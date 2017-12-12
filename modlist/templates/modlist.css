@@ -1,0 +1,48 @@
+#module-modlist hr {
+	margin: 10px 0;
+}
+
+.pages-pagination {
+	float: right;
+	width: 33%;
+	margin-bottom: 10px;
+}
+
+.itemlist-modlist.itemlist-several h2,
+.itemlist-modlist.itemlist-several .more {
+	margin: 0;
+}
+
+.itemlist-modlist.itemlist-several .content {
+	padding: 0 0.5em 0 0.5em;
+}
+
+.itemlist-modlist.itemlist-several img {
+	padding: 0 0 0.5em 0;
+}
+
+span.contents + hr {
+	margin: 35px 0 20px 0;
+	clear: both;
+}
+
+/* --- thumbnails --- */
+.carousel-thumbnail,
+.navigation-link-thumbnail { max-width: 150px;}
+
+.carousel-thumbnail {
+	display: inline-block;
+	margin-bottom: 0.618em;
+}
+
+.carousel-thumbnail figcaption { text-align: center;}
+
+.suggested-thumbnail a {
+	display: block;
+	text-align: center;
+}
+
+['navigation-link-'] a {text-decoration: none;}
+
+.navigation-link-previous {float: left;}
+.navigation-link-next {float: right;}
