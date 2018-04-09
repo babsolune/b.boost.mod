@@ -1,7 +1,7 @@
 # pbt-modules
 Modules for [PHPBoost CMS](https://www.phpboost.com)
 
-## ModSeries
+<!-- ## ModSeries
 The ModSeries (modcat, modcatart, modcatfull, modlist and modmix) are non-modules.  
 They work as they are but they are inteded to be cloned for the creation of new modules.  
 Each module is full of all the options known in phpboost :  
@@ -35,4 +35,12 @@ Coming soon a link to a audio/video file
 
 ### Modmix
 (still work in progress)  
-Display of the complete list of categories with their items on its home page.
+Display of the complete list of categories with their items on its home page. -->
+
+## Countdown    
+This mini module displays a customizable countdown on your website.
+Download it on phpboost : [Countdown for pbt 5.1](https://www.phpboost.com/download/62-modules-phpboost-5-1/524-compte-a-rebours/)
+
+## Lastcoms    
+This mini module displays the list of the last comments posted on your website.
+Download it on phpboost : [Lastcoms for pbt 5.1](https://www.phpboost.com/download/62-modules-phpboost-5-1/526-derniers-commentaires/)
