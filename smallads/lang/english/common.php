@@ -64,7 +64,6 @@ $lang['smallads.contact.phone'] = 'by phone';
 $lang['config.categories.title'] = 'Categories configuration';
 $lang['config.cats.icon.display'] = 'Categories icon display';
 $lang['config.sort.filter.display'] = 'Display the sort filters';
-$lang['config.items.default.sort'] = 'Default items order display';
 $lang['config.characters.number.to.cut'] = 'Number of characters to cut the ad\'s description';
 $lang['config.display.type'] = 'Display type';
 $lang['config.mosaic.type.display'] = 'Mosaic';
@@ -161,6 +160,7 @@ $lang['smallads.pagination'] = 'Page {current} on {pages}';
 $lang['smallads.seo.description.root'] = 'All :site\'s ads.';
 $lang['smallads.seo.description.tag'] = 'All :subject\'s ads.';
 $lang['smallads.seo.description.pending'] = 'All pending ads.';
+$lang['smallads.seo.description.usage.terms'] = ':site\'s smallads usage terms.';
 
 //Messages
 $lang['smallads.message.success.add'] = 'The ad <b>:title</b> has been added';
@@ -185,4 +185,8 @@ $lang['mini.there.is'] = 'There is';
 $lang['mini.there.are'] = 'There are';
 $lang['mini.one.smallad'] = 'ad on the website';
 $lang['mini.several.smallads'] = 'ads on the website';
+
+// Accessibility
+$lang['open.modal'] = 'Opening in a new window';
+$lang['close.modal'] = 'Close window';
 ?>

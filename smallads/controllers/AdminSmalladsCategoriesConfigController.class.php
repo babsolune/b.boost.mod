@@ -81,10 +81,8 @@ class AdminSmalladsCategoriesConfigController extends AdminModuleController
 	{
 		$form = new HTMLForm(__CLASS__);
 
-		$fieldset = new FormFieldsetHTML('smallads_configuration', $this->lang['config.categories.title']);
+		$fieldset = new FormFieldsetHTMLHeading('smallads_configuration', $this->lang['config.categories.title']);
 		$form->add_fieldset($fieldset);
-
-		// $fieldset->add_field(new FormFieldSimpleSelectChoice('items_default_sort', $this->lang['config.items.default.sort'], $this->config->get_items_default_sort_field() . '-' . $this->config->get_items_default_sort_mode(), $this->get_sort_options()));
 
 		$fieldset->add_field(new FormFieldCheckbox('display_sort_filters', $this->lang['config.sort.filter.display'], $this->config->are_sort_filters_enabled()));
 
@@ -94,6 +92,8 @@ class AdminSmalladsCategoriesConfigController extends AdminModuleController
 			array('min' => 1, 'max' => 50, 'required' => true),
 			array(new FormFieldConstraintIntegerRange(1, 50))
 		));
+
+		$fieldset->add_field(new FormFieldCheckbox('display_descriptions_to_guests', $this->lang['config.display.descriptions.to.guests'], $this->config->are_descriptions_displayed_to_guests()));
 
 		$fieldset->add_field(new FormFieldSimpleSelectChoice('display_type', $this->lang['config.display.type'], $this->config->get_display_type(),
 			array(
@@ -124,30 +124,19 @@ class AdminSmalladsCategoriesConfigController extends AdminModuleController
 			array(new FormFieldConstraintIntegerRange(1, 6))
 		));
 
-		$fieldset->add_field(new FormFieldCheckbox('display_descriptions_to_guests', $this->lang['config.display.descriptions.to.guests'], $this->config->are_descriptions_displayed_to_guests()));
-
 		$fieldset->add_field(new FormFieldRichTextEditor('root_category_description', $this->admin_common_lang['config.root_category_description'], $this->config->get_root_category_description(),
 			array('rows' => 8, 'cols' => 47)
 		));
 
-		$common_lang = LangLoader::get('common');
-		$fieldset_authorizations = new FormFieldsetHTML('authorizations', $common_lang['authorizations'],
+		$fieldset_authorizations = new FormFieldsetHTML('authorizations', LangLoader::get_message('authorizations', 'common'),
 			array('description' => $this->admin_common_lang['config.authorizations.explain'])
 		);
 
 		$form->add_fieldset($fieldset_authorizations);
 
-		$auth_settings = new AuthorizationsSettings(array(
-			new ActionAuthorization($common_lang['authorizations.read'], Category::READ_AUTHORIZATIONS),
-			new ActionAuthorization($common_lang['authorizations.write'], Category::WRITE_AUTHORIZATIONS),
-			new ActionAuthorization($common_lang['authorizations.contribution'], Category::CONTRIBUTION_AUTHORIZATIONS),
-			new ActionAuthorization($common_lang['authorizations.moderation'], Category::MODERATION_AUTHORIZATIONS),
-			new ActionAuthorization($common_lang['authorizations.categories_management'], Category::CATEGORIES_MANAGEMENT_AUTHORIZATIONS)
-		));
-
-		$auth_setter = new FormFieldAuthorizationsSetter('authorizations', $auth_settings);
+		$auth_settings = new AuthorizationsSettings(RootCategory::get_authorizations_settings());
 		$auth_settings->build_from_auth_array($this->config->get_authorizations());
-		$fieldset_authorizations->add_field($auth_setter);
+		$fieldset_authorizations->add_field(new FormFieldAuthorizationsSetter('authorizations', $auth_settings));
 
 		$this->submit_button = new FormButtonDefaultSubmit();
 		$form->add_button($this->submit_button);
@@ -159,10 +148,6 @@ class AdminSmalladsCategoriesConfigController extends AdminModuleController
 
 	private function save()
 	{
-		// $items_default_sort = $this->form->get_value('items_default_sort')->get_raw_value();
-		// $items_default_sort = explode('-', $items_default_sort);
-		// $this->config->set_items_default_sort_field($items_default_sort[0]);
-		// $this->config->set_items_default_sort_mode(TextHelper::strtolower($items_default_sort[1]));
 
 		if ($this->form->get_value('display_sort_filters'))
 			$this->config->enable_sort_filters();

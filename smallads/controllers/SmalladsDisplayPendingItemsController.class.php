@@ -32,70 +32,37 @@
 class SmalladsDisplayPendingItemsController extends ModuleController
 {
 	private $lang;
+	private $county_lang;
 	private $view;
 	private $form;
 	private $config;
+	private $comments_config;
+	private $content_management_config;
 
 	public function execute(HTTPRequestCustom $request)
 	{
 		$this->init();
 		$this->check_authorizations();
 		$this->build_view($request);
-		return $this->generate_response();
+		return $this->generate_response($request);
 	}
 
 	private function init()
 	{
 		$this->lang = LangLoader::get('common', 'smallads');
+		$this->county_lang = LangLoader::get('counties', 'smallads');
 		$this->view = new FileTemplate('smallads/SmalladsDisplayCategoryController.tpl');
 		$this->view->add_lang($this->lang);
+		$this->view->add_lang($this->county_lang);
+		$this->config = SmalladsConfig::load();
+		$this->comments_config = CommentsConfig::load();
+		$this->content_management_config = ContentManagementConfig::load();
 	}
 
-	private function build_sorting_form($field, $mode)
-	{
-		$common_lang = LangLoader::get('common');
-
-		$form = new HTMLForm(__CLASS__, '', false);
-		$form->set_css_class('options no-style');
-
-		$fieldset = new FormFieldsetHorizontal('filters', array('description' => $common_lang['sort_by']));
-		$form->add_fieldset($fieldset);
-
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('sort_fields', '', $field, array(
-			new FormFieldSelectChoiceOption($common_lang['form.date.creation'], Smallad::SORT_FIELDS_URL_VALUES[Smallad::SORT_DATE]),
-			new FormFieldSelectChoiceOption($common_lang['form.title'], Smallad::SORT_FIELDS_URL_VALUES[Smallad::SORT_ALPHABETIC]),
-			new FormFieldSelectChoiceOption($common_lang['author'], Smallad::SORT_FIELDS_URL_VALUES[Smallad::SORT_AUTHOR])
-			), array('events' => array('change' => 'document.location = "'. SmalladsUrlBuilder::display_pending_items()->rel() . '" + HTMLForms.getField("sort_fields").getValue() + "/" + HTMLForms.getField("sort_mode").getValue();'))
-		));
-
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('sort_mode', '', $mode,
-			array(
-				new FormFieldSelectChoiceOption($common_lang['sort.asc'], 'asc'),
-				new FormFieldSelectChoiceOption($common_lang['sort.desc'], 'desc')
-			),
-			array('events' => array('change' => 'document.location = "' . SmalladsUrlBuilder::display_pending_items()->rel() . '" + HTMLForms.getField("sort_fields").getValue() + "/" + HTMLForms.getField("sort_mode").getValue();'))
-		));
-
-		$this->form = $form;
-	}
-
-	private function build_view($request)
+	private function build_view(HTTPRequestCustom $request)
 	{
 		$now = new Date();
 		$authorized_categories = SmalladsService::get_authorized_categories(Category::ROOT_CATEGORY);
-		$this->config = SmalladsConfig::load();
-		$comments_config = new SmalladsComments();
-
-		$mode = $request->get_getstring('sort', $this->config->get_items_default_sort_mode());
-		$field = $request->get_getstring('field', Smallad::SORT_FIELDS_URL_VALUES[$this->config->get_items_default_sort_field()]);
-
-		$sort_mode = TextHelper::strtoupper($mode);
-		$sort_mode = (in_array($sort_mode, array(Smallad::ASC, Smallad::DESC)) ? $sort_mode : $this->config->get_items_default_sort_mode());
-
-		if (in_array($field, array(Smallad::SORT_FIELDS_URL_VALUES[Smallad::SORT_ALPHABETIC], Smallad::SORT_FIELDS_URL_VALUES[Smallad::SORT_AUTHOR], Smallad::SORT_FIELDS_URL_VALUES[Smallad::SORT_DATE])))
-			$sort_field = array_search($field, Smallad::SORT_FIELDS_URL_VALUES);
-		else
-			$sort_field = Smallad::SORT_DATE;
 
 		$condition = 'WHERE id_category IN :authorized_categories
 		' . (!SmalladsAuthorizationsService::check_authorizations()->moderation() ? ' AND author_user_id = :user_id' : '') . '
@@ -106,23 +73,21 @@ class SmalladsDisplayPendingItemsController extends ModuleController
 			'timestamp_now' => $now->get_timestamp()
 		);
 
-		$page = AppContext::get_request()->get_getint('page', 1);
-
 		$result = PersistenceContext::get_querier()->select('SELECT smallads.*, member.*, com.number_comments
-		FROM '. SmalladsSetup::$smallads_table .' smallads
-		LEFT JOIN '. DB_TABLE_MEMBER .' member ON member.user_id = smallads.author_user_id
-		LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = smallads.id AND com.module_id = "smallads"
-		' . $condition . '
-		ORDER BY ' . $sort_field . ' ' . $sort_mode . '
-		', array_merge($parameters, array(
-		)));
+			FROM '. SmalladsSetup::$smallads_table .' smallads
+			LEFT JOIN '. DB_TABLE_MEMBER .' member ON member.user_id = smallads.author_user_id
+			LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = smallads.id AND com.module_id = "smallads"
+			' . $condition . '
+			ORDER BY smallads.creation_date DESC
+			', array_merge($parameters)
+		);
 
 		$nbr_items_pending = $result->get_rows_count();
 
-		$this->build_sorting_form($field, TextHelper::strtolower($sort_mode));
 		$this->build_sorting_smallad_type();
 
 		$this->view->put_all(array(
+			'C_ENABLED_FILTERS'		 => $this->config->are_sort_filters_enabled(),
 			'C_ITEMS'                => $result->get_rows_count() > 0,
 			'C_MORE_THAN_ONE_ITEM'   => $result->get_rows_count() > 1,
 			'C_PENDING'              => true,
@@ -140,8 +105,7 @@ class SmalladsDisplayPendingItemsController extends ModuleController
 			$columns_number_displayed_per_line = $this->config->get_displayed_cols_number_per_line();
 
 			$this->view->put_all(array(
-				'C_ITEMS_SORT_FILTERS' => $this->config->are_sort_filters_enabled(),
-				'C_COMMENTS_ENABLED'   => $comments_config->are_comments_enabled(),
+				'C_COMMENTS_ENABLED'   => $this->comments_config->are_comments_enabled(),
 				'C_SEVERAL_COLUMNS'    => $columns_number_displayed_per_line > 1,
 				'COLUMNS_NUMBER'       => $columns_number_displayed_per_line
 			));
@@ -158,13 +122,10 @@ class SmalladsDisplayPendingItemsController extends ModuleController
 			}
 		}
 		$result->dispose();
-
-		$this->view->put('FORM', $this->form->display());
 	}
 
 	private function build_sorting_smallad_type()
 	{
-		$this->config = SmalladsConfig::load();
 		$smallad_types = $this->config->get_smallad_types();
 		$type_nbr = count($smallad_types);
 		if ($type_nbr)
@@ -232,18 +193,18 @@ class SmalladsDisplayPendingItemsController extends ModuleController
 		}
 	}
 
-	private function generate_response()
+	private function generate_response(HTTPRequestCustom $request)
 	{
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
 		$graphical_environment->set_page_title($this->lang['smallads.pending.items'], $this->lang['smallads.module.title']);
 		$graphical_environment->get_seo_meta_data()->set_description($this->lang['smallads.seo.description.pending']);
-		$graphical_environment->get_seo_meta_data()->set_canonical_url(SmalladsUrlBuilder::display_pending_items(AppContext::get_request()->get_getstring('field', 'date'), AppContext::get_request()->get_getstring('sort', 'desc'), AppContext::get_request()->get_getint('page', 1)));
+		$graphical_environment->get_seo_meta_data()->set_canonical_url(SmalladsUrlBuilder::display_pending_items());
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['smallads.module.title'], SmalladsUrlBuilder::home());
-		$breadcrumb->add($this->lang['smallads.pending.items'], SmalladsUrlBuilder::display_pending_items(AppContext::get_request()->get_getstring('field', 'date'), AppContext::get_request()->get_getstring('sort', 'desc'), AppContext::get_request()->get_getint('page', 1)));
+		$breadcrumb->add($this->lang['smallads.pending.items'], SmalladsUrlBuilder::display_pending_items());
 
 		return $response;
 	}

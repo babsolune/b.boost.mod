@@ -4,7 +4,7 @@
  *                            -------------------
  *   begin                : April 15, 2016
  *   copyright            : (C) 2016 Sebastien Lartigue
- *   email                : babso@web33.fr
+ *   email                : babsolune@phpboost.fr
  *
  *
  ###################################################
@@ -26,7 +26,7 @@
  ###################################################*/
 
 /**
- * @author Sebastien Lartigue <babso@web33.fr>
+ * @author Sebastien Lartigue <babsolune@phpboost.fr>
  */
 
 class HomeLandingFormFieldSliderConfig extends AbstractFormField
@@ -43,7 +43,7 @@ class HomeLandingFormFieldSliderConfig extends AbstractFormField
 		$template = $this->get_template_to_use();
 
 		$tpl = new FileTemplate('HomeLanding/HomeLandingFormFieldSliderConfig.tpl');
-		$tpl->add_lang(LangLoader::get('common'));
+		$tpl->add_lang(LangLoader::get('common', 'HomeLanding'));
 
 		$tpl->put_all(array(
 			'NAME' => $this->get_html_id(),
@@ -113,7 +113,7 @@ class HomeLandingFormFieldSliderConfig extends AbstractFormField
 	{
 		foreach($field_options as $attribute => $value)
 		{
-			$attribute = TextHelper::strtolower($attribute);
+			$attribute = strtolower($attribute);
 			switch ($attribute)
 			{
 				case 'max_input':

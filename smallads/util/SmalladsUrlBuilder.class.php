@@ -114,15 +114,10 @@ class SmalladsUrlBuilder
 	/**
 	 * @return Url
 	 */
-	public static function display_category($id, $rewrited_name, $sort_field = '', $sort_mode = '', $page = 1, $subcategories_page = 1)
+	public static function display_category($id, $rewrited_name)
 	{
-		$config = SmalladsConfig::load();
 		$category = $id > 0 ? $id . '-' . $rewrited_name .'/' : '';
-		$page = $page !== 1 || $subcategories_page !== 1 ? $page . '/': '';
-		$subcategories_page = $subcategories_page !== 1 ? $subcategories_page . '/': '';
-		$sort_field = $sort_field !== $config->get_items_default_sort_field() ? $sort_field . '/' : '';
-		$sort_mode = $sort_mode !== $config->get_items_default_sort_mode() ? $sort_mode . '/' : '';
-		return DispatchManager::get_url(self::$dispatcher, '/' . $category . $sort_field . $sort_mode . $page . $subcategories_page);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $category);
 	}
 
     // Items
@@ -140,7 +135,7 @@ class SmalladsUrlBuilder
 	 */
 	public static function print_item($id_smallad, $rewrited_title)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/print/' . $id_smallad . '-' .$rewrited_title . '/');
+		return DispatchManager::get_url(self::$dispatcher, '/print/' . $id_smallad . '-' . $rewrited_title . '/');
 	}
 
 	/**
@@ -155,10 +150,9 @@ class SmalladsUrlBuilder
 	/**
 	 * @return Url
 	 */
-	public static function edit_item($id, $page = 1)
+	public static function edit_item($id)
 	{
-		$page = $page !== 1 ? $page . '/' : '';
-		return DispatchManager::get_url(self::$dispatcher, '/' . $id . '/edit/' . $page);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $id . '/edit/');
 	}
 
 	/**
@@ -172,10 +166,9 @@ class SmalladsUrlBuilder
 	/**
 	 * @return Url
 	 */
-	public static function display_item($id_category, $rewrited_name_category, $id_smallad, $rewrited_title, $page = 1)
+	public static function display_item($id_category, $rewrited_name_category, $id_smallad, $rewrited_title)
 	{
-		$page = $page !== 1 ? $page . '/' : '';
-		return DispatchManager::get_url(self::$dispatcher, '/' . $id_category . '-' . $rewrited_name_category . '/' . $id_smallad . '-' .$rewrited_title . '/' . $page);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $id_category . '-' . $rewrited_name_category . '/' . $id_smallad . '-' .$rewrited_title . '/');
 	}
 
 	/**
@@ -189,25 +182,17 @@ class SmalladsUrlBuilder
 	/**
 	 * @return Url
 	 */
- 	public static function display_pending_items($sort_field = '', $sort_mode = '', $page = 1)
+ 	public static function display_pending_items()
 	{
-		$config = SmalladsConfig::load();
-		$page = $page !== 1 ? $page . '/': '';
-		$sort_field = $sort_field !== $config->get_items_default_sort_field() ? $sort_field . '/' : '';
-		$sort_mode = $sort_mode !== $config->get_items_default_sort_mode() ? $sort_mode . '/' : '';
-		return DispatchManager::get_url(self::$dispatcher, '/pending/' . $sort_field . $sort_mode . $page);
+		return DispatchManager::get_url(self::$dispatcher, '/pending/');
 	}
 
 	/**
 	 * @return Url
 	 */
-	public static function display_tag($rewrited_name, $sort_field = '', $sort_mode = '', $page = 1)
+	public static function display_tag($rewrited_name)
 	{
-		$config = SmalladsConfig::load();
-		$page = $page !== 1 ? $page . '/' : '';
-		$sort_field = $sort_field !== $config->get_items_default_sort_field() ? $sort_field . '/' : '';
-		$sort_mode = $sort_mode !== $config->get_items_default_sort_mode() ? $sort_mode . '/' : '';
-		return DispatchManager::get_url(self::$dispatcher, '/tag/'. $rewrited_name . '/' . $sort_field . $sort_mode . $page);
+		return DispatchManager::get_url(self::$dispatcher, '/tag/'. $rewrited_name);
 	}
 
 	/**

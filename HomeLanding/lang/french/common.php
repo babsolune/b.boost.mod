@@ -141,7 +141,7 @@ $lang['no.web.item'] = 'Il n\'y a pas de liens dans cette catégorie';
 $lang['admin.char'] = 'Limiter le nombre de caractères';
 $lang['admin.cat'] = 'Choisir une catégorie';
 $lang['admin.subcategories_content_displayed'] = 'Afficher le contenu des sous-catégories';
-$lang['admin.elements_position'] = 'Position des éléments sur la page d\'accueil';
+$lang['admin.elements_position'] = 'Position des éléments';
 
 //Config
 $lang['admin.module.title'] = 'Titre du module';
@@ -168,6 +168,13 @@ $lang['admin.form.carousel.hover.disabled'] = 'Désactivée';
 $lang['admin.form.carousel.mini'] = 'Affichage des miniatures';
 $lang['admin.form.carousel.mini.dots'] = 'Points';
 $lang['admin.form.carousel.mini.imgs'] = 'Images';
+//Admin - Carousel content
+$lang['admin.form.description'] = 'Description du slide';
+$lang['admin.form.link.url'] = 'Adresse du lien';
+$lang['admin.form.picture.url'] = 'Adresse de l\'image';
+$lang['admin.form.upload'] = 'Ouvrir le gestionnaire de fichiers';
+$lang['admin.form.add'] = 'Ajouter une image';
+$lang['admin.form.del'] = 'Supprimer le slide';
 
 //Admin - One page Menu
 $lang['admin.onepage'] = 'Affichage du menu onepage';
@@ -241,7 +248,7 @@ $lang['admin.rss.site.name'] = 'Nom du site';
 $lang['admin.rss.site.url'] = 'Adresse du site';
 $lang['admin.rss.xml.url'] = 'Adresse du fichier xml';
 $lang['admin.rss.xml.nb'] = 'Nombre de liens';
-$lang['admin.rss.xml.char'] = 'Nombre de caratères par lien';
+$lang['admin.rss.xml.char'] = 'Nombre de caractères par lien';
 
 //Admin - Web
 $lang['admin.web'] = 'Affichage du module Web';

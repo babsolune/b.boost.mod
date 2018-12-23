@@ -64,11 +64,6 @@ class SmalladsExtensionPointProvider extends ExtensionPointProvider
 		return new SmalladsHomePageExtensionPoint();
 	}
 
-	public function newcontent()
-	{
-		return new SmalladsNewContent();
-	}
-
 	public function scheduled_jobs()
 	{
 		return new SmalladsScheduledJobs();

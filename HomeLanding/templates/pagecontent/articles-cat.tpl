@@ -25,6 +25,14 @@
 
 			<h3 class="item-title">
 				<a href="{item.U_ARTICLE}">{item.TITLE}</a>
+				<span class="actions">
+					# IF item.C_EDIT #
+						<a href="{item.U_EDIT_ARTICLE}" aria-label="${LangLoader::get_message('edit', 'common')}"><i class="fa fa-edit" aria-hidden="true" title="${LangLoader::get_message('edit', 'common')}"></i></a>
+					# ENDIF #
+					# IF item.C_DELETE #
+						<a href="{item.U_DELETE_ARTICLE}" aria-label="${LangLoader::get_message('delete', 'common')}" data-confirmation="delete-element"><i class="fa fa-delete" aria-hidden="true" title="${LangLoader::get_message('delete', 'common')}"></i></a>
+					# ENDIF #
+				</span>
 			</h3>
 
 			<div class="more">
@@ -35,7 +43,7 @@
 			</div>
 
 			# IF item.C_HAS_PICTURE #
-				<a href="{item.U_ARTICLE}" class="item-picture"><img src="{item.PICTURE}" alt="{item.TITLE}" itemprop="thumbnailUrl" /></a>
+				<a href="{item.U_ARTICLE}" title="{item.TITLE}" class="item-picture"><img src="{item.PICTURE}" alt="{item.TITLE}" itemprop="thumbnailUrl" /></a>
 			# ENDIF #
 
 			<p class="item-desc">

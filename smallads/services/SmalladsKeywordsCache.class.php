@@ -1,10 +1,10 @@
 <?php
 /*##################################################
- *                      SmalladsNewContent.class.php
+ *                        SmalladsKeywordsCache.class.php
  *                            -------------------
- *   begin                : March 15, 2018 
- *   copyright            : (C) 2018 Sebastien LARTIGUE
- *   email                : babsolune@phpboost.com
+ *   begin                : November 9, 2018
+ *   copyright            : (C) 2018 Julien BRISWALTER
+ *   email                : j1.seth@phpboost.com
  *
  *
  ###################################################
@@ -26,14 +26,13 @@
  ###################################################*/
 
 /**
- * @author Sebastien LARTIGUE <babsolune@phpboost.com>
+ * @author Julien BRISWALTER <j1.seth@phpboost.com>
  */
-
-class SmalladsNewContent extends AbstractNewContentExtensionPoint
+class SmalladsKeywordsCache extends KeywordsCache
 {
-	public function __construct()
+	public function get_module_identifier()
 	{
-		parent::__construct('smallads');
+		return 'smallads';
 	}
 }
 ?>

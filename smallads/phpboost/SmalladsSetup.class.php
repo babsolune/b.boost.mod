@@ -40,7 +40,7 @@ class SmalladsSetup extends DefaultModuleSetup
 	 * @var string[string] localized messages
 	 */
 	private $messages;
-
+	
 	public static function __static()
 	{
 		self::$smallads_table = PREFIX . 'smallads';
@@ -49,19 +49,25 @@ class SmalladsSetup extends DefaultModuleSetup
 
 	public function upgrade($installed_version)
 	{
-		$this->db_utils = PersistenceContext::get_dbms_utils();
-		$this->columns = PersistenceContext::get_dbms_utils()->desc_table(PREFIX . 'smallads');
+		$this->columns = PersistenceContext::get_dbms_utils()->desc_table(self::$smallads_table);
 		$this->disable_mini_menu();
 		$this->delete_fields();
 		$this->change_fields();
 		$this->add_fields();
-		$this->create_smallads_cats_table();
-		$this->insert_smallads_cats_data();
-		$this->delete_files();
 		$this->update_fields();
-		$this->pics_to_upload();
+		
+		$tables = PersistenceContext::get_dbms_utils()->list_tables(true);
+		
+		if (!in_array(self::$smallads_cats_table, $tables))
+		{
+			$this->create_smallads_cats_table();
+			$this->insert_smallads_cats_data();
+		}
+		
+		$this->delete_files();
+		self::pics_to_upload();
 
-		return '5.1.2';
+		return '5.2.0';
 	}
 
 	public function install()
@@ -184,7 +190,7 @@ class SmalladsSetup extends DefaultModuleSetup
 			'publication_end_date' => 0,
 			'creation_date' => time(),
 			'updated_date' => 0,
-			'smallad_type' => $this->messages['default.smallad.type'],
+			'smallad_type' => Url::encode_rewrite($this->messages['default.smallad.type']),
 			'sources' => TextHelper::serialize(array()),
 			'carousel' => TextHelper::serialize(array())
 		));
@@ -200,57 +206,104 @@ class SmalladsSetup extends DefaultModuleSetup
 		if ($menu_id)
  		{
 			$menu = MenuService::load($menu_id);
-			MenuService::disable($menu);
+			MenuService::delete($menu);
 			MenuService::generate_cache();
 		}
 	}
 
 	private function delete_fields()
 	{
-		if ($this->columns['cat_id']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads DROP cat_id');
-		if ($this->columns['links_flag']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads DROP links_flag');
-		if ($this->columns['shipping']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads DROP shipping');
-		if ($this->columns['vid']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads DROP vid');
-		if ($this->columns['id_updated']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads DROP id_updated');
-		if ($this->columns['date_approved']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads DROP date_approved');
+		if (isset($this->columns['cat_id']))
+			PersistenceContext::get_dbms_utils()->drop_column(PREFIX . 'smallads', 'cat_id');
+		if (isset($this->columns['links_flag']))
+			PersistenceContext::get_dbms_utils()->drop_column(PREFIX . 'smallads', 'links_flag');
+		if (isset($this->columns['shipping']))
+			PersistenceContext::get_dbms_utils()->drop_column(PREFIX . 'smallads', 'shipping');
+		if (isset($this->columns['vid']))
+			PersistenceContext::get_dbms_utils()->drop_column(PREFIX . 'smallads', 'vid');
+		if (isset($this->columns['id_updated']))
+			PersistenceContext::get_dbms_utils()->drop_column(PREFIX . 'smallads', 'id_updated');
+		if (isset($this->columns['date_approved']))
+			PersistenceContext::get_dbms_utils()->drop_column(PREFIX . 'smallads', 'date_approved');
 	}
 
 	private function add_fields()
 	{
-		$this->db_utils->add_column(PREFIX . 'smallads', 'id_category', array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'rewrited_title', array('type' => 'string', 'length' => 255, 'default' => "''"));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'description', array('type' => 'text', 'length' => 65000));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'brand', array('type' => 'string', 'length' => 255));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'completed', array('type' => 'boolean', 'notnull' => 1, 'default' => 0));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'location', array('type' => 'text', 'length' => 65000));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'other_location', array('type' => 'string', 'length' => 255));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'views_number', array('type' => 'integer', 'length' => 11, 'default' => 0));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'displayed_author_email', array('type' => 'boolean', 'notnull' => 1, 'default' => 0));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'custom_author_email', array('type' => 'string', 'length' => 255, 'default' => "''"));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'displayed_author_pm', array('type' => 'boolean', 'notnull' => 1, 'default' => 1));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'displayed_author_name', array('type' => 'boolean', 'notnull' => 1, 'default' => 1));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'custom_author_name', array('type' => 'string', 'length' => 255, 'default' => "''"));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'displayed_author_phone', array('type' => 'boolean', 'notnull' => 1, 'default' => 0));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'author_phone', array('type' => 'string', 'length' => 25, 'default' => "''"));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'publication_start_date', array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'publication_end_date', array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'sources', array('type' => 'text', 'length' => 65000));
-		$this->db_utils->add_column(PREFIX . 'smallads', 'carousel', array('type' => 'text', 'length' => 65000));
+		if (!isset($this->columns['id_category']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'id_category', array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0));
+		if (!isset($this->columns['rewrited_title']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'rewrited_title', array('type' => 'string', 'length' => 255, 'default' => "''"));
+		if (!isset($this->columns['description']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'description', array('type' => 'text', 'length' => 65000));
+		if (!isset($this->columns['brand']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'brand', array('type' => 'string', 'length' => 255));
+		if (!isset($this->columns['completed']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'completed', array('type' => 'boolean', 'notnull' => 1, 'default' => 0));
+		if (!isset($this->columns['location']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'location', array('type' => 'text', 'length' => 65000));
+		if (!isset($this->columns['other_location']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'other_location', array('type' => 'string', 'length' => 255));
+		if (!isset($this->columns['views_number']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'views_number', array('type' => 'integer', 'length' => 11, 'default' => 0));
+		if (!isset($this->columns['displayed_author_email']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'displayed_author_email', array('type' => 'boolean', 'notnull' => 1, 'default' => 0));
+		if (!isset($this->columns['custom_author_email']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'custom_author_email', array('type' => 'string', 'length' => 255, 'default' => "''"));
+		if (!isset($this->columns['displayed_author_pm']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'displayed_author_pm', array('type' => 'boolean', 'notnull' => 1, 'default' => 1));
+		if (!isset($this->columns['displayed_author_name']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'displayed_author_name', array('type' => 'boolean', 'notnull' => 1, 'default' => 1));
+		if (!isset($this->columns['custom_author_name']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'custom_author_name', array('type' => 'string', 'length' => 255, 'default' => "''"));
+		if (!isset($this->columns['displayed_author_phone']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'displayed_author_phone', array('type' => 'boolean', 'notnull' => 1, 'default' => 0));
+		if (!isset($this->columns['author_phone']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'author_phone', array('type' => 'string', 'length' => 25, 'default' => "''"));
+		if (!isset($this->columns['publication_start_date']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'publication_start_date', array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0));
+		if (!isset($this->columns['publication_end_date']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'publication_end_date', array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0));
+		if (!isset($this->columns['sources']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'sources', array('type' => 'text', 'length' => 65000));
+		if (!isset($this->columns['carousel']))
+			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'smallads', 'carousel', array('type' => 'text', 'length' => 65000));
+		
+		$columns = PersistenceContext::get_dbms_utils()->desc_table(PREFIX . 'smallads');
+		if (!isset($columns['title']['key']) || !$columns['title']['key'])
+			PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads ADD FULLTEXT KEY `title` (`title`)');
+		if (!isset($columns['contents']['key']) || !$columns['contents']['key'])
+			PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads ADD FULLTEXT KEY `contents` (`contents`)');
+		if (!isset($columns['description']['key']) || !$columns['description']['key'])
+			PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads ADD FULLTEXT KEY `description` (`description`)');
+		if (!isset($columns['id_category']['key']) || !$columns['id_category']['key'])
+			PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads ADD FULLTEXT KEY `id_category` (`id_category`)');
 	}
 
 	private function change_fields()
 	{
 		//fields rename
-		if ($this->columns['picture']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads CHANGE COLUMN `picture` `thumbnail_url` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 0');
-		if ($this->columns['type']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads CHANGE COLUMN `type` `smallad_type` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL');
-		if ($this->columns['id_created']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads CHANGE COLUMN `id_created` `author_user_id` INT(11) NOT NULL DEFAULT 0');
-		if ($this->columns['approved']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads CHANGE COLUMN `approved` `published` INT(11) NOT NULL DEFAULT 0');
-		if ($this->columns['date_created']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads CHANGE COLUMN `date_created` `creation_date` INT(11) NOT NULL DEFAULT 0');
-		if ($this->columns['date_updated']) PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'smallads CHANGE COLUMN `date_updated` `updated_date` INT(11) NOT NULL DEFAULT 0');
+		$rows_change = array(
+			'picture' => 'thumbnail_url VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 0',
+			'type' => 'smallad_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL',
+			'id_created' => 'author_user_id INT(11) NOT NULL DEFAULT 0',
+			'approved' => 'published INT(11) NOT NULL DEFAULT 0',
+			'date_created' => 'creation_date INT(11) NOT NULL DEFAULT 0',
+			'date_updated' => 'updated_date INT(11) NOT NULL DEFAULT 0'
+		);
+		
+		foreach ($rows_change as $old_name => $new_name)
+		{
+			if (isset($this->columns[$old_name]))
+				PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'download CHANGE ' . $old_name . ' ' . $new_name);
+		}
 	}
 
 	private function delete_files()
 	{
+		$file = new File(PATH_TO_ROOT . '/smallads/fields/SmalladsFormFieldSelectSources.class.php');
+		$file->delete();
+		$file = new File(PATH_TO_ROOT . '/smallads/templates/fields/SmalladsFormFieldSelectSources.tpl');
+		$file->delete();
 		$file = new File(PATH_TO_ROOT . '/smallads/controllers/AdminSmalladsConfigController.class.php');
 		$file->delete();
 		$file = new File(PATH_TO_ROOT . '/smallads/controllers/SmalladsHomeController.class.php');
@@ -290,8 +343,8 @@ class SmalladsSetup extends DefaultModuleSetup
 	public static function pics_to_upload()
 	{
 		// Move pics content to upload and delete pics
-		$source = realpath(PATH_TO_ROOT . '/smallads/pics') . '/';
-		$dest = realpath(PATH_TO_ROOT . '/upload/') . '/';
+		$source = PATH_TO_ROOT . '/smallads/pics/';
+		$dest = PATH_TO_ROOT . '/upload/';
 		if (is_dir($source)) {
 			if ($dh = opendir($source)) {
 				while (($file = readdir($dh)) !== false) {
@@ -302,7 +355,9 @@ class SmalladsSetup extends DefaultModuleSetup
 				closedir($dh);
 			}
 		}
-		rmdir($source);
+		$folder = new Folder($source);
+		if ($folder->exists())
+			$folder->delete();
 
 		// update thumbnail_url files to /upload/files
 		$result = PersistenceContext::get_querier()->select_rows(PREFIX . 'smallads', array('id', 'thumbnail_url'));

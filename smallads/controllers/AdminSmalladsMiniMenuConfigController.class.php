@@ -81,7 +81,7 @@ class AdminSmalladsMiniMenuConfigController extends AdminModuleController
 	{
 		$form = new HTMLForm(__CLASS__);
 
-		$fieldset = new FormFieldsetHTML('mini_configuration', $this->lang['config.mini.title']);
+		$fieldset = new FormFieldsetHTMLHeading('mini_configuration', $this->lang['config.mini.title']);
 		$form->add_fieldset($fieldset);
 
 		$fieldset->add_field(new FormFieldNumberEditor('mini_menu_items_nb', $this->lang['config.mini.items.nb'], $this->config->get_mini_menu_items_nb(),
@@ -92,6 +92,8 @@ class AdminSmalladsMiniMenuConfigController extends AdminModuleController
 		$fieldset->add_field(new FormFieldNumberEditor('mini_menu_animation_speed', $this->lang['config.mini.animation.speed'], $this->config->get_mini_menu_animation_speed(),
 			array('description' => $this->lang['config.mini.speed.desc'])
 		));
+
+		$fieldset->add_field(new FormFieldFree('1_separator', '', ''));
 
 		$fieldset->add_field(new FormFieldCheckbox('mini_menu_autoplay', $this->lang['config.mini.autoplay'], $this->config->is_slideshow_autoplayed(), array(
 			'events' => array('click' => '

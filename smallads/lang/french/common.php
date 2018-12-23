@@ -64,7 +64,6 @@ $lang['smallads.contact.phone'] = 'par téléphone';
 $lang['config.categories.title'] = 'Configuration des catégories';
 $lang['config.cats.icon.display'] = 'Afficher l\'icône des catégories';
 $lang['config.sort.filter.display'] = 'Afficher les filtres de tri';
-$lang['config.items.default.sort'] = 'Ordre d\'affichage des éléments par défaut';
 $lang['config.characters.number.to.cut'] = 'Nombre de caractères pour couper le condensé de l\'annonce';
 $lang['config.display.type'] = 'Type d\'affichage des annonces';
 $lang['config.mosaic.type.display'] = 'Mosaïque';
@@ -97,7 +96,7 @@ $lang['config.related.links.display.desc'] = 'Lien précédent, lien suivant.';
 //Smallads mini Menu configuration
 $lang['config.mini.title'] = 'Configuration du mini menu';
 $lang['config.mini.items.nb'] = 'Nombre d\'annonces à afficher dans le mini menu';
-$lang['config.mini.speed.desc'] = 'en milisecondes.';
+$lang['config.mini.speed.desc'] = 'en millisecondes.';
 $lang['config.mini.animation.speed'] = 'Vitesse de défilement';
 $lang['config.mini.autoplay'] = 'Autoriser le défilement automatique';
 $lang['config.mini.autoplay.speed'] = 'Temps entre chaque défilement';
@@ -161,6 +160,7 @@ $lang['smallads.pagination'] = 'Page {current} sur {pages}';
 $lang['smallads.seo.description.root'] = 'Toutes les annonces du site :site.';
 $lang['smallads.seo.description.tag'] = 'Toutes les annonces sur le sujet :subject.';
 $lang['smallads.seo.description.pending'] = 'Toutes les annonces en attente.';
+$lang['smallads.seo.description.usage.terms'] = 'Conditions générales d\'utilisation des annonces du site :site.';
 
 //Messages
 $lang['smallads.message.success.add'] = 'L\'annonce <b>:title</b> a été ajoutée';
@@ -185,4 +185,8 @@ $lang['mini.there.is'] = 'Il y a';
 $lang['mini.there.are'] = 'Il y a';
 $lang['mini.one.smallad'] = 'annonce sur le site';
 $lang['mini.several.smallads'] = 'annonces sur le site';
+
+// Accessibility
+$lang['open.modal'] = 'Ouverture dans une nouvelle fenêtre';
+$lang['close.modal'] = 'Fermeture de la fenêtre';
 ?>

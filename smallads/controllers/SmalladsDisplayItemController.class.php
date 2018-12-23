@@ -103,7 +103,8 @@ class SmalladsDisplayItemController extends ModuleController
 
 	private function build_view(HTTPRequestCustom $request)
 	{
-		$comments_config = new SmalladsComments();
+		$comments_config = CommentsConfig::load();
+		$content_management_config = ContentManagementConfig::load();
 
 		$this->category = $this->smallad->get_category();
 
@@ -115,13 +116,13 @@ class SmalladsDisplayItemController extends ModuleController
 		$this->build_navigation_links($this->smallad);
 
 		$this->tpl->put_all(array_merge($this->smallad->get_array_tpl_vars(), array(
-			'C_COMMENTS_ENABLED' => $comments_config->are_comments_enabled(),
+			'C_COMMENTS_ENABLED' => $comments_config->module_comments_is_enabled('smallads'),
 			'CONTENTS'           => FormatingHelper::second_parse($this->smallad->get_contents()),
 			'U_EDIT_ITEM'     	 => SmalladsUrlBuilder::edit_item($this->smallad->get_id())->rel()
 		)));
 
 		//Affichage commentaires
-		if ($comments_config->are_comments_enabled())
+		if ($comments_config->module_comments_is_enabled('smallads'))
 		{
 			$comments_topic = new SmalladsCommentsTopic($this->smallad);
 			$comments_topic->set_id_in_module($this->smallad->get_id());
@@ -172,15 +173,10 @@ class SmalladsDisplayItemController extends ModuleController
 		$i = 1;
 		foreach ($carousel as $id => $options)
 		{
-			if(filter_var($options['picture_url'], FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED))
-				$ptr = false;
-			else
-				$ptr = true;
 
 			$this->tpl->assign_block_vars('carousel', array(
-				'C_PTR' => $ptr,
 				'DESCRIPTION' => $options['description'],
-				'U_PICTURE' => $options['picture_url'],
+				'U_PICTURE' => Url::to_rel($options['picture_url']),
 			));
 			$i++;
 		}
@@ -228,17 +224,12 @@ class SmalladsDisplayItemController extends ModuleController
 
 		while ($row = $result->fetch())
 		{
-			if(filter_var($row['thumbnail_url'], FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED))
-				$ptr = false;
-			else
-				$ptr = true;
 
 			$this->tpl->assign_block_vars('suggested_items', array(
-				'C_PTR' => $ptr,
 				'C_COMPLETED' => $row['completed'],
 				'C_HAS_THUMBNAIL' => !empty($row['thumbnail_url']),
 				'TITLE' => $row['title'],
-				'THUMBNAIL' => $row['thumbnail_url'],
+				'THUMBNAIL' => Url::to_rel($row['thumbnail_url']),
 				'U_ITEM' => SmalladsUrlBuilder::display_item($row['id_category'], SmalladsService::get_categories_manager()->get_categories_cache()->get_category($row['id_category'])->get_rewrited_name(), $row['id'], $row['rewrited_title'])->rel()
 			));
 		}
@@ -270,18 +261,12 @@ class SmalladsDisplayItemController extends ModuleController
 
 		while ($row = $result->fetch())
 		{
-			if(filter_var($row['thumbnail_url'], FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED))
-				$ptr = false;
-			else
-				$ptr = true;
-
 			$this->tpl->put_all(array(
 				'C_'. $row['type'] .'_COMPLETED' => $row['completed'],
 				'C_'. $row['type'] .'_ITEM' => true,
-				'C_' . $row['type'] . '_PTR' => $ptr,
 				'C_' . $row['type'] . '_HAS_THUMBNAIL' => !empty($row['thumbnail_url']),
 				$row['type'] . '_ITEM_TITLE' => $row['title'],
-				$row['type'] . '_THUMBNAIL' => $row['thumbnail_url'],
+				$row['type'] . '_THUMBNAIL' => Url::to_rel($row['thumbnail_url']),
 				'U_'. $row['type'] .'_ITEM' => SmalladsUrlBuilder::display_item($row['id_category'], SmalladsService::get_categories_manager()->get_categories_cache()->get_category($row['id_category'])->get_rewrited_name(), $row['id'], $row['rewrited_title'])->rel(),
 			));
 		}
@@ -384,9 +369,9 @@ class SmalladsDisplayItemController extends ModuleController
 		$response = new SiteDisplayResponse($this->tpl);
 
 		$graphical_environment = $response->get_graphical_environment();
-		$graphical_environment->set_page_title($this->smallad->get_title(), $this->lang['smallads.module.title']);
-		$graphical_environment->get_seo_meta_data()->set_description($this->smallad->get_description());
-		$graphical_environment->get_seo_meta_data()->set_canonical_url(SmalladsUrlBuilder::display_item($this->category->get_id(), $this->category->get_rewrited_name(), $this->smallad->get_id(), $this->smallad->get_rewrited_title(), AppContext::get_request()->get_getint('page', 1)));
+		$graphical_environment->set_page_title($this->smallad->get_title(), ($this->category->get_id() != Category::ROOT_CATEGORY ? $this->category->get_name() . ' - ' : '') . $this->lang['smallads.module.title']);
+		$graphical_environment->get_seo_meta_data()->set_description($this->smallad->get_real_description());
+		$graphical_environment->get_seo_meta_data()->set_canonical_url(SmalladsUrlBuilder::display_item($this->category->get_id(), $this->category->get_rewrited_name(), $this->smallad->get_id(), $this->smallad->get_rewrited_title()));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['smallads.module.title'], SmalladsUrlBuilder::home());

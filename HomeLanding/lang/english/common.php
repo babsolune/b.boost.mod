@@ -138,7 +138,7 @@ $lang['no.web.item'] = 'There is no link in this category';
 $lang['admin.char'] = 'Limit the number of characters';
 $lang['admin.cat'] = 'Choose a category';
 $lang['admin.subcategories_content_displayed'] = 'Display subcategories content';
-$lang['admin.elements_position'] = 'Elements position on Homepage';
+$lang['admin.elements_position'] = 'Elements position';
 
 //Config
 $lang['admin.module.title'] = 'Module title';
@@ -165,6 +165,13 @@ $lang['admin.form.carousel.hover.disabled'] = 'Disabled';
 $lang['admin.form.carousel.mini'] = 'Thumbnail display';
 $lang['admin.form.carousel.mini.dots'] = 'Dots';
 $lang['admin.form.carousel.mini.imgs'] = 'Thumbnails';
+//Admin - Carousel content
+$lang['admin.form.description'] = 'Description of the slide';
+$lang['admin.form.link.url'] = 'Address of the link';
+$lang['admin.form.picture.url'] = 'Address of the picture';
+$lang['admin.form.upload'] = 'Open the file manager';
+$lang['admin.form.add'] = 'Add a picture';
+$lang['admin.form.del'] = 'Delete the slide';
 
 //Admin - One page Menu
 $lang['admin.onepage'] = 'Onepage menu display';

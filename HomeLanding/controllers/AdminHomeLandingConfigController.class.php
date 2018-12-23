@@ -4,7 +4,7 @@
  *                            -------------------
  *   begin                : January 2, 2016
  *   copyright            : (C) 2016 Sebastien Lartigue
- *   email                : babso@web33.fr
+ *   email                : babsolune@phpboost.fr
  *
  *
  ###################################################
@@ -163,7 +163,7 @@ class AdminHomeLandingConfigController extends AdminModuleController
 		$form = new HTMLForm(__CLASS__);
 
 		//Configuration
-		$fieldset_config = new FormFieldsetHTML('configuration', LangLoader::get_message('configuration', 'admin-common'));
+		$fieldset_config = new FormFieldsetHTMLHeading('configuration', LangLoader::get_message('configuration', 'admin-common'));
 		$form->add_fieldset($fieldset_config);
 
 		$fieldset_config->add_field(new FormFieldTextEditor('module_title', $this->lang['admin.module.title'], $this->config->get_module_title(),
@@ -195,7 +195,7 @@ class AdminHomeLandingConfigController extends AdminModuleController
 		$form->add_fieldset($fieldset_carousel);
 
 		$fieldset_carousel->add_field(new FormFieldCheckbox('carousel_enabled', $this->lang['admin.carousel.enabled'], $this->modules[HomeLandingConfig::MODULE_CAROUSEL]->is_displayed(),
-			array('events' => array('click' => '
+			array('class'=> 'top-field', 'events' => array('click' => '
 			if (HTMLForms.getField("carousel_enabled").getValue()) {
 				HTMLForms.getField("carousel").enable();
 				HTMLForms.getField("carousel_speed").enable();
@@ -211,10 +211,6 @@ class AdminHomeLandingConfigController extends AdminModuleController
 				HTMLForms.getField("carousel_hover").disable();
 				HTMLForms.getField("carousel_mini").disable();
 			}'))
-		));
-
-		$fieldset_carousel->add_field(new HomeLandingFormFieldSliderConfig('carousel', $this->lang['admin.form.carousel'], $this->config->get_carousel(),
-			array('hidden' => !$this->modules[HomeLandingConfig::MODULE_CAROUSEL]->is_displayed())
 		));
 
 		$fieldset_carousel->add_field(new FormFieldNumberEditor('carousel_speed', $this->lang['admin.form.carousel.speed'], $this->config->get_carousel_speed(),
@@ -247,6 +243,10 @@ class AdminHomeLandingConfigController extends AdminModuleController
 				new FormFieldSelectChoiceOption($this->lang['admin.form.carousel.mini.imgs'], HomeLandingConfig::CAROUSEL_IMG)
 			),
 			array('hidden' => !$this->modules[HomeLandingConfig::MODULE_CAROUSEL]->is_displayed())
+		));
+
+		$fieldset_carousel->add_field(new HomeLandingFormFieldSliderConfig('carousel', $this->lang['admin.form.carousel'], $this->config->get_carousel(),
+			array('class' => 'full-field', 'hidden' => !$this->modules[HomeLandingConfig::MODULE_CAROUSEL]->is_displayed())
 		));
 
 		$fieldset_edito = new FormFieldsetHTML('admin_edito', LangLoader::get_message('admin.edito', 'common', 'HomeLanding'));

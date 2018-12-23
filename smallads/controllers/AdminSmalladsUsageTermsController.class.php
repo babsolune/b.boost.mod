@@ -40,9 +40,6 @@ class AdminSmalladsUsageTermsController extends AdminModuleController
 	 */
 	private $submit_button;
 
-	private $comments_config;
-	private $content_management_config;
-
 	private $lang;
 	private $admin_common_lang;
 
@@ -50,6 +47,8 @@ class AdminSmalladsUsageTermsController extends AdminModuleController
 	 * @var SmalladsConfig
 	 */
 	private $config;
+	private $comments_config;
+	private $content_management_config;
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -85,7 +84,7 @@ class AdminSmalladsUsageTermsController extends AdminModuleController
 	{
 		$form = new HTMLForm(__CLASS__);
 
-		$fieldset = new FormFieldsetHTML('config_usage_terms_configuration', $this->lang['config.usage.terms']);
+		$fieldset = new FormFieldsetHTMLHeading('config_usage_terms_configuration', $this->lang['config.usage.terms']);
 		$form->add_fieldset($fieldset);
 
 		$fieldset->add_field(new FormFieldCheckbox('usage_terms_displayed', $this->lang['config.usage.terms.displayed'], $this->config->are_usage_terms_displayed(),
