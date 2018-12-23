@@ -49,29 +49,6 @@
  /* #####  #   #  #   #  #   #  #####  #####  #####  #####  #####
  */
 
- 10/03/2018 5.2.0
- #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- - Réfection du slider :
-    - images en background pour la gestion des images de tailles différentes
-        => les images "portrait" sont tronquées et les trop petites images sont agrandies donc pixélisées
-        mais elle font toutes la même taille dans le slider
-        (hauteur du slider dépend du nb d'images: padding-bottom: calc(100% / nb d'images / 2); env= mode paysage)
-    - ajout de la déclaration d'un lien sur la description
-        - si lien vers site externe => ouverture dans un nouvel onglet/fenêtre
-        - si pas de description, le lien n'apparait pas
-    - séparation des css dans un fichier à part pour gérer plus facilement l'utilisation d'un autre slider
-- contact => affichage de la map si déclarée
-- news/articles/download/galerie => alignement de l'affichage sur la configuration du module (bloc/mosaïc/table/liste + nb d'item/ligne)
-- web => fix lien vers module sur le web-cat + affichage image: si image-partner => si image => nom
-- lastcoms => alignement de l'affichage sur modules forum/guestbook avec récup de l'avatar
-- forum/guestbook/lastcom => passage en elements-container / 3 blocs/lignes
-
-- ajustement des css en fonction des nouveautés
-- remplacement des id "last_module" et "last_module_cat" par "module" et "module-cat"
-- remplacement des index de variables : module_items => item (transparent)
-- possibilité d'afficher le module HomeLanding en tant que page => nomdusite.ext/HomeLanding
-- gestion d'une page libre pour les admin : titre + contenu de la page configurable via admin
-
  09/04/2017 5.1.0
  #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  Ajout du poster dans les media

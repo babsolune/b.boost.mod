@@ -32,12 +32,7 @@ require_once PATH_TO_ROOT . '/kernel/init.php';
 $url_controller_mappers = array(
 	new UrlControllerMapper('AdminHomeLandingConfigController', '`^/admin(?:/config)?/?$`'),
 	new UrlControllerMapper('AdminHomeLandingModulesPositionController', '`^/admin/positions/?$`'),
-	new UrlControllerMapper('HomeLandingAjaxChangeModuleDisplayController', '`^/admin/positions/change_display/?$`'),
-
-	new UrlControllerMapper('AdminHomeLandingStickyConfigController', '`^/admin/sticky/?$`'),
-	new UrlControllerMapper('HomeLandingStickyController', '`^/sticky/?$`'),
-
-	new UrlControllerMapper('HomeLandingHomeController', '`^(?:/([0-9]+))?/?$`')
+	new UrlControllerMapper('HomeLandingAjaxChangeModuleDisplayController', '`^/admin/positions/change_display/?$`')
 );
 DispatchManager::dispatch($url_controller_mappers);
 
