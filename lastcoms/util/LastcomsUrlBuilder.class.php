@@ -4,7 +4,8 @@
  *                            -------------------
  *   begin                	: June 15, 2015
  *   copyright            	: (C) 2015 Sebastien Lartigue
- *   email                	: babsolune@phpboost.com
+ *   email                	: babso@web33.fr
+ *   original countdown author 	: 
  *
  *
  ###################################################
@@ -28,7 +29,7 @@
 class LastcomsUrlBuilder
 {
 	private static $dispatcher = '/lastcoms';
-
+	
 	public static function config()
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/admin/config/');

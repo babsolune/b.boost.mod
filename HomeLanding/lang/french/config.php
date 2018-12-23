@@ -26,5 +26,5 @@
  ###################################################*/
 
 $lang['title'] = 'Bienvenue';
-$lang['module.edito.description'] = 'Acc√©dez √† la <a href="' . HomeLandingUrlBuilder::configuration()->relative() . '">configuration du module</a> pour param√©trer la page d\'accueil';
+$lang['module.edito.description'] = 'AccÈdez ‡ la <a href="' . HomeLandingUrlBuilder::configuration()->relative() . '">configuration du module</a> pour paramÈtrer la page d\'accueil';
 ?>

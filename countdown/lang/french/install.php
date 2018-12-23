@@ -33,9 +33,8 @@
  ####################################################
 #                     French                        #
  ####################################################
-$lang['countdown.no.javas'] = 'Prochain Ã©vÃ©nement le 1er Janvier 2018 Ã  0h 00m 00s';
-$lang['countdown.next.event'] = 'Prochain Ã©vÃ©nement dans :';
-$lang['countdown.last.event'] = 'Dernier Ã©vÃ©nement terminÃ© depuis :';
-$lang['countdown.no.event'] = 'Il n\'y a pas d\'Ã©vÃ©nement programmÃ©';
-$lang['countdown.stoped.event'] = 'L\'Ã©vÃ©nement programmÃ© est terminÃ©';
+$lang['countdown.no.javas'] = 'Prochain événement le 1er Janvier 2017 à 0h 00m 00s';
+$lang['countdown.next.event'] = 'Prochain événement dans :';
+$lang['countdown.last.event'] = 'Dernier événement terminé depuis :';
+$lang['countdown.no.event'] = 'Il n\'y a pas d\'événement programmé';
 ?>

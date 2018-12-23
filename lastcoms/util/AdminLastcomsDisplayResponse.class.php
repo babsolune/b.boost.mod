@@ -2,10 +2,10 @@
 /*##################################################
  *		                AdminLastcomsDisplayResponse.class.php
  *                            -------------------
- *   begin                             : July 26, 2009
- *   copyright                         : (C) 2009 ROGUELON Geoffrey
- *   email                             : liaght@gmail.com
- *   Adapted for Phpboost since 4.1 by : babsolune - babsolune@phpboost.com
+ *   begin                       : July 26, 2009
+ *   copyright                   : (C) 2009 ROGUELON Geoffrey
+ *   email                       : liaght@gmail.com
+ *   Adapted for Phpboost 4.1 by : babsolune - babso@web33.fr
  *
  *
  ###################################################
@@ -31,13 +31,13 @@ class AdminLastcomsDisplayResponse extends AdminMenuDisplayResponse
 	public function __construct($view, $title_page)
 	{
 		parent::__construct($view);
-
+		
 		$lang = LangLoader::get('common', 'lastcoms');
-		$this->set_title($lang['lastcoms.title']);
+		$this->set_title($lang['title']);
 		$img = 'lastcoms.png';
 
 		$this->add_link(LangLoader::get_message('configuration', 'admin'), LastcomsUrlBuilder::config(), $img);
-
+		
 		$env = $this->get_graphical_environment();
 		$env->set_page_title($title_page);
 	}

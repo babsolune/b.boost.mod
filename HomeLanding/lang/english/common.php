@@ -34,7 +34,6 @@ $lang['module_title'] = 'Home Page';
 
 //Modules position
 $lang['module.carousel'] = 'Slider';
-$lang['module.onepage_menu'] = 'Onepage Menu';
 $lang['module.edito'] = 'Edito';
 $lang['module.lastcoms'] = 'Last comments';
 $lang['module.articles'] = 'Last articles';
@@ -52,21 +51,6 @@ $lang['module.news_category'] = 'Last news of a category';
 $lang['module.rss'] = 'External RSS Feed';
 $lang['module.web'] = 'Partners websites list';
 $lang['module.web_category'] = 'Partners websites list of a category';
-
-// One page menu
-$lang['onepage.edito'] = 'Edito';
-$lang['onepage.carousel'] = 'Slideshow';
-$lang['onepage.lastcoms'] = 'Comments';
-$lang['onepage.articles'] = 'Articles';
-$lang['onepage.contact'] = 'Contact';
-$lang['onepage.events'] = 'Events';
-$lang['onepage.download'] = 'Downloads';
-$lang['onepage.forum'] = 'Forum';
-$lang['onepage.gallery'] = 'Gallery';
-$lang['onepage.guestbook'] = 'Guestbook';
-$lang['onepage.media'] = 'Media';
-$lang['onepage.news'] = 'News';
-$lang['onepage.web'] = 'Weblinks';
 
 //Last Comments
 $lang['last.comments'] = 'Last comments';
@@ -165,10 +149,6 @@ $lang['admin.form.carousel.hover.disabled'] = 'Disabled';
 $lang['admin.form.carousel.mini'] = 'Thumbnail display';
 $lang['admin.form.carousel.mini.dots'] = 'Dots';
 $lang['admin.form.carousel.mini.imgs'] = 'Thumbnails';
-
-//Admin - One page Menu
-$lang['admin.onepage'] = 'Onepage menu display';
-$lang['admin.menu.onepage'] = 'Display the onepage menu';
 
 //Admin - Edito
 $lang['admin.edito'] = 'Edito display';

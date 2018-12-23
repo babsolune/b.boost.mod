@@ -25,17 +25,18 @@
 
 .timer-name { font-size:10px; }
 
-.horizontal-timer { overflow: hidden; display: table; width: 100%;}
+.horizontal-timer { overflow: hidden; }
 
 .horizontal-timer .pbt-timer {
     width:60%;
-    display: table-cell;
+    float: right;
 }
 
 .horizontal-timer span.event-title {
-    padding: 0 5px;
-    display: table-cell;
-    vertical-align: middle;
+    margin-top: 20px;
+    padding-left: 20px;
+    float: left;
+    width: 40%;
 }
 
 input.input-hours,

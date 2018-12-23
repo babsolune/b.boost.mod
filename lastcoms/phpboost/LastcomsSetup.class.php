@@ -1,10 +1,10 @@
 <?php
 /*##################################################
- *                      SmalladsComments.class.php
+ *                         LastcomsSetup.class.php
  *                            -------------------
- *   begin                : March 15, 2018 
- *   copyright            : (C) 2018 Sebastien LARTIGUE
- *   email                : babsolune@phpboost.com
+ *   begin                	: December 12, 2014
+ *   copyright            	: (C) 2014 Sebastien LARTIGUE
+ *   email                	: babsolune@phpboost.com
  *
  *
  ###################################################
@@ -29,11 +29,11 @@
  * @author Sebastien LARTIGUE <babsolune@phpboost.com>
  */
 
-class SmalladsComments extends AbstractCommentsExtensionPoint
+class LastcomsSetup extends DefaultModuleSetup
 {
-	public function __construct()
+	public function upgrade($installed_version)
 	{
-		parent::__construct('smallads');
+		return '5.0.0';
 	}
 }
 ?>

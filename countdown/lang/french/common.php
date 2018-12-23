@@ -33,28 +33,23 @@
  ####################################################
 #                     French                        #
  ####################################################
-$lang['title'] = 'Compte √† rebours';
-$lang['module_config_title'] = 'Configuration du compte √† rebours';
+$lang['title'] = 'Compte ‡ rebours';
+$lang['module_config_title'] = 'Configuration du compte ‡ rebours';
 
 // Config
-$lang['config.event.date'] = 'Date de l\'√©v√©nement';
+$lang['config.event.date'] = 'Date de l\'ÈvÈnement';
 $lang['config.no.script'] = 'No-script';
-$lang['config.no.script.desc'] = 'Message √† afficher si le javascript est d√©sactiv√©';
-$lang['config.next.event'] = 'Prochain √©v√©nement';
-$lang['config.next.event.desc'] = 'Message √† afficher avant la fin du d√©compte';
-$lang['config.last.event'] = 'Dernier √©v√©nement';
-$lang['config.last.event.desc'] = 'Message √† afficher apr√®s la fin du d√©compte';
-$lang['config.timer.disabled'] = 'D√©sactiver le compte √† rebours';
-$lang['config.no.event'] = 'Aucun √©v√©nement';
-$lang['config.no.event.desc'] = 'Message √† afficher si le compte √† rebours est d√©sactiv√©';
-$lang['config.authorizations.read']  = 'Autorisation d\'afficher le compte √† rebours';
-$lang['config.stop.counter'] = 'Arr√™ter le compteur √† la fin du d√©compte';
-$lang['config.stop.counter.desc'] = 'Si non coch√©, le compteur continue';
-$lang['config.hidden.counter'] = 'Cacher le compteur √† la fin du d√©compte';
-$lang['config.stopped.event'] = '√âv√©nement Termin√©';
-$lang['config.stopped.event.desc'] = 'Message √† afficher quand le d√©compte s\'arr√™te';
+$lang['config.no.script.desc'] = 'Message ‡ afficher si le javascript est dÈsactivÈ';
+$lang['config.next.event'] = 'Prochain ÈvÈnement';
+$lang['config.next.event.desc'] = 'Message ‡ afficher avant la fin du dÈcompte';
+$lang['config.last.event'] = 'Dernier ÈvÈnement';
+$lang['config.last.event.desc'] = 'Message ‡ afficher aprËs la fin du dÈcompte';
+$lang['config.timer.disabled'] = 'DÈsactiver le compte ‡ rebours';
+$lang['config.no.event'] = 'Aucun ÈvÈnement';
+$lang['config.no.event.desc'] = 'Message ‡ afficher si le compte ‡ rebours est dÈsactivÈ';
+$lang['config.authorizations.read']  = 'Autorisation d\'afficher le compte ‡ rebours';
 
-// Gestion de l'affichage
+// Gestion de l'affichage 
 $lang['day'] = 'Jour';
 $lang['hour'] = 'Heure';
 $lang['mini.hour'] = 'Hr';
