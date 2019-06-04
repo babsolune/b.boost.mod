@@ -1,34 +1,17 @@
 <?php
-/*##################################################
- *                      common.php
- *                            -------------------
- *   begin                : January 2, 2016
- *   copyright            : (C) 2016 Sebastien LARTIGUE - Julien BRISWALTER
- *   email                : babsolune@phpboost.com - j1.seth@phpboost.com
- *
- *
- ###################################################
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
- ###################################################*/
-
 /**
- * @author Sebastien LARTIGUE <babsolune@phpboost.com>
- * @author Julien BRISWALTER <j1.seth@phpboost.com>
- */
+ * @copyright 	&copy; 2005-2019 PHPBoost
+ * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
+ * @version   	PHPBoost 5.2 - last update: 2019 01 17
+ * @since   	PHPBoost 5.0 - 2016 01 02
+ * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
+ * @contributor mipel <mipel@phpboost.com>
+*/
+
+####################################################
+#                      English                     #
+####################################################
 
 $lang['module_title'] = 'Home Page';
 
@@ -162,6 +145,11 @@ $lang['admin.form.carousel.nav.disabled'] = 'No navigation';
 $lang['admin.form.carousel.hover'] = 'Pause on hover';
 $lang['admin.form.carousel.hover.enabled'] = 'Enabled';
 $lang['admin.form.carousel.hover.disabled'] = 'Disabled';
+$lang['admin.form.carousel.display'] = 'Display type of pictures';
+$lang['admin.form.carousel.display.cropped'] = 'Displaying cropped pictures';
+$lang['admin.form.carousel.display.cropped.desc'] = 'Whatever the pictures dimensions, it will all be displayed with the same ratio';
+$lang['admin.form.carousel.display.full'] = 'Displaying full pictures';
+$lang['admin.form.carousel.display.full.desc'] = 'All pictures will be displayed in their own ratio';
 $lang['admin.form.carousel.mini'] = 'Thumbnail display';
 $lang['admin.form.carousel.mini.dots'] = 'Dots';
 $lang['admin.form.carousel.mini.imgs'] = 'Thumbnails';

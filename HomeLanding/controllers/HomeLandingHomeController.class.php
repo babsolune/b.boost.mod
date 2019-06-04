@@ -1,34 +1,13 @@
 <?php
-/*##################################################
- *                         HomeLandingHomeController.class.php
- *                            -------------------
- *   begin                : January 2, 2016
- *   copyright            : (C) 2016 Sebastien LARTIGUE - Julien BRISWALTER
- *   email                : babsolune@phpboost.com - j1.seth@phpboost.com
- *
- *
- ###################################################
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
- ###################################################*/
-
 /**
- * @author Sebastien Lartigue <babsolune@phpboost.com>
- * @author Julien Briswalter <j1.seth@phpboost.com>
- */
+ * @copyright 	&copy; 2005-2019 PHPBoost
+ * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
+ * @version   	PHPBoost 5.2 - last update: 2019 01 17
+ * @since   	PHPBoost 5.0 - 2016 01 02
+ * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
+ * @contributor Arnaud GENET <elenwii@phpboost.com>
+*/
 
 class HomeLandingHomeController extends ModuleController
 {
@@ -364,26 +343,28 @@ class HomeLandingHomeController extends ModuleController
 		$tpl = new FileTemplate('HomeLanding/pagecontent/carousel.tpl');
 		$carousel = $this->config->get_carousel();
 
-		$tpl->put_all(array(
-			'CAROUSEL_POSITION' => $this->config->get_module_position_by_id(HomeLandingConfig::MODULE_CAROUSEL),
-			'NB_DOTS' => count($carousel),
-			'CAROUSEL_SPEED' => $this->config->get_carousel_speed(),
-			'CAROUSEL_TIME' => $this->config->get_carousel_time(),
-			'CAROUSEL_NAV' => $this->config->get_carousel_nav(),
-			'CAROUSEL_HOVER' => $this->config->get_carousel_hover(),
-			'CAROUSEL_MINI' => $this->config->get_carousel_mini(),
-		));
-
+		$nb_dots = 0;
 		foreach ($carousel as $id => $options)
 		{
-
-			$tpl->assign_block_vars('carousel', array(
+			$tpl->assign_block_vars('item', array(
 				'DESCRIPTION' => $options['description'],
 				'PICTURE_TITLE' => $options['description'] ? $options['description'] : basename($options['picture_url']),
 				'PICTURE_URL' => Url::to_rel($options['picture_url']),
 				'LINK' => Url::to_rel($options['link'])
 			));
+			$nb_dots++;
 		}
+
+		$tpl->put_all(array(
+			'CAROUSEL_POSITION' => $this->config->get_module_position_by_id(HomeLandingConfig::MODULE_CAROUSEL),
+			'NB_DOTS' => $nb_dots,
+			'CAROUSEL_SPEED' => $this->config->get_carousel_speed(),
+			'CAROUSEL_TIME' => $this->config->get_carousel_time(),
+			'CAROUSEL_NAV' => $this->config->get_carousel_nav(),
+			'CAROUSEL_HOVER' => $this->config->get_carousel_hover(),
+			'C_CAROUSEL_CROPPED' => $this->config->get_carousel_display(),
+			'CAROUSEL_MINI' => $this->config->get_carousel_mini(),
+		));
 		$this->view->put('CAROUSEL', $tpl);
 	}
 

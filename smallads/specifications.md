@@ -38,7 +38,6 @@ Links shown in the actions links menu if visitor is connected
 
 ### Configuration
 #### Categories configuration
-- _Coming next_ Default items sort order display
 - Display filters (categories/types of ads/sort order)
 - Number of items displayed per page
 - Number of columns to display categories

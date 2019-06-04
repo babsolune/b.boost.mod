@@ -1,29 +1,12 @@
 <?php
-/*##################################################
- *		             HomeLandingConfig.class.php
- *                            -------------------
- *   begin                : January 2, 2016
- *   copyright            : (C) 2016 Sebastien Lartigue
- *   email                : babsolune@phpboost.fr
- *
- *
- ###################################################
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Comments Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Comments Public License for more details.
- *
- * You should have received a copy of the GNU Comments Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
- ###################################################*/
+/**
+ * @copyright 	&copy; 2005-2019 PHPBoost
+ * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
+ * @version   	PHPBoost 5.2 - last update: 2019 01 17
+ * @since   	PHPBoost 5.0 - 2016 01 02
+ * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
+*/
 
 class HomeLandingConfig extends AbstractConfigData
 {
@@ -44,6 +27,9 @@ class HomeLandingConfig extends AbstractConfigData
 	const CAROUSEL_HOVER = 'carousel_hover';
 	const CAROUSEL_TRUE = 'true';
 	const CAROUSEL_FALSE = 'false';
+	const CAROUSEL_DISPLAY = 'carousel_display';
+	const CAROUSEL_D_TRUE = true;
+	const CAROUSEL_D_FALSE = false;
 	const CAROUSEL_MINI = 'carousel_mini';
 	const CAROUSEL_DOT = 'dot';
 	const CAROUSEL_IMG = 'img';
@@ -237,6 +223,16 @@ class HomeLandingConfig extends AbstractConfigData
 	public function set_carousel_hover($hover)
 	{
 		$this->set_property(self::CAROUSEL_HOVER, $hover);
+	}
+
+	public function get_carousel_display()
+	{
+		return $this->get_property(self::CAROUSEL_DISPLAY);
+	}
+
+	public function set_carousel_display($display)
+	{
+		$this->set_property(self::CAROUSEL_DISPLAY, $display);
 	}
 
 	public function get_carousel_mini()
@@ -473,6 +469,7 @@ class HomeLandingConfig extends AbstractConfigData
 			self::CAROUSEL_TIME => 5000,
 			self::CAROUSEL_NAV => 1,
 			self::CAROUSEL_HOVER => 1,
+			self::CAROUSEL_DISPLAY => 1,
 			self::CAROUSEL_MINI => self::CAROUSEL_DOT,
 
 			self::EDITO => LangLoader::get_message('module.edito.description', 'config', 'HomeLanding'),

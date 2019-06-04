@@ -1,29 +1,12 @@
 <?php
-/*##################################################
- *		                   AdminHomeLandingConfigController.class.php
- *                            -------------------
- *   begin                : January 2, 2016
- *   copyright            : (C) 2016 Sebastien Lartigue
- *   email                : babsolune@phpboost.fr
- *
- *
- ###################################################
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
- ###################################################*/
+/**
+ * @copyright 	&copy; 2005-2019 PHPBoost
+ * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
+ * @version   	PHPBoost 5.2 - last update: 2019 01 17
+ * @since   	PHPBoost 5.0 - 2016 01 02
+ * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
+*/
 
 class AdminHomeLandingConfigController extends AdminModuleController
 {
@@ -66,6 +49,7 @@ class AdminHomeLandingConfigController extends AdminModuleController
 			$this->form->get_field_by_id('carousel_time')->set_hidden(!$this->modules[HomeLandingConfig::MODULE_CAROUSEL]->is_displayed());
 			$this->form->get_field_by_id('carousel_nav')->set_hidden(!$this->modules[HomeLandingConfig::MODULE_CAROUSEL]->is_displayed());
 			$this->form->get_field_by_id('carousel_hover')->set_hidden(!$this->modules[HomeLandingConfig::MODULE_CAROUSEL]->is_displayed());
+			$this->form->get_field_by_id('carousel_display')->set_hidden(!$this->modules[HomeLandingConfig::MODULE_CAROUSEL]->is_displayed());
 			$this->form->get_field_by_id('carousel_mini')->set_hidden(!$this->modules[HomeLandingConfig::MODULE_CAROUSEL]->is_displayed());
 
 			$this->form->get_field_by_id('edito')->set_hidden(!$this->modules[HomeLandingConfig::MODULE_EDITO]->is_displayed());
@@ -202,6 +186,7 @@ class AdminHomeLandingConfigController extends AdminModuleController
 				HTMLForms.getField("carousel_time").enable();
 				HTMLForms.getField("carousel_nav").enable();
 				HTMLForms.getField("carousel_hover").enable();
+				HTMLForms.getField("carousel_display").enable();
 				HTMLForms.getField("carousel_mini").enable();
 			} else {
 				HTMLForms.getField("carousel").disable();
@@ -209,6 +194,7 @@ class AdminHomeLandingConfigController extends AdminModuleController
 				HTMLForms.getField("carousel_time").disable();
 				HTMLForms.getField("carousel_nav").disable();
 				HTMLForms.getField("carousel_hover").disable();
+				HTMLForms.getField("carousel_display").disable();
 				HTMLForms.getField("carousel_mini").disable();
 			}'))
 		));
@@ -235,6 +221,21 @@ class AdminHomeLandingConfigController extends AdminModuleController
 				new FormFieldSelectChoiceOption($this->lang['admin.form.carousel.hover.disabled'], HomeLandingConfig::CAROUSEL_FALSE)
 			),
 			array('hidden' => !$this->modules[HomeLandingConfig::MODULE_CAROUSEL]->is_displayed())
+		));
+
+		$fieldset_carousel->add_field(new FormFieldSimpleSelectChoice('carousel_display', $this->lang['admin.form.carousel.display'], $this->config->get_carousel_display(),
+			array(
+				new FormFieldSelectChoiceOption($this->lang['admin.form.carousel.display.cropped'], HomeLandingConfig::CAROUSEL_D_TRUE),
+				new FormFieldSelectChoiceOption($this->lang['admin.form.carousel.display.full'], HomeLandingConfig::CAROUSEL_D_FALSE)
+			),
+			array('hidden' => !$this->modules[HomeLandingConfig::MODULE_CAROUSEL]->is_displayed())
+			// ,
+			// array('events' => array('blur' => '
+			// if (HTMLForms.getField("carousel_display").getValue() = '.HomeLandingConfig::CAROUSEL_CROPPED.') {
+			// 	'.array('description' => $this->lang['admin.form.carousel.display.cropped.desc']).'
+			// } else {
+			// 	'.array('description' => $this->lang['admin.form.carousel.display.full.desc']).'
+			// }'))
 		));
 
 		$fieldset_carousel->add_field(new FormFieldSimpleSelectChoice('carousel_mini', $this->lang['admin.form.carousel.mini'], $this->config->get_carousel_mini(),
@@ -712,6 +713,7 @@ class AdminHomeLandingConfigController extends AdminModuleController
 			$this->config->set_carousel_time($this->form->get_value('carousel_time'));
 			$this->config->set_carousel_nav($this->form->get_value('carousel_nav')->get_raw_value());
 			$this->config->set_carousel_hover($this->form->get_value('carousel_hover')->get_raw_value());
+			$this->config->set_carousel_display($this->form->get_value('carousel_display')->get_raw_value());
 			$this->config->set_carousel_mini($this->form->get_value('carousel_mini')->get_raw_value());
 		}
 		else
