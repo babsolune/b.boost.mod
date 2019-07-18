@@ -1,2 +1,2 @@
 # pbt-modules
-Modules for [PHPBoost CMS](https://www.phpboost.com) Dev
+Modules for [PHPBoost CMS](https://www.phpboost.com) 5.2
