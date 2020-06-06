@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright 	&copy; 2005-2019 PHPBoost
- * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
- * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version   	PHPBoost 5.2 - last update: 2018 12 08
- * @since   	PHPBoost 5.1 - 2018 03 15
- * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
+ * @copyright   &copy; 2005-2020 PHPBoost
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @author        Sebastien LARTIGUE <babsolune@phpboost.com>
+ * @version     PHPBoost 5.3 - last update: 2020 01 26
+ * @since       PHPBoost 5.1 - 2019 11 04
+ * @contributor  Julien BRISWALTER <j1.seth@phpboost.com>
+ * @contributor  Mipel <mipel@phpboost.com>
 */
 
 class AdminSmalladsItemsConfigController extends AdminModuleController
@@ -68,61 +69,94 @@ class AdminSmalladsItemsConfigController extends AdminModuleController
 		$fieldset->add_field(new FormFieldSelectCurrencies('currency', $this->lang['config.currency'], $this->config->get_currency()));
 
 		$fieldset->add_field(new FormFieldNumberEditor('display_delay_before_delete', $this->lang['config.display.delay.before.delete'], $this->config->get_display_delay_before_delete(),
-			array('min' => 1, 'max' => 7, 'required' => true, 'description' => $this->lang['config.display.delay.before.delete.desc']),
+			array(
+				'min' => 1, 'max' => 7, 'required' => true,
+				'description' => $this->lang['config.display.delay.before.delete.desc']
+			),
 			array(new FormFieldConstraintIntegerRange(1, 7))
 		));
 
-		$fieldset->add_field(new FormFieldCheckbox('max_weeks_number_displayed', $this->lang['config.max.weeks.number.displayed'], $this->config->is_max_weeks_number_displayed(), array(
-			'events' => array('click' => '
-				if (HTMLForms.getField("max_weeks_number_displayed").getValue()) {
-					HTMLForms.getField("max_weeks_number").enable();
-				} else {
-					HTMLForms.getField("max_weeks_number").disable();
-				}'
+		$fieldset->add_field(new FormFieldCheckbox('max_weeks_number_displayed', $this->lang['config.max.weeks.number.displayed'], $this->config->is_max_weeks_number_displayed(),
+			array(
+				'class'=> 'custom-checkbox',
+				'events' => array('click' => '
+					if (HTMLForms.getField("max_weeks_number_displayed").getValue()) {
+						HTMLForms.getField("max_weeks_number").enable();
+					} else {
+						HTMLForms.getField("max_weeks_number").disable();
+					}'
+				)
 			)
-		)));
+		));
 
 		$fieldset->add_field(new FormFieldNumberEditor('max_weeks_number', $this->lang['config.max.weeks.number'], $this->config->get_max_weeks_number(),
-			array('min' => 1, 'max' => 52, 'required' => true, 'hidden' => !$this->config->is_max_weeks_number_displayed()),
+			array(
+				'min' => 1, 'max' => 52, 'required' => true,
+				'hidden' => !$this->config->is_max_weeks_number_displayed()
+			),
 			array(new FormFieldConstraintIntegerRange(1, 52))
 		));
 
-		$fieldset->add_field(new FormFieldFree('1_separator', '', ''));
+		$fieldset->add_field(new FormFieldSpacer('1_separator', ''));
 
 		$fieldset->add_field(new FormFieldCheckbox('contact_level', $this->lang['config.display.contact.to.visitors'], $this->config->is_user_allowed(),
-			array('description' => $this->lang['config.display.contact.to.visitors.desc'])
+			array(
+				'class'=> 'custom-checkbox',
+				'description' => $this->lang['config.display.contact.to.visitors.desc']
+			)
 		));
 
-		$fieldset->add_field(new FormFieldCheckbox('display_email_enabled', $this->lang['config.display.email.enabled'], $this->config->is_email_displayed()));
+		$fieldset->add_field(new FormFieldCheckbox('display_email_enabled', $this->lang['config.display.email.enabled'], $this->config->is_email_displayed(),
+			array('class'=> 'custom-checkbox')
+		));
 
-		$fieldset->add_field(new FormFieldCheckbox('display_pm_enabled', $this->lang['config.display.pm.enabled'], $this->config->is_pm_displayed()));
+		$fieldset->add_field(new FormFieldCheckbox('display_pm_enabled', $this->lang['config.display.pm.enabled'], $this->config->is_pm_displayed(),
+			array('class'=> 'custom-checkbox')
+		));
 
-		$fieldset->add_field(new FormFieldCheckbox('display_phone_enabled', $this->lang['config.display.phone.enabled'], $this->config->is_phone_displayed()));
+		$fieldset->add_field(new FormFieldCheckbox('display_phone_enabled', $this->lang['config.display.phone.enabled'], $this->config->is_phone_displayed(),
+			array('class'=> 'custom-checkbox')
+		));
 
 		$fieldset->add_field(new FormFieldCheckbox('enabled_navigation_links', $this->lang['config.related.links.display'], $this->config->get_enabled_navigation_links(),
-			array('description' => $this->lang['config.related.links.display.desc'])
+			array(
+				'class' => 'custom-checkbox',
+				'description' => $this->lang['config.related.links.display.desc']
+			)
 		));
 
-		$fieldset->add_field(new FormFieldCheckbox('display_location_enabled', $this->lang['config.location'], $this->config->is_location_displayed()));
+		$fieldset->add_field(new FormFieldCheckbox('display_location_enabled', $this->lang['config.location'], $this->config->is_location_displayed(),
+			array('class'=> 'custom-checkbox')
+		));
 
 		$fieldset->add_field(new FormFieldCheckbox('enabled_items_suggestions', $this->lang['config.suggestions.display'], $this->config->get_enabled_items_suggestions(),
-			array('events' => array('click' => '
-				if (HTMLForms.getField("enabled_items_suggestions").getValue()) {
-					HTMLForms.getField("suggested_items_nb").enable();
-				} else {
-					HTMLForms.getField("suggested_items_nb").disable();
-				}
-			'))
+			array(
+				'class' => 'custom-checkbox',
+				'events' => array('click' => '
+					if (HTMLForms.getField("enabled_items_suggestions").getValue()) {
+						HTMLForms.getField("suggested_items_nb").enable();
+					} else {
+						HTMLForms.getField("suggested_items_nb").disable();
+					}'
+				)
+			)
 		));
 
 		$fieldset->add_field(new FormFieldNumberEditor('suggested_items_nb', $this->lang['config.suggestions.nb'], $this->config->get_suggested_items_nb(),
-			array('min' => 1, 'max' => 10, 'hidden' => !$this->config->get_enabled_items_suggestions()),
+			array(
+				'min' => 1, 'max' => 10,
+				'hidden' => !$this->config->get_enabled_items_suggestions()
+			),
 			array(new FormFieldConstraintIntegerRange(1, 10))
 		));
 
-		$fieldset->add_field(new FormFieldFree('2_separator', '', ''));
+		$fieldset->add_field(new FormFieldSpacer('2_separator', ''));
 
 		$fieldset->add_field(new SmalladsFormFieldSmalladType('smallad_type', $this->lang['smallads.type.add'], $this->config->get_smallad_types()));
+
+        $fieldset->add_field(new FormFieldRichTextEditor('default_contents', $this->lang['smallads.default.contents'], $this->config->get_default_contents(),
+			array('rows' => 8, 'cols' => 47)
+		));
 
 		// $fieldset->add_field(new SmalladsFormFieldBrand('smallad_brand', $this->lang['smallads.brand.add'], $this->config->get_brands()));
 
@@ -181,8 +215,10 @@ class AdminSmalladsItemsConfigController extends AdminModuleController
 		else
 			$this->config->hide_location();
 
+		$this->config->set_default_contents($this->form->get_value('default_contents'));
+
 		SmalladsConfig::save();
-		SmalladsService::get_categories_manager()->regenerate_cache();
+		CategoriesService::get_categories_manager()->regenerate_cache();
 	}
 }
 ?>

@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 	&copy; 2005-2019 PHPBoost
- * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @copyright   &copy; 2005-2020 PHPBoost
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version   	PHPBoost 5.2 - last update: 2018 10 23
- * @since   	PHPBoost 5.1 - 2018 03 15
+ * @version     PHPBoost 5.3 - last update: 2020 05 08
+ * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
 
@@ -13,6 +13,9 @@ class SmalladsItemsManagerController extends ModuleController
 	private $lang;
 	private $view;
 
+	private $elements_number = 0;
+	private $ids = array();
+
 	public function execute(HTTPRequestCustom $request)
 	{
 		$this->check_authorizations();
@@ -20,6 +23,8 @@ class SmalladsItemsManagerController extends ModuleController
 		$this->init();
 
 		$current_page = $this->build_table();
+
+		$this->execute_multiple_delete_if_needed($request);
 
 		return $this->generate_response($current_page);
 	}
@@ -32,7 +37,7 @@ class SmalladsItemsManagerController extends ModuleController
 
 	private function build_table()
 	{
-		$display_categories = SmalladsService::get_categories_manager()->get_categories_cache()->has_categories();
+		$display_categories = CategoriesService::get_categories_manager()->get_categories_cache()->has_categories();
 
 		$columns = array(
 			new HTMLTableColumn(LangLoader::get_message('form.title', 'common'), 'title'),
@@ -41,7 +46,7 @@ class SmalladsItemsManagerController extends ModuleController
 			new HTMLTableColumn(LangLoader::get_message('form.date.creation', 'common'), 'creation_date'),
 			new HTMLTableColumn(LangLoader::get_message('status', 'common'), 'published'),
 			new HTMLTableColumn(LangLoader::get_message('smallads.completed.item', 'common', 'smallads'), 'completed'),
-			new HTMLTableColumn('')
+			new HTMLTableColumn(LangLoader::get_message('actions', 'admin-common'), '', array('sr-only' => true))
 		);
 
 		if (!$display_categories)
@@ -65,8 +70,11 @@ class SmalladsItemsManagerController extends ModuleController
 			$category = $smallad->get_category();
 			$user = $smallad->get_author_user();
 
-			$edit_link = new LinkHTMLElement(SmalladsUrlBuilder::edit_item($smallad->get_id()), '', array('title' => LangLoader::get_message('edit', 'common')), 'fa fa-edit');
-			$delete_link = new LinkHTMLElement(SmalladsUrlBuilder::delete_item($smallad->get_id()), '', array('title' => LangLoader::get_message('delete', 'common'), 'data-confirmation' => 'delete-element'), 'fa fa-delete');
+			$this->elements_number++;
+			$this->ids[$this->elements_number] = $smallad->get_id();
+
+			$edit_link = new EditLinkHTMLElement(SmalladsUrlBuilder::edit_item($smallad->get_id()));
+			$delete_link = new DeleteLinkHTMLElement(SmalladsUrlBuilder::delete_item($smallad->get_id()));
 
 			$user_group_color = User::get_group_color($user->get_groups(), $user->get_level(), true);
 			$author = $user->get_id() !== User::VISITOR_LEVEL ? new LinkHTMLElement(UserUrlBuilder::profile($user->get_id()), $user->get_display_name(), (!empty($user_group_color) ? array('style' => 'color: ' . $user_group_color) : array()), UserService::get_level_class($user->get_level())) : $user->get_display_name();
@@ -91,19 +99,16 @@ class SmalladsItemsManagerController extends ModuleController
 
 			$start_and_end_dates = new SpanHTMLElement($dates, array(), 'smaller');
 
-			if($smallad->is_completed())
-				$completed = LangLoader::get_message('smallads.completed.item', 'common', 'smallads');
-			else
-				$completed = '';
+			$completed = $smallad->is_completed() ? LangLoader::get_message('smallads.completed.item', 'common', 'smallads') : '';
 
 			$row = array(
 				new HTMLTableRowCell(new LinkHTMLElement(SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $smallad->get_id(), $smallad->get_rewrited_title()), $smallad->get_title()), 'left'),
-				new HTMLTableRowCell(new LinkHTMLElement(SmalladsUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()), $category->get_name())),
+				new HTMLTableRowCell(new LinkHTMLElement(SmalladsUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()), ($category->get_id() == Category::ROOT_CATEGORY ? LangLoader::get_message('none_e', 'common') : $category->get_name()))),
 				new HTMLTableRowCell($author),
 				new HTMLTableRowCell($smallad->get_creation_date()->format(Date::FORMAT_DAY_MONTH_YEAR)),
 				new HTMLTableRowCell($smallad->get_status() . $br->display() . ($dates ? $start_and_end_dates->display() : '')),
 				new HTMLTableRowCell($completed),
-				new HTMLTableRowCell($edit_link->display() . $delete_link->display()),
+				new HTMLTableRowCell($edit_link->display() . $delete_link->display(), 'controls'),
 			);
 
 			if (!$display_categories)
@@ -118,9 +123,30 @@ class SmalladsItemsManagerController extends ModuleController
 		return $table->get_page_number();
 	}
 
+	private function execute_multiple_delete_if_needed(HTTPRequestCustom $request)
+	{
+		if ($request->get_string('delete-selected-elements', false))
+		{
+			for ($i = 1 ; $i <= $this->elements_number ; $i++)
+			{
+				if ($request->get_value('delete-checkbox-' . $i, 'off') == 'on')
+				{
+					if (isset($this->ids[$i]))
+					{
+						SmalladsService::delete($this->ids[$i]);
+					}
+				}
+			}
+
+			SmalladsService::clear_cache();
+
+			AppContext::get_response()->redirect(SmalladsUrlBuilder::manage_items(), LangLoader::get_message('process.success', 'status-messages-common'));
+		}
+	}
+
 	private function check_authorizations()
 	{
-		if (!SmalladsAuthorizationsService::check_authorizations()->moderation())
+		if (!CategoriesAuthorizationsService::check_authorizations()->moderation())
 		{
 			$error_controller = PHPBoostErrors::user_not_authorized();
 			DispatchManager::redirect($error_controller);

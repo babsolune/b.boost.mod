@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 	&copy; 2005-2019 PHPBoost
- * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @copyright   &copy; 2005-2020 PHPBoost
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version   	PHPBoost 5.2 - last update: 2018 12 10
- * @since   	PHPBoost 5.1 - 2018 03 15
+ * @version     PHPBoost 5.3 - last update: 2019 12 30
+ * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
 
@@ -48,7 +48,7 @@ class SmalladsDisplayCategoryController extends ModuleController
 
 	private function build_category_list()
 	{
-		$authorized_categories = SmalladsService::get_authorized_categories(Category::ROOT_CATEGORY);
+		$authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, $this->config->are_descriptions_displayed_to_guests());
 
 		$result_cat = PersistenceContext::get_querier()->select('SELECT smallads_cat.*
 		FROM '. SmalladsSetup::$smallads_cats_table .' smallads_cat
@@ -73,7 +73,7 @@ class SmalladsDisplayCategoryController extends ModuleController
 
 	private function build_items_listing_view(Date $now)
 	{
-		$authorized_categories = SmalladsService::get_authorized_categories($this->get_category()->get_id());
+		$authorized_categories = CategoriesService::get_authorized_categories($this->get_category()->get_id(), $this->config->are_descriptions_displayed_to_guests());
 
 		$condition = 'WHERE id_category IN :authorized_categories
 		AND (published = 1 OR (published = 2 AND publication_start_date < :timestamp_now AND (publication_end_date > :timestamp_now OR publication_end_date = 0)))';
@@ -95,37 +95,38 @@ class SmalladsDisplayCategoryController extends ModuleController
 
 		$columns_number_displayed_per_line = $this->config->get_displayed_cols_number_per_line();
 		$category_description = FormatingHelper::second_parse($this->get_category()->get_description());
-		$category_image = $this->get_category()->get_image()->rel();
+		$category_thumbnail = $this->get_category()->get_thumbnail()->rel();
 
 		$this->view->put_all(array(
 			'C_ITEMS'                => $result->get_rows_count() > 0,
 			'C_MORE_THAN_ONE_ITEM'   => $result->get_rows_count() > 1,
 
-			'C_CATEGORY'             => true, // SmalladsService::get_categories_manager()->get_categories_cache()->has_categories()
+			'C_CATEGORY'             => true, // CategoriesService::get_categories_manager()->get_categories_cache()->has_categories()
 			'C_ROOT_CATEGORY'        => $this->get_category()->get_id() == Category::ROOT_CATEGORY,
-			'C_CATEGORY_IMAGE'       => !empty($category_image),
+			'C_CATEGORY_THUMBNAIL'   => !empty($category_thumbnail),
 			'C_CATEGORY_DESCRIPTION' => !empty($category_description),
 			'CATEGORY_NAME'          => $this->get_category()->get_name(),
 			'CATEGORY_DESCRIPTION'   => $category_description,
-			'CATEGORY_IMAGE'         => $category_image,
+			'U_CATEGORY_THUMBNAIL'   => $category_thumbnail,
 
 			'C_ENABLED_FILTERS'		 => $this->config->are_sort_filters_enabled(),
-			'C_MOSAIC'               => $this->config->get_display_type() == SmalladsConfig::MOSAIC_DISPLAY,
-			'C_LIST'                 => $this->config->get_display_type() == SmalladsConfig::LIST_DISPLAY,
-			'C_TABLE'                => $this->config->get_display_type() == SmalladsConfig::TABLE_DISPLAY,
+			'C_DISPLAY_GRID_VIEW'    => $this->config->get_display_type() == SmalladsConfig::DISPLAY_GRID_VIEW,
+			'C_DISPLAY_LIST_VIEW'    => $this->config->get_display_type() == SmalladsConfig::DISPLAY_LIST_VIEW,
+			'C_DISPLAY_TABLE_VIEW'   => $this->config->get_display_type() == SmalladsConfig::DISPLAY_TABLE_VIEW,
 			'C_LOCATION'			 => $this->config->is_location_displayed(),
 			'C_COMMENTS_ENABLED'     => $this->comments_config->are_comments_enabled(),
 			'C_DISPLAY_CAT_ICONS'    => $this->config->are_cat_icons_enabled(),
 			'C_NO_ITEM_AVAILABLE'    => $result->get_rows_count() == 0,
 			'C_SEVERAL_COLUMNS'      => $columns_number_displayed_per_line > 1,
-			'C_MODERATION'           => SmalladsAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
+			'C_MODERATION'           => CategoriesAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
 			'COLUMNS_NUMBER'         => $columns_number_displayed_per_line,
 			'C_ONE_ITEM_AVAILABLE'   => $result->get_rows_count() == 1,
 			'C_TWO_ITEMS_AVAILABLE'  => $result->get_rows_count() == 2,
 			'C_USAGE_TERMS'	         => $this->config->are_usage_terms_displayed(),
+			'C_PAGINATION'           => $result->get_rows_count() > $this->config->get_items_number_per_page(),
 			'ITEMS_PER_PAGE'         => $this->config->get_items_number_per_page(),
 			'ID_CATEGORY'            => $this->get_category()->get_id(),
-			'U_EDIT_CATEGORY'        => $this->get_category()->get_id() == Category::ROOT_CATEGORY ? SmalladsUrlBuilder::categories_configuration()->rel() : SmalladsUrlBuilder::edit_category($this->get_category()->get_id())->rel(),
+			'U_EDIT_CATEGORY'        => $this->get_category()->get_id() == Category::ROOT_CATEGORY ? SmalladsUrlBuilder::categories_configuration()->rel() : CategoriesUrlBuilder::edit_category($this->get_category()->get_id())->rel(),
 			'U_USAGE_TERMS' 		 => SmalladsUrlBuilder::usage_terms()->rel()
 		));
 
@@ -192,7 +193,7 @@ class SmalladsDisplayCategoryController extends ModuleController
 			if (!empty($id))
 			{
 				try {
-					$this->category = SmalladsService::get_categories_manager()->get_categories_cache()->get_category($id);
+					$this->category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($id);
 				} catch (CategoryNotFoundException $e) {
 					$error_controller = PHPBoostErrors::unexisting_page();
 					DispatchManager::redirect($error_controller);
@@ -200,7 +201,7 @@ class SmalladsDisplayCategoryController extends ModuleController
 			}
 			else
 			{
-				$this->category = SmalladsService::get_categories_manager()->get_categories_cache()->get_category(Category::ROOT_CATEGORY);
+				$this->category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category(Category::ROOT_CATEGORY);
 			}
 		}
 		return $this->category;
@@ -228,7 +229,7 @@ class SmalladsDisplayCategoryController extends ModuleController
 	{
 		if (AppContext::get_current_user()->is_guest())
 		{
-			if (($this->config->are_descriptions_displayed_to_guests() && !Authorizations::check_auth(RANK_TYPE, User::MEMBER_LEVEL, $this->get_category()->get_authorizations(), Category::READ_AUTHORIZATIONS)) || (!$this->config->are_descriptions_displayed_to_guests() && !SmalladsAuthorizationsService::check_authorizations($this->get_category()->get_id())->read()))
+			if (($this->config->are_descriptions_displayed_to_guests() && !Authorizations::check_auth(RANK_TYPE, User::MEMBER_LEVEL, $this->get_category()->get_authorizations(), Category::READ_AUTHORIZATIONS)) || (!$this->config->are_descriptions_displayed_to_guests() && !CategoriesAuthorizationsService::check_authorizations($this->get_category()->get_id())->read()))
 			{
 				$error_controller = PHPBoostErrors::user_not_authorized();
 				DispatchManager::redirect($error_controller);
@@ -236,7 +237,7 @@ class SmalladsDisplayCategoryController extends ModuleController
 		}
 		else
 		{
-			if (!SmalladsAuthorizationsService::check_authorizations($this->get_category()->get_id())->read())
+			if (!CategoriesAuthorizationsService::check_authorizations($this->get_category()->get_id())->read())
 			{
 				$error_controller = PHPBoostErrors::user_not_authorized();
 				DispatchManager::redirect($error_controller);
@@ -264,7 +265,7 @@ class SmalladsDisplayCategoryController extends ModuleController
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['smallads.module.title'], SmalladsUrlBuilder::home());
 
-		$categories = array_reverse(SmalladsService::get_categories_manager()->get_parents($this->category->get_id(), true));
+		$categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($this->category->get_id(), true));
 		foreach ($categories as $id => $category)
 		{
 			if ($category->get_id() != Category::ROOT_CATEGORY)

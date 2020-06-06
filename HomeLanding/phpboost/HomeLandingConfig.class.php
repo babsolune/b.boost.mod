@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 	&copy; 2005-2019 PHPBoost
- * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @copyright   &copy; 2005-2020 PHPBoost
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version   	PHPBoost 5.2 - last update: 2019 01 17
- * @since   	PHPBoost 5.0 - 2016 01 02
+ * @version     PHPBoost 5.3 - last update: 2020 06 04
+ * @since       PHPBoost 5.0 - 2016 01 02
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
 
@@ -23,18 +23,13 @@ class HomeLandingConfig extends AbstractConfigData
 	const CAROUSEL = 'carousel';
 	const CAROUSEL_SPEED = 'carousel_speed';
 	const CAROUSEL_TIME = 'carousel_time';
-	const CAROUSEL_NAV = 'carousel_nav';
+	const CAROUSEL_NUMBER = 'carousel_number';
+	const CAROUSEL_AUTO = 'carousel_auto';
 	const CAROUSEL_HOVER = 'carousel_hover';
 	const CAROUSEL_TRUE = 'true';
 	const CAROUSEL_FALSE = 'false';
-	const CAROUSEL_DISPLAY = 'carousel_display';
-	const CAROUSEL_D_TRUE = true;
-	const CAROUSEL_D_FALSE = false;
-	const CAROUSEL_MINI = 'carousel_mini';
-	const CAROUSEL_DOT = 'dot';
-	const CAROUSEL_IMG = 'img';
 
-	const ONEPAGE_MENU = 'onepage_menu';
+	const ANCHORS_MENU = 'anchors_menu';
 	const EDITO = 'edito';
 
 	const RSS_SITE_NAME = 'rss_site_name';
@@ -44,7 +39,7 @@ class HomeLandingConfig extends AbstractConfigData
 	const ELEMENTS_NUMBER_DISPLAYED = 5;
 	const CHARACTERS_NUMBER_DISPLAYED = 128;
 	const MODULE_CAROUSEL = 'carousel';
-	const MODULE_ONEPAGE_MENU = 'onepage_menu';
+	const MODULE_ANCHORS_MENU = 'anchors_menu';
 	const MODULE_EDITO = 'edito';
 	const MODULE_LASTCOMS = 'lastcoms';
 	const MODULE_ARTICLES = 'articles';
@@ -66,9 +61,12 @@ class HomeLandingConfig extends AbstractConfigData
 	const STICKY_TEXT = 'sticky_text';
 	const STICKY_TITLE = 'sticky_title';
 
-	//Config
+	// Configuration
+	// Articles errors - waiting for a real dev
+	public function get_authorizations() { }
+	public function get_auto_cut_characters_number() { }
 
-	//Module Title
+	// Module Title
 	public function get_module_title()
 	{
 		return $this->get_property(self::MODULE_TITLE);
@@ -79,7 +77,7 @@ class HomeLandingConfig extends AbstractConfigData
 		$this->set_property(self::MODULE_TITLE, $module_title);
 	}
 
-	//Menus Management
+	// Menus Management
 	public function get_left_columns()
 	{
 		return $this->get_property(self::LEFT_COLUMNS);
@@ -164,14 +162,14 @@ class HomeLandingConfig extends AbstractConfigData
 	}
 
 	// One page menu
-	public function get_onepage_menu()
+	public function get_anchors_menu()
 	{
-		return $this->get_property(self::ONEPAGE_MENU);
+		return $this->get_property(self::ANCHORS_MENU);
 	}
 
-	public function set_onepage_menu($onepage_menu)
+	public function set_anchors_menu($anchors_menu)
 	{
-		$this->set_property(self::ONEPAGE_MENU, $onepage_menu);
+		$this->set_property(self::ANCHORS_MENU, $anchors_menu);
 	}
 
 	// Carousel
@@ -205,14 +203,24 @@ class HomeLandingConfig extends AbstractConfigData
 		$this->set_property(self::CAROUSEL_TIME, $time);
 	}
 
-	public function get_carousel_nav()
+	public function get_carousel_number()
 	{
-		return $this->get_property(self::CAROUSEL_NAV);
+		return $this->get_property(self::CAROUSEL_NUMBER);
 	}
 
-	public function set_carousel_nav($nav)
+	public function set_carousel_number($number)
 	{
-		$this->set_property(self::CAROUSEL_NAV, $nav);
+		$this->set_property(self::CAROUSEL_NUMBER, $number);
+	}
+
+	public function get_carousel_auto()
+	{
+		return $this->get_property(self::CAROUSEL_AUTO);
+	}
+
+	public function set_carousel_auto($auto)
+	{
+		$this->set_property(self::CAROUSEL_AUTO, $auto);
 	}
 
 	public function get_carousel_hover()
@@ -223,26 +231,6 @@ class HomeLandingConfig extends AbstractConfigData
 	public function set_carousel_hover($hover)
 	{
 		$this->set_property(self::CAROUSEL_HOVER, $hover);
-	}
-
-	public function get_carousel_display()
-	{
-		return $this->get_property(self::CAROUSEL_DISPLAY);
-	}
-
-	public function set_carousel_display($display)
-	{
-		$this->set_property(self::CAROUSEL_DISPLAY, $display);
-	}
-
-	public function get_carousel_mini()
-	{
-		return $this->get_property(self::CAROUSEL_MINI);
-	}
-
-	public function set_carousel_mini($mini)
-	{
-		$this->set_property(self::CAROUSEL_MINI, $mini);
 	}
 
 	// Edito
@@ -316,7 +304,7 @@ class HomeLandingConfig extends AbstractConfigData
 		$lang = LangLoader::get('config', 'HomeLanding');
 
 		$module = new HomeLandingModule();
-		$module->set_module_id(self::MODULE_ONEPAGE_MENU);
+		$module->set_module_id(self::MODULE_ANCHORS_MENU);
 		$module->hide();
 
 		$modules[1] = $module->get_properties();
@@ -462,15 +450,14 @@ class HomeLandingConfig extends AbstractConfigData
 
 			self::MODULES_LIST => self::init_modules_array(),
 
-			self::ONEPAGE_MENU => false,
+			self::ANCHORS_MENU => false,
 
 			self::CAROUSEL => array(),
 			self::CAROUSEL_SPEED => 200,
 			self::CAROUSEL_TIME => 5000,
-			self::CAROUSEL_NAV => 1,
+			self::CAROUSEL_NUMBER => 4,
+			self::CAROUSEL_AUTO => 1,
 			self::CAROUSEL_HOVER => 1,
-			self::CAROUSEL_DISPLAY => 1,
-			self::CAROUSEL_MINI => self::CAROUSEL_DOT,
 
 			self::EDITO => LangLoader::get_message('module.edito.description', 'config', 'HomeLanding'),
 

@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 	&copy; 2005-2019 PHPBoost
- * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @copyright   &copy; 2005-2020 PHPBoost
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version   	PHPBoost 5.2 - last update: 2018 12 10
- * @since   	PHPBoost 5.1 - 2018 03 15
+ * @version     PHPBoost 5.3 - last update: 2019 11 12
+ * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
 
@@ -41,10 +41,10 @@ class SmalladsDisplayPendingItemsController extends ModuleController
 	private function build_view(HTTPRequestCustom $request)
 	{
 		$now = new Date();
-		$authorized_categories = SmalladsService::get_authorized_categories(Category::ROOT_CATEGORY);
+		$authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, $this->config->are_descriptions_displayed_to_guests());
 
 		$condition = 'WHERE id_category IN :authorized_categories
-		' . (!SmalladsAuthorizationsService::check_authorizations()->moderation() ? ' AND author_user_id = :user_id' : '') . '
+		' . (!CategoriesAuthorizationsService::check_authorizations()->moderation() ? ' AND author_user_id = :user_id' : '') . '
 		AND (published = 0 OR (published = 2 AND (publication_start_date > :timestamp_now OR (publication_end_date != 0 AND publication_end_date < :timestamp_now))))';
 		$parameters = array(
 			'authorized_categories' => $authorized_categories,
@@ -70,12 +70,14 @@ class SmalladsDisplayPendingItemsController extends ModuleController
 			'C_ITEMS'                => $result->get_rows_count() > 0,
 			'C_MORE_THAN_ONE_ITEM'   => $result->get_rows_count() > 1,
 			'C_PENDING'              => true,
-			'C_MOSAIC'               => $this->config->get_display_type() == SmalladsConfig::MOSAIC_DISPLAY,
-			'C_LIST'                 => $this->config->get_display_type() == SmalladsConfig::LIST_DISPLAY,
-			'C_TABLE'                => $this->config->get_display_type() == SmalladsConfig::TABLE_DISPLAY,
+			'C_DISPLAY_GRID_VIEW'    => $this->config->get_display_type() == SmalladsConfig::DISPLAY_GRID_VIEW,
+			'C_DISPLAY_LIST_VIEW'    => $this->config->get_display_type() == SmalladsConfig::DISPLAY_LIST_VIEW,
+			'C_DISPLAY_TABLE_VIEW'   => $this->config->get_display_type() == SmalladsConfig::DISPLAY_TABLE_VIEW,
 			'C_NO_ITEM_AVAILABLE'    => $nbr_items_pending == 0,
-			'ITEMS_PER_PAGE'         => $this->config->get_items_number_per_page(),
+			'C_PAGINATION'           => $result->get_rows_count() > $this->config->get_items_number_per_page(),
 			'C_USAGE_TERMS'	         => $this->config->are_usage_terms_displayed(),
+
+			'ITEMS_PER_PAGE'         => $this->config->get_items_number_per_page(),
 			'U_USAGE_TERMS' 		 => SmalladsUrlBuilder::usage_terms()->rel()
 		));
 
@@ -165,7 +167,7 @@ class SmalladsDisplayPendingItemsController extends ModuleController
 
 	private function check_authorizations()
 	{
-		if (!(SmalladsAuthorizationsService::check_authorizations()->write() || SmalladsAuthorizationsService::check_authorizations()->contribution() || SmalladsAuthorizationsService::check_authorizations()->moderation()))
+		if (!(CategoriesAuthorizationsService::check_authorizations()->write() || CategoriesAuthorizationsService::check_authorizations()->contribution() || CategoriesAuthorizationsService::check_authorizations()->moderation()))
 		{
 			$error_controller = PHPBoostErrors::user_not_authorized();
 			DispatchManager::redirect($error_controller);

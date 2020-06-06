@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright 	&copy; 2005-2019 PHPBoost
- * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @copyright   &copy; 2005-2020 PHPBoost
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version   	PHPBoost 5.2 - last update: 2018 12 08
- * @since   	PHPBoost 5.1 - 2018 03 15
+ * @version     PHPBoost 5.3 - last update: 2020 01 26
+ * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
+ * @contributor Mipel <mipel@phpboost.com>
 */
 
 class AdminSmalladsCategoriesConfigController extends AdminModuleController
@@ -39,8 +40,8 @@ class AdminSmalladsCategoriesConfigController extends AdminModuleController
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
-			$this->form->get_field_by_id('characters_number_to_cut')->set_hidden($this->config->get_display_type() === SmalladsConfig::TABLE_DISPLAY);
-			$this->form->get_field_by_id('displayed_cols_number_per_line')->set_hidden($this->config->get_display_type() !== SmalladsConfig::MOSAIC_DISPLAY);
+			$this->form->get_field_by_id('characters_number_to_cut')->set_hidden($this->config->get_display_type() === SmalladsConfig::DISPLAY_TABLE_VIEW);
+			$this->form->get_field_by_id('displayed_cols_number_per_line')->set_hidden($this->config->get_display_type() !== SmalladsConfig::DISPLAY_GRID_VIEW);
 			$tpl->put('MSG', MessageHelper::display(LangLoader::get_message('message.success.config', 'status-messages-common'), MessageHelper::SUCCESS, 4));
 		}
 
@@ -63,44 +64,59 @@ class AdminSmalladsCategoriesConfigController extends AdminModuleController
 		$fieldset = new FormFieldsetHTMLHeading('smallads_configuration', $this->lang['config.categories.title']);
 		$form->add_fieldset($fieldset);
 
-		$fieldset->add_field(new FormFieldCheckbox('display_sort_filters', $this->lang['config.sort.filter.display'], $this->config->are_sort_filters_enabled()));
+		$fieldset->add_field(new FormFieldCheckbox('display_sort_filters', $this->lang['config.sort.filter.display'], $this->config->are_sort_filters_enabled(),
+			array('class'=> 'custom-checkbox')
+		));
 
-		$fieldset->add_field(new FormFieldCheckbox('display_icon_cats', $this->lang['config.cats.icon.display'], $this->config->are_cat_icons_enabled()));
+		$fieldset->add_field(new FormFieldCheckbox('display_icon_cats', $this->lang['config.cats.icon.display'], $this->config->are_cat_icons_enabled(),
+			array('class'=> 'custom-checkbox')
+		));
 
 		$fieldset->add_field(new FormFieldNumberEditor('items_number_per_page', $this->admin_common_lang['config.items_number_per_page'], $this->config->get_items_number_per_page(),
 			array('min' => 1, 'max' => 50, 'required' => true),
 			array(new FormFieldConstraintIntegerRange(1, 50))
 		));
 
-		$fieldset->add_field(new FormFieldCheckbox('display_descriptions_to_guests', $this->lang['config.display.descriptions.to.guests'], $this->config->are_descriptions_displayed_to_guests()));
+		$fieldset->add_field(new FormFieldCheckbox('display_descriptions_to_guests', $this->lang['config.display.descriptions.to.guests'], $this->config->are_descriptions_displayed_to_guests(),
+			array('class'=> 'custom-checkbox')
+		));
 
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('display_type', $this->lang['config.display.type'], $this->config->get_display_type(),
+		$fieldset->add_field(new FormFieldSimpleSelectChoice('display_type', $this->admin_common_lang['config.display.type'], $this->config->get_display_type(),
 			array(
-				new FormFieldSelectChoiceOption($this->lang['config.mosaic.type.display'], SmalladsConfig::MOSAIC_DISPLAY),
-				new FormFieldSelectChoiceOption($this->lang['config.list.type.display'], SmalladsConfig::LIST_DISPLAY),
-				new FormFieldSelectChoiceOption($this->lang['config.table.type.display'], SmalladsConfig::TABLE_DISPLAY)
+				new FormFieldSelectChoiceOption($this->admin_common_lang['config.display.type.grid'], SmalladsConfig::DISPLAY_GRID_VIEW),
+				new FormFieldSelectChoiceOption($this->admin_common_lang['config.display.type.list'], SmalladsConfig::DISPLAY_LIST_VIEW),
+				new FormFieldSelectChoiceOption($this->admin_common_lang['config.display.type.table'], SmalladsConfig::DISPLAY_TABLE_VIEW)
 			),
-			array('events' => array('change' => '
-				if (HTMLForms.getField("display_type").getValue() === \'' . SmalladsConfig::MOSAIC_DISPLAY . '\') {
-					HTMLForms.getField("characters_number_to_cut").enable();
-					HTMLForms.getField("displayed_cols_number_per_line").enable();
-				} else if (HTMLForms.getField("display_type").getValue() === \'' . SmalladsConfig::LIST_DISPLAY . '\') {
-					HTMLForms.getField("characters_number_to_cut").enable();
-					HTMLForms.getField("displayed_cols_number_per_line").disable();
-				} else {
-					HTMLForms.getField("characters_number_to_cut").disable();
-					HTMLForms.getField("displayed_cols_number_per_line").disable();
-				}'))
+			array(
+				'events' => array('change' => '
+					if (HTMLForms.getField("display_type").getValue() === \'' . SmalladsConfig::DISPLAY_GRID_VIEW . '\') {
+						HTMLForms.getField("characters_number_to_cut").enable();
+						HTMLForms.getField("displayed_cols_number_per_line").enable();
+					} else if (HTMLForms.getField("display_type").getValue() === \'' . SmalladsConfig::DISPLAY_LIST_VIEW . '\') {
+						HTMLForms.getField("characters_number_to_cut").enable();
+						HTMLForms.getField("displayed_cols_number_per_line").disable();
+					} else {
+						HTMLForms.getField("characters_number_to_cut").disable();
+						HTMLForms.getField("displayed_cols_number_per_line").disable();
+					}'
+				)
+			)
 		));
 
 		$fieldset->add_field(new FormFieldNumberEditor('characters_number_to_cut', $this->lang['config.characters.number.to.cut'], $this->config->get_characters_number_to_cut(),
-			array('min' => 20, 'max' => 1000, 'hidden' => $this->config->get_display_type() === SmalladsConfig::TABLE_DISPLAY),
+			array(
+				'min' => 20, 'max' => 1000,
+				'hidden' => $this->config->get_display_type() === SmalladsConfig::DISPLAY_TABLE_VIEW
+			),
 			array(new FormFieldConstraintIntegerRange(20, 1000))
 		));
 
 		$fieldset->add_field(new FormFieldNumberEditor('displayed_cols_number_per_line', $this->admin_common_lang['config.columns_number_per_line'], $this->config->get_displayed_cols_number_per_line(),
-			array('min' => 1, 'max' => 6, 'hidden' => $this->config->get_display_type() !== SmalladsConfig::MOSAIC_DISPLAY),
-			array(new FormFieldConstraintIntegerRange(1, 6))
+			array(
+				'min' => 1, 'max' => 4,
+				'hidden' => $this->config->get_display_type() !== SmalladsConfig::DISPLAY_GRID_VIEW
+			),
+			array(new FormFieldConstraintIntegerRange(1, 4))
 		));
 
 		$fieldset->add_field(new FormFieldRichTextEditor('root_category_description', $this->admin_common_lang['config.root_category_description'], $this->config->get_root_category_description(),
@@ -140,10 +156,10 @@ class AdminSmalladsCategoriesConfigController extends AdminModuleController
 			$this->config->disable_cats_icon();
 
 		$this->config->set_display_type($this->form->get_value('display_type')->get_raw_value());
-		if($this->config->get_display_type() == SmalladsConfig::MOSAIC_DISPLAY) {
+		if($this->config->get_display_type() == SmalladsConfig::DISPLAY_GRID_VIEW) {
 			$this->config->set_characters_number_to_cut($this->form->get_value('characters_number_to_cut'));
 			$this->config->set_displayed_cols_number_per_line($this->form->get_value('displayed_cols_number_per_line'));
-		} else if ($this->config->get_display_type() == SmalladsConfig::LIST_DISPLAY) {
+		} else if ($this->config->get_display_type() == SmalladsConfig::DISPLAY_LIST_VIEW) {
 			$this->config->set_characters_number_to_cut($this->form->get_value('characters_number_to_cut'));
 		}
 
@@ -157,7 +173,7 @@ class AdminSmalladsCategoriesConfigController extends AdminModuleController
 		$this->config->set_authorizations($this->form->get_value('authorizations')->build_auth_array());
 
 		SmalladsConfig::save();
-		SmalladsService::get_categories_manager()->regenerate_cache();
+		CategoriesService::get_categories_manager()->regenerate_cache();
 		SmalladsCache::invalidate();
 	}
 }

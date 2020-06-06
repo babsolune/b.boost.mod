@@ -1,10 +1,10 @@
 <?php
 /**
- * @copyright 	&copy; 2005-2019 PHPBoost
- * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @copyright   &copy; 2005-2020 PHPBoost
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version   	PHPBoost 5.2 - last update: 2019 01 17
- * @since   	PHPBoost 5.0 - 2016 01 02
+ * @version     PHPBoost 5.3 - last update: 2020 06 04
+ * @since       PHPBoost 5.0 - 2016 01 02
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
  * @contributor mipel <mipel@phpboost.com>
 */
@@ -13,13 +13,18 @@
 #                      French                      #
 ####################################################
 
-$lang['module_title'] = 'Page d\'accueil';
-$lang['module.views'] = 'vue(s)';
+$lang['module.title'] = 'Page d\'accueil';
+$lang['creation.date'] = 'Date de création';
+$lang['module.views.number'] = 'Nombre de vues';
+$lang['module.views'] = 'vues';
+$lang['module.view'] = 'vue';
+$lang['module.post.date'] = 'Date du message';
+$lang['module.posted.in.topic'] = 'Posté dans le sujet:';
+$lang['module.posted.in.module'] = 'Posté dans un sujet du module:';
 
-
-//Modules position
+// Modules position
 $lang['module.carousel'] = 'Carousel';
-$lang['module.onepage_menu'] = 'Menu Onepage';
+$lang['module.anchors_menu'] = 'Menu d\'accueil';
 $lang['module.edito'] = 'Edito';
 $lang['module.lastcoms'] = 'Derniers commentaires';
 $lang['module.articles'] = 'Derniers articles';
@@ -39,33 +44,34 @@ $lang['module.web'] = 'Liste des sites partenaires';
 $lang['module.web_category'] = 'Liste des sites partenaires d\'une catégorie';
 
 // One page menu
-$lang['onepage.title'] = 'Menu Onepage';
-$lang['onepage.edito'] = 'Édito';
-$lang['onepage.carousel'] = 'Carrousel';
-$lang['onepage.lastcoms'] = 'Commentaires';
-$lang['onepage.articles'] = 'Articles';
-$lang['onepage.contact'] = 'Contact';
-$lang['onepage.events'] = 'Événements';
-$lang['onepage.download'] = 'Téléchargements';
-$lang['onepage.forum'] = 'Forum';
-$lang['onepage.gallery'] = 'Galerie';
-$lang['onepage.guestbook'] = 'Livre d\'or';
-$lang['onepage.media'] = 'Multimédia';
-$lang['onepage.news'] = 'News';
-$lang['onepage.web'] = 'Liens web';
+$lang['anchors.title'] = 'Menu d\'accueil';
+$lang['anchors.edito'] = 'Édito';
+$lang['anchors.carousel'] = 'Carrousel';
+$lang['anchors.lastcoms'] = 'Commentaires';
+$lang['anchors.articles'] = 'Articles';
+$lang['anchors.contact'] = 'Contact';
+$lang['anchors.calendar'] = 'Calendrier';
+$lang['anchors.download'] = 'Téléchargements';
+$lang['anchors.forum'] = 'Forum';
+$lang['anchors.gallery'] = 'Galerie';
+$lang['anchors.guestbook'] = 'Livre d\'or';
+$lang['anchors.media'] = 'Multimédia';
+$lang['anchors.news'] = 'News';
+$lang['anchors.rss'] = 'Rss';
+$lang['anchors.web'] = 'Liens web';
 
-//Last Comments
-$lang['last.comments'] = 'Derniers commentaires';
+// Last Comments
+$lang['last.lastcoms'] = 'Derniers commentaires';
 $lang['in.modules'] = 'dans le module :';
 $lang['no.comment'] = 'Aucun commentaires';
 
-// articles
+// Articles
 $lang['last.articles'] = 'Derniers articles';
 $lang['last.articles.cat'] = 'Derniers articles de la catégorie ';
 $lang['link.to.articles'] = 'Voir tous les articles';
 $lang['no.articles.item'] = 'Il n\'y a pas d\'article dans cette catégorie';
 
-// contact
+// Contact
 $lang['link.to.contact'] = 'Voir la page contact';
 $lang['send.email.success'] = 'Votre message a bien été envoyé. ';
 $lang['send.email.error'] = 'Votre message n\'a pas pu être envoyé. ';
@@ -75,20 +81,20 @@ $lang['send.email.acknowledgment.title'] = 'Confirmation';
 $lang['send.email.acknowledgment.correct'] = 'Votre message a été envoyé correctement. ';
 $lang['send.another.email'] = 'Envoyer un autre message. ';
 
-// download
+// Download
 $lang['last.download'] = 'Derniers téléchargements';
 $lang['last.download.cat'] = 'Derniers téléchargements de la catégorie ';
 $lang['link.to.download'] = 'Voir tous les téléchargements';
 $lang['no.download.item'] = 'Il n\'y a pas de fichier dans cette catégorie';
 
-// events
-$lang['next.events'] = 'Les événements à venir';
-$lang['link.to.events'] = 'Voir le calendrier';
+// Calendar
+$lang['last.calendar'] = 'Les événements à venir';
+$lang['link.to.calendar'] = 'Voir le calendrier';
 $lang['event.date'] = 'Événement prévu le';
-$lang['no.events'] = 'Aucun événement à venir';
+$lang['no.event'] = 'Aucun événement à venir';
 
 // Forum
-$lang['last.forum.messages'] = 'Derniers messages du forum';
+$lang['last.forum'] = 'Derniers messages du forum';
 $lang['link.to.forum'] = 'Voir le forum';
 
 // Gallery
@@ -118,6 +124,7 @@ $lang['link.to.rss.site'] = 'Fil rss du site : ';
 $lang['last.web'] = 'Liste des sites partenaires';
 $lang['last.web.cat'] = 'Derniers sites partenaires de la catégorie ';
 $lang['link.to.web'] = 'Voir tous les liens web';
+$lang['website.link'] = 'Lien direct vers le site';
 $lang['no.web.item'] = 'Il n\'y a pas de liens dans cette catégorie';
 
 // Admin
@@ -142,20 +149,13 @@ $lang['admin.carousel.enabled'] = 'Afficher le carrousel';
 $lang['admin.form.carousel'] = 'Contenu du carousel';
 $lang['admin.form.carousel.speed'] = 'Vitesse de changement d\'image (ms)';
 $lang['admin.form.carousel.time'] = 'Durée d\'affichage d\'une image (ms)';
-$lang['admin.form.carousel.nav'] = 'Affichage de la navigation';
-$lang['admin.form.carousel.nav.enabled'] = 'Navigation affichée au survol';
-$lang['admin.form.carousel.nav.disabled'] = 'Pas de navigation';
+$lang['admin.form.carousel.number'] = 'Nombre d\'images affichées';
+$lang['admin.form.carousel.number.explain'] = '0px < 1 image < 768px < 2 images < 1024px < choix';
+$lang['admin.form.carousel.auto'] = 'Défilement automatique';
 $lang['admin.form.carousel.hover'] = 'Pause au survol';
-$lang['admin.form.carousel.hover.enabled'] = 'Activée';
-$lang['admin.form.carousel.hover.disabled'] = 'Désactivée';
-$lang['admin.form.carousel.display'] = 'Type d\'affichage des images';
-$lang['admin.form.carousel.display.cropped'] = 'Affichage des images rognées';
-$lang['admin.form.carousel.display.cropped.desc'] = 'Quelles que soient les dimensions de vos images, elles seront toutes affichées avec le même ratio';
-$lang['admin.form.carousel.display.full'] = 'Affichage des images entières';
-$lang['admin.form.carousel.display.full.desc'] = 'Vos images s\'afficheront aux dimensions de chacune';
-$lang['admin.form.carousel.mini'] = 'Affichage des miniatures';
-$lang['admin.form.carousel.mini.dots'] = 'Points';
-$lang['admin.form.carousel.mini.imgs'] = 'Images';
+$lang['admin.form.carousel.enabled'] = 'Activé';
+$lang['admin.form.carousel.disabled'] = 'Désactivé';
+
 //Admin - Carousel content
 $lang['admin.form.description'] = 'Description du slide';
 $lang['admin.form.link.url'] = 'Adresse du lien';
@@ -165,8 +165,9 @@ $lang['admin.form.add'] = 'Ajouter une image';
 $lang['admin.form.del'] = 'Supprimer le slide';
 
 //Admin - One page Menu
-$lang['admin.onepage'] = 'Affichage du menu onepage';
-$lang['admin.menu.onepage'] = 'Afficher le menu onepage';
+$lang['admin.anchors'] = 'Affichage du menu d\'accueil';
+$lang['admin.menu.anchors'] = 'Afficher le menu d\'accueil';
+$lang['admin.menu.anchors.explain'] = 'Ce menu permet de naviguer rapidement au sein de la page d\'accueil';
 
 //Admin - Edito
 $lang['admin.edito'] = 'Affichage de l\'édito';
@@ -245,5 +246,4 @@ $lang['admin.web.limit'] = 'Nombre de liens à afficher';
 $lang['admin.web.enabled.desc'] = 'Affiche seulement les liens partenaires';
 $lang['admin.web.cat.enabled'] = 'Afficher une catégorie du module Web';
 $lang['admin.web.cat.limit'] = 'Nombre de liens de la catégorie à afficher';
-
 ?>

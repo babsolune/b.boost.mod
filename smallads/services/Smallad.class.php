@@ -1,10 +1,13 @@
 <?php
 /**
- * @copyright 	&copy; 2005-2019 PHPBoost
- * @license 	https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @copyright   &copy; 2005-2020 PHPBoost
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version   	PHPBoost 5.2 - last update: 2018 12 10
- * @since   	PHPBoost 5.1 - 2018 03 15
+ * @version     PHPBoost 5.3 - last update: 2019 12 30
+ * @since       PHPBoost 5.1 - 2018 03 15
+ * @contributor Mipel <mipel@phpboost.com>
+ * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
+
 */
 
 class Smallad
@@ -87,8 +90,6 @@ class Smallad
 	const NOTDISPLAYED_AUTHOR_PHONE = 0;
 	const DISPLAYED_AUTHOR_PHONE = 1;
 
-	const DEFAULT_PICTURE = '/smallads/templates/images/default.png';
-
 	public function set_id($id)
 	{
 		$this->id = $id;
@@ -111,7 +112,7 @@ class Smallad
 
 	public function get_category()
 	{
-		return SmalladsService::get_categories_manager()->get_categories_cache()->get_category($this->id_category);
+		return CategoriesService::get_categories_manager()->get_categories_cache()->get_category($this->id_category);
 	}
 
 	public function set_title($title)
@@ -220,7 +221,19 @@ class Smallad
 
 	public function get_thumbnail()
 	{
+		if (!$this->thumbnail_url instanceof Url)
+			return $this->get_default_thumbnail();
+
 		return $this->thumbnail_url;
+	}
+
+	public function get_default_thumbnail()
+	{
+		$file = new File(PATH_TO_ROOT . '/templates/' . AppContext::get_current_user()->get_theme() . '/images/default_item_thumbnail.png');
+		if ($file->exists())
+			return new Url('/templates/' . AppContext::get_current_user()->get_theme() . '/images/default_item_thumbnail.png');
+		else
+			return new Url('/templates/default/images/default_item_thumbnail.png');
 	}
 
 	public function has_thumbnail()
@@ -412,7 +425,7 @@ class Smallad
 	public function is_published()
 	{
 		$now = new Date();
-		return SmalladsAuthorizationsService::check_authorizations($this->id_category)->read() && ($this->get_publication_state() == self::PUBLISHED_NOW || ($this->get_publication_state() == self::PUBLICATION_DATE && $this->get_publication_start_date()->is_anterior_to($now) && ($this->enabled_end_date ? $this->get_publication_end_date()->is_posterior_to($now) : true)));
+		return CategoriesAuthorizationsService::check_authorizations($this->id_category)->read() && ($this->get_publication_state() == self::PUBLISHED_NOW || ($this->get_publication_state() == self::PUBLICATION_DATE && $this->get_publication_start_date()->is_anterior_to($now) && ($this->enabled_end_date ? $this->get_publication_end_date()->is_posterior_to($now) : true)));
 	}
 
 	public function get_status()
@@ -510,7 +523,7 @@ class Smallad
 	{
 		if ($this->keywords === null)
 		{
-			$this->keywords = SmalladsService::get_keywords_manager()->get_keywords($this->id);
+			$this->keywords = KeywordsService::get_keywords_manager()->get_keywords($this->id);
 		}
 		return $this->keywords;
 	}
@@ -522,17 +535,17 @@ class Smallad
 
 	public function is_authorized_to_add()
 	{
-		return SmalladsAuthorizationsService::check_authorizations($this->id_category)->write() || SmalladsAuthorizationsService::check_authorizations($this->id_category)->contribution();
+		return CategoriesAuthorizationsService::check_authorizations($this->id_category)->write() || CategoriesAuthorizationsService::check_authorizations($this->id_category)->contribution();
 	}
 
 	public function is_authorized_to_edit()
 	{
-		return SmalladsAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((SmalladsAuthorizationsService::check_authorizations($this->get_id_category())->write() || (SmalladsAuthorizationsService::check_authorizations($this->get_id_category())->contribution() && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL))));
+		return CategoriesAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((CategoriesAuthorizationsService::check_authorizations($this->get_id_category())->write() || (CategoriesAuthorizationsService::check_authorizations($this->get_id_category())->contribution() && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL))));
 	}
 
 	public function is_authorized_to_delete()
 	{
-		return SmalladsAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((SmalladsAuthorizationsService::check_authorizations($this->get_id_category())->write() || (SmalladsAuthorizationsService::check_authorizations($this->get_id_category())->contribution() && !$this->is_published())) && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
+		return CategoriesAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((CategoriesAuthorizationsService::check_authorizations($this->get_id_category())->write() || (CategoriesAuthorizationsService::check_authorizations($this->get_id_category())->contribution() && !$this->is_published())) && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
 	}
 
 	public function get_properties()
@@ -626,6 +639,7 @@ class Smallad
 			$max_weeks_config_number = null;
 
 		$this->id_category = $id_category;
+        $this->contents = SmalladsConfig::load()->get_default_contents();
 		$this->completed = self::NOTCOMPLETED;
 		$this->displayed_author_name = self::DISPLAYED_AUTHOR_NAME;
 		$this->author_user = AppContext::get_current_user();
@@ -635,7 +649,7 @@ class Smallad
 		$this->creation_date = new Date();
 		$this->sources = array();
 		$this->carousel = array();
-		$this->thumbnail_url = new Url(self::DEFAULT_PICTURE);
+		$this->thumbnail_url = self::get_default_thumbnail();
 		$this->views_number = 0;
 		$this->price = 0;
 		$this->max_weeks = $max_weeks_config_number;
@@ -696,7 +710,7 @@ class Smallad
 			Date::get_array_tpl_vars($this->publication_start_date, 'publication_start_date'),
 			Date::get_array_tpl_vars($this->publication_end_date, 'publication_end_date'),
 			array(
-			//Conditions
+			// Conditions
 			'C_EDIT'                           => $this->is_authorized_to_edit(),
 			'C_DELETE'                         => $this->is_authorized_to_delete(),
 			'C_PRICE'                  		   => $this->get_price() != 0,
@@ -726,12 +740,12 @@ class Smallad
 			'C_OTHER_LOCATION'				   => $this->get_location() === 'other',
 			'C_GMAP'					   	   => $this->config->is_googlemaps_available(),
 
-			//Smallads
+			// Smallads
 			'ID'                 	=> $this->get_id(),
 			'TITLE'              	=> $this->get_title(),
 			'STATUS'             	=> $this->get_status(),
 			'L_COMMENTS'         	=> CommentsService::get_number_and_lang_comments('smallads', $this->get_id()),
-			'COMMENTS_NUMBER'    	=> CommentsService::get_number_comments('smallads', $this->get_id()),
+			'COMMENTS_NUMBER'    	=> CommentsService::get_comments_number('smallads', $this->get_id()),
 			'VIEWS_NUMBER'       	=> $this->get_views_number(),
 			'C_AUTHOR_EXIST'     	=> $user->get_id() !== User::VISITOR_LEVEL,
 			'AUTHOR_EMAIL'       	=> $user->get_email(),
@@ -745,29 +759,29 @@ class Smallad
 			'SMALLAD_TYPE'   		=> str_replace('-',' ', $this->get_smallad_type()),
 			'SMALLAD_TYPE_FILTER'   => Url::encode_rewrite(TextHelper::strtolower($this->get_smallad_type())),
 			'BRAND'          	 	=> $this->get_brand(),
-			'THUMBNAIL'          	=> $this->get_thumbnail()->rel(),
 			'USER_LEVEL_CLASS'   	=> UserService::get_level_class($user->get_level()),
 			'USER_GROUP_COLOR'   	=> $user_group_color,
 			'LOCATION'				=> $location,
 			'OTHER_LOCATION'		=> $this->get_other_location(),
 
-			//Category
+			// Category
 			'C_ROOT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY,
 			'ID_CATEGORY'          => $category->get_id(),
 			'CATEGORY_NAME'        => $category->get_name(),
 			'CATEGORY_DESCRIPTION' => $category->get_description(),
-			'CATEGORY_IMAGE'       => $category->get_image()->rel(),
-			'U_EDIT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY ? SmalladsUrlBuilder::categories_configuration()->rel() : SmalladsUrlBuilder::edit_category($category->get_id())->rel(),
+			'U_CATEGORY_THUMBNAIL' => $category->get_thumbnail()->rel(),
+			'U_EDIT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY ? SmalladsUrlBuilder::categories_configuration()->rel() : CategoriesUrlBuilder::edit_category($category->get_id())->rel(),
 
-			//Links
+			// Links
 			'U_COMMENTS'    => SmalladsUrlBuilder::display_items_comments($category->get_id(), $category->get_rewrited_name(), $this->get_id(), $this->get_rewrited_title())->rel(),
-			'U_AUTHOR'      => UserUrlBuilder  ::profile($this->get_author_user()->get_id())->rel(),
-			'U_AUTHOR_PM'   => UserUrlBuilder  ::personnal_message($this->get_author_user()->get_id())->rel(),
+			'U_AUTHOR'      => UserUrlBuilder::profile($this->get_author_user()->get_id())->rel(),
+			'U_AUTHOR_PM'   => UserUrlBuilder::personnal_message($this->get_author_user()->get_id())->rel(),
 			'U_CATEGORY'    => SmalladsUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel(),
 			'U_ITEM'        => SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $this->get_id(), $this->get_rewrited_title())->rel(),
+			'U_THUMBNAIL' 	=> $this->get_thumbnail()->rel(),
 			'U_EDIT_ITEM'   => SmalladsUrlBuilder::edit_item($this->id)->rel(),
 			'U_DELETE_ITEM' => SmalladsUrlBuilder::delete_item($this->id)->rel(),
-			'U_SYNDICATION' => SmalladsUrlBuilder::category_syndication($category->get_id())->rel(),
+			'U_SYNDICATION' => SyndicationUrlBuilder::rss('smallads', $category->get_id())->rel(),
 			'U_PRINT_ITEM'  => SmalladsUrlBuilder::print_item($this->get_id(), $this->get_rewrited_title())->rel(),
 			'U_USAGE_TERMS' => SmalladsUrlBuilder::usage_terms()->rel()
 			)
