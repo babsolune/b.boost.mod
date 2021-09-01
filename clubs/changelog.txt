@@ -1,0 +1,58 @@
+/* #####  #####         ####   #####         #      #####  ##### #####
+/*   #    #   #         #   #  #   #         #        #    #       #
+/*   #    #   #         #   #  #   #         #        #    #####   #
+/*   #    #   #         #   #  #   #         #        #        #   #
+/*   #    #####         ####   #####         #####  #####  #####   #
+*/
+
+En attente des modules SCM pour liens vers gestion des saisons (staff, résultats, classement, ...)
+
+/* #####  #   #  #####  #   #  #####  #####  #      #####  #####
+/* #      #   #  #   #  ##  #  #      #      #      #   #  #
+/* #      #####  #####  # # #  #  ##  #####  #      #   #  #  ##
+/* #      #   #  #   #  #  ##  #   #  #      #      #   #  #   #
+/* #####  #   #  #   #  #   #  #####  #####  #####  #####  #####
+*/
+
+2021 08 22
+-------------------------------------------------------------------------------
+Passage en 6.0
+La config des maps dépend uniquement de GoogleMaps
+Options supplémentaires dépendant du futur module SCM
+Optimisation des tpls
+
+2018 09 30
+-------------------------------------------------------------------------------
+Gestion des cartes par le module GoogleMaps dans le ClubsFormController
+Affichage map si :
+        Module GoogleMaps installé/activé + clé
+        Adresse d'origine déclarée dans config module
+        lat/lng du club != 0
+
+Catégorie
+    Remplacement de l'image default_category
+
+Fiche club
+    gestion des couleurs
+
+2017 06 21 - création du module
+-------------------------------------------------------------------------------
+Clubs est un module de cartographie d'une liste de clubs
+    Catégories :
+        si la catégorie a des sous-catégories on affiche la liste des ss-cat
+        sinon on affiche la map avec les markers de tous les clubs de la cat
+
+    Fiche club :
+        Nom = nom du club
+        Catégorie
+        Comité
+        Logo = affichage dans fiche club
+        Mini logo = icône du pointeur carte + logo dans le taleau catégorie
+        Adresse du site internet
+        Téléphone
+        Email
+        Adresse du siège
+        Coordonnées gps du stade
+        Description
+        Réseaux sociaux : fb tw g+
+        Publication : date + publication maintenant/brouillon

@@ -1,0 +1,86 @@
+.cell-options { max-width: 30%; }
+
+.clubs-picture,
+.clubs-partner-picture {
+	display: block;
+	padding-bottom: 10px;
+}
+
+.club-colors {
+	width: 25px;
+	height: 25px;
+	border: 1px solid var(--bdr-main);
+	display: inline-block;
+}
+
+@media (min-width: 769px) {
+	.gm-style-iw-d { min-width: 300px;}
+
+	.gm-stadium-location { min-width: 190px; }
+
+	.article-several .clubs-picture {
+		float: right;
+		padding: 0 0 0 10px;
+		max-width: 500px;
+	}
+
+	.options { max-width: 30%; }
+
+	/*#onblurContainerResponseClubsFormController_gps,*/
+	#onblurContainerResponseClubsFormController_district,
+	#onblurContainerResponseClubsFormController_location,
+	#onblurContainerResponseClubsFormController_stadium_location {
+		width: 58%;
+	}
+
+	.gmap-autocomplete,
+	#onblurContainerResponseClubsFormController_gps,
+	#onblurContainerResponseClubsFormController_gps input {
+		max-width: 100%;
+		width: 100%;
+	}
+
+	#onblurContainerResponseClubsFormController_gps .map-canvas {
+		width: 100%;
+		padding-bottom: 52.76%;
+		height: auto;
+	}
+
+	#onblurContainerResponseClubsFormController_location input.gmap-short {
+		width: 20%;
+		float: left;
+	}
+
+	#onblurContainerResponseClubsFormController_location input.gmap-large {
+		width: 80%;
+	}
+}
+
+#gmap {
+	width: 100%;
+	padding-bottom: 52.76%
+}
+
+.gm-style img { max-width: 100% !important; }
+
+.fixed-top.sticky {
+	top: 0;
+	margin: 0 auto;
+	position: fixed;
+	z-index: 10;
+}
+
+@media (min-width: 769px) {
+	.fixed-top.sticky {
+		left: 10%;
+		right: 10%;
+	}
+
+	.fixed-top.sticky #gmap {
+		padding-bottom: 35%;
+	}
+}
+
+.gmap-autocomplete {
+	margin-bottom: 10px;
+}
