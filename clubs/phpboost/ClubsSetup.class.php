@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
  * @version     PHPBoost 6.0 - last update: 2021 08 22
@@ -60,7 +60,7 @@ class ClubsSetup extends DefaultModuleSetup
 			'id_category' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'title' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
 			'rewrited_title' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
-			'short_title' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
+			'short_title' => array('type' => 'string', 'length' => 255, 'default' => "''"),
 			'website_url' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
 			'content' => array('type' => 'text', 'length' => 65000),
 			'creation_date' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),

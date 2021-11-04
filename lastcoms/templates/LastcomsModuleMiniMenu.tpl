@@ -3,24 +3,29 @@
 		<div class="cell">
 			<div class="cell-header">
 				<h6 class="cell-name">
-					{@lastcoms.title}
+					{@lastcoms.module.title}
 				</h6>
 			</div>
 # ENDIF #
 	# IF C_COMS #
-			<div class="cell-list">
-				<ul class="lastcoms# IF C_HORIZONTAL # lastcoms-horizontal# ENDIF #">
-					# START coms #
+		<div class="cell-list">
+			<ul class="lastcoms# IF C_HORIZONTAL # lastcoms-horizontal# ENDIF #">
+				# START items #
 					<li>
-						<span class="pinned notice small">{coms.DATE_DIFF_NOW}</span>
-						# IF coms.C_AUTHOR_EXIST #<a class="{coms.USER_LEVEL_CLASS}" href="{coms.U_AUTHOR_PROFILE}"# IF coms.C_USER_GROUP_COLOR # style="color:{coms.USER_GROUP_COLOR}"# ENDIF #>{coms.PSEUDO}</a># ELSE #{coms.PSEUDO}# ENDIF #
-						<p><a href="{coms.PATH}"><i class="far fa-comment"></i> {coms.CONTENT}</a></p>
+						<div class="flex-between">
+							<time class="pinned notice small" datetime="{items.DATE_ISO8601}" itemprop="datePublished">{items.DATE_DELAY}</time>
+							<span class="pinned notice small">{items.MODULE_NAME}</span>
+						</div>
+						<p>
+							# IF items.C_AUTHOR_EXISTS #<a class="{items.AUTHOR_LEVEL_CLASS} offload" href="{items.U_AUTHOR_PROFILE}"# IF items.C_AUTHOR_GROUP_COLOR # style="color:{items.AUTHOR_GROUP_COLOR}"# ENDIF #>{items.AUTHOR_DISPLAY_NAME}</a># ELSE #{items.AUTHOR_DISPLAY_NAME}# ENDIF #
+						 	: <a aria-label="{@lastcoms.see.comment}" class="offload" href="{items.PATH}">{items.CONTENT}</a>
+					 	</p>
 					</li>
-					# END coms #
-				</ul>
-			</div>
+				# END items #
+			</ul>
+		</div>
 	# ELSE #
-		{@lastcoms.no.com}
+		{@lastcoms.no.item}
 	# ENDIF #
 # IF C_HORIZONTAL #
 		</div>

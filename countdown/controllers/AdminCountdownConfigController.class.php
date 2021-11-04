@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2020 01 26
+ * @version     PHPBoost 6.0 - last update: 2021 06 25
  * @since       PHPBoost 4.1 - 2014 12 12
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
+ * @contributor Sebastien LARTIGUE <babsolune@phpboost.com>
 */
 
 class AdminCountdownConfigController extends AdminModuleController
@@ -29,8 +30,8 @@ class AdminCountdownConfigController extends AdminModuleController
 		$this->init();
 		$this->build_form();
 
-		$tpl = new StringTemplate('# INCLUDE MSG # # INCLUDE FORM #');
-		$tpl->add_lang($this->lang);
+		$view = new StringTemplate('# INCLUDE MSG # # INCLUDE FORM #');
+		$view->add_lang($this->lang);
 
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
@@ -38,12 +39,12 @@ class AdminCountdownConfigController extends AdminModuleController
 			$this->form->get_field_by_id('no_event')->set_hidden(!$this->config->get_timer_disabled());
 			$this->form->get_field_by_id('stopped_event')->set_hidden(!$this->config->get_stop_counter());
 			$this->form->get_field_by_id('hidden_counter')->set_hidden(!$this->config->get_stop_counter());
-			$tpl->put('MSG', MessageHelper::display(LangLoader::get_message('message.success.config', 'status-messages-common'), MessageHelper::SUCCESS, 4));
+			$view->put('MSG', MessageHelper::display(LangLoader::get_message('warning.success.config', 'warning-lang'), MessageHelper::SUCCESS, 4));
 		}
 
-		$tpl->put('FORM', $this->form->display());
+		$view->put('FORM', $this->form->display());
 
-		return new DefaultAdminDisplayResponse($tpl);
+		return new DefaultAdminDisplayResponse($view);
 	}
 
 	private function init()
@@ -54,37 +55,38 @@ class AdminCountdownConfigController extends AdminModuleController
 
 	private function build_form()
 	{
+		$form_lang = LangLoader::get('form-lang');
 		$form = new HTMLForm('countdown');
 
-		$fieldset = new FormFieldsetHTMLHeading('configuration', StringVars::replace_vars(LangLoader::get_message('configuration.module.title', 'admin-common'), array('module_name' => self::get_module()->get_configuration()->get_name())));
+		$fieldset = new FormFieldsetHTML('configuration', StringVars::replace_vars($form_lang['form.module.title'], array('module_name' => self::get_module()->get_configuration()->get_name())));
 		$form->add_fieldset($fieldset);
 
-		$fieldset->add_field(new FormFieldDateTime('event_date', $this->lang['config.event.date'], $this->config->get_event_date(),
+		$fieldset->add_field(new FormFieldDateTime('event_date', $this->lang['countdown.config.event.date'], $this->config->get_event_date(),
 			array('class' => 'half-field')
 		));
 
-		$fieldset->add_field(new FormFieldTextEditor('no_javas', $this->lang['config.no.script'], $this->config->get_no_javas(),
+		$fieldset->add_field(new FormFieldTextEditor('no_js', $this->lang['countdown.config.no.script'], $this->config->get_no_js(),
 			array(
 				'class' => 'half-field',
-				'description' => $this->lang['config.no.script.desc']
+				'description' => $this->lang['countdown.config.no.script.clue']
 			)
 		));
 
-		$fieldset->add_field(new FormFieldTextEditor('next_event', $this->lang['config.next.event'], $this->config->get_next_event(),
+		$fieldset->add_field(new FormFieldTextEditor('next_event', $this->lang['countdown.config.next.event'], $this->config->get_next_event(),
 			array(
 				'class' => 'half-field',
-				'description' => $this->lang['config.next.event.desc']
+				'description' => $this->lang['countdown.config.next.event.clue']
 			)
 		));
 
-		$fieldset->add_field(new FormFieldTextEditor('last_event', $this->lang['config.last.event'], $this->config->get_last_event(),
+		$fieldset->add_field(new FormFieldTextEditor('last_event', $this->lang['countdown.config.last.event'], $this->config->get_last_event(),
 			array(
 				'class' => 'half-field',
-				'description' => $this->lang['config.last.event.desc']
+				'description' => $this->lang['countdown.config.last.event.clue']
 			)
 		));
 
-		$fieldset->add_field(new FormFieldCheckbox('stop_counter', $this->lang['config.stop.counter'], $this->config->get_stop_counter(),
+		$fieldset->add_field(new FormFieldCheckbox('stop_counter', $this->lang['countdown.config.stop.counter'], $this->config->get_stop_counter(),
 			array(
 				'class' => 'custom-checkbox',
 				'events' => array('click' => '
@@ -99,24 +101,24 @@ class AdminCountdownConfigController extends AdminModuleController
 			)
 		));
 
-		$fieldset->add_field(new FormFieldCheckbox('hidden_counter', $this->lang['config.hidden.counter'], $this->config->get_hidden_counter(),
+		$fieldset->add_field(new FormFieldCheckbox('hidden_counter', $this->lang['countdown.config.hide.counter'], $this->config->get_hidden_counter(),
 			array(
 				'class' => 'custom-checkbox',
 				'hidden' => !$this->config->get_stop_counter()
 			)
 		));
 
-		$fieldset->add_field(new FormFieldTextEditor('stopped_event', $this->lang['config.stopped.event'], $this->config->get_stopped_event(),
+		$fieldset->add_field(new FormFieldTextEditor('stopped_event', $this->lang['countdown.config.event.over'], $this->config->get_stopped_event(),
 			array(
 				'class' => 'half-field',
 				'hidden' => !$this->config->get_stop_counter(),
-				'description' => $this->lang['config.stopped.event.desc']
+				'description' => $this->lang['countdown.config.event.over.clue']
 			)
 		));
 
 		$fieldset->add_field(new FormFieldSpacer('1_separator', ''));
 
-		$fieldset->add_field(new FormFieldCheckbox('timer_disabled', $this->lang['config.timer.disabled'], $this->config->get_timer_disabled(),
+		$fieldset->add_field(new FormFieldCheckbox('timer_disabled', $this->lang['countdown.config.disable.countdown'], $this->config->get_timer_disabled(),
 			array(
 				'class' => 'custom-checkbox',
 				'events' => array('click' => '
@@ -129,22 +131,18 @@ class AdminCountdownConfigController extends AdminModuleController
 			)
 		));
 
-		$fieldset->add_field(new FormFieldTextEditor('no_event', $this->lang['config.no.event'], $this->config->get_no_event(),
+		$fieldset->add_field(new FormFieldTextEditor('no_event', $this->lang['countdown.config.no.event'], $this->config->get_no_event(),
 			array(
 				'class' => 'half-field',
 				'hidden' => !$this->config->get_timer_disabled(),
-				'description' => $this->lang['config.no.event.desc']
+				'description' => $this->lang['countdown.config.no.event.clue']
 			)
 		));
 
-		$common_lang = LangLoader::get('common');
-		$fieldset_authorizations = new FormFieldsetHTML('authorizations', $common_lang['authorizations']);
+		$fieldset_authorizations = new FormFieldsetHTML('authorizations', $form_lang['form.authorizations']);
 		$form->add_fieldset($fieldset_authorizations);
 
-		$auth_settings = new AuthorizationsSettings(array(
-			new ActionAuthorization($this->lang['config.authorizations.read'], CountdownAuthorizationsService::READ_AUTHORIZATIONS)
-		));
-
+		$auth_settings = new AuthorizationsSettings(array(new ActionAuthorization($form_lang['form.authorizations.read'], CountdownAuthorizationsService::READ_AUTHORIZATIONS)));
 		$auth_settings->build_from_auth_array($this->config->get_authorizations());
 		$fieldset_authorizations->add_field(new FormFieldAuthorizationsSetter('authorizations', $auth_settings));
 
@@ -158,7 +156,7 @@ class AdminCountdownConfigController extends AdminModuleController
 	private function save()
 	{
 		$this->config->set_event_date($this->form->get_value('event_date'));
-		$this->config->set_no_javas($this->form->get_value('no_javas'));
+		$this->config->set_no_js($this->form->get_value('no_js'));
 		$this->config->set_next_event($this->form->get_value('next_event'));
 		$this->config->set_last_event($this->form->get_value('last_event'));
 
@@ -173,7 +171,6 @@ class AdminCountdownConfigController extends AdminModuleController
 			$this->config->set_hidden_counter($this->form->get_value('hidden_counter'));
 			$this->config->set_stopped_event($this->form->get_value('stopped_event'));
 		}
-
 
 		$this->config->set_authorizations($this->form->get_value('authorizations')->build_auth_array());
 		CountdownConfig::save();

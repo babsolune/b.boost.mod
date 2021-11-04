@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Geoffrey ROGUELON <liaght@gmail.com>
- * @version     PHPBoost 5.3 - last update: 2020 01 16
+ * @version     PHPBoost 6.0 - last update: 2021 06 16
  * @since       PHPBoost 3.0 - 2009 07 26
  * @contributor Sebastien LARTIGUE <babsolune@phpboost.com>
 */
@@ -35,7 +35,7 @@ class AdminLastcomsConfigController extends AdminModuleController
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
-			$view->put('MSG', MessageHelper::display(LangLoader::get_message('message.success.config', 'status-messages-common'), MessageHelper::SUCCESS, 5));
+			$view->put('MSG', MessageHelper::display(LangLoader::get_message('warning.success.config', 'warning-lang'), MessageHelper::SUCCESS, 5));
 		}
 
 		$view->put('FORM', $this->form->display());
@@ -51,25 +51,24 @@ class AdminLastcomsConfigController extends AdminModuleController
 
 	private function build_form()
 	{
+		$form_lang = LangLoader::get('form-lang');
 		$form = new HTMLForm('lastcoms');
 
-		$fieldset = new FormFieldsetHTMLHeading('configuration', StringVars::replace_vars(LangLoader::get_message('configuration.module.title', 'admin-common'), array('module_name' => self::get_module()->get_configuration()->get_name())));
+		$fieldset = new FormFieldsetHTML('configuration', StringVars::replace_vars($form_lang['form.module.title'], array('module_name' => self::get_module()->get_configuration()->get_name())));
 		$form->add_fieldset($fieldset);
 
 		$fieldset->add_field(new FormFieldNumberEditor('lastcoms_number', $this->lang['lastcoms.number'], $this->config->get_lastcoms_number(),
-			array('description' => $this->lang['lastcoms.number.explain'])));
-
-		$fieldset->add_field(new FormFieldNumberEditor('lastcoms_char', $this->lang['lastcoms.char'], $this->config->get_lastcoms_char(),
-			array('description' => $this->lang['lastcoms.char.explain'])));
-
-		$common_lang = LangLoader::get('common');
-		$fieldset_authorizations = new FormFieldsetHTML('authorizations', $common_lang['authorizations']);
-		$form->add_fieldset($fieldset_authorizations);
-
-		$auth_settings = new AuthorizationsSettings(array(
-			new ActionAuthorization($this->lang['admin.authorizations.read'], LastcomsAuthorizationsService::READ_AUTHORIZATIONS)
+			array('description' => $this->lang['lastcoms.number.clue'])
 		));
 
+		$fieldset->add_field(new FormFieldNumberEditor('lastcoms_char', $this->lang['lastcoms.char'], $this->config->get_lastcoms_char(),
+			array('description' => $this->lang['lastcoms.char.clue'])
+		));
+
+		$fieldset_authorizations = new FormFieldsetHTML('authorizations', $form_lang['form.authorizations']);
+		$form->add_fieldset($fieldset_authorizations);
+
+		$auth_settings = new AuthorizationsSettings(array(new ActionAuthorization($form_lang['form.authorizations.read'], LastcomsAuthorizationsService::READ_AUTHORIZATIONS)));
 		$auth_settings->build_from_auth_array($this->config->get_authorizations());
 		$fieldset_authorizations->add_field(new FormFieldAuthorizationsSetter('authorizations', $auth_settings));
 

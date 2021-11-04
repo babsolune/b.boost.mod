@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
  * @version     PHPBoost 6.0 - last update: 2021 08 22
@@ -187,7 +187,7 @@ class ClubsItemFormController extends ModuleController
 
 			if (!$this->get_item()->is_published())
 			{
-				$publication_fieldset->add_field(new FormFieldCheckbox('update_creation_date', $this->form_lang['form.update.date.creation'], false,
+				$publication_fieldset->add_field(new FormFieldCheckbox('update_creation_date', $this->form_lang['form.update.creation.date'], false,
 					array('hidden' => $this->get_item()->get_status() != ClubsItem::NOT_PUBLISHED)
 				));
 			}

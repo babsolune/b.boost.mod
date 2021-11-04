@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Geoffrey ROGUELON <liaght@gmail.com>
- * @version     PHPBoost 5.3 - last update: 2017 06 15
+ * @version     PHPBoost 6.0 - last update: 2017 06 15
  * @since       PHPBoost 3.0 - 2009 07 26
  * @contributor Sebastien LARTIGUE <babsolune@phpboost.com>
 */
@@ -11,8 +11,8 @@
 class LastcomsConfig extends AbstractConfigData
 {
 	const LASTCOMS_NUMBER = 'lastcoms_number';
-	const LASTCOMS_CHAR = 'lastcoms_char';
-	const AUTHORIZATIONS = 'authorizations';
+	const LASTCOMS_CHAR   = 'lastcoms_char';
+	const AUTHORIZATIONS  = 'authorizations';
 
 	public function get_lastcoms_number()
 	{
@@ -34,7 +34,7 @@ class LastcomsConfig extends AbstractConfigData
 		$this->set_property(self::LASTCOMS_CHAR, $lastcoms_char);
 	}
 
-	 /**
+	/**
 	 * @method Get authorizations
 	 */
 	public function get_authorizations()
@@ -42,7 +42,7 @@ class LastcomsConfig extends AbstractConfigData
 		return $this->get_property(self::AUTHORIZATIONS);
 	}
 
-	 /**
+	/**
 	 * @method Set authorizations
 	 * @params string[] $array Array of authorizations
 	 */
@@ -73,7 +73,7 @@ class LastcomsConfig extends AbstractConfigData
 	}
 
 	/**
-	 * Saves the configuration in the database. Has it become persistent.
+	 * Saving the configuration in database.
 	 */
 	public static function save()
 	{

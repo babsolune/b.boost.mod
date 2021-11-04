@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Geoffrey ROGUELON <liaght@gmail.com>
- * @version     PHPBoost 5.3 - last update: 2020 05 09
+ * @version     PHPBoost 6.0 - last update: 2021 10 29
  * @since       PHPBoost 3.0 - 2009 07 26
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
  * @contributor Sebastien LARTIGUE <babsolune@phpboost.com>
@@ -28,7 +28,7 @@ class LastcomsModuleMiniMenu extends ModuleMiniMenu
 
 	public function get_menu_title()
 	{
-		return LangLoader::get_message('lastcoms.title', 'common', 'lastcoms');
+		return LangLoader::get_message('lastcoms.module.title', 'common', 'lastcoms');
 	}
 
 	public function is_displayed()
@@ -39,15 +39,18 @@ class LastcomsModuleMiniMenu extends ModuleMiniMenu
 	public function get_menu_content()
 	{
 		$lang = LangLoader::get('common', 'lastcoms');
-		$tpl = new FileTemplate('lastcoms/LastcomsModuleMiniMenu.tpl');
-		$tpl->add_lang($lang);
-		MenuService::assign_positions_conditions($tpl, $this->get_block());
-		Menu::assign_common_template_variables($tpl);
+		$view = new FileTemplate('lastcoms/LastcomsModuleMiniMenu.tpl');
+		$view->add_lang($lang);
+		MenuService::assign_positions_conditions($view, $this->get_block());
+		Menu::assign_common_template_variables($view);
 
 		$lastcoms_config = LastcomsConfig::load();
 		$coms_char = $lastcoms_config->get_lastcoms_char();
 
-		$results = PersistenceContext::get_querier()->select("SELECT c.id, c.user_id, c.pseudo, c.message, c.timestamp, ct.path, ct.module_id, ct.is_locked, m.level, m.groups
+		$results = PersistenceContext::get_querier()->select("SELECT
+			c.id, c.user_id, c.pseudo, c.message, c.timestamp,
+			ct.path, ct.module_id, ct.is_locked,
+			m.level, m.user_groups
 			FROM " . DB_TABLE_COMMENTS . " AS c
 			LEFT JOIN " . DB_TABLE_COMMENTS_TOPIC . " AS ct ON ct.id_topic = c.id_topic
 			LEFT JOIN " . DB_TABLE_MEMBER . " AS m ON c.user_id = m.user_id
@@ -65,31 +68,32 @@ class LastcomsModuleMiniMenu extends ModuleMiniMenu
 		while($row = $results->fetch())
 		{
 			$comments_number++;
-			$contents = @strip_tags(FormatingHelper::second_parse($row['message']));
-			$content_limited = trim(TextHelper::substr($contents, 0, (int)$coms_char));
-			$user_group_color = User::get_group_color($row['groups'], $row['level']);
+			$content = @strip_tags(FormatingHelper::second_parse($row['message']));
+			$limited_content = trim(TextHelper::substr($content, 0, (int)$coms_char));
+			$user_group_color = User::get_group_color($row['user_groups'], $row['level']);
+			$modules_config = ModulesConfig::load();
 
-			$tpl->assign_block_vars('coms', array_merge(
+			$view->assign_block_vars('items', array_merge(
 				Date::get_array_tpl_vars(new Date($row['timestamp'], Timezone::SERVER_TIMEZONE), 'date'),
 				array(
-				'C_USER_GROUP_COLOR' => !empty($user_group_color),
-				'C_AUTHOR_EXIST' => $row['user_id'] !== User::VISITOR_LEVEL,
-				'USER_LEVEL_CLASS' => UserService::get_level_class($row['level']),
-				'USER_GROUP_COLOR' => $user_group_color,
-				'PSEUDO' => $row['pseudo'],
-				'CONTENT' => $content_limited . (TextHelper::strlen($contents) > $coms_char ? '...' : ''),
-				'PATH' => Url::to_rel($row['path'] . '#com' . $row['id']),
-				'U_AUTHOR_PROFILE' => UserUrlBuilder::profile($row['user_id'])->rel()
+				'C_AUTHOR_GROUP_COLOR' => !empty($user_group_color),
+				'C_AUTHOR_EXISTS'      => $row['user_id'] !== User::VISITOR_LEVEL,
+
+				'AUTHOR_LEVEL_CLASS'  => UserService::get_level_class($row['level']),
+				'AUTHOR_GROUP_COLOR'  => $user_group_color,
+				'AUTHOR_DISPLAY_NAME' => $row['pseudo'],
+				'CONTENT'             => $limited_content . (TextHelper::strlen($content) > $coms_char ? '...' : ''),
+				'PATH'                => Url::to_rel($row['path'] . '#com' . $row['id']),
+				'MODULE_NAME'		  => $modules_config->get_module($row['module_id']) ? $modules_config->get_module($row['module_id'])->get_configuration()->get_name() : '',
+
+				'U_AUTHOR_PROFILE'   => UserUrlBuilder::profile($row['user_id'])->rel()
 				)
 			));
 		}
 
-		$tpl->put_all(array(
-			'C_COMS' => $comments_number > 0,
-			'L_LAST_COMS' => $lang['lastcoms.title'],
-		));
+		$view->put('C_COMS', $comments_number > 0);
 
-		return $tpl->render();
+		return $view->render();
 	}
 
 	public function display()
