@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2018 12 29
+ * @version     PHPBoost 6.0 - last update: 2021 06 25
  * @since       PHPBoost 5.0 - 2016 01 02
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
@@ -44,7 +44,7 @@ class AdminHomeLandingStickyConfigController extends AdminModuleController
 		{
 			$this->save();
 
-			$tpl->put('MSG', MessageHelper::display(LangLoader::get_message('message.success.config', 'status-messages-common'), MessageHelper::SUCCESS, 4));
+			$tpl->put('MSG', MessageHelper::display(LangLoader::get_message('warning.success.config', 'warning-lang'), MessageHelper::SUCCESS, 4));
 		}
 
 		$tpl->put('FORM', $this->form->display());
@@ -64,7 +64,7 @@ class AdminHomeLandingStickyConfigController extends AdminModuleController
 		$form = new HTMLForm(__CLASS__);
 
 		//Sticky
-		$sticky_fieldset = new FormFieldsetHTMLHeading('sticky', $this->lang['homelanding.sticky.manage']);
+		$sticky_fieldset = new FormFieldsetHTML('sticky', $this->lang['homelanding.sticky.manage']);
 		$form->add_fieldset($sticky_fieldset);
 
 		$sticky_fieldset->add_field(new FormFieldTextEditor('sticky_title', $this->lang['homelanding.sticky.title.label'], $this->config->get_sticky_title()));

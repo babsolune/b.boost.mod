@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2020 06 03
+ * @version     PHPBoost 6.0 - last update: 2021 09 01
  * @since       PHPBoost 5.0 - 2016 01 02
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
  * @contributor Arnaud GENET <elenwii@phpboost.com>
@@ -13,7 +13,6 @@ class HomeLandingHomeController extends ModuleController
 {
 	private $view;
 	private $lang;
-	private $querier;
 	private $form;
 	private $submit_button;
 
@@ -40,10 +39,9 @@ class HomeLandingHomeController extends ModuleController
 	{
 		$this->lang = LangLoader::get('common', 'HomeLanding');
 		$this->view = new FileTemplate('HomeLanding/home.tpl');
-		$this->view->add_lang($this->lang);
+		$this->view->add_lang(array_merge($this->lang, LangLoader::get('common-lang')));
 		$this->config = HomeLandingConfig::load();
 		$this->modules = HomeLandingModulesList::load();
-		$this->querier = PersistenceContext::get_querier();
 
 		$columns_disabled = ThemesManager::get_theme(AppContext::get_current_user()->get_theme())->get_columns_disabled();
 		$columns_disabled->set_disable_left_columns($this->config->get_left_columns());
@@ -55,12 +53,12 @@ class HomeLandingHomeController extends ModuleController
 
 	private function build_view()
 	{
-		//Config HomeLanding title & edito
+		// Config HomeLanding title & edito
 		$this->view->put_all(array(
-			'MODULE_TITLE' => $this->config->get_module_title(),
+			'MODULE_TITLE'    => $this->config->get_module_title(),
 			'C_EDITO_ENABLED' => $this->modules[HomeLandingConfig::MODULE_EDITO]->is_displayed(),
-			'EDITO' => FormatingHelper::second_parse($this->config->get_edito()),
-			'EDITO_POSITION' => $this->config->get_module_position_by_id(HomeLandingConfig::MODULE_EDITO),
+			'EDITO'           => FormatingHelper::second_parse($this->config->get_edito()),
+			'EDITO_POSITION'  => $this->config->get_module_position_by_id(HomeLandingConfig::MODULE_EDITO),
 		));
 
 		if ($this->modules[HomeLandingConfig::MODULE_ANCHORS_MENU]->is_displayed())
@@ -81,53 +79,71 @@ class HomeLandingHomeController extends ModuleController
 		if ($this->modules[HomeLandingConfig::MODULE_CONTACT]->is_displayed() && ContactAuthorizationsService::check_authorizations()->read())
 			$this->build_contact_view();
 
-		if ($this->modules[HomeLandingConfig::MODULE_CALENDAR]->is_displayed() && CategoriesAuthorizationsService::check_authorizations()->read())
+		if ($this->modules[HomeLandingConfig::MODULE_CALENDAR]->is_displayed() && CategoriesAuthorizationsService::check_authorizations(Category::ROOT_CATEGORY, HomeLandingConfig::MODULE_CALENDAR)->read())
 			$this->view->put('CALENDAR', HomeLandingCalendar::get_calendar_view());
 
-		if ($this->modules[HomeLandingConfig::MODULE_DOWNLOAD]->is_displayed() && CategoriesAuthorizationsService::check_authorizations()->read())
+		if ($this->modules[HomeLandingConfig::MODULE_DOWNLOAD]->is_displayed() && CategoriesAuthorizationsService::check_authorizations(Category::ROOT_CATEGORY, HomeLandingConfig::MODULE_DOWNLOAD)->read())
 			$this->view->put('DOWNLOAD', HomeLandingDownload::get_download_view());
 
-		if ($this->modules[HomeLandingConfig::MODULE_DOWNLOAD_CATEGORY]->is_displayed() && CategoriesAuthorizationsService::check_authorizations($this->modules[HomeLandingConfig::MODULE_DOWNLOAD_CATEGORY]->get_id_category())->read())
+		if ($this->modules[HomeLandingConfig::MODULE_DOWNLOAD_CATEGORY]->is_displayed() && CategoriesAuthorizationsService::check_authorizations($this->modules[HomeLandingConfig::MODULE_DOWNLOAD_CATEGORY]->get_id_category(), HomeLandingConfig::MODULE_DOWNLOAD)->read())
 			$this->view->put('DOWNLOAD_CAT', HomeLandingDownload::get_download_cat_view());
 
 		if ($this->modules[HomeLandingConfig::MODULE_FORUM]->is_displayed() && ForumAuthorizationsService::check_authorizations()->read())
 			$this->view->put('FORUM', HomeLandingForum::get_forum_view());
 
-		if ($this->modules[HomeLandingConfig::MODULE_GALLERY]->is_displayed() && CategoriesAuthorizationsService::check_authorizations()->read())
+		if ($this->modules[HomeLandingConfig::MODULE_GALLERY]->is_displayed() && CategoriesAuthorizationsService::check_authorizations(Category::ROOT_CATEGORY, HomeLandingConfig::MODULE_GALLERY)->read())
 			$this->view->put('GALLERY', HomeLandingGallery::get_gallery_view());
 
 		if ($this->modules[HomeLandingConfig::MODULE_GUESTBOOK]->is_displayed() && GuestbookAuthorizationsService::check_authorizations()->read())
 			$this->view->put('GUESTBOOK', HomeLandingGuestbook::get_guestbook_view());
 
-		if ($this->modules[HomeLandingConfig::MODULE_MEDIA]->is_displayed() && CategoriesAuthorizationsService::check_authorizations()->read())
+		if ($this->modules[HomeLandingConfig::MODULE_MEDIA]->is_displayed() && CategoriesAuthorizationsService::check_authorizations(Category::ROOT_CATEGORY, HomeLandingConfig::MODULE_MEDIA)->read())
 			$this->view->put('MEDIA', HomeLandingMedia::get_media_view());
 
 		if ($this->modules[HomeLandingConfig::MODULE_NEWS]->is_displayed() && CategoriesAuthorizationsService::check_authorizations(Category::ROOT_CATEGORY, HomeLandingConfig::MODULE_NEWS)->read())
-			$this->view->put('NEWS', HomeLandingNews::get_news_view());
+			$this->view->put('NEWS', HomeLandingDisplayItems::build_view(HomeLandingConfig::MODULE_NEWS));
 
 		if ($this->modules[HomeLandingConfig::MODULE_NEWS_CATEGORY]->is_displayed() && CategoriesAuthorizationsService::check_authorizations($this->modules[HomeLandingConfig::MODULE_NEWS_CATEGORY]->get_id_category(), HomeLandingConfig::MODULE_NEWS)->read())
-			$this->view->put('NEWS_CAT', HomeLandingNews::get_news_cat_view());
+			$this->view->put('NEWS_CAT', HomeLandingDisplayItems::build_view(HomeLandingConfig::MODULE_NEWS, HomeLandingConfig::MODULE_NEWS_CATEGORY));
 
-		if ($this->modules[HomeLandingConfig::MODULE_RSS]->is_displayed())
-		 	$this->view->put('RSS', HomeLandingRss::get_rss_view());
+		if ($this->modules[HomeLandingConfig::MODULE_SMALLADS]->is_displayed() && CategoriesAuthorizationsService::check_authorizations(Category::ROOT_CATEGORY, HomeLandingConfig::MODULE_SMALLADS)->read())
+			$this->view->put('SMALLADS', HomeLandingSmallads::get_smallads_view());
 
-		if ($this->modules[HomeLandingConfig::MODULE_WEB]->is_displayed() && CategoriesAuthorizationsService::check_authorizations()->read())
+		if ($this->modules[HomeLandingConfig::MODULE_SMALLADS_CATEGORY]->is_displayed() && CategoriesAuthorizationsService::check_authorizations($this->modules[HomeLandingConfig::MODULE_SMALLADS_CATEGORY]->get_id_category(), HomeLandingConfig::MODULE_SMALLADS)->read())
+			$this->view->put('SMALLADS_CAT', HomeLandingSmallads::get_smallads_cat_view());
+
+		if ($this->modules[HomeLandingConfig::MODULE_WEB]->is_displayed() && CategoriesAuthorizationsService::check_authorizations(Category::ROOT_CATEGORY, HomeLandingConfig::MODULE_WEB)->read())
 			$this->view->put('WEB', HomeLandingWeb::get_web_view());
 
-		if ($this->modules[HomeLandingConfig::MODULE_WEB_CATEGORY]->is_displayed() && CategoriesAuthorizationsService::check_authorizations($this->modules[HomeLandingConfig::MODULE_WEB_CATEGORY]->get_id_category())->read())
+		if ($this->modules[HomeLandingConfig::MODULE_WEB_CATEGORY]->is_displayed() && CategoriesAuthorizationsService::check_authorizations($this->modules[HomeLandingConfig::MODULE_WEB_CATEGORY]->get_id_category(), HomeLandingConfig::MODULE_WEB)->read())
 			$this->view->put('WEB_CAT', HomeLandingWeb::get_web_cat_view());
+
+		if ($this->modules[HomeLandingConfig::MODULE_RSS]->is_displayed())
+		 	$this->view->put('RSS_READER', HomeLandingRss::get_rss_view());
+
+		// Files autoload for additional template variables
+		$home_directory = PATH_TO_ROOT . '/HomeLanding/additional/home/';
+		$scan_home = scandir($home_directory);
+		foreach ($scan_home as $key => $value)
+		{
+	      	if (!in_array($value,array('.', '..', '.empty')))
+				require_once($home_directory . $value);
+		}
 	}
 
 	//Contact
 	private function build_contact_view()
 	{
 		$view = new FileTemplate('HomeLanding/pagecontent/contact.tpl');
+		$view->add_lang($this->lang);
 		$contact_config = ContactConfig::load();
+        $module_name = HomeLandingConfig::MODULE_CONTACT;
 		$view->put_all(array(
 			'CONTACT_POSITION' => $this->config->get_module_position_by_id(HomeLandingConfig::MODULE_CONTACT),
-			'C_MAP_ENABLED' => $contact_config->is_map_enabled(),
-			'C_MAP_TOP' => $contact_config->is_map_enabled() && $contact_config->is_map_top(),
-			'C_MAP_BOTTOM' => $contact_config->is_map_enabled() && $contact_config->is_map_bottom(),
+			'C_MAP_ENABLED'    => $contact_config->is_map_enabled(),
+			'C_MAP_TOP'        => $contact_config->is_map_enabled() && $contact_config->is_map_top(),
+			'C_MAP_BOTTOM'     => $contact_config->is_map_enabled() && $contact_config->is_map_bottom(),
+			'L_MODULE_TITLE'   => ModulesManager::get_module($module_name)->get_configuration()->get_name(),
 		));
 
 		$this->build_contact_form();
@@ -136,11 +152,11 @@ class HomeLandingHomeController extends ModuleController
 		{
 			if ($this->send_contact_mail())
 			{
-				$view->put('MSG', MessageHelper::display($this->lang['send.email.success'] . (ContactConfig::load()->is_sender_acknowledgment_enabled() ? ' ' . $this->lang['send.email.acknowledgment'] : ''), MessageHelper::SUCCESS));
+				$view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['homelanding.send.email.success'] . (ContactConfig::load()->is_sender_acknowledgment_enabled() ? ' ' . $this->lang['send.email.acknowledgment'] : ''), MessageHelper::SUCCESS));
 				$view->put('C_MAIL_SENT', true);
 			}
 			else
-				$view->put('MSG', MessageHelper::display($this->lang['send.email.error'], MessageHelper::ERROR, 5));
+				$view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['homelanding.send.email.error'], MessageHelper::ERROR, 5));
 		}
 
 		if ($contact_config->is_map_enabled()) {
@@ -152,7 +168,7 @@ class HomeLandingHomeController extends ModuleController
 
 		$view->put_all(array(
 			'CONTACT_FORM' => $this->form->display(),
-			'MAP' => $displayed_map
+			'MAP'          => $displayed_map
 		));
 
 		$this->view->put('CONTACT', $view);
@@ -226,7 +242,7 @@ class HomeLandingHomeController extends ModuleController
 
 			$tracking_number = $contact_config->get_last_tracking_number();
 			$tracking_number++;
-			$message .= $this->lang['send.email.tracking.number'] . ' : ' . ($contact_config->is_date_in_tracking_number_enabled() ? $now->get_year() . $now->get_month() . $now->get_day() . '-' : '') . $tracking_number . ' ';
+			$message .= $this->lang['homelanding.send.email.tracking.number'] . ' : ' . ($contact_config->is_date_in_tracking_number_enabled() ? $now->get_year() . $now->get_month() . $now->get_day() . '-' : '') . $tracking_number . ' ';
 			$contact_config->set_last_tracking_number($tracking_number);
 			ContactConfig::save();
 
@@ -254,12 +270,12 @@ class HomeLandingHomeController extends ModuleController
 		}
 
 		if ($display_message_title)
-			$message .= $this->lang['contact.form.message'] . ':';
+			$message .= LangLoader::get_message('contact.form.message', 'common', 'contact') . ':';
 
 		$message .= $this->form->get_value('f_message');
 
 		$mail = new Mail();
-		$mail->set_sender(MailServiceConfig::load()->get_default_mail_sender(), $this->lang['module.title']);
+		$mail->set_sender(MailServiceConfig::load()->get_default_mail_sender(), $this->lang['homelanding.module.title']);
 		$mail->set_reply_to($this->form->get_value('f_sender_mail'), $current_user->get_display_name());
 		$mail->set_subject($subject);
 		$mail->set_content(TextHelper::html_entity_decode($message));
@@ -311,8 +327,8 @@ class HomeLandingHomeController extends ModuleController
 		{
 			$acknowledgment = new Mail();
 			$acknowledgment->set_sender(MailServiceConfig::load()->get_default_mail_sender(), Mail::SENDER_ADMIN);
-			$acknowledgment->set_subject('[' . $this->lang['send.email.acknowledgment.title'] . '] ' . $subject);
-			$acknowledgment->set_content($this->lang['send.email.acknowledgment.correct'] . $message);
+			$acknowledgment->set_subject('[' . $this->lang['homelanding.send.email.acknowledgment.title'] . '] ' . $subject);
+			$acknowledgment->set_content($this->lang['homelanding.send.email.acknowledgment.correct'] . $message);
 			$acknowledgment->add_recipient($this->form->get_value('f_sender_mail'));
 
 			return $mail_service->try_to_send($mail) && $mail_service->try_to_send($acknowledgment);
@@ -321,7 +337,7 @@ class HomeLandingHomeController extends ModuleController
 		return $mail_service->try_to_send($mail);
 	}
 
-	//Generation
+	// Generation
 	private function generate_response()
 	{
 		$response = new SiteDisplayResponse($this->view);
@@ -330,7 +346,7 @@ class HomeLandingHomeController extends ModuleController
 		$graphical_environment->get_seo_meta_data()->set_description(GeneralConfig::load()->get_site_description());
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(HomeLandingUrlBuilder::home());
 
-		$graphical_environment->get_seo_meta_data()->set_picture_url(new Url(PATH_TO_ROOT.'/templates/' . AppContext::get_current_user()->get_theme() . '/theme/images/logo.png'));
+		$graphical_environment->get_seo_meta_data()->set_picture_url(new Url(PATH_TO_ROOT.'/templates/' . AppContext::get_current_user()->get_theme() . '/images/default_item_thumbnail.png'));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->config->get_module_title(), HomeLandingUrlBuilder::home());

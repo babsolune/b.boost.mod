@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2018 08 09
+ * @version     PHPBoost 6.0 - last update: 2021 10 19
  * @since       PHPBoost 5.1 - 2018 03 15
 */
 
@@ -20,13 +20,16 @@ class SmalladsFormFieldCarousel extends AbstractFormField
 	{
 		$template = $this->get_template_to_use();
 
-		$tpl = new FileTemplate('smallads/fields/SmalladsFormFieldCarousel.tpl');
-		$tpl->add_lang(LangLoader::get('common'));
-		$tpl->add_lang(LangLoader::get('common', 'smallads'));
+		$view = new FileTemplate('smallads/fields/SmalladsFormFieldCarousel.tpl');
+		$view->add_lang(array_merge(
+			LangLoader::get('common', 'smallads'),
+			LangLoader::get('common-lang'),
+			LangLoader::get('upload-lang')
+		));
 
-		$tpl->put_all(array(
-			'NAME' => $this->get_html_id(),
-			'ID' => $this->get_html_id(),
+		$view->put_all(array(
+			'NAME'       => $this->get_html_id(),
+			'ID'         => $this->get_html_id(),
 			'C_DISABLED' => $this->is_disabled()
 		));
 
@@ -35,8 +38,8 @@ class SmalladsFormFieldCarousel extends AbstractFormField
 		$i = 0;
 		foreach ($this->get_value() as $id => $options)
 		{
-			$tpl->assign_block_vars('fieldelements', array(
-				'ID' => $i,
+			$view->assign_block_vars('fieldelements', array(
+				'ID'          => $i,
 				'PICTURE_URL' => $options['picture_url'],
 				'DESCRIPTION' => $options['description']
 			));
@@ -45,20 +48,20 @@ class SmalladsFormFieldCarousel extends AbstractFormField
 
 		if ($i == 0)
 		{
-			$tpl->assign_block_vars('fieldelements', array(
-				'ID' => $i,
+			$view->assign_block_vars('fieldelements', array(
+				'ID'          => $i,
 				'PICTURE_URL' => '',
 				'DESCRIPTION' => ''
 			));
 		}
 
-		$tpl->put_all(array(
-			'MAX_INPUT' => $this->max_input,
-			'NBR_FIELDS' => $i == 0 ? 1 : $i
+		$view->put_all(array(
+			'MAX_INPUT'     => $this->max_input,
+			'FIELDS_NUMBER' => $i == 0 ? 1 : $i
 		));
 
 		$template->assign_block_vars('fieldelements', array(
-			'ELEMENT' => $tpl->render()
+			'ELEMENT' => $view->render()
 		));
 
 		return $template;

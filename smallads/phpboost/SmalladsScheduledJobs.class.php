@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Julien BRISWALTER <j1.seth@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2019 12 18
+ * @version     PHPBoost 6.0 - last update: 2021 02 11
  * @since       PHPBoost 4.0 - 2013 02 11
  * @contributor Sebastien LARTIGUE <babsolune@phpboost.com>
 */
@@ -46,16 +46,19 @@ class SmalladsScheduledJobs extends AbstractScheduledJobExtensionPoint
 	{
 		$config = SmalladsConfig::load();
 
-		// Delete item at the end of max_weeks
+		// Archiving item at the end of max_weeks
 		if ($config->is_max_weeks_number_displayed())
 		{
-			PersistenceContext::get_querier()->delete(SmalladsSetup::$smallads_table,
-				'WHERE (published = 1) AND (DATEDIFF(NOW(), FROM_UNIXTIME(creation_date)) > (7 * max_weeks))');
+			PersistenceContext::get_querier()->inject('UPDATE ' . SmalladsSetup::$smallads_table . '
+				SET archived = 1, published = 0
+				WHERE published = 1
+				AND (DATEDIFF(NOW(), FROM_UNIXTIME(creation_date)) > (7 * max_weeks))'
+			);
 		}
 
-		// Delete item if "ad completed" is checked
+		// Deleting item if "completed" is checked
 		PersistenceContext::get_querier()->delete(SmalladsSetup::$smallads_table,
-			'WHERE (published = 1) AND (completed = 1) AND (DATEDIFF(NOW(), FROM_UNIXTIME(updated_date)) > :delay)', array('delay' => (int)$config->get_display_delay_before_delete())
+			'WHERE (published = 1) AND (completed = 1) AND (DATEDIFF(NOW(), FROM_UNIXTIME(update_date)) > :delay)', array('delay' => (int)$config->get_display_delay_before_delete())
 		);
 
 		SmalladsService::clear_cache();

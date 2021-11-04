@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2020 01 26
+ * @version     PHPBoost 6.0 - last update: 2021 08 25
  * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
@@ -19,14 +19,14 @@ class SmalladsItemFormController extends ModuleController
 	 */
 	private $submit_button;
 
-	private $tpl;
+	private $view;
 
 	private $lang;
 	private $county_lang;
-	private $common_lang;
+	private $form_lang;
 
-	private $smallad;
-	private $is_new_smallad;
+	private $item;
+	private $is_new_item;
 	private $config;
 
 	public function execute(HTTPRequestCustom $request)
@@ -35,9 +35,8 @@ class SmalladsItemFormController extends ModuleController
 		$this->check_authorizations();
 		$this->build_form($request);
 
-		$tpl = new StringTemplate('# INCLUDE FORM #');
-		$tpl->add_lang($this->lang);
-		$tpl->add_lang($this->county_lang);
+		$view = new StringTemplate('# INCLUDE FORM #');
+		$view->add_lang(array_merge($this->lang, $this->county_lang));
 
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
@@ -45,33 +44,51 @@ class SmalladsItemFormController extends ModuleController
 			$this->redirect();
 		}
 
-		$tpl->put('FORM', $this->form->display());
+		$view->put('FORM', $this->form->display());
 
-		return $this->generate_response($tpl);
+		return $this->generate_response($view);
 	}
 
 	private function init()
 	{
 		$this->lang = LangLoader::get('common', 'smallads');
 		$this->county_lang = LangLoader::get('counties', 'smallads');
-		$this->common_lang = LangLoader::get('common');
+		$this->form_lang = LangLoader::get('form-lang');
 		$this->config = SmalladsConfig::load();
 	}
 
 	private function build_form(HTTPRequestCustom $request)
 	{
 		$form = new HTMLForm(__CLASS__);
+		$form->set_layout_title($this->item->get_id() === null ? $this->lang['smallads.form.add'] : ($this->lang['smallads.form.edit'] . ': ' . $this->item->get_title()));
+		$form->set_css_class('tabs-container fieldset-content');
 
-		$fieldset = new FormFieldsetHTMLHeading('smallads', $this->get_smallad()->get_id() === null ? $this->lang['smallads.form.add'] : $this->lang['smallads.form.edit']);
+		$fieldset_tabs_menu = new FormFieldMenuFieldset('tabs_menu', '');
+		$form->add_fieldset($fieldset_tabs_menu);
+		$fieldset_tabs_menu->set_css_class('tabs-nav');
+
+        $fieldset_tabs_menu->add_field(new FormFieldMultitabsLinkList('tabs_menu_list',
+			array(
+				new FormFieldMultitabsLinkElement($this->form_lang['form.parameters'], 'tabs', 'SmalladsItemFormController_smallads'),
+				new FormFieldMultitabsLinkElement($this->form_lang['form.options'], 'tabs', 'SmalladsItemFormController_other'),
+				new FormFieldMultitabsLinkElement($this->form_lang['form.publication'], 'tabs', 'SmalladsItemFormController_publication'),
+			)
+		));
+
+		$fieldset_tabs_menu->add_field(new FormFieldFree('warning', '', $this->lang['smallads.form.warning'], array('class' => 'message-helper bgc notice')));
+
+		$fieldset = new FormFieldsetMultitabsHTML('smallads', $this->form_lang['form.parameters'],
+			array('css_class' => 'tabs tabs-animation first-tab')
+		);
 		$form->add_fieldset($fieldset);
 
-		$fieldset->add_field(new FormFieldTextEditor('title', $this->common_lang['form.title'], $this->get_smallad()->get_title(),
+		$fieldset->add_field(new FormFieldTextEditor('title', $this->form_lang['form.title'], $this->item->get_title(),
 			array('required' => true)
 		));
 
-		if (CategoriesAuthorizationsService::check_authorizations($this->get_smallad()->get_id_category())->moderation())
+		if (CategoriesAuthorizationsService::check_authorizations($this->item->get_id_category())->moderation())
 		{
-			$fieldset->add_field(new FormFieldCheckbox('personalize_rewrited_title', $this->common_lang['form.rewrited_name.personalize'], $this->get_smallad()->rewrited_title_is_personalized(),
+			$fieldset->add_field(new FormFieldCheckbox('personalize_rewrited_title', $this->form_lang['form.rewrited.title.personalize'], $this->item->rewrited_title_is_personalized(),
 				array('events' => array('click' =>'
 					if (HTMLForms.getField("personalize_rewrited_title").getValue()) {
 						HTMLForms.getField("rewrited_title").enable();
@@ -81,16 +98,16 @@ class SmalladsItemFormController extends ModuleController
 				))
 			));
 
-			$fieldset->add_field(new FormFieldTextEditor('rewrited_title', $this->common_lang['form.rewrited_name'], $this->get_smallad()->get_rewrited_title(),
+			$fieldset->add_field(new FormFieldTextEditor('rewrited_title', $this->form_lang['form.rewrited.title'], $this->item->get_rewrited_title(),
 				array(
-					'description' => $this->common_lang['form.rewrited_name.description'],
-			      	'hidden' => !$this->get_smallad()->rewrited_title_is_personalized()
+					'description' => $this->form_lang['form.rewrited.title.clue'],
+			      	'hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_personalize_rewrited_title', false) : !$this->item->rewrited_title_is_personalized())
 			  	),
 				array(new FormFieldConstraintRegex('`^[a-z0-9\-]+$`iu'))
 			));
 		}
 
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('smallad_type', $this->lang['smallads.form.smallad.type'], $this->get_smallad()->get_smallad_type(), $this->smallad_type_list(),
+		$fieldset->add_field(new FormFieldSimpleSelectChoice('smallad_type', $this->lang['smallads.form.smallad.type'], $this->item->get_smallad_type(), $this->smallad_type_list(),
 			array('required' => true)
 		));
 
@@ -99,42 +116,42 @@ class SmalladsItemFormController extends ModuleController
 			$search_category_children_options = new SearchCategoryChildrensOptions();
 			$search_category_children_options->add_authorizations_bits(Category::CONTRIBUTION_AUTHORIZATIONS);
 			$search_category_children_options->add_authorizations_bits(Category::WRITE_AUTHORIZATIONS);
-			$fieldset->add_field(CategoriesService::get_categories_manager()->get_select_categories_form_field('id_category', $this->lang['smallads.category'], $this->get_smallad()->get_id_category(), $search_category_children_options,
+			$fieldset->add_field(CategoriesService::get_categories_manager()->get_select_categories_form_field('id_category', $this->form_lang['form.category'], $this->item->get_id_category(), $search_category_children_options,
 				array('description' => $this->lang['smallads.select.category'])
 			));
 		}
 
-		$fieldset->add_field(new FormFieldUploadPictureFile('thumbnail', $this->lang['smallads.form.thumbnail'], $this->get_smallad()->get_thumbnail()->relative(),
-			array('description' => $this->lang['smallads.form.thumbnail.desc'])
+		$fieldset->add_field(new FormFieldThumbnail('thumbnail', $this->lang['smallads.form.thumbnail'], $this->item->get_thumbnail()->relative(), SmalladsItem::THUMBNAIL_URL,
+			array('description' => $this->lang['smallads.form.thumbnail.clue'])
 		));
 
-		$fieldset->add_field(new FormFieldCheckbox('enable_description', $this->lang['smallads.form.enabled.description'], $this->get_smallad()->get_description_enabled(),
+		$fieldset->add_field(new FormFieldCheckbox('enable_summary', $this->lang['smallads.form.enable.summary'], $this->item->get_summary_enabled(),
 			array(
-				'description' => StringVars::replace_vars($this->lang['smallads.form.enabled.description.description'], array('number' => SmalladsConfig::load()->get_characters_number_to_cut())),
+				'description' => StringVars::replace_vars($this->lang['smallads.form.enable.summary.clue'], array('number' => SmalladsConfig::load()->get_characters_number_to_cut())),
 				'events' => array('click' => '
-					if (HTMLForms.getField("enable_description").getValue()) {
-						HTMLForms.getField("description").enable();
+					if (HTMLForms.getField("enable_summary").getValue()) {
+						HTMLForms.getField("summary").enable();
 					} else {
-						HTMLForms.getField("description").disable();
+						HTMLForms.getField("summary").disable();
 					}'
 				)
 			)
 		));
 
-		$fieldset->add_field(new FormFieldRichTextEditor('description', StringVars::replace_vars($this->lang['smallads.form.description'], array('number' =>SmalladsConfig::load()->get_characters_number_to_cut())), $this->get_smallad()->get_description(),
+		$fieldset->add_field(new FormFieldRichTextEditor('summary', StringVars::replace_vars($this->form_lang['form.summary'], array('number' =>SmalladsConfig::load()->get_characters_number_to_cut())), $this->item->get_summary(),
 			array(
 				'rows' => 3,
-				'hidden' => !$this->get_smallad()->get_description_enabled()
+				'hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_enable_summary', false) : !$this->item->get_summary_enabled())
 			)
 		));
 
-		$fieldset->add_field(new FormFieldRichTextEditor('contents', $this->common_lang['form.contents'], $this->get_smallad()->get_contents(),
+		$fieldset->add_field(new FormFieldRichTextEditor('content', $this->form_lang['form.content'], $this->item->get_content(),
 			array('rows' => 15, 'required' => true)
 		));
 
-		$fieldset->add_field(new FormFieldDecimalNumberEditor('price', $this->lang['smallads.form.price'], $this->get_smallad()->get_price(),
+		$fieldset->add_field(new FormFieldDecimalNumberEditor('price', $this->lang['smallads.form.price'], $this->item->get_price(),
 			array(
-				'description' => $this->lang['smallads.form.price.desc'],
+				'description' => $this->lang['smallads.form.price.clue'],
 				'min' => 0,
 				'step' => 0.01
 			)
@@ -143,8 +160,8 @@ class SmalladsItemFormController extends ModuleController
 		// County
 		if($this->config->is_location_displayed()) {
 			if($this->config->is_googlemaps_available()) {
-				$unserialized_value = @unserialize($this->get_smallad()->get_location());
-				$location_value = $unserialized_value !== false ? $unserialized_value : $this->get_smallad()->get_location();
+				$unserialized_value = @unserialize($this->item->get_location());
+				$location_value = $unserialized_value !== false ? $unserialized_value : $this->item->get_location();
 
 				$location = '';
 				if (is_array($location_value) && isset($location_value['address']))
@@ -153,11 +170,11 @@ class SmalladsItemFormController extends ModuleController
 					$location = $location_value;
 
 				$fieldset->add_field(new GoogleMapsFormFieldSimpleAddress('location', $this->county_lang['location'], $location,
-					array('description' => $this->county_lang['location.desc'])
+					array('description' => $this->county_lang['location.clue'])
 				));
 			}
 			else {
-				$location = $this->get_smallad()->get_location();
+				$location = $this->item->get_location();
 				$fieldset->add_field(new FormFieldSimpleSelectChoice('location', $this->county_lang['county'], $location, $this->list_counties(),
 					array(
 						'events' => array('change' =>
@@ -170,93 +187,31 @@ class SmalladsItemFormController extends ModuleController
 					)
 				));
 
-				$fieldset->add_field(new FormFieldTextEditor('other_location', $this->county_lang['other.country'], $this->get_smallad()->get_other_location(),
+				$fieldset->add_field(new FormFieldTextEditor('other_location', $this->county_lang['other.country'], $this->item->get_other_location(),
 					array(
 						'description' => $this->county_lang['other.country.explain'],
-						'hidden' => $this->get_smallad()->get_location() != 'other'
+						'hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_location', false) : $this->item->get_location() != 'other')
 					)
 				));
 			}
 		}
 
-		if($this->config->is_email_displayed() || $this->config->is_pm_displayed() || $this->config->is_phone_displayed())
-		{
-			$contact_fieldset = new FormFieldsetHTML('contact', $this->lang['smallads.form.contact']);
-			$form->add_fieldset($contact_fieldset);
-
-			if($this->config->is_pm_displayed())
-				$contact_fieldset->add_field(new FormFieldCheckbox('displayed_author_pm', $this->lang['smallads.form.displayed.author.pm'], $this->get_smallad()->get_displayed_author_pm()));
-
-			if($this->config->is_email_displayed())
-			{
-				$contact_fieldset->add_field(new FormFieldCheckbox('displayed_author_email', $this->lang['smallads.form.displayed.author.email'], $this->get_smallad()->get_displayed_author_email(),
-					array(
-						'events' => array('click' => '
-							if (HTMLForms.getField("displayed_author_email").getValue()) {
-								HTMLForms.getField("enabled_author_email_customization").enable();
-									if (HTMLForms.getField("enabled_author_email_customization").getValue()) {
-										HTMLForms.getField("custom_author_email").enable();
-									}
-							} else {
-								HTMLForms.getField("enabled_author_email_customization").disable();
-									if (HTMLForms.getField("enabled_author_email_customization").getValue()) {
-										HTMLForms.getField("custom_author_email").disable();
-									}
-							}'
-						)
-					)
-				));
-
-				$contact_fieldset->add_field(new FormFieldCheckbox('enabled_author_email_customization', $this->lang['smallads.form.enabled.author.email.customisation'], $this->get_smallad()->is_enabled_author_email_customization(),
-					array(
-						'description' => $this->lang['smallads.form.enabled.author.email.customisation.desc'],
-						'hidden' => !$this->get_smallad()->is_displayed_author_email(),
-						'events' => array('click' => '
-							if (HTMLForms.getField("enabled_author_email_customization").getValue()) {
-								HTMLForms.getField("custom_author_email").enable();
-							} else {
-								HTMLForms.getField("custom_author_email").disable();
-							}'
-						)
-					)
-				));
-
-				$contact_fieldset->add_field(new FormFieldMailEditor('custom_author_email', $this->lang['smallads.form.custom.author.email'], $this->get_smallad()->get_custom_author_email(),
-					array( 'hidden' => !$this->get_smallad()->is_displayed_author_email() || !$this->get_smallad()->is_enabled_author_email_customization())
-				));
-			}
-
-			if($this->config->is_phone_displayed())
-			{
-				$contact_fieldset->add_field(new FormFieldCheckbox('displayed_author_phone', $this->lang['smallads.form.displayed.author.phone'], $this->get_smallad()->get_displayed_author_phone(),
-					array(
-						'events' => array('click' => '
-							if (HTMLForms.getField("displayed_author_phone").getValue()) {
-								HTMLForms.getField("author_phone").enable();
-							} else {
-								HTMLForms.getField("author_phone").disable();
-							}'
-						)
-					)
-				));
-
-				$contact_fieldset->add_field(new FormFieldTelEditor('author_phone', $this->lang['smallads.form.author.phone'], $this->get_smallad()->get_author_phone(),
-					array('hidden' => !$this->get_smallad()->get_displayed_author_phone())
-				));
-			}
-		}
-
-		$other_fieldset = new FormFieldsetHTML('other', $this->common_lang['form.other']);
+		$other_fieldset = new FormFieldsetMultitabsHTML('other', $this->form_lang['form.options'],
+			array('css_class' => 'tabs tabs-animation')
+		);
 		$form->add_fieldset($other_fieldset);
 
 		if($this->config->is_max_weeks_number_displayed())
 		{
-			$other_fieldset->add_field(new FormFieldNumberEditor('max_weeks', $this->lang['smallads.form.max.weeks'], $this->get_smallad()->get_max_weeks(),
-				array('min' => 1, 'max' => 52)
+			$other_fieldset->add_field(new FormFieldNumberEditor('max_weeks', $this->lang['smallads.form.max.weeks'], $this->item->get_max_weeks(),
+				array(
+					'min' => 1, 'max' => 52,
+					'description' => $this->lang['smallads.form.max.weeks.clue']
+				)
 			));
 		}
 
-		$other_fieldset->add_field(new FormFieldCheckbox('displayed_author_name', LangLoader::get_message('config.author_displayed', 'admin-common'), $this->get_smallad()->get_displayed_author_name(),
+		$other_fieldset->add_field(new FormFieldCheckbox('displayed_author_name', $this->form_lang['form.display.author'], $this->item->get_displayed_author_name(),
 			array(
 				'events' => array('click' => '
 					if (HTMLForms.getField("displayed_author_name").getValue()) {
@@ -274,9 +229,9 @@ class SmalladsItemFormController extends ModuleController
 			)
 		));
 
-		$other_fieldset->add_field(new FormFieldCheckbox('enabled_author_name_customization', $this->lang['smallads.form.enabled.author.name.customisation'], $this->get_smallad()->is_enabled_author_name_customization(),
+		$other_fieldset->add_field(new FormFieldCheckbox('enabled_author_name_customization', $this->lang['smallads.form.author.name.customization'], $this->item->is_enabled_author_name_customization(),
 			array(
-				'hidden' => !$this->get_smallad()->is_displayed_author_name(),
+				'hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_displayed_author_name', false) : !$this->item->is_displayed_author_name()),
 				'events' => array('click' => '
 					if (HTMLForms.getField("enabled_author_name_customization").getValue()) {
 						HTMLForms.getField("custom_author_name").enable();
@@ -287,83 +242,162 @@ class SmalladsItemFormController extends ModuleController
 			)
 		));
 
-		$other_fieldset->add_field(new FormFieldTextEditor('custom_author_name', $this->lang['smallads.form.custom.author.name'], $this->get_smallad()->get_custom_author_name(), array(
-			'hidden' => !$this->get_smallad()->is_displayed_author_name() || !$this->get_smallad()->is_enabled_author_name_customization(),
+		$other_fieldset->add_field(new FormFieldTextEditor('custom_author_name', $this->lang['smallads.form.custom.author.name'], $this->item->get_custom_author_name(), array(
+			'hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_enabled_author_name_customization', false) : !$this->item->is_displayed_author_name() || !$this->item->is_enabled_author_name_customization())
 		)));
 
-		$other_fieldset->add_field(KeywordsService::get_keywords_manager()->get_form_field($this->get_smallad()->get_id(), 'keywords', $this->common_lang['form.keywords'],
-			array('description' => $this->common_lang['form.keywords.description'])
+		$other_fieldset->add_field(KeywordsService::get_keywords_manager()->get_form_field($this->item->get_id(), 'keywords', $this->form_lang['form.keywords'],
+			array('description' => $this->form_lang['form.keywords.clue'])
 		));
 
-		$other_fieldset->add_field(new FormFieldSelectSources('sources', $this->common_lang['form.sources'], $this->get_smallad()->get_sources()));
+		$other_fieldset->add_field(new FormFieldSelectSources('sources', $this->form_lang['form.sources'], $this->item->get_sources()));
 
-		$other_fieldset->add_field(new SmalladsFormFieldCarousel('carousel', $this->lang['smallads.form.carousel'], $this->get_smallad()->get_carousel()));
+		$other_fieldset->add_field(new SmalladsFormFieldCarousel('carousel', $this->lang['smallads.form.carousel'], $this->item->get_carousel()));
 
-		if($this->get_smallad()->get_id() !== null)
+		if($this->config->is_email_displayed() || $this->config->is_pm_displayed() || $this->config->is_phone_displayed())
 		{
-			$completed_fieldset = new FormFieldsetHTML('completed_ad', $this->lang['smallads.form.completed.ad']);
-			$form->add_fieldset($completed_fieldset);
+			$other_fieldset->add_field(new FormFieldSubTitle('contact', $this->lang['smallads.form.contact'], ''));
 
-			$completed_fieldset->add_field(new FormFieldCheckbox('completed', $this->lang['smallads.form.completed'], $this->get_smallad()->get_completed(),
+			if($this->config->is_pm_displayed())
+				$other_fieldset->add_field(new FormFieldCheckbox('displayed_author_pm', $this->lang['smallads.form.display.author.pm'], $this->item->get_displayed_author_pm()));
+
+			if($this->config->is_email_displayed())
+			{
+				$other_fieldset->add_field(new FormFieldCheckbox('displayed_author_email', $this->lang['smallads.form.display.author.email'], $this->item->get_displayed_author_email(),
+					array(
+						'events' => array('click' => '
+							if (HTMLForms.getField("displayed_author_email").getValue()) {
+								HTMLForms.getField("enabled_author_email_customization").enable();
+									if (HTMLForms.getField("enabled_author_email_customization").getValue()) {
+										HTMLForms.getField("custom_author_email").enable();
+									}
+							} else {
+								HTMLForms.getField("enabled_author_email_customization").disable();
+									if (HTMLForms.getField("enabled_author_email_customization").getValue()) {
+										HTMLForms.getField("custom_author_email").disable();
+									}
+							}'
+						)
+					)
+				));
+
+				$other_fieldset->add_field(new FormFieldCheckbox('enabled_author_email_customization', $this->lang['smallads.form.author.email.customization'], $this->item->is_enabled_author_email_customization(),
+					array(
+						'description' => $this->lang['smallads.form.author.email.customization.clue'],
+						'hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_displayed_author_email', false) : !$this->item->is_displayed_author_email()),
+						'events' => array('click' => '
+							if (HTMLForms.getField("enabled_author_email_customization").getValue()) {
+								HTMLForms.getField("custom_author_email").enable();
+							} else {
+								HTMLForms.getField("custom_author_email").disable();
+							}'
+						)
+					)
+				));
+
+				$other_fieldset->add_field(new FormFieldMailEditor('custom_author_email', $this->lang['smallads.form.custom.author.email'], $this->item->get_custom_author_email(),
+					array( 'hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_enabled_author_email_customization', false) : !$this->item->is_displayed_author_email() || !$this->item->is_enabled_author_email_customization()))
+				));
+			}
+
+			if($this->config->is_phone_displayed())
+			{
+				$other_fieldset->add_field(new FormFieldCheckbox('displayed_author_phone', $this->lang['smallads.form.display.author.phone'], $this->item->get_displayed_author_phone(),
+					array(
+						'events' => array('click' => '
+							if (HTMLForms.getField("displayed_author_phone").getValue()) {
+								HTMLForms.getField("author_phone").enable();
+							} else {
+								HTMLForms.getField("author_phone").disable();
+							}'
+						)
+					)
+				));
+
+				$other_fieldset->add_field(new FormFieldTelEditor('author_phone', $this->lang['smallads.form.author.phone'], $this->item->get_author_phone(),
+					array('hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_displayed_author_phone', false) : !$this->item->get_displayed_author_phone()))
+				));
+			}
+		}
+
+		$publication_fieldset = new FormFieldsetMultitabsHTML('publication', $this->form_lang['form.publication'],
+			array('css_class' => 'tabs tabs-animation')
+		);
+		$form->add_fieldset($publication_fieldset);
+
+		if($this->item->get_id() !== null)
+		{
+			$publication_fieldset->add_field(new FormFieldCheckbox('completed', $this->lang['smallads.form.completed'], $this->item->get_completed(),
 				array('description' => StringVars::replace_vars($this->lang['smallads.form.completed.warning'],array('delay' => SmalladsConfig::load()->get_display_delay_before_delete())))
 			));
 		}
 
-		if (CategoriesAuthorizationsService::check_authorizations($this->get_smallad()->get_id_category())->moderation())
+		if ($this->item->is_archived())
 		{
-			$publication_fieldset = new FormFieldsetHTML('publication', $this->common_lang['form.approbation']);
-			$form->add_fieldset($publication_fieldset);
+			$publication_fieldset->add_field(new FormFieldCheckbox('unarchived', $this->lang['smallads.form.unarchive'], !$this->item->is_archived(),
+				array('description' => $this->lang['smallads.form.unarchive.clue'])
+			));
+		}
 
-			$publication_fieldset->add_field(new FormFieldDateTime('creation_date', $this->common_lang['form.date.creation'], $this->get_smallad()->get_creation_date(),
+		if (CategoriesAuthorizationsService::check_authorizations($this->item->get_id_category())->moderation())
+		{
+
+			$publication_fieldset->add_field(new FormFieldDateTime('creation_date', $this->form_lang['form.creation.date'], $this->item->get_creation_date(),
 				array('required' => true)
 			));
 
-			if (!$this->get_smallad()->is_published())
+			if (!$this->item->is_published())
 			{
-				$publication_fieldset->add_field(new FormFieldCheckbox('update_creation_date', $this->common_lang['form.update.date.creation'], false,
-					array('hidden' => $this->get_smallad()->get_status() != Smallad::NOT_PUBLISHED)
+				$publication_fieldset->add_field(new FormFieldCheckbox('update_creation_date', $this->form_lang['form.update.creation.date'], false,
+					array('hidden' => $this->item->get_status() != SmalladsItem::NOT_PUBLISHED)
 				));
 			}
 
-			$publication_fieldset->add_field(new FormFieldSimpleSelectChoice('publication_state', $this->common_lang['form.approbation'], $this->get_smallad()->get_publication_state(),
+			$publication_fieldset->add_field(new FormFieldSimpleSelectChoice('publication_state', $this->form_lang['form.publication'], $this->item->get_publication_state(),
 				array(
-					new FormFieldSelectChoiceOption($this->common_lang['form.approbation.not'], Smallad::NOT_PUBLISHED),
-					new FormFieldSelectChoiceOption($this->common_lang['form.approbation.now'], Smallad::PUBLISHED_NOW),
-					new FormFieldSelectChoiceOption($this->common_lang['status.approved.date'], Smallad::PUBLICATION_DATE),
+					new FormFieldSelectChoiceOption($this->form_lang['form.publication.draft'], SmalladsItem::NOT_PUBLISHED),
+					new FormFieldSelectChoiceOption($this->form_lang['form.publication.now'], SmalladsItem::PUBLISHED_NOW),
+					new FormFieldSelectChoiceOption($this->form_lang['form.publication.deffered'], SmalladsItem::PUBLICATION_DATE),
 				),
 				array(
 					'events' => array('change' => '
 						if (HTMLForms.getField("publication_state").getValue() == 2) {
-							jQuery("#' . __CLASS__ . '_publication_start_date_field").show();
+							jQuery("#' . __CLASS__ . '_publishing_start_date_field").show();
 							HTMLForms.getField("end_date_enable").enable();
+							if (HTMLForms.getField("end_date_enable").getValue()) {
+								HTMLForms.getField("publishing_end_date").enable();
+							}
 						} else {
-							jQuery("#' . __CLASS__ . '_publication_start_date_field").hide();
+							jQuery("#' . __CLASS__ . '_publishing_start_date_field").hide();
 							HTMLForms.getField("end_date_enable").disable();
+							HTMLForms.getField("publishing_end_date").disable();
 						}'
 					)
 				)
 			));
 
-			$publication_fieldset->add_field(new FormFieldDateTime('publication_start_date', $this->common_lang['form.date.start'], ($this->get_smallad()->get_publication_start_date() === null ? new Date() : $this->get_smallad()->get_publication_start_date()),
-				array('hidden' => ($this->get_smallad()->get_publication_state() != Smallad::PUBLICATION_DATE))
+			$publication_fieldset->add_field($publishing_start_date = new FormFieldDateTime('publishing_start_date', $this->form_lang['form.start.date'], ($this->item->get_publishing_start_date() === null ? new Date() : $this->item->get_publishing_start_date()),
+				array('hidden' => ($request->is_post_method() ? ($request->get_postint(__CLASS__ . '_publication_state', 0) != SmalladsItem::PUBLICATION_DATE) : ($this->item->get_publication_state() != SmalladsItem::PUBLICATION_DATE)))
 			));
 
-			$publication_fieldset->add_field(new FormFieldCheckbox('end_date_enable', $this->common_lang['form.date.end.enable'], $this->get_smallad()->enabled_end_date(),
+			$publication_fieldset->add_field(new FormFieldCheckbox('end_date_enable', $this->form_lang['form.enable.end.date'], $this->item->enabled_end_date(),
 				array(
-					'hidden' => ($this->get_smallad()->get_publication_state() != Smallad::PUBLICATION_DATE),
+					'hidden' => ($request->is_post_method() ? ($request->get_postint(__CLASS__ . '_publication_state', 0) != SmalladsItem::PUBLICATION_DATE) : ($this->item->get_publication_state() != SmalladsItem::PUBLICATION_DATE)),
 					'events' => array('click' => '
 						if (HTMLForms.getField("end_date_enable").getValue()) {
-							HTMLForms.getField("publication_end_date").enable();
+							HTMLForms.getField("publishing_end_date").enable();
 						} else {
-							HTMLForms.getField("publication_end_date").disable();
+							HTMLForms.getField("publishing_end_date").disable();
 						}'
 					)
 				)
 			));
 
-			$publication_fieldset->add_field(new FormFieldDateTime('publication_end_date', $this->common_lang['form.date.end'], ($this->get_smallad()->get_publication_end_date() === null ? new date() : $this->get_smallad()->get_publication_end_date()),
-				array('hidden' => !$this->get_smallad()->enabled_end_date())
+			$publication_fieldset->add_field($publishing_end_date = new FormFieldDateTime('publishing_end_date', $this->form_lang['form.end.date'], ($this->item->get_publishing_end_date() === null ? new date() : $this->item->get_publishing_end_date()),
+				array('hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_end_date_enable', false) : !$this->item->enabled_end_date()))
 			));
+
+			$publishing_end_date->add_form_constraint(new FormConstraintFieldsDifferenceSuperior($publishing_start_date, $publishing_end_date));
 		}
 
 		$this->build_contribution_fieldset($form);
@@ -389,7 +423,7 @@ class SmalladsItemFormController extends ModuleController
 		$i = 1;
 		foreach($smallad_types as $name)
 		{
-			$options[] = new FormFieldSelectChoiceOption($name, str_replace(' ', '-', $name));
+			$options[] = new FormFieldSelectChoiceOption($name, TextHelper::htmlspecialchars(Url::encode_rewrite($name)));
 			$i++;
 		}
 
@@ -417,24 +451,25 @@ class SmalladsItemFormController extends ModuleController
 
 	private function build_contribution_fieldset($form)
 	{
-		if ($this->get_smallad()->get_id() === null && $this->is_contributor_member())
+		$contribution = LangLoader::get('contribution-lang');
+		if ($this->item->get_id() === null && $this->is_contributor_member())
 		{
-			$fieldset = new FormFieldsetHTML('contribution', LangLoader::get_message('contribution', 'user-common'));
-			$fieldset->set_description(MessageHelper::display($this->lang['smallads.form.member.contribution.explain'], MessageHelper::WARNING)->render());
+			$fieldset = new FormFieldsetHTML('contribution', $contribution['contribution.contribution']);
+			$fieldset->set_description(MessageHelper::display($contribution['contribution.extended.warning'], MessageHelper::WARNING)->render());
 			$form->add_fieldset($fieldset);
 
-			$fieldset->add_field(new FormFieldRichTextEditor('contribution_description', LangLoader::get_message('contribution.description', 'user-common'), '',
-				array('description' => LangLoader::get_message('contribution.description.explain', 'user-common'))
+			$fieldset->add_field(new FormFieldRichTextEditor('contribution_description', $contribution['contribution.description'], '',
+				array('description' => $contribution['contribution.description.clue'])
 			));
 		}
-		elseif ($this->get_smallad()->is_published() && $this->get_smallad()->is_authorized_to_edit() && !AppContext::get_current_user()->check_level(User::ADMIN_LEVEL))
+		elseif ($this->item->is_published() && $this->item->is_authorized_to_edit() && !AppContext::get_current_user()->check_level(User::ADMINISTRATOR_LEVEL))
 		{
-			$fieldset = new FormFieldsetHTML('member_edition', $this->lang['smallads.form.member.edition']);
-			$fieldset->set_description(MessageHelper::display($this->lang['smallads.form.member.edition.explain'], MessageHelper::WARNING)->render());
+			$fieldset = new FormFieldsetHTML('member_edition', $contribution['contribution.member.edition']);
+			$fieldset->set_description(MessageHelper::display($contribution['contribution.edition.warning'], MessageHelper::WARNING)->render());
 			$form->add_fieldset($fieldset);
 
-			$fieldset->add_field(new FormFieldRichTextEditor('edittion_description', LangLoader::get_message('smallads.form.member.edition.description', 'common', 'smallads'), '',
-				array('description' => $this->lang['smallads.form.member.edition.description.desc'])
+			$fieldset->add_field(new FormFieldRichTextEditor('edition_description', $contribution['contribution.edition.description'], '',
+				array('description' => $contribution['contribution.edition.description.clue'])
 			));
 		}
 	}
@@ -444,16 +479,16 @@ class SmalladsItemFormController extends ModuleController
 		return (!CategoriesAuthorizationsService::check_authorizations()->write() && CategoriesAuthorizationsService::check_authorizations()->contribution());
 	}
 
-	private function get_smallad()
+	private function get_item()
 	{
-		if ($this->smallad === null)
+		if ($this->item === null)
 		{
 			$id = AppContext::get_request()->get_getint('id', 0);
 			if (!empty($id))
 			{
 				try
 				{
-					$this->smallad = SmalladsService::get_smallad('WHERE smallads.id=:id', array('id' => $id));
+					$this->item = SmalladsService::get_item('WHERE smallads.id=:id', array('id' => $id));
 				}
 				catch(RowNotFoundException $e)
 				{
@@ -463,21 +498,21 @@ class SmalladsItemFormController extends ModuleController
 			}
 			else
 			{
-				$this->is_new_smallad = true;
-				$this->smallad = new Smallad();
-				$this->smallad->init_default_properties(AppContext::get_request()->get_getint('id_category', Category::ROOT_CATEGORY));
+				$this->is_new_item = true;
+				$this->item = new SmalladsItem();
+				$this->item->init_default_properties(AppContext::get_request()->get_getint('id_category', Category::ROOT_CATEGORY));
 			}
 		}
-		return $this->smallad;
+		return $this->item;
 	}
 
 	private function check_authorizations()
 	{
-		$smallad = $this->get_smallad();
+		$item = $this->get_item();
 
-		if ($smallad->get_id() === null)
+		if ($item->get_id() === null)
 		{
-			if (!$smallad->is_authorized_to_add())
+			if (!$item->is_authorized_to_add())
 			{
 				$error_controller = PHPBoostErrors::user_not_authorized();
 				DispatchManager::redirect($error_controller);
@@ -485,7 +520,7 @@ class SmalladsItemFormController extends ModuleController
 		}
 		else
 		{
-			if (!$smallad->is_authorized_to_edit())
+			if (!$item->is_authorized_to_edit())
 			{
 				$error_controller = PHPBoostErrors::user_not_authorized();
 				DispatchManager::redirect($error_controller);
@@ -553,109 +588,113 @@ class SmalladsItemFormController extends ModuleController
 
 	private function save()
 	{
-		$smallad = $this->get_smallad();
-
-		$smallad->set_title($this->form->get_value('title'));
+		$this->item->set_title($this->form->get_value('title'));
 
 		if (CategoriesService::get_categories_manager()->get_categories_cache()->has_categories())
-			$smallad->set_id_category($this->form->get_value('id_category')->get_raw_value());
+			$this->item->set_id_category($this->form->get_value('id_category')->get_raw_value());
 
-		$smallad->set_description(($this->form->get_value('enable_description') ? $this->form->get_value('description') : ''));
-		$smallad->set_contents($this->form->get_value('contents'));
+		$this->item->set_summary(($this->form->get_value('enable_summary') ? $this->form->get_value('summary') : ''));
+		$this->item->set_content($this->form->get_value('content'));
 
 		if(empty($this->form->get_value('price')))
-			$smallad->set_price('0');
+			$this->item->set_price('0');
 		else
-			$smallad->set_price($this->form->get_value('price'));
+			$this->item->set_price($this->form->get_value('price'));
 
-		$smallad->set_smallad_type($this->form->get_value('smallad_type')->get_raw_value());
-		// $smallad->set_brand($this->form->get_value('brand')->get_raw_value());
+		$this->item->set_smallad_type($this->form->get_value('smallad_type')->get_raw_value());
+		// $this->item->set_brand($this->form->get_value('brand')->get_raw_value());
 
-		$smallad->set_thumbnail(new Url($this->form->get_value('thumbnail')));
+		$this->item->set_thumbnail($this->form->get_value('thumbnail'));
 
 		if($this->config->is_max_weeks_number_displayed())
 		{
 			if(empty($this->form->get_value('max_weeks')) || $this->form->get_value('max_weeks') === 0)
-				$smallad->set_max_weeks(SmalladsConfig::load()->get_max_weeks_number());
+				$this->item->set_max_weeks(SmalladsConfig::load()->get_max_weeks_number());
 			else
-				$smallad->set_max_weeks($this->form->get_value('max_weeks'));
+				$this->item->set_max_weeks($this->form->get_value('max_weeks'));
 		}
 
 		if($this->config->is_location_displayed()) {
 			if($this->config->is_googlemaps_available()){
-				$smallad->set_location($this->form->get_value('location'));
+				$this->item->set_location($this->form->get_value('location'));
 			} else {
 				$location = $this->form->get_value('location')->get_raw_value();
-				$smallad->set_location($location);
+				$this->item->set_location($location);
 				if ($location === 'other')
-					$smallad->set_other_location($this->form->get_value('other_location'));
+					$this->item->set_other_location($this->form->get_value('other_location'));
 				else
-					$smallad->set_other_location('');
+					$this->item->set_other_location('');
 			}
 		}
 
-		$displayed_author_phone = $this->form->get_value('displayed_author_phone') ? $this->form->get_value('displayed_author_phone') : Smallad::NOTDISPLAYED_AUTHOR_PHONE;
-		$smallad->set_displayed_author_phone($displayed_author_phone);
+		$displayed_author_phone = $this->form->get_value('displayed_author_phone') ? $this->form->get_value('displayed_author_phone') : SmalladsItem::NOT_DISPLAYED_AUTHOR_PHONE;
+		$this->item->set_displayed_author_phone($displayed_author_phone);
 
-		if ($this->get_smallad()->get_displayed_author_phone() == true)
-			$smallad->set_author_phone($this->form->get_value('author_phone'));
+		if ($this->item->get_displayed_author_phone() == true)
+			$this->item->set_author_phone($this->form->get_value('author_phone'));
 
-		$displayed_author_pm = $this->form->get_value('displayed_author_pm') ? $this->form->get_value('displayed_author_pm') : Smallad::NOTDISPLAYED_AUTHOR_PM;
-		$smallad->set_displayed_author_pm($displayed_author_pm);
+		$displayed_author_pm = $this->form->get_value('displayed_author_pm') ? $this->form->get_value('displayed_author_pm') : SmalladsItem::NOT_DISPLAYED_AUTHOR_PM;
+		$this->item->set_displayed_author_pm($displayed_author_pm);
 
-		$displayed_author_email = $this->form->get_value('displayed_author_email') ? $this->form->get_value('displayed_author_email') : Smallad::NOTDISPLAYED_AUTHOR_EMAIL;
-		$smallad->set_displayed_author_email($displayed_author_email);
+		$displayed_author_email = $this->form->get_value('displayed_author_email') ? $this->form->get_value('displayed_author_email') : SmalladsItem::NOT_DISPLAYED_AUTHOR_EMAIL;
+		$this->item->set_displayed_author_email($displayed_author_email);
 
-		if ($this->get_smallad()->get_displayed_author_email() == true)
-			$smallad->set_custom_author_email(($this->form->get_value('custom_author_email') && $this->form->get_value('custom_author_email') !== $smallad->get_author_user()->get_email() ? $this->form->get_value('custom_author_email') : ''));
+		if ($this->item->get_displayed_author_email() == true)
+			$this->item->set_custom_author_email(($this->form->get_value('custom_author_email') && $this->form->get_value('custom_author_email') !== $this->item->get_author_user()->get_email() ? $this->form->get_value('custom_author_email') : ''));
 
-		$displayed_author_name = $this->form->get_value('displayed_author_name') ? $this->form->get_value('displayed_author_name') : Smallad::NOTDISPLAYED_AUTHOR_NAME;
-		$smallad->set_displayed_author_name($displayed_author_name);
+		$displayed_author_name = $this->form->get_value('displayed_author_name') ? $this->form->get_value('displayed_author_name') : SmalladsItem::NOT_DISPLAYED_AUTHOR_NAME;
+		$this->item->set_displayed_author_name($displayed_author_name);
 
-		if ($this->get_smallad()->get_displayed_author_name() == true)
-			$smallad->set_custom_author_name(($this->form->get_value('custom_author_name') && $this->form->get_value('custom_author_name') !== $smallad->get_author_user()->get_display_name() ? $this->form->get_value('custom_author_name') : ''));
+		if ($this->item->get_displayed_author_name() == true)
+			$this->item->set_custom_author_name(($this->form->get_value('custom_author_name') && $this->form->get_value('custom_author_name') !== $this->item->get_author_user()->get_display_name() ? $this->form->get_value('custom_author_name') : ''));
 
-		$smallad->set_sources($this->form->get_value('sources'));
-		$smallad->set_carousel($this->form->get_value('carousel'));
+		$this->item->set_sources($this->form->get_value('sources'));
+		$this->item->set_carousel($this->form->get_value('carousel'));
 
-		if($this->get_smallad()->get_id() !== null)
-			$smallad->set_completed($this->form->get_value('completed'));
+		if($this->item->get_id() !== null)
+			$this->item->set_completed($this->form->get_value('completed'));
 
-		if (!CategoriesAuthorizationsService::check_authorizations($smallad->get_id_category())->moderation())
+		if ($this->item->is_archived()) {
+			if ($this->form->get_value('unarchived'))
+				$this->item->set_archived(SmalladsItem::NOT_ARCHIVED);
+		}
+
+
+		if (!CategoriesAuthorizationsService::check_authorizations($this->item->get_id_category())->moderation())
 		{
-			if ($smallad->get_id() === null)
-				$smallad->set_creation_date(new Date());
+			if ($this->item->get_id() === null)
+				$this->item->set_creation_date(new Date());
 
-			$smallad->set_rewrited_title(Url::encode_rewrite($smallad->get_title()));
-			$smallad->clean_publication_start_and_end_date();
+			$this->item->set_rewrited_title(Url::encode_rewrite($this->item->get_title()));
+			$this->item->clean_publication_start_and_end_date();
 
-			if (CategoriesAuthorizationsService::check_authorizations($smallad->get_id_category())->contribution() && !CategoriesAuthorizationsService::check_authorizations($smallad->get_id_category())->write())
-				$smallad->set_publication_state(Smallad::NOT_PUBLISHED);
+			if (CategoriesAuthorizationsService::check_authorizations($this->item->get_id_category())->contribution() && !CategoriesAuthorizationsService::check_authorizations($this->item->get_id_category())->write())
+				$this->item->set_publication_state(SmalladsItem::NOT_PUBLISHED);
 		}
 		else
 		{
 			if ($this->form->get_value('update_creation_date'))
 			{
-				$smallad->set_creation_date(new Date());
+				$this->item->set_creation_date(new Date());
 			}
 			else
 			{
-				$smallad->set_creation_date($this->form->get_value('creation_date'));
+				$this->item->set_creation_date($this->form->get_value('creation_date'));
 			}
 
 			$rewrited_title = $this->form->get_value('rewrited_title', '');
-			$rewrited_title = $this->form->get_value('personalize_rewrited_title') && !empty($rewrited_title) ? $rewrited_title : Url::encode_rewrite($smallad->get_title());
-			$smallad->set_rewrited_title($rewrited_title);
+			$rewrited_title = $this->form->get_value('personalize_rewrited_title') && !empty($rewrited_title) ? $rewrited_title : Url::encode_rewrite($this->item->get_title());
+			$this->item->set_rewrited_title($rewrited_title);
 
-			$smallad->set_publication_state($this->form->get_value('publication_state')->get_raw_value());
-			if ($smallad->get_publication_state() == Smallad::PUBLICATION_DATE)
+			$this->item->set_publication_state($this->form->get_value('publication_state')->get_raw_value());
+			if ($this->item->get_publication_state() == SmalladsItem::PUBLICATION_DATE)
 			{
 				$config = SmalladsConfig::load();
 				$deferred_operations = $config->get_deferred_operations();
 
-				$old_start_date = $smallad->get_publication_start_date();
-				$start_date = $this->form->get_value('publication_start_date');
-				$smallad->set_publication_start_date($start_date);
+				$old_start_date = $this->item->get_publishing_start_date();
+				$start_date = $this->form->get_value('publishing_start_date');
+				$this->item->set_publishing_start_date($start_date);
 
 				if ($old_start_date !== null && $old_start_date->get_timestamp() != $start_date->get_timestamp() && in_array($old_start_date->get_timestamp(), $deferred_operations))
 				{
@@ -668,9 +707,9 @@ class SmalladsItemFormController extends ModuleController
 
 				if ($this->form->get_value('end_date_enable'))
 				{
-					$old_end_date = $smallad->get_publication_end_date();
-					$end_date = $this->form->get_value('publication_end_date');
-					$smallad->set_publication_end_date($end_date);
+					$old_end_date = $this->item->get_publishing_end_date();
+					$end_date = $this->form->get_value('publishing_end_date');
+					$this->item->set_publishing_end_date($end_date);
 
 					if ($old_end_date !== null && $old_end_date->get_timestamp() != $end_date->get_timestamp() && in_array($old_end_date->get_timestamp(), $deferred_operations))
 					{
@@ -683,7 +722,7 @@ class SmalladsItemFormController extends ModuleController
 				}
 				else
 				{
-					$smallad->clean_publication_end_date();
+					$this->item->clean_publishing_end_date();
 				}
 
 				$config->set_deferred_operations($deferred_operations);
@@ -691,48 +730,48 @@ class SmalladsItemFormController extends ModuleController
 			}
 			else
 			{
-				$smallad->clean_publication_start_and_end_date();
+				$this->item->clean_publication_start_and_end_date();
 			}
 		}
 
-		if ($smallad->get_id() === null)
+		if ($this->item->get_id() === null)
 		{
-			$smallad->set_author_user(AppContext::get_current_user());
-			$id_smallad = SmalladsService::add($smallad);
+			$this->item->set_author_user(AppContext::get_current_user());
+			$item_id = SmalladsService::add($this->item);
 		}
 		else
 		{
 			$now = new Date();
-			$smallad->set_updated_date($now);
-			$id_smallad = $smallad->get_id();
-			SmalladsService::update($smallad);
+			$this->item->set_update_date($now);
+			$item_id = $this->item->get_id();
+			SmalladsService::update($this->item);
 		}
 
-		$this->contribution_actions($smallad, $id_smallad);
+		$this->contribution_actions($this->item, $item_id);
 
-		KeywordsService::get_keywords_manager()->put_relations($id_smallad, $this->form->get_value('keywords'));
+		KeywordsService::get_keywords_manager()->put_relations($item_id, $this->form->get_value('keywords'));
 
 		SmalladsService::clear_cache();
 	}
 
-	private function contribution_actions(Smallad $smallad, $id_smallad)
+	private function contribution_actions(SmalladsItem $item, $item_id)
 	{
 		if ($this->is_contributor_member())
 		{
 			$contribution = new Contribution();
-			$contribution->set_id_in_module($id_smallad);
-			if ($smallad->get_id() === null)
+			$contribution->set_id_in_module($item_id);
+			if ($item->get_id() === null)
 				$contribution->set_description(stripslashes($this->form->get_value('contribution_description')));
 			else
-				$contribution->set_description(stripslashes($this->form->get_value('edittion_description')));
+				$contribution->set_description(stripslashes($this->form->get_value('edition_description')));
 
-			$contribution->set_entitled($smallad->get_title());
-			$contribution->set_fixing_url(SmalladsUrlBuilder::edit_item($id_smallad)->relative());
+			$contribution->set_entitled($item->get_title());
+			$contribution->set_fixing_url(SmalladsUrlBuilder::edit_item($item_id)->relative());
 			$contribution->set_poster_id(AppContext::get_current_user()->get_id());
 			$contribution->set_module('smallads');
 			$contribution->set_auth(
 				Authorizations::capture_and_shift_bit_auth(
-					CategoriesService::get_categories_manager()->get_heritated_authorizations($smallad->get_id_category(), Category::MODERATION_AUTHORIZATIONS, Authorizations::AUTH_CHILD_PRIORITY),
+					CategoriesService::get_categories_manager()->get_heritated_authorizations($item->get_id_category(), Category::MODERATION_AUTHORIZATIONS, Authorizations::AUTH_CHILD_PRIORITY),
 					Category::MODERATION_AUTHORIZATIONS, Contribution::CONTRIBUTION_AUTH_BIT
 				)
 			);
@@ -740,7 +779,7 @@ class SmalladsItemFormController extends ModuleController
 		}
 		else
 		{
-			$corresponding_contributions = ContributionService::find_by_criteria('smallads', $id_smallad);
+			$corresponding_contributions = ContributionService::find_by_criteria('smallads', $item_id);
 			if (count($corresponding_contributions) > 0)
 			{
 				foreach ($corresponding_contributions as $contribution)
@@ -750,71 +789,68 @@ class SmalladsItemFormController extends ModuleController
 				}
 			}
 		}
-		$smallad->set_id($id_smallad);
+		$item->set_id($item_id);
 	}
 
 	private function redirect()
 	{
-		$smallad = $this->get_smallad();
-		$category = $smallad->get_category();
+		$category = $this->item->get_category();
 
-		if ($this->is_new_smallad && $this->is_contributor_member() && !$smallad->is_published())
+		if ($this->is_new_item && $this->is_contributor_member() && !$this->item->is_published())
 		{
 			DispatchManager::redirect(new UserContributionSuccessController());
 		}
-		elseif ($smallad->is_published())
+		elseif ($this->item->is_published())
 		{
-			if ($this->is_new_smallad)
-				AppContext::get_response()->redirect(SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $smallad->get_id(), $smallad->get_rewrited_title()), StringVars::replace_vars($this->lang['smallads.message.success.add'], array('title' => $smallad->get_title())));
+			if ($this->is_new_item)
+				AppContext::get_response()->redirect(SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title()), StringVars::replace_vars($this->lang['smallads.message.success.add'], array('title' => $this->item->get_title())));
 			else
-				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $smallad->get_id(), $smallad->get_rewrited_title())), StringVars::replace_vars($this->lang['smallads.message.success.edit'], array('title' => $smallad->get_title())));
+				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title())), StringVars::replace_vars($this->lang['smallads.message.success.edit'], array('title' => $this->item->get_title())));
 		}
 		else
 		{
-			if ($this->is_new_smallad)
-				AppContext::get_response()->redirect(SmalladsUrlBuilder::display_pending_items(), StringVars::replace_vars($this->lang['smallads.message.success.add'], array('title' => $smallad->get_title())));
+			if ($this->is_new_item)
+				AppContext::get_response()->redirect(SmalladsUrlBuilder::display_pending_items(), StringVars::replace_vars($this->lang['smallads.message.success.add'], array('title' => $this->item->get_title())));
 			else
-				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : SmalladsUrlBuilder::display_pending_items()), StringVars::replace_vars($this->lang['smallads.message.success.edit'], array('title' => $smallad->get_title())));
+				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : SmalladsUrlBuilder::display_pending_items()), StringVars::replace_vars($this->lang['smallads.message.success.edit'], array('title' => $this->item->get_title())));
 		}
 	}
 
-	private function generate_response(View $tpl)
+	private function generate_response(View $view)
 	{
-		$smallad = $this->get_smallad();
+		$location_id = $this->item->get_id() ? 'item-edit-'. $this->item->get_id() : '';
 
-		$location_id = $smallad->get_id() ? 'smallads-edit-'. $smallad->get_id() : '';
-
-		$response = new SiteDisplayResponse($tpl, $location_id);
+		$response = new SiteDisplayResponse($view, $location_id);
 		$graphical_environment = $response->get_graphical_environment();
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['smallads.module.title'], SmalladsUrlBuilder::home());
 
-		if ($smallad->get_id() === null)
+		if ($this->item->get_id() === null)
 		{
-			$breadcrumb->add($this->lang['smallads.add'], SmalladsUrlBuilder::add_item($smallad->get_id_category()));
-			$graphical_environment->set_page_title($this->lang['smallads.add'], $this->lang['smallads.module.title']);
-			$graphical_environment->get_seo_meta_data()->set_description($this->lang['smallads.add']);
-			$graphical_environment->get_seo_meta_data()->set_canonical_url(SmalladsUrlBuilder::add_item($smallad->get_id_category()));
+			$breadcrumb->add($this->lang['smallads.add.item'], SmalladsUrlBuilder::add_item($this->item->get_id_category()));
+			$graphical_environment->set_page_title($this->lang['smallads.add.item'], $this->lang['smallads.module.title']);
+			$graphical_environment->get_seo_meta_data()->set_description($this->lang['smallads.add.item']);
+			$graphical_environment->get_seo_meta_data()->set_canonical_url(SmalladsUrlBuilder::add_item($this->item->get_id_category()));
 		}
 		else
 		{
-			$categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($smallad->get_id_category(), true));
+			$categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($this->item->get_id_category(), true));
 			foreach ($categories as $id => $category)
 			{
 				if ($category->get_id() != Category::ROOT_CATEGORY)
 					$breadcrumb->add($category->get_name(), SmalladsUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
 			}
-			$breadcrumb->add($smallad->get_title(), SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $smallad->get_id(), $smallad->get_rewrited_title()));
+			$breadcrumb->add($this->item->get_title(), SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title()));
 
-			$breadcrumb->add($this->lang['smallads.edit'], SmalladsUrlBuilder::edit_item($smallad->get_id()));
+			$breadcrumb->add($this->lang['smallads.edit.item'], SmalladsUrlBuilder::edit_item($this->item->get_id()));
 
 			if (!AppContext::get_session()->location_id_already_exists($location_id))
 				$graphical_environment->set_location_id($location_id);
 
-			$graphical_environment->set_page_title($this->lang['smallads.edit'], $this->lang['smallads.module.title']);
-			$graphical_environment->get_seo_meta_data()->set_description($this->lang['smallads.edit']);
-			$graphical_environment->get_seo_meta_data()->set_canonical_url(SmalladsUrlBuilder::edit_item($smallad->get_id()));
+			$graphical_environment->set_page_title($this->lang['smallads.edit.item'], $this->lang['smallads.module.title']);
+			$graphical_environment->get_seo_meta_data()->set_description($this->lang['smallads.edit.item']);
+			$graphical_environment->get_seo_meta_data()->set_canonical_url(SmalladsUrlBuilder::edit_item($this->item->get_id()));
 		}
 
 		return $response;

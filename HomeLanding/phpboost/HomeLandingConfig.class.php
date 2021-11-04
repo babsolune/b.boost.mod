@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2020 06 04
+ * @version     PHPBoost 6.0 - last update: 2021 09 01
  * @since       PHPBoost 5.0 - 2016 01 02
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
@@ -36,8 +36,13 @@ class HomeLandingConfig extends AbstractConfigData
 	const RSS_SITE_URL = 'rss_site_url';
 	const RSS_XML_URL = 'rss_xml_url';
 
+	const STICKY_TEXT = 'sticky_text';
+	const STICKY_TITLE = 'sticky_title';
+
 	const ELEMENTS_NUMBER_DISPLAYED = 5;
 	const CHARACTERS_NUMBER_DISPLAYED = 128;
+
+	// Modules
 	const MODULE_CAROUSEL = 'carousel';
 	const MODULE_ANCHORS_MENU = 'anchors_menu';
 	const MODULE_EDITO = 'edito';
@@ -54,17 +59,13 @@ class HomeLandingConfig extends AbstractConfigData
 	const MODULE_MEDIA = 'media';
 	const MODULE_NEWS = 'news';
 	const MODULE_NEWS_CATEGORY = 'news_category';
+	const MODULE_SMALLADS = 'smallads';
+	const MODULE_SMALLADS_CATEGORY = 'smallads_category';
 	const MODULE_RSS = 'rss';
 	const MODULE_WEB = 'web';
 	const MODULE_WEB_CATEGORY = 'web_category';
 
-	const STICKY_TEXT = 'sticky_text';
-	const STICKY_TITLE = 'sticky_title';
-
-	// Configuration
-	// Articles errors - waiting for a real dev
-	public function get_authorizations() { }
-	public function get_auto_cut_characters_number() { }
+	// Additional modules
 
 	// Module Title
 	public function get_module_title()
@@ -161,7 +162,7 @@ class HomeLandingConfig extends AbstractConfigData
 		return $id_category;
 	}
 
-	// One page menu
+	// Anchors menu
 	public function get_anchors_menu()
 	{
 		return $this->get_property(self::ANCHORS_MENU);
@@ -244,7 +245,6 @@ class HomeLandingConfig extends AbstractConfigData
 		$this->set_property(self::EDITO, $edito);
 	}
 
-
 	//External Rss
 	public function get_rss_site_name()
 	{
@@ -300,8 +300,6 @@ class HomeLandingConfig extends AbstractConfigData
 	private function init_modules_array()
 	{
 		$modules = array();
-
-		$lang = LangLoader::get('config', 'HomeLanding');
 
 		$module = new HomeLandingModule();
 		$module->set_module_id(self::MODULE_ANCHORS_MENU);
@@ -413,6 +411,20 @@ class HomeLandingConfig extends AbstractConfigData
 		$modules[] = $module->get_properties();
 
 		$module = new HomeLandingModule();
+		$module->set_module_id(self::MODULE_SMALLADS);
+		$module->set_phpboost_module_id(self::MODULE_SMALLADS);
+		$module->hide();
+
+		$modules[] = $module->get_properties();
+
+		$module = new HomeLandingModuleCategory();
+		$module->set_module_id(self::MODULE_SMALLADS_CATEGORY);
+		$module->set_phpboost_module_id(self::MODULE_SMALLADS);
+		$module->hide();
+
+		$modules[] = $module->get_properties();
+
+		$module = new HomeLandingModule();
 		$module->set_module_id(self::MODULE_RSS);
 		$module->set_elements_number_displayed(10);
 		$module->hide();
@@ -433,6 +445,15 @@ class HomeLandingConfig extends AbstractConfigData
 
 		$modules[] = $module->get_properties();
 
+		// Files autoload for adding new modules
+		$init_directory = PATH_TO_ROOT . '/HomeLanding/additional/init/';
+		$scan_init = scandir($init_directory);
+		foreach ($scan_init as $key => $value)
+		{
+	      	if (!in_array($value,array('.', '..', '.empty')))
+				require_once($init_directory . $value);
+		}
+
 		return $modules;
 	}
 
@@ -440,7 +461,7 @@ class HomeLandingConfig extends AbstractConfigData
 	public function get_default_values()
 	{
 		return array(
-			self::MODULE_TITLE => LangLoader::get_message('title', 'config', 'HomeLanding'),
+			self::MODULE_TITLE => LangLoader::get_message('homelanding.title', 'common', 'HomeLanding'),
 
 			self::LEFT_COLUMNS => true,
 			self::RIGHT_COLUMNS => true,
@@ -456,10 +477,10 @@ class HomeLandingConfig extends AbstractConfigData
 			self::CAROUSEL_SPEED => 200,
 			self::CAROUSEL_TIME => 5000,
 			self::CAROUSEL_NUMBER => 4,
-			self::CAROUSEL_AUTO => 1,
-			self::CAROUSEL_HOVER => 1,
+			self::CAROUSEL_AUTO => self::CAROUSEL_TRUE,
+			self::CAROUSEL_HOVER => self::CAROUSEL_TRUE,
 
-			self::EDITO => LangLoader::get_message('module.edito.description', 'config', 'HomeLanding'),
+			self::EDITO => LangLoader::get_message('homelanding.edito.description', 'common', 'HomeLanding'),
 
 			self::RSS_SITE_NAME => '',
 			self::RSS_SITE_URL => '',
@@ -479,7 +500,7 @@ class HomeLandingConfig extends AbstractConfigData
 	}
 
 	/**
-	 * Saves the configuration in the database. Has it become persistent.
+	 * Saving the configuration in database.
 	 */
 	public static function save()
 	{

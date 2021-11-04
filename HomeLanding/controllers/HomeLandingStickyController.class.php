@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2018 04 11
+ * @version     PHPBoost 6.0 - last update: 2018 04 11
  * @since       PHPBoost 5.0 - 2016 01 02
 */
 
@@ -44,7 +44,7 @@ class HomeLandingStickyController extends ModuleController
 	    $graphical_environment = $response->get_graphical_environment();
 	    $graphical_environment->set_page_title($this->lang['homelanding.sticky.title']);
 	    $breadcrumb = $graphical_environment->get_breadcrumb();
-	    $breadcrumb->add(Langloader::get_message('module.title', 'common', 'HomeLanding'), HomeLandingUrlBuilder::home());
+	    $breadcrumb->add(Langloader::get_message('homelanding.module.title', 'common', 'HomeLanding'), HomeLandingUrlBuilder::home());
 	    $breadcrumb->add($this->lang['homelanding.sticky.title']);
         $this->template->put_all(array(
             'STICKY_TITLE' => $config->get_sticky_title(),

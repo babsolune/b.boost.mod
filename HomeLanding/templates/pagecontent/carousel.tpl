@@ -1,18 +1,32 @@
-
-
-<div id="home-slideboost" style="order: {CAROUSEL_POSITION};">
-	# START item #
-		<figure>
-			# IF item.DESCRIPTION #
-			<figcaption>
-				# IF item.LINK #<a href="{item.LINK}"># ENDIF #
-					{item.DESCRIPTION}
-				# IF item.LINK #</a># ENDIF #
-			</figcaption>
-			# ENDIF #
-			<img class="slideImage" src="{item.PICTURE_URL}" alt="{item.PICTURE_URL}" />
-		</figure>
-	# END item #
+<div class="sub-section" style="order: {CAROUSEL_POSITION};">
+	<div class="content-container">
+		<div class="content">
+			<div id="home-slideboost">
+				# START items #
+					# IF items.C_LINK_ONLY #
+						<a class="offload" href="{items.LINK}">
+							<figure>
+								<img class="slideImage" src="{items.U_DEFAULT_PICTURE}" alt="{@homelanding.carousel.no.alt}" />
+							</figure>
+						</a>
+					# ELSE #
+						# IF items.LINK #<a class="offload" href="{items.LINK}"># ENDIF #
+							<figure>
+								# IF items.DESCRIPTION #
+									<figcaption>
+										{items.DESCRIPTION}
+									</figcaption>
+								# ENDIF #
+								# IF items.U_PICTURE #
+									<img class="slideImage" src="{items.U_PICTURE}" alt="# IF items.DESCRIPTION #{items.DESCRIPTION}# ELSE #{@homelanding.carousel.no.alt}# ENDIF #" />
+								# ENDIF #
+							</figure>
+						# IF items.LINK #</a># ENDIF #
+					# ENDIF #
+				# END items #
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
@@ -21,7 +35,7 @@
 		autoplayTimeout: ${escapejs(CAROUSEL_TIME)},
 		smartSpeed: ${escapejs(CAROUSEL_SPEED)},
 		loop: ${escapejs(CAROUSEL_AUTO)},
-		margin: 15,
+		margin: 14,
 		autoplayHoverPause: ${escapejs(CAROUSEL_HOVER)},
 		responsive: {
 			0: { items: 1},

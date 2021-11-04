@@ -1,28 +1,29 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Julien BRISWALTER <j1.seth@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2018 08 09
+ * @version     PHPBoost 6.0 - last update: 2020 12 20
  * @since       PHPBoost 5.0 - 2016 02 02
+ * @contributor Sebastien LARTIGUE <babsolune@phpboost.com>
 */
 
  class SmalladsCache implements CacheData
  {
- 	private $smallad = array();
+ 	private $item = array();
 
  	/**
  	 * {@inheritdoc}
  	 */
  	public function synchronize()
  	{
- 		$this->smallad = array();
+ 		$this->items = array();
  		$now = new Date();
 
  		$result = PersistenceContext::get_querier()->select('
  			SELECT smallads.*
  			FROM ' . SmalladsSetup::$smallads_table . ' smallads
-			WHERE (published = 1 OR (published = 2 AND publication_start_date < :timestamp_now AND (publication_end_date > :timestamp_now OR publication_end_date = 0)))
+			WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
             ORDER BY creation_date DESC
  			LIMIT :module_mini_items_nb OFFSET 0', array(
                 'timestamp_now' => $now->get_timestamp(),
@@ -31,33 +32,33 @@
 
  		while ($row = $result->fetch())
  		{
- 			$this->smallad[$row['id']] = $row;
+ 			$this->items[$row['id']] = $row;
  		}
  		$result->dispose();
  	}
 
- 	public function get_smallad()
+ 	public function get_items()
  	{
- 		return $this->smallad;
+ 		return $this->items;
  	}
 
- 	public function smallad_exists($id)
+ 	public function item_exists($id)
  	{
- 		return array_key_exists($id, $this->smallad);
+ 		return array_key_exists($id, $this->items);
  	}
 
- 	public function get_smallad_item($id)
+ 	public function get_item($id)
  	{
- 		if ($this->smallad_exists($id))
+ 		if ($this->item_exists($id))
  		{
- 			return $this->smallad[$id];
+ 			return $this->items[$id];
  		}
  		return null;
  	}
 
 	public function get_items_number()
 	{
-		return count($this->smallad);
+		return count($this->items);
 	}
 
  	/**

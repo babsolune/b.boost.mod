@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2020 05 14
+ * @version     PHPBoost 6.0 - last update: 2021 02 02
  * @since       PHPBoost 4.0 - 2013 01 29
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
@@ -17,18 +17,22 @@ class SmalladsSearchable extends DefaultSearchable
 
 		$this->table_name = SmalladsSetup::$smallads_table;
 
-		$this->authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, SmalladsConfig::load()->are_descriptions_displayed_to_guests(), $module_id);
-
-		$this->field_content = 'contents';
+		$this->authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, SmalladsConfig::load()->are_summaries_displayed_to_guests(), $module_id);
 
 		$this->use_keywords = true;
 
+		$this->field_title = 'title';
+		$this->field_rewrited_title = 'rewrited_title';
+		$this->field_content = 'content';
+
 		$this->has_summary = true;
-		$this->field_summary = 'smallads_table_name.description';
+		$this->field_summary = 'summary';
+
+		$this->field_published = 'published';
 
 		$this->has_validation_period = true;
-		$this->field_validation_start_date = 'publication_start_date';
-		$this->field_validation_end_date = 'publication_end_date';
+		$this->field_validation_publishing_start_date = 'publishing_start_date';
+		$this->field_validation_publishing_end_date = 'publishing_end_date';
 	}
 }
 ?>

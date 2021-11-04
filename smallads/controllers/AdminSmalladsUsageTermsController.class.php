@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2020 01 26
+ * @version     PHPBoost 6.0 - last update: 2021 07 21
  * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
@@ -20,7 +20,6 @@ class AdminSmalladsUsageTermsController extends AdminModuleController
 	private $submit_button;
 
 	private $lang;
-	private $admin_common_lang;
 
 	/**
 	 * @var SmalladsConfig
@@ -35,25 +34,24 @@ class AdminSmalladsUsageTermsController extends AdminModuleController
 
 		$this->build_form();
 
-		$tpl = new StringTemplate('# INCLUDE MSG # # INCLUDE FORM #');
-		$tpl->add_lang($this->lang);
+		$view = new StringTemplate('# INCLUDE MSG # # INCLUDE FORM #');
+		$view->add_lang($this->lang);
 
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
 			$this->form->get_field_by_id('usage_terms')->set_hidden(!$this->config->are_usage_terms_displayed());
-			$tpl->put('MSG', MessageHelper::display(LangLoader::get_message('message.success.config', 'status-messages-common'), MessageHelper::SUCCESS, 4));
+			$view->put('MSG', MessageHelper::display(LangLoader::get_message('warning.success.config', 'warning-lang'), MessageHelper::SUCCESS, 4));
 		}
 
-		$tpl->put('FORM', $this->form->display());
+		$view->put('FORM', $this->form->display());
 
-		return new AdminSmalladsDisplayResponse($tpl, $this->lang['config.usage.terms']);
+		return new AdminSmalladsDisplayResponse($view, $this->lang['smallads.usage.terms.management']);
 	}
 
 	private function init()
 	{
 		$this->lang = LangLoader::get('common', 'smallads');
-		$this->admin_common_lang = LangLoader::get('admin-common');
 		$this->config = SmalladsConfig::load();
 		$this->comments_config = CommentsConfig::load();
 		$this->content_management_config = ContentManagementConfig::load();
@@ -63,10 +61,10 @@ class AdminSmalladsUsageTermsController extends AdminModuleController
 	{
 		$form = new HTMLForm(__CLASS__);
 
-		$fieldset = new FormFieldsetHTMLHeading('config_usage_terms_configuration', $this->lang['config.usage.terms']);
+		$fieldset = new FormFieldsetHTML('config_usage_terms_configuration', $this->lang['smallads.usage.terms.management']);
 		$form->add_fieldset($fieldset);
 
-		$fieldset->add_field(new FormFieldCheckbox('usage_terms_displayed', $this->lang['config.usage.terms.displayed'], $this->config->are_usage_terms_displayed(),
+		$fieldset->add_field(new FormFieldCheckbox('usage_terms_displayed', $this->lang['smallads.display.usage.terms'], $this->config->are_usage_terms_displayed(),
 			array(
 				'class' => 'custom-checkbox',
 				'events' => array('click' => '
@@ -79,7 +77,7 @@ class AdminSmalladsUsageTermsController extends AdminModuleController
 			)
 		));
 
-		$fieldset->add_field(new FormFieldRichTextEditor('usage_terms', $this->lang['config.usage.terms.desc'], $this->config->get_usage_terms(),
+		$fieldset->add_field(new FormFieldRichTextEditor('usage_terms', $this->lang['smallads.usage.terms.clue'], $this->config->get_usage_terms(),
 			array(
 				'rows' => 25,
 				'hidden' => !$this->config->are_usage_terms_displayed()

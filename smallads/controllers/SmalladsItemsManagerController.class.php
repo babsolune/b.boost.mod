@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2020 05 08
+ * @version     PHPBoost 6.0 - last update: 2021 06 26
  * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
@@ -32,31 +32,43 @@ class SmalladsItemsManagerController extends ModuleController
 	private function init()
 	{
 		$this->lang = LangLoader::get('common', 'smallads');
-		$this->view = new StringTemplate('# INCLUDE table #');
+		$this->view = new StringTemplate('# INCLUDE TABLE #');
 	}
 
 	private function build_table()
 	{
+		$common_lang = LangLoader::get('common-lang');
 		$display_categories = CategoriesService::get_categories_manager()->get_categories_cache()->has_categories();
 
 		$columns = array(
-			new HTMLTableColumn(LangLoader::get_message('form.title', 'common'), 'title'),
-			new HTMLTableColumn(LangLoader::get_message('category', 'categories-common'), 'id_category'),
-			new HTMLTableColumn(LangLoader::get_message('author', 'common'), 'display_name'),
-			new HTMLTableColumn(LangLoader::get_message('form.date.creation', 'common'), 'creation_date'),
-			new HTMLTableColumn(LangLoader::get_message('status', 'common'), 'published'),
-			new HTMLTableColumn(LangLoader::get_message('smallads.completed.item', 'common', 'smallads'), 'completed'),
-			new HTMLTableColumn(LangLoader::get_message('actions', 'admin-common'), '', array('sr-only' => true))
+			new HTMLTableColumn($common_lang['common.title'], 'title'),
+			new HTMLTableColumn($common_lang['common.category'], 'id_category'),
+			new HTMLTableColumn($common_lang['common.author'], 'display_name'),
+			new HTMLTableColumn($common_lang['common.creation.date'], 'creation_date'),
+			new HTMLTableColumn($common_lang['common.status.publication'], 'published'),
+			new HTMLTableColumn($common_lang['common.status'], 'completed'),
+			new HTMLTableColumn($common_lang['common.moderation'], '', array('sr-only' => true))
 		);
 
 		if (!$display_categories)
 			unset($columns[1]);
 
-		$table_model = new SQLHTMLTableModel(SmalladsSetup::$smallads_table, 'table', $columns, new HTMLTableSortingRule('creation_date', HTMLTableSortingRule::DESC));
+		$table_model = new SQLHTMLTableModel(SmalladsSetup::$smallads_table, 'items-manager', $columns, new HTMLTableSortingRule('creation_date', HTMLTableSortingRule::DESC));
 
-		$table_model->set_caption($this->lang['smallads.management']);
+		$table_model->set_layout_title($this->lang['smallads.items.management']);
+
+		$table_model->set_filters_menu_title($this->lang['smallads.filter.items']);
+		$table_model->add_filter(new HTMLTableDateGreaterThanOrEqualsToSQLFilter('creation_date', 'filter1', $common_lang['common.creation.date'] . ' ' . TextHelper::lcfirst($common_lang['common.minimum'])));
+		$table_model->add_filter(new HTMLTableDateLessThanOrEqualsToSQLFilter('creation_date', 'filter2', $common_lang['common.creation.date'] . ' ' . TextHelper::lcfirst($common_lang['common.maximum'])));
+		$table_model->add_filter(new HTMLTableAjaxUserAutoCompleteSQLFilter('display_name', 'filter3', $common_lang['common.author']));
+		if ($display_categories)
+			$table_model->add_filter(new HTMLTableCategorySQLFilter('filter4'));
+
+		$status_list = array(Item::PUBLISHED => $common_lang['common.status.published.alt'], Item::NOT_PUBLISHED => $common_lang['common.status.draft'], Item::DEFERRED_PUBLICATION => $common_lang['common.status.deffered.date']);
+		$table_model->add_filter(new HTMLTableEqualsFromListSQLFilter('published', 'filter5', $common_lang['common.status.publication'], $status_list));
 
 		$table = new HTMLTable($table_model);
+		$table->set_filters_fieldset_class_HTML();
 
 		$results = array();
 		$result = $table_model->get_sql_results('smallads
@@ -65,16 +77,16 @@ class SmalladsItemsManagerController extends ModuleController
 		);
 		foreach ($result as $row)
 		{
-			$smallad = new Smallad();
-			$smallad->set_properties($row);
-			$category = $smallad->get_category();
-			$user = $smallad->get_author_user();
+			$item = new SmalladsItem();
+			$item->set_properties($row);
+			$category = $item->get_category();
+			$user = $item->get_author_user();
 
 			$this->elements_number++;
-			$this->ids[$this->elements_number] = $smallad->get_id();
+			$this->ids[$this->elements_number] = $item->get_id();
 
-			$edit_link = new EditLinkHTMLElement(SmalladsUrlBuilder::edit_item($smallad->get_id()));
-			$delete_link = new DeleteLinkHTMLElement(SmalladsUrlBuilder::delete_item($smallad->get_id()));
+			$edit_link = new EditLinkHTMLElement(SmalladsUrlBuilder::edit_item($item->get_id()));
+			$delete_link = new DeleteLinkHTMLElement(SmalladsUrlBuilder::delete_item($item->get_id()));
 
 			$user_group_color = User::get_group_color($user->get_groups(), $user->get_level(), true);
 			$author = $user->get_id() !== User::VISITOR_LEVEL ? new LinkHTMLElement(UserUrlBuilder::profile($user->get_id()), $user->get_display_name(), (!empty($user_group_color) ? array('style' => 'color: ' . $user_group_color) : array()), UserService::get_level_class($user->get_level())) : $user->get_display_name();
@@ -82,32 +94,43 @@ class SmalladsItemsManagerController extends ModuleController
 			$br = new BrHTMLElement();
 
 			$dates = '';
-			if ($smallad->get_publication_start_date() != null && $smallad->get_publication_end_date() != null)
+			if ($item->get_publishing_start_date() != null && $item->get_publishing_end_date() != null)
 			{
-				$dates = LangLoader::get_message('form.date.start', 'common') . ' ' . $smallad->get_publication_start_date()->format(Date::FORMAT_DAY_MONTH_YEAR) . $br->display() . LangLoader::get_message('form.date.end', 'common') . ' ' . $smallad->get_publication_end_date()->format(Date::FORMAT_DAY_MONTH_YEAR_HOUR_MINUTE);
+				$dates = LangLoader::get_message('form.start.date', 'form-lang') . ' ' . $item->get_publishing_start_date()->format(Date::FORMAT_DAY_MONTH_YEAR) . $br->display() . LangLoader::get_message('form.end.date', 'form-lang') . ' ' . $item->get_publishing_end_date()->format(Date::FORMAT_DAY_MONTH_YEAR_HOUR_MINUTE);
 			}
 			else
 			{
-				if ($smallad->get_publication_start_date() != null)
-					$dates = $smallad->get_publication_start_date()->format(Date::FORMAT_DAY_MONTH_YEAR);
+				if ($item->get_publishing_start_date() != null)
+					$dates = $item->get_publishing_start_date()->format(Date::FORMAT_DAY_MONTH_YEAR);
 				else
 				{
-					if ($smallad->get_publication_end_date() != null)
-						$dates = LangLoader::get_message('until', 'main') . ' ' . $smallad->get_publication_end_date()->format(Date::FORMAT_DAY_MONTH_YEAR);
+					if ($item->get_publishing_end_date() != null)
+						$dates = $common_lang['common.until'] . ' ' . $item->get_publishing_end_date()->format(Date::FORMAT_DAY_MONTH_YEAR);
 				}
 			}
 
 			$start_and_end_dates = new SpanHTMLElement($dates, array(), 'smaller');
 
-			$completed = $smallad->is_completed() ? LangLoader::get_message('smallads.completed.item', 'common', 'smallads') : '';
+			if($item->is_completed()) {
+				$final_status =  $common_lang['common.status.finished.alt'];
+				$final_status_class = 'bgc-full error';
+			}
+			else if ($item->is_archived()) {
+				$final_status =  $common_lang['common.status.archived.alt'];
+				$final_status_class = 'bgc-full warning';
+			}
+			else {
+				$final_status = '';
+				$final_status_class = '';
+			}
 
 			$row = array(
-				new HTMLTableRowCell(new LinkHTMLElement(SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $smallad->get_id(), $smallad->get_rewrited_title()), $smallad->get_title()), 'left'),
-				new HTMLTableRowCell(new LinkHTMLElement(SmalladsUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()), ($category->get_id() == Category::ROOT_CATEGORY ? LangLoader::get_message('none_e', 'common') : $category->get_name()))),
+				new HTMLTableRowCell(new LinkHTMLElement(SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()), $item->get_title()), 'left'),
+				new HTMLTableRowCell(new LinkHTMLElement(SmalladsUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()), ($category->get_id() == Category::ROOT_CATEGORY ? $common_lang['common.none.alt'] : $category->get_name()))),
 				new HTMLTableRowCell($author),
-				new HTMLTableRowCell($smallad->get_creation_date()->format(Date::FORMAT_DAY_MONTH_YEAR)),
-				new HTMLTableRowCell($smallad->get_status() . $br->display() . ($dates ? $start_and_end_dates->display() : '')),
-				new HTMLTableRowCell($completed),
+				new HTMLTableRowCell($item->get_creation_date()->format(Date::FORMAT_DAY_MONTH_YEAR)),
+				new HTMLTableRowCell($item->get_status() . $br->display() . ($dates ? $start_and_end_dates->display() : '')),
+				new HTMLTableRowCell($final_status, $final_status_class),
 				new HTMLTableRowCell($edit_link->display() . $delete_link->display(), 'controls'),
 			);
 
@@ -118,7 +141,7 @@ class SmalladsItemsManagerController extends ModuleController
 		}
 		$table->set_rows($table_model->get_number_of_matching_rows(), $results);
 
-		$this->view->put('table', $table->display());
+		$this->view->put('TABLE', $table->display());
 
 		return $table->get_page_number();
 	}
@@ -140,7 +163,7 @@ class SmalladsItemsManagerController extends ModuleController
 
 			SmalladsService::clear_cache();
 
-			AppContext::get_response()->redirect(SmalladsUrlBuilder::manage_items(), LangLoader::get_message('process.success', 'status-messages-common'));
+			AppContext::get_response()->redirect(SmalladsUrlBuilder::manage_items(), LangLoader::get_message('warning.process.success', 'warning-lang'));
 		}
 	}
 
@@ -158,13 +181,13 @@ class SmalladsItemsManagerController extends ModuleController
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-		$graphical_environment->set_page_title($this->lang['smallads.management'], $this->lang['smallads.module.title'], $page);
+		$graphical_environment->set_page_title($this->lang['smallads.items.management'], $this->lang['smallads.module.title'], $page);
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(SmalladsUrlBuilder::manage_items());
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['smallads.module.title'], SmalladsUrlBuilder::home());
 
-		$breadcrumb->add($this->lang['smallads.management'], SmalladsUrlBuilder::manage_items());
+		$breadcrumb->add($this->lang['smallads.items.management'], SmalladsUrlBuilder::manage_items());
 
 		return $response;
 	}

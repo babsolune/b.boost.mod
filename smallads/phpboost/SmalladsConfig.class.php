@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Julien BRISWALTER <j1.seth@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2019 11 04
+ * @version     PHPBoost 6.0 - last update: 2021 07 21
  * @since       PHPBoost 5.0 - 2016 02 02
  * @contributor Sebastien LARTIGUE <babsolune@phpboost.com>
  * @contributor Mipel <mipel@phpboost.com>
@@ -14,17 +14,17 @@ class SmalladsConfig extends AbstractConfigData
 	// Categories
 	const ENABLED_SORT_FILTERS = 'enabled_sort_filters';
 	const ENABLED_CATS_ICON = 'enabled_cats_icon';
-	const ITEMS_NUMBER_PER_PAGE = 'items_number_per_page';
+	const ITEMS_PER_ROW = 'items_per_row';
+	const ITEMS_PER_PAGE = 'items_per_page';
 	const ROOT_CATEGORY_DESCRIPTION = 'root_category_description';
 	const DISPLAY_TYPE = 'display_type';
-	const DISPLAY_GRID_VIEW = 'grid';
-	const DISPLAY_LIST_VIEW = 'list';
-	const DISPLAY_TABLE_VIEW = 'table';
+	const GRID_VIEW = 'grid_view';
+	const LIST_VIEW = 'list_view';
+	const TABLE_VIEW = 'table_view';
 	const CHARACTERS_NUMBER_TO_CUT = 'characters_number_to_cut';
-	const DISPLAYED_COLS_NUMBER_PER_LINE = 'displayed_cols_number_per_line';
-	const DESCRIPTIONS_DISPLAYED_TO_GUESTS = 'descriptions_displayed_to_guests';
+	const SUMMARIES_DISPLAYED_TO_GUESTS = 'summaries_displayed_to_guests';
 	const AUTHORIZATIONS = 'authorizations';
-    const DEFAULT_CONTENTS = 'default_contents';
+    const DEFAULT_CONTENTS = 'default_content';
 
 	// Items
 	const CURRENCY = 'currency';
@@ -70,24 +70,24 @@ class SmalladsConfig extends AbstractConfigData
 		return $this->get_property(self::ENABLED_SORT_FILTERS);
 	}
 
-	public function get_items_number_per_page()
+	public function get_items_per_page()
 	{
-		return $this->get_property(self::ITEMS_NUMBER_PER_PAGE);
+		return $this->get_property(self::ITEMS_PER_PAGE);
 	}
 
-	public function set_items_number_per_page($number)
+	public function set_items_per_page($number)
 	{
-		$this->set_property(self::ITEMS_NUMBER_PER_PAGE, $number);
+		$this->set_property(self::ITEMS_PER_PAGE, $number);
 	}
 
-	public function get_displayed_cols_number_per_line()
+	public function get_items_per_row()
 	{
-		return $this->get_property(self::DISPLAYED_COLS_NUMBER_PER_LINE);
+		return $this->get_property(self::ITEMS_PER_ROW);
 	}
 
-	public function set_displayed_cols_number_per_line($number)
+	public function set_items_per_row($number)
 	{
-		$this->set_property(self::DISPLAYED_COLS_NUMBER_PER_LINE, $number);
+		$this->set_property(self::ITEMS_PER_ROW, $number);
 	}
 
 	public function get_characters_number_to_cut()
@@ -114,19 +114,19 @@ class SmalladsConfig extends AbstractConfigData
 		return $this->get_property(self::ENABLED_CATS_ICON);
 	}
 
-	public function display_descriptions_to_guests()
+	public function display_summaries_to_guests()
 	{
-		$this->set_property(self::DESCRIPTIONS_DISPLAYED_TO_GUESTS, true);
+		$this->set_property(self::SUMMARIES_DISPLAYED_TO_GUESTS, true);
 	}
 
-	public function hide_descriptions_to_guests()
+	public function hide_summaries_to_guests()
 	{
-		$this->set_property(self::DESCRIPTIONS_DISPLAYED_TO_GUESTS, false);
+		$this->set_property(self::SUMMARIES_DISPLAYED_TO_GUESTS, false);
 	}
 
-	public function are_descriptions_displayed_to_guests()
+	public function are_summaries_displayed_to_guests()
 	{
-		return $this->get_property(self::DESCRIPTIONS_DISPLAYED_TO_GUESTS);
+		return $this->get_property(self::SUMMARIES_DISPLAYED_TO_GUESTS);
 	}
 
 	public function get_root_category_description()
@@ -179,12 +179,12 @@ class SmalladsConfig extends AbstractConfigData
 		$this->set_property(self::SMALLAD_TYPES, $smallad_types);
 	}
 
-    public function get_default_contents()
+    public function get_default_content()
 	{
 		return $this->get_property(self::DEFAULT_CONTENTS);
 	}
 
-	public function set_default_contents($value)
+	public function set_default_content($value)
 	{
 		$this->set_property(self::DEFAULT_CONTENTS, $value);
 	}
@@ -443,23 +443,23 @@ class SmalladsConfig extends AbstractConfigData
 
 	public function get_default_values()
 	{
-		$config_lang = LangLoader::get('install', 'smallads');
+		$common_lang = LangLoader::get('common', 'smallads');
 		return array(
 			// Categories
 			self::ENABLED_SORT_FILTERS => true,
 			self::ENABLED_CATS_ICON => false,
-			self::ITEMS_NUMBER_PER_PAGE => 10,
-			self::DISPLAY_TYPE => self::DISPLAY_GRID_VIEW,
+			self::ITEMS_PER_ROW => 2,
+			self::ITEMS_PER_PAGE => 10,
+			self::DISPLAY_TYPE => self::GRID_VIEW,
 			self::CHARACTERS_NUMBER_TO_CUT => 128,
-			self::DISPLAYED_COLS_NUMBER_PER_LINE => 2,
-			self::DESCRIPTIONS_DISPLAYED_TO_GUESTS => false,
-			self::ROOT_CATEGORY_DESCRIPTION => LangLoader::get_message('root_category_description', 'config', 'smallads'),
+			self::SUMMARIES_DISPLAYED_TO_GUESTS => false,
+			self::ROOT_CATEGORY_DESCRIPTION => $common_lang['smallads.root.category.description'],
             self::DEFAULT_CONTENTS => '',
 			self::AUTHORIZATIONS => array('r-1' => 1, 'r0' => 5, 'r1' => 13),
 
 			// Items
 			self::CURRENCY => '€',
-			self::SMALLAD_TYPES => array($config_lang['default.smallad.type']),
+			self::SMALLAD_TYPES => array($common_lang['smallads.default.type']),
 			self::MAX_WEEKS_NUMBER_DISPLAYED => true,
 			self::MAX_WEEKS_NUMBER => 12,
 			self::DISPLAY_DELAY_BEFORE_DELETE => 2,
@@ -483,7 +483,7 @@ class SmalladsConfig extends AbstractConfigData
 
 			// Usage Terms
 			self::USAGE_TERMS_ENABLED => false,
-			self::USAGE_TERMS => LangLoader::get_message('config.usage.terms.conditions', 'install', 'smallads'),
+			self::USAGE_TERMS => LangLoader::get_message('smallads.default.usage.terms', 'install', 'smallads'),
 		);
 	}
 
@@ -497,7 +497,7 @@ class SmalladsConfig extends AbstractConfigData
 	}
 
 	/**
-	 * Saves the configuration in the database. Has it become persistent.
+	 * Saves the configuration in the database
 	 */
 	public static function save()
 	{

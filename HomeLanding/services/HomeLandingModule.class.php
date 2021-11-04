@@ -1,10 +1,11 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Julien BRISWALTER <j1.seth@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2016 06 12
+ * @version     PHPBoost 6.0 - last update: 2021 09 01
  * @since       PHPBoost 5.0 - 2016 05 01
+ * @contributor Sebastien LARTIGUE <babsolune@phpboost.com>
 */
 
 class HomeLandingModule
@@ -17,7 +18,10 @@ class HomeLandingModule
 
 	public function get_name()
 	{
-		return LangLoader::get_message('module.' . $this->get_module_id(), 'common', 'HomeLanding');
+		if ($this->get_module_id() == $this->get_phpboost_module_id())
+			return ModulesManager::get_module($this->get_module_id())->get_configuration()->get_name();
+		else
+			return LangLoader::get_message('homelanding.module.' . $this->get_module_id(), 'common', 'HomeLanding');
 	}
 
 	public function display()
@@ -33,6 +37,11 @@ class HomeLandingModule
 	public function is_displayed()
 	{
 		return $this->phpboost_module_id ? (ModulesManager::is_module_installed($this->phpboost_module_id) && ModulesManager::is_module_activated($this->phpboost_module_id) && $this->displayed) : $this->displayed;
+	}
+
+	public function is_active()
+	{
+		return ModulesManager::is_module_installed($this->phpboost_module_id) && ModulesManager::is_module_activated($this->phpboost_module_id);
 	}
 
 	public function set_module_id($module_id)

@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2020 05 13
+ * @version     PHPBoost 6.0 - last update: 2021 08 30
  * @since       PHPBoost 5.2 - 2020 03 06
 */
 
@@ -18,17 +18,14 @@ class HomeLandingLastcoms
 		$module_name    = HomeLandingConfig::MODULE_LASTCOMS;
 
         $theme_id = AppContext::get_current_user()->get_theme();
-        if (file_exists(PATH_TO_ROOT . '/HomeLanding/templates/pagecontent/' . $module_name . '.tpl'))
-			$view = new FileTemplate('/HomeLanding/templates/pagecontent/' . $module_name . '.tpl');
-        elseif (file_exists(PATH_TO_ROOT . '/templates/' . $theme_id . '/modules/HomeLanding/pagecontent/' . $module_name . '.tpl'))
+		if (file_exists(PATH_TO_ROOT . '/templates/' . $theme_id . '/modules/HomeLanding/pagecontent/' . $module_name . '.tpl'))
 			$view = new FileTemplate('/templates/' . $theme_id . '/modules/HomeLanding/pagecontent/' . $module_name . '.tpl');
+        elseif (file_exists(PATH_TO_ROOT . '/HomeLanding/templates/pagecontent/' . $module_name . '.tpl'))
+			$view = new FileTemplate('/HomeLanding/templates/pagecontent/' . $module_name . '.tpl');
 		else
             $view = new FileTemplate('HomeLanding/pagecontent/messages.tpl');
 
-		$home_lang = LangLoader::get('common', 'HomeLanding');
-		$common_lang = LangLoader::get('common', $module_name);
-		$view->add_lang($home_lang);
-		$view->add_lang($common_lang);
+        $view->add_lang(array_merge(LangLoader::get('common', 'HomeLanding'), LangLoader::get('common-lang')));
 
 		$result = PersistenceContext::get_querier()->select('SELECT c.id, c.user_id, c.pseudo, c.message, c.timestamp, ct.module_id, ct.is_locked, ct.path, m.*, ext_field.user_avatar
 		FROM ' . DB_TABLE_COMMENTS . ' AS c
@@ -49,7 +46,7 @@ class HomeLandingLastcoms
 			'C_AVATAR_IMG' => $user_accounts_config->is_default_avatar_enabled(),
 			'MODULE_NAME' => $module_name,
 			'MODULE_POSITION' => $home_config->get_module_position_by_id($module_name),
-			'L_MODULE_TITLE'  => LangLoader::get_message('last.'.$module_name, 'common', 'HomeLanding'),
+			'L_MODULE_TITLE'  => LangLoader::get_message('homelanding.module.' . $module_name, 'common', 'HomeLanding'),
 		));
 
 		while ($row = $result->fetch())
@@ -68,22 +65,22 @@ class HomeLandingLastcoms
 				$author->init_visitor_user();
 			$user_group_color = User::get_group_color($author->get_groups(), $author->get_level(), true);
 
-			$view->assign_block_vars('item', array(
-				'C_USER_GROUP_COLOR' => !empty($user_group_color),
-				'C_AUTHOR_EXIST' => $author->get_id() !== User::VISITOR_LEVEL,
-				'C_READ_MORE' => $cut_contents != $contents,
+			$view->assign_block_vars('items', array(
+				'C_AUTHOR_GROUP_COLOR' => !empty($user_group_color),
+				'C_AUTHOR_EXISTS'      => $author->get_id() !== User::VISITOR_LEVEL,
+				'C_READ_MORE'          => strlen($contents) > $characters_number_to_cut,
 
-				'PSEUDO' => $author->get_display_name(),
-				'USER_LEVEL_CLASS' => UserService::get_level_class($author->get_level()),
-				'USER_GROUP_COLOR' => $user_group_color,
-				'DATE' => $date->format(Date::FORMAT_DAY_MONTH_YEAR_HOUR_MINUTE),
-				'TOPIC' => $modules_config->get_module($row['module_id']) ? $modules_config->get_module($row['module_id'])->get_configuration()->get_name() : '',
-				'CONTENTS' => $cut_contents,
+				'AUTHOR_DISPLAY_NAME' => $author->get_display_name(),
+				'AUTHOR_LEVEL_CLASS'  => UserService::get_level_class($author->get_level()),
+				'AUTHOR_GROUP_COLOR'  => $user_group_color,
+				'DATE'                => $date->format(Date::FORMAT_DAY_MONTH_YEAR_HOUR_MINUTE),
+				'TOPIC'               => $modules_config->get_module($row['module_id']) ? $modules_config->get_module($row['module_id'])->get_configuration()->get_name() : '',
+				'CONTENT'             => $cut_contents,
 
-				'U_AVATAR_IMG' => $user_avatar,
+				'U_AVATAR_IMG'     => $user_avatar,
 				'U_AUTHOR_PROFILE' => UserUrlBuilder::profile($author->get_id())->rel(),
-				'U_TOPIC' => Url::to_rel($row['path']),
-				'U_ITEM' => Url::to_rel($row['path'] . '#com' . $row['id'])
+				'U_TOPIC'          => Url::to_rel($row['path']),
+				'U_ITEM'           => Url::to_rel($row['path'] . '#com' . $row['id'])
 			));
 		}
 		$result->dispose();

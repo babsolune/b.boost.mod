@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2020 PHPBoost
+ * @copyright   &copy; 2005-2021 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 5.3 - last update: 2018 12 29
+ * @version     PHPBoost 6.0 - last update: 2021 09 06
  * @since       PHPBoost 5.0 - 2016 01 02
 */
 
@@ -18,6 +18,14 @@ class HomeLandingUrlBuilder
 	{
 		$anchor = $anchor !== null ? '#AdminHomeLandingConfigController_admin_' . $anchor : '';
 		return DispatchManager::get_url(self::$dispatcher, '/admin/config/' . $anchor);
+	}
+
+	/**
+	 * @return Url
+	 */
+	public static function add_modules()
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/admin/add/');
 	}
 
 	/**
