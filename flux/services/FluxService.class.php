@@ -1,15 +1,16 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 10 30
+ * @version     PHPBoost 6.0 - last update: 2021 11 09
  * @since       PHPBoost 6.0 - 2021 10 30
 */
 
 class FluxService
 {
 	private static $db_querier;
+	protected static $module_id = 'flux';
 
 	public static function __static()
 	{
@@ -75,9 +76,22 @@ class FluxService
             $controller = PHPBoostErrors::user_in_read_only();
             DispatchManager::redirect($controller);
         }
-		self::$db_querier->delete(FluxSetup::$web_table, 'WHERE id=:id', array('id' => $id));
+		self::$db_querier->delete(FluxSetup::$flux_table, 'WHERE id=:id', array('id' => $id));
 
 		self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', array('module' => 'flux', 'id' => $id));
+	}
+
+	/**
+	 * @desc Delete an entry.
+	 * @param string $condition : Restriction to apply to the list
+	 * @param string[] $parameters : Parameters of the condition
+	*/
+	public static function delete_xml_files()
+	{
+		foreach (glob(PATH_TO_ROOT . '/flux/xml/*.xml') as $filename) {
+			$xml_file = new File($filename);
+			$xml_file->delete();
+		}
 	}
 
 	/**
@@ -85,12 +99,15 @@ class FluxService
 	 * @param string $condition : Restriction to apply to the list
 	 * @param string[] $parameters : Parameters of the condition
 	*/
-	public static function get_item($condition, array $parameters)
+	public static function get_item(int $id)
 	{
 		$row = self::$db_querier->select_single_row_query('SELECT flux.*, member.*
 		FROM ' . FluxSetup::$flux_table . ' flux
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = flux.author_user_id
-		' . $condition, $parameters);
+		WHERE flux.id=:id', array(
+			'id'              => $id,
+			'current_user_id' => AppContext::get_current_user()->get_id()
+		));
 
 		$item = new FluxItem();
 		$item->set_properties($row);

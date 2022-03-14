@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 09 06
+ * @version     PHPBoost 6.0 - last update: 2021 12 14
  * @since       PHPBoost 5.0 - 2016 01 02
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
  * @contributor mipel <mipel@phpboost.com>
@@ -42,11 +42,11 @@ $lang['homelanding.module.carousel']     = 'Carousel';
 $lang['homelanding.module.anchors_menu'] = 'Homepage Menu';
 $lang['homelanding.module.edito']        = 'Edito';
 $lang['homelanding.module.lastcoms']     = 'Comments';
-$lang['homelanding.module.rss']          = 'External RSS';
     // Module position
 $lang['homelanding.module.articles_category'] = 'Articles - category';
 $lang['homelanding.module.download_category'] = 'Downloads - category';
 $lang['homelanding.module.news_category']     = 'News - category';
+$lang['homelanding.module.pinned_news']       = 'Pinned news';
 $lang['homelanding.module.smallads_category'] = 'Small ads - category';
 $lang['homelanding.module.web_category']      = 'Partners links - category';
     // Anchors tab
@@ -55,8 +55,6 @@ $lang['homelanding.category.download_category'] = 'Downloads';
 $lang['homelanding.category.news_category']     = 'News';
 $lang['homelanding.category.smallads_category'] = 'Small ads';
 $lang['homelanding.category.web_category']      = 'Partners links';
-
-// Additional modules
 
 // Anchors menu
 $lang['homelanding.anchors.title'] = 'Homepage menu';
@@ -73,11 +71,6 @@ $lang['homelanding.send.email.tracking.number']        = 'Tracking number';
 $lang['homelanding.send.email.acknowledgment.title']   = 'Confirmation';
 $lang['homelanding.send.email.acknowledgment.correct'] = 'Your email has been correctly sent. ';
 $lang['homelanding.send.another.email']                = 'Send another message. ';
-
-// Rss
-$lang['homelanding.rss.target']   = 'Rss feed of the website : ';
-$lang['homelanding.no.xml.file']  = 'No xml file defined';
-$lang['homelanding.not.xml.file'] = 'The url is not a xml file';
 
 // Configuration
 $lang['homelanding.label.module.title']      = 'Module title';
@@ -97,6 +90,9 @@ $lang['homelanding.items.number']           = 'Items number to display';
 $lang['homelanding.characters.limit']       = 'Limit the number of characters';
 $lang['homelanding.choose.category']        = 'Choose a category';
 $lang['homelanding.display.sub.categories'] = 'Display subcategories content';
+    // Pinned news
+$lang['homelanding.pinned.news.title']      = 'Title on homepage';
+$lang['homelanding.show.pinned.news']       = 'Display the pinned news';
     // Default
 $lang['homelanding.title'] = 'Welcome';
 $lang['homelanding.edito.description'] = 'Modify the <a class="offload" href="' . HomeLandingUrlBuilder::configuration()->relative() . '">module configuration</a> to setup the landing page';
@@ -137,14 +133,7 @@ $lang['homelanding.carousel.add']         = 'Add a picture';
 $lang['homelanding.carousel.del']         = 'Delete the slide';
 
 // Modules configuration
-$lang['homelanding.calendar.clue']     = 'Only displays upcoming events';
-$lang['homelanding.web.clue']          = 'Displays only the partner links';
-    // External Rss
-$lang['homelanding.config.rss']    = 'Rss timeline display of an external website';
-$lang['homelanding.display.rss']   = 'Display the rss timeline';
-$lang['homelanding.rss.site.name'] = 'Name of the website';
-$lang['homelanding.rss.site.url']  = 'Address of the website';
-$lang['homelanding.rss.xml.url']   = 'Address of the xml file';
-$lang['homelanding.rss.xml.nb']    = 'Number of links';
-$lang['homelanding.rss.xml.char']  = 'Number of character per links';
+$lang['homelanding.calendar.clue'] = 'Only displays upcoming events';
+$lang['homelanding.flux.clue']     = 'Displays latest feed items from all feeds';
+$lang['homelanding.web.clue']      = 'Displays only the partner links';
 ?>

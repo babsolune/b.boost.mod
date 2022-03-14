@@ -1,20 +1,22 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 10 30
+ * @version     PHPBoost 6.0 - last update: 2021 11 09
  * @since       PHPBoost 6.0 - 2021 10 30
 */
 
 class FluxConfig extends AbstractConfigData
 {
-    const MODULE_NAME     = 'module_name';
-    const NEW_WINDOW      = 'new_window';
-	const ITEMS_PER_PAGE  = 'items_per_page';
-	const ITEMS_PER_ROW   = 'items_per_row';
-	const DEFAULT_CONTENT = 'default_content';
-	const RSS_NUMBER      = 'rss_number';
+    const MODULE_NAME              = 'module_name';
+    const NEW_WINDOW               = 'new_window';
+    const DISPLAY_LAST_FEEDS       = 'display_last_feeds';
+    const LAST_FEEDS_NUMBER        = 'last_feeds_number';
+	const ITEMS_PER_PAGE           = 'items_per_page';
+	const ITEMS_PER_ROW            = 'items_per_row';
+	const DEFAULT_CONTENT          = 'default_content';
+	const RSS_NUMBER               = 'rss_number';
 	const CHARACTERS_NUMBER_TO_CUT = 'characters_number_to_cut';
 
 	const CATEGORIES_PER_PAGE       = 'categories_per_page';
@@ -45,6 +47,26 @@ class FluxConfig extends AbstractConfigData
 	public function set_new_window($value)
 	{
 		$this->set_property(self::NEW_WINDOW, $value);
+	}
+
+	public function get_last_feeds_display()
+	{
+		return $this->get_property(self::DISPLAY_LAST_FEEDS);
+	}
+
+	public function set_last_feeds_display($value)
+	{
+		$this->set_property(self::DISPLAY_LAST_FEEDS, $value);
+	}
+
+	public function get_last_feeds_number()
+	{
+		return $this->get_property(self::LAST_FEEDS_NUMBER);
+	}
+
+	public function set_last_feeds_number($value)
+	{
+		$this->set_property(self::LAST_FEEDS_NUMBER, $value);
 	}
 
 	public function get_rss_number()
@@ -155,6 +177,8 @@ class FluxConfig extends AbstractConfigData
 		return array(
             self::MODULE_NAME               => LangLoader::get_message('flux.module.title', 'common', 'flux'),
             self::NEW_WINDOW                => false,
+            self::DISPLAY_LAST_FEEDS        => true,
+            self::LAST_FEEDS_NUMBER         => 10,
             self::RSS_NUMBER                => 10,
             self::CHARACTERS_NUMBER_TO_CUT  => 128,
 			self::ITEMS_PER_PAGE            => 16,

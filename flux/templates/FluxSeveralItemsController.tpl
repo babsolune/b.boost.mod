@@ -1,4 +1,4 @@
-<section id="module-flux">
+<section id="module-flux" class="several-items">
 	<header class="section-header">
 		<div class="controls align-right">
 			<a class="offload" href="${relative_url(SyndicationUrlBuilder::rss('flux', ID_CAT))}" aria-label="{@common.syndication}"><i class="fa fa-rss warning"></i></a>
@@ -19,83 +19,78 @@
 	</header>
 
 	# IF C_ROOT_CATEGORY #
-		<div class="sub-section">
-			<div class="content-container">
-				<div class="cat-description">
-					{ROOT_CATEGORY_DESC}
+		# IF C_ROOT_CATEGORY_DESCRIPTION #
+			<div class="sub-section">
+				<div class="content-container">
+					<div class="cat-description">
+						{ROOT_CATEGORY_DESCRIPTION}
+					</div>
 				</div>
 			</div>
-		</div>
-		<div
-			data-listorder-control="dropdown-sort"
-			class="listorder-drop-down hidden"
-			data-group="feed-items"
-			data-name="sorttitle">
-			<div data-type="panel" class="listorder-dd-panel"></div>
-			<ul data-type="content" class="dropdown-container">
-				<li> {@common.sort.by.date}
-					<em class="sort-type bgc-full link-color" data-path=".lo-date" data-order="asc" data-type="number"><span class="sr-only">{@common.sort.by.date} &#8593;</span> <i class="fa fa-sort-numeric-up-alt"></i></em>
-					<em class="sort-type bgc-full logo-color" data-path=".lo-date" data-order="desc" data-type="number" data-selected="true"><span class="sr-only">{@common.sort.by.date} &#8595;</span> <i class="fa fa-sort-numeric-down-alt"></i></em>
-				</li>
-			</ul>
-		</div>
-		<ul data-type="content" data-listorder-group="feed-items">
-			# START feed_items #
-				<li data-listorder-item>
-					<span class="lo-date hidden">{feed_items.SORT_DATE}</span>
-					<span class="flex-between">
-						<span>
-							<a class="big" href="{feed_items.U_ITEM}"# IF feed_items.C_NEW_WINDOW # target="_blank" rel="noopener noreferrer"# ENDIF #>
-								{feed_items.TITLE}
-							</a>
-
-						</span>
-						<span class="small align-right"><span class="text-italic">{feed_items.ITEM_HOST}</span> | {feed_items.DATE}</span>
-					</span>
-					<p>
-						# IF feed_items.C_HAS_THUMBNAIL #
-							<img src="{feed_items.U_THUMBNAIL}" class="align-left" alt="{feed_items.TITLE}" />
-						# ENDIF #
-						{feed_items.SUMMARY}# IF feed_items.C_READ_MORE #...# ENDIF #
-					</p>
-				</li>
-			# END feed_items #
-		</ul>
-		<div class="sub-section items-pagination">
-			<div class="content-container">
-				<nav
-				   	class="listorder-pagination pagination"
-				   	data-listorder-control="pagination"
-			        data-group="feed-items"
-			        data-items-per-page="{ITEMS_NUMBER}"
-			        data-current-page="0"
-			        data-name="pagination1"
-					data-id="paging">
-					<!-- <p data-type="info" class="align-center">
-						{@common.listorder.item.start} - {@common.listorder.item.end} / {@common.listorder.items.number} ${TextHelper::lcfirst(@items)}
-					</p>
-					<ul>
-						<li class="pagination-item" data-type="first" aria-label="{@common.pagination.first}"><a href="#"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a> </li>
-					    <li class="pagination-item" data-type="prev" aria-label="{@common.pagination.previous}"><a href="#"><i class="fa fa-chevron-left" aria-hidden="true"></i></a> </li>
-
-					    <ul class="listorder-holder" data-type="pages">
-					        <li class="pagination-item" data-type="page"><a href="#">{@common.listorder.page.number}</a></li>
-					    </ul>
-
-					    <li class="pagination-item" data-type="next" aria-label="{@common.pagination.next}"><a href="#"><i class="fa fa-chevron-right" aria-hidden="true"></i></a> </li>
-					    <li class="pagination-item" data-type="last" aria-label="{@common.pagination.last}"><a href="#"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a> </li>
-					</ul>
-					<div class="align-center">
-			            <select data-type="items-per-page">
-			                <option value="{ITEMS_NUMBER}"> {ITEMS_NUMBER} {@common.pagination.per}</option>
-			                <option value="25"> 25 {@common.pagination.per}</option>
-			                <option value="50"> 50 {@common.pagination.per}</option>
-			                <option value="0"> {@common.all.alt} </option>
-			            </select>
-					</div> -->
-				</nav>
+		# ENDIF #
+		# IF C_DISPLAY_LAST_FEEDS #
+			<div class="sub-section">
+				<div class="content-container">
+					<article>
+						<header>
+							<h5>{LAST_FEEDS}</h5>
+						</header>
+						<div class="content">
+							# IF C_LAST_FEEDS #
+								<div
+									class="hidden"
+									data-listorder-control="hidden-sort"
+									data-group="feed-items"
+									data-path=".lo-date"
+									data-order="desc"
+									data-type="number">
+								</div>
+								<ul class="last-feeds" data-listorder-group="feed-items">
+									# START feed_items #
+										<li data-listorder-item>
+											<span class="lo-date hidden">{feed_items.SORT_DATE}</span>
+											<span class="feed-title">
+												<h6>
+													<a href="{feed_items.U_ITEM}"# IF C_NEW_WINDOW # target="_blank" rel="noopener noreferrer"# ENDIF #>
+														{feed_items.TITLE}
+													</a>
+												</h6>
+												<span class="small align-right"><a href="{feed_items.U_ITEM_HOST}" class="offload text-italic">{feed_items.ITEM_HOST}</a> | {feed_items.DATE}</span>
+											</span>
+											<p>
+												# IF feed_items.C_HAS_THUMBNAIL #
+													<img src="{feed_items.U_THUMBNAIL}" class="align-left" alt="{feed_items.TITLE}" />
+												# ENDIF #
+												{feed_items.SUMMARY} # IF feed_items.C_READ_MORE # <span aria-label="{@flux.words.not.read}" class="small text-italic pinned notice">{feed_items.WORDS_NUMBER}</span># ENDIF #
+											</p>
+										</li>
+									# END feed_items #
+								</ul>
+								<nav
+								   	class="listorder-pagination pagination"
+								   	data-listorder-control="pagination"
+							        data-group="feed-items"
+							        data-items-per-page="{LAST_FEEDS_NUMBER}"
+							        data-current-page="0"
+							        data-name="pagination1"
+									data-id="paging">
+								</nav>
+							# ELSE #
+								<div class="message-helper bgc notice">{@flux.no.last.feeds}</div>
+							# ENDIF #
+						</div>
+					</article>
+				</div>
 			</div>
-		</div>
+		# ENDIF #
+	# ELSE #
+		# IF C_CATEGORY_DESCRIPTION #
+			<div class="sub-section">
+				<div class="cat-description">
+					{CATEGORY_DESCRIPTION}
+				</div>
+			</div>
+		# ENDIF #
 	# ENDIF #
 
 	# IF C_SUB_CATEGORIES #
@@ -103,10 +98,9 @@
 			<div class="content-container">
 				<div class="cell-flex cell-tile cell-columns-{CATEGORIES_PER_ROW}">
 					# START sub_categories_list #
-						<div class="cell category-{sub_categories_list.CATEGORY_ID}" itemscope>
-							<div class="cell-header colored-category marker-container" data-color-surround="{sub_categories_list.CATEGORY_COLOR}">
+						<div class="cell cell-category category-{sub_categories_list.CATEGORY_ID}" itemscope>
+							<div class="cell-header">
 								<h5 class="cell-name" itemprop="about">
-									<i class="inner-marker ${sub_categories_list.CATEGORY_INNER_ICON}" aria-hidden="true"></i>
 									<a class="offload" href="{sub_categories_list.U_CATEGORY}">
 										{sub_categories_list.CATEGORY_NAME}
 									</a>
@@ -115,6 +109,16 @@
 									{sub_categories_list.ITEMS_NUMBER}
 								</span>
 							</div>
+							# IF sub_categories_list.C_CATEGORY_THUMBNAIL #
+								<div class="cell-body">
+									<div class="cell-thumbnail cell-landscape cell-center">
+										<img itemprop="thumbnailUrl" src="{sub_categories_list.U_CATEGORY_THUMBNAIL}" alt="{sub_categories_list.CATEGORY_NAME}" />
+										<a class="cell-thumbnail-caption offload" href="{sub_categories_list.U_CATEGORY}">
+											{@category.see.category}
+										</a>
+									</div>
+								</div>
+							# ENDIF #
 						</div>
 					# END sub_categories_list #
 				</div>
@@ -127,71 +131,71 @@
 		# IF C_SEVERAL_ITEMS #
 			<div class="spacer"></div>
 		# ENDIF #
-		<div class="content-container">
-			# IF C_TABLE_VIEW #
-				<table class="table">
-					<thead>
-						<tr>
-							<th>{@common.name}</th>
-							<th class="coll-small" aria-label="{@common.website}"><i class="fa fa-link" aria-hidden="true"></i><span class="hidden-large-screens">{@common.website}</span></th>
-							<th class="col-small" aria-label="{@common.views.number}"><i class="fa fa-eye" aria-hidden="true"></i><span class="hidden-large-screens">{@common.views.number}</span></th>
-							<th class="col-small" aria-label="{@common.visits.number}"><i class="fa fa-external-link-alt" aria-hidden="true"></i><span class="hidden-large-screens">{@common.visits.number}</span></th>
-							# IF C_CONTROLS #<th class="col-small" aria-label="{@common.moderation}"><i class="fa fa-cog" aria-hidden="true"></i><span class="hidden-large-screens">{@common.moderation}</span></th># ENDIF #
-						</tr>
-					</thead>
-					<tbody>
-						# START items #
+		<div class="sub-section">
+			<div class="content-container">
+				# IF C_TABLE_VIEW #
+					<table class="table">
+						<thead>
 							<tr>
-								<td>
-									<a class="offload" href="{items.U_ITEM}"><span itemprop="name" aria-label="{@common.see.details}">{items.TITLE}</span></a>
-								</td>
-								<td>
-									# IF items.C_VISIT #
-										<a class="basic-button" aria-label="{@common.visit}" # IF items.C_NEW_WINDOW #target="_blank" rel="noopener noreferrer"# ENDIF # href="{items.U_VISIT}">{@common.visit}</a>
-									# ELSE #
-										{@flux.no.website}
-									# ENDIF #
-								</td>
-								<td>
-									{items.VIEWS_NUMBER}
-								</td>
-								<td>
-									{items.VISITS_NUMBER}
-								</td>
-								# IF C_CONTROLS #
+								<th>{@common.name}</th>
+								<th class="coll-small" aria-label="{@common.website}"><i class="fa fa-link" aria-hidden="true"></i><span class="hidden-large-screens">{@common.website}</span></th>
+								<th class="col-small" aria-label="{@common.views.number}"><i class="fa fa-eye" aria-hidden="true"></i><span class="hidden-large-screens">{@common.views.number}</span></th>
+								<th class="col-small" aria-label="{@common.visits.number}"><i class="fa fa-external-link-alt" aria-hidden="true"></i><span class="hidden-large-screens">{@common.visits.number}</span></th>
+								# IF C_CONTROLS #<th class="col-small" aria-label="{@common.moderation}"><i class="fa fa-cog" aria-hidden="true"></i><span class="hidden-large-screens">{@common.moderation}</span></th># ENDIF #
+							</tr>
+						</thead>
+						<tbody>
+							# START items #
+								<tr>
 									<td>
-										# IF items.C_EDIT #
-											<a class="offload" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="fa fa-edit"></i></a>
-										# ENDIF #
-										# IF items.C_DELETE #
-											<a href="{items.U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-trash-alt"></i></a>
+										<a class="offload" href="{items.U_ITEM}"><span itemprop="name" aria-label="{@common.see.details}">{items.TITLE}</span></a>
+									</td>
+									<td>
+										# IF items.C_VISIT #
+											<a class="basic-button" aria-label="{@common.visit}" # IF items.C_NEW_WINDOW #target="_blank" rel="noopener noreferrer"# ENDIF # href="{items.U_VISIT}">{@common.visit}</a>
+										# ELSE #
+											{@flux.no.website}
 										# ENDIF #
 									</td>
-								# ENDIF #
-							</tr>
-						# END items #
-					</tbody>
-				</table>
-			# ELSE #
-				<div class="cell-flex cell-columns-{ITEMS_PER_ROW}">
-					# START items #
-						<article id="article-flux-{items.ID}" class="flux-item several-items cell# IF items.C_IS_PARTNER # content-friends# ENDIF ## IF items.C_IS_PRIVILEGED_PARTNER # content-privileged-friends# ENDIF ## IF items.C_NEW_CONTENT # new-content# ENDIF#" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
-							<header class="cell-header">
-								<h2>
-									<a class="offload" href="{items.U_ITEM}" itemprop="name">{items.TITLE}</a>
-								</h2>
-							</header>
-							<div class="cell-body">
+									<td>
+										{items.VIEWS_NUMBER}
+									</td>
+									<td>
+										{items.VISITS_NUMBER}
+									</td>
+									# IF C_CONTROLS #
+										<td>
+											# IF items.C_EDIT #
+												<a class="offload" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="fa fa-edit"></i></a>
+											# ENDIF #
+											# IF items.C_DELETE #
+												<a href="{items.U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-trash-alt"></i></a>
+											# ENDIF #
+										</td>
+									# ENDIF #
+								</tr>
+							# END items #
+						</tbody>
+					</table>
+				# ELSE #
+					<div class="cell-flex cell-columns-{ITEMS_PER_ROW}">
+						# START items #
+							<article id="article-flux-{items.ID}" class="flux-item cell# IF items.C_IS_PARTNER # content-friends# ENDIF ## IF items.C_IS_PRIVILEGED_PARTNER # content-privileged-friends# ENDIF ## IF items.C_NEW_CONTENT # new-content# ENDIF#" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
+								<header class="cell-header">
+									<h2>
+										<a class="offload" href="{items.U_ITEM}" itemprop="name">{items.TITLE}</a>
+									</h2>
+								</header>
 								<div class="cell-infos">
 									<div class="more">
-										<span class="pinned" aria-label="{@common.views.number}"> <i class="fa fa-eye" aria-hidden="true"></i> {items.VIEWS_NUMBER}</span>
-										# IF items.C_VISIT #<span class="pinned" aria-label="{@common.visits.number}"> <i class="fa fa-external-link-alt" aria-hidden="true"></i> {items.VISITS_NUMBER}</span># ENDIF #
-										<span class="pinned-category" data-color-surround="{items.CATEGORY_COLOR}" aria-label="{@common.category}"><i class="far fa-folder" aria-hidden="true"></i> <a class="offload" itemprop="about" href="{items.U_CATEGORY}">{items.CATEGORY_NAME}</a></span>
+										<span class="pinned item-views-number" aria-label="{@common.views.number}"> <i class="fa fa-eye" aria-hidden="true"></i> {items.VIEWS_NUMBER}</span>
+										# IF items.C_VISIT #<span class="pinned item-visits-number" aria-label="{@common.visits.number}"> <i class="fa fa-external-link-alt" aria-hidden="true"></i> {items.VISITS_NUMBER}</span># ENDIF #
+										<span class="pinned-category item-category" data-color-surround="{items.CATEGORY_COLOR}" aria-label="{@common.category}"><i class="far fa-folder" aria-hidden="true"></i> <a class="offload" itemprop="about" href="{items.U_CATEGORY}">{items.CATEGORY_NAME}</a></span>
 									</div>
 									# IF items.C_CONTROLS #
 										<div class="controls align-right">
-											# IF items.C_EDIT #<a class="offload" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-edit"></i></a># ENDIF #
-											# IF items.C_DELETE #<a href="{items.U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-trash-alt"></i></a># ENDIF #
+											# IF items.C_EDIT #<a class="offload item-edit" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-edit"></i></a># ENDIF #
+											# IF items.C_DELETE #<a class="item-delete" href="{items.U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-trash-alt"></i></a># ENDIF #
 										</div>
 									# ENDIF #
 								</div>
@@ -203,23 +207,27 @@
 										</a>
 									</div>
 								# ENDIF #
-								<div class="cell-content">
-									<div itemprop="text">{items.CONTENT}</div>
+								<div class="cell-body">
+									<div class="cell-content">
+										<div itemprop="text">{items.CONTENT}</div>
+									</div>
 								</div>
-							</div>
-						</article>
-					# END items #
-				</div>
-			# ENDIF #
+							</article>
+						# END items #
+					</div>
+				# ENDIF #
+			</div>
 		</div>
 	# ELSE #
-		<div class="content">
-			# IF NOT C_HIDE_NO_ITEM_MESSAGE #
-				<div class="message-helper bgc notice">
-					{@common.no.item.now}
+		# IF NOT C_HIDE_NO_ITEM_MESSAGE #
+			<div class="sub-section">
+				<div class="content-container">
+					<div class="message-helper bgc notice">
+						{@common.no.item.now}
+					</div>
 				</div>
-			# ENDIF #
-		</div>
+			</div>
+		# ENDIF #
 	# ENDIF #
 
 	<footer># IF C_PAGINATION # # INCLUDE PAGINATION # # ENDIF #</footer>

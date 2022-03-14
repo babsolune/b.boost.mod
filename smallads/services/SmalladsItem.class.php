@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 06 26
+ * @version     PHPBoost 6.0 - last update: 2022 02 19
  * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Mipel <mipel@phpboost.com>
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
@@ -93,7 +93,7 @@ class SmalladsItem
 	const NOT_DISPLAYED_AUTHOR_PHONE = 0;
 	const DISPLAYED_AUTHOR_PHONE = 1;
 
-	const THUMBNAIL_URL = '/templates/__default__/images/default_item_thumbnail.png';
+	const THUMBNAIL_URL = '/templates/__default__/images/default_item.webp';
 
 	public function set_id($id)
 	{
@@ -687,12 +687,19 @@ class SmalladsItem
 		$this->enabled_end_date = false;
 	}
 
-	public function get_array_tpl_vars()
+	public function get_item_url()
+	{
+		$category = $this->get_category();
+		return SmalladsUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $this->id, $this->get_rewrited_title())->rel();
+	}
+
+	public function get_template_vars()
 	{
 		$this->config = SmalladsConfig::load();
 
 		$category         = $this->get_category();
 		$content	 	  = FormatingHelper::second_parse($this->content);
+		$rich_content 	  = HooksService::execute_hook_display_action('smallads', $content, $this->get_properties());
 		$summary 	      = $this->get_real_summary();
 		$user             = $this->get_author_user();
 		$user_group_color = User::get_group_color($user->get_groups(), $user->get_level(), true);
@@ -701,19 +708,22 @@ class SmalladsItem
 		$carousel         = $this->get_carousel();
 		$nbr_pictures	  = count($carousel);
 
-		if($this->config->is_googlemaps_available()) {
-			$unserialized_value = @unserialize($this->get_location());
-			$location_value = $unserialized_value !== false ? $unserialized_value : $this->get_location();
+		if($this->config->is_googlemaps_available())
+		{
+			$location_value = TextHelper::deserialize($this->get_location());
 			$location = '';
 			if (is_array($location_value) && isset($location_value['address']))
 				$location = $location_value['address'];
 			else if (!is_array($location_value))
 				$location = $location_value;
-		} else
+		}
+		else
+		{
 			if(is_numeric($this->get_location()))
 				$location = LangLoader::get_message('county.' . $this->get_location(), 'counties', 'smallads');
 			else
 				$location = $this->get_location();
+		}
 
 		if($this->config->is_user_allowed())
 			$contact_level = AppContext::get_current_user()->check_level(User::VISITOR_LEVEL);
@@ -781,7 +791,7 @@ class SmalladsItem
 			'AUTHOR_GROUP_COLOR'   	=> $user_group_color,
 			'LOCATION'				=> $location,
 			'OTHER_LOCATION'		=> $this->get_other_location(),
-			'CONTENT'           	=> FormatingHelper::second_parse($this->get_content()),
+			'CONTENT'           	=> $rich_content,
 
 			// Category
 			'C_ROOT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY,
@@ -789,14 +799,14 @@ class SmalladsItem
 			'CATEGORY_NAME'        => $category->get_name(),
 			'CATEGORY_DESCRIPTION' => $category->get_description(),
 			'U_CATEGORY_THUMBNAIL' => $category->get_thumbnail()->rel(),
-			'U_EDIT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY ? SmalladsUrlBuilder::categories_configuration()->rel() : CategoriesUrlBuilder::edit($category->get_id())->rel(),
+			'U_EDIT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY ? SmalladsUrlBuilder::categories_configuration()->rel() : CategoriesUrlBuilder::edit($category->get_id(), 'smallads')->rel(),
 
 			// Links
 			'U_COMMENTS'       => SmalladsUrlBuilder::display_items_comments($category->get_id(), $category->get_rewrited_name(), $this->get_id(), $this->get_rewrited_title())->rel(),
 			'U_AUTHOR_PROFILE' => UserUrlBuilder::profile($this->get_author_user()->get_id())->rel(),
 			'U_AUTHOR_PM'      => UserUrlBuilder::personnal_message($this->get_author_user()->get_id())->rel(),
 			'U_CATEGORY'       => SmalladsUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel(),
-			'U_ITEM'           => SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $this->get_id(), $this->get_rewrited_title())->rel(),
+			'U_ITEM'           => $this->get_item_url(),
 			'U_THUMBNAIL' 	   => $this->get_thumbnail()->rel(),
 			'U_EDIT'   		   => SmalladsUrlBuilder::edit_item($this->id)->rel(),
 			'U_DELETE' 		   => SmalladsUrlBuilder::delete_item($this->id)->rel(),

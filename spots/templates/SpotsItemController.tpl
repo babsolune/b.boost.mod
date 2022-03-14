@@ -1,4 +1,4 @@
-<section id="module-spots" class="category-{CATEGORY_ID}">
+<section id="module-spots" class="category-{CATEGORY_ID} single-item">
 	<header class="section-header">
 		<div class="controls align-right">
 			<a class="offload" href="{U_SYNDICATION}" aria-label="{@common.syndication}"><i class="fa fa-rss"></i></a>
@@ -13,7 +13,7 @@
 			# IF NOT C_VISIBLE #
 				# INCLUDE NOT_VISIBLE_MESSAGE #
 			# ENDIF #
-			<article id="article-spots-{ID}" itemscope="itemscope" itemtype="https://schema.org/CreativeWork" class="spots-item single-item# IF C_IS_PARTNER # content-friends# ENDIF ## IF C_IS_PRIVILEGED_PARTNER # content-privileged-friends# ENDIF ## IF C_NEW_CONTENT # new-content# ENDIF#">
+			<article id="article-spots-{ID}" itemscope="itemscope" itemtype="https://schema.org/CreativeWork" class="spots-item# IF C_IS_PARTNER # content-friends# ENDIF ## IF C_IS_PRIVILEGED_PARTNER # content-privileged-friends# ENDIF ## IF C_NEW_CONTENT # new-content# ENDIF#">
 				# IF C_CONTROLS #
 					<div class="controls align-right">
 						# IF C_EDIT #
@@ -154,7 +154,7 @@
 
 # IF C_GMAP_ENABLED #
 	# IF C_DEFAULT_ADDRESS #
-		<script src="{PATH_TO_ROOT}/spots/templates/js/sticky.js"></script>
+		<script src="{PATH_TO_ROOT}/spots/templates/js/sticky# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
 
 		<script>
 			jQuery(function(){
@@ -166,7 +166,7 @@
 			# IF C_LOCATION #
 				var spot = {lat: {LATITUDE}, lng: {LONGITUDE}};
 			# ELSE #
-				var spot = {lat: {DEFAULT_LAT}, lng: {DEFAULT_LNG}};
+				var spot = {lat: {CATEGORY_LATITUDE}, lng: {CATEGORY_LONGITUDE}};
 			# ENDIF #
 			var map;
 			function initMap() {
@@ -185,7 +185,7 @@
 					# IF C_NEW_ADDRESS #
 						origin = {lat: {NEW_LAT}, lng: {NEW_LNG}}
 					# ELSE #
-						origin = {lat: {DEFAULT_LAT}, lng: {DEFAULT_LNG}}
+						origin = {lat: {CATEGORY_LATITUDE}, lng: {CATEGORY_LONGITUDE}}
 					# ENDIF #
 
 				calculate = function(){

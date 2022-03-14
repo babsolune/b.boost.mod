@@ -1,39 +1,19 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 10 30
+ * @version     PHPBoost 6.0 - last update: 2021 12 14
  * @since       PHPBoost 6.0 - 2021 10 30
 */
 
-class FluxItemFormController extends ModuleController
+class FluxItemFormController extends DefaultModuleController
 {
-	/**
-	 * @var HTMLForm
-	 */
-	private $form;
-	/**
-	 * @var FormButtonSubmit
-	 */
-	private $submit_button;
-
-	private $lang;
-	private $form_lang;
-    private $config;
-
-	private $item;
-	private $is_new_item;
-
 	public function execute(HTTPRequestCustom $request)
 	{
-		$this->init();
-
 		$this->check_authorizations();
 
 		$this->build_form($request);
-
-		$view = new StringTemplate('# INCLUDE FORM #');
 
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
@@ -41,16 +21,9 @@ class FluxItemFormController extends ModuleController
 			$this->redirect();
 		}
 
-		$view->put('FORM', $this->form->display());
+		$this->view->put('CONTENT', $this->form->display());
 
-		return $this->build_response($view);
-	}
-
-	private function init()
-	{
-		$this->lang = LangLoader::get('common', 'flux');
-		$this->form_lang = LangLoader::get('form-lang');
-        $this->config = FluxConfig::load();
+		return $this->build_response($this->view);
 	}
 
 	private function build_form(HTTPRequestCustom $request)
@@ -58,10 +31,10 @@ class FluxItemFormController extends ModuleController
 		$form = new HTMLForm(__CLASS__);
 		$form->set_layout_title($this->get_item()->get_id() === null ? $this->lang['flux.add'] : ($this->lang['flux.edit']));
 
-		$fieldset = new FormFieldsetHTML('flux', $this->form_lang['form.parameters']);
+		$fieldset = new FormFieldsetHTML('flux', $this->lang['form.parameters']);
 		$form->add_fieldset($fieldset);
 
-		$fieldset->add_field(new FormFieldTextEditor('title', $this->form_lang['form.name'], $this->get_item()->get_title(),
+		$fieldset->add_field(new FormFieldTextEditor('title', $this->lang['form.name'], $this->get_item()->get_title(),
 			array('required' => true)
 		));
 
@@ -70,41 +43,37 @@ class FluxItemFormController extends ModuleController
 			$search_category_children_options = new SearchCategoryChildrensOptions();
 			$search_category_children_options->add_authorizations_bits(Category::CONTRIBUTION_AUTHORIZATIONS);
 			$search_category_children_options->add_authorizations_bits(Category::WRITE_AUTHORIZATIONS);
-			$fieldset->add_field(CategoriesService::get_categories_manager()->get_select_categories_form_field('id_category', $this->form_lang['form.category'], $this->get_item()->get_id_category(), $search_category_children_options));
+			$fieldset->add_field(CategoriesService::get_categories_manager()->get_select_categories_form_field('id_category', $this->lang['form.category'], $this->get_item()->get_id_category(), $search_category_children_options));
 		}
-
-		$fieldset->add_field(new FormFieldUrlEditor('website_url', $this->form_lang['form.website'], $this->get_item()->get_website_url()->absolute(),
-			array('required' => true)
-		));
 
 		$fieldset->add_field(new FormFieldUrlEditor('website_xml', $this->lang['flux.website.xml'], $this->get_item()->get_website_xml()->absolute(),
 			array('required' => true)
 		));
 
-		$fieldset->add_field(new FormFieldThumbnail('thumbnail', $this->form_lang['form.thumbnail'], $this->get_item()->get_thumbnail()->relative(), FluxItem::THUMBNAIL_URL));
+		$fieldset->add_field(new FormFieldThumbnail('thumbnail', $this->lang['form.thumbnail'], $this->get_item()->get_thumbnail()->relative(), FluxItem::THUMBNAIL_URL));
 
-		$fieldset->add_field(new FormFieldRichTextEditor('content', $this->form_lang['form.description'], $this->get_item()->get_content()));
+		$fieldset->add_field(new FormFieldRichTextEditor('content', $this->lang['form.description'], $this->get_item()->get_content()));
 
         if (CategoriesAuthorizationsService::check_authorizations($this->get_item()->get_id_category())->moderation())
 		{
-			$publication_fieldset = new FormFieldsetHTML('publication', $this->form_lang['form.publication']);
+			$publication_fieldset = new FormFieldsetHTML('publication', $this->lang['form.publication']);
 			$form->add_fieldset($publication_fieldset);
 
-			$publication_fieldset->add_field(new FormFieldDateTime('creation_date', $this->form_lang['form.creation.date'], $this->get_item()->get_creation_date(),
+			$publication_fieldset->add_field(new FormFieldDateTime('creation_date', $this->lang['form.creation.date'], $this->get_item()->get_creation_date(),
 				array('required' => true)
 			));
 
 			if (!$this->get_item()->is_published())
 			{
-				$publication_fieldset->add_field(new FormFieldCheckbox('update_creation_date', $this->form_lang['form.update.creation.date'], false,
+				$publication_fieldset->add_field(new FormFieldCheckbox('update_creation_date', $this->lang['form.update.creation.date'], false,
 					array('hidden' => $this->get_item()->get_status() != FluxItem::NOT_PUBLISHED)
 				));
 			}
 
-			$publication_fieldset->add_field(new FormFieldSimpleSelectChoice('published', $this->form_lang['form.publication'], $this->get_item()->get_published(),
+			$publication_fieldset->add_field(new FormFieldSimpleSelectChoice('published', $this->lang['form.publication'], $this->get_item()->get_published(),
 				array(
-					new FormFieldSelectChoiceOption($this->form_lang['form.publication.draft'], FluxItem::NOT_PUBLISHED),
-					new FormFieldSelectChoiceOption($this->form_lang['form.publication.now'], FluxItem::PUBLISHED),
+					new FormFieldSelectChoiceOption($this->lang['form.publication.draft'], FluxItem::NOT_PUBLISHED),
+					new FormFieldSelectChoiceOption($this->lang['form.publication.now'], FluxItem::PUBLISHED),
 				)
 			));
 		}
@@ -122,25 +91,24 @@ class FluxItemFormController extends ModuleController
 
 	private function build_contribution_fieldset($form)
 	{
-		$contribution = LangLoader::get('contribution-lang');
 		if ($this->get_item()->get_id() === null && $this->is_contributor_member())
 		{
-			$fieldset = new FormFieldsetHTML('contribution', $contribution['contribution.contribution']);
-			$fieldset->set_description(MessageHelper::display($contribution['contribution.extended.warning'], MessageHelper::WARNING)->render());
+			$fieldset = new FormFieldsetHTML('contribution', $this->lang['contribution.contribution']);
+			$fieldset->set_description(MessageHelper::display($this->lang['contribution.extended.warning'], MessageHelper::WARNING)->render());
 			$form->add_fieldset($fieldset);
 
-			$fieldset->add_field(new FormFieldRichTextEditor('contribution_description', $contribution['contribution.description'], '',
-				array('description' => $contribution['contribution.description.clue'])
+			$fieldset->add_field(new FormFieldRichTextEditor('contribution_description', $this->lang['contribution.description'], '',
+				array('description' => $this->lang['contribution.description.clue'])
 			));
 		}
 		elseif ($this->get_item()->is_published() && $this->get_item()->is_authorized_to_edit() && !AppContext::get_current_user()->check_level(User::ADMINISTRATOR_LEVEL))
 		{
-			$fieldset = new FormFieldsetHTML('member_edition', $contribution['contribution.member.edition']);
-			$fieldset->set_description(MessageHelper::display($contribution['contribution.edition.warning'], MessageHelper::WARNING)->render());
+			$fieldset = new FormFieldsetHTML('member_edition', $this->lang['contribution.member.edition']);
+			$fieldset->set_description(MessageHelper::display($this->lang['contribution.edition.warning'], MessageHelper::WARNING)->render());
 			$form->add_fieldset($fieldset);
 
-			$fieldset->add_field(new FormFieldRichTextEditor('edition_description', $contribution['contribution.edition.description'], '',
-				array('description' => $contribution['contribution.edition.description.clue'])
+			$fieldset->add_field(new FormFieldRichTextEditor('edition_description', $this->lang['contribution.edition.description'], '',
+				array('description' => $this->lang['contribution.edition.description.clue'])
 			));
 		}
 	}
@@ -158,7 +126,7 @@ class FluxItemFormController extends ModuleController
 			if (!empty($id))
 			{
 				try {
-					$this->item = FluxService::get_item('WHERE flux.id=:id', array('id' => $id));
+					$this->item = FluxService::get_item($id);
 				} catch (RowNotFoundException $e) {
 					$error_controller = PHPBoostErrors::unexisting_page();
 					DispatchManager::redirect($error_controller);
@@ -211,7 +179,10 @@ class FluxItemFormController extends ModuleController
 		if (CategoriesService::get_categories_manager()->get_categories_cache()->has_categories())
 			$item->set_id_category($this->form->get_value('id_category')->get_raw_value());
 
-		$item->set_website_url(new Url($this->form->get_value('website_url')));
+		$xml_url = parse_url($this->form->get_value('website_xml'));
+		$website_url = $xml_url['scheme'] . '://' . $xml_url['host'];
+		$item->set_website_url(new Url($website_url));
+
 		$item->set_website_xml(new Url($this->form->get_value('website_xml')));
 		$item->set_thumbnail($this->form->get_value('thumbnail'));
 		$item->set_content($this->form->get_value('content'));
@@ -240,11 +211,19 @@ class FluxItemFormController extends ModuleController
 		if ($item->get_id() === null)
 		{
 			$id = FluxService::add($item);
+			$item->set_id($id);
+
+			if (!$this->is_contributor_member())
+				HooksService::execute_hook_action('add', self::$module_id, array_merge($item->get_properties(), array('item_url' => $item->get_item_url())));
 		}
 		else
 		{
+			$item->set_update_date(new Date());
 			$id = $item->get_id();
 			FluxService::update($item);
+
+			if (!$this->is_contributor_member())
+				HooksService::execute_hook_action('edit', self::$module_id, array_merge($item->get_properties(), array('item_url' => $item->get_item_url())));
 		}
 
 		$this->contribution_actions($item, $id);
@@ -273,6 +252,7 @@ class FluxItemFormController extends ModuleController
 				)
 			);
 			ContributionService::save_contribution($contribution);
+			HooksService::execute_hook_action($this->is_new_item ? 'add_contribution' : 'edit_contribution', self::$module_id, array_merge($contribution->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
 		}
 		else
 		{
@@ -284,6 +264,7 @@ class FluxItemFormController extends ModuleController
 					$contribution->set_status(Event::EVENT_STATUS_PROCESSED);
 					ContributionService::save_contribution($contribution);
 				}
+				HooksService::execute_hook_action('process_contribution', self::$module_id, array_merge($contribution->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
 			}
 		}
 		$item->set_id($id);

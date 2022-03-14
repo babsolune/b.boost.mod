@@ -1,31 +1,15 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 06 25
+ * @version     PHPBoost 6.0 - last update: 2021 12 14
  * @since       PHPBoost 5.0 - 2016 01 02
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
 
-class AdminHomeLandingStickyConfigController extends AdminModuleController
+class AdminHomeLandingStickyConfigController extends DefaultAdminModuleController
 {
-	/**
-	 * @var HTMLForm
-	 */
-	private $form;
-	/**
-	 * @var FormButtonSubmit
-	 */
-	private $submit_button;
-
-	private $lang;
-
-	/**
-	 * @var HomeLandingConfig
-	 */
-	private $config;
-
 	/**
 	 * @var HomeLandingModulesList
 	 */
@@ -37,25 +21,20 @@ class AdminHomeLandingStickyConfigController extends AdminModuleController
 
 		$this->build_form();
 
-		$tpl = new StringTemplate('# INCLUDE MSG # # INCLUDE FORM #');
-		$tpl->add_lang($this->lang);
-
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
 
-			$tpl->put('MSG', MessageHelper::display(LangLoader::get_message('warning.success.config', 'warning-lang'), MessageHelper::SUCCESS, 4));
+			$this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['warning.success.config'], MessageHelper::SUCCESS, 4));
 		}
 
-		$tpl->put('FORM', $this->form->display());
+		$this->view->put('CONTENT', $this->form->display());
 
-		return new AdminHomeLandingDisplayResponse($tpl, $this->lang['homelanding.sticky.manage']);
+		return new AdminHomeLandingDisplayResponse($this->view, $this->lang['homelanding.sticky.manage']);
 	}
 
 	private function init()
 	{
-		$this->lang = LangLoader::get('sticky', 'HomeLanding');
-		$this->config = HomeLandingConfig::load();
 		$this->modules = HomeLandingModulesList::load();
 	}
 

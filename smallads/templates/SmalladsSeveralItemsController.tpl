@@ -1,4 +1,4 @@
-<section id="module-smallads">
+<section id="module-smallads" class="several-items">
 	<header class="section-header">
 		<div class="controls align-right">
 			<a class="offload" href="${relative_url(SyndicationUrlBuilder::rss('smallads', id_category))}" aria-label="{@common.syndication}"><i class="fa fa-rss warning" aria-hidden="true"></i></a>
@@ -44,9 +44,9 @@
 			<div class="content-container">
 				# IF C_TYPES_FILTERS #
 					<div class="listorder-panel">
-						<div class="cell-flex cell-tile cell-columns-# IF C_PENDING #2# ELSE ## IF C_MEMBER #2# ELSE ## IF C_TAG #2# ELSE ## IF C_CATEGORY #3# ELSE #2# ENDIF ## ENDIF ## ENDIF ## ENDIF #">
+						<div class="cell-flex cell-filter cell-tile cell-columns-# IF C_PENDING #2# ELSE ## IF C_MEMBER #2# ELSE ## IF C_TAG #2# ELSE ## IF C_CATEGORY #3# ELSE #2# ENDIF ## ENDIF ## ENDIF ## ENDIF #">
 							# IF C_CATEGORY #
-								<div class="category-select cell">
+								<div class="category-select cell cell-filter">
 									<div class="cell-body">
 										<div class="cell-content">
 											<span>{@smallads.category.select} :</span>
@@ -70,7 +70,7 @@
 							# ENDIF #
 
 							<!-- Types filter -->
-							<div class="listorder-type-filter cell">
+							<div class="listorder-type-filter cell cell-filter">
 								<div class="cell-body">
 									<div class="cell-content">
 										<span>{@smallads.form.smallads.types} :</span>
@@ -108,7 +108,7 @@
 							</div>
 
 							<!-- sort dropdown -->
-							<div class="sort-list cell">
+							<div class="sort-list cell cell-filter">
 								<div class="cell-body">
 									<div class="cell-content">
 										<span>{@common.sort.by} :</span>
@@ -167,15 +167,7 @@
 
 	<div class="sub-section">
 		<div class="content-container">
-			# IF C_NO_ITEM #
-				# IF NOT C_HIDE_NO_ITEM_MESSAGE #
-						<div class="content">
-							<div class="message-helper bgc notice align-center">
-								{@common.no.item.now}
-							</div>
-						</div>
-				# ENDIF #
-			# ELSE #
+			# IF C_ITEMS #
 				# IF C_TABLE_VIEW #
 					<div class="responsive-table">
 						<table class="table">
@@ -264,9 +256,9 @@
 					</div>
 
 				# ELSE #
-					<div data-listorder-group="smallads-items" class="# IF C_GRID_VIEW #cell-flex cell-columns-{ITEMS_PER_ROW}# ENDIF ## IF C_LIST_VIEW # cell-row# ENDIF #">
+					<div data-listorder-group="smallads-items" class="cell-flex # IF C_GRID_VIEW #cell-columns-{ITEMS_PER_ROW}# ELSE # cell-row# ENDIF #">
 						# START items #
-							<article data-listorder-item id="smallads-items-{items.ID}" class="smallads-item several-items category-{items.ID_CATEGORY} cell# IF items.C_COMPLETED# completed-smallad bgc error# ENDIF ## IF items.C_NEW_CONTENT # new-content# ENDIF #" itemscope="itemscope" itemtype="http://schema.org/CreativeWork">
+							<article data-listorder-item id="smallads-items-{items.ID}" class="smallads-item category-{items.ID_CATEGORY} cell# IF items.C_COMPLETED# completed-smallad bgc error# ENDIF ## IF items.C_NEW_CONTENT # new-content# ENDIF #" itemscope="itemscope" itemtype="http://schema.org/CreativeWork">
 								# IF items.C_COMPLETED #<span class="bigger">{@common.status.finished}</span># ENDIF #
 								<header class="cell-header">
 									<h2 class="cell-name# IF items.C_ARCHIVED # text-strike# ENDIF #">
@@ -335,13 +327,13 @@
 										</div>
 									# ENDIF #
 								</div>
+								# IF items.C_HAS_THUMBNAIL #
+									<div class="cell-thumbnail cell-landscape cell-center">
+										<img src="{items.U_THUMBNAIL}" alt="{items.TITLE}" itemprop="thumbnailUrl" />
+										# IF NOT items.C_COMPLETED #<a href="{items.U_ITEM}" class="cell-thumbnail-caption offload">{@common.read.more}</a># ENDIF #
+									</div>
+								# ENDIF #
 								<div class="cell-body">
-									# IF items.C_HAS_THUMBNAIL #
-										<div class="cell-thumbnail cell-landscape cell-center">
-											<img src="{items.U_THUMBNAIL}" alt="{items.TITLE}" itemprop="thumbnailUrl" />
-											# IF NOT items.C_COMPLETED #<a href="{items.U_ITEM}" class="cell-thumbnail-caption offload">{@common.read.more}</a># ENDIF #
-										</div>
-									# ENDIF #
 									<div class="cell-content">
 										<div itemprop="text">{items.SUMMARY}# IF items.C_READ_MORE #... # IF NOT items.C_COMPLETED #<a class="read-more offload" href="{items.U_ITEM}">[{@common.read.more}]</a># ENDIF ## ENDIF #</div>
 										<div class="smallad-price lo-price"># IF items.C_PRICE #{items.PRICE} {items.CURRENCY}# ENDIF #</div>
@@ -369,6 +361,14 @@
 						# END items #
 					</div>
 					<div class="no-result hidden message-helper bgc notice"> {@common.no.item.now} </div>
+				# ENDIF #
+			# ELSE #
+				# IF NOT C_HIDE_NO_ITEM_MESSAGE #
+					<div class="content">
+						<div class="message-helper bgc notice align-center">
+							{@common.no.item.now}
+						</div>
+					</div>
 				# ENDIF #
 			# ENDIF #
 		</div>

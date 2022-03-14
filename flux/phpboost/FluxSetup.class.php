@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 10 30
+ * @version     PHPBoost 6.0 - last update: 2022 02 19
  * @since       PHPBoost 6.0 - 2021 10 30
 */
 
@@ -40,6 +40,7 @@ class FluxSetup extends DefaultModuleSetup
 		$this->drop_tables();
 		ConfigManager::delete('flux', 'config');
 		CacheManager::invalidate('module', 'flux');
+		FluxService::delete_xml_files();
 	}
 
 	private function drop_tables()
@@ -62,6 +63,7 @@ class FluxSetup extends DefaultModuleSetup
 			'rewrited_title' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
 			'website_url' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
 			'website_xml' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
+			'xml_path' => array('type' => 'string', 'length' => 255, 'default' => "''"),
 			'content' => array('type' => 'text', 'length' => 65000),
 			'creation_date' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'update_date' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
@@ -103,6 +105,7 @@ class FluxSetup extends DefaultModuleSetup
 			'auth'          => '',
 			'rewrited_name' => Url::encode_rewrite($this->messages['default.category.name']),
 			'name'          => $this->messages['default.category.name'],
+			'description'   => $this->messages['default.category.description'],
 		));
 	}
 
@@ -122,7 +125,7 @@ class FluxSetup extends DefaultModuleSetup
 			'author_user_id' => 1,
 			'views_number'   => 0,
 			'visits_number'  => 0,
-			'thumbnail_url'  => '/templates/__default__/images/default_item_thumbnail.png',
+			'thumbnail_url'  => '/templates/__default__/images/default_item.webp',
 		));
 	}
 }

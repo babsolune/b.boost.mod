@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 09 01
+ * @version     PHPBoost 6.0 - last update: 2021 12 14
  * @since       PHPBoost 5.0 - 2016 01 02
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
@@ -31,10 +31,7 @@ class HomeLandingConfig extends AbstractConfigData
 
 	const ANCHORS_MENU = 'anchors_menu';
 	const EDITO = 'edito';
-
-	const RSS_SITE_NAME = 'rss_site_name';
-	const RSS_SITE_URL = 'rss_site_url';
-	const RSS_XML_URL = 'rss_xml_url';
+	const PINNED_NEWS_TITLE = 'pinned_news_title';
 
 	const STICKY_TEXT = 'sticky_text';
 	const STICKY_TITLE = 'sticky_title';
@@ -53,15 +50,16 @@ class HomeLandingConfig extends AbstractConfigData
 	const MODULE_CONTACT = 'contact';
 	const MODULE_DOWNLOAD = 'download';
 	const MODULE_DOWNLOAD_CATEGORY = 'download_category';
+	const MODULE_FLUX = 'flux';
 	const MODULE_FORUM = 'forum';
 	const MODULE_GALLERY = 'gallery';
 	const MODULE_GUESTBOOK = 'guestbook';
 	const MODULE_MEDIA = 'media';
 	const MODULE_NEWS = 'news';
 	const MODULE_NEWS_CATEGORY = 'news_category';
+	const MODULE_PINNED_NEWS = 'pinned_news';
 	const MODULE_SMALLADS = 'smallads';
 	const MODULE_SMALLADS_CATEGORY = 'smallads_category';
-	const MODULE_RSS = 'rss';
 	const MODULE_WEB = 'web';
 	const MODULE_WEB_CATEGORY = 'web_category';
 
@@ -245,35 +243,15 @@ class HomeLandingConfig extends AbstractConfigData
 		$this->set_property(self::EDITO, $edito);
 	}
 
-	//External Rss
-	public function get_rss_site_name()
+	// Pinned news title
+	public function get_pinned_news_title()
 	{
-		return $this->get_property(self::RSS_SITE_NAME);
+		return $this->get_property(self::PINNED_NEWS_TITLE);
 	}
 
-	public function set_rss_site_name($site_name)
+	public function set_pinned_news_title($edito)
 	{
-		$this->set_property(self::RSS_SITE_NAME, $site_name);
-	}
-
-	public function get_rss_site_url()
-	{
-		return $this->get_property(self::RSS_SITE_URL);
-	}
-
-	public function set_rss_site_url($site_url)
-	{
-		$this->set_property(self::RSS_SITE_URL, $site_url);
-	}
-
-	public function get_rss_xml_url()
-	{
-		return $this->get_property(self::RSS_XML_URL);
-	}
-
-	public function set_rss_xml_url($xml_url)
-	{
-		$this->set_property(self::RSS_XML_URL, $xml_url);
+		$this->set_property(self::PINNED_NEWS_TITLE, $edito);
 	}
 
 	public function get_sticky_text()
@@ -369,6 +347,13 @@ class HomeLandingConfig extends AbstractConfigData
 		$modules[] = $module->get_properties();
 
 		$module = new HomeLandingModule();
+		$module->set_module_id(self::MODULE_FLUX);
+		$module->set_phpboost_module_id(self::MODULE_FLUX);
+		$module->hide();
+
+		$modules[] = $module->get_properties();
+
+		$module = new HomeLandingModule();
 		$module->set_module_id(self::MODULE_FORUM);
 		$module->set_phpboost_module_id(self::MODULE_FORUM);
 		$module->hide();
@@ -411,6 +396,13 @@ class HomeLandingConfig extends AbstractConfigData
 		$modules[] = $module->get_properties();
 
 		$module = new HomeLandingModule();
+		$module->set_module_id(self::MODULE_PINNED_NEWS);
+		$module->set_phpboost_module_id(self::MODULE_NEWS);
+		$module->hide();
+
+		$modules[] = $module->get_properties();
+
+		$module = new HomeLandingModule();
 		$module->set_module_id(self::MODULE_SMALLADS);
 		$module->set_phpboost_module_id(self::MODULE_SMALLADS);
 		$module->hide();
@@ -420,13 +412,6 @@ class HomeLandingConfig extends AbstractConfigData
 		$module = new HomeLandingModuleCategory();
 		$module->set_module_id(self::MODULE_SMALLADS_CATEGORY);
 		$module->set_phpboost_module_id(self::MODULE_SMALLADS);
-		$module->hide();
-
-		$modules[] = $module->get_properties();
-
-		$module = new HomeLandingModule();
-		$module->set_module_id(self::MODULE_RSS);
-		$module->set_elements_number_displayed(10);
 		$module->hide();
 
 		$modules[] = $module->get_properties();
@@ -446,12 +431,11 @@ class HomeLandingConfig extends AbstractConfigData
 		$modules[] = $module->get_properties();
 
 		// Files autoload for adding new modules
-		$init_directory = PATH_TO_ROOT . '/HomeLanding/additional/init/';
-		$scan_init = scandir($init_directory);
-		foreach ($scan_init as $key => $value)
+		$init_directory = new Folder(PATH_TO_ROOT . '/HomeLanding/additional/init/');
+		$init_files = $init_directory->get_files();
+		foreach ($init_files as $init_file)
 		{
-	      	if (!in_array($value,array('.', '..', '.empty')))
-				require_once($init_directory . $value);
+	      	require_once($init_file->get_path());
 		}
 
 		return $modules;
@@ -463,30 +447,28 @@ class HomeLandingConfig extends AbstractConfigData
 		return array(
 			self::MODULE_TITLE => LangLoader::get_message('homelanding.title', 'common', 'HomeLanding'),
 
-			self::LEFT_COLUMNS => true,
-			self::RIGHT_COLUMNS => true,
-			self::TOP_CENTRAL => true,
+			self::LEFT_COLUMNS   => true,
+			self::RIGHT_COLUMNS  => true,
+			self::TOP_CENTRAL    => true,
 			self::BOTTOM_CENTRAL => true,
-			self::TOP_FOOTER => true,
+			self::TOP_FOOTER     => true,
 
 			self::MODULES_LIST => self::init_modules_array(),
 
 			self::ANCHORS_MENU => false,
 
-			self::CAROUSEL => array(),
-			self::CAROUSEL_SPEED => 200,
-			self::CAROUSEL_TIME => 5000,
+			self::CAROUSEL        => array(),
+			self::CAROUSEL_SPEED  => 200,
+			self::CAROUSEL_TIME   => 5000,
 			self::CAROUSEL_NUMBER => 4,
-			self::CAROUSEL_AUTO => self::CAROUSEL_TRUE,
-			self::CAROUSEL_HOVER => self::CAROUSEL_TRUE,
+			self::CAROUSEL_AUTO   => self::CAROUSEL_TRUE,
+			self::CAROUSEL_HOVER  => self::CAROUSEL_TRUE,
 
-			self::EDITO => LangLoader::get_message('homelanding.edito.description', 'common', 'HomeLanding'),
+			self::EDITO             => LangLoader::get_message('homelanding.edito.description', 'common', 'HomeLanding'),
+			self::PINNED_NEWS_TITLE => LangLoader::get_message('homelanding.module.pinned_news', 'common', 'HomeLanding'),
 
-			self::RSS_SITE_NAME => '',
-			self::RSS_SITE_URL => '',
-			self::RSS_XML_URL => '',
-			self::STICKY_TEXT => LangLoader::get_message('homelanding.sticky.content', 'sticky', 'HomeLanding'),
-			self::STICKY_TITLE => LangLoader::get_message('homelanding.sticky', 'sticky', 'HomeLanding'),
+			self::STICKY_TEXT   => LangLoader::get_message('homelanding.sticky.content', 'sticky', 'HomeLanding'),
+			self::STICKY_TITLE  => LangLoader::get_message('homelanding.sticky', 'sticky', 'HomeLanding'),
 		);
 	}
 

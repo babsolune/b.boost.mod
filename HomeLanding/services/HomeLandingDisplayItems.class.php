@@ -1,22 +1,21 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 09 01
+ * @version     PHPBoost 6.0 - last update: 2022 02 22
  * @since       PHPBoost 5.2 - 2020 03 06
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
 
 class HomeLandingDisplayItems
 {
-	public static function build_view($module_name, $module_cat = false)
+	public static function build_view($module_name, $module_cat = false, $has_pinned = false)
 	{
 		$module        = ModulesManager::get_module($module_name);
 		$module_config = $module->get_configuration()->get_configuration_parameters();
 		$home_modules  = HomeLandingModulesList::load();
 		$page_type     = $module_cat ? $module_cat : $module_name;
-
 
         $theme_id = AppContext::get_current_user()->get_theme();
         if (file_exists(PATH_TO_ROOT . '/templates/' . $theme_id . '/modules/HomeLanding/pagecontent/' . $page_type . '.tpl'))
@@ -26,11 +25,17 @@ class HomeLandingDisplayItems
 		else
             $view = new FileTemplate('HomeLanding/pagecontent/items.tpl');
 
-		$home_lang = LangLoader::get('common', 'HomeLanding');
-		$module_lang = LangLoader::get('common', $module_name);
-		$view->add_lang(array_merge($home_lang, $module_lang, LangLoader::get('common-lang')));
+		$home_lang = LangLoader::get_all_langs('HomeLanding');
+		$module_lang = LangLoader::get_all_langs($module_name);
+		$view->add_lang(array_merge($home_lang, $module_lang));
 
 		$sql_condition = 'WHERE id_category IN :categories
+			AND (published = ' . Item::PUBLISHED . ' OR (published = ' . Item::DEFERRED_PUBLICATION . ' AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))';
+
+		// Manage pinned item in News
+		if ($has_pinned && $home_modules[HomeLandingConfig::MODULE_PINNED_NEWS]->is_displayed())
+			$sql_condition = 'WHERE id_category IN :categories
+			AND top_list_enabled = 0
 			AND (published = ' . Item::PUBLISHED . ' OR (published = ' . Item::DEFERRED_PUBLICATION . ' AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))';
 
 		$sql_parameters = array();
@@ -64,8 +69,9 @@ class HomeLandingDisplayItems
 		{
 			$category = CategoriesService::get_categories_manager($module_name)->get_categories_cache()->get_category($home_modules[$module_cat]->get_id_category());
 			$view->put_all(array(
-				'C_CATEGORY'     => true,
-				'L_MODULE_TITLE' => ModulesManager::get_module($module_name)->get_configuration()->get_name() . ': ' . $category->get_name()
+				'C_CATEGORY'      => true,
+				'L_MODULE_TITLE'  => ModulesManager::get_module($module_name)->get_configuration()->get_name(),
+				'L_CATEGORY_NAME' => $category->get_name()
 			));
 		}
 		else

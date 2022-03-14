@@ -1,3 +1,5 @@
+.spots-map { margin-bottom: 1.618em; }
+
 .leaflet-popup { min-width: 250px; }
 
 .marker-container {
@@ -109,7 +111,7 @@ span.marker-container .inner-marker {
 .adp-listsel,
 [data-route-index]:hover,
 .adp-placemark {
-    background-color: rgba(var(--main-rgb-t), 0.1) !important;
+    background-color: rgba(var(--darken), 0.1) !important;
 }
 
 #map-SpotsItemController_new_gps {

@@ -1,31 +1,16 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
- * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
- * @author        Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 07 21
- * @since       PHPBoost 5.1 - 2019 11 04
+ * @copyright    &copy; 2005-2022 PHPBoost
+ * @license      https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @author       Sebastien LARTIGUE <babsolune@phpboost.com>
+ * @version      PHPBoost 6.0 - last update: 2022 01 01
+ * @since        PHPBoost 5.1 - 2019 11 04
  * @contributor  Julien BRISWALTER <j1.seth@phpboost.com>
  * @contributor  Mipel <mipel@phpboost.com>
 */
 
-class AdminSmalladsItemsConfigController extends AdminModuleController
+class AdminSmalladsItemsConfigController extends DefaultAdminModuleController
 {
-	/**
-	 * @var HTMLForm
-	 */
-	private $form;
-	/**
-	 * @var FormButtonSubmit
-	 */
-	private $submit_button;
-
-	private $lang;
-
-	/**
-	 * @var SmalladsConfig
-	 */
-	private $config;
 	private $comments_config;
 
 	public function execute(HTTPRequestCustom $request)
@@ -34,26 +19,21 @@ class AdminSmalladsItemsConfigController extends AdminModuleController
 
 		$this->build_form();
 
-		$view = new StringTemplate('# INCLUDE MSG # # INCLUDE FORM #');
-		$view->add_lang($this->lang);
-
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
 			$this->form->get_field_by_id('max_weeks_number')->set_hidden(!$this->config->is_max_weeks_number_displayed());
 			$this->form->get_field_by_id('suggested_items_nb')->set_hidden(!$this->config->get_enabled_items_suggestions());
-			$view->put('MSG', MessageHelper::display(LangLoader::get_message('warning.success.config', 'warning-lang'), MessageHelper::SUCCESS, 4));
+			$this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['warning.success.config'], MessageHelper::SUCCESS, 4));
 		}
 
-		$view->put('FORM', $this->form->display());
+		$this->view->put('CONTENT', $this->form->display());
 
-		return new AdminSmalladsDisplayResponse($view, $this->lang['smallads.items.config']);
+		return new AdminSmalladsDisplayResponse($this->view, $this->lang['smallads.items.config']);
 	}
 
 	private function init()
 	{
-		$this->lang = LangLoader::get('common', 'smallads');
-		$this->config = SmalladsConfig::load();
 		$this->comments_config = CommentsConfig::load();
 	}
 
@@ -150,13 +130,17 @@ class AdminSmalladsItemsConfigController extends AdminModuleController
 
 		$fieldset->add_field(new FormFieldSpacer('2_separator', ''));
 
-		$fieldset->add_field(new SmalladsFormFieldSmalladType('smallad_type', $this->lang['smallads.type.add'], $this->config->get_smallad_types()));
+		$fieldset->add_field(new SmalladsFormFieldSmalladType('smallad_type', $this->lang['smallads.type.add'], $this->config->get_smallad_types(),
+			array('class' => ' full-field')
+		));
+
+		// $fieldset->add_field(new SmalladsFormFieldBrand('smallad_brand', $this->lang['smallads.brand.add'], $this->config->get_brands(),
+		// 	array('class' => ' full-field')
+		// ));
 
         $fieldset->add_field(new FormFieldRichTextEditor('default_content', $this->lang['smallads.default.content'], $this->config->get_default_content(),
 			array('rows' => 8, 'cols' => 47)
 		));
-
-		// $fieldset->add_field(new SmalladsFormFieldBrand('smallad_brand', $this->lang['smallads.brand.add'], $this->config->get_brands()));
 
 		$this->submit_button = new FormButtonDefaultSubmit();
 		$form->add_button($this->submit_button);
@@ -217,6 +201,7 @@ class AdminSmalladsItemsConfigController extends AdminModuleController
 
 		SmalladsConfig::save();
 		CategoriesService::get_categories_manager()->regenerate_cache();
+		HooksService::execute_hook_action('edit_config', self::$module_id, array('title' => StringVars::replace_vars($this->lang['form.module.title'], array('module_name' => self::get_module_configuration()->get_name())) . ' - ' . $this->lang['smallads.items.config'], 'url' => ModulesUrlBuilder::configuration()->rel()));
 	}
 }
 ?>

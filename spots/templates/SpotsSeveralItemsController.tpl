@@ -1,4 +1,4 @@
-<section id="module-spots">
+<section id="module-spots" class="several-items">
 	<header class="section-header">
 		<div class="controls align-right">
 			<a class="offload" href="${relative_url(SyndicationUrlBuilder::rss('spots', ID_CAT))}" aria-label="{@common.syndication}"><i class="fa fa-rss warning"></i></a>
@@ -29,11 +29,15 @@
 	# ENDIF #
 
 	# IF C_CATEGORY #
-		# IF C_GMAP_ENABLED #
-			<div id="map"></div>
-		# ELSE #
-			<div class="message-helper bgc warning">{@spots.no.gmap}</div>
-		# ENDIF #
+		<div class="sub-section">
+			<div class="content-container">
+				# IF C_GMAP_ENABLED #
+					<div id="map" class="spots-map"></div>
+				# ELSE #
+					<div class="message-helper bgc warning spots-map">{@spots.no.gmap}</div>
+				# ENDIF #
+			</div>
+		</div>
 	# ENDIF #
 
 	# IF C_SUB_CATEGORIES #
@@ -41,7 +45,7 @@
 			<div class="content-container">
 				<div class="cell-flex cell-tile cell-columns-{CATEGORIES_PER_ROW}">
 					# START sub_categories_list #
-						<div class="cell category-{sub_categories_list.CATEGORY_ID}" itemscope>
+						<div class="cell cell-category category-{sub_categories_list.CATEGORY_ID}" itemscope>
 							<div class="cell-header colored-category marker-container" data-color-surround="{sub_categories_list.CATEGORY_COLOR}">
 								<h5 class="cell-name" itemprop="about">
 									<i class="inner-marker ${sub_categories_list.CATEGORY_INNER_ICON}" aria-hidden="true"></i>
@@ -127,34 +131,34 @@
 			# ELSE #
 				<div class="cell-flex cell-columns-{ITEMS_PER_ROW}">
 					# START items #
-						<article id="article-spots-{items.ID}" class="spots-item several-items cell# IF items.C_IS_PARTNER # content-friends# ENDIF ## IF items.C_IS_PRIVILEGED_PARTNER # content-privileged-friends# ENDIF ## IF items.C_NEW_CONTENT # new-content# ENDIF#" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
+						<article id="article-spots-{items.ID}" class="spots-item cell# IF items.C_IS_PARTNER # content-friends# ENDIF ## IF items.C_IS_PRIVILEGED_PARTNER # content-privileged-friends# ENDIF ## IF items.C_NEW_CONTENT # new-content# ENDIF#" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
 							<header class="cell-header">
 								<h2>
 									<a class="offload" href="{items.U_ITEM}" itemprop="name">{items.TITLE}</a>
 								</h2>
 							</header>
-							<div class="cell-body">
-								<div class="cell-infos">
-									<div class="more">
-										<span class="pinned" aria-label="{@common.views.number}"> <i class="fa fa-eye" aria-hidden="true"></i> {items.VIEWS_NUMBER}</span>
-										# IF items.C_VISIT #<span class="pinned" aria-label="{@common.visits.number}"> <i class="fa fa-external-link-alt" aria-hidden="true"></i> {items.VISITS_NUMBER}</span># ENDIF #
-										<span class="pinned-category" data-color-surround="{items.CATEGORY_COLOR}" aria-label="{@common.category}"><i class="far fa-folder" aria-hidden="true"></i> <a class="offload" itemprop="about" href="{items.U_CATEGORY}">{items.CATEGORY_NAME}</a></span>
-									</div>
-									# IF items.C_CONTROLS #
-										<div class="controls align-right">
-											# IF items.C_EDIT #<a class="offload" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-edit"></i></a># ENDIF #
-											# IF items.C_DELETE #<a href="{items.U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-trash-alt"></i></a># ENDIF #
-										</div>
-									# ENDIF #
+							<div class="cell-infos">
+								<div class="more">
+									<span class="pinned item-views-number" aria-label="{@common.views.number}"> <i class="fa fa-eye" aria-hidden="true"></i> {items.VIEWS_NUMBER}</span>
+									# IF items.C_VISIT #<span class="pinned item-visits-number" aria-label="{@common.visits.number}"> <i class="fa fa-external-link-alt" aria-hidden="true"></i> {items.VISITS_NUMBER}</span># ENDIF #
+									<span class="pinned-category item-category" data-color-surround="{items.CATEGORY_COLOR}" aria-label="{@common.category}"><i class="far fa-folder" aria-hidden="true"></i> <a class="offload" itemprop="about" href="{items.U_CATEGORY}">{items.CATEGORY_NAME}</a></span>
 								</div>
-								# IF items.C_HAS_THUMBNAIL #
-									<div class="cell-thumbnail cell-landscape cell-center">
-										<img src="{items.U_THUMBNAIL}" alt="{items.TITLE}" itemprop="image" />
-										<a href="{items.U_ITEM}" class="cell-thumbnail-caption offload">
-											{@common.see.details}
-										</a>
+								# IF items.C_CONTROLS #
+									<div class="controls align-right">
+										# IF items.C_EDIT #<a class="offload item-edit" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-edit"></i></a># ENDIF #
+										# IF items.C_DELETE #<a class="item-delete" href="{items.U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-trash-alt"></i></a># ENDIF #
 									</div>
 								# ENDIF #
+							</div>
+							# IF items.C_HAS_THUMBNAIL #
+								<div class="cell-thumbnail cell-landscape cell-center">
+									<img src="{items.U_THUMBNAIL}" alt="{items.TITLE}" itemprop="image" />
+									<a href="{items.U_ITEM}" class="cell-thumbnail-caption offload">
+										{@common.see.details}
+									</a>
+								</div>
+							# ENDIF #
+							<div class="cell-body">
 								<div class="cell-content">
 									<div itemprop="text">{items.CONTENT}</div>
 								</div>
@@ -179,10 +183,16 @@
 # IF C_GMAP_ENABLED #
 	<script src="{PATH_TO_ROOT}/spots/templates/js/leaflet.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key={GMAP_API_KEY}"></script>
-	<script src="{PATH_TO_ROOT}/spots/templates/js/leaflet.google.js"></script>
+	<script src="{PATH_TO_ROOT}/spots/templates/js/leaflet.google# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
 
 	<script>
 		var map = new L.Map('map', {
+    		# IF C_ROOT_CATEGORY #
+				center: new L.LatLng({DEFAULT_LAT}, {DEFAULT_LNG}),
+			# ELSE #
+				center: new L.LatLng({CATEGORY_LATITUDE}, {CATEGORY_LONGITUDE}),
+			# ENDIF #
+			zoom: 12,
 			maxZoom: 18,
 			minZoom: 1,
 		});
@@ -209,8 +219,8 @@
 		var markersData = [
 			# START items #
 				[
-                    '<div class="align-center marker-logo"><a class="offload" href="${items.U_ITEM}" aria-label="{@common.see.details}"><img src="# IF items.C_HAS_THUMBNAIL #{items.U_THUMBNAIL}# ELSE #{PATH_TO_ROOT}/spots/spots.png# ENDIF #" alt="{items.TITLE}" /></a></div>'
-	               	+ '<h4><a class="offload" href="${items.U_ITEM}" aria-label="{@common.see.details}">${items.TITLE}</a></h4>'
+                    # IF items.C_HAS_THUMBNAIL #'<div class="align-center marker-logo"><a class="offload" href="${items.U_ITEM}" aria-label="{@common.see.details}"><img src="{items.U_THUMBNAIL}" alt="{items.TITLE}" /></a></div>'
+	               	+# ENDIF # '<h4><a class="offload" href="${items.U_ITEM}" aria-label="{@common.see.details}">${items.TITLE}</a></h4>'
 	                + '<div class="cell cell-list gm-location-location">'
 	                    + '<ul>'
 	                        + '<li class="li-stretch"><span class="text-strong">{@common.category}:</span> <span class="d-block">{items.CATEGORY_NAME}</span></li>'

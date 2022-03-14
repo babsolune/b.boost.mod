@@ -1,22 +1,24 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 05 26
+ * @version     PHPBoost 6.0 - last update: 2021 12 16
  * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
 
-class SmalladsTagController extends ModuleController
+class SmalladsTagController extends DefaultModuleController
 {
-	private $view;
-	private $lang;
 	private $keyword;
 
-	private $config;
 	private $comments_config;
 	private $content_management_config;
+
+	protected function get_template_to_use()
+   	{
+	   	return new FileTemplate('smallads/SmalladsSeveralItemsController.tpl');
+   	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -31,15 +33,6 @@ class SmalladsTagController extends ModuleController
 
 	private function init()
 	{
-		$this->lang = LangLoader::get('common', 'smallads');
-		$county_lang = LangLoader::get('counties', 'smallads');
-		$this->view = new FileTemplate('smallads/SmalladsSeveralItemsController.tpl');
-		$this->view->add_lang(array_merge(
-			$this->lang,
-			LangLoader::get('common-lang'),
-			$county_lang
-		));
-		$this->config = SmalladsConfig::load();
 		$this->comments_config = CommentsConfig::load();
 		$this->content_management_config = ContentManagementConfig::load();
 	}
@@ -99,7 +92,6 @@ class SmalladsTagController extends ModuleController
 			'C_ENABLED_FILTERS'	 => $this->config->are_sort_filters_enabled(),
 			'C_ITEMS'            => $result->get_rows_count() > 0,
 			'C_SEVERAL_ITEMS'    => $result->get_rows_count() > 1,
-			'C_NO_ITEM'          => $result->get_rows_count() == 0,
 			'C_GRID_VIEW'        => $this->config->get_display_type() == SmalladsConfig::GRID_VIEW,
 			'C_LIST_VIEW'        => $this->config->get_display_type() == SmalladsConfig::LIST_VIEW,
 			'C_TABLE_VIEW'       => $this->config->get_display_type() == SmalladsConfig::TABLE_VIEW,
@@ -116,13 +108,13 @@ class SmalladsTagController extends ModuleController
 
 		while ($row = $result->fetch())
 		{
-			$smallad = new SmalladsItem();
-			$smallad->set_properties($row);
+			$item = new SmalladsItem();
+			$item->set_properties($row);
 
-			$this->build_keywords_view($smallad);
+			$this->build_keywords_view($item);
 
-			$this->view->assign_block_vars('items', $smallad->get_array_tpl_vars());
-			$this->build_sources_view($smallad);
+			$this->view->assign_block_vars('items', $item->get_template_vars());
+			$this->build_sources_view($item);
 		}
 		$result->dispose();
 	}
@@ -148,9 +140,9 @@ class SmalladsTagController extends ModuleController
 		}
 	}
 
-	private function build_sources_view(SmalladsItem $smallad)
+	private function build_sources_view(SmalladsItem $item)
 	{
-		$sources = $smallad->get_sources();
+		$sources = $item->get_sources();
 		$nbr_sources = count($sources);
 		if ($nbr_sources)
 		{
@@ -169,9 +161,9 @@ class SmalladsTagController extends ModuleController
 		}
 	}
 
-	private function build_keywords_view(SmalladsItem $smallad)
+	private function build_keywords_view(SmalladsItem $item)
 	{
-		$keywords = $smallad->get_keywords();
+		$keywords = $item->get_keywords();
 		$nbr_keywords = count($keywords);
 		$this->view->put('C_KEYWORDS', $nbr_keywords > 0);
 

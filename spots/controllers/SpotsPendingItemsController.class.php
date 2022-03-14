@@ -1,35 +1,27 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 09 16
+ * @version     PHPBoost 6.0 - last update: 2021 12 04
  * @since       PHPBoost 6.0 - 2021 08 22
 */
 
-class SpotsPendingItemsController extends ModuleController
+class SpotsPendingItemsController extends DefaultModuleController
 {
-	private $view;
-	private $lang;
-	private $config;
+
+	protected function get_template_to_use()
+	{
+		return new FileTemplate('spots/SpotsSeveralItemsController.tpl');
+	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
 		$this->check_authorizations();
 
-		$this->init();
-
 		$this->build_view($request);
 
 		return $this->generate_response();
-	}
-
-	public function init()
-	{
-		$this->lang = LangLoader::get('common', 'spots');
-		$this->view = new FileTemplate('spots/SpotsSeveralItemsController.tpl');
-		$this->view->add_lang(array_merge($this->lang, LangLoader::get('common-lang')));
-		$this->config = SpotsConfig::load();
 	}
 
 	public function build_view(HTTPRequestCustom $request)
@@ -79,7 +71,7 @@ class SpotsPendingItemsController extends ModuleController
 			$item = new SpotsItem();
 			$item->set_properties($row);
 
-			$this->view->assign_block_vars('items', array_merge($item->get_array_tpl_vars()));
+			$this->view->assign_block_vars('items', array_merge($item->get_template_vars()));
 		}
 		$result->dispose();
 	}

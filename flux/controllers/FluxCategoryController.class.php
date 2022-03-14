@@ -1,39 +1,28 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 10 30
+ * @version     PHPBoost 6.0 - last update: 2022 01 19
  * @since       PHPBoost 6.0 - 2021 10 30
 */
 
-class FluxCategoryController extends ModuleController
+class FluxCategoryController extends DefaultModuleController
 {
-	private $lang;
-	private $common_lang;
-	private $view;
-	private $config;
-
 	private $category;
+
+	protected function get_template_to_use()
+	{
+	   return new FileTemplate('flux/FluxSeveralItemsController.tpl');
+	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
-		$this->init();
-
 		$this->check_authorizations();
 
 		$this->build_view($request);
 
 		return $this->generate_response();
-	}
-
-	private function init()
-	{
-		$this->lang = LangLoader::get('common', 'flux');
-		$this->common_lang = LangLoader::get('common-lang');
-		$this->view = new FileTemplate('flux/FluxSeveralItemsController.tpl');
-		$this->view->add_lang(array_merge($this->lang, $this->common_lang, LangLoader::get('contribution-lang')));
-		$this->config = FluxConfig::load();
 	}
 
 	private function build_view(HTTPRequestCustom $request)
@@ -48,7 +37,6 @@ class FluxCategoryController extends ModuleController
 		$subcategories = CategoriesService::get_categories_manager('flux')->get_categories_cache()->get_children($this->get_category()->get_id(), CategoriesService::get_authorized_categories($this->get_category()->get_id(),'', 'flux'));
 		$subcategories_pagination = $this->get_subcategories_pagination(count($subcategories), $this->config->get_categories_per_page(), $page, $subcategories_page);
 
-
 		$sub_categories_number = 0;
 		foreach ($subcategories as $id => $category)
 		{
@@ -58,12 +46,14 @@ class FluxCategoryController extends ModuleController
 			{
 				$this->view->assign_block_vars('sub_categories_list', array(
 					'C_SEVERAL_ITEMS' => $category->get_elements_number() > 1,
+					'C_CATEGORY_THUMBNAIL' => !empty($category->get_thumbnail()->rel()),
 
 					'CATEGORY_ID'            => $category->get_id(),
 					'CATEGORY_NAME'          => $category->get_name(),
 					'ITEMS_NUMBER'           => $category->get_elements_number(),
 
-					'U_CATEGORY' => FluxUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
+					'U_CATEGORY_THUMBNAIL' => $category->get_thumbnail()->rel(),
+					'U_CATEGORY'           => FluxUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
 				));
 			}
 		}
@@ -89,86 +79,120 @@ class FluxCategoryController extends ModuleController
 			'display_from' => $pagination->get_display_from()
 		)));
 
-		// Get last $rss_number feed items among all files
-		$rss_number = $this->config->get_rss_number();
-		$char_number = $this->config->get_characters_number_to_cut();
-		foreach (glob(PATH_TO_ROOT . '/flux/xml/*.xml') as $filename) {
-			$xml = simplexml_load_file($filename);
-			$items = array();
-			$items['title'] = array();
-			$items['link']  = array();
-			$items['desc']  = array();
-			$items['img']   = array();
-			$items['date']  = array();
-
-
-			foreach($xml->channel->item as $i)
-			{
-				$items['title'][] = $i->title;
-				$items['link'][]  = $i->link;
-				$items['desc'][]  = $i->description;
-				$items['img'][]   = $i->image;
-				$items['date'][]  = $i->pubDate;
-			}
-
-			$items_number = $rss_number <= count($items['title']) ? $rss_number : count($items['title']);
-
-			for($i = 0; $i < $items_number ; $i++)
-			{
-				$item_host = basename(parse_url($items['link'][$i], PHP_URL_HOST));
-
-				$date = strtotime($items['date'][$i]);
-				$item_date = strftime('%d/%m/%Y - %Hh%M', $date);
-				$desc = @strip_tags(FormatingHelper::second_parse($items['desc'][$i]));
-				$cut_desc = TextHelper::cut_string(@strip_tags(FormatingHelper::second_parse($desc), '<br><br/>'), (int)$this->config->get_characters_number_to_cut());
-				$item_img = $items['img'][$i];
-				$this->view->assign_block_vars('feed_items',array(
-					'TITLE'           => $items['title'][$i],
-					'U_ITEM'          => $items['link'][$i],
-					'ITEM_HOST'       => $item_host,
-					'DATE'            => $item_date,
-					'SORT_DATE'       => $date,
-					'SUMMARY'         => $cut_desc,
-					'C_READ_MORE'     => strlen($desc) > $char_number,
-					'WORDS_NUMBER'    => str_word_count($desc) - str_word_count($cut_desc),
-					'C_HAS_THUMBNAIL' => !empty($item_img),
-					'U_THUMBNAIL'     => $item_img,
-				));
-			}
-		}
+		$this->last_feeds_view($request);
 
 		$this->view->put_all(array(
-			'C_CATEGORY'                 => true,
-			'C_ITEMS'                    => $result->get_rows_count() > 0,
-            'C_SEVERAL_ITEMS'            => $result->get_rows_count() > 1,
-			'C_GRID_VIEW'                => $this->config->get_display_type() == FluxConfig::GRID_VIEW,
-			'C_TABLE_VIEW'               => $this->config->get_display_type() == FluxConfig::TABLE_VIEW,
-			'C_CATEGORY_DESCRIPTION'     => !empty($category_description),
-			'C_CONTROLS'                 => CategoriesAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
-			'C_PAGINATION'               => $pagination->has_several_pages(),
-			'C_ROOT_CATEGORY'            => $this->get_category()->get_id() == Category::ROOT_CATEGORY,
-			'C_HIDE_NO_ITEM_MESSAGE'     => $this->get_category()->get_id() == Category::ROOT_CATEGORY && ($sub_categories_number != 0 || !empty($category_description)),
-			'C_SUB_CATEGORIES'           => $sub_categories_number > 0,
-			'C_SUBCATEGORIES_PAGINATION' => $subcategories_pagination->has_several_pages(),
+			'C_CATEGORY'                  => true,
+			'C_ITEMS'                     => $result->get_rows_count() > 0,
+            'C_SEVERAL_ITEMS'             => $result->get_rows_count() > 1,
+			'C_GRID_VIEW'                 => $this->config->get_display_type() == FluxConfig::GRID_VIEW,
+			'C_TABLE_VIEW'                => $this->config->get_display_type() == FluxConfig::TABLE_VIEW,
+			'C_ROOT_CATEGORY_DESCRIPTION' => !empty($this->config->get_root_category_description()),
+			'C_CATEGORY_DESCRIPTION'      => !empty($this->get_category()->get_description()),
+			'C_CONTROLS'                  => CategoriesAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
+			'C_PAGINATION'                => $pagination->has_several_pages(),
+			'C_ROOT_CATEGORY'             => $this->get_category()->get_id() == Category::ROOT_CATEGORY,
+			'C_HIDE_NO_ITEM_MESSAGE'      => $this->get_category()->get_id() == Category::ROOT_CATEGORY && ($sub_categories_number != 0 || !empty($this->get_category()->get_description())),
+			'C_SUB_CATEGORIES'            => $sub_categories_number > 0,
+			'C_SUBCATEGORIES_PAGINATION'  => $subcategories_pagination->has_several_pages(),
+			'C_NEW_WINDOW' 				  => $this->config->get_new_window(),
+			'C_DISPLAY_LAST_FEEDS'		  => $this->config->get_last_feeds_display(),
 
-			'MODULE_NAME'              => $this->config->get_module_name(),
-			'ITEMS_NUMBER'			   => $this->config->get_rss_number(),
-			'ROOT_CATEGORY_DESC'       => $this->config->get_root_category_description(),
-			'CATEGORY_NAME'            => $this->get_category()->get_name(),
-			'SUBCATEGORIES_PAGINATION' => $subcategories_pagination->display(),
-			'PAGINATION'               => $pagination->display(),
-			'CATEGORIES_PER_ROW'       => $this->config->get_categories_per_row(),
-			'ITEMS_PER_ROW'            => $this->config->get_items_per_row(),
-			'ID_CAT'                   => $this->get_category()->get_id(),
+			'MODULE_NAME'               => $this->config->get_module_name(),
+			'LAST_FEEDS_NUMBER'		    => $this->config->get_last_feeds_number(),
+			'LAST_FEEDS'			    => StringVars::replace_vars($this->lang['flux.last.feeds.title'], array('feeds_number' => $this->config->get_rss_number())),
+			'ROOT_CATEGORY_DESCRIPTION' => $this->config->get_root_category_description(),
+			'CATEGORY_NAME'             => $this->get_category()->get_name(),
+			'CATEGORY_DESCRIPTION'      => FormatingHelper::second_parse($this->get_category()->get_description()),
+			'SUBCATEGORIES_PAGINATION'  => $subcategories_pagination->display(),
+			'PAGINATION'                => $pagination->display(),
+			'CATEGORIES_PER_ROW'        => $this->config->get_categories_per_row(),
+			'ITEMS_PER_ROW'             => $this->config->get_items_per_row(),
+			'ID_CAT'                    => $this->get_category()->get_id(),
 
-			'U_EDIT_CATEGORY' => $this->get_category()->get_id() == Category::ROOT_CATEGORY ? FluxUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($this->get_category()->get_id())->rel()
+			'U_EDIT_CATEGORY' => $this->get_category()->get_id() == Category::ROOT_CATEGORY ? FluxUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($this->get_category()->get_id(), 'flux')->rel()
 		));
 
 		while ($row = $result->fetch())
 		{
 			$item = new FluxItem();
 			$item->set_properties($row);
-			$this->view->assign_block_vars('items', array_merge($item->get_array_tpl_vars()));
+			$this->view->assign_block_vars('items', array_merge($item->get_templates_vars()));
+		}
+		$result->dispose();
+	}
+
+	private function last_feeds_view(HTTPRequestCustom $request)
+	{
+		$authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY);
+
+		$result = PersistenceContext::get_querier()->select('SELECT flux.*, member.*
+		FROM '. FluxSetup::$flux_table .' flux
+		LEFT JOIN '. DB_TABLE_MEMBER .' member ON member.user_id = flux.author_user_id
+		WHERE id_category IN :authorised_categories
+		AND published = 1
+		ORDER BY flux.title ASC', array(
+			'user_id' => AppContext::get_current_user()->get_id(),
+			'authorised_categories' => $authorized_categories
+		));
+
+		while ($row = $result->fetch())
+		{
+			$item = new FluxItem();
+			$item->set_properties($row);
+
+			$rss_number = $this->config->get_rss_number();
+			$char_number = $this->config->get_characters_number_to_cut();
+
+			if(!empty($item->get_xml_path()))
+			{
+				$this->view->put('C_LAST_FEEDS', $result->get_rows_count() > 0 && $this->config->get_last_feeds_display());
+
+				$xml = simplexml_load_file(PATH_TO_ROOT . '/' . $item->get_xml_path());
+				$xml_items = array();
+				$xml_items['title'] = array();
+				$xml_items['link']  = array();
+				$xml_items['desc']  = array();
+				$xml_items['img']   = array();
+				$xml_items['date']  = array();
+
+				foreach($xml->channel->item as $i)
+				{
+					$xml_items['title'][] = $i->title;
+					$xml_items['link'][]  = $i->link;
+					$xml_items['desc'][]  = $i->description;
+					$xml_items['img'][]   = $i->enclosure->url;
+					$xml_items['date'][]  = $i->pubDate;
+				}
+
+				$xml_items_number = $rss_number <= count($xml_items['title']) ? $rss_number : count($xml_items['title']);
+
+				for($i = 0; $i < $xml_items_number ; $i++)
+				{
+					$item_host = basename(parse_url($xml_items['link'][$i], PHP_URL_HOST));
+
+					$date = strtotime($xml_items['date'][$i]);
+					$item_date = strftime('%d/%m/%Y - %Hh%M', $date);
+					$desc = @strip_tags(FormatingHelper::second_parse($xml_items['desc'][$i]));
+					$cut_desc = TextHelper::cut_string(@strip_tags(FormatingHelper::second_parse($desc), '<br><br/>'), (int)$this->config->get_characters_number_to_cut());
+					$item_img = $xml_items['img'][$i];
+					$words_number = str_word_count($desc) - str_word_count($cut_desc);
+
+					$this->view->assign_block_vars('feed_items',array(
+						'TITLE'           => $xml_items['title'][$i],
+						'U_ITEM'          => $xml_items['link'][$i],
+						'ITEM_HOST'       => $item->get_title(),
+						'U_ITEM_HOST'     => $item->get_item_url(),
+						'DATE'            => $item_date,
+						'SORT_DATE'       => $date,
+						'SUMMARY'         => $cut_desc,
+						'C_READ_MORE'     => strlen($desc) > $char_number,
+						'WORDS_NUMBER'    => $words_number > 0 ? $words_number : '',
+						'C_HAS_THUMBNAIL' => !empty($item_img),
+						'U_THUMBNAIL'     => !empty($item_img) ? $item_img->absolute() : '#',
+					));
+				}
+			}
 		}
 		$result->dispose();
 	}

@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 09 01
+ * @version     PHPBoost 6.0 - last update: 2022 02 22
  * @since       PHPBoost 5.2 - 2021 01 25
 */
 
@@ -27,9 +27,9 @@ class HomeLandingSmallads
 		else
             $view = new FileTemplate('HomeLanding/pagecontent/items.tpl');
 
-        $home_lang = LangLoader::get('common', 'HomeLanding');
-        $module_lang = LangLoader::get('common', $module_name);
-        $view->add_lang(array_merge($home_lang, $module_lang, LangLoader::get('common-lang')));
+        $home_lang = LangLoader::get_all_langs('HomeLanding');
+        $module_lang = LangLoader::get_all_langs($module_name);
+        $view->add_lang(array_merge($home_lang, $module_lang));
 
         $categories_id = $modules[$module_cat]->is_subcategories_content_displayed() ? CategoriesService::get_authorized_categories($modules[$module_cat]->get_id_category(), $module_config->are_summaries_displayed_to_guests(), $module_name) : array($modules[$module_cat]->get_id_category());
 
@@ -58,7 +58,8 @@ class HomeLandingSmallads
             'MODULE_POSITION'    => $home_config->get_module_position_by_id($module_name),
             'MODULE_NAME'        => $module_name,
             'ITEMS_PER_ROW'      => $module_config->get_items_per_row(),
-            'L_MODULE_TITLE'     => ModulesManager::get_module($module_name)->get_configuration()->get_name() . ': ' . $category->get_name(),
+            'L_MODULE_TITLE'     => ModulesManager::get_module($module_name)->get_configuration()->get_name(),
+            'L_CATEGORY_NAME'    => $category->get_name(),
         ));
 
 		while ($row = $result->fetch())
@@ -66,7 +67,7 @@ class HomeLandingSmallads
 			$item = new SmalladsItem();
 			$item->set_properties($row);
 
-			$view->assign_block_vars('items', array_merge($item->get_array_tpl_vars(), array(
+			$view->assign_block_vars('items', array_merge($item->get_template_vars(), array(
                 'C_SEVERAL_VIEWS' => $item->get_views_number() > 1,
             )));
 		}
@@ -92,9 +93,9 @@ class HomeLandingSmallads
 		else
             $view = new FileTemplate('HomeLanding/pagecontent/items.tpl');
 
-        $home_lang = LangLoader::get('common', 'HomeLanding');
-        $module_lang = LangLoader::get('common', $module_name);
-        $view->add_lang(array_merge($home_lang, $module_lang, LangLoader::get('common-lang')));
+        $home_lang = LangLoader::get_all_langs('HomeLanding');
+        $module_lang = LangLoader::get_all_langs($module_name);
+        $view->add_lang(array_merge($home_lang, $module_lang));
 
 		$authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, $module_config->are_summaries_displayed_to_guests(), $module_name);
 
@@ -131,7 +132,7 @@ class HomeLandingSmallads
 			$item = new SmalladsItem();
 			$item->set_properties($row);
 
-			$view->assign_block_vars('items', array_merge($item->get_array_tpl_vars(), array(
+			$view->assign_block_vars('items', array_merge($item->get_template_vars(), array(
                 'C_SEVERAL_VIEWS' => $item->get_views_number() > 1,
             )));
 		}

@@ -1,43 +1,28 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 10 30
+ * @version     PHPBoost 6.0 - last update: 2021 12 14
  * @since       PHPBoost 6.0 - 2021 10 30
 */
 
-class FluxItemController extends ModuleController
+class FluxItemController extends DefaultModuleController
 {
-	private $lang;
-	private $common_lang;
-	private $view;
-	private $config;
-	private $form;
-	private $submit_button;
-
-	private $item;
+	protected function get_template_to_use()
+	{
+	   return new FileTemplate('flux/FluxItemController.tpl');
+	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
 		$this->check_authorizations();
-
-		$this->init();
 
 		$this->count_views_number($request);
 
 		$this->build_view($request);
 
 		return $this->generate_response();
-	}
-
-	private function init()
-	{
-		$this->lang = LangLoader::get('common', 'flux');
-		$this->common_lang = LangLoader::get('common-lang');
-		$this->view = new FileTemplate('flux/FluxItemController.tpl');
-		$this->view->add_lang(array_merge($this->lang, $this->common_lang, LangLoader::get('contribution-lang')));
-		$this->config = FluxConfig::load();
 	}
 
 	private function build_view(HTTPRequestCustom $request)
@@ -55,19 +40,25 @@ class FluxItemController extends ModuleController
 		$lastname = str_replace(".", "-", $host);
 		$path = parse_url($xml_url, PHP_URL_PATH);
 		$firstname = preg_replace("~[/.#=?]~", "-", $path);
-		$filename = PATH_TO_ROOT . '/flux/xml/' . $lastname . $firstname . '.xml';
 
-		if ($this->submit_button->has_been_submited() && $this->form->validate())
+		$filename = '/flux/xml/' . $lastname . $firstname . '.xml';
+
+		if ($item->is_published())
 		{
-			// load feed items in file
-			$content = file_get_contents($xml_url);
-			file_put_contents($filename, $content);
+			if ($this->submit_button->has_been_submited() && $this->form->validate())
+			{
+				// load feed items in file
+				$content = file_get_contents($xml_url);
+				file_put_contents(PATH_TO_ROOT . $filename, $content);
+				$item->set_xml_path($filename);
+				FluxService::update($item);
+			}
 		}
 
 		// Read cache file
-		if(file_exists($filename))
+		if(file_exists(PATH_TO_ROOT . $filename))
 		{
-			$xml = simplexml_load_file($filename);
+			$xml = simplexml_load_file(PATH_TO_ROOT . $filename);
 			$items = array();
 			$items['title'] = array();
 			$items['link']  = array();
@@ -116,7 +107,7 @@ class FluxItemController extends ModuleController
 			));
 		}
 
-		$this->view->put_all(array_merge($item->get_array_tpl_vars(), array(
+		$this->view->put_all(array_merge($item->get_templates_vars(), array(
 			'FORM' => $this->form->display(),
 			'NOT_VISIBLE_MESSAGE' => MessageHelper::display(LangLoader::get_message('warning.element.not.visible', 'warning-lang'), MessageHelper::WARNING),
 			'MODULE_NAME' => $this->config->get_module_name()
@@ -125,15 +116,21 @@ class FluxItemController extends ModuleController
 
 	private function build_refresh_form(HTTPRequestCustom $request)
 	{
+		$item = $this->get_item();
 		$form = new HTMLForm(__CLASS__);
 		$form->set_css_class('fieldset-content front-fieldset');
 
 		$fieldset = new FormFieldsetHTML('flux', $this->lang['flux.check.updates']);
 		$form->add_fieldset($fieldset);
-		$fieldset->set_description($this->lang['flux.rss.init.admin']);
+		if ($item->is_published())
+		{
+			$fieldset->set_description($this->lang['flux.rss.init.admin']);
 
-		$this->submit_button = new FormButtonDefaultSubmit($this->lang['flux.update']);
-		$form->add_button($this->submit_button);
+			$this->submit_button = new FormButtonDefaultSubmit($this->lang['flux.update']);
+			$form->add_button($this->submit_button);
+		}
+		else
+			$fieldset->set_description($this->lang['flux.rss.init.contribution']);
 
 		$this->form = $form;
 	}
@@ -162,7 +159,7 @@ class FluxItemController extends ModuleController
 			if (!empty($id))
 			{
 				try {
-					$this->item = FluxService::get_item('WHERE flux.id = :id', array('id' => $id));
+					$this->item = FluxService::get_item($id);
 				} catch (RowNotFoundException $e) {
 					$error_controller = PHPBoostErrors::unexisting_page();
 					DispatchManager::redirect($error_controller);

@@ -1,17 +1,20 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 10 30
+ * @version     PHPBoost 6.0 - last update: 2021 11 10
  * @since       PHPBoost 6.0 - 2021 10 30
 */
 
- ####################################################
- #						French						#
- ####################################################
+####################################################
+#						French					   #
+####################################################
 
-$lang['flux.module.title'] = 'Flux RSS';
+$lang['flux.module.title']     = 'Flux RSS';
+$lang['flux.last.feeds.title'] = 'Les :feeds_number éléments de flux les plus récents';
+$lang['flux.no.last.feeds']    = 'Aucun flux n\'a été initialisé.';
+$lang['flux.words.not.read']   = 'Mots restant à lire';
 
 $lang['items'] = 'flux';
 $lang['item']  = 'flux';
@@ -26,27 +29,29 @@ $lang['flux.add']        = 'Ajouter un flux';
 $lang['flux.edit']       = 'Modifier un flux';
 $lang['flux.management'] = 'Gestion des flux';
 
-$lang['flux.website.infos']  = 'Infos sur le site';
-$lang['flux.website.xml']    = 'Url du flux xml';
-$lang['flux.rss.init']       = 'Le flux du site n\'a pas été initialisé.';
-$lang['flux.rss.init.admin'] = 'L\'affichage des nouveaux éléments issus des flux du site est mis à jour en cliquant sur le bouton.';
-$lang['flux.check.updates']  = 'Vérifier les nouveaux sujets sur le site';
-$lang['flux.update']         = 'Mettre à jour';
+$lang['flux.website.infos']         = 'Infos sur le site';
+$lang['flux.website.xml']           = 'Url du fichier xml';
+$lang['flux.rss.init']              = 'Le flux Rss du site n\'a pas été initialisé.';
+$lang['flux.rss.init.admin']        = 'L\'affichage des nouveaux éléments issus des flux du site est mis à jour en cliquant sur le bouton.';
+$lang['flux.rss.init.contribution'] = 'L\'affichage des nouveaux éléments sera accessible quand la contribution sera validée.';
+$lang['flux.check.updates']         = 'Vérifier les nouveaux sujets sur le site';
+$lang['flux.update']                = 'Mettre à jour';
 
 // Configuration
 $lang['flux.module.name']               = 'Titre du module';
 $lang['flux.rss.number']                = 'Nombre d\'éléments de flux par site';
+$lang['flux.display.last.feeds']        = 'Afficher les éléments récents de flux sur l\'accueil';
+$lang['flux.last.feeds.number']         = 'Nombre d\'éléments de flux à afficher sur l\'accueil';
+$lang['flux.characters.number.to.cut']  = 'Nombre de caractères pour couper l\'élément d\'un flux';
 $lang['flux.root.category.description'] = '
-    Bienvenue dans l\'espace du site consacré aux flux !
-    <br /><br />
-    Une catégorie et une flux ont été créés pour vous montrer comment fonctionne ce module. Voici quelques conseils pour bien débuter sur ce module.
-    <br /><br />
+    <p>Bienvenue dans l\'espace du site consacré aux Flux Rss !</p>
+    <p>Une catégorie et un flux ont été créés pour vous montrer comment fonctionne ce module. Voici quelques conseils pour bien débuter sur ce module.</p>
     <ul class="formatter-ul">
-    	<li class="formatter-li"> Pour configurer ou personnaliser l\'accueil de votre module, rendez vous dans l\'<a class="offload" href="' . FluxUrlBuilder::configuration()->relative() . '">administration du module</a></li>
-    	<li class="formatter-li"> Pour créer des catégories, <a class="offload" href="' . CategoriesUrlBuilder::add()->relative() . '">cliquez ici</a> </li>
-    	<li class="formatter-li"> Pour ajouter des flux, <a class="offload" href="' . FluxUrlBuilder::add()->relative() . '">cliquez ici</a></li>
+    	<li class="formatter-li"> Pour configurer ou personnaliser l\'accueil de votre module, rendez vous dans l\'<a class="offload" href="' . Url::to_rel(FluxUrlBuilder::configuration('flux')) . '">administration du module</a></li>
+    	<li class="formatter-li"> Pour créer des catégories, <a class="offload" href="' . Url::to_rel(CategoriesUrlBuilder::add(Category::ROOT_CATEGORY, 'flux')) . '">cliquez ici</a> </li>
+    	<li class="formatter-li"> Pour ajouter des flux, <a class="offload" href="' . Url::to_rel(FluxUrlBuilder::add(Category::ROOT_CATEGORY, 'flux')) . '">cliquez ici</a></li>
     </ul>
-    <br />Pour en savoir plus, n\'hésitez pas à consulter la documentation du module sur le site de <a class="offload" href="https://www.phpboost.com">PHPBoost</a>.
+    <p>Pour en savoir plus, n\'hésitez pas à consulter la documentation du module sur le site de <a class="offload" href="https://www.phpboost.com">PHPBoost</a>.</p>
 ';
 
 // S.E.O.

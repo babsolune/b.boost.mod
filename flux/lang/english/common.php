@@ -1,17 +1,20 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 10 30
+ * @version     PHPBoost 6.0 - last update: 2022 01 20
  * @since       PHPBoost 6.0 - 2021 10 30
 */
 
- ####################################################
- #						English						#
- ####################################################
+####################################################
+#					 English					   #
+####################################################
 
-$lang['flux.module.title'] = 'RSS feeds';
+$lang['flux.module.title']     = 'RSS feeds';
+$lang['flux.last.feeds.title'] = 'The :feeds_number most recent feed items';
+$lang['flux.no.last.feeds']    = 'No Rss feeds has been initilized.';
+$lang['flux.words.not.read']   = 'Words remaining to be read';
 
 $lang['item']  = 'feed';
 
@@ -25,27 +28,29 @@ $lang['flux.add']        = 'Add a feed';
 $lang['flux.edit']       = 'Feed edition';
 $lang['flux.management'] = 'Feeds management';
 
-$lang['flux.website.infos']  = 'Infos about the website';
-$lang['flux.website.xml']    = 'xml feed url';
-$lang['flux.rss.init']       = 'The site feed has not been initialized.';
-$lang['flux.rss.init.admin'] = 'The display of new elements from the site feeds is updated by clicking on the button.';
-$lang['flux.check.updates']  = 'Check new site feed topics.';
-$lang['flux.update']         = 'Update';
+$lang['flux.website.infos']         = 'Infos about the website';
+$lang['flux.website.xml']           = 'xml file url';
+$lang['flux.rss.init']              = 'The site feed has not been initialized.';
+$lang['flux.rss.init.admin']        = 'The display of new feed items from the site feeds is updated by clicking on the button.';
+$lang['flux.rss.init.contribution'] = 'The display of new feed items is available when the contribution is validated.';
+$lang['flux.check.updates']         = 'Check new site feed topics.';
+$lang['flux.update']                = 'Update';
 
 // Configuration
 $lang['flux.module.name']               = 'Module title';
 $lang['flux.rss.number']                = 'Feed items number per site';
+$lang['flux.display.last.feeds']        = 'Display most recent feed items on module homepage';
+$lang['flux.last.feeds.number']         = 'Number of most recent feed items to display on module homepage';
+$lang['flux.characters.number.to.cut']  = 'Characters number to cut the feed item';
 $lang['flux.root.category.description'] = '
-    Welcome to the flux section of the website!
-    <br /><br />
-    A category and a feed were created to show you how this module works. Here are some tips to get started on this module.
-    <br /><br />
+    <p>Welcome to the Rss Feed section of the website!</p>
+    <p>A category and a feed were created to show you how this module works. Here are some tips to get started on this module.</p>
     <ul class="formatter-ul">
-    	<li class="formatter-li"> To configure or customize the module homepage your module, go into the <a class="offload" href="' . FluxUrlBuilder::configuration()->relative() . '">module administration</a></li>
-    	<li class="formatter-li"> To create categories, <a class="offload" href="' . CategoriessUrlBuilder::add()->relative() . '">clic here</a></li>
-    	<li class="formatter-li"> To create feeds, <a class="offload" href="' . FluxUrlBuilder::add()->relative() . '">clic here</a></li>
+    	<li class="formatter-li"> To configure or customize the module homepage your module, go into the <a class="offload" href="' . Url::to_rel(FluxUrlBuilder::configuration('flux')->relative()) . '">module administration</a></li>
+    	<li class="formatter-li"> To create categories, <a class="offload" href="' . Url::to_rel(CategoriesUrlBuilder::add()->relative(Category::ROOT_CATEGORY, 'flux')) . '">clic here</a></li>
+    	<li class="formatter-li"> To create feeds, <a class="offload" href="' . Url::to_rel(FluxUrlBuilder::add()->relative(Category::ROOT_CATEGORY, 'flux')) . '">clic here</a></li>
     </ul>
-    <br />To learn more, feel free to consult the documentation for the module on <a class="offload" href="https://www.phpboost.com">PHPBoost</a>.
+    <p>To learn more, feel free to consult the documentation for the module on <a class="offload" href="https://www.phpboost.com">PHPBoost</a>.</p>
 ';
 
 // S.E.O.

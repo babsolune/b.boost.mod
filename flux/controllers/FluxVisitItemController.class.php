@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 10 30
+ * @version     PHPBoost 6.0 - last update: 2021 11 09
  * @since       PHPBoost 6.0 - 2021 10 30
 */
 
@@ -18,7 +18,7 @@ class FluxVisitItemController extends AbstractController
 		if (!empty($id))
 		{
 			try {
-				$this->item = FluxService::get_item('WHERE flux.id = :id', array('id' => $id));
+				$this->item = FluxService::get_item($id);
 			} catch (RowNotFoundException $e) {
 				$error_controller = PHPBoostErrors::unexisting_page();
 				DispatchManager::redirect($error_controller);

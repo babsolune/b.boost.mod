@@ -1,39 +1,28 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 09 16
+ * @version     PHPBoost 6.0 - last update: 2022 01 19
  * @since       PHPBoost 6.0 - 2021 08 22
 */
 
-class SpotsCategoryController extends ModuleController
+class SpotsCategoryController extends DefaultModuleController
 {
-	private $lang;
-	private $common_lang;
-	private $view;
-	private $config;
-
 	private $category;
+
+   	protected function get_template_to_use()
+   	{
+	   	return new FileTemplate('spots/SpotsSeveralItemsController.tpl');
+   	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
-		$this->init();
-
 		$this->check_authorizations();
 
 		$this->build_view($request);
 
 		return $this->generate_response();
-	}
-
-	private function init()
-	{
-		$this->lang = LangLoader::get('common', 'spots');
-		$this->common_lang = LangLoader::get('common-lang');
-		$this->view = new FileTemplate('spots/SpotsSeveralItemsController.tpl');
-		$this->view->add_lang(array_merge($this->lang, $this->common_lang, LangLoader::get('contribution-lang')));
-		$this->config = SpotsConfig::load();
 	}
 
 	private function build_view(HTTPRequestCustom $request)
@@ -91,6 +80,16 @@ class SpotsCategoryController extends ModuleController
 			'display_from' => $pagination->get_display_from()
 		)));
 
+		$root_category = $this->get_category()->get_id() == Category::ROOT_CATEGORY;
+
+		if(!$root_category){
+			$category_address_values = TextHelper::deserialize($this->get_category()->get_category_address());
+			$this->view->put_all(array(
+				'CATEGORY_LATITUDE' => (!empty($this->get_category()->get_category_address()) || TextHelper::is_serialized($this->get_category()->get_category_address())) ? $category_address_values['latitude'] : GoogleMapsConfig::load()->get_default_marker_latitude(),
+				'CATEGORY_LONGITUDE' => (!empty($this->get_category()->get_category_address()) || TextHelper::is_serialized($this->get_category()->get_category_address())) ? $category_address_values['longitude'] : GoogleMapsConfig::load()->get_default_marker_longitude(),
+			));
+		}
+
 		$this->view->put_all(array(
 			'C_CATEGORY'                 => true,
 			'C_ITEMS'                    => $result->get_rows_count() > 0,
@@ -101,8 +100,8 @@ class SpotsCategoryController extends ModuleController
 			'C_CATEGORY_DESCRIPTION'     => !empty($category_description),
 			'C_CONTROLS'                 => CategoriesAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
 			'C_PAGINATION'               => $pagination->has_several_pages(),
-			'C_ROOT_CATEGORY'            => $this->get_category()->get_id() == Category::ROOT_CATEGORY,
-			'C_HIDE_NO_ITEM_MESSAGE'     => $this->get_category()->get_id() == Category::ROOT_CATEGORY && ($nbr_cat_displayed != 0 || !empty($category_description)),
+			'C_ROOT_CATEGORY'            => $root_category,
+			'C_HIDE_NO_ITEM_MESSAGE'     => $root_category && ($nbr_cat_displayed != 0 || !empty($category_description)),
 			'C_SUB_CATEGORIES'           => $nbr_cat_displayed > 0,
 			'C_SUBCATEGORIES_PAGINATION' => $subcategories_pagination->has_several_pages(),
 
@@ -118,14 +117,14 @@ class SpotsCategoryController extends ModuleController
 			'ITEMS_PER_ROW'            => $this->config->get_items_per_row(),
 			'ID_CAT'                   => $this->get_category()->get_id(),
 
-			'U_EDIT_CATEGORY' => $this->get_category()->get_id() == Category::ROOT_CATEGORY ? SpotsUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($this->get_category()->get_id())->rel()
+			'U_EDIT_CATEGORY' => $root_category ? SpotsUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($this->get_category()->get_id(), 'spots')->rel()
 		));
 
 		while ($row = $result->fetch())
 		{
 			$item = new SpotsItem();
 			$item->set_properties($row);
-			$this->view->assign_block_vars('items', array_merge($item->get_array_tpl_vars()));
+			$this->view->assign_block_vars('items', array_merge($item->get_template_vars()));
 		}
 		$result->dispose();
 	}
@@ -232,7 +231,6 @@ class SpotsCategoryController extends ModuleController
 	public static function get_view()
 	{
 		$object = new self();
-		$object->init();
 		$object->check_authorizations();
 		$object->build_view(AppContext::get_request());
 		return $object->view;

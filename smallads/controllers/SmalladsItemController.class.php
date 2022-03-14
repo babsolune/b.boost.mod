@@ -1,46 +1,33 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 07 21
+ * @version     PHPBoost 6.0 - last update: 2022 01 10
  * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
 
-class SmalladsItemController extends ModuleController
+class SmalladsItemController extends DefaultModuleController
 {
-	private $view;
-	private $lang;
-	private $item;
 	private $category;
 
 	private $email_form;
-	private $submit_button;
+
+	protected function get_template_to_use()
+   	{
+	   	return new FileTemplate('smallads/SmalladsItemController.tpl');
+   	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
 		$this->check_authorizations();
-
-		$this->init();
 
 		$this->check_pending_items($request);
 
 		$this->build_view($request);
 
 		return $this->generate_response();
-	}
-
-	private function init()
-	{
-		$this->lang = LangLoader::get('common', 'smallads');
-		$county_lang = LangLoader::get('counties', 'smallads');
-		$this->view = new FileTemplate('smallads/SmalladsItemController.tpl');
-		$this->view->add_lang(array_merge(
-			$this->lang,
-			LangLoader::get('common-lang'),
-			$county_lang
-		));
 	}
 
 	private function get_item()
@@ -78,7 +65,7 @@ class SmalladsItemController extends ModuleController
 		}
 		else
 		{
-			if ($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), SmalladsUrlBuilder::display_item($this->item->get_category()->get_id(), $this->item->get_category()->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title())->rel()))
+			if ($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), SmalladsUrlBuilder::display($this->item->get_category()->get_id(), $this->item->get_category()->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title())->rel()))
 			{
 				$this->item->set_views_number($this->item->get_views_number() + 1);
 				SmalladsService::update_views_number($this->item);
@@ -100,7 +87,7 @@ class SmalladsItemController extends ModuleController
 		$this->build_suggested_items($this->item);
 		$this->build_navigation_links($this->item);
 
-		$this->view->put_all(array_merge($this->item->get_array_tpl_vars(), array(
+		$this->view->put_all(array_merge($this->item->get_template_vars(), array(
 			'C_COMMENTS_ENABLED' => $comments_config->module_comments_is_enabled('smallads')
 		)));
 
@@ -109,7 +96,7 @@ class SmalladsItemController extends ModuleController
 		{
 			$comments_topic = new SmalladsCommentsTopic($this->item);
 			$comments_topic->set_id_in_module($this->item->get_id());
-			$comments_topic->set_url(SmalladsUrlBuilder::display_item($this->category->get_id(), $this->category->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title()));
+			$comments_topic->set_url(SmalladsUrlBuilder::display($this->category->get_id(), $this->category->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title()));
 
 			$this->view->put('COMMENTS', $comments_topic->display());
 		}
@@ -119,11 +106,11 @@ class SmalladsItemController extends ModuleController
 		{
 			if ($this->send_item_email())
 			{
-				$this->view->put('MSG', MessageHelper::display($this->lang['smallads.message.success.email'], MessageHelper::SUCCESS));
+				$this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['smallads.message.success.email'], MessageHelper::SUCCESS));
 				$this->view->put('C_SMALLAD_EMAIL_SENT', true);
 			}
 			else
-				$this->view->put('MSG', MessageHelper::display($this->lang['smallads.message.error.email'], MessageHelper::ERROR, 5));
+				$this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['smallads.message.error.email'], MessageHelper::ERROR, 5));
 		}
 
 		$this->view->put('EMAIL_FORM', $this->email_form->display());
@@ -211,7 +198,7 @@ class SmalladsItemController extends ModuleController
 				'C_HAS_THUMBNAIL' => !empty($row['thumbnail_url']),
 				'TITLE' => $row['title'],
 				'U_THUMBNAIL' => !empty($row['thumbnail_url']) ? Url::to_rel($row['thumbnail_url']) : $this->item->get_default_thumbnail()->rel(),
-				'U_ITEM' => SmalladsUrlBuilder::display_item($row['id_category'], CategoriesService::get_categories_manager()->get_categories_cache()->get_category($row['id_category'])->get_rewrited_name(), $row['id'], $row['rewrited_title'])->rel()
+				'U_ITEM' => SmalladsUrlBuilder::display($row['id_category'], CategoriesService::get_categories_manager()->get_categories_cache()->get_category($row['id_category'])->get_rewrited_name(), $row['id'], $row['rewrited_title'])->rel()
 			));
 		}
 		$result->dispose();
@@ -248,7 +235,7 @@ class SmalladsItemController extends ModuleController
 				'C_' . $row['type'] . '_HAS_THUMBNAIL' => !empty($row['thumbnail_url']),
 				$row['type'] . '_ITEM' => $row['title'],
 				'U_'. $row['type'] . '_THUMBNAIL' => !empty($row['thumbnail_url']) ? Url::to_rel($row['thumbnail_url']) : $this->item->get_default_thumbnail()->rel(),
-				'U_'. $row['type'] .'_ITEM' => SmalladsUrlBuilder::display_item($row['id_category'], CategoriesService::get_categories_manager()->get_categories_cache()->get_category($row['id_category'])->get_rewrited_name(), $row['id'], $row['rewrited_title'])->rel(),
+				'U_'. $row['type'] .'_ITEM' => SmalladsUrlBuilder::display($row['id_category'], CategoriesService::get_categories_manager()->get_categories_cache()->get_category($row['id_category'])->get_rewrited_name(), $row['id'], $row['rewrited_title'])->rel(),
 			));
 		}
 		$result->dispose();
@@ -352,7 +339,7 @@ class SmalladsItemController extends ModuleController
 		$graphical_environment = $response->get_graphical_environment();
 		$graphical_environment->set_page_title($this->item->get_title(), ($this->category->get_id() != Category::ROOT_CATEGORY ? $this->category->get_name() . ' - ' : '') . $this->lang['smallads.module.title']);
 		$graphical_environment->get_seo_meta_data()->set_description($this->item->get_real_summary());
-		$graphical_environment->get_seo_meta_data()->set_canonical_url(SmalladsUrlBuilder::display_item($this->category->get_id(), $this->category->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title()));
+		$graphical_environment->get_seo_meta_data()->set_canonical_url(SmalladsUrlBuilder::display($this->category->get_id(), $this->category->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title()));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['smallads.module.title'], SmalladsUrlBuilder::home());
@@ -363,7 +350,7 @@ class SmalladsItemController extends ModuleController
 			if ($category->get_id() != Category::ROOT_CATEGORY)
 				$breadcrumb->add($category->get_name(), SmalladsUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
 		}
-		$breadcrumb->add($this->item->get_title(), SmalladsUrlBuilder::display_item($category->get_id(), $category->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title()));
+		$breadcrumb->add($this->item->get_title(), SmalladsUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title()));
 
 		return $response;
 	}

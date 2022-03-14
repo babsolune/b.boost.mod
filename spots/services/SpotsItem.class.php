@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 09 16
+ * @version     PHPBoost 6.0 - last update: 2022 02 19
  * @since       PHPBoost 6.0 - 2021 08 22
 */
 
@@ -26,6 +26,7 @@ class SpotsItem
 	private $published;
 
 	private $creation_date;
+	private $update_date;
 	private $author_user;
 	private $views_number;
 	private $visits_number;
@@ -36,7 +37,7 @@ class SpotsItem
     private $instagram;
     private $youtube;
 
-	const THUMBNAIL_URL = '/templates/__default__/images/default_item_thumbnail.png';
+	const THUMBNAIL_URL = '/templates/__default__/images/default_item.webp';
 
 	const NOT_PUBLISHED = 0;
 	const PUBLISHED = 1;
@@ -223,6 +224,21 @@ class SpotsItem
 		$this->creation_date = $creation_date;
 	}
 
+	public function set_update_date(Date $update_date)
+	{
+		$this->update_date = $update_date;
+	}
+
+	public function get_update_date()
+	{
+		return $this->update_date;
+	}
+
+	public function has_update_date()
+	{
+		return ($this->update_date !== null) && ($this->update_date > $this->creation_date);
+	}
+
 	public function get_author_user()
 	{
 		return $this->author_user;
@@ -331,7 +347,7 @@ class SpotsItem
 
 	public function is_authorized_to_edit()
 	{
-		return CategoriesAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((CategoriesAuthorizationsService::check_authorizations($this->id_category)->write() || (CategoriesAuthorizationsService::check_authorizations($this->id_category)->contribution() && !$this->is_published())) && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
+		return CategoriesAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((CategoriesAuthorizationsService::check_authorizations($this->id_category)->write() || (CategoriesAuthorizationsService::check_authorizations($this->id_category)->contribution())) && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
 	}
 
 	public function is_authorized_to_delete()
@@ -361,6 +377,7 @@ class SpotsItem
 			'content' => $this->get_content(),
 			'published' => $this->get_published(),
 			'creation_date' => $this->get_creation_date()->get_timestamp(),
+			'update_date' => $this->get_update_date() !== null ? $this->get_update_date()->get_timestamp() : $this->get_creation_date()->get_timestamp(),
 			'author_user_id' => $this->get_author_user()->get_id(),
 			'views_number' => $this->get_views_number(),
 			'visits_number' => $this->get_visits_number(),
@@ -389,6 +406,7 @@ class SpotsItem
 		$this->content = $properties['content'];
 		$this->published = $properties['published'];
 		$this->creation_date = new Date($properties['creation_date'], Timezone::SERVER_TIMEZONE);
+		$this->update_date = !empty($properties['update_date']) ? new Date($properties['update_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->views_number = $properties['views_number'];
 		$this->visits_number = $properties['visits_number'];
 		$this->thumbnail_url = $properties['thumbnail'];
@@ -420,10 +438,17 @@ class SpotsItem
         $this->youtube = new Url('');
 	}
 
-	public function get_array_tpl_vars()
+	public function get_item_url()
+	{
+		$category = $this->get_category();
+		return SpotsUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $this->id, $this->rewrited_title)->rel();
+	}
+
+	public function get_template_vars()
 	{
 		$category = $this->get_category();
 		$content = FormatingHelper::second_parse($this->content);
+		$rich_content = HooksService::execute_hook_display_action('spots', $content, $this->get_properties());
 		$user = $this->get_author_user();
 		$user_group_color = User::get_group_color($user->get_groups(), $user->get_level(), true);
         $config = SpotsConfig::load();
@@ -454,7 +479,9 @@ class SpotsItem
         $loca_lng_deg = intval($loca_lng);
         $loca_lng_min = ($loca_lng - $loca_lng_deg)*60;
         $loca_lng_sec = ($loca_lng_min - intval($loca_lng))*60;
-		
+
+		$category_address_values = TextHelper::deserialize($category->get_category_address());
+
 		return array_merge(
 			Date::get_array_tpl_vars($this->creation_date, 'date'),
 			array(
@@ -483,7 +510,7 @@ class SpotsItem
 
             // Deafult values
             'GMAP_API_KEY' => GoogleMapsConfig::load()->get_api_key(),
-            'C_GMAP_API'   => ModulesManager  ::is_module_installed('GoogleMaps') && ModulesManager::is_module_activated('GoogleMaps'),
+            'C_GMAP_API'   => ModulesManager::is_module_installed('GoogleMaps') && ModulesManager::is_module_activated('GoogleMaps'),
 
 			// Category
 			'C_ROOT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY,
@@ -491,14 +518,17 @@ class SpotsItem
 			'CATEGORY_NAME'        => $category->get_name(),
 			'CATEGORY_COLOR'   	   => !$category->get_id() == Category::ROOT_CATEGORY ? $category->get_color() : $config->get_default_color(),
 			'CATEGORY_INNER_ICON'  => !$category->get_id() == Category::ROOT_CATEGORY  ? (!empty($category->get_inner_icon()) ? $category->get_inner_icon() : $config->get_default_inner_icon()) : $config->get_default_inner_icon(),
-			'U_EDIT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY ? SpotsUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($category->get_id())->rel(),
+			'CATEGORY_LATITUDE'    => !empty($category->get_category_address()) ? $category_address_values['latitude'] : GoogleMapsConfig::load()->get_default_marker_latitude(),
+			'CATEGORY_LONGITUDE'   => !empty($category->get_category_address()) ? $category_address_values['longitude'] : GoogleMapsConfig::load()->get_default_marker_longitude(),
+
+			'U_EDIT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY ? SpotsUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($category->get_id(), 'spots')->rel(),
 
 			// Item
 			'ID'                  => $this->id,
 			'TITLE'               => $this->title,
 			'REWRITED_TITLE'      => $this->rewrited_title,
 			'WEBSITE_URL'         => $this->website_url->absolute(),
-			'CONTENT'             => $content,
+			'CONTENT'             => $rich_content,
 			'STATUS'              => $this->get_status(),
 			'C_AUTHOR_EXIST'      => $user->get_id() !== User::VISITOR_LEVEL,
 			'AUTHOR_DISPLAY_NAME' => $user->get_display_name(),

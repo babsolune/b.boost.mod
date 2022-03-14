@@ -1,30 +1,42 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 09 01
+ * @version     PHPBoost 6.0 - last update: 2022 02 19
  * @since       PHPBoost 5.0 - 2016 01 02
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
  * @contributor Arnaud GENET <elenwii@phpboost.com>
 */
 
-class HomeLandingHomeController extends ModuleController
+class HomeLandingHomeController extends DefaultModuleController
 {
-	private $view;
-	private $lang;
-	private $form;
-	private $submit_button;
-
-	/**
-	 * @var HomeLandingConfig
-	 */
-	private $config;
-
 	/**
 	 * @var HomeLandingModulesList
 	 */
 	private $modules;
+
+	public function __construct($module_id = '')
+	{
+		self::$module_id = 'HomeLanding';
+
+		$this->init_parameters();
+		$this->init_view();
+	}
+
+	protected function init_parameters()
+	{
+		$this->request = AppContext::get_request();
+		$this->config = HomeLandingConfig::load();
+		$this->lang = LangLoader::get_all_langs(self::$module_id);
+	}
+
+	protected function init_view()
+	{
+		$this->view = new FileTemplate('HomeLanding/home.tpl');
+
+		$this->view->add_lang($this->lang);
+	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -37,10 +49,6 @@ class HomeLandingHomeController extends ModuleController
 
 	private function init()
 	{
-		$this->lang = LangLoader::get('common', 'HomeLanding');
-		$this->view = new FileTemplate('HomeLanding/home.tpl');
-		$this->view->add_lang(array_merge($this->lang, LangLoader::get('common-lang')));
-		$this->config = HomeLandingConfig::load();
 		$this->modules = HomeLandingModulesList::load();
 
 		$columns_disabled = ThemesManager::get_theme(AppContext::get_current_user()->get_theme())->get_columns_disabled();
@@ -88,6 +96,9 @@ class HomeLandingHomeController extends ModuleController
 		if ($this->modules[HomeLandingConfig::MODULE_DOWNLOAD_CATEGORY]->is_displayed() && CategoriesAuthorizationsService::check_authorizations($this->modules[HomeLandingConfig::MODULE_DOWNLOAD_CATEGORY]->get_id_category(), HomeLandingConfig::MODULE_DOWNLOAD)->read())
 			$this->view->put('DOWNLOAD_CAT', HomeLandingDownload::get_download_cat_view());
 
+		if ($this->modules[HomeLandingConfig::MODULE_FLUX]->is_displayed())
+		 	$this->view->put('FLUX', HomeLandingFlux::get_flux_view());
+
 		if ($this->modules[HomeLandingConfig::MODULE_FORUM]->is_displayed() && ForumAuthorizationsService::check_authorizations()->read())
 			$this->view->put('FORUM', HomeLandingForum::get_forum_view());
 
@@ -101,10 +112,13 @@ class HomeLandingHomeController extends ModuleController
 			$this->view->put('MEDIA', HomeLandingMedia::get_media_view());
 
 		if ($this->modules[HomeLandingConfig::MODULE_NEWS]->is_displayed() && CategoriesAuthorizationsService::check_authorizations(Category::ROOT_CATEGORY, HomeLandingConfig::MODULE_NEWS)->read())
-			$this->view->put('NEWS', HomeLandingDisplayItems::build_view(HomeLandingConfig::MODULE_NEWS));
+			$this->view->put('NEWS', HomeLandingDisplayItems::build_view(HomeLandingConfig::MODULE_NEWS, false, true));
 
 		if ($this->modules[HomeLandingConfig::MODULE_NEWS_CATEGORY]->is_displayed() && CategoriesAuthorizationsService::check_authorizations($this->modules[HomeLandingConfig::MODULE_NEWS_CATEGORY]->get_id_category(), HomeLandingConfig::MODULE_NEWS)->read())
-			$this->view->put('NEWS_CAT', HomeLandingDisplayItems::build_view(HomeLandingConfig::MODULE_NEWS, HomeLandingConfig::MODULE_NEWS_CATEGORY));
+			$this->view->put('NEWS_CAT', HomeLandingDisplayItems::build_view(HomeLandingConfig::MODULE_NEWS, HomeLandingConfig::MODULE_NEWS_CATEGORY, true));
+
+		if ($this->modules[HomeLandingConfig::MODULE_PINNED_NEWS]->is_displayed() && CategoriesAuthorizationsService::check_authorizations(Category::ROOT_CATEGORY, HomeLandingConfig::MODULE_NEWS)->read())
+			$this->view->put('PINNED_NEWS', HomeLandingPinnedNews::get_pinned_news_view(HomeLandingConfig::MODULE_PINNED_NEWS));
 
 		if ($this->modules[HomeLandingConfig::MODULE_SMALLADS]->is_displayed() && CategoriesAuthorizationsService::check_authorizations(Category::ROOT_CATEGORY, HomeLandingConfig::MODULE_SMALLADS)->read())
 			$this->view->put('SMALLADS', HomeLandingSmallads::get_smallads_view());
@@ -118,16 +132,12 @@ class HomeLandingHomeController extends ModuleController
 		if ($this->modules[HomeLandingConfig::MODULE_WEB_CATEGORY]->is_displayed() && CategoriesAuthorizationsService::check_authorizations($this->modules[HomeLandingConfig::MODULE_WEB_CATEGORY]->get_id_category(), HomeLandingConfig::MODULE_WEB)->read())
 			$this->view->put('WEB_CAT', HomeLandingWeb::get_web_cat_view());
 
-		if ($this->modules[HomeLandingConfig::MODULE_RSS]->is_displayed())
-		 	$this->view->put('RSS_READER', HomeLandingRss::get_rss_view());
-
 		// Files autoload for additional template variables
-		$home_directory = PATH_TO_ROOT . '/HomeLanding/additional/home/';
-		$scan_home = scandir($home_directory);
-		foreach ($scan_home as $key => $value)
+		$home_directory = new Folder(PATH_TO_ROOT . '/HomeLanding/additional/home/');
+		$home_files = $home_directory->get_files();
+		foreach ($home_files as $home_file)
 		{
-	      	if (!in_array($value,array('.', '..', '.empty')))
-				require_once($home_directory . $value);
+	      	require_once($home_file->get_path());
 		}
 	}
 
@@ -346,7 +356,7 @@ class HomeLandingHomeController extends ModuleController
 		$graphical_environment->get_seo_meta_data()->set_description(GeneralConfig::load()->get_site_description());
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(HomeLandingUrlBuilder::home());
 
-		$graphical_environment->get_seo_meta_data()->set_picture_url(new Url(PATH_TO_ROOT.'/templates/' . AppContext::get_current_user()->get_theme() . '/images/default_item_thumbnail.png'));
+		$graphical_environment->get_seo_meta_data()->set_picture_url(new Url(PATH_TO_ROOT.'/templates/' . AppContext::get_current_user()->get_theme() . '/images/default_item.webp'));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->config->get_module_title(), HomeLandingUrlBuilder::home());

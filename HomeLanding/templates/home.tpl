@@ -1,4 +1,4 @@
-<section id="module-homelanding">
+<section id="module-homelanding" class="several-items">
 	<header class="section-header" style="order: 0;">
 		<h1>{MODULE_TITLE}</h1>
 	</header>
@@ -39,6 +39,9 @@
 	# INCLUDE DOWNLOAD_CAT #
 
 
+	# INCLUDE FLUX #
+
+
 	# INCLUDE FORUM #
 
 
@@ -55,13 +58,12 @@
 
 	# INCLUDE NEWS_CAT #
 
+	# INCLUDE PINNED_NEWS #
+
 
 	# INCLUDE SMALLADS #
 
 	# INCLUDE SMALLADS_CAT #
-
-
-	# INCLUDE RSS_READER #
 
 
 	# INCLUDE  WEB #
@@ -72,3 +74,9 @@
 
 	<footer style="order: 9999;"></footer>
 </section>
+
+<script>
+	jQuery('document').ready(function(){
+		listorder.init();
+	});
+</script>

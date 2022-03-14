@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 11 04
+ * @version     PHPBoost 6.0 - last update: 2022 01 20
  * @since       PHPBoost 6.0 - 2021 08 22
 */
 
@@ -71,6 +71,11 @@ $lang['spots.inner.icon.clue']        = '
     </span>
 ';
 $lang['spots.inner.icon.placeholder'] = 'fa fa-...';
+$lang['spots.category.address'] = 'Start address';
+$lang['spots.category.address.clue'] = '
+    For route calculation. <br />
+    If left empty, the address of the GoogleMaps module configuration replaces it.
+';
 
 // Configuration
 $lang['spots.module.name']               = 'Module title';
@@ -84,9 +89,9 @@ $lang['spots.root.category.description'] = '
     A category and a location were created to show you how this module works. Here are some tips to get started on this module.
     <br /><br />
     <ul class="formatter-ul">
-    	<li class="formatter-li"> To configure or customize the module homepage your module, go into the <a class="offload" href="' . SpotsUrlBuilder::configuration()->relative() . '">module administration</a></li>
-    	<li class="formatter-li"> To create categories, <a class="offload" href="' . CategoriessUrlBuilder::add()->relative() . '">clic here</a></li>
-    	<li class="formatter-li"> To create locations, <a class="offload" href="' . SpotsUrlBuilder::add()->relative() . '">clic here</a></li>
+    	<li class="formatter-li"> To configure or customize the module homepage your module, go into the <a class="offload" href="' . Url::to_rel(SpotsUrlBuilder::configuration('spots')) . '">module administration</a></li>
+    	<li class="formatter-li"> To create categories, <a class="offload" href="' . Url::to_rel(CategoriesUrlBuilder::add(Category::ROOT_CATEGORY, 'spots')) . '">clic here</a></li>
+    	<li class="formatter-li"> To create locations, <a class="offload" href="' . Url::to_rel(SpotsUrlBuilder::add(Category::ROOT_CATEGORY, 'spots')) . '">clic here</a></li>
     </ul>
     <br />To learn more, don \'t hesitate to consult the documentation for the module on <a class="offload" href="https://www.phpboost.com">PHPBoost</a>.
 ';

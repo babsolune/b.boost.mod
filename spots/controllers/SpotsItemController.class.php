@@ -1,28 +1,22 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 09 16
+ * @version     PHPBoost 6.0 - last update: 2021 12 14
  * @since       PHPBoost 6.0 - 2021 08 22
 */
 
-class SpotsItemController extends ModuleController
+class SpotsItemController extends DefaultModuleController
 {
-	private $lang;
-	private $common_lang;
-	private $view;
-	private $config;
-	private $form;
-	private $submit_button;
-
-	private $item;
+	protected function get_template_to_use()
+   	{
+	   	return new FileTemplate('spots/SpotsItemController.tpl');
+   	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
 		$this->check_authorizations();
-
-		$this->init();
 
 		$this->count_views_number($request);
 
@@ -41,15 +35,6 @@ class SpotsItemController extends ModuleController
 		return $this->generate_response();
 	}
 
-	private function init()
-	{
-		$this->lang = LangLoader::get('common', 'spots');
-		$this->common_lang = LangLoader::get('common-lang');
-		$this->view = new FileTemplate('spots/SpotsItemController.tpl');
-		$this->view->add_lang(array_merge($this->lang, $this->common_lang, LangLoader::get('contribution-lang')));
-		$this->config = SpotsConfig::load();
-	}
-
 	private function build_view(HTTPRequestCustom $request)
 	{
 		$item = $this->get_item();
@@ -57,7 +42,7 @@ class SpotsItemController extends ModuleController
 
 		$this->build_new_address_form($request);
 
-		$this->view->put_all(array_merge($item->get_array_tpl_vars(), array(
+		$this->view->put_all(array_merge($item->get_template_vars(), array(
 			'FORM' => $this->form->display(),
 			'NOT_VISIBLE_MESSAGE' => MessageHelper::display(LangLoader::get_message('warning.element.not.visible', 'warning-lang'), MessageHelper::WARNING),
 			'MODULE_NAME' => $this->config->get_module_name(),
@@ -111,7 +96,7 @@ class SpotsItemController extends ModuleController
 			if (!empty($id))
 			{
 				try {
-					$this->item = SpotsService::get_item('WHERE spots.id = :id', array('id' => $id));
+					$this->item = SpotsService::get_item($id);
 				} catch (RowNotFoundException $e) {
 					$error_controller = PHPBoostErrors::unexisting_page();
 					DispatchManager::redirect($error_controller);

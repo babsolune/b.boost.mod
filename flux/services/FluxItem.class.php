@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2021 PHPBoost
+ * @copyright   &copy; 2005-2022 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 10 30
+ * @version     PHPBoost 6.0 - last update: 2022 02 19
  * @since       PHPBoost 6.0 - 2021 10 30
 */
 
@@ -15,17 +15,19 @@ class FluxItem
 	private $rewrited_title;
 	private $website_url;
 	private $website_xml;
+	private $xml_path;
 	private $content;
 
 	private $published;
 
 	private $creation_date;
+	private $update_date;
 	private $author_user;
 	private $views_number;
 	private $visits_number;
 	private $thumbnail_url;
 
-	const THUMBNAIL_URL = '/templates/__default__/images/default_item_thumbnail.png';
+	const THUMBNAIL_URL = '/templates/__default__/images/default_item.webp';
 
 	const NOT_PUBLISHED = 0;
 	const PUBLISHED = 1;
@@ -101,6 +103,16 @@ class FluxItem
 		$this->website_xml = $website_xml;
 	}
 
+	public function get_xml_path()
+	{
+		return $this->xml_path;
+	}
+
+	public function set_xml_path($xml_path)
+	{
+		$this->xml_path = $xml_path;
+	}
+
 	public function get_content()
 	{
 		return $this->content;
@@ -147,6 +159,21 @@ class FluxItem
 	public function set_creation_date(Date $creation_date)
 	{
 		$this->creation_date = $creation_date;
+	}
+
+	public function set_update_date(Date $update_date)
+	{
+		$this->update_date = $update_date;
+	}
+
+	public function get_update_date()
+	{
+		return $this->update_date;
+	}
+
+	public function has_update_date()
+	{
+		return ($this->update_date !== null) && ($this->update_date > $this->creation_date);
 	}
 
 	public function get_author_user()
@@ -205,7 +232,7 @@ class FluxItem
 
 	public function is_authorized_to_edit()
 	{
-		return CategoriesAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((CategoriesAuthorizationsService::check_authorizations($this->id_category)->write() || (CategoriesAuthorizationsService::check_authorizations($this->id_category)->contribution() && !$this->is_published())) && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
+		return CategoriesAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((CategoriesAuthorizationsService::check_authorizations($this->id_category)->write() || (CategoriesAuthorizationsService::check_authorizations($this->id_category)->contribution())) && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
 	}
 
 	public function is_authorized_to_delete()
@@ -222,9 +249,11 @@ class FluxItem
 			'rewrited_title' => $this->get_rewrited_title(),
 			'website_url' => $this->get_website_url()->absolute(),
 			'website_xml' => $this->get_website_xml()->absolute(),
+			'xml_path' => $this->get_xml_path(),
 			'content' => $this->get_content(),
 			'published' => $this->get_published(),
 			'creation_date' => $this->get_creation_date()->get_timestamp(),
+			'update_date' => $this->get_update_date() !== null ? $this->get_update_date()->get_timestamp() : $this->get_creation_date()->get_timestamp(),
 			'author_user_id' => $this->get_author_user()->get_id(),
 			'views_number' => $this->get_views_number(),
 			'visits_number' => $this->get_visits_number(),
@@ -240,9 +269,11 @@ class FluxItem
 		$this->rewrited_title = $properties['rewrited_title'];
 		$this->website_url = new Url($properties['website_url']);
 		$this->website_xml = new Url($properties['website_xml']);
+		$this->xml_path = $properties['xml_path'];
 		$this->content = $properties['content'];
 		$this->published = $properties['published'];
 		$this->creation_date = new Date($properties['creation_date'], Timezone::SERVER_TIMEZONE);
+		$this->update_date = !empty($properties['update_date']) ? new Date($properties['update_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->views_number = $properties['views_number'];
 		$this->visits_number = $properties['visits_number'];
 		$this->thumbnail_url = $properties['thumbnail_url'];
@@ -269,10 +300,17 @@ class FluxItem
 		$this->website_xml = new Url('');
 	}
 
-	public function get_array_tpl_vars()
+	public function get_item_url()
+	{
+		$category = $this->get_category();
+		return FluxUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $this->id, $this->rewrited_title)->rel();
+	}
+
+	public function get_templates_vars()
 	{
 		$category = $this->get_category();
 		$content = FormatingHelper::second_parse($this->content);
+		$rich_content = HooksService::execute_hook_display_action('flux', $content, $this->get_properties());
 		$user = $this->get_author_user();
 		$user_group_color = User::get_group_color($user->get_groups(), $user->get_level(), true);
         $config = FluxConfig::load();
@@ -280,9 +318,9 @@ class FluxItem
 		return array_merge(
 			Date::get_array_tpl_vars($this->creation_date, 'date'),
 			array(
-            'C_NEW_WINDOW'         => $config->get_new_window(true),
+            'C_NEW_WINDOW'         => $config->get_new_window(),
             'C_CONTENT'            => !empty($content),
-			'C_VISIBLE'            => $this->is_published(),
+			'C_IS_PUBLISHED'       => $this->is_published(),
 			'C_CONTROLS'           => $this->is_authorized_to_edit() || $this->is_authorized_to_delete(),
 			'C_EDIT'               => $this->is_authorized_to_edit(),
 			'C_DELETE'             => $this->is_authorized_to_delete(),
@@ -295,7 +333,7 @@ class FluxItem
 			'C_ROOT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY,
 			'CATEGORY_ID'          => $category->get_id(),
 			'CATEGORY_NAME'        => $category->get_name(),
-			'U_EDIT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY ? FluxUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($category->get_id())->rel(),
+			'U_EDIT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY ? FluxUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($category->get_id(), 'flux')->rel(),
 
 			// Item
 			'ID'                  => $this->id,
@@ -303,7 +341,7 @@ class FluxItem
 			'REWRITED_TITLE'      => $this->rewrited_title,
 			'WEBSITE_URL'         => $this->website_url->absolute(),
 			'WEBSITE_RSS'         => $this->website_xml->absolute(),
-			'CONTENT'             => $content,
+			'CONTENT'             => $rich_content,
 			'STATUS'              => $this->get_status(),
 			'C_AUTHOR_EXIST'      => $user->get_id() !== User::VISITOR_LEVEL,
 			'AUTHOR_DISPLAY_NAME' => $user->get_display_name(),
@@ -314,7 +352,7 @@ class FluxItem
 
 			'U_SYNDICATION'    => SyndicationUrlBuilder::rss('flux', $this->id_category)->rel(),
 			'U_AUTHOR_PROFILE' => UserUrlBuilder::profile($this->get_author_user()->get_id())->rel(),
-			'U_ITEM'           => FluxUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $this->id, $this->rewrited_title)->rel(),
+			'U_ITEM'           => $this->get_item_url(),
 			'U_VISIT'          => FluxUrlBuilder::visit($this->id)->rel(),
 			'U_DEADLINK'       => FluxUrlBuilder::dead_link($this->id)->rel(),
 			'U_CATEGORY'       => FluxUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel(),
