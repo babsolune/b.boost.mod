@@ -1,0 +1,121 @@
+/*
+* Copy this file into your theme to customize the module.
+* https://www.phpboost.com/wiki/structure-d-un-theme#paragraph-le-repertoire-modules
+*/
+
+#documentation-sources-container { margin: 1em 1em 1em 2em; }
+
+.documentation-sources-title { font-weight: bold; }
+
+.several-items .article-documentation .actions { padding-top: 0.618em; }
+
+@media (min-width: 769px) {
+	#DocumentationFormController_file_size_field,
+	#DocumentationFormController_file_size_unit_field { display: inline-block; }
+
+	#onblurContainerResponseDocumentationFormController_file_size,
+	#onblurContainerResponseDocumentationFormController_file_size_unit,
+	#DocumentationFormController_file_size_field label,
+	#DocumentationFormController_file_size_unit_field label {
+		width: auto;
+		margin-right: 0.618em;
+	}
+
+	#DocumentationFormController_file_size_unit_field  select { width: 120px; }
+}
+
+/*
+ * summary menu
+*/
+#summary-list li { 
+	font-size: 0.809em;
+	padding: 0; 
+}
+
+#summary-list li a { 
+	display: flex;
+	flex-direction: row;	
+	padding: 0.228em;
+	text-decoration: none;
+}
+
+#summary-list .inner-title { 
+	flex: 1 1 auto; 
+	margin-left: 0.309em;
+}
+
+#summary-list .smaller { align-self: center; }
+
+/* --- Thumbnail --- */
+
+.item-thumbnail {
+	padding: 0.309em 0;
+	display: block;
+	background-color: var(--bgc-main);
+}
+
+@media (min-width: 769px) {
+	.item-thumbnail {
+		max-width: 38%;
+		float: right;
+		padding: 0.309em 0 0.618em 0.618em;
+		position: relative;
+		z-index: 2;
+	}
+}
+
+.nav-items-list ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	position: relative;
+}
+
+#category-nav ul ul {
+	padding-left: 1.618em;
+}
+
+#category-nav .categories-item:hover { background-color: rgba(var(--main-rgb-d), 0.2); }
+
+.categories-item {
+	position: relative;
+	flex: 1 1 auto;
+	padding: 0.456em;
+}
+
+.has-children>[class*="toggle-menu-button-"] > .categories-item { padding-left: 1.618em; }
+
+.has-children>[class*="toggle-menu-button-"] { cursor: pointer; }
+
+.has-children>[class*="toggle-menu-button-"] > .categories-item:before {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 0.456em;
+	content: '\f0fe';
+	font-family: 'Font Awesome 6 free';
+	font-weight: 400;
+}
+
+.has-children>[class*="toggle-menu-button-"]>.is-open-menu.categories-item:before { content: '\f146'; }
+
+[class*="items-list-"]:not([class*="items-list-0"]) {
+	opacity: 0;
+	visibility: hidden;
+	height: 0;
+}
+
+.reorder-items {
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+[class*="items-list-"].show-list {
+	opacity: 1;
+	visibility: visible;
+	height: auto;
+}
+
+.active-content td { background-color: var(--bgc-sub); }

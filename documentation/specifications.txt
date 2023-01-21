@@ -1,0 +1,108 @@
+# Objectif  
+    Passer le module wiki en mvc
+
+# Spec  
+- item
+    titre | catégorie | contenu | contenu court | statut qualité | renommage de l'auteur | vignette | mots clé | sources | publication différée
+- catégories 
+    richCategories
+
+    ## Fonctionnement
+        - Page d'accueil (racine) comme pour le module Pages 
+            => tous les items + catégories affichés sous forme de menu (remplace l'explorateur)
+        
+        - Page de réagencements de l'ordre des items dans une catégorie (accèssible si 2 items min)
+
+        - création de la table des matières à partir des [title] du contenu  seulement si contenu contient des titres
+            =>  pouvoir récupérer le html (couleur, icônes, etc) dans les titres de la table des matières et du contenu
+            => Envoyer la table des matières sur le coté
+                - dans le menu gauche si colonne gauche et droite sont présentes
+                - dans colonne droite si seulement colonne droite présentes
+                - création de la colonne gauche si aucune colonne présente
+
+        - création d'un nouveau contenu séparé 
+            - à la création un item ou d'une contribution
+            - à l'édition un item déjà publié
+
+        - simple mise à jour du contenu courant quand on édite un item non publié => évite d'avoir x contenus inutiles pour un item
+            => édition multiple d'une contribution avant publication
+            => passer un item déjà publié en brouillon pour pouvoir valider +rs fois avant revalidation définitive
+
+        - statut d'un item 
+            => aucun | qualité | incomplet | en cours | à refaire(obsolète) | contesté || personnalisé + textarea
+
+    ## Item
+        ### bdd module_items
+            - id  
+            - id_category
+            - id_order
+            - title 
+            - rewrited_title
+            - summary
+            - author_custom_name
+            - thumbnail
+            - published
+            - publishing_start_date
+            - publishing_end_date
+            - update_date
+            - defined_status
+            - customized_status
+            - views_number
+            - sources  
+
+        ### bdd module_contents
+            - content_id
+            - item_id
+            - active_content
+            - content
+            - creation_date
+            - author_user_id
+            - change_reason
+
+    ## BDD alternative
+        parce que l'historique ne permettra de rollback que de ce qui est contenu dans la bdd module_contents
+        
+        ### bdd module_items
+            - id
+            - thumbnail
+            - published
+            - creation_date
+            - update_date
+            - defined_status
+            - customized_status
+            - views_number
+            - sources  
+
+        ### bdd module_contents
+            - content_id
+            - item_id
+            - active_content  
+            - id_category
+            - title 
+            - rewrited_title
+            - content
+            - summary
+            - author_custom_name
+            - author_user_id
+            - version_date
+            - change_reason
+
+# Commentaires (cf "bdd alternative"plus bas)
+    - comment éviter la création d'un nouveau contenu si on modifie un élément en dehors de la table module_contents
+    - utilité de la publication différée
+    - utilité de la vignette
+    - choix des bdd pour les colonnes pour prévoir le rollback depuis l'historique
+
+# TODO
+    - ~~page d'accueil~~
+    - ~~table des matières~~
+    - ~~table des matières dans colonnes~~
+    - ~~création item et contenu séparé~~
+    - ~~simple mise à jour du contenu d'un item en brouillon~~
+    - statut
+    - historique 
+        - général
+        - particulier
+    - suppression d'un item = suppression des relations (+rs contenus, favoris, historique)
+    - recherche
+    - favoris

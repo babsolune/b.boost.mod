@@ -1,0 +1,2 @@
+Change_reason
+    texte tronqué + modal si texte dépasse les x caractéres
