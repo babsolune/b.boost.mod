@@ -12,11 +12,11 @@
 			{@guide.module.title}
 		</h1>
 	</header>
-	# IF C_CATEGORY_DESCRIPTION #
+	# IF C_ROOT_CATEGORY_DESCRIPTION #
 		<div class="sub-section">
 			<div class="content-container">
 				<div class="cat-description">
-					{CATEGORY_DESCRIPTION}
+					{ROOT_CATEGORY_DESCRIPTION}
 				</div>
 			</div>
 		</div>

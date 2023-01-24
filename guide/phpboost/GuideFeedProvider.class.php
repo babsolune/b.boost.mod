@@ -40,7 +40,7 @@ class GuideFeedProvider implements FeedProvider
 
 			$now = new Date();
 			$results = $querier->select('SELECT guide.id, guide.id_category, guide.title, guide.rewrited_title, guide.content, guide.update_date, guide.thumbnail, cat.rewrited_name AS rewrited_name_cat
-				FROM ' . GuideSetup::$guide_items_table . ' guide
+				FROM ' . GuideSetup::$guide_table . ' guide
 				LEFT JOIN '. GuideSetup::$guide_cats_table .' cat ON cat.id = guide.id_category
 				WHERE guide.id_category IN :ids_categories
 				AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))

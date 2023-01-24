@@ -123,3 +123,5 @@
 }
 
 .active-content td { background-color: var(--bgc-sub); }
+
+.large-table p.ellipsis { margin: 0; }

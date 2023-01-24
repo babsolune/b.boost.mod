@@ -15,7 +15,7 @@ class GuideSearchable extends DefaultSearchable
 		parent::__construct($module_id);
 		$this->read_authorization = GuideAuthorizationsService::check_authorizations()->read();
 
-		$this->table_name = GuideSetup::$guide_items_table;
+		$this->table_name = GuideSetup::$guide_table;
 
 		$this->authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, GuideConfig::load()->is_summary_displayed_to_guests(), $module_id);
 

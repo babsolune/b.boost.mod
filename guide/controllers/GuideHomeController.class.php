@@ -9,9 +9,6 @@
 
 class GuideHomeController extends DefaultModuleController
 {
-	private $comments_config;
-	private $content_management_config;
-
 	private $category;
 
 	protected function get_template_to_use()
@@ -21,39 +18,39 @@ class GuideHomeController extends DefaultModuleController
 
 	public function execute(HTTPRequestCustom $request)
 	{
-		$this->init();
-
 		$this->check_authorizations();
 
-		$this->build_root_view($request);
-		$this->build_view($request);
+		$this->build_root_view();
+		$this->build_view();
 
 		return $this->generate_response($request);
 	}
 
-	private function init()
-	{
-		$this->comments_config = CommentsConfig::load();
-		$this->content_management_config = ContentManagementConfig::load();
-	}
-
-	private function build_root_view(HTTPRequestCustom $request)
+	private function build_root_view()
 	{
 		$now = new Date();
 
-        $condition = 'WHERE id_category = 0
+        $condition = 'WHERE id_category = :root_category
             AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))';
         $parameters = array(
-            'timestamp_now' => $now->get_timestamp()
+            'timestamp_now' => $now->get_timestamp(),
+            'root_category' => Category::ROOT_CATEGORY
         );
+
+        $root_description = FormatingHelper::second_parse($this->config->get_root_category_description());
+
         $this->view->put_all(array(
-            'C_ROOT_CONTROLS'           => GuideAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
-            'C_SEVERAL_ROOT_ITEMS' => GuideService::count($condition, $parameters) > 1,
-            'U_REORDER_ROOT_ITEMS'    => GuideUrlBuilder::reorder_items(0, 'root')->rel(),
+            'C_ROOT_CONTROLS'        => GuideAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
+            'C_SEVERAL_ROOT_ITEMS'   => GuideService::count($condition, $parameters) > 1,
+            'C_ROOT_CATEGORY_DESCRIPTION' => !empty($root_description),
+
+            'ROOT_CATEGORY_DESCRIPTION' => $root_description,
+
+            'U_REORDER_ROOT_ITEMS' => GuideUrlBuilder::reorder_items(0, 'root')->rel(),
         ));
 
         $result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
-        FROM ' . GuideSetup::$guide_items_table . ' i
+        FROM ' . GuideSetup::$guide_table . ' i
         LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
         LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
         LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
@@ -74,7 +71,7 @@ class GuideHomeController extends DefaultModuleController
         $result->dispose();
 	}
 
-	private function build_view(HTTPRequestCustom $request)
+	private function build_view()
 	{
 		$now = new Date();
 		$categories = CategoriesService::get_categories_manager(self::$module_id)->get_categories_cache()->get_categories();
@@ -85,8 +82,8 @@ class GuideHomeController extends DefaultModuleController
 			if ($id != Category::ROOT_CATEGORY && in_array($id, $authorized_categories))
 			{
 				$category_elements_number = isset($categories_elements_number[$id]) ? $categories_elements_number[$id] : $category->get_elements_number();
-				$this->view->assign_block_vars('categories', array(
-                    'C_CONTROLS'           => GuideAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
+                $this->view->assign_block_vars('categories', array(
+                    'C_CONTROLS'         => GuideAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
 					'C_ITEMS'            => $category_elements_number > 0,
 					'C_SEVERAL_ITEMS'    => $category_elements_number > 1,
 					'ITEMS_NUMBER'       => $category->get_elements_number(),
@@ -99,7 +96,7 @@ class GuideHomeController extends DefaultModuleController
 				));
 
 				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
-				FROM ' . GuideSetup::$guide_items_table . ' i
+				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
@@ -126,36 +123,6 @@ class GuideHomeController extends DefaultModuleController
 		}
 	}
 
-	private function get_pagination($condition, $parameters, $page, $subcategories_page)
-	{
-		$items_number = GuideService::count($condition, $parameters);
-
-		$pagination = new ModulePagination($page, $items_number, (int)GuideConfig::load()->get_items_per_page());
-		$pagination->set_url(GuideUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name(), '%d', $subcategories_page));
-
-		if ($pagination->current_page_is_empty() && $page > 1)
-		{
-			$error_controller = PHPBoostErrors::unexisting_page();
-			DispatchManager::redirect($error_controller);
-		}
-
-		return $pagination;
-	}
-
-	private function get_subcategories_pagination($subcategories_number, $categories_per_page, $page, $subcategories_page)
-	{
-		$pagination = new ModulePagination($subcategories_page, $subcategories_number, (int)$categories_per_page);
-		$pagination->set_url(GuideUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name(), $page, '%d'));
-
-		if ($pagination->current_page_is_empty() && $subcategories_page > 1)
-		{
-			$error_controller = PHPBoostErrors::unexisting_page();
-			DispatchManager::redirect($error_controller);
-		}
-
-		return $pagination;
-	}
-
 	private function get_category()
 	{
 		if ($this->category === null)
@@ -178,40 +145,13 @@ class GuideHomeController extends DefaultModuleController
 		return $this->category;
 	}
 
-	private function build_keywords_view($keywords)
-	{
-		$nbr_keywords = count($keywords);
-
-		$i = 1;
-		foreach ($keywords as $keyword)
-		{
-			$this->view->assign_block_vars('items.keywords', array(
-				'C_SEPARATOR' => $i < $nbr_keywords,
-				'NAME' => $keyword->get_name(),
-				'URL'  => GuideUrlBuilder::display_tag($keyword->get_rewrited_name())->rel(),
-			));
-			$i++;
-		}
-	}
-
 	private function check_authorizations()
 	{
-		if (AppContext::get_current_user()->is_guest())
-		{
-			if (($this->config->is_summary_displayed_to_guests() && (!Authorizations::check_auth(RANK_TYPE, User::MEMBER_LEVEL, $this->get_category()->get_authorizations(), Category::READ_AUTHORIZATIONS) || $this->config->get_display_type() == GuideConfig::LIST_VIEW)) || (!$this->config->is_summary_displayed_to_guests() && !GuideAuthorizationsService::check_authorizations($this->get_category()->get_id())->read()))
-			{
-				$error_controller = PHPBoostErrors::user_not_authorized();
-				DispatchManager::redirect($error_controller);
-			}
-		}
-		else
-		{
-			if (!GuideAuthorizationsService::check_authorizations($this->get_category()->get_id())->read())
-			{
-				$error_controller = PHPBoostErrors::user_not_authorized();
-				DispatchManager::redirect($error_controller);
-			}
-		}
+        if (!GuideAuthorizationsService::check_authorizations($this->get_category()->get_id())->read())
+        {
+            $error_controller = PHPBoostErrors::user_not_authorized();
+            DispatchManager::redirect($error_controller);
+        }
 	}
 
 	private function generate_response(HTTPRequestCustom $request)
@@ -247,8 +187,7 @@ class GuideHomeController extends DefaultModuleController
 
 	public static function get_view()
 	{
-		$object = new self();
-		$object->init();
+		$object = new self('guide');
 		$object->check_authorizations();
 		$object->build_view(AppContext::get_request());
 		return $object->view;

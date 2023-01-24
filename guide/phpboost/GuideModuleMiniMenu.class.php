@@ -31,7 +31,7 @@ class GuideModuleMiniMenu extends ModuleMiniMenu
 
 	public function is_displayed()
 	{
-		return Url::is_current_url('/guide/') && ModulesManager::is_module_installed('guide') && ModulesManager::is_module_activated('guide');
+		return ModulesManager::is_module_installed('guide') && ModulesManager::is_module_activated('guide');
 	}
 
 	public function get_menu_content()
@@ -60,7 +60,7 @@ class GuideModuleMiniMenu extends ModuleMiniMenu
 				));
 
 				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
-				FROM ' . GuideSetup::$guide_items_table . ' i
+				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
@@ -95,7 +95,7 @@ class GuideModuleMiniMenu extends ModuleMiniMenu
 				));
 
 				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
-				FROM ' . GuideSetup::$guide_items_table . ' i
+				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id

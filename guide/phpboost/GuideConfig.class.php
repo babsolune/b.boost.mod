@@ -9,18 +9,18 @@
 
 class GuideConfig extends AbstractConfigData
 {
-	const CATEGORIES_PER_PAGE      = 'categories_per_page';
-	const CATEGORIES_PER_ROW       = 'categories_per_row';
-	const ITEMS_PER_PAGE           = 'items_per_page';
-	const ITEMS_PER_ROW            = 'items_per_row';
+	const CATEGORIES_PER_PAGE = 'categories_per_page';
+	const CATEGORIES_PER_ROW  = 'categories_per_row';
+	const ITEMS_PER_PAGE      = 'items_per_page';
+	const ITEMS_PER_ROW       = 'items_per_row';
 
 	const DEFAULT_CONTENT = 'default_content';
 
-	const SUMMARY_DISPLAYED_TO_GUESTS           = 'summary_displayed_to_guests';
-	const AUTHOR_DISPLAYED                      = 'author_displayed';
-	const NB_VIEW_ENABLED                       = 'nb_view_enabled';
-	const ROOT_CATEGORY_DESCRIPTION             = 'root_category_description';
-	const AUTHORIZATIONS                        = 'authorizations';
+	const SUMMARY_DISPLAYED_TO_GUESTS = 'summary_displayed_to_guests';
+	const AUTHOR_DISPLAYED            = 'author_displayed';
+	const NB_VIEW_ENABLED             = 'nb_view_enabled';
+	const ROOT_CATEGORY_DESCRIPTION   = 'root_category_description';
+	const AUTHORIZATIONS              = 'authorizations';
 
 	const DISPLAY_TYPE = 'display_type';
 	const GRID_VIEW    = 'grid_view';
@@ -186,7 +186,7 @@ class GuideConfig extends AbstractConfigData
 			self::SUMMARY_DISPLAYED_TO_GUESTS           => false,
 			self::AUTHOR_DISPLAYED                      => true,
 			self::NB_VIEW_ENABLED                       => false,
-			self::ROOT_CATEGORY_DESCRIPTION             => CategoriesService::get_default_root_category_description('guide'),
+			self::ROOT_CATEGORY_DESCRIPTION             => LangLoader::get_message('default.root.description', 'install', 'guide'),
 			self::AUTO_CUT_CHARACTERS_NUMBER            => 128,
 			self::AUTHORIZATIONS                        => array('r-1' => 33, 'r0' => 37, 'r1' => 61),
 			self::DEFERRED_OPERATIONS                   => array()

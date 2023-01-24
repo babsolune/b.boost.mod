@@ -17,7 +17,7 @@
 	<div class="sub-section">
 		<div class="content-container">
 			<div class="responsive-table">
-				<table class="table">
+				<table class="table large-table">
 					<thead>
 						<tr>
 							<th>{@common.version}</th>
@@ -49,7 +49,7 @@
 									# IF items.C_INIT #
 										{@guide.history.init}
 									# ELSE #
-										# IF items.C_CHANGE_REASON #<i class="fa fa-question" aria-hidden></i># ENDIF #
+										# IF items.C_CHANGE_REASON #<p class="ellipsis">{items.CHANGE_REASON}</p># ENDIF #
 									# ENDIF #
 								</td#>
 								# IF C_CONTROLS #
@@ -57,7 +57,7 @@
 										# IF items.C_ACTIVE_CONTENT #
 											<span class="small text-italic">{@guide.current.version}</span>
 										# ELSE #
-											# IF C_RESTORE #<a class="offload" href="{items.U_RESTORE}" aria-label="{@guide.restore.item}" data-confirmation="{@guide.restore.confirmation}"><i class="fa fa-fw fa-undo" aria-hidden="true"></i></a># ENDIF #
+											# IF C_RESTORE #<a class="offload" href="{items.U_RESTORE}" aria-label="{@guide.restore.item}" data-confirmation="{@guide.confirm.restore}"><i class="fa fa-fw fa-undo" aria-hidden="true"></i></a># ENDIF #
 											# IF items.C_DELETE #
 												<a href="{items.U_DELETE_CONTENT}" aria-label="{@guide.delete.version}" data-confirmation="delete-element"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a>
 											# ENDIF #

@@ -69,7 +69,7 @@ class GuideCategoryController extends DefaultModuleController
 				);
 
 				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
-				FROM ' . GuideSetup::$guide_items_table . ' i
+				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
@@ -109,13 +109,16 @@ class GuideCategoryController extends DefaultModuleController
 			if ($categories_number_displayed > $subcategories_pagination->get_display_from() && $categories_number_displayed <= ($subcategories_pagination->get_display_from() + $subcategories_pagination->get_number_items_per_page()))
 			{
 				$category_thumbnail = $category->get_thumbnail()->rel();
+				$category_description = FormatingHelper::second_parse($category->get_description());
 
 				$this->view->assign_block_vars('sub_categories_list', array(
-					'C_CATEGORY_THUMBNAIL' => !empty($category_thumbnail),
-					'C_SEVERAL_ITEMS'      => $category->get_elements_number() > 1,
+					'C_CATEGORY_THUMBNAIL' 	 => !empty($category_thumbnail),
+					'C_SEVERAL_ITEMS'      	 => $category->get_elements_number() > 1,
+					'C_CATEGORY_DESCRIPTION' => !empty($category_description),
 
 					'CATEGORY_ID'          => $category->get_id(),
 					'CATEGORY_NAME'        => $category->get_name(),
+					'CATEGORY_DESCRIPTION' => $category_description,
 					'U_CATEGORY_THUMBNAIL' => $category_thumbnail,
 					'ITEMS_NUMBER'         => $category->get_elements_number(),
 					'U_CATEGORY'           => GuideUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
@@ -132,7 +135,7 @@ class GuideCategoryController extends DefaultModuleController
 		$pagination = $this->get_pagination($condition, $parameters, $page, $subcategories_page);
 
 		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
-		FROM ' . GuideSetup::$guide_items_table . ' i
+		FROM ' . GuideSetup::$guide_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id

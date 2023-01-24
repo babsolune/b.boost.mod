@@ -9,7 +9,7 @@
 
 class GuideSetup extends DefaultModuleSetup
 {
-	public static $guide_items_table;
+	public static $guide_table;
 	public static $guide_contents_table;
 	public static $guide_cats_table;
 	public static $guide_favs_table;
@@ -21,7 +21,7 @@ class GuideSetup extends DefaultModuleSetup
 
 	public static function __static()
 	{
-		self::$guide_items_table = PREFIX . 'guide_items';
+		self::$guide_table = PREFIX . 'guide';
 		self::$guide_contents_table = PREFIX . 'guide_contents';
 		self::$guide_cats_table = PREFIX . 'guide_cats';
 		self::$guide_favs_table = PREFIX . 'guide_favs';
@@ -45,7 +45,7 @@ class GuideSetup extends DefaultModuleSetup
 	private function drop_tables()
 	{
 		PersistenceContext::get_dbms_utils()->drop(array(
-			self::$guide_items_table, 
+			self::$guide_table, 
 			self::$guide_contents_table, 
 			self::$guide_cats_table,
 			self::$guide_favs_table
@@ -54,13 +54,13 @@ class GuideSetup extends DefaultModuleSetup
 
 	private function create_tables()
 	{
-		$this->create_guide_items_table();
+		$this->create_guide_table();
 		$this->create_guide_contents_table();
 		$this->create_guide_cats_table();
 		$this->create_guide_favs_table();
 	}
 
-	private function create_guide_items_table()
+	private function create_guide_table()
 	{
 		$fields = array(
 			'id' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
@@ -80,7 +80,7 @@ class GuideSetup extends DefaultModuleSetup
 				'i_order' => array('type' => 'key', 'fields' => 'i_order'),
 			)
 		);
-		PersistenceContext::get_dbms_utils()->create_table(self::$guide_items_table, $fields, $options);
+		PersistenceContext::get_dbms_utils()->create_table(self::$guide_table, $fields, $options);
 	}
 
 	private function create_guide_contents_table()
@@ -134,7 +134,7 @@ class GuideSetup extends DefaultModuleSetup
 	{
 		$this->messages = LangLoader::get('install', 'guide');
 		$this->insert_guide_cats_data();
-		$this->insert_guide_items_data();
+		$this->insert_guide_data();
 		$this->insert_guide_contents_data();
 	}
 
@@ -152,9 +152,9 @@ class GuideSetup extends DefaultModuleSetup
 		));
 	}
 
-	private function insert_guide_items_data()
+	private function insert_guide_data()
 	{
-		PersistenceContext::get_querier()->insert(self::$guide_items_table, array(
+		PersistenceContext::get_querier()->insert(self::$guide_table, array(
 			'id'               		=> 1,
 			'id_category'           => 1,
 			'i_order'               => 1,

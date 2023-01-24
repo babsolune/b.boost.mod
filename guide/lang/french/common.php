@@ -12,7 +12,7 @@
 ####################################################
 
 $lang['guide.module.title'] = 'Guide';
-$lang['guide.menu.title'] = 'Arborescence de la guide';
+$lang['guide.menu.title'] = 'Arborescence du guide';
 
 // TreeLinks
 $lang['item']  = 'fiche';
@@ -25,6 +25,7 @@ $lang['items.reordering'] = 'Réorganisation des fiches';
 $lang['guide.summary'] = 'Table des matières';
 
 // Titles
+$lang['guide.root']             = 'Sans catégorie';
 $lang['guide.add.item']         = 'Ajouter une fiche';
 $lang['guide.edit.item']        = 'Modifier une fiche';
 $lang['guide.my.items']         = 'Mes fiches';
@@ -34,7 +35,7 @@ $lang['guide.filter.items']     = 'Filtrer les fiches';
 $lang['guide.items.management'] = 'Gestion des fiches';
 $lang['guide.item.history']     = 'Historique de la fiche';
 $lang['guide.restore.item']     = 'Restaurer cette version';
-$lang['guide.restore.confirmation'] = 'Êtes-vous sûr de vouloir restaurer cette version ?';
+$lang['guide.confirm.restore']  = 'Êtes-vous sûr de vouloir restaurer cette version ?';
 $lang['guide.history.init']     = 'Initialisation';
 $lang['guide.current.version']  = 'Version courrante';
 $lang['guide.delete.version']   = 'Supprimer cette version';
@@ -81,7 +82,7 @@ $lang['guide.message.success.delete.content'] = 'Le contenu :content de la fiche
 $lang['guide.message.success.restore']        = 'Le contenu :content de la fiche <b>:title</b> a été restauré';
 $lang['guide.message.draft']            = '
     <div class="message-helper bgc warning">
-        L\'édition d\'une fiche la place automatiquement en <b>brouillon</b>. Cela permet plusieurs validations sans en multiplier exécessivement les archives.
+        L\'édition d\'une fiche la place automatiquement en <b>brouillon</b>. Cela permet plusieurs validations sans en multiplier excessivement les archives.
         <br /><br />
         <p>Pensez à modifier le status de publication en fin de travaux !</p>
     </div>

@@ -42,9 +42,9 @@
 			}
 		};
 
-		var GuideItem = function(id, guide_items){
+		var GuideItem = function(id, guide){
 			this.id = id;
-			this.GuideItems = guide_items;
+			this.GuideItems = guide;
 
 			if (GuideItems.items_number > 1)
 				GuideItems.change_reposition_pictures();

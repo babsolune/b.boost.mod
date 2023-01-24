@@ -1,28 +1,4 @@
 <div class="cell-body# IF C_HORIZONTAL # inline-nav# ENDIF #">
-	# IF C_ROOT_ITEMS #
-	<nav id="guide-root-nav" class="guide-mini-nav">
-		<ul class="root-ul">
-			<li class="sub-cat root-category">
-				<span class="swap-handle"></span>
-				<span class="menutree-title offload">
-					<i class="fa fa-fw fa-folder" aria-hidden></i> 
-					<span>{@common.root}</span>
-				</span>
-				<ul>
-					# START root_items #
-						<li>
-							<span class="swap-handle"></span>
-							<a class="menutree-title offload" href="{root_items.U_ITEM}">
-								<i class="far fa-file" aria-hidden="true"></i>
-								<span>{root_items.TITLE}</span>
-							</a>
-						</li>
-					# END root_items #
-				</ul>
-			</li>
-		</ul>
-	</nav>
-	# ENDIF #
 	<nav id="guide-mini-nav" class="guide-mini-nav">
 		<ul>
 			# START categories #
@@ -53,6 +29,30 @@
 			# END categories #
 		</ul>
 	</nav>
+	# IF C_ROOT_ITEMS #
+		<nav id="guide-root-nav" class="guide-mini-nav">
+			<ul class="root-ul">
+				<li class="sub-cat root-category">
+					<span class="swap-handle"></span>
+					<span class="menutree-title offload">
+						<i class="fa fa-house-flag" aria-hidden></i> 
+						<span>{@guide.root}</span>
+					</span>
+					<ul>
+						# START root_items #
+							<li>
+								<span class="swap-handle"></span>
+								<a class="menutree-title offload" href="{root_items.U_ITEM}">
+									<i class="far fa-file" aria-hidden="true"></i>
+									<span>{root_items.TITLE}</span>
+								</a>
+							</li>
+						# END root_items #
+					</ul>
+				</li>
+			</ul>
+		</nav>
+	# ENDIF #
 </div>
 <script src="{PATH_TO_ROOT}/guide/templates/js/guide.mini# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
 <script src="{PATH_TO_ROOT}/guide/templates/js/guide.menu# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
