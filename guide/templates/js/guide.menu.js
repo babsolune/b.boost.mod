@@ -104,3 +104,26 @@
         });
     };
 })(jQuery);
+
+jQuery(document).ready(function () {
+    jQuery('#guide-mini-nav').append(GuideMiniCreateChild(0)).find('ul:first').remove();
+
+	function GuideMiniCreateChild(id){
+		var $li = jQuery('li[data-guide-parent-id="' + id + '"]').sort(function(a, b){
+			return jQuery(a).attr('data-guide-order-id') - jQuery(b).attr('data-guide-order-id');
+		});
+		if($li.length > 0){
+			for(var i = 0; i < $li.length; i++){
+				var $this = $li.eq(i);
+                $this.append(GuideMiniCreateChild($this.attr('data-guide-id')));
+			}
+            return jQuery('<ul class="level-' + id + '">').append($li);
+		}
+    }
+
+    jQuery('#guide-mini-nav .items-list li').each(function() {
+        var target = jQuery(this).parent().siblings('[class^="level-"]');
+        if(target)
+            target.prepend(jQuery(this));
+    });
+});

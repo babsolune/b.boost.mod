@@ -6,7 +6,7 @@
  * @since       PHPBoost 6.0 - 2022 11 18
 */
 
-// Menu constructor
+// Summary menu constructor
 let title = jQuery('.content .formatter-title:not(span)');
 if (title.length == 0)
 {
@@ -36,7 +36,7 @@ jQuery('.summary-title').on('click', function () {
     return false;
 });
 
-// Send summary to side columns
+// Send summary menu to side columns
 function sendSummaryMenu()
 {
     let left = jQuery('#menu-left');
@@ -67,16 +67,16 @@ if (window.matchMedia("(min-width: 769px)").matches) {
 
 // Home page (root)
 jQuery(document).ready(function () {
-    jQuery('#category-nav').append(CreateChild(0)).find('ul:first').remove();
-    
-    function CreateChild(id) {
+    jQuery('#category-nav').append(GuideCreateChild(0)).find('ul:first').remove();
+
+    function GuideCreateChild(id) {
         var $li = jQuery('li[data_p_id="' + id + '"]').sort(function (a, b) {
             return jQuery(a).attr('data_order_id') - jQuery(b).attr('data_order_id');
         });
         if ($li.length > 0) {
             for (var i = 0; i < $li.length; i++) {
                 var $this = $li.eq(i);
-                $this.append(CreateChild($this.attr('data_id')));
+                $this.append(GuideCreateChild($this.attr('data_id')));
             }
             return jQuery('<ul class="items-list-' + id + '">').append($li);
         }
