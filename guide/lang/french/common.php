@@ -13,6 +13,7 @@
 
 $lang['guide.module.title'] = 'Guide';
 $lang['guide.menu.title'] = 'Arborescence du guide';
+$lang['guide.explorer'] = 'Explorateur';
 
 // TreeLinks
 $lang['item']  = 'fiche';

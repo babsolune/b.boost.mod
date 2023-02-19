@@ -144,7 +144,7 @@ class GuideItemController extends DefaultModuleController
 		$item = $this->get_item();
 
 		$current_user = AppContext::get_current_user();
-		$not_authorized = !GuideAuthorizationsService::check_authorizations($item->get_id_category())->moderation() && !GuideAuthorizationsService::check_authorizations($item->get_id_category())->write() && (!GuideAuthorizationsService::check_authorizations($item->get_id_category())->contribution() || $item->get_item_content()->get_author_user()->get_id() != $current_user->get_id());
+		$not_authorized = !GuideAuthorizationsService::check_authorizations($item->get_id_category())->moderation() && !GuideAuthorizationsService::check_authorizations($item->get_id_category())->write() && (!GuideAuthorizationsService::check_authorizations($item->get_id_category())->contribution() || $item->get_author_user()->get_id() != $current_user->get_id());
 
 		switch ($item->get_publishing_state()) {
 			case GuideItem::PUBLISHED:
@@ -200,7 +200,7 @@ class GuideItemController extends DefaultModuleController
 				$breadcrumb->add($category->get_name(), GuideUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
 		}
 		$breadcrumb->add($item_content->get_title(), GuideUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()));
-		
+
 		return $response;
 	}
 }

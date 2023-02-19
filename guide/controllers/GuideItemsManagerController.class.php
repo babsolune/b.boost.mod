@@ -32,7 +32,7 @@ class GuideItemsManagerController extends DefaultModuleController
 			new HTMLTableColumn($this->lang['category.category'], 'id_category'),
 			new HTMLTableColumn($this->lang['common.author'], 'display_name'),
 			new HTMLTableColumn($this->lang['common.creation.date'], 'creation_date'),
-			new HTMLTableColumn($this->lang['common.status.publication'], 'published'),
+			new HTMLTableColumn($this->lang['common.status'], 'published'),
 			new HTMLTableColumn($this->lang['common.actions'], '', array('sr-only' => true))
 		);
 
@@ -64,7 +64,7 @@ class GuideItemsManagerController extends DefaultModuleController
 			LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 			LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 			LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = ' . AppContext::get_current_user()->get_id() . '
-			LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id',
+			LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id',
 			array('*', 'i.id')
 		);
 		foreach ($result as $row)
@@ -72,7 +72,7 @@ class GuideItemsManagerController extends DefaultModuleController
 			$item = new GuideItem();
 			$item->set_properties($row);
 			$category = $item->get_category();
-			$user = $item->get_item_content()->get_author_user();
+			$user = $item->get_author_user();
 
 			$this->elements_number++;
 			$this->ids[$this->elements_number] = $item->get_id();

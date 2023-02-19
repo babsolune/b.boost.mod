@@ -72,7 +72,7 @@ class GuideCategoryController extends DefaultModuleController
 				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
+				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
 				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 				LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
@@ -126,7 +126,7 @@ class GuideCategoryController extends DefaultModuleController
 			}
 		}
 
-		$condition = '';
+		$condition = 'WHERE id_category = :id_category';
 		$parameters = array(
 			'id_category' => $this->get_category()->get_id(),
 			'timestamp_now' => $now->get_timestamp()
@@ -138,11 +138,11 @@ class GuideCategoryController extends DefaultModuleController
 		FROM ' . GuideSetup::$guide_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
+		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
 		LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
-		WHERE id_category = :id_category
+		' . $condition . '
 		AND c.active_content = 1
 		AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
 		ORDER BY i.i_order
@@ -328,6 +328,15 @@ class GuideCategoryController extends DefaultModuleController
 		}
 
 		return $response;
+	}
+
+	public static function get_view()
+	{
+		$object = new self('guide');
+		$object->init();
+		$object->check_authorizations();
+		$object->build_view(AppContext::get_request());
+		return $object->view;
 	}
 }
 ?>

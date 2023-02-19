@@ -188,7 +188,7 @@ class GuideConfig extends AbstractConfigData
 			self::NB_VIEW_ENABLED                       => false,
 			self::ROOT_CATEGORY_DESCRIPTION             => LangLoader::get_message('default.root.description', 'install', 'guide'),
 			self::AUTO_CUT_CHARACTERS_NUMBER            => 128,
-			self::AUTHORIZATIONS                        => array('r-1' => 33, 'r0' => 37, 'r1' => 61),
+			self::AUTHORIZATIONS                        => array('r-1' => 1, 'r0' => 39, 'r1' => 63),
 			self::DEFERRED_OPERATIONS                   => array()
 		);
 	}

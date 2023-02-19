@@ -15,6 +15,7 @@ class GuideTreeLinks extends DefaultTreeLinks
 		$current_user = AppContext::get_current_user()->get_id();
 
 		$tree->add_link(new ModuleLink(LangLoader::get_message('guide.my.items', 'common', $module_id), GuideUrlBuilder::display_member_items($current_user), GuideAuthorizationsService::check_authorizations()->write() || GuideAuthorizationsService::check_authorizations()->contribution() || GuideAuthorizationsService::check_authorizations()->moderation()));
+		$tree->add_link(new ModuleLink(LangLoader::get_message('guide.explorer', 'common', $module_id), GuideUrlBuilder::explorer()));
 	}
 }
 ?>

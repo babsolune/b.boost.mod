@@ -113,7 +113,7 @@ class GuideItemFormController extends DefaultModuleController
 				)
 			)
 		));
-		
+
 		$options_fieldset->add_field(new FormFieldRichTextEditor('custom_level', $this->lang['guide.level.custom.content'], $item_content->get_custom_level(),
 			array('hidden' => $item_content->get_content_level() != GuideItemContent::CUSTOM_LEVEL)
 		));
@@ -199,7 +199,7 @@ class GuideItemFormController extends DefaultModuleController
 		$this->build_contribution_fieldset($form);
 
 		$fieldset->add_field(new FormFieldHidden('referrer', $request->get_url_referrer()));
-
+		
 		$this->submit_button = new FormButtonDefaultSubmit();
 		$form->add_button($this->submit_button);
 		$form->add_button(new FormButtonReset());
@@ -296,6 +296,8 @@ class GuideItemFormController extends DefaultModuleController
 		$item = $this->get_item();
 		$item_content = $item->get_item_content();
 
+		$item_content->set_contributor_user(new User(AppContext::get_current_user()->get_id()));
+
 		if ($item->get_i_order() === null) {
 			$items_number_in_category = GuideService::count('WHERE id_category = :id_category', array('id_category' => $this->get_item()->get_id_category()));
 			$item->set_i_order($items_number_in_category + 1);
@@ -307,6 +309,8 @@ class GuideItemFormController extends DefaultModuleController
 		if (CategoriesService::get_categories_manager()->get_categories_cache()->has_categories())
 			$item->set_id_category($this->form->get_value('id_category')->get_raw_value());
 
+		$item_content->set_contributor_user(new User(AppContext::get_current_user()->get_id()));
+
 		$item_content->set_content($this->form->get_value('content'));
 		$item_content->set_change_reason($this->form->get_value('change_reason'));
 		$item_content->set_summary(($this->form->get_value('summary_enabled') ? $this->form->get_value('summary') : ''));
@@ -317,7 +321,7 @@ class GuideItemFormController extends DefaultModuleController
 			$item_content->set_custom_level($this->form->get_value('custom_level'));
 
 		if ($this->config->is_author_displayed())
-			$item_content->set_author_custom_name(($this->form->get_value('author_custom_name') && $this->form->get_value('author_custom_name') !== $item_content->get_author_user()->get_display_name() ? $this->form->get_value('author_custom_name') : ''));
+			$item_content->set_author_custom_name(($this->form->get_value('author_custom_name') && ($this->form->get_value('author_custom_name') !== $item->get_author_user()->get_display_name()) ? $this->form->get_value('author_custom_name') : ''));
 
 		$item_content->set_sources($this->form->get_value('sources'));
 
@@ -379,7 +383,7 @@ class GuideItemFormController extends DefaultModuleController
 		}
 
 		if ($this->is_new_item) {
-			$item_content->set_update_date($this->form->get_value('creation_date'));
+			// $item_content->set_update_date($this->form->get_value('creation_date'));
 			$items_number_in_category = GuideService::count('WHERE id_category = :id_category', array('id_category' => $item->get_id_category()));
 			$item->set_i_order($items_number_in_category + 1);
 

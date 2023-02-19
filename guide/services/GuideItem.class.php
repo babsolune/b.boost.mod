@@ -20,6 +20,7 @@ class GuideItem
 	private $publishing_end_date;
 	private $end_date_enabled;
 	private $creation_date;
+	private $author_user;
 
 	private $views_number;
 	private $notation;
@@ -158,6 +159,16 @@ class GuideItem
 		return $this->item_content->get_update_date() !== null && $this->item_content->get_update_date() > $this->creation_date;
 	}
 
+	public function get_author_user()
+	{
+		return $this->author_user;
+	}
+
+	public function set_author_user(User $user)
+	{
+		$this->author_user = $user;
+	}
+
 	public function set_views_number($views_number)
 	{
 		$this->views_number = $views_number;
@@ -194,27 +205,31 @@ class GuideItem
 
 	public function is_authorized_to_manage_history()
 	{
-		// return GuideAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((GuideAuthorizationsService::check_authorizations($this->id_category)->write() || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution() && !GuideItem::is_published())) && $this->item_content->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
+		// return GuideAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((GuideAuthorizationsService::check_authorizations($this->id_category)->write() || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution() && !GuideItem::is_published())) && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
 	}
 
 	public function is_authorized_to_add()
 	{
-		return GuideAuthorizationsService::check_authorizations($this->id_category)->write() || GuideAuthorizationsService::check_authorizations($this->id_category)->contribution();
+		return GuideAuthorizationsService::check_authorizations(
+			$this->id_category)->write() || GuideAuthorizationsService::check_authorizations($this->id_category)->contribution();
 	}
 
 	public function is_authorized_to_edit()
 	{
-		return GuideAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((GuideAuthorizationsService::check_authorizations($this->id_category)->write() || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution())) && $this->item_content->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
+		return GuideAuthorizationsService::check_authorizations(
+			$this->id_category)->moderation() || ((GuideAuthorizationsService::check_authorizations($this->id_category)->write() || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution())) && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
 	}
 
 	public function is_authorized_to_delete()
 	{
-		return GuideAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((GuideAuthorizationsService::check_authorizations($this->id_category)->write() || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution() && !$this->is_published())) && $this->item_content->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
+		return GuideAuthorizationsService::check_authorizations(
+			$this->id_category)->moderation() || ((GuideAuthorizationsService::check_authorizations($this->id_category)->write() || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution() && !$this->is_published())) && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
 	}
 
 	public function is_authorized_to_restore()
 	{
-		return GuideAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((GuideAuthorizationsService::check_authorizations($this->id_category)->write() || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution() && !$this->is_published())) && $this->item_content->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
+		return GuideAuthorizationsService::check_authorizations(
+			$this->id_category)->moderation() || ((GuideAuthorizationsService::check_authorizations($this->id_category)->write() || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution() && !$this->is_published())) && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
 	}
 
 	public function get_properties()
@@ -228,6 +243,7 @@ class GuideItem
 			'publishing_start_date' => $this->get_publishing_start_date() !== null ? $this->get_publishing_start_date()->get_timestamp() : 0,
 			'publishing_end_date' => $this->get_publishing_end_date() !== null ? $this->get_publishing_end_date()->get_timestamp() : 0,
 			'creation_date' => $this->get_creation_date()->get_timestamp(),
+			'author_user_id' => $this->get_author_user()->get_id(),
 			'views_number' => $this->get_views_number(),
 		);
 	}
@@ -249,6 +265,14 @@ class GuideItem
 		$this->end_date_enabled = !empty($properties['publishing_end_date']);
 		$this->creation_date = new Date($properties['creation_date'], Timezone::SERVER_TIMEZONE);
 
+		$user = new User();
+		if (!empty($properties['user_id']))
+			$user->set_properties($properties);
+		else
+			$user->init_visitor_user();
+
+		$this->set_author_user($user);
+
 		$notation = new Notation();
 		$notation->set_module_name('guide');
 		$notation->set_id_in_module($properties['id']);
@@ -267,6 +291,7 @@ class GuideItem
 		$this->views_number = 0;
 		$this->end_date_enabled = false;
 		$this->creation_date = new Date();
+		$this->author_user = AppContext::get_current_user();
 	}
 
 	public function clean_publishing_start_and_end_date()
@@ -294,8 +319,10 @@ class GuideItem
 		$content = FormatingHelper::second_parse($this->item_content->get_content());
 		$rich_content = HooksService::execute_hook_display_action('guide', $content, $this->get_properties());
 		$real_summary = $this->item_content->get_real_summary();
-		$user = $this->item_content->get_author_user();
+		$user = $this->author_user;
+		$contributor_user = $this->item_content->get_contributor_user();
 		$user_group_color = User::get_group_color($user->get_groups(), $user->get_level(), true);
+		$contributor_user_group_color = User::get_group_color($contributor_user->get_groups(), $contributor_user->get_level(), true);
 		$comments_number = CommentsService::get_comments_number('guide', $this->id);
 		$sources = $this->item_content->get_sources();
 		$nbr_sources = count($sources);
@@ -317,6 +344,7 @@ class GuideItem
 				'C_AUTHOR_CUSTOM_NAME'   => $this->item_content->is_author_custom_name_enabled(),
 				'C_ENABLED_VIEWS_NUMBER' => $config->get_enabled_views_number(),
 				'C_AUTHOR_GROUP_COLOR'   => !empty($user_group_color),
+				'C_CONTRIBUTOR_GROUP_COLOR'   => !empty($contributor_user_group_color),
 				'C_HAS_UPDATE_DATE'      => $this->has_update_date(),
 				'C_SOURCES'              => $nbr_sources > 0,
 				'C_DIFFERED'             => $this->published == self::DEFERRED_PUBLICATION,
@@ -333,9 +361,13 @@ class GuideItem
 				'STATUS'              => $this->get_publishing_state(),
 				'AUTHOR_CUSTOM_NAME'  => $this->item_content->get_author_custom_name(),
 				'C_AUTHOR_EXISTS'     => $user->get_id() !== User::VISITOR_LEVEL,
+				'C_CONTRIBUTOR_EXISTS'     => $contributor_user->get_id() !== User::VISITOR_LEVEL,
 				'AUTHOR_DISPLAY_NAME' => $user->get_display_name(),
 				'AUTHOR_LEVEL_CLASS'  => UserService::get_level_class($user->get_level()),
 				'AUTHOR_GROUP_COLOR'  => $user_group_color,
+				'CONTRIBUTOR_DISPLAY_NAME' => $contributor_user->get_display_name(),
+				'CONTRIBUTOR_LEVEL_CLASS'  => UserService::get_level_class($contributor_user->get_level()),
+				'CONTRIBUTOR_GROUP_COLOR'  => $contributor_user_group_color,
 				'VIEWS_NUMBER'        => $this->get_views_number(),
 				'STATIC_NOTATION'     => NotationService::display_static_image($this->get_notation()),
 				'NOTATION'            => NotationService::display_active_image($this->get_notation()),
@@ -355,7 +387,8 @@ class GuideItem
 
 				// Links
 				'U_SYNDICATION'    => SyndicationUrlBuilder::rss('guide', $this->id_category)->rel(),
-				'U_AUTHOR_PROFILE' => UserUrlBuilder::profile($this->item_content->get_author_user()->get_id())->rel(),
+				'U_AUTHOR_PROFILE' => UserUrlBuilder::profile($this->author_user->get_id())->rel(),
+				'U_CONTRIBUTOR_PROFILE' => UserUrlBuilder::profile($this->item_content->get_contributor_user()->get_id())->rel(),
 				'U_ITEM'           => $this->get_item_url(),
 				'U_HISTORY'        => GuideUrlBuilder::history($this->id)->rel(),
 				'U_EDIT'           => GuideUrlBuilder::edit($this->id)->rel(),

@@ -40,7 +40,7 @@
                             // add .open to all parents li
                             jQuery(this)
                                 .parents('.has-sub')
-                                .addClass('open');  
+                                .addClass('open');
                             // add .active to all parents item
                             jQuery(this)
                                 .parents('.has-sub')

@@ -11,7 +11,7 @@ class GuideExtensionPointProvider extends ItemsModuleExtensionPointProvider
 {
 	public function home_page()
 	{
-		return new DefaultHomePageDisplay($this->get_id(), GuideHomeController::get_view());
+		return new DefaultHomePageDisplay($this->get_id(), GuideCategoryController::get_view());
 	}
 
 	public function user()

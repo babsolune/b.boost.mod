@@ -12,36 +12,29 @@
 			{@guide.module.title}
 		</h1>
 	</header>
-	# IF C_ROOT_CATEGORY_DESCRIPTION #
-		<div class="sub-section">
-			<div class="content-container">
-				<div class="cat-description">
-					{ROOT_CATEGORY_DESCRIPTION}
-				</div>
-			</div>
-		</div>
-	# ENDIF #
     <div class="sub-section">
         <div class="content-container">
-            <ul class="root-ul">
-                # IF C_ROOT_CONTROLS #
-                    # IF C_SEVERAL_ROOT_ITEMS #
-                        <a class="offload reorder-items" href="{U_REORDER_ROOT_ITEMS}" aria-label="{@items.reorder}"><i class="fa fa-fw fa-exchange-alt"></i></a>
+            # IF C_ROOT_ITEMS #
+                <ul class="root-ul">
+                    # IF C_ROOT_CONTROLS #
+                        # IF C_SEVERAL_ROOT_ITEMS #
+                            <a class="offload reorder-items" href="{U_REORDER_ROOT_ITEMS}" aria-label="{@items.reorder}"><i class="fa fa-fw fa-exchange-alt"></i></a>
+                        # ENDIF #
                     # ENDIF #
-                # ENDIF #
-                # START root_items #
-                    <li class="flex-between">
-                        <a class="d-block categories-item offload" href="{root_items.U_ITEM}"><i class="fa fa-fw fa-file-alt"></i> {root_items.TITLE}</a>
-                        <div class="controls">
-                            <a href="{root_items.U_ITEM}" aria-label="<h5>{root_items.TITLE}</h5>{root_items.SUMMARY}"><i class="fa fa-eye"></i></a>
-                            # IF root_items.C_CONTROLS #
-                                # IF root_items.C_EDIT #<a class="offload" href="{root_items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
-                                # IF root_items.C_DELETE #<a href="{root_items.U_DELETE}" data-confirmation="delete-element" aria-label="{@common.delete}" id="delete-{root_items.ID}"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
-                            # ENDIF #
-                        </div>
-                    </li>
-                # END root_items #
-            </ul>
+                    # START root_items #
+                        <li class="flex-between">
+                            <a class="d-block categories-item offload" href="{root_items.U_ITEM}"><i class="fa fa-fw fa-file-alt"></i> {root_items.TITLE}</a>
+                            <div class="controls">
+                                <a href="{root_items.U_ITEM}" aria-label="<h5>{root_items.TITLE}</h5>{root_items.SUMMARY}"><i class="fa fa-eye"></i></a>
+                                # IF root_items.C_CONTROLS #
+                                    # IF root_items.C_EDIT #<a class="offload" href="{root_items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
+                                    # IF root_items.C_DELETE #<a href="{root_items.U_DELETE}" data-confirmation="delete-element" aria-label="{@common.delete}" id="delete-{root_items.ID}"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
+                                # ENDIF #
+                            </div>
+                        </li>
+                    # END root_items #
+                </ul>
+            # ENDIF #
             <nav id="category-nav" class="nav-items-list">
                 <ul>
                     # START categories #

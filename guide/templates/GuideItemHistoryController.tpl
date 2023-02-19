@@ -34,16 +34,16 @@
 							<tr class="category-{items.CATEGORY_ID}# IF items.C_ACTIVE_CONTENT # active-content# ENDIF #">
 								<td>
 								# IF items.C_ACTIVE_CONTENT #
-									<a href="{items.U_ITEM}" itemprop="name" class="offload">{@guide.archived.item}</a>
+									<a class="offload" href="{items.U_ITEM}" itemprop="name">{@guide.archived.item}</a>
 								# ELSE #
-									<a href="{items.U_ARCHIVE}" itemprop="name" class="offload">{@guide.archived.item}</a>
+									<a class="offload" href="{items.U_ARCHIVE}" itemprop="name">{@guide.archived.item}</a>
 								# ENDIF #
 								</td>
 								<td>
 									<time datetime="{items.DATE_ISO8601}" itemprop="datePublished">{items.UPDATE_DATE_FULL}</time>
 								</td>
 								<td>
-									{items.AUTHOR_DISPLAY_NAME}
+									{items.CONTRIBUTOR_DISPLAY_NAME}
 								</td>
 								<td# IF NOT items.C_INIT ## IF items.C_CHANGE_REASON # aria-label="{items.CHANGE_REASON}"# ENDIF ## ENDIF #>
 									# IF items.C_INIT #

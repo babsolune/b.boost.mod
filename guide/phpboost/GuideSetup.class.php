@@ -67,6 +67,7 @@ class GuideSetup extends DefaultModuleSetup
 			'id_category' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'i_order' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'rewrited_title' => array('type' => 'string', 'length' => 255, 'default' => "''"),
+			'author_user_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'published' => array('type' => 'integer', 'length' => 1, 'notnull' => 1, 'default' => 0),
 			'publishing_start_date' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'publishing_end_date' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
@@ -93,10 +94,10 @@ class GuideSetup extends DefaultModuleSetup
 			'active_content' => array('type' => 'boolean', 'length' => 1, 'notnull' => 1, 'default' => 0),
 			'content' => array('type' => 'text', 'length' => 16777215),
 			'thumbnail' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
-			'author_user_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
+			'contributor_user_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'author_custom_name' => array('type' =>  'string', 'length' => 255, 'default' => "''"),
-			'update_date' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
-			'change_reason' => array('type' => 'text', 'length' => 100, 'notnull' => 0),
+			'update_date' => array('type' => 'integer', 'length' => 11, 'default' => 0),
+			'change_reason' => array('type' => 'text', 'length' => 65000, 'notnull' => 0),
 			'content_level' => array('type' => 'integer', 'length' => 1, 'default' => 0),
 			'custom_level' => array('type' => 'text', 'length' => 65000),
 			'sources' => array('type' => 'text', 'length' => 65000)
@@ -163,6 +164,7 @@ class GuideSetup extends DefaultModuleSetup
 			'publishing_start_date' => 0,
 			'publishing_end_date'   => 0,
 			'creation_date'  	    => time(),
+			'author_user_id' 	 	=> 1,
 			'views_number'          => 0
 		));
 	}
@@ -170,19 +172,19 @@ class GuideSetup extends DefaultModuleSetup
 	private function insert_guide_contents_data()
 	{
 		PersistenceContext::get_querier()->insert(self::$guide_contents_table, array(
-			'content_id'     	 => 1,
-			'item_id'        	 => 1,
-			'title'                 => $this->messages['default.sheet.name'],
-			'active_content'     => 1,
-			'summary'        	    => '',
-			'author_custom_name' 	=> '',
-			'thumbnail'             => FormFieldThumbnail::DEFAULT_VALUE,
-			'content'        	 => $this->messages['default.sheet.content'],
-			'content_level'    		=> GuideItemContent::NO_LEVEL,
-			'sources'               => TextHelper::serialize(array()),
-			'change_reason'    	 => '',
-			'author_user_id' 	 => 1,
-			'update_date'    	 => time()
+			'content_id'     	  => 1,
+			'item_id'        	  => 1,
+			'title'               => $this->messages['default.sheet.name'],
+			'active_content'      => 1,
+			'summary'        	  => '',
+			'author_custom_name'  => '',
+			'thumbnail'           => FormFieldThumbnail::DEFAULT_VALUE,
+			'content'        	  => $this->messages['default.sheet.content'],
+			'content_level'    	  => GuideItemContent::NO_LEVEL,
+			'sources'             => TextHelper::serialize(array()),
+			'change_reason'    	  => '',
+			'contributor_user_id' => 1,
+			'update_date'    	  => time()
 		));
 	}
 }

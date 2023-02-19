@@ -7,13 +7,13 @@
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
-class GuideHomeController extends DefaultModuleController
+class GuideExplorerController extends DefaultModuleController
 {
 	private $category;
 
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('guide/GuideHomeController.tpl');
+		return new FileTemplate('guide/GuideExplorerController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
@@ -35,18 +35,12 @@ class GuideHomeController extends DefaultModuleController
 		{
 			if ($id == Category::ROOT_CATEGORY)
 			{
-				$condition = 'WHERE id_category = :id_category
-					AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))';
-				$parameters = array(
-					'timestamp_now' => $now->get_timestamp(),
-					'id_category' => $category->get_id()
-				);
-
 				$root_description = FormatingHelper::second_parse($this->config->get_root_category_description());
 				$this->view->put_all(array(
 					'C_ROOT_CONTROLS'             => GuideAuthorizationsService::check_authorizations($id)->moderation(),
-					'C_SEVERAL_ROOT_ITEMS'        => GuideService::count($condition, $parameters) > 1,
 					'C_ROOT_CATEGORY_DESCRIPTION' => !empty($root_description),
+					'C_ROOT_ITEMS' => $category->get_elements_number() > 0,
+					'C_SEVERAL_ROOT_ITEMS' => $category->get_elements_number() > 1,
 
 					'ROOT_CATEGORY_DESCRIPTION' => $root_description,
 
@@ -57,14 +51,18 @@ class GuideHomeController extends DefaultModuleController
 				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
+				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
 				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 				LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
-				' . $condition . '
-				ORDER BY i.i_order', array_merge($parameters, array(
-					'user_id' => AppContext::get_current_user()->get_id()
-				)));
+				WHERE i.id_category = :id_category
+				AND c.active_content = 1
+				AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
+                ORDER BY i.i_order', array(
+					'user_id' => AppContext::get_current_user()->get_id(),
+					'timestamp_now' => $now->get_timestamp(),
+					'id_category' => $category->get_id()
+				));
 
 				while ($row = $result->fetch()) {
 					$item = new GuideItem();
@@ -82,20 +80,23 @@ class GuideHomeController extends DefaultModuleController
                     'C_CONTROLS'         => GuideAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
 					'C_ITEMS'            => $category_elements_number > 0,
 					'C_SEVERAL_ITEMS'    => $category_elements_number > 1,
+                    'C_CATEGORY_THUMBNAIL' => !empty($category->get_thumbnail()),
 					'ITEMS_NUMBER'       => $category->get_elements_number(),
 					'CATEGORY_ID'        => $category->get_id(),
 					'CATEGORY_SUB_ORDER' => $category->get_order(),
 					'CATEGORY_PARENT_ID' => $category->get_id_parent(),
 					'CATEGORY_NAME'      => $category->get_name(),
-					'U_CATEGORY'         => GuideUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name(), self::$module_id)->rel(),
-					'U_REORDER_ITEMS'    => GuideUrlBuilder::reorder_items($category->get_id(), $category->get_rewrited_name())->rel()
+
+                    'U_CATEGORY_THUMBNAIL' => $category->get_thumbnail()->rel(),
+					'U_CATEGORY'           => GuideUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name(), self::$module_id)->rel(),
+					'U_REORDER_ITEMS'      => GuideUrlBuilder::reorder_items($category->get_id(), $category->get_rewrited_name())->rel()
 				));
 
 				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
 				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
+				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
 				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 				LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
@@ -179,14 +180,6 @@ class GuideHomeController extends DefaultModuleController
 		}
 
 		return $response;
-	}
-
-	public static function get_view()
-	{
-		$object = new self('guide');
-		$object->check_authorizations();
-		$object->build_view(AppContext::get_request());
-		return $object->view;
 	}
 }
 ?>

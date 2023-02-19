@@ -148,6 +148,14 @@ class GuideUrlBuilder
 	/**
 	 * @return Url
 	 */
+	public static function explorer()
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/explorer/');
+	}
+
+	/**
+	 * @return Url
+	 */
 	public static function home()
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/');

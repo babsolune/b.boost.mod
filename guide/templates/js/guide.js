@@ -24,6 +24,25 @@ title.each(function () {
     if (jQuery(this).is('h5')) padding = '3.618em';
     if (jQuery(this).is('h6')) padding = '4.618em';
     jQuery('#summary-list').append(jQuery('<li><a class="summary-title" href="#' + rewrited + '" style="padding-left: ' + padding + '">' + hyphen + '<span class="inner-title">' + innerhtml + '</span></a></li>'));
+
+    let anchor = jQuery('<a href="' + window.location.href + '#' + rewrited + '" class="smaller copy-link-to-clipboard" aria-label="' + ARIA_TO_CLIPBOARD + '"><i class="fa fa-fw fa-hashtag" aria-hidden="true"></i></a>');
+    jQuery(this).prepend(anchor);
+});
+
+document.querySelectorAll('.copy-link-to-clipboard').forEach( el => {
+    el.addEventListener('click', event => {
+        event.preventDefault();
+
+        var hrefValue = el.getAttribute('href');
+
+        document.addEventListener('copy', function(e) {
+            e.clipboardData.setData('text/plain', hrefValue);
+            e.preventDefault();
+        }, true);
+
+        document.execCommand('copy');
+        alert(COPIED_TO_CLIPBOARD +'\n' + hrefValue);
+    });
 });
 
 // smoth scroll

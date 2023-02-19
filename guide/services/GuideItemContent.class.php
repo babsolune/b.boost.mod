@@ -23,7 +23,7 @@ class GuideItemContent
 
 	private $update_date;
 
-	private $author_user;
+	private $contributor_user;
 	private $author_custom_name;
 	private $author_custom_name_enabled;
 
@@ -152,14 +152,14 @@ class GuideItemContent
 		$this->update_date = $update_date;
 	}
 
-	public function get_author_user()
+	public function get_contributor_user()
 	{
-		return $this->author_user;
+		return $this->contributor_user;
 	}
 
-	public function set_author_user(User $user)
+	public function set_contributor_user(User $user)
 	{
-		$this->author_user = $user;
+		$this->contributor_user = $user;
 	}
 
 	public function get_author_custom_name()
@@ -228,7 +228,7 @@ class GuideItemContent
 			'active_content' => $this->get_active_content(),
 			'change_reason' => $this->get_change_reason(),
 			'update_date' => $this->get_update_date()->get_timestamp(),
-			'author_user_id' => $this->get_author_user()->get_id(),
+			'contributor_user_id' => $this->get_contributor_user()->get_id(),
 			'author_custom_name' => $this->get_author_custom_name(),
 			'thumbnail' => $this->get_thumbnail()->relative(),
 			'content_level' => $this->get_content_level(),
@@ -252,14 +252,14 @@ class GuideItemContent
 		$this->custom_level = $properties['custom_level'];
 		$this->sources = !empty($properties['sources']) ? TextHelper::unserialize($properties['sources']) : array();
 
-		$user = new User();
+		$user = new User($properties['contributor_user_id']);
 		if (!empty($properties['user_id']))
 			$user->set_properties($properties);
 		else
 			$user->init_visitor_user();
 
-		$this->set_author_user($user);
-		$this->author_custom_name = !empty($properties['author_custom_name']) ? $properties['author_custom_name'] : $this->author_user->get_display_name();
+		$this->set_contributor_user(new User($properties['contributor_user_id']));
+		$this->author_custom_name = !empty($properties['author_custom_name']) ? $properties['author_custom_name'] : '';
 		$this->author_custom_name_enabled = !empty($properties['author_custom_name']);
 	}
 
@@ -267,7 +267,7 @@ class GuideItemContent
 	{
         $this->content = GuideConfig::load()->get_default_content();
 		$this->active_content = true;
-		$this->author_user = AppContext::get_current_user();
+		$this->contributor_user = AppContext::get_current_user();
 		$this->thumbnail_url = FormFieldThumbnail::DEFAULT_VALUE;
 		$this->update_date = new Date();
 		$this->author_custom_name = AppContext::get_current_user()->get_display_name();

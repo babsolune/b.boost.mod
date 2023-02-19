@@ -103,9 +103,9 @@ $lang['default.root.description'] = '
     <p>Bienvenue dans le module Guide du site.</p>
     Une catégorie et une fiche ont été créées pour vous montrer comment fonctionne ce module. Voici quelques conseils pour bien débuter sur ce module.
     <ul class="formatter-ul">
-        <li class="formatter-li">Pour configurer ou personnaliserl\'accueil de votre module, rendez-vous dans  <a class="offload" href="' . GuideUrlBuilder::configuration()->relative() . '">l\'administration du module</a></li>
-        <li class="formatter-li">Pour créer des catégories, <a class="offload" href="' . CategoriesUrlBuilder::add(Category::ROOT_CATEGORY, 'guide')->relative() . '">cliquez ici</li>
-        <li class="formatter-li">Pour ajouter des fiches, <a class="offload" href="' . GuideUrlBuilder::add()->relative() . '">cliquez ici</li>
+        <li class="formatter-li">Pour configurer ou personnaliser l\'accueil de votre module, rendez-vous dans  <a class="offload" href="' . GuideUrlBuilder::configuration()->relative() . '">l\'administration du module</a></li>
+        <li class="formatter-li">Pour créer des catégories, <a class="offload" href="' . CategoriesUrlBuilder::add(Category::ROOT_CATEGORY, 'guide')->relative() . '">cliquez ici</a></li>
+        <li class="formatter-li">Pour ajouter des fiches, <a class="offload" href="' . GuideUrlBuilder::add()->relative() . '">cliquez ici</a></li>
     </ul>
     Pour en savoir plus, n\'hésitez pas à consulter la documentation du module sur le site de <a class="offload" href="https://www.phpboost.com">PHPBoost</a>. 
 ';

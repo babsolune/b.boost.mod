@@ -42,7 +42,6 @@ class GuideModuleMiniMenu extends ModuleMiniMenu
 		Menu::assign_common_template_variables($view);
 		$now = new Date();
 
-        
 		$categories = CategoriesService::get_categories_manager('guide')->get_categories_cache()->get_categories();
 		$authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, true, 'guide');
 
@@ -50,27 +49,25 @@ class GuideModuleMiniMenu extends ModuleMiniMenu
 		{
 			if ($id == Category::ROOT_CATEGORY)
 			{
-				$condition = 'WHERE id_category = 0
-					AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))';
-				$parameters = array(
-					'timestamp_now' => $now->get_timestamp()
-				);
 				$view->put_all(array(
-					'C_ROOT_ITEMS' => GuideService::count($condition, $parameters) > 1,
+					'C_ROOT_ITEMS' => $category->get_elements_number() > 0,
 				));
 
 				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
 				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
+				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
 				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 				LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
-				' . $condition . '
-				ORDER BY i.i_order', array_merge($parameters, array(
-					'user_id' => AppContext::get_current_user()->get_id()
-				)));
+				WHERE id_category = 0
+				AND c.active_content = 1
+				AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
+				ORDER BY i.i_order', array(
+					'user_id' => AppContext::get_current_user()->get_id(),
+					'timestamp_now' => $now->get_timestamp()
+				));
 
 				while ($row = $result->fetch()) {
 					$item = new GuideItem();
@@ -98,7 +95,7 @@ class GuideModuleMiniMenu extends ModuleMiniMenu
 				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
+				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
 				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 				LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
