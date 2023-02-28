@@ -157,9 +157,9 @@ class GuideItemContent
 		return $this->contributor_user;
 	}
 
-	public function set_contributor_user(User $user)
+	public function set_contributor_user(User $contributor_user)
 	{
-		$this->contributor_user = $user;
+		$this->contributor_user = $contributor_user;
 	}
 
 	public function get_author_custom_name()
@@ -252,13 +252,14 @@ class GuideItemContent
 		$this->custom_level = $properties['custom_level'];
 		$this->sources = !empty($properties['sources']) ? TextHelper::unserialize($properties['sources']) : array();
 
-		$user = new User($properties['contributor_user_id']);
-		if (!empty($properties['user_id']))
-			$user->set_properties($properties);
+        $contributor_user = new User();
+		if (!empty($properties['contributor_user_id']))
+			$contributor_user->set_properties($properties);
 		else
-			$user->init_visitor_user();
+			$contributor_user->init_visitor_user();
 
-		$this->set_contributor_user(new User($properties['contributor_user_id']));
+        $this->set_contributor_user($contributor_user);
+
 		$this->author_custom_name = !empty($properties['author_custom_name']) ? $properties['author_custom_name'] : '';
 		$this->author_custom_name_enabled = !empty($properties['author_custom_name']);
 	}

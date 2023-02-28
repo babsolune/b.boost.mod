@@ -64,12 +64,16 @@ $lang['guide.level.custom.content'] = 'Description du niveau personalisé';
 
 // Form
 $lang['guide.change.reason'] = 'Nature de la modification';
+$lang['guide.suggestions.number'] = 'Nombre d\'éléments suggérés à afficher';
+$lang['guide.homepage'] = 'Choisir la page d\'accueil';
+$lang['guide.homepage.categories'] = 'Catégories';
+$lang['guide.homepage.explorer'] = 'Explorateur';
 
 // Authorizations
 $lang['guide.manage.archives']     = 'Autorisation de gérer les archives';
 
 // SEO
-$lang['guide.seo.description.root']    = 'Toutes les fiches en téléchargement du site :site.';
+$lang['guide.seo.description.root']    = 'Toutes les fiches du site :site.';
 $lang['guide.seo.description.tag']     = 'Toutes les fiches sur le sujet :subject.';
 $lang['guide.seo.description.pending'] = 'Toutes les fiches en attente.';
 $lang['guide.seo.description.member']  = 'Toutes les fiches de :author.';

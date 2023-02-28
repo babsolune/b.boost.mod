@@ -24,6 +24,7 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 			$this->form->get_field_by_id('display_summary_to_guests')->set_hidden($this->config->get_display_type() == GuideConfig::TABLE_VIEW);
 			$this->form->get_field_by_id('auto_cut_characters_number')->set_hidden($this->config->get_display_type() == GuideConfig::TABLE_VIEW);
 			$this->form->get_field_by_id('items_per_row')->set_hidden($this->config->get_display_type() !== GuideConfig::GRID_VIEW);
+			$this->form->get_field_by_id('suggested_items_nb')->set_hidden(!$this->config->get_enabled_items_suggestions());
 			$this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['warning.success.config'], MessageHelper::SUCCESS, 5));
 		}
 
@@ -108,7 +109,44 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 				'hidden' => $this->config->get_display_type() === GuideConfig::TABLE_VIEW
 			)
 		));
-		
+
+		$fieldset->add_field(new FormFieldSpacer('links_options', ''));
+
+        $fieldset->add_field(new FormFieldSimpleSelectChoice('homepage', $this->lang['guide.homepage'], $this->config->get_homepage(),
+			array(
+				new FormFieldSelectChoiceOption($this->lang['guide.homepage.categories'], GuideConfig::CATEGORIES),
+				new FormFieldSelectChoiceOption($this->lang['guide.homepage.explorer'], GuideConfig::EXPLORER),
+			)
+        ));
+
+		$fieldset->add_field(new FormFieldCheckbox('enabled_navigation_links', $this->lang['form.enable.navigation'], $this->config->get_enabled_navigation_links(),
+			array(
+				'class' => 'custom-checkbox',
+				'description' => $this->lang['form.enable.navigation.clue']
+			)
+		));
+
+		$fieldset->add_field(new FormFieldCheckbox('enabled_items_suggestions', $this->lang['form.enable.suggestions'], $this->config->get_enabled_items_suggestions(),
+			array(
+				'class' => 'custom-checkbox',
+				'events' => array('click' => '
+					if (HTMLForms.getField("enabled_items_suggestions").getValue()) {
+						HTMLForms.getField("suggested_items_nb").enable();
+					} else {
+						HTMLForms.getField("suggested_items_nb").disable();
+					}'
+				)
+			)
+		));
+
+		$fieldset->add_field(new FormFieldNumberEditor('suggested_items_nb', $this->lang['guide.suggestions.number'], $this->config->get_suggested_items_nb(),
+			array(
+				'min' => 1, 'max' => 10,
+				'hidden' => !$this->config->get_enabled_items_suggestions()
+			),
+			array(new FormFieldConstraintIntegerRange(1, 10))
+		));
+
 		$fieldset->add_field(new FormFieldRichTextEditor('root_category_description', $this->lang['form.root.category.description'], $this->config->get_root_category_description(),
 			array('rows' => 8, 'cols' => 47)
 		));
@@ -149,10 +187,12 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 
 		if($this->form->get_value('display_type') == GuideConfig::GRID_VIEW)
 			$this->config->set_items_number_per_row($this->form->get_value('items_per_row'));
-			
+
 		$this->config->set_categories_per_page($this->form->get_value('categories_per_page'));
 		$this->config->set_categories_per_row($this->form->get_value('categories_per_row'));
 		$this->config->set_display_type($this->form->get_value('display_type')->get_raw_value());
+
+		$this->config->set_homepage($this->form->get_value('homepage')->get_raw_value());
 
 		if ($this->config->get_display_type() != GuideConfig::TABLE_VIEW)
 		{
@@ -173,6 +213,12 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 
 		$this->config->set_default_content($this->form->get_value('default_content'));
         $this->config->set_authorizations($this->form->get_value('authorizations')->build_auth_array());
+
+		$this->config->set_enabled_items_suggestions($this->form->get_value('enabled_items_suggestions'));
+		if($this->form->get_value('enabled_items_suggestions'))
+			$this->config->set_suggested_items_nb($this->form->get_value('suggested_items_nb'));
+
+		$this->config->set_enabled_navigation_links($this->form->get_value('enabled_navigation_links'));
 
 		GuideConfig::save();
 		CategoriesService::get_categories_manager()->regenerate_cache();

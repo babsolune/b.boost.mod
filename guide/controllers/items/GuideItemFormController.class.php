@@ -156,6 +156,7 @@ class GuideItemFormController extends DefaultModuleController
 					new FormFieldSelectChoiceOption($this->lang['form.publication.deffered'], GuideItem::DEFERRED_PUBLICATION),
 				),
 				array(
+                    'class' => $this->get_item()->get_id() !== null ? 'bgc warning' : '',
 					'events' => array('change' => '
 						if (HTMLForms.getField("published").getValue() == 2) {
 							jQuery("#' . __CLASS__ . '_publishing_start_date_field").show();
@@ -308,8 +309,6 @@ class GuideItemFormController extends DefaultModuleController
 
 		if (CategoriesService::get_categories_manager()->get_categories_cache()->has_categories())
 			$item->set_id_category($this->form->get_value('id_category')->get_raw_value());
-
-		$item_content->set_contributor_user(new User(AppContext::get_current_user()->get_id()));
 
 		$item_content->set_content($this->form->get_value('content'));
 		$item_content->set_change_reason($this->form->get_value('change_reason'));

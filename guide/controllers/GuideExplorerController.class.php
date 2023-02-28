@@ -38,6 +38,7 @@ class GuideExplorerController extends DefaultModuleController
 				$root_description = FormatingHelper::second_parse($this->config->get_root_category_description());
 				$this->view->put_all(array(
 					'C_ROOT_CONTROLS'             => GuideAuthorizationsService::check_authorizations($id)->moderation(),
+                    'C_HOMEPAGE' => $this->config->get_homepage() == GuideConfig::EXPLORER,
 					'C_ROOT_CATEGORY_DESCRIPTION' => !empty($root_description),
 					'C_ROOT_ITEMS' => $category->get_elements_number() > 0,
 					'C_SEVERAL_ROOT_ITEMS' => $category->get_elements_number() > 1,
@@ -153,33 +154,27 @@ class GuideExplorerController extends DefaultModuleController
 
 	private function generate_response(HTTPRequestCustom $request)
 	{
-		$page = $request->get_getint('page', 1);
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-
-		if ($this->get_category()->get_id() != Category::ROOT_CATEGORY)
-			$graphical_environment->set_page_title($this->get_category()->get_name(), $this->lang['guide.module.title'], $page);
-		else
-			$graphical_environment->set_page_title($this->lang['guide.module.title'], '', $page);
-
-		$description = $this->get_category()->get_description();
-		if (empty($description))
-			$description = StringVars::replace_vars($this->lang['guide.seo.description.root'], array('site' => GeneralConfig::load()->get_site_name())) . ($this->get_category()->get_id() != Category::ROOT_CATEGORY ? ' ' . $this->lang['category.category'] . ' ' . $this->get_category()->get_name() : '');
-		$graphical_environment->get_seo_meta_data()->set_description($description, $page);
-		$graphical_environment->get_seo_meta_data()->set_canonical_url(GuideUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name(), $page));
+        $graphical_environment->set_page_title($this->lang['guide.explorer'], $this->lang['guide.module.title']);
+		$description = StringVars::replace_vars($this->lang['guide.seo.description.root'], array('site' => GeneralConfig::load()->get_site_name()));
+		$graphical_environment->get_seo_meta_data()->set_description($description);
+		$graphical_environment->get_seo_meta_data()->set_canonical_url(GuideUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name()));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['guide.module.title'], GuideUrlBuilder::home());
-
-		$categories = array_reverse(CategoriesService::get_categories_manager('guide')->get_parents($this->get_category()->get_id(), true));
-		foreach ($categories as $id => $category)
-		{
-			if ($category->get_id() != Category::ROOT_CATEGORY)
-				$breadcrumb->add($category->get_name(), GuideUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name(), ($category->get_id() == $this->get_category()->get_id() ? $page : 1)));
-		}
+		$breadcrumb->add($this->lang['guide.explorer'], GuideUrlBuilder::explorer());
 
 		return $response;
+	}
+
+	public static function get_view()
+	{
+		$object = new self('guide');
+		$object->check_authorizations();
+		$object->build_view(AppContext::get_request());
+		return $object->view;
 	}
 }
 ?>

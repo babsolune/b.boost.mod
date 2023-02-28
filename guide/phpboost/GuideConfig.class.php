@@ -27,7 +27,15 @@ class GuideConfig extends AbstractConfigData
 	const LIST_VIEW    = 'list_view';
 	const TABLE_VIEW   = 'table_view';
 
+    const HOMEPAGE = 'homepage';
+    const CATEGORIES = 'categories';
+    const EXPLORER = 'explorer';
+
 	const DEFERRED_OPERATIONS = 'deferred_operations';
+
+	const SUGGESTED_ITEMS    = 'suggested_items';
+	const SUGGESTED_ITEMS_NB = 'suggested_items_nb';
+	const RELATED_ITEMS      = 'related_items';
 
 	const AUTO_CUT_CHARACTERS_NUMBER = 'auto_cut_characters_number';
 
@@ -79,6 +87,16 @@ class GuideConfig extends AbstractConfigData
 	public function set_display_type($value)
 	{
 		$this->set_property(self::DISPLAY_TYPE, $value);
+	}
+
+	public function get_homepage()
+	{
+		return $this->get_property(self::HOMEPAGE);
+	}
+
+	public function set_homepage($value)
+	{
+		$this->set_property(self::HOMEPAGE, $value);
 	}
 
 	public function get_default_content()
@@ -161,6 +179,36 @@ class GuideConfig extends AbstractConfigData
 		$this->set_property(self::DEFERRED_OPERATIONS, $deferred_operations);
 	}
 
+    public function get_enabled_items_suggestions()
+    {
+        return $this->get_property(self::SUGGESTED_ITEMS);
+    }
+
+    public function set_enabled_items_suggestions($enabled_items_suggestions)
+    {
+        $this->set_property(self::SUGGESTED_ITEMS, $enabled_items_suggestions);
+    }
+
+	public function get_suggested_items_nb()
+	{
+		return $this->get_property(self::SUGGESTED_ITEMS_NB);
+	}
+
+	public function set_suggested_items_nb($number)
+	{
+		$this->set_property(self::SUGGESTED_ITEMS_NB, $number);
+	}
+
+    public function get_enabled_navigation_links()
+    {
+        return $this->get_property(self::RELATED_ITEMS);
+    }
+
+    public function set_enabled_navigation_links($enabled_navigation_links)
+    {
+        $this->set_property(self::RELATED_ITEMS, $enabled_navigation_links);
+    }
+
 	public function get_auto_cut_characters_number()
 	{
 		return $this->get_property(self::AUTO_CUT_CHARACTERS_NUMBER);
@@ -177,19 +225,23 @@ class GuideConfig extends AbstractConfigData
 	public function get_default_values()
 	{
 		return array(
-			self::CATEGORIES_PER_PAGE                   => 10,
-			self::CATEGORIES_PER_ROW                    => 3,
-			self::ITEMS_PER_PAGE                        => 15,
-			self::ITEMS_PER_ROW                         => 2,
-			self::DISPLAY_TYPE                          => self::GRID_VIEW,
-			self::DEFAULT_CONTENT                       => '',
-			self::SUMMARY_DISPLAYED_TO_GUESTS           => false,
-			self::AUTHOR_DISPLAYED                      => true,
-			self::NB_VIEW_ENABLED                       => false,
-			self::ROOT_CATEGORY_DESCRIPTION             => LangLoader::get_message('default.root.description', 'install', 'guide'),
-			self::AUTO_CUT_CHARACTERS_NUMBER            => 128,
-			self::AUTHORIZATIONS                        => array('r-1' => 1, 'r0' => 39, 'r1' => 63),
-			self::DEFERRED_OPERATIONS                   => array()
+			self::CATEGORIES_PER_PAGE         => 10,
+			self::CATEGORIES_PER_ROW          => 3,
+			self::ITEMS_PER_PAGE              => 15,
+			self::ITEMS_PER_ROW               => 2,
+			self::DISPLAY_TYPE                => self::GRID_VIEW,
+			self::HOMEPAGE                    => self::CATEGORIES,
+			self::DEFAULT_CONTENT             => '',
+			self::SUMMARY_DISPLAYED_TO_GUESTS => false,
+			self::AUTHOR_DISPLAYED            => true,
+			self::NB_VIEW_ENABLED             => false,
+			self::ROOT_CATEGORY_DESCRIPTION   => LangLoader::get_message('default.root.description', 'install', 'guide'),
+			self::AUTO_CUT_CHARACTERS_NUMBER  => 128,
+			self::AUTHORIZATIONS              => array('r-1' => 1, 'r0' => 39, 'r1' => 63),
+			self::DEFERRED_OPERATIONS         => array(),
+			self::SUGGESTED_ITEMS             => false,
+			self::SUGGESTED_ITEMS_NB          => 4,
+			self::RELATED_ITEMS               => true,
 		);
 	}
 

@@ -12,6 +12,13 @@
 			{@guide.module.title}
 		</h1>
 	</header>
+    # IF C_HOMEPAGE #
+        # IF C_ROOT_CATEGORY_DESCRIPTION #
+            <div class="sub-section">
+                <div class="content-container">{ROOT_CATEGORY_DESCRIPTION}</div>
+            </div>
+        # ENDIF #
+    # ENDIF #
     <div class="sub-section">
         <div class="content-container">
             # IF C_ROOT_ITEMS #

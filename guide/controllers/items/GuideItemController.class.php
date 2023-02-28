@@ -17,7 +17,8 @@ class GuideItemController extends DefaultModuleController
 	public function execute(HTTPRequestCustom $request)
 	{
 		$this->build_view();
-		$this->count_views_number($request);
+		$this->check_pending_items($request);
+
 		$this->check_authorizations();
 
 		return $this->generate_response();
@@ -43,11 +44,11 @@ class GuideItemController extends DefaultModuleController
 		return $this->item;
 	}
 
-	private function count_views_number(HTTPRequestCustom $request)
+	private function check_pending_items(HTTPRequestCustom $request)
 	{
 		if (!$this->item->is_published())
 		{
-			$this->view->put('NOT_VISIBLE_MESSAGE', MessageHelper::display($this->lang['warning.element.not.visible'], MessageHelper::WARNING));
+			$this->view->put('NOT_VISIBLE_MESSAGE', MessageHelper::display(LangLoader::get_message('warning.element.not.visible', 'warning-lang'), MessageHelper::WARNING));
 		}
 		else
 		{
@@ -67,6 +68,8 @@ class GuideItemController extends DefaultModuleController
 		$item = $this->get_item();
 		$item_content = $this->get_item()->get_item_content();
 		$category = $item->get_category();
+		$this->build_suggested_items($item);
+		$this->build_navigation_links($item);
 
 		$keywords = $item->get_keywords();
 		$has_keywords = count($keywords) > 0;
@@ -100,9 +103,6 @@ class GuideItemController extends DefaultModuleController
 			'C_ENABLED_COMMENTS' => $comments_config->module_comments_is_enabled('guide'),
 			'C_ENABLED_NOTATION' => $content_management_config->module_notation_is_enabled('guide'),
 			'C_KEYWORDS'         => $has_keywords,
-
-			'ARCHIVED_CONTENT'	  => MessageHelper::display($this->lang['guide.archived.content'], MessageHelper::WARNING),
-			'NOT_VISIBLE_MESSAGE' => MessageHelper::display($this->lang['warning.element.not.visible'], MessageHelper::WARNING),
 		)));
 
 		if ($comments_config->module_comments_is_enabled('guide'))
@@ -121,6 +121,79 @@ class GuideItemController extends DefaultModuleController
 		{
 			$this->view->assign_block_vars('sources', $item->get_array_tpl_source_vars($name));
 		}
+	}
+
+	private function build_suggested_items(GuideItem $item)
+	{
+		$now = new Date();
+
+		$result = PersistenceContext::get_querier()->select('SELECT
+			i.id, c.item_id, c.title, i.id_category, i.rewrited_title, c.thumbnail, c.content, c.active_content, i.creation_date, c.update_date,
+			(2 * FT_SEARCH_RELEVANCE(c.title, :search_content) + FT_SEARCH_RELEVANCE(c.content, :search_content) / 3) AS relevance
+		FROM ' . GuideSetup::$guide_table . ' i
+        LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
+		WHERE (FT_SEARCH(c.title, :search_content) OR FT_SEARCH(c.content, :search_content)) AND i.id <> :excluded_id
+		AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
+		AND c.active_content = 1
+		ORDER BY relevance DESC LIMIT 0, :limit_nb', array(
+			'excluded_id' => $item->get_id(),
+			'search_content' => $item->get_item_content()->get_title() .','. $item->get_item_content()->get_content(),
+			'timestamp_now' => $now->get_timestamp(),
+			'limit_nb' => (int)GuideConfig::load()->get_suggested_items_nb()
+		));
+
+		$this->view->put('C_SUGGESTED_ITEMS', $result->get_rows_count() > 0 && GuideConfig::load()->get_enabled_items_suggestions());
+
+		while ($row = $result->fetch())
+		{
+			$date = $row['creation_date'] <= $row['update_date'] ? $row['update_date'] : $row['creation_date'];
+			$this->view->assign_block_vars('suggested', array(
+				'C_HAS_THUMBNAIL' => !empty($row['thumbnail']),
+				'TITLE'           => $row['title'],
+				'DATE'            => Date::to_format($date, Date::FORMAT_DAY_MONTH_YEAR),
+				'U_THUMBNAIL'     => Url::to_rel($row['thumbnail']),
+				'U_ITEM'          => GuideUrlBuilder::display($row['id_category'], CategoriesService::get_categories_manager()->get_categories_cache()->get_category($row['id_category'])->get_rewrited_name(), $row['id'], $row['rewrited_title'])->rel()
+			));
+		}
+		$result->dispose();
+	}
+
+	private function build_navigation_links(GuideItem $item)
+	{
+		$now = new Date();
+		$item_timestamp = $item->get_creation_date()->get_timestamp();
+
+		$result = PersistenceContext::get_querier()->select('
+		(SELECT i.id, c.title, i.id_category, i.rewrited_title, c.thumbnail, \'PREVIOUS\' as type
+		FROM '. GuideSetup::$guide_table .' i
+		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
+        WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0))) AND creation_date < :item_timestamp AND id_category IN :authorized_categories ORDER BY creation_date DESC LIMIT 1 OFFSET 0)
+		UNION
+		(SELECT i.id, c.title, i.id_category, i.rewrited_title, c.thumbnail, \'NEXT\' as type
+		FROM '. GuideSetup::$guide_table .' i
+		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
+        WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0))) AND creation_date > :item_timestamp AND id_category IN :authorized_categories ORDER BY creation_date ASC LIMIT 1 OFFSET 0)
+		', array(
+			'timestamp_now' => $now->get_timestamp(),
+			'item_timestamp' => $item_timestamp,
+			'authorized_categories' => array($item->get_id_category())
+		));
+
+		$this->view->put_all(array(
+			'C_RELATED_LINKS' => $result->get_rows_count() > 0 && GuideConfig::load()->get_enabled_navigation_links(),
+		));
+
+		while ($row = $result->fetch())
+		{
+			$this->view->put_all(array(
+				'C_'. $row['type'] .'_ITEM' => true,
+				'C_' . $row['type'] . '_HAS_THUMBNAIL' => !empty($row['thumbnail']),
+				$row['type'] . '_ITEM' => $row['title'],
+				'U_'. $row['type'] . '_THUMBNAIL' => Url::to_rel($row['thumbnail']),
+				'U_'. $row['type'] .'_ITEM' => GuideUrlBuilder::display($row['id_category'], CategoriesService::get_categories_manager()->get_categories_cache()->get_category($row['id_category'])->get_rewrited_name(), $row['id'], $row['rewrited_title'])->rel(),
+			));
+		}
+		$result->dispose();
 	}
 
 	private function build_keywords_view($keywords)

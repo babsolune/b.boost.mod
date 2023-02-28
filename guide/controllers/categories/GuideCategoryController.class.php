@@ -25,7 +25,6 @@ class GuideCategoryController extends DefaultModuleController
 
 		$this->check_authorizations();
 
-		$this->build_root_view($request);
 		$this->build_view($request);
 
 		return $this->generate_response($request);
@@ -35,61 +34,6 @@ class GuideCategoryController extends DefaultModuleController
 	{
 		$this->comments_config = CommentsConfig::load();
 		$this->content_management_config = ContentManagementConfig::load();
-	}
-
-	private function build_root_view(HTTPRequestCustom $request)
-	{
-		$now = new Date();
-		$categories = CategoriesService::get_categories_manager('guide')->get_categories_cache()->get_categories();
-		$authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, true, 'guide');
-
-		foreach ($categories as $id => $category) 
-		{
-			if (in_array($id, $authorized_categories)) 
-			{
-				$this->view->assign_block_vars('categories', array(
-					'C_ITEMS'		  => $category->get_elements_number() > 0,
-					'C_SEVERAL_ITEMS' => $category->get_elements_number() > 1,
-
-					'ITEMS_NUMBER'       => $category->get_elements_number(),
-					'CATEGORY_ID'        => $category->get_id(),
-					'CATEGORY_SUB_ORDER' => $category->get_order(),
-					'CATEGORY_PARENT_ID' => $category->get_id_parent(),
-					'CATEGORY_NAME'      => $category->get_name(),
-					'U_CATEGORY'         => GuideUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name(), 'guide')->rel(),
-					'U_REORDER_ITEMS'    => GuideUrlBuilder::reorder_items($category->get_id(), $category->get_rewrited_name())->rel(),
-				));
-
-				$condition = 'WHERE id_category = :id_category
-					AND c.active_content = 1
-					AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))';
-				$parameters = array(
-					'id_category' => $category->get_id(),
-					'timestamp_now' => $now->get_timestamp()
-				);
-
-				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
-				FROM ' . GuideSetup::$guide_table . ' i
-				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
-				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
-				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
-				LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
-				' . $condition . '
-				ORDER BY i.i_order', array_merge($parameters, array(
-					'user_id' => AppContext::get_current_user()->get_id()
-				)));
-
-				while ($row = $result->fetch()) {
-					$item = new GuideItem();
-					$item->set_properties($row);
-
-					$this->view->assign_block_vars('categories.items', $item->get_template_vars());
-				}
-				$result->dispose();
-			}
-		}
 	}
 
 	private function build_view(HTTPRequestCustom $request)

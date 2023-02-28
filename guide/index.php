@@ -14,7 +14,6 @@ require_once PATH_TO_ROOT . '/kernel/init.php';
 $url_controller_mappers = array(
 	// Configuration
 	new UrlControllerMapper('AdminGuideConfigController', '`^/admin(?:/config)?/?$`'),
-	new UrlControllerMapper('GuideExplorerController', '`^/explorer/?$`'),
 
 	//Categories
 	new UrlControllerMapper('DefaultCategoriesManagementController', '`^/categories/?$`'),
@@ -39,6 +38,7 @@ $url_controller_mappers = array(
 	new UrlControllerMapper('GuidePendingItemsController', '`^/pending(?:/([a-z_]+))?/?([a-z]+)?/?([0-9]+)?/?$`', array('page')),
 	new UrlControllerMapper('GuideMemberItemsController', '`^/member/([0-9]+)?/?([0-9]+)?/?$`', array('user_id', 'page')),
 
+	new UrlControllerMapper('GuideExplorerController', '`^/explorer/?$`'),
 	new UrlControllerMapper('GuideCategoryController', '`^(?:/([0-9]+)-([a-z0-9-_]+))?/?([a-z_]+)?/?([a-z]+)?/?([0-9]+)?/?([0-9]+)?/?$`', array('id_category', 'rewrited_name', 'page', 'subcategories_page')),
 );
 DispatchManager::dispatch($url_controller_mappers);
