@@ -51,8 +51,8 @@ class GuideItemHistoryController extends DefaultModuleController
 		$this->view->put_all(array(
 			'C_ITEMS'         => $result->get_rows_count() > 0,
 			'C_SEVERAL_ITEMS' => $result->get_rows_count() > 1,
-			'C_CONTROLS'      => GuideAuthorizationsService::check_authorizations($this->get_item()->get_category()->get_id())->moderation() || GuideAuthorizationsService::check_authorizations()->display_restore_link(),
-			'C_RESTORE' 	  => GuideAuthorizationsService::check_authorizations()->display_restore_link(),
+			'C_CONTROLS'      => GuideAuthorizationsService::check_authorizations($this->get_item()->get_category()->get_id())->moderation() || GuideAuthorizationsService::check_authorizations()->manage_archives(),
+			'C_RESTORE' 	  => GuideAuthorizationsService::check_authorizations()->manage_archives(),
 
 			'ITEM_TITLE' => $this->item->get_item_content()->get_title(),
 

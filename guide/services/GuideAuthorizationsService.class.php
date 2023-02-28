@@ -11,17 +11,14 @@ class GuideAuthorizationsService extends CategoriesAuthorizationsService
 {
 	const MANAGE_ARCHIVES_AUTHORIZATIONS = 32;
 
-	public function display_restore_link()
+	public function restore()
 	{
 		return $this->is_authorized(self::MANAGE_ARCHIVES_AUTHORIZATIONS);
 	}
 
 	protected function is_authorized($bit, $mode = Authorizations::AUTH_CHILD_PRIORITY)
 	{
-		if ($bit == self::MANAGE_ARCHIVES_AUTHORIZATIONS)
-			$auth = GuideConfig::load()->get_authorizations();
-		else
-			$auth = CategoriesService::get_categories_manager('guide')->get_heritated_authorizations($this->id_category, $bit, $mode);
+		$auth = CategoriesService::get_categories_manager('guide')->get_heritated_authorizations($this->id_category, $bit, $mode);
 
 		return AppContext::get_current_user()->check_auth($auth, $bit);
 	}

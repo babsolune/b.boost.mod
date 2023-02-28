@@ -60,7 +60,7 @@ class GuideItemArchiveController extends DefaultModuleController
 			'C_ENABLED_NOTATION' => $content_management_config->module_notation_is_enabled('guide'),
 			'C_KEYWORDS'         => $has_keywords,
 			'C_ARCHIVE'          => $item->is_published() && $item->get_item_content()->get_active_content() == 0,
-			'C_RESTORE' 		 => GuideAuthorizationsService::check_authorizations()->display_restore_link(),
+			'C_RESTORE' 		 => GuideAuthorizationsService::check_authorizations()->manage_archives(),
 
 			'ARCHIVED_CONTENT' => MessageHelper::display($this->lang['guide.archived.content'], MessageHelper::WARNING),
 
