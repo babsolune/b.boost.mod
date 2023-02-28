@@ -348,7 +348,7 @@ class GuideItem
 			array(
 				// Conditions
 				'C_VISIBLE'              => $this->is_published(),
-				'C_CONTROLS'			 => $this->is_authorized_to_edit() || $this->is_authorized_to_delete(),
+				'C_CONTROLS'			 => $this->is_authorized_to_edit() || $this->is_authorized_to_delete() || $this->is_authorized_to_restore(),
 				'C_EDIT'                 => $this->is_authorized_to_edit(),
 				'C_DELETE'               => $this->is_authorized_to_delete(),
 				'C_RESTORE'		         => $this->is_authorized_to_restore(),
