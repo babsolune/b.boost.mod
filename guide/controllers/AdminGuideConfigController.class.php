@@ -169,7 +169,7 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 		$form->add_fieldset($fieldset_authorizations);
 
 		$auth_settings = new AuthorizationsSettings(array_merge(RootCategory::get_authorizations_settings(), array(
-			new ActionAuthorization($this->lang['guide.manage.archives'], GuideAuthorizationsService::MANAGE_ARCHIVES_AUTHORIZATIONS)
+			new VisitorDisabledActionAuthorization($this->lang['guide.manage.archives'], GuideAuthorizationsService::MANAGE_ARCHIVES_AUTHORIZATIONS)
 		)));
 		$auth_settings->build_from_auth_array($this->config->get_authorizations());
 		$fieldset_authorizations->add_field(new FormFieldAuthorizationsSetter('authorizations', $auth_settings));
