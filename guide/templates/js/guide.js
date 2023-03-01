@@ -7,17 +7,17 @@
 */
 
 // Summary menu constructor
-let title = jQuery('.content .formatter-title:not(span)');
+var title = jQuery('.content .formatter-title:not(span)');
 if (title.length == 0)
 {
     jQuery('#sheet-summary').remove();
 }
 title.each(function () {
-    let rewrited = jQuery(this).text().replace(/[^a-zA-Z0-9]/ig, "-").toLowerCase();
+    var rewrited = jQuery(this).text().replace(/[^a-zA-Z0-9]/ig, "-").toLowerCase();
     jQuery(this).attr('id', rewrited);
-    let innerhtml = jQuery(this).html();
-    let padding = '';
-    let hyphen = '<span>&vdash;</span>';
+    var innerhtml = jQuery(this).html();
+    var padding = '';
+    var hyphen = '<span>&vdash;</span>';
     if (jQuery(this).is('h2')) {padding = '0.618em'; hyphen = '<i class="fa fa-circle smaller"></i> '}
     if (jQuery(this).is('h3')) padding = '1.618em';
     if (jQuery(this).is('h4')) padding = '2.618em';
@@ -25,9 +25,10 @@ title.each(function () {
     if (jQuery(this).is('h6')) padding = '4.618em';
     jQuery('#summary-list').append(jQuery('<li><a class="summary-title" href="#' + rewrited + '" style="padding-left: ' + padding + '">' + hyphen + '<span class="inner-title">' + innerhtml + '</span></a></li>'));
 
-    let anchor = jQuery('<a href="' + window.location.href + '#' + rewrited + '" class="smaller copy-link-to-clipboard" aria-label="' + ARIA_TO_CLIPBOARD + '"><i class="fa fa-fw fa-hashtag" aria-hidden="true"></i></a>');
+    var anchor = jQuery('<a href="' + window.location.href + '#' + rewrited + '" class="smaller copy-link-to-clipboard" aria-label="' + ARIA_TO_CLIPBOARD + '"><i class="fa fa-fw fa-hashtag" aria-hidden="true"></i></a>');
     jQuery(this).prepend(anchor);
 });
+
 
 document.querySelectorAll('.copy-link-to-clipboard').forEach( el => {
     el.addEventListener('click', event => {

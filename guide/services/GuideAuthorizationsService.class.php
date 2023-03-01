@@ -11,7 +11,7 @@ class GuideAuthorizationsService extends CategoriesAuthorizationsService
 {
 	const MANAGE_ARCHIVES_AUTHORIZATIONS = 32;
 
-	public function restore()
+	public function manage_archives()
 	{
 		return $this->is_authorized(self::MANAGE_ARCHIVES_AUTHORIZATIONS);
 	}
