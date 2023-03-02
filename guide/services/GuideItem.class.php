@@ -205,44 +205,44 @@ class GuideItem
 
 	public function is_authorized_to_add()
 	{
-		return 
-            GuideAuthorizationsService::check_authorizations($this->id_category)->write() 
-            || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution() && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id())
-            && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL
-            );
+		return
+            GuideAuthorizationsService::check_authorizations($this->id_category)->write()
+            || GuideAuthorizationsService::check_authorizations($this->id_category)->contribution()
+        ;
 	}
 
 	public function is_authorized_to_edit()
 	{
-		return 
+		return
             GuideAuthorizationsService::check_authorizations($this->id_category)->moderation()
-			|| (
-                GuideAuthorizationsService::check_authorizations($this->id_category)->write() 
-                || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution() && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id()) 
-                && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL)
-            );
+			|| GuideAuthorizationsService::check_authorizations($this->id_category)->write()
+            || (
+                GuideAuthorizationsService::check_authorizations($this->id_category)->contribution()
+                && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id()
+            )
+        ;
 	}
 
 	public function is_authorized_to_delete()
 	{
-		return 
-            GuideAuthorizationsService::check_authorizations($this->id_category)->moderation() 
+		return
+            GuideAuthorizationsService::check_authorizations($this->id_category)->moderation()
             || (
-                GuideAuthorizationsService::check_authorizations($this->id_category)->write() 
-                || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution() && !$this->is_published() && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id())
-                && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL)
-            );
+                (
+                    GuideAuthorizationsService::check_authorizations($this->id_category)->write()
+                    || GuideAuthorizationsService::check_authorizations($this->id_category)->contribution()
+                )
+                && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id()
+            )
+        ;
 	}
 
 	public function is_authorized_to_restore()
 	{
-		return 
-            GuideAuthorizationsService::check_authorizations($this->id_category)->moderation() 
-            || (
-                GuideAuthorizationsService::check_authorizations($this->id_category)->manage_archives() 
-                || (GuideAuthorizationsService::check_authorizations($this->id_category)->contribution() && !$this->is_published()&& $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id())
-                && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL)
-            );
+		return
+            GuideAuthorizationsService::check_authorizations($this->id_category)->moderation()
+            || GuideAuthorizationsService::check_authorizations($this->id_category)->manage_archives()
+        ;
 	}
 
 	public function get_properties()
