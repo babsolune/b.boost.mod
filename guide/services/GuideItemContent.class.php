@@ -220,61 +220,60 @@ class GuideItemContent
 	public function get_properties()
 	{
 		return array(
-			'content_id' => $this->get_content_id(),
-			'item_id' => $this->get_item_id(),
-			'title' => $this->get_title(),
-			'summary' => $this->get_summary(),
-			'content' => $this->get_content(),
-			'active_content' => $this->get_active_content(),
-			'change_reason' => $this->get_change_reason(),
-			'update_date' => $this->get_update_date()->get_timestamp(),
-			'contributor_user_id' => $this->get_contributor_user()->get_id(),
-			'author_custom_name' => $this->get_author_custom_name(),
-			'thumbnail' => $this->get_thumbnail()->relative(),
-			'content_level' => $this->get_content_level(),
-			'custom_level' => $this->get_custom_level(),
-			'sources' => TextHelper::serialize($this->get_sources())
+			'content_id'            => $this->get_content_id(),
+			'item_id'               => $this->get_item_id(),
+			'title'                 => $this->get_title(),
+			'summary'               => $this->get_summary(),
+			'content'               => $this->get_content(),
+			'active_content'        => $this->get_active_content(),
+			'change_reason'         => $this->get_change_reason(),
+			'update_date'           => $this->get_update_date()->get_timestamp(),
+			'contributor_user_id'   => $this->get_contributor_user()->get_id(),
+			'author_custom_name'    => $this->get_author_custom_name(),
+			'thumbnail'             => $this->get_thumbnail()->relative(),
+			'content_level'         => $this->get_content_level(),
+			'custom_level'          => $this->get_custom_level(),
+			'sources'               => TextHelper::serialize($this->get_sources())
 		);
 	}
 
 	public function set_properties(array $properties)
 	{
-		$this->content_id = $properties['content_id'];
-		$this->item_id = $properties['item_id'];
-		$this->title = $properties['title'];
-		$this->summary = $properties['summary'];
-		$this->content = $properties['content'];
-		$this->active_content = $properties['active_content'];
-		$this->change_reason = $properties['change_reason'];
-		$this->update_date = new Date($properties['update_date'], Timezone::SERVER_TIMEZONE);
-		$this->thumbnail_url = $properties['thumbnail'];
-		$this->content_level = $properties['content_level'];
-		$this->custom_level = $properties['custom_level'];
-		$this->sources = !empty($properties['sources']) ? TextHelper::unserialize($properties['sources']) : array();
+		$this->content_id       = $properties['content_id'];
+		$this->item_id          = $properties['item_id'];
+		$this->title            = $properties['title'];
+		$this->summary          = $properties['summary'];
+		$this->content          = $properties['content'];
+		$this->active_content   = $properties['active_content'];
+		$this->change_reason    = $properties['change_reason'];
+		$this->update_date      = new Date($properties['update_date'], Timezone::SERVER_TIMEZONE);
+		$this->thumbnail_url    = $properties['thumbnail'];
+		$this->content_level    = $properties['content_level'];
+		$this->custom_level     = $properties['custom_level'];
+		$this->sources          = !empty($properties['sources']) ? TextHelper::unserialize($properties['sources']) : array();
 
         $contributor_user = new User();
-		if (!empty($properties['contributor_user_id']))
+		if (!empty($properties['user_id']))
 			$contributor_user->set_properties($properties);
 		else
 			$contributor_user->init_visitor_user();
 
         $this->set_contributor_user($contributor_user);
 
-		$this->author_custom_name = !empty($properties['author_custom_name']) ? $properties['author_custom_name'] : '';
-		$this->author_custom_name_enabled = !empty($properties['author_custom_name']);
+		$this->author_custom_name           = !empty($properties['author_custom_name']) ? $properties['author_custom_name'] : '';
+		$this->author_custom_name_enabled   = !empty($properties['author_custom_name']);
 	}
 
 	public function init_default_properties()
 	{
-        $this->content = GuideConfig::load()->get_default_content();
-		$this->active_content = true;
-		$this->contributor_user = AppContext::get_current_user();
-		$this->thumbnail_url = FormFieldThumbnail::DEFAULT_VALUE;
-		$this->update_date = new Date();
-		$this->author_custom_name = AppContext::get_current_user()->get_display_name();
-		$this->author_custom_name_enabled = false;
-		$this->content_level = self::NO_LEVEL;
-		$this->sources = array();
+        $this->content                      = GuideConfig::load()->get_default_content();
+		$this->active_content               = true;
+		$this->thumbnail_url                = FormFieldThumbnail::DEFAULT_VALUE;
+		$this->update_date                  = new Date();
+		$this->author_custom_name           = AppContext::get_current_user()->get_display_name();
+		$this->author_custom_name_enabled   = false;
+		$this->content_level                = self::NO_LEVEL;
+		$this->sources                      = array();
 	}
 }
 ?>

@@ -248,16 +248,16 @@ class GuideItem
 	public function get_properties()
 	{
 		return array(
-			'id' => $this->get_id(),
-			'id_category' => $this->get_id_category(),
-			'i_order' => $this->get_i_order(),
-			'rewrited_title' => $this->get_rewrited_title(),
-			'published' => $this->get_publishing_state(),
+			'id'                    => $this->get_id(),
+			'id_category'           => $this->get_id_category(),
+			'i_order'               => $this->get_i_order(),
+			'rewrited_title'        => $this->get_rewrited_title(),
+			'published'             => $this->get_publishing_state(),
 			'publishing_start_date' => $this->get_publishing_start_date() !== null ? $this->get_publishing_start_date()->get_timestamp() : 0,
-			'publishing_end_date' => $this->get_publishing_end_date() !== null ? $this->get_publishing_end_date()->get_timestamp() : 0,
-			'creation_date' => $this->get_creation_date()->get_timestamp(),
-			'author_user_id' => $this->get_author_user()->get_id(),
-			'views_number' => $this->get_views_number(),
+			'publishing_end_date'   => $this->get_publishing_end_date() !== null ? $this->get_publishing_end_date()->get_timestamp() : 0,
+			'creation_date'         => $this->get_creation_date()->get_timestamp(),
+			'author_user_id'        => $this->get_author_user()->get_id(),
+			'views_number'          => $this->get_views_number(),
 		);
 	}
 
@@ -266,17 +266,17 @@ class GuideItem
 		$item_content = new GuideItemContent();
 		$item_content->set_properties($properties);
 
-		$this->id = $properties['id'];
-		$this->id_category = $properties['id_category'];
-		$this->i_order = $properties['i_order'];
-		$this->rewrited_title = $properties['rewrited_title'];
-		$this->item_content = $item_content;
-		$this->views_number = $properties['views_number'];
-		$this->published = $properties['published'];
-		$this->publishing_start_date = !empty($properties['publishing_start_date']) ? new Date($properties['publishing_start_date'], Timezone::SERVER_TIMEZONE) : null;
-		$this->publishing_end_date = !empty($properties['publishing_end_date']) ? new Date($properties['publishing_end_date'], Timezone::SERVER_TIMEZONE) : null;
-		$this->end_date_enabled = !empty($properties['publishing_end_date']);
-		$this->creation_date = new Date($properties['creation_date'], Timezone::SERVER_TIMEZONE);
+		$this->id                      = $properties['id'];
+		$this->id_category             = $properties['id_category'];
+		$this->i_order                 = $properties['i_order'];
+		$this->rewrited_title          = $properties['rewrited_title'];
+		$this->item_content            = $item_content;
+		$this->views_number            = $properties['views_number'];
+		$this->published               = $properties['published'];
+		$this->publishing_start_date   = !empty($properties['publishing_start_date']) ? new Date($properties['publishing_start_date'], Timezone::SERVER_TIMEZONE) : null;
+		$this->publishing_end_date     = !empty($properties['publishing_end_date']) ? new Date($properties['publishing_end_date'], Timezone::SERVER_TIMEZONE) : null;
+		$this->end_date_enabled        = !empty($properties['publishing_end_date']);
+		$this->creation_date           = new Date($properties['creation_date'], Timezone::SERVER_TIMEZONE);
 
 		$user = new User();
 		if (!empty($properties['user_id']))
@@ -297,21 +297,21 @@ class GuideItem
 
 	public function init_default_properties($id_category = Category::ROOT_CATEGORY)
 	{
-		$this->id_category = $id_category;
-		$this->published = self::PUBLISHED;
-		$this->publishing_start_date = new Date();
-		$this->publishing_end_date = new Date();
-		$this->views_number = 0;
-		$this->end_date_enabled = false;
-		$this->creation_date = new Date();
-		$this->author_user = AppContext::get_current_user();
+		$this->id_category             = $id_category;
+		$this->published               = self::PUBLISHED;
+		$this->publishing_start_date   = new Date();
+		$this->publishing_end_date     = new Date();
+		$this->views_number            = 0;
+		$this->end_date_enabled        = false;
+		$this->creation_date           = new Date();
+		$this->author_user             = AppContext::get_current_user();
 	}
 
 	public function clean_publishing_start_and_end_date()
 	{
-		$this->publishing_start_date = null;
-		$this->publishing_end_date = null;
-		$this->end_date_enabled = false;
+		$this->publishing_start_date   = null;
+		$this->publishing_end_date     = null;
+		$this->end_date_enabled        = false;
 	}
 
 	public function clean_publishing_end_date()
@@ -328,18 +328,18 @@ class GuideItem
 
 	public function get_template_vars()
 	{
-		$category = $this->get_category();
-		$content = FormatingHelper::second_parse($this->item_content->get_content());
-		$rich_content = HooksService::execute_hook_display_action('guide', $content, $this->get_properties());
-		$real_summary = $this->item_content->get_real_summary();
-		$user = $this->author_user;
-		$contributor_user = $this->item_content->get_contributor_user();
-		$user_group_color = User::get_group_color($user->get_groups(), $user->get_level(), true);
-		$contributor_user_group_color = User::get_group_color($contributor_user->get_groups(), $contributor_user->get_level(), true);
-		$comments_number = CommentsService::get_comments_number('guide', $this->id);
-		$sources = $this->item_content->get_sources();
-		$nbr_sources = count($sources);
-		$config = GuideConfig::load();
+		$category                       = $this->get_category();
+		$content                        = FormatingHelper::second_parse($this->item_content->get_content());
+		$rich_content                   = HooksService::execute_hook_display_action('guide', $content, $this->get_properties());
+		$real_summary                   = $this->item_content->get_real_summary();
+		$user                           = $this->author_user;
+		$contributor_user               = $this->item_content->get_contributor_user();
+		$user_group_color               = User::get_group_color($user->get_groups(), $user->get_level(), true);
+		$contributor_user_group_color   = User::get_group_color($contributor_user->get_groups(), $contributor_user->get_level(), true);
+		$comments_number                = CommentsService::get_comments_number('guide', $this->id);
+		$sources                        = $this->item_content->get_sources();
+		$nbr_sources                    = count($sources);
+		$config                         = GuideConfig::load();
 
 		return array_merge(
 			Date::get_array_tpl_vars($this->creation_date, 'date'),
@@ -347,43 +347,43 @@ class GuideItem
 			Date::get_array_tpl_vars($this->publishing_start_date, 'differed_publishing_start_date'),
 			array(
 				// Conditions
-				'C_VISIBLE'              => $this->is_published(),
-				'C_CONTROLS'			 => $this->is_authorized_to_edit() || $this->is_authorized_to_delete() || $this->is_authorized_to_restore(),
-				'C_EDIT'                 => $this->is_authorized_to_edit(),
-				'C_DELETE'               => $this->is_authorized_to_delete(),
-				'C_RESTORE'		         => $this->is_authorized_to_restore(),
-				'C_READ_MORE'            => !$this->item_content->is_summary_enabled() && TextHelper::strlen($content) > $config->get_auto_cut_characters_number() && $real_summary != @strip_tags($content, '<br><br/>'),
-				'C_HAS_THUMBNAIL'        => $this->item_content->has_thumbnail(),
-				'C_AUTHOR_CUSTOM_NAME'   => $this->item_content->is_author_custom_name_enabled(),
-				'C_ENABLED_VIEWS_NUMBER' => $config->get_enabled_views_number(),
-				'C_AUTHOR_GROUP_COLOR'   => !empty($user_group_color),
-				'C_CONTRIBUTOR_GROUP_COLOR'   => !empty($contributor_user_group_color),
-				'C_HAS_UPDATE_DATE'      => $this->has_update_date(),
-				'C_SOURCES'              => $nbr_sources > 0,
-				'C_DIFFERED'             => $this->published == self::DEFERRED_PUBLICATION,
-				'C_NEW_CONTENT'          => ContentManagementConfig::load()->module_new_content_is_enabled_and_check_date('guide', $this->get_publishing_start_date() != null ? $this->get_publishing_start_date()->get_timestamp() : $this->creation_date->get_timestamp()) && $this->is_published(),
-				'C_INIT'				 => $this->creation_date->get_timestamp() == $this->item_content->get_update_date()->get_timestamp(),
-				'C_CHANGE_REASON'		 => !empty($this->item_content->get_change_reason()),
+				'C_VISIBLE'                 => $this->is_published(),
+				'C_CONTROLS'			    => $this->is_authorized_to_edit() || $this->is_authorized_to_delete() || $this->is_authorized_to_restore(),
+				'C_EDIT'                    => $this->is_authorized_to_edit(),
+				'C_DELETE'                  => $this->is_authorized_to_delete(),
+				'C_RESTORE'		            => $this->is_authorized_to_restore(),
+				'C_READ_MORE'               => !$this->item_content->is_summary_enabled() && TextHelper::strlen($content) > $config->get_auto_cut_characters_number() && $real_summary != @strip_tags($content, '<br><br/>'),
+				'C_HAS_THUMBNAIL'           => $this->item_content->has_thumbnail(),
+				'C_AUTHOR_CUSTOM_NAME'      => $this->item_content->is_author_custom_name_enabled(),
+				'C_ENABLED_VIEWS_NUMBER'    => $config->get_enabled_views_number(),
+				'C_AUTHOR_GROUP_COLOR'      => !empty($user_group_color),
+				'C_CONTRIBUTOR_GROUP_COLOR' => !empty($contributor_user_group_color),
+				'C_HAS_UPDATE_DATE'         => $this->has_update_date(),
+				'C_SOURCES'                 => $nbr_sources > 0,
+				'C_DIFFERED'                => $this->published == self::DEFERRED_PUBLICATION,
+				'C_NEW_CONTENT'             => ContentManagementConfig::load()->module_new_content_is_enabled_and_check_date('guide', $this->get_publishing_start_date() != null ? $this->get_publishing_start_date()->get_timestamp() : $this->creation_date->get_timestamp()) && $this->is_published(),
+				'C_INIT'				    => $this->creation_date->get_timestamp() == $this->item_content->get_update_date()->get_timestamp(),
+				'C_CHANGE_REASON'		    => !empty($this->item_content->get_change_reason()),
 
 				// Item
-				'ID'                  => $this->id,
-				'TITLE'               => $this->item_content->get_title(),
-				'CONTENT'             => $rich_content,
-				'SUMMARY' 		      => $real_summary,
-				'CHANGE_REASON'       => $this->item_content->get_change_reason(),
-				'STATUS'              => $this->get_publishing_state(),
-				'AUTHOR_CUSTOM_NAME'  => $this->item_content->get_author_custom_name(),
-				'C_AUTHOR_EXISTS'     => $user->get_id() !== User::VISITOR_LEVEL,
-				'C_CONTRIBUTOR_EXISTS' => $contributor_user->get_id() !== User::VISITOR_LEVEL,
-				'AUTHOR_DISPLAY_NAME' => $user->get_display_name(),
-				'AUTHOR_LEVEL_CLASS'  => UserService::get_level_class($user->get_level()),
-				'AUTHOR_GROUP_COLOR'  => $user_group_color,
-				'CONTRIBUTOR_DISPLAY_NAME' => $contributor_user->get_display_name(),
-				'CONTRIBUTOR_LEVEL_CLASS'  => UserService::get_level_class($contributor_user->get_level()),
-				'CONTRIBUTOR_GROUP_COLOR'  => $contributor_user_group_color,
-				'VIEWS_NUMBER'        => $this->get_views_number(),
-				'STATIC_NOTATION'     => NotationService::display_static_image($this->get_notation()),
-				'NOTATION'            => NotationService::display_active_image($this->get_notation()),
+				'ID'                        => $this->id,
+				'TITLE'                     => $this->item_content->get_title(),
+				'CONTENT'                   => $rich_content,
+				'SUMMARY' 		            => $real_summary,
+				'CHANGE_REASON'             => $this->item_content->get_change_reason(),
+				'STATUS'                    => $this->get_publishing_state(),
+				'AUTHOR_CUSTOM_NAME'        => $this->item_content->get_author_custom_name(),
+				'C_AUTHOR_EXISTS'           => $user->get_id() !== User::VISITOR_LEVEL,
+				'C_CONTRIBUTOR_EXISTS'      => $contributor_user->get_id() !== User::VISITOR_LEVEL,
+				'AUTHOR_DISPLAY_NAME'       => $user->get_display_name(),
+				'AUTHOR_LEVEL_CLASS'        => UserService::get_level_class($user->get_level()),
+				'AUTHOR_GROUP_COLOR'        => $user_group_color,
+				'CONTRIBUTOR_DISPLAY_NAME'  => $contributor_user->get_display_name(),
+				'CONTRIBUTOR_LEVEL_CLASS'   => UserService::get_level_class($contributor_user->get_level()),
+				'CONTRIBUTOR_GROUP_COLOR'   => $contributor_user_group_color,
+				'VIEWS_NUMBER'              => $this->get_views_number(),
+				'STATIC_NOTATION'           => NotationService::display_static_image($this->get_notation()),
+				'NOTATION'                  => NotationService::display_active_image($this->get_notation()),
 
 				'C_COMMENTS'      => !empty($comments_number),
 				'L_COMMENTS'      => CommentsService::get_lang_comments('guide', $this->id),
@@ -399,15 +399,15 @@ class GuideItem
 				'U_EDIT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY ? GuideUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($category->get_id(), 'guide')->rel(),
 
 				// Links
-				'U_SYNDICATION'    => SyndicationUrlBuilder::rss('guide', $this->id_category)->rel(),
-				'U_AUTHOR_PROFILE' => UserUrlBuilder::profile($this->author_user->get_id())->rel(),
+				'U_SYNDICATION'         => SyndicationUrlBuilder::rss('guide', $this->id_category)->rel(),
+				'U_AUTHOR_PROFILE'      => UserUrlBuilder::profile($this->author_user->get_id())->rel(),
 				'U_CONTRIBUTOR_PROFILE' => UserUrlBuilder::profile($this->item_content->get_contributor_user()->get_id())->rel(),
-				'U_ITEM'           => $this->get_item_url(),
-				'U_HISTORY'        => GuideUrlBuilder::history($this->id)->rel(),
-				'U_EDIT'           => GuideUrlBuilder::edit($this->id)->rel(),
-				'U_DELETE'         => GuideUrlBuilder::delete($this->id, 0)->rel(),
-				'U_THUMBNAIL'      => $this->item_content->get_thumbnail()->rel(),
-				'U_COMMENTS'       => GuideUrlBuilder::display_comments($category->get_id(), $category->get_rewrited_name(), $this->id, $this->rewrited_title)->rel()
+				'U_ITEM'                => $this->get_item_url(),
+				'U_HISTORY'             => GuideUrlBuilder::history($this->id)->rel(),
+				'U_EDIT'                => GuideUrlBuilder::edit($this->id)->rel(),
+				'U_DELETE'              => GuideUrlBuilder::delete($this->id, 0)->rel(),
+				'U_THUMBNAIL'           => $this->item_content->get_thumbnail()->rel(),
+				'U_COMMENTS'            => GuideUrlBuilder::display_comments($category->get_id(), $category->get_rewrited_name(), $this->id, $this->rewrited_title)->rel()
 			)
 		);
 	}

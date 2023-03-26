@@ -125,3 +125,18 @@
 .active-content td { background-color: var(--bgc-sub); }
 
 .large-table p.ellipsis { margin: 0; }
+
+.show-anchor {
+    background-color: var(--bgc-main);
+    width: 300px;
+    z-index: 5;
+    position: fixed;
+    top: 1.618em;
+    left: -400px;
+    transition: all 0.5s;
+}
+
+.show-anchor.active-anchor {
+    left: 1.618em;
+    transition: all 0.5s;
+}

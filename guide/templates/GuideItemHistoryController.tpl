@@ -43,7 +43,7 @@
 									<time datetime="{items.DATE_ISO8601}" itemprop="datePublished">{items.UPDATE_DATE_FULL}</time>
 								</td>
 								<td>
-									{items.CONTRIBUTOR_DISPLAY_NAME}
+                                    <a href="${relative_url(UserUrlBuilder::personnal_message())}">{items.CONTRIBUTOR_DISPLAY_NAME}</a>  
 								</td>
 								<td# IF NOT items.C_INIT ## IF items.C_CHANGE_REASON # aria-label="{items.CHANGE_REASON}"# ENDIF ## ENDIF #>
 									# IF items.C_INIT #

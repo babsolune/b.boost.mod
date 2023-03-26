@@ -6,9 +6,9 @@
  * @since       PHPBoost 5.1 - 2017 09 11
 */
 
-(function ($)
+(function (jQuery)
 {
-    $.fn.menutree = function(options) {
+    jQuery.fn.menutree = function(options) {
         var defaults = jQuery(this), params = jQuery.extend({
             'oneSub': false,
             'openLink' : true

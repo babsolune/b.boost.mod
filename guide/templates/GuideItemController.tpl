@@ -5,7 +5,7 @@
 			{@guide.module.title}# IF NOT C_ROOT_CATEGORY # - {CATEGORY_NAME}# ENDIF #
 			# IF IS_ADMIN #<a class="offload" href="{U_EDIT_CATEGORY}" aria-label="{@common.edit}"><i class="far fa-edit" aria-hidden="true"></i></a># ENDIF #
 		</div>
-		<h1><span id="name" itemprop="name">{TITLE}</span></h1>		
+		<h1><span id="name" itemprop="name">{TITLE}</span></h1>
 	</header>
 	<div class="sub-section">
 		<div class="content-container">
@@ -178,4 +178,7 @@
 		# ENDIF #
 	</footer>
 </section>
+<div class="show-anchor">
+    <div class="message-helper bgc success"></div>
+</div>
 <script src="{PATH_TO_ROOT}/guide/templates/js/guide# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>

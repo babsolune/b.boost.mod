@@ -297,8 +297,6 @@ class GuideItemFormController extends DefaultModuleController
 		$item = $this->get_item();
 		$item_content = $item->get_item_content();
 
-		$item_content->set_contributor_user(new User(AppContext::get_current_user()->get_id()));
-
 		if ($item->get_i_order() === null) {
 			$items_number_in_category = GuideService::count('WHERE id_category = :id_category', array('id_category' => $this->get_item()->get_id_category()));
 			$item->set_i_order($items_number_in_category + 1);
@@ -322,7 +320,7 @@ class GuideItemFormController extends DefaultModuleController
 		if ($this->config->is_author_displayed())
 			$item_content->set_author_custom_name(($this->form->get_value('author_custom_name') && ($this->form->get_value('author_custom_name') !== $item->get_author_user()->get_display_name()) ? $this->form->get_value('author_custom_name') : ''));
 
-		$item_content->set_sources($this->form->get_value('sources'));
+        $item_content->set_sources($this->form->get_value('sources'));
 
 		if (!GuideAuthorizationsService::check_authorizations($item->get_id_category())->moderation())
 		{
@@ -382,7 +380,6 @@ class GuideItemFormController extends DefaultModuleController
 		}
 
 		if ($this->is_new_item) {
-			// $item_content->set_update_date($this->form->get_value('creation_date'));
 			$items_number_in_category = GuideService::count('WHERE id_category = :id_category', array('id_category' => $item->get_id_category()));
 			$item->set_i_order($items_number_in_category + 1);
 
@@ -402,38 +399,32 @@ class GuideItemFormController extends DefaultModuleController
 			if (!$this->is_contributor_member())
 				HooksService::execute_hook_action('add', self::$module_id, array_merge($item_content->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
 		}
-		elseif (!$this->is_new_item && $item->is_published()) {
-			$item_content->set_update_date(new Date());
+        else {
+            $item_content->set_update_date(new Date());
+            if ($item->is_published()) {
 
-			$last_content_id = GuideService::get_last_content_id();
-			foreach ($last_content_id as $content_id) {
-				$item_content->set_content_id($content_id + 1);
-			}
-			PersistenceContext::get_querier()->update(PREFIX . "guide_contents", array('active_content' => 0), 'WHERE item_id = :item_id', array('item_id' => $this->get_item()->get_id()));
-			$item_content->set_active_content('1');
+                $last_content_id = GuideService::get_last_content_id();
+                foreach ($last_content_id as $content_id) {
+                    $item_content->set_content_id($content_id + 1);
+                }
+                PersistenceContext::get_querier()->update(PREFIX . "guide_contents", array('active_content' => 0), 'WHERE item_id = :item_id', array('item_id' => $this->get_item()->get_id()));
+                $item_content->set_active_content('1');
 
-			$content_id = GuideService::add_content($item_content);
-			$item_content->set_content_id($content_id);
+                $content_id = GuideService::add_content($item_content);
+            }
+            else {
+                $item_content->set_active_content('1');
 
-			$item->set_item_content($item_content);
-			GuideService::update($item);
+                $content_id = GuideService::update_content($item_content);
+            }
+                $item_content->set_content_id($content_id);
 
-			if (!$this->is_contributor_member())
-				HooksService::execute_hook_action('edit', self::$module_id, array_merge($item_content->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
-		}
-		elseif (!$this->is_new_item && !$item->is_published()) {
-			$item_content->set_active_content('1');
-			$item_content->set_update_date(new Date());
+            $item->set_item_content($item_content);
+            GuideService::update($item);
 
-			$content_id = GuideService::update_content($item_content);
-			$item_content->set_content_id($content_id);
-
-			$item->set_item_content($item_content);
-			GuideService::update($item);
-
-			if (!$this->is_contributor_member())
-				HooksService::execute_hook_action('edit', self::$module_id, array_merge($item_content->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
-		}
+            if (!$this->is_contributor_member())
+                HooksService::execute_hook_action('edit', self::$module_id, array_merge($item_content->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
+        }
 
 		$this->contribution_actions($item);
 

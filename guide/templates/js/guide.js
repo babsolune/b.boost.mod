@@ -25,12 +25,14 @@ title.each(function () {
     if (jQuery(this).is('h6')) padding = '4.618em';
     jQuery('#summary-list').append(jQuery('<li><a class="summary-title" href="#' + rewrited + '" style="padding-left: ' + padding + '">' + hyphen + '<span class="inner-title">' + innerhtml + '</span></a></li>'));
 
-    var anchor = jQuery('<a href="' + window.location.href + '#' + rewrited + '" class="smaller copy-link-to-clipboard" aria-label="' + ARIA_TO_CLIPBOARD + '"><i class="fa fa-fw fa-hashtag" aria-hidden="true"></i></a>');
+    var anchor = jQuery('<a href="' + window.location.href + '#' + rewrited + '" class="smaller copy-anchor" aria-label="' + ARIA_TO_CLIPBOARD + '"><i class="fa fa-fw fa-hashtag" aria-hidden="true"></i></a>');
     jQuery(this).prepend(anchor);
 });
 
+// Copy anchor to clipboard and show when done
+jQuery('.show-anchor').prependTo('body');
 
-document.querySelectorAll('.copy-link-to-clipboard').forEach( el => {
+document.querySelectorAll('.copy-anchor').forEach( el => {
     el.addEventListener('click', event => {
         event.preventDefault();
 
@@ -42,9 +44,16 @@ document.querySelectorAll('.copy-link-to-clipboard').forEach( el => {
         }, true);
 
         document.execCommand('copy');
-        alert(COPIED_TO_CLIPBOARD +'\n' + hrefValue);
+        show_anchor(COPIED_TO_CLIPBOARD + '<br /><br />' + hrefValue);
     });
 });
+
+function show_anchor(content) {
+    jQuery('.show-anchor').addClass('active-anchor').children().html(content);
+    setTimeout(() => {
+        jQuery('.show-anchor').removeClass('active-anchor')
+    }, 3000);
+}
 
 // smoth scroll
 jQuery('.summary-title').on('click', function () {
