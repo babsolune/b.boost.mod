@@ -1,7 +1,7 @@
 # Wiki 2 Specs  
 
 ## Objectif  
-    Passer le module wiki en mvc
+    Passer le module wiki en mvc (renommé en Guide le temps des travaux)
 
 ## Spec  
 - items
