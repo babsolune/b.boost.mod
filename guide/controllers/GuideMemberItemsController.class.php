@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 11 18
+ * @version     PHPBoost 6.0 - last update: 2023 03 27
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -47,13 +47,13 @@ class GuideMemberItemsController extends DefaultModuleController
 		FROM ' . GuideSetup::$guide_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
+		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
 		' . $condition . '
 		AND c.active_content = 1
-		AND i.author_user_id = :user_id
+		AND c.author_user_id = :user_id
 		ORDER BY c.update_date
 		LIMIT :number_items_per_page OFFSET :display_from', array_merge($parameters, array(
 			'number_items_per_page' => $pagination->get_number_items_per_page(),
@@ -61,6 +61,7 @@ class GuideMemberItemsController extends DefaultModuleController
 		)));
 
 		$this->view->put_all(array(
+            'MODULE_NAME'            => $this->config->get_module_name(),
 			'C_MEMBER_ITEMS'         => true,
 			'C_MY_ITEMS'             => $this->is_current_member_displayed(),
 			'C_ITEMS'                => $result->get_rows_count() > 0,
@@ -168,12 +169,12 @@ class GuideMemberItemsController extends DefaultModuleController
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-		$graphical_environment->set_page_title($page_title, $this->lang['guide.module.title'], $page);
+		$graphical_environment->set_page_title($page_title, $this->config->get_module_name(), $page);
 		$graphical_environment->get_seo_meta_data()->set_description(StringVars::replace_vars($this->lang['guide.seo.description.member'], array('author' => $this->get_member()->get_display_name())), $page);
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(GuideUrlBuilder::display_member_items($this->get_member()->get_id(), $page));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
-		$breadcrumb->add($this->lang['guide.module.title'], GuideUrlBuilder::home());
+		$breadcrumb->add($this->config->get_module_name(), GuideUrlBuilder::home());
 		$breadcrumb->add($page_title, GuideUrlBuilder::display_member_items($this->get_member()->get_id(), $page));
 
 		return $response;

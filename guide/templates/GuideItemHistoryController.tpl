@@ -1,13 +1,5 @@
 <section id="module-guide" class="several-items">
 	<header class="section-header">
-		<div class="controls align-right">
-			<a class="offload" href="${relative_url(SyndicationUrlBuilder::rss('guide', ID_CAT))}" aria-label="{@common.syndication}"><i class="fa fa-rss warning" aria-hidden="true"></i></a>
-			# IF NOT C_ROOT_CATEGORY #{@guide.module.title}# ENDIF #
-			# IF C_DISPLAY_REORDER_LINK #
-				<a class="offload" href="{U_REORDER_ITEMS}" aria-label="{@items.reorder}"><i class="fa fa-fw fa-exchange-alt" aria-hidden="true"></i></a>
-			# ENDIF #
-			# IF C_CATEGORY ## IF IS_ADMIN #<a class="offload" href="{U_EDIT_CATEGORY}" aria-label="{@common.edit}"><i class="far fa-edit" aria-hidden="true"></i></a># ENDIF ## ENDIF #
-		</div>
 		<h1>
 			{@guide.item.history}: 
 			<span class="d-block small align-center">{ITEM_TITLE}</span>

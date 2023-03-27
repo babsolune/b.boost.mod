@@ -1,29 +1,31 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 01 21
- * @since       PHPBoost 6.0 - 2023 01 21
+ * @version     PHPBoost 6.0 - last update: 2023 03 27
+ * @since       PHPBoost 6.0 - 2022 11 18
  */
 
 ####################################################
 #                       French                     #
 ####################################################
 
-$lang['guide.module.title'] = 'Guide';
-$lang['guide.menu.title'] = 'Arborescence du guide';
-$lang['guide.explorer'] = 'Explorateur';
+$lang['guide.module.title']   = 'Guide';
+$lang['guide.menu.title']     = 'Arborescence du guide';
+$lang['guide.explorer']       = 'Explorateur';
 
 // TreeLinks
-$lang['item']  = 'fiche';
-$lang['an.item']  = 'une fiche';
-$lang['the.item']  = 'la fiche';
-$lang['items.reorder']    = 'Réorganiser les fiches';
-$lang['items.reordering'] = 'Réorganisation des fiches';
+$lang['item']               = 'fiche';
+$lang['an.item']            = 'une fiche';
+$lang['the.item']           = 'la fiche';
+$lang['items.reorder']      = 'Réorganiser les fiches';
+$lang['items.reordering']   = 'Réorganisation des fiches';
 
 // Summary
-$lang['guide.summary'] = 'Table des matières';
+$lang['guide.summary']                  = 'Table des matières';
+$lang['guide.name']                     = 'Nom du guide';
+$lang['guide.display.sticky.summary']   = 'Afficher la table des matières en position fixe';
 
 // Titles
 $lang['guide.root']             = 'Sans catégorie';

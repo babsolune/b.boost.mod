@@ -2,7 +2,7 @@
 	<header class="section-header">
 		<div class="controls align-right">
 			<a class="offload" href="${relative_url(SyndicationUrlBuilder::rss('guide', ID_CAT))}" aria-label="{@common.syndication}"><i class="fa fa-rss warning" aria-hidden="true"></i></a>
-			# IF NOT C_ROOT_CATEGORY #{@guide.module.title}# ENDIF #
+			# IF NOT C_ROOT_CATEGORY #{MODULE_NAME}# ENDIF #
 			# IF C_DISPLAY_REORDER_LINK #
 				<a class="offload" href="{U_REORDER_ITEMS}" aria-label="{@items.reorder}"><i class="fa fa-fw fa-exchange-alt" aria-hidden="true"></i></a>
 			# ENDIF #
@@ -15,7 +15,7 @@
 				# IF C_MEMBER_ITEMS #
 					# IF C_MY_ITEMS #{@guide.my.items}# ELSE #{@guide.member.items} {MEMBER_NAME}# ENDIF #
 				# ELSE #
-					# IF C_ROOT_CATEGORY #{@guide.module.title}# ELSE ## IF C_TAG_ITEMS #<span class="smaller">{@common.keyword}: </span># ENDIF #{CATEGORY_NAME}# ENDIF #
+					# IF C_ROOT_CATEGORY #{MODULE_NAME}# ELSE ## IF C_TAG_ITEMS #<span class="smaller">{@common.keyword}: </span># ENDIF #{CATEGORY_NAME}# ENDIF #
 				# ENDIF #
 			# ENDIF #
 		</h1>

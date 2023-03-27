@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 11 18
+ * @version     PHPBoost 6.0 - last update: 2023 03 27
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -37,7 +37,7 @@ class GuideItemHistoryController extends DefaultModuleController
 		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
 		FROM ' . GuideSetup::$guide_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
+		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
@@ -49,10 +49,11 @@ class GuideItemHistoryController extends DefaultModuleController
 		)));
 
 		$this->view->put_all(array(
-			'C_ITEMS'         => $result->get_rows_count() > 0,
-			'C_SEVERAL_ITEMS' => $result->get_rows_count() > 1,
-			'C_CONTROLS'      => GuideAuthorizationsService::check_authorizations($this->get_item()->get_category()->get_id())->moderation() || GuideAuthorizationsService::check_authorizations()->manage_archives(),
-			'C_RESTORE' 	  => GuideAuthorizationsService::check_authorizations()->manage_archives(),
+            'MODULE_NAME'       => $this->config->get_module_name(),
+			'C_ITEMS'           => $result->get_rows_count() > 0,
+			'C_SEVERAL_ITEMS'   => $result->get_rows_count() > 1,
+			'C_CONTROLS'        => GuideAuthorizationsService::check_authorizations($this->get_item()->get_category()->get_id())->moderation() || GuideAuthorizationsService::check_authorizations()->manage_archives(),
+			'C_RESTORE' 	    => GuideAuthorizationsService::check_authorizations()->manage_archives(),
 
 			'ITEM_TITLE' => $this->item->get_item_content()->get_title(),
 
@@ -103,12 +104,12 @@ class GuideItemHistoryController extends DefaultModuleController
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-		$graphical_environment->set_page_title($page_title, $this->lang['guide.module.title']);
+		$graphical_environment->set_page_title($page_title, $this->config->get_module_name());
 		$graphical_environment->get_seo_meta_data()->set_description(StringVars::replace_vars($this->lang['guide.seo.description.history'], array('item' => $this->item->get_item_content()->get_title())));
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(GuideUrlBuilder::history($this->item->get_id()));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
-		$breadcrumb->add($this->lang['guide.module.title'], GuideUrlBuilder::home());
+		$breadcrumb->add($this->config->get_module_name(), GuideUrlBuilder::home());
 		$breadcrumb->add($this->item->get_item_content()->get_title(), GuideUrlBuilder::display($this->item->get_category()->get_id(), $this->item->get_category()->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title()));
 		$breadcrumb->add($page_title, GuideUrlBuilder::history($this->item->get_id()));
 

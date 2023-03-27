@@ -46,6 +46,6 @@ class GuideUserExtensionPoint implements UserExtensionPoint
 	 */
 	public function get_publications_number($user_id)
 	{
-		return PersistenceContext::get_querier()->count(PREFIX . 'guide', 'WHERE author_user_id = :user_id', array('user_id' => $user_id));
+		return PersistenceContext::get_querier()->count(PREFIX . 'guide_contents', 'WHERE author_user_id = :user_id', array('user_id' => $user_id));
 	}
 }

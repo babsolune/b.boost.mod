@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 01 09
+ * @version     PHPBoost 6.0 - last update: 2023 03 27
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -67,7 +67,6 @@ class GuideSetup extends DefaultModuleSetup
 			'id_category' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'i_order' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'rewrited_title' => array('type' => 'string', 'length' => 255, 'default' => "''"),
-			'author_user_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'published' => array('type' => 'integer', 'length' => 1, 'notnull' => 1, 'default' => 0),
 			'publishing_start_date' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'publishing_end_date' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
@@ -94,7 +93,7 @@ class GuideSetup extends DefaultModuleSetup
 			'active_content' => array('type' => 'boolean', 'length' => 1, 'notnull' => 1, 'default' => 0),
 			'content' => array('type' => 'text', 'length' => 16777215),
 			'thumbnail' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
-			'contributor_user_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
+			'author_user_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'author_custom_name' => array('type' =>  'string', 'length' => 255, 'default' => "''"),
 			'update_date' => array('type' => 'integer', 'length' => 11, 'default' => 0),
 			'change_reason' => array('type' => 'text', 'length' => 65000, 'notnull' => 0),
@@ -164,7 +163,6 @@ class GuideSetup extends DefaultModuleSetup
 			'publishing_start_date' => 0,
 			'publishing_end_date'   => 0,
 			'creation_date'  	    => time(),
-			'author_user_id' 	 	=> 1,
 			'views_number'          => 0
 		));
 	}
@@ -172,19 +170,19 @@ class GuideSetup extends DefaultModuleSetup
 	private function insert_guide_contents_data()
 	{
 		PersistenceContext::get_querier()->insert(self::$guide_contents_table, array(
-			'content_id'     	  => 1,
-			'item_id'        	  => 1,
-			'title'               => $this->messages['default.sheet.name'],
-			'active_content'      => 1,
-			'summary'        	  => '',
-			'author_custom_name'  => '',
-			'thumbnail'           => FormFieldThumbnail::DEFAULT_VALUE,
-			'content'        	  => $this->messages['default.sheet.content'],
-			'content_level'    	  => GuideItemContent::NO_LEVEL,
-			'sources'             => TextHelper::serialize(array()),
-			'change_reason'    	  => '',
-			'contributor_user_id' => 1,
-			'update_date'    	  => time()
+			'content_id'     	    => 1,
+			'item_id'        	    => 1,
+			'title'                 => $this->messages['default.sheet.name'],
+			'active_content'        => 1,
+			'summary'        	    => '',
+			'author_custom_name'    => '',
+			'thumbnail'             => FormFieldThumbnail::DEFAULT_VALUE,
+			'content'        	    => $this->messages['default.sheet.content'],
+			'content_level'    	    => GuideItemContent::NO_LEVEL,
+			'sources'               => TextHelper::serialize(array()),
+			'change_reason'    	    => $this->messages['default.history.init'],
+			'author_user_id'        => 1,
+			'update_date'    	    => time()
 		));
 	}
 }

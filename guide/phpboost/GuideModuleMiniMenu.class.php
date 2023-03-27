@@ -57,7 +57,7 @@ class GuideModuleMiniMenu extends ModuleMiniMenu
 				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
+				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 				LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
@@ -95,7 +95,7 @@ class GuideModuleMiniMenu extends ModuleMiniMenu
 				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
+				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 				LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id

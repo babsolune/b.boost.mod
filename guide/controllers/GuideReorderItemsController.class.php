@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 11 18
+ * @version     PHPBoost 6.0 - last update: 2023 03 27
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -38,12 +38,13 @@ class GuideReorderItemsController extends DefaultModuleController
 		FROM ' . GuideSetup::$guide_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
+		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
 		WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
 		AND i.id_category = :id_category
+		AND c.active_content = 1
 		ORDER BY i.i_order', array(
 			'id_category' => $this->get_category()->get_id(),
 			'user_id' => AppContext::get_current_user()->get_id(),
@@ -73,7 +74,12 @@ class GuideReorderItemsController extends DefaultModuleController
 			$item = new GuideItem();
 			$item->set_properties($row);
 
-			$this->view->assign_block_vars('items', $item->get_template_vars());
+			$this->view->assign_block_vars('items', array(
+                'ID' => $item->get_id(),
+                'TITLE' => $item->get_item_content()->get_title(),
+                'U_EDIT' => GuideUrlBuilder::edit($item->get_id())->rel(),
+                'U_DELETE' => GuideUrlBuilder::delete($item->get_id(), 0)->rel(),
+            ));
 		}
 		$result->dispose();
 	}
@@ -126,9 +132,9 @@ class GuideReorderItemsController extends DefaultModuleController
 		$graphical_environment = $response->get_graphical_environment();
 
 		if ($this->get_category()->get_id() != Category::ROOT_CATEGORY)
-			$graphical_environment->set_page_title($this->get_category()->get_name(), $this->lang['guide.module.title']);
+			$graphical_environment->set_page_title($this->get_category()->get_name(), $this->config->get_module_name());
 		else
-			$graphical_environment->set_page_title($this->lang['guide.module.title']);
+			$graphical_environment->set_page_title($this->config->get_module_name());
 
 		$description = $this->get_category()->get_description() . ' ' . $this->lang['items.reorder'];
 		if (empty($description))
@@ -137,7 +143,7 @@ class GuideReorderItemsController extends DefaultModuleController
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(GuideUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name()));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
-		$breadcrumb->add($this->lang['guide.module.title'], GuideUrlBuilder::home());
+		$breadcrumb->add($this->config->get_module_name(), GuideUrlBuilder::home());
 
 		$categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($this->get_category()->get_id(), true));
 		foreach ($categories as $id => $category)

@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 01 09
+ * @version     PHPBoost 6.0 - last update: 2023 03 27
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -133,7 +133,7 @@ class GuideItemFormController extends DefaultModuleController
 			));
 		}
 
-		if (GuideAuthorizationsService::check_authorizations($this->get_item()->get_id_category())->moderation())
+		if ($this->item->is_authorized_to_add() || $this->item->is_authorized_to_edit())
 		{
 			$publication_fieldset = new FormFieldsetHTML('publication', $this->lang['form.publication']);
 			$form->add_fieldset($publication_fieldset);
@@ -309,7 +309,6 @@ class GuideItemFormController extends DefaultModuleController
 			$item->set_id_category($this->form->get_value('id_category')->get_raw_value());
 
 		$item_content->set_content($this->form->get_value('content'));
-		$item_content->set_change_reason($this->form->get_value('change_reason'));
 		$item_content->set_summary(($this->form->get_value('summary_enabled') ? $this->form->get_value('summary') : ''));
 		$item_content->set_thumbnail($this->form->get_value('thumbnail'));
 
@@ -318,11 +317,11 @@ class GuideItemFormController extends DefaultModuleController
 			$item_content->set_custom_level($this->form->get_value('custom_level'));
 
 		if ($this->config->is_author_displayed())
-			$item_content->set_author_custom_name(($this->form->get_value('author_custom_name') && ($this->form->get_value('author_custom_name') !== $item->get_author_user()->get_display_name()) ? $this->form->get_value('author_custom_name') : ''));
+			$item_content->set_author_custom_name(($this->form->get_value('author_custom_name') && ($this->form->get_value('author_custom_name') !== $item->get_item_content()->get_author_user()->get_display_name()) ? $this->form->get_value('author_custom_name') : ''));
 
         $item_content->set_sources($this->form->get_value('sources'));
 
-		if (!GuideAuthorizationsService::check_authorizations($item->get_id_category())->moderation())
+		if (!$item->is_authorized_to_add() || !$item->is_authorized_to_edit())
 		{
 			$item->clean_publishing_start_and_end_date();
 
@@ -379,7 +378,8 @@ class GuideItemFormController extends DefaultModuleController
 				$item->clean_publishing_start_and_end_date();
 		}
 
-		if ($this->is_new_item) {
+		if ($this->is_new_item)
+        {
 			$items_number_in_category = GuideService::count('WHERE id_category = :id_category', array('id_category' => $item->get_id_category()));
 			$item->set_i_order($items_number_in_category + 1);
 
@@ -399,26 +399,28 @@ class GuideItemFormController extends DefaultModuleController
 			if (!$this->is_contributor_member())
 				HooksService::execute_hook_action('add', self::$module_id, array_merge($item_content->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
 		}
-        else {
+        else
+        {
             $item_content->set_update_date(new Date());
-            if ($item->is_published()) {
-
+            if ($item->is_published()) 
+            {
+                $item_content->set_change_reason($this->form->get_value('change_reason'));
                 $last_content_id = GuideService::get_last_content_id();
                 foreach ($last_content_id as $content_id) {
                     $item_content->set_content_id($content_id + 1);
                 }
                 PersistenceContext::get_querier()->update(PREFIX . "guide_contents", array('active_content' => 0), 'WHERE item_id = :item_id', array('item_id' => $this->get_item()->get_id()));
-                $item_content->set_active_content('1');
 
+                $item_content->set_active_content('1');
                 $content_id = GuideService::add_content($item_content);
             }
-            else {
+            else
+            {
                 $item_content->set_active_content('1');
-
                 $content_id = GuideService::update_content($item_content);
             }
-                $item_content->set_content_id($content_id);
 
+            $item_content->set_content_id($content_id);
             $item->set_item_content($item_content);
             GuideService::update($item);
 
@@ -510,12 +512,12 @@ class GuideItemFormController extends DefaultModuleController
 		$graphical_environment = $response->get_graphical_environment();
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
-		$breadcrumb->add($this->lang['guide.module.title'], GuideUrlBuilder::home());
+		$breadcrumb->add($this->config->get_module_name(), GuideUrlBuilder::home());
 
 		if ($item->get_id() === null)
 		{
 			$breadcrumb->add($this->lang['guide.add.item'], GuideUrlBuilder::add($item->get_id_category()));
-			$graphical_environment->set_page_title($this->lang['guide.add.item'], $this->lang['guide.module.title']);
+			$graphical_environment->set_page_title($this->lang['guide.add.item'], $this->config->get_module_name());
 			$graphical_environment->get_seo_meta_data()->set_description($this->lang['guide.add.item']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(GuideUrlBuilder::add($item->get_id_category()));
 		}
@@ -524,7 +526,7 @@ class GuideItemFormController extends DefaultModuleController
 			if (!AppContext::get_session()->location_id_already_exists($location_id))
 				$graphical_environment->set_location_id($location_id);
 
-			$graphical_environment->set_page_title($this->lang['guide.edit.item'], $this->lang['guide.module.title']);
+			$graphical_environment->set_page_title($this->lang['guide.edit.item'], $this->config->get_module_name());
 			$graphical_environment->get_seo_meta_data()->set_description($this->lang['guide.edit.item']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(GuideUrlBuilder::edit($item->get_id()));
 

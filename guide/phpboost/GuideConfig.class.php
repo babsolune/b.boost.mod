@@ -1,14 +1,17 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 11 18
+ * @version     PHPBoost 6.0 - last update: 2023 03 27
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
 class GuideConfig extends AbstractConfigData
 {
+	const MODULE_NAME = 'module_name';
+	const STICKY_SUMMARY = 'sticky_menu';
+
 	const CATEGORIES_PER_PAGE = 'categories_per_page';
 	const CATEGORIES_PER_ROW  = 'categories_per_row';
 	const ITEMS_PER_PAGE      = 'items_per_page';
@@ -38,6 +41,26 @@ class GuideConfig extends AbstractConfigData
 	const RELATED_ITEMS      = 'related_items';
 
 	const AUTO_CUT_CHARACTERS_NUMBER = 'auto_cut_characters_number';
+
+	public function get_module_name()
+	{
+		return $this->get_property(self::MODULE_NAME);
+	}
+
+	public function set_module_name($value)
+	{
+		$this->set_property(self::MODULE_NAME, $value);
+	}
+
+	public function get_sticky_summary()
+	{
+		return $this->get_property(self::STICKY_SUMMARY);
+	}
+
+	public function set_sticky_summary($value)
+	{
+		$this->set_property(self::STICKY_SUMMARY, $value);
+	}
 
 	public function get_categories_per_page()
 	{
@@ -225,23 +248,25 @@ class GuideConfig extends AbstractConfigData
 	public function get_default_values()
 	{
 		return array(
-			self::CATEGORIES_PER_PAGE         => 10,
-			self::CATEGORIES_PER_ROW          => 3,
-			self::ITEMS_PER_PAGE              => 15,
-			self::ITEMS_PER_ROW               => 2,
-			self::DISPLAY_TYPE                => self::GRID_VIEW,
-			self::HOMEPAGE                    => self::CATEGORIES,
-			self::DEFAULT_CONTENT             => '',
-			self::SUMMARY_DISPLAYED_TO_GUESTS => false,
-			self::AUTHOR_DISPLAYED            => true,
-			self::NB_VIEW_ENABLED             => false,
-			self::ROOT_CATEGORY_DESCRIPTION   => LangLoader::get_message('default.root.description', 'install', 'guide'),
-			self::AUTO_CUT_CHARACTERS_NUMBER  => 128,
-			self::AUTHORIZATIONS              => array('r-1' => 1, 'r0' => 39, 'r1' => 63),
-			self::DEFERRED_OPERATIONS         => array(),
-			self::SUGGESTED_ITEMS             => false,
-			self::SUGGESTED_ITEMS_NB          => 4,
-			self::RELATED_ITEMS               => true,
+			self::MODULE_NAME                    => LangLoader::get_message('guide.module.title', 'common', 'guide') . ' ' . GeneralConfig::load()->get_site_name(),
+			self::STICKY_SUMMARY                => false,
+			self::CATEGORIES_PER_PAGE           => 10,
+			self::CATEGORIES_PER_ROW            => 3,
+			self::ITEMS_PER_PAGE                => 15,
+			self::ITEMS_PER_ROW                 => 2,
+			self::DISPLAY_TYPE                  => self::GRID_VIEW,
+			self::HOMEPAGE                      => self::CATEGORIES,
+			self::DEFAULT_CONTENT               => '',
+			self::SUMMARY_DISPLAYED_TO_GUESTS   => false,
+			self::AUTHOR_DISPLAYED              => true,
+			self::NB_VIEW_ENABLED               => false,
+			self::ROOT_CATEGORY_DESCRIPTION     => LangLoader::get_message('default.root.description', 'install', 'guide'),
+			self::AUTO_CUT_CHARACTERS_NUMBER    => 128,
+			self::AUTHORIZATIONS                => array('r-1' => 1, 'r0' => 39, 'r1' => 63),
+			self::DEFERRED_OPERATIONS           => array(),
+			self::SUGGESTED_ITEMS               => false,
+			self::SUGGESTED_ITEMS_NB            => 4,
+			self::RELATED_ITEMS                 => true,
 		);
 	}
 

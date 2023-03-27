@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 01 09
+ * @version     PHPBoost 6.0 - last update: 2023 03 27
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -137,7 +137,7 @@ class GuideService
 		FROM ' . GuideSetup::$guide_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
+		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = :module_id AND note.user_id = :current_user_id
 		WHERE i.id = :id AND i.id = c.item_id AND c.active_content = 1', array(
@@ -159,7 +159,7 @@ class GuideService
 		FROM ' . GuideSetup::$guide_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.contributor_user_id
+		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = :module_id AND note.user_id = :current_user_id
 		WHERE c.item_id = :id', array(
@@ -188,7 +188,7 @@ class GuideService
 		FROM ' . GuideSetup::$guide_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
-		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = i.author_user_id
+		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = :module_id AND note.user_id = :current_user_id
 		WHERE i.id = :id AND i.id = c.item_id AND c.content_id = :content_id', array(
@@ -202,6 +202,46 @@ class GuideService
 		$item->set_properties($row);
 		return $item;
 	}
+
+    public static function get_initial_content(int $id)
+    {
+		$result = self::$db_querier->select('SELECT i.*, c.*, member.*, f.id AS fav_id, notes.average_notes, notes.notes_number, note.note
+		FROM ' . GuideSetup::$guide_table .' i
+		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
+		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
+		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
+		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
+		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = :module_id AND note.user_id = :current_user_id
+		WHERE i.id = :id AND i.id = c.item_id', array(
+			'module_id'       => self::$module_id,
+			'id'              => $id,
+			'current_user_id' => AppContext::get_current_user()->get_id()
+		));
+
+        $all_content_ids = array();
+		while ($row = $result->fetch())
+		{
+            $all_content_ids[] = $row['content_id'];
+        }
+
+        $row = self::$db_querier->select_single_row_query('SELECT i.*, c.*, member.*, f.id AS fav_id, notes.average_notes, notes.notes_number, note.note
+		FROM ' . GuideSetup::$guide_table .' i
+		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
+		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
+		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
+		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
+		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = :module_id AND note.user_id = :current_user_id
+		WHERE i.id = :id AND i.id = c.item_id AND c.content_id = :content_id', array(
+			'module_id'       => self::$module_id,
+			'id'              => $id,
+			'content_id'      => min($all_content_ids),
+			'current_user_id' => AppContext::get_current_user()->get_id()
+		));
+
+		$content_item = new GuideItemContent();
+        $content_item->set_properties($row);
+		return $content_item;
+    }
 
 	public static function clear_cache()
 	{

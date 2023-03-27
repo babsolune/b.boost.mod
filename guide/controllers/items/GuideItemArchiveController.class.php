@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 11 18
+ * @version     PHPBoost 6.0 - last update: 2023 03 27
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -45,7 +45,6 @@ class GuideItemArchiveController extends DefaultModuleController
 
 	private function build_view()
 	{
-		$config = GuideConfig::load();
 		$comments_config = CommentsConfig::load();
 		$content_management_config = ContentManagementConfig::load();
 		$item = $this->get_item();
@@ -55,7 +54,8 @@ class GuideItemArchiveController extends DefaultModuleController
 		$has_keywords = count($keywords) > 0;
 
 		$this->view->put_all(array_merge($item->get_template_vars(), array(
-			'C_AUTHOR_DISPLAYED' => $config->is_author_displayed(),
+            'MODULE_NAME'        => $this->config->get_module_name(),
+			'C_AUTHOR_DISPLAYED' => $this->config->is_author_displayed(),
 			'C_ENABLED_COMMENTS' => $comments_config->module_comments_is_enabled('guide'),
 			'C_ENABLED_NOTATION' => $content_management_config->module_notation_is_enabled('guide'),
 			'C_KEYWORDS'         => $has_keywords,
@@ -107,7 +107,7 @@ class GuideItemArchiveController extends DefaultModuleController
 		$item = $this->get_item();
 
 		$current_user = AppContext::get_current_user();
-		$not_authorized = !GuideAuthorizationsService::check_authorizations($item->get_id_category())->moderation() && !GuideAuthorizationsService::check_authorizations($item->get_id_category())->write() && (!GuideAuthorizationsService::check_authorizations($item->get_id_category())->contribution() || $item->get_author_user()->get_id() != $current_user->get_id());
+		$not_authorized = !GuideAuthorizationsService::check_authorizations($item->get_id_category())->moderation() && !GuideAuthorizationsService::check_authorizations($item->get_id_category())->write() && (!GuideAuthorizationsService::check_authorizations($item->get_id_category())->contribution() || $item->get_item_content()->get_author_user()->get_id() != $current_user->get_id());
 
 		switch ($item->get_publishing_state()) {
 			case GuideItem::PUBLISHED:
@@ -145,7 +145,7 @@ class GuideItemArchiveController extends DefaultModuleController
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-		$graphical_environment->set_page_title($item->get_item_content()->get_title(), ($category->get_id() != Category::ROOT_CATEGORY ? $category->get_name() . ' - ' : '') . $this->lang['guide.module.title']);
+		$graphical_environment->set_page_title($item->get_item_content()->get_title(), ($category->get_id() != Category::ROOT_CATEGORY ? $category->get_name() . ' - ' : '') . $this->config->get_module_name());
 		$graphical_environment->get_seo_meta_data()->set_description($item->get_item_content()->get_real_summary());
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(GuideUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()));
 
@@ -153,7 +153,7 @@ class GuideItemArchiveController extends DefaultModuleController
 			$graphical_environment->get_seo_meta_data()->set_picture_url($item->get_item_content()->get_thumbnail());
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
-		$breadcrumb->add($this->lang['guide.module.title'],GuideUrlBuilder::home());
+		$breadcrumb->add($this->config->get_module_name(),GuideUrlBuilder::home());
 
 		$categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($item->get_id_category(), true));
 		foreach ($categories as $id => $category)

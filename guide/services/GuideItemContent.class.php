@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 01 09
+ * @version     PHPBoost 6.0 - last update: 2023 03 27
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -23,7 +23,7 @@ class GuideItemContent
 
 	private $update_date;
 
-	private $contributor_user;
+	private $author_user;
 	private $author_custom_name;
 	private $author_custom_name_enabled;
 
@@ -152,14 +152,14 @@ class GuideItemContent
 		$this->update_date = $update_date;
 	}
 
-	public function get_contributor_user()
+	public function get_author_user()
 	{
-		return $this->contributor_user;
+		return $this->author_user;
 	}
 
-	public function set_contributor_user(User $contributor_user)
+	public function set_author_user(User $author_user)
 	{
-		$this->contributor_user = $contributor_user;
+		$this->author_user = $author_user;
 	}
 
 	public function get_author_custom_name()
@@ -228,7 +228,7 @@ class GuideItemContent
 			'active_content'        => $this->get_active_content(),
 			'change_reason'         => $this->get_change_reason(),
 			'update_date'           => $this->get_update_date()->get_timestamp(),
-			'contributor_user_id'   => $this->get_contributor_user()->get_id(),
+			'author_user_id'        => $this->get_author_user()->get_id(),
 			'author_custom_name'    => $this->get_author_custom_name(),
 			'thumbnail'             => $this->get_thumbnail()->relative(),
 			'content_level'         => $this->get_content_level(),
@@ -252,13 +252,14 @@ class GuideItemContent
 		$this->custom_level     = $properties['custom_level'];
 		$this->sources          = !empty($properties['sources']) ? TextHelper::unserialize($properties['sources']) : array();
 
-        $contributor_user = new User();
+        $user = new User();
 		if (!empty($properties['user_id']))
-			$contributor_user->set_properties($properties);
+			$user->set_properties($properties);
 		else
-			$contributor_user->init_visitor_user();
+			$user->init_visitor_user();
+        // Debug::stop($user);
 
-        $this->set_contributor_user($contributor_user);
+        $this->set_author_user($user);
 
 		$this->author_custom_name           = !empty($properties['author_custom_name']) ? $properties['author_custom_name'] : '';
 		$this->author_custom_name_enabled   = !empty($properties['author_custom_name']);
@@ -268,12 +269,13 @@ class GuideItemContent
 	{
         $this->content                      = GuideConfig::load()->get_default_content();
 		$this->active_content               = true;
-		$this->thumbnail_url                = FormFieldThumbnail::DEFAULT_VALUE;
+		$this->thumbnail_url                = '';
 		$this->update_date                  = new Date();
 		$this->author_custom_name           = AppContext::get_current_user()->get_display_name();
 		$this->author_custom_name_enabled   = false;
 		$this->content_level                = self::NO_LEVEL;
 		$this->sources                      = array();
+        $this->author_user                  = AppContext::get_current_user();
 	}
 }
 ?>
