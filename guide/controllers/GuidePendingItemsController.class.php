@@ -49,7 +49,7 @@ class GuidePendingItemsController extends DefaultModuleController
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
 		' . $condition .'
-		' . (!GuideAuthorizationsService::check_authorizations()->moderation() ? ' AND c.author_user_id = :user_id' : '') . '
+		' . (!GuideAuthorizationsService::check_authorizations()->write() ? ' AND c.author_user_id = :user_id' : '') . '
 		AND c.active_content = 1
 		ORDER BY c.update_date
 		LIMIT :number_items_per_page OFFSET :display_from', array_merge($parameters, array(

@@ -5,6 +5,7 @@
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
  * @version     PHPBoost 6.0 - last update: 2023 03 27
  * @since       PHPBoost 6.0 - 2022 11 18
+ * @contributor Myster <MP : https://www.phpboost.com/user/pm-3023>
  */
 
 class GuideItemFormController extends DefaultModuleController
@@ -404,6 +405,7 @@ class GuideItemFormController extends DefaultModuleController
             $item_content->set_update_date(new Date());
             if ($item->is_published()) 
             {
+                $item_content->set_author_user(AppContext::get_current_user());
                 $item_content->set_change_reason($this->form->get_value('change_reason'));
                 $last_content_id = GuideService::get_last_content_id();
                 foreach ($last_content_id as $content_id) {
