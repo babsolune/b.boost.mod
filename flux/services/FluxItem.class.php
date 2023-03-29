@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 02 19
+ * @version     PHPBoost 6.0 - last update: 2023 01 06
  * @since       PHPBoost 6.0 - 2021 10 30
 */
 
@@ -257,7 +257,7 @@ class FluxItem
 			'author_user_id' => $this->get_author_user()->get_id(),
 			'views_number' => $this->get_views_number(),
 			'visits_number' => $this->get_visits_number(),
-			'thumbnail_url' => $this->get_thumbnail()->relative(),
+			'thumbnail' => $this->get_thumbnail()->relative(),
 		);
 	}
 
@@ -276,7 +276,7 @@ class FluxItem
 		$this->update_date = !empty($properties['update_date']) ? new Date($properties['update_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->views_number = $properties['views_number'];
 		$this->visits_number = $properties['visits_number'];
-		$this->thumbnail_url = $properties['thumbnail_url'];
+		$this->thumbnail_url = $properties['thumbnail'];
 
 		$user = new User();
 		if (!empty($properties['user_id']))
@@ -352,6 +352,7 @@ class FluxItem
 
 			'U_SYNDICATION'    => SyndicationUrlBuilder::rss('flux', $this->id_category)->rel(),
 			'U_AUTHOR_PROFILE' => UserUrlBuilder::profile($this->get_author_user()->get_id())->rel(),
+			'U_AUTHOR_CONTRIB' => FluxUrlBuilder::display_member_items($this->get_author_user()->get_id())->rel(),
 			'U_ITEM'           => $this->get_item_url(),
 			'U_VISIT'          => FluxUrlBuilder::visit($this->id)->rel(),
 			'U_DEADLINK'       => FluxUrlBuilder::dead_link($this->id)->rel(),

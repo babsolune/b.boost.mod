@@ -1,7 +1,7 @@
 <section id="module-flux" class="several-items">
 	<header class="section-header">
 		<div class="controls align-right">
-			<a class="offload" href="${relative_url(SyndicationUrlBuilder::rss('flux', ID_CAT))}" aria-label="{@common.syndication}"><i class="fa fa-rss warning"></i></a>
+			<a class="offload" href="${relative_url(SyndicationUrlBuilder::rss('flux', CATEGORY_ID))}" aria-label="{@common.syndication}"><i class="fa fa-rss warning"></i></a>
 			# IF NOT C_ROOT_CATEGORY #{MODULE_NAME}# ENDIF #
 			# IF IS_ADMIN #<a class="offload" href="{U_EDIT_CATEGORY}" aria-label="{@common.edit}"><i class="fa fa-edit"></i></a># ENDIF #
 		</div>
@@ -28,15 +28,14 @@
 				</div>
 			</div>
 		# ENDIF #
-		# IF C_DISPLAY_LAST_FEEDS #
+		# IF C_LAST_ITEMS #
 			<div class="sub-section">
 				<div class="content-container">
 					<article>
 						<header>
-							<h5>{LAST_FEEDS}</h5>
+							<h5>{L_LAST_FEEDS}</h5>
 						</header>
 						<div class="content">
-							# IF C_LAST_FEEDS #
 								<div
 									class="hidden"
 									data-listorder-control="hidden-sort"
@@ -47,37 +46,40 @@
 								</div>
 								<ul class="last-feeds" data-listorder-group="feed-items">
 									# START feed_items #
-										<li data-listorder-item>
-											<span class="lo-date hidden">{feed_items.SORT_DATE}</span>
-											<span class="feed-title">
-												<h6>
-													<a href="{feed_items.U_ITEM}"# IF C_NEW_WINDOW # target="_blank" rel="noopener noreferrer"# ENDIF #>
-														{feed_items.TITLE}
-													</a>
-												</h6>
-												<span class="small align-right"><a href="{feed_items.U_ITEM_HOST}" class="offload text-italic">{feed_items.ITEM_HOST}</a> | {feed_items.DATE}</span>
-											</span>
-											<p>
-												# IF feed_items.C_HAS_THUMBNAIL #
-													<img src="{feed_items.U_THUMBNAIL}" class="align-left" alt="{feed_items.TITLE}" />
-												# ENDIF #
-												{feed_items.SUMMARY} # IF feed_items.C_READ_MORE # <span aria-label="{@flux.words.not.read}" class="small text-italic pinned notice">{feed_items.WORDS_NUMBER}</span># ENDIF #
-											</p>
-										</li>
+										# IF feed_items.C_HAS_FEEDS #
+											<li data-listorder-item>
+												<span class="lo-date hidden">{feed_items.SORT_DATE}</span>
+												<div class="feed-item-container">
+													# IF feed_items.C_HAS_THUMBNAIL #
+														<img src="{feed_items.U_THUMBNAIL}" alt="{feed_items.TITLE}" />
+													# ENDIF #
+													<div class="feed-item-content">
+														<span class="feed-title">
+															<h6>
+																<a href="{feed_items.U_ITEM}"# IF C_NEW_WINDOW # target="_blank" rel="noopener noreferrer"# ENDIF #>
+																	{feed_items.TITLE}
+																</a>
+															</h6>
+															<span class="small align-right flux-infos"><a href="{feed_items.U_ITEM_HOST}" class="offload text-italic">{feed_items.ITEM_HOST}</a> | {feed_items.DATE}</span>
+														</span>
+														<p>
+															{feed_items.SUMMARY} # IF feed_items.C_READ_MORE # <span aria-label="{@flux.words.not.read}" class="small text-italic pinned notice">{feed_items.WORDS_NUMBER}</span># ENDIF #
+														</p>
+													</div>
+												</div>
+											</li>
+										# ENDIF #
 									# END feed_items #
 								</ul>
 								<nav
-								   	class="listorder-pagination pagination"
-								   	data-listorder-control="pagination"
-							        data-group="feed-items"
-							        data-items-per-page="{LAST_FEEDS_NUMBER}"
-							        data-current-page="0"
-							        data-name="pagination1"
+									class="listorder-pagination pagination"
+									data-listorder-control="pagination"
+									data-group="feed-items"
+									data-items-per-page="{LAST_FEEDS_NUMBER}"
+									data-current-page="0"
+									data-name="pagination1"
 									data-id="paging">
 								</nav>
-							# ELSE #
-								<div class="message-helper bgc notice">{@flux.no.last.feeds}</div>
-							# ENDIF #
 						</div>
 					</article>
 				</div>
@@ -164,7 +166,7 @@
 										{items.VISITS_NUMBER}
 									</td>
 									# IF C_CONTROLS #
-										<td>
+										<td class="controls">
 											# IF items.C_EDIT #
 												<a class="offload" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="fa fa-edit"></i></a>
 											# ENDIF #
