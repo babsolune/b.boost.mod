@@ -140,3 +140,43 @@
     left: 1.618em;
     transition: all 0.5s;
 }
+.summary-sticky.cell-name {
+    padding: 0.309em;
+    background-color: var(--bgc-alt);
+    color: var(--txt-alt);
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    transform: translateX(-220px);
+    opacity: 0.5;
+    transition: all 0.5s;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.summary-sticky.cell-name:hover {
+    transform: translateX(0);
+    opacity: 1;
+    transition: all 0.5s;
+}
+
+.summary-sticky.cell-name i { margin-left: 0.618em; }
+
+.summary-sticky.cell-list {
+    padding: 0.618em;
+    background-color: var(--bgc-main);
+    border-right: 1px solid var(--bdr-main);
+    max-width: 500px;;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    transition: all 0.5s;
+    overflow-y: auto;
+}
+
+.summary-sticky.cell-list.open-summary {
+    transform: translateX(0);
+    transition: all 0.5s;
+}

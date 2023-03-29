@@ -77,9 +77,9 @@
 				<div id="sheet-summary" class="cell-tile">
 					<div class="cell-summary cell">
 						<div class="cell-header">
-							<h5 class="cell-name">{@guide.summary}</h5>
+							<h5 class="cell-name# IF C_STICKY_SUMMARY # summary-sticky# ENDIF #">{@guide.summary}</h5>
 						</div>
-						<div class="cell-list">
+						<div class="cell-list# IF C_STICKY_SUMMARY # summary-sticky# ENDIF #">
 							<ul id="summary-list"></ul>
 						</div>
 					</div>
@@ -182,3 +182,13 @@
     <div class="message-helper bgc success"></div>
 </div>
 <script src="{PATH_TO_ROOT}/guide/templates/js/guide# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
+<script>
+    # IF C_STICKY_SUMMARY #
+        setSummarySticky();
+    # ELSE #
+        if (window.matchMedia("(min-width: 769px)").matches) {
+            sendSummaryMenu();
+        }
+    # ENDIF #
+</script>
+

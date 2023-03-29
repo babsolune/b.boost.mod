@@ -1,10 +1,34 @@
-/**
- * @copyright   &copy; 2005-2023 PHPBoost
- * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
- * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 11 18
- * @since       PHPBoost 6.0 - 2022 11 18
-*/
+// @copyright   &copy; 2005-2023 PHPBoost
+// @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+// @author      Sebastien LARTIGUE <babsolune@phpboost.com>
+// @version     PHPBoost 6.0 - last update: 2022 11 18
+// @since       PHPBoost 6.0 - 2022 11 18
+
+// Explorer page
+jQuery('#category-nav').append(GuideCreateChild(0)).find('ul:first').remove();
+
+function GuideCreateChild(id) {
+    var $li = jQuery('li[data_p_id="' + id + '"]').sort(function (a, b) {
+        return jQuery(a).attr('data_order_id') - jQuery(b).attr('data_order_id');
+    });
+    if ($li.length > 0) {
+        for (var i = 0; i < $li.length; i++) {
+            var $this = $li.eq(i);
+            $this.append(GuideCreateChild($this.attr('data_id')));
+        }
+        return jQuery('<ul class="items-list-' + id + '">').append($li);
+    }
+}
+
+jQuery('#category-nav li').has('ul').addClass('has-children');
+jQuery('#category-nav').find('.toggle-menu-button-0').removeClass('flex-between').css('display', 'none');
+
+jQuery('[class*="toggle-menu-button"] .categories-item').each(function () {
+    jQuery(this).on('click', function () {
+        jQuery(this).toggleClass('is-open-menu');
+        jQuery(this).closest('li').children('[class*="items-list"]').toggleClass('show-list');
+    });
+});
 
 // Summary menu constructor
 var title = jQuery('.content .formatter-title:not(span)');
@@ -90,35 +114,30 @@ function sendSummaryMenu()
     }
 }
 
-if (window.matchMedia("(min-width: 769px)").matches) {
-    sendSummaryMenu();
-}
+// Set summary menu sticky
+function setSummarySticky()
+{
+    var button = jQuery('.summary-sticky.cell-name'),
+        summary = jQuery('.summary-sticky.cell-list');
 
-// Home page (root)
-jQuery(document).ready(function () {
-    jQuery('#category-nav').append(GuideCreateChild(0)).find('ul:first').remove();
+    button.prependTo(jQuery('body'));
+    summary.appendTo(jQuery('body'));
+    button.addClass('blink');
+    jQuery(' <i class="fa fa-bars" aria-hidden="true"></i>').appendTo(button);
 
-    function GuideCreateChild(id) {
-        var $li = jQuery('li[data_p_id="' + id + '"]').sort(function (a, b) {
-            return jQuery(a).attr('data_order_id') - jQuery(b).attr('data_order_id');
-        });
-        if ($li.length > 0) {
-            for (var i = 0; i < $li.length; i++) {
-                var $this = $li.eq(i);
-                $this.append(GuideCreateChild($this.attr('data_id')));
-            }
-            return jQuery('<ul class="items-list-' + id + '">').append($li);
-        }
-    }
-
-    jQuery('#category-nav li').has('ul').addClass('has-children');
-    jQuery('#category-nav').find('.toggle-menu-button-0').removeClass('flex-between').css('display', 'none');
-});
-
-jQuery('[class*="toggle-menu-button"] .categories-item').each(function () {
-    jQuery(this).on('click', function () {
-        jQuery(this).toggleClass('is-open-menu');
-        jQuery(this).closest('li').children('[class*="items-list"]').toggleClass('show-list');
+    button.on('click', function (){
+        button.removeClass('blink');
+        summary.toggleClass('open-summary');
     });
-});
 
+    jQuery(document).on('mouseup', function(e){
+        if (!summary.is(e.target) && summary.has(e.target).length === 0) 
+            summary.removeClass('open-summary');
+    });
+
+    jQuery('.summary-title').on('click', function(){
+        summary.removeClass('open-summary');
+    });
+
+    jQuery('#sheet-summary').remove();
+}

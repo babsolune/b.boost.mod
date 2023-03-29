@@ -327,6 +327,7 @@ class GuideItem
 			Date::get_array_tpl_vars($this->publishing_start_date, 'differed_publishing_start_date'),
 			array(
 				// Conditions
+                'C_STICKY_SUMMARY'          => $config->get_sticky_summary(),
 				'C_VISIBLE'                 => $this->is_published(),
 				'C_CONTROLS'			    => $this->is_authorized_to_edit() || $this->is_authorized_to_delete() || $this->is_authorized_to_restore(),
 				'C_EDIT'                    => $this->is_authorized_to_edit(),

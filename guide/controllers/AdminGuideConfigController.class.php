@@ -191,6 +191,9 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 
 	private function save()
 	{
+		$this->config->set_module_name($this->form->get_value('module_name'));
+		$this->config->set_sticky_summary($this->form->get_value('display_sticky_summary'));
+        
 		$this->config->set_items_per_page($this->form->get_value('items_per_page'));
 
 		if($this->form->get_value('display_type') == GuideConfig::GRID_VIEW)

@@ -257,7 +257,6 @@ class GuideItemContent
 			$user->set_properties($properties);
 		else
 			$user->init_visitor_user();
-        // Debug::stop($user);
 
         $this->set_author_user($user);
 

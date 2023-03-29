@@ -10,7 +10,7 @@
 class GuideConfig extends AbstractConfigData
 {
 	const MODULE_NAME = 'module_name';
-	const STICKY_SUMMARY = 'sticky_menu';
+	const STICKY_SUMMARY = 'sticky_summary';
 
 	const CATEGORIES_PER_PAGE = 'categories_per_page';
 	const CATEGORIES_PER_ROW  = 'categories_per_row';

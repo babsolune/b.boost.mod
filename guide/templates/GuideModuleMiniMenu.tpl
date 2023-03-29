@@ -54,7 +54,7 @@
 		</nav>
 	# ENDIF #
 </div>
-<script src="{PATH_TO_ROOT}/guide/templates/js/guide.menu# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
+<script src="{PATH_TO_ROOT}/guide/templates/js/guide.mini# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
 <script>
 	jQuery(document).ready(function() { 
 		jQuery('#guide-mini-nav').menutree();
