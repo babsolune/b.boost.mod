@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 02 28
+ * @version     PHPBoost 6.0 - last update: 2023 02 20
  * @since       PHPBoost 5.2 - 2020 03 06
 */
 
@@ -19,7 +19,7 @@ class HomeLandingMedia
 
         $home_lang = LangLoader::get_all_langs('HomeLanding');
         $module_lang = LangLoader::get_all_langs($module_name);
-        $view->add_lang(array_merge($home_lang, $module_lang));
+        $view->add_lang(array_merge(LangLoader::get_all_langs(), $home_lang, $module_lang));
 
 		$authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, true, $module_name, 'id_category');
 
@@ -51,15 +51,12 @@ class HomeLandingMedia
 
         while ($row = $result->fetch())
         {
-            $thumbnail = new Url($row['thumbnail']);
-            $thumbnail_url = $thumbnail->rel();
-
             $summary = TextHelper::cut_string(@strip_tags(FormatingHelper::second_parse($row['content']), '<br><br/>'), $module_config->get_characters_number_to_cut());
 
             $view->assign_block_vars('items', array(
                 'C_SUMMARY'   => !empty($row['content']),
                 'C_AUDIO'     => $row['mime_type'] == 'audio/mpeg',
-                'C_THUMBNAIL' => !empty($row['thumbnail']),
+                'C_HAS_THUMBNAIL' => !empty($row['thumbnail']),
 
                 'PSEUDO'        => $row['display_name'],
                 'TITLE'         => $row['title'],
@@ -69,7 +66,7 @@ class HomeLandingMedia
                 'CATEGORY_NAME' => $row['id_category'] == Category::ROOT_CATEGORY ? $module_lang['common.root'] : CategoriesService::get_categories_manager('media')->get_categories_cache()->get_category($row['id_category'])->get_name(),
                 'SUMMARY'       => FormatingHelper::second_parse($summary),
 
-                'U_THUMBNAIL' => $thumbnail_url,
+                'U_THUMBNAIL' => Url::to_rel($row['thumbnail']),
                 'U_ITEM'      => Url::to_rel('/media/' . url('media.php?id=' . $row['id'], 'media-' . $row['id'] . '-' . $row['id_category'] . '+' . Url::encode_rewrite($row['title']) . '.php')),
             ));
         }
