@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 01 13
+ * @version     PHPBoost 6.0 - last update: 2022 12 33
  * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
@@ -33,8 +33,8 @@ class SmalladsItemsManagerController extends DefaultModuleController
 			new HTMLTableColumn($this->lang['common.category'], 'id_category'),
 			new HTMLTableColumn($this->lang['common.author'], 'display_name'),
 			new HTMLTableColumn($this->lang['common.creation.date'], 'creation_date'),
-			new HTMLTableColumn($this->lang['common.status.publication'], 'published'),
-			new HTMLTableColumn($this->lang['common.status'], 'completed'),
+			new HTMLTableColumn($this->lang['common.status'], 'published'),
+			new HTMLTableColumn($this->lang['common.archives'], 'completed'),
 			new HTMLTableColumn($this->lang['common.moderation'], '', array('sr-only' => true))
 		);
 
@@ -113,7 +113,7 @@ class SmalladsItemsManagerController extends DefaultModuleController
 			}
 
 			$row = array(
-				new HTMLTableRowCell(new LinkHTMLElement(SmalladsUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()), $item->get_title()), 'left'),
+				new HTMLTableRowCell(new LinkHTMLElement(SmalladsUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()), $item->get_title()), 'align-left'),
 				new HTMLTableRowCell(new LinkHTMLElement(SmalladsUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()), ($category->get_id() == Category::ROOT_CATEGORY ? $this->lang['common.none.alt'] : $category->get_name()))),
 				new HTMLTableRowCell($author),
 				new HTMLTableRowCell($item->get_creation_date()->format(Date::FORMAT_DAY_MONTH_YEAR)),
@@ -144,8 +144,8 @@ class SmalladsItemsManagerController extends DefaultModuleController
 				{
 					if (isset($this->ids[$i]))
 					{
-						$item = SmalladsService::get_item('WHERE smallads.id=:id', array('id' => $this->ids[$i]));
-                        SmalladsService::delete($this->ids[$i]);
+						$item = SmalladsService::get_item($this->ids[$i]);
+						SmalladsService::delete($item->get_id());
 						HooksService::execute_hook_action('delete', self::$module_id, $item->get_properties());
 					}
 				}

@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 01 10
+ * @version     PHPBoost 6.0 - last update: 2022 08 18
  * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
@@ -15,9 +15,9 @@ class SmalladsItemController extends DefaultModuleController
 	private $email_form;
 
 	protected function get_template_to_use()
-   	{
-	   	return new FileTemplate('smallads/SmalladsItemController.tpl');
-   	}
+	{
+		return new FileTemplate('smallads/SmalladsItemController.tpl');
+	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -39,12 +39,12 @@ class SmalladsItemController extends DefaultModuleController
 			{
 				try
 				{
-					$this->item = SmalladsService::get_item('WHERE smallads.id=:id', array('id' => $id));
+					$this->item = SmalladsService::get_item($id);
 				}
 				catch (RowNotFoundException $e)
 				{
 					$error_controller = PHPBoostErrors::unexisting_page();
-   					DispatchManager::redirect($error_controller);
+					DispatchManager::redirect($error_controller);
 				}
 			}
 			else
@@ -176,7 +176,7 @@ class SmalladsItemController extends DefaultModuleController
 		$now = new Date();
 
 		$result = PersistenceContext::get_querier()->select('SELECT
-			id, title, id_category, rewrited_title, thumbnail_url, completed, archived,
+			id, title, id_category, rewrited_title, thumbnail_url, completed, archived, creation_date, update_date,
 			(2 * FT_SEARCH_RELEVANCE(title, :search_content) + FT_SEARCH_RELEVANCE(content, :search_content) / 3) AS relevance
 		FROM ' . SmalladsSetup::$smallads_table . '
 		WHERE (FT_SEARCH(title, :search_content) OR FT_SEARCH(content, :search_content)) AND id <> :excluded_id
@@ -189,16 +189,18 @@ class SmalladsItemController extends DefaultModuleController
 			'limit_nb' => (int)SmalladsConfig::load()->get_suggested_items_nb()
 		));
 
-		$this->view->put_all(array('C_SUGGESTED_ITEMS', $result->get_rows_count() > 0 && SmalladsConfig::load()->get_enabled_items_suggestions()));
+		$this->view->put('C_SUGGESTED_ITEMS', $result->get_rows_count() > 0 && SmalladsConfig::load()->get_enabled_items_suggestions());
 
 		while ($row = $result->fetch())
 		{
-			$this->view->assign_block_vars('suggested_items', array(
-				'C_COMPLETED' => $row['completed'],
+			$date = $row['creation_date'] <= $row['update_date'] ? $row['update_date'] : $row['creation_date'];
+			$this->view->assign_block_vars('suggested', array(
+				'C_COMPLETED'     => $row['completed'],
 				'C_HAS_THUMBNAIL' => !empty($row['thumbnail_url']),
-				'TITLE' => $row['title'],
-				'U_THUMBNAIL' => !empty($row['thumbnail_url']) ? Url::to_rel($row['thumbnail_url']) : $this->item->get_default_thumbnail()->rel(),
-				'U_ITEM' => SmalladsUrlBuilder::display($row['id_category'], CategoriesService::get_categories_manager()->get_categories_cache()->get_category($row['id_category'])->get_rewrited_name(), $row['id'], $row['rewrited_title'])->rel()
+				'TITLE'           => $row['title'],
+				'DATE'            => Date::to_format($date, Date::FORMAT_DAY_MONTH_YEAR),
+				'U_THUMBNAIL'     => !empty($row['thumbnail_url']) ? Url::to_rel($row['thumbnail_url']) : $this->item->get_default_thumbnail()->rel(),
+				'U_ITEM'          => SmalladsUrlBuilder::display($row['id_category'], CategoriesService::get_categories_manager()->get_categories_cache()->get_category($row['id_category'])->get_rewrited_name(), $row['id'], $row['rewrited_title'])->rel()
 			));
 		}
 		$result->dispose();
@@ -302,27 +304,27 @@ class SmalladsItemController extends DefaultModuleController
 		$current_user = AppContext::get_current_user();
 		$not_authorized = !CategoriesAuthorizationsService::check_authorizations($item->get_id_category())->moderation() && !CategoriesAuthorizationsService::check_authorizations($item->get_id_category())->write() && (!CategoriesAuthorizationsService::check_authorizations($item->get_id_category())->contribution() || $item->get_author_user()->get_id() != $current_user->get_id());
 
-		switch ($item->get_publication_state())
+		switch ($item->get_publishing_state())
 		{
 			case SmalladsItem::PUBLISHED_NOW:
 				if (!CategoriesAuthorizationsService::check_authorizations($item->get_id_category())->read())
 				{
 					$error_controller = PHPBoostErrors::user_not_authorized();
-		   			DispatchManager::redirect($error_controller);
+					DispatchManager::redirect($error_controller);
 				}
 			break;
 			case SmalladsItem::NOT_PUBLISHED:
 				if ($not_authorized || ($current_user->get_id() == User::VISITOR_LEVEL))
 				{
 					$error_controller = PHPBoostErrors::user_not_authorized();
-		   			DispatchManager::redirect($error_controller);
+					DispatchManager::redirect($error_controller);
 				}
 			break;
-			case SmalladsItem::PUBLICATION_DATE:
+			case SmalladsItem::DEFERRED_PUBLICATION:
 				if (!$item->is_published() && ($not_authorized || ($current_user->get_id() == User::VISITOR_LEVEL)))
 				{
 					$error_controller = PHPBoostErrors::user_not_authorized();
-		   			DispatchManager::redirect($error_controller);
+					DispatchManager::redirect($error_controller);
 				}
 			break;
 			default:

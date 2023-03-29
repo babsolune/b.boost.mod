@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Julien BRISWALTER <j1.seth@phpboost.com>
  * @version     PHPBoost 6.0 - last update: 2022 01 10
@@ -118,7 +118,7 @@ class SmalladsUrlBuilder
 	/**
 	 * @return Url
 	 */
- 	public static function display_pending_items()
+	public static function display_pending_items()
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/pending/');
 	}
@@ -126,7 +126,7 @@ class SmalladsUrlBuilder
 	/**
 	 * @return Url
 	 */
- 	public static function archived_items()
+	public static function archived_items()
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/archives/');
 	}

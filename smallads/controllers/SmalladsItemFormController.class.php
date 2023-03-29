@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 01 10
+ * @version     PHPBoost 6.0 - last update: 2022 08 18
  * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
@@ -70,8 +70,8 @@ class SmalladsItemFormController extends DefaultModuleController
 			$fieldset->add_field(new FormFieldTextEditor('rewrited_title', $this->lang['form.rewrited.title'], $this->item->get_rewrited_title(),
 				array(
 					'description' => $this->lang['form.rewrited.title.clue'],
-			      	'hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_personalize_rewrited_title', false) : !$this->item->rewrited_title_is_personalized())
-			  	),
+					'hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_personalize_rewrited_title', false) : !$this->item->rewrited_title_is_personalized())
+				),
 				array(new FormFieldConstraintRegex('`^[a-z0-9\-]+$`iu'))
 			));
 		}
@@ -168,16 +168,6 @@ class SmalladsItemFormController extends DefaultModuleController
 			array('css_class' => 'tabs tabs-animation')
 		);
 		$form->add_fieldset($other_fieldset);
-
-		if($this->config->is_max_weeks_number_displayed())
-		{
-			$other_fieldset->add_field(new FormFieldNumberEditor('max_weeks', $this->lang['smallads.form.max.weeks'], $this->item->get_max_weeks(),
-				array(
-					'min' => 1, 'max' => 52,
-					'description' => $this->lang['smallads.form.max.weeks.clue']
-				)
-			));
-		}
 
 		$other_fieldset->add_field(new FormFieldCheckbox('displayed_author_name', $this->lang['form.display.author'], $this->item->get_displayed_author_name(),
 			array(
@@ -293,6 +283,16 @@ class SmalladsItemFormController extends DefaultModuleController
 		);
 		$form->add_fieldset($publication_fieldset);
 
+		if($this->config->is_max_weeks_number_displayed())
+		{
+			$publication_fieldset->add_field(new FormFieldNumberEditor('max_weeks', $this->lang['smallads.form.max.weeks'], $this->item->get_max_weeks(),
+				array(
+					'min' => 1, 'max' => 52,
+					'description' => $this->lang['smallads.form.max.weeks.clue']
+				)
+			));
+		}
+
 		if($this->item->get_id() !== null)
 		{
 			$publication_fieldset->add_field(new FormFieldCheckbox('completed', $this->lang['smallads.form.completed'], $this->item->get_completed(),
@@ -321,11 +321,11 @@ class SmalladsItemFormController extends DefaultModuleController
 				));
 			}
 
-			$publication_fieldset->add_field(new FormFieldSimpleSelectChoice('publication_state', $this->lang['form.publication'], $this->item->get_publication_state(),
+			$publication_fieldset->add_field(new FormFieldSimpleSelectChoice('publication_state', $this->lang['form.publication'], $this->item->get_publishing_state(),
 				array(
 					new FormFieldSelectChoiceOption($this->lang['form.publication.draft'], SmalladsItem::NOT_PUBLISHED),
 					new FormFieldSelectChoiceOption($this->lang['form.publication.now'], SmalladsItem::PUBLISHED_NOW),
-					new FormFieldSelectChoiceOption($this->lang['form.publication.deffered'], SmalladsItem::PUBLICATION_DATE),
+					new FormFieldSelectChoiceOption($this->lang['form.publication.deffered'], SmalladsItem::DEFERRED_PUBLICATION),
 				),
 				array(
 					'events' => array('change' => '
@@ -345,12 +345,12 @@ class SmalladsItemFormController extends DefaultModuleController
 			));
 
 			$publication_fieldset->add_field($publishing_start_date = new FormFieldDateTime('publishing_start_date', $this->lang['form.start.date'], ($this->item->get_publishing_start_date() === null ? new Date() : $this->item->get_publishing_start_date()),
-				array('hidden' => ($request->is_post_method() ? ($request->get_postint(__CLASS__ . '_publication_state', 0) != SmalladsItem::PUBLICATION_DATE) : ($this->item->get_publication_state() != SmalladsItem::PUBLICATION_DATE)))
+				array('hidden' => ($request->is_post_method() ? ($request->get_postint(__CLASS__ . '_publishing_state', 0) != SmalladsItem::DEFERRED_PUBLICATION) : ($this->item->get_publishing_state() != SmalladsItem::DEFERRED_PUBLICATION)))
 			));
 
 			$publication_fieldset->add_field(new FormFieldCheckbox('end_date_enable', $this->lang['form.enable.end.date'], $this->item->enabled_end_date(),
 				array(
-					'hidden' => ($request->is_post_method() ? ($request->get_postint(__CLASS__ . '_publication_state', 0) != SmalladsItem::PUBLICATION_DATE) : ($this->item->get_publication_state() != SmalladsItem::PUBLICATION_DATE)),
+					'hidden' => ($request->is_post_method() ? ($request->get_postint(__CLASS__ . '_publishing_state', 0) != SmalladsItem::DEFERRED_PUBLICATION) : ($this->item->get_publishing_state() != SmalladsItem::DEFERRED_PUBLICATION)),
 					'events' => array('click' => '
 						if (HTMLForms.getField("end_date_enable").getValue()) {
 							HTMLForms.getField("publishing_end_date").enable();
@@ -429,7 +429,7 @@ class SmalladsItemFormController extends DefaultModuleController
 				array('description' => $this->lang['contribution.description.clue'])
 			));
 		}
-		elseif ($this->item->is_published() && $this->item->is_authorized_to_edit() && !AppContext::get_current_user()->check_level(User::ADMINISTRATOR_LEVEL))
+		elseif ($this->item->is_published() && $this->item->is_authorized_to_edit() && $this->is_contributor_member())
 		{
 			$fieldset = new FormFieldsetHTML('member_edition', $this->lang['contribution.member.edition']);
 			$fieldset->set_description(MessageHelper::display($this->lang['contribution.edition.warning'], MessageHelper::WARNING)->render());
@@ -455,7 +455,7 @@ class SmalladsItemFormController extends DefaultModuleController
 			{
 				try
 				{
-					$this->item = SmalladsService::get_item('WHERE smallads.id=:id', array('id' => $id));
+					$this->item = SmalladsService::get_item($id);
 				}
 				catch(RowNotFoundException $e)
 				{
@@ -549,7 +549,6 @@ class SmalladsItemFormController extends DefaultModuleController
 			}
 		}
 
-
 		return $options;
 	}
 
@@ -635,7 +634,7 @@ class SmalladsItemFormController extends DefaultModuleController
 			$this->item->clean_publication_start_and_end_date();
 
 			if (CategoriesAuthorizationsService::check_authorizations($this->item->get_id_category())->contribution() && !CategoriesAuthorizationsService::check_authorizations($this->item->get_id_category())->write())
-				$this->item->set_publication_state(SmalladsItem::NOT_PUBLISHED);
+				$this->item->set_publishing_state(SmalladsItem::NOT_PUBLISHED);
 		}
 		else
 		{
@@ -652,8 +651,8 @@ class SmalladsItemFormController extends DefaultModuleController
 			$rewrited_title = $this->form->get_value('personalize_rewrited_title') && !empty($rewrited_title) ? $rewrited_title : Url::encode_rewrite($this->item->get_title());
 			$this->item->set_rewrited_title($rewrited_title);
 
-			$this->item->set_publication_state($this->form->get_value('publication_state')->get_raw_value());
-			if ($this->item->get_publication_state() == SmalladsItem::PUBLICATION_DATE)
+			$this->item->set_publishing_state($this->form->get_value('publication_state')->get_raw_value());
+			if ($this->item->get_publishing_state() == SmalladsItem::DEFERRED_PUBLICATION)
 			{
 				$config = SmalladsConfig::load();
 				$deferred_operations = $config->get_deferred_operations();
@@ -702,8 +701,8 @@ class SmalladsItemFormController extends DefaultModuleController
 
 		if ($this->item->get_id() === null)
 		{
-			$this->item->set_author_user(AppContext::get_current_user());
-			$item_id = SmalladsService::add($this->item);
+			$id = SmalladsService::add($this->item);
+			$this->item->set_id($id);
 
 			if (!$this->is_contributor_member())
 				HooksService::execute_hook_action('add', self::$module_id, array_merge($this->item->get_properties(), array('item_url' => $this->item->get_item_url())));
@@ -712,33 +711,32 @@ class SmalladsItemFormController extends DefaultModuleController
 		{
 			$now = new Date();
 			$this->item->set_update_date($now);
-			$item_id = $this->item->get_id();
 			SmalladsService::update($this->item);
 
 			if (!$this->is_contributor_member())
 				HooksService::execute_hook_action('edit', self::$module_id, array_merge($this->item->get_properties(), array('item_url' => $this->item->get_item_url())));
 		}
 
-		$this->contribution_actions($this->item, $item_id);
+		$this->contribution_actions($this->item);
 
-		KeywordsService::get_keywords_manager()->put_relations($item_id, $this->form->get_value('keywords'));
+		KeywordsService::get_keywords_manager()->put_relations($this->item->get_id(), $this->form->get_value('keywords'));
 
 		SmalladsService::clear_cache();
 	}
 
-	private function contribution_actions(SmalladsItem $item, $item_id)
+	private function contribution_actions(SmalladsItem $item)
 	{
 		if ($this->is_contributor_member())
 		{
 			$contribution = new Contribution();
-			$contribution->set_id_in_module($item_id);
-			if ($item->get_id() === null)
+			$contribution->set_id_in_module($item->get_id());
+			if ($this->is_new_item)
 				$contribution->set_description(stripslashes($this->form->get_value('contribution_description')));
 			else
 				$contribution->set_description(stripslashes($this->form->get_value('edition_description')));
 
 			$contribution->set_entitled($item->get_title());
-			$contribution->set_fixing_url(SmalladsUrlBuilder::edit_item($item_id)->relative());
+			$contribution->set_fixing_url(SmalladsUrlBuilder::edit_item($item->get_id())->relative());
 			$contribution->set_poster_id(AppContext::get_current_user()->get_id());
 			$contribution->set_module('smallads');
 			$contribution->set_auth(
@@ -752,7 +750,7 @@ class SmalladsItemFormController extends DefaultModuleController
 		}
 		else
 		{
-			$corresponding_contributions = ContributionService::find_by_criteria('smallads', $item_id);
+			$corresponding_contributions = ContributionService::find_by_criteria('smallads', $item->get_id());
 			if (count($corresponding_contributions) > 0)
 			{
 				foreach ($corresponding_contributions as $contribution)
@@ -763,7 +761,6 @@ class SmalladsItemFormController extends DefaultModuleController
 				HooksService::execute_hook_action('process_contribution', self::$module_id, array_merge($contribution->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
 			}
 		}
-		$item->set_id($item_id);
 	}
 
 	private function redirect()

@@ -17,7 +17,13 @@
 			# ENDIF #
 			<article itemscope="itemscope" itemtype="http://schema.org/Smallad" id="smallads-item-{ID}" class="smallads-item# IF C_NEW_CONTENT # new-content# ENDIF #">
 				<div class="flex-between">
-					<div></div>
+					# IF C_HAS_UPDATE_DATE #
+						<span class="pinned notice small text-italic modified-date">
+							{@common.last.update} : <time datetime="{UPDATE_DATE_ISO8601}" itemprop="dateModified">{UPDATE_DATE_FULL}</time>
+						</span>
+					# ELSE #
+						<span></span>
+					# ENDIF #
 					# IF C_CONTROLS #
 						<div class="controls align-right">
 							# IF NOT C_COMPLETED ## IF C_EDIT #<a class="offload" href="{U_EDIT}" aria-label="{@common.edit}"><i class="fa fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF ## ENDIF #
@@ -72,6 +78,7 @@
 														<div id="email-modal" class="modal modal-animation">
 															<div class="close-modal" role="button" aria-label="{@smallads.close.modal}"></div>
 															<div class="content-panel cell">
+																<div class="align-right"><a href="#" class="error big hide-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></a></div>
 																<div class="cell-body">
 																	# IF C_CONTACT_LEVEL #
 																		# INCLUDE MESSAGE_HELPER #
@@ -90,13 +97,14 @@
 													# ENDIF #
 													# IF C_DISPLAYED_AUTHOR_PM #
 														<a href="{U_AUTHOR_PM}" class="smallad-pm offload" aria-label="{@smallads.contact.pm}"><i class="fa fa-fw fa-people-arrows" aria-hidden="true"></i></a>
-													 # ENDIF #
+													# ENDIF #
 
 													# IF C_DISPLAYED_AUTHOR_PHONE #
 														<a href="#" data-modal data-target="tel-modal" aria-label="{@smallads.contact.phone} - {@smallads.open.modal}"><i class="fa fa-fw fa-phone" aria-hidden="true"></i><span class="sr-only">{@smallads.contact.phone}</span></a>
 														<div id="tel-modal" class="modal modal-animation">
 															<div class="close-modal" role="button" aria-label="{@smallads.close.modal}"></div>
 															<div class="content-panel cell">
+																<div class="align-right"><a href="#" class="error big hide-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></a></div>
 																<div class="cell-body">
 																	<div class="cell-content align-center">
 																		# IF C_CONTACT_LEVEL #
@@ -149,7 +157,7 @@
 										# ENDIF #
 										# IF C_KEYWORDS #
 											<li class="li-stretch">
-												 <span aria-label="{@common.keywords}"><i class="fa fa-fw fa-tags" aria-hidden="true"></i></span>
+												<span aria-label="{@common.keywords}"><i class="fa fa-fw fa-tags" aria-hidden="true"></i></span>
 												<span>
 													# START keywords #
 														<a class="offload" itemprop="keywords" href="{keywords.URL}">{keywords.NAME}</a># IF keywords.C_SEPARATOR #, # ENDIF #
@@ -173,14 +181,14 @@
 
 				# IF C_CAROUSEL #
 					<aside class="carousel-container">
-					 	# START carousel #
+						# START carousel #
 							<a href="{carousel.U_PICTURE}" # IF carousel.C_DESCRIPTION #aria-label="{carousel.DESCRIPTION}"# ENDIF # data-lightbox="formatter" data-rel="lightcase:collection">
 								<figure class="carousel-thumbnail">
 									<img src="{carousel.U_PICTURE}" alt="{carousel.DESCRIPTION}" />
 									# IF carousel.C_DESCRIPTION #<figcaption>{carousel.DESCRIPTION}</figcaption># ENDIF #
 								</figure>
 							</a>
-					 	# END carousel #
+						# END carousel #
 					</aside>
 				# ENDIF #
 				# IF C_SOURCES #
@@ -193,24 +201,30 @@
 						# END sources #
 					</aside>
 				# ENDIF #
-				# IF C_HAS_UPDATE_DATE #
-					<span class="pinned notice small text-italic modified-date">
-						{@common.last.update} : <time datetime="{UPDATE_DATE_ISO8601}" itemprop="dateModified">{UPDATE_DATE_FULL}</time>
-					</span>
-				# ENDIF #
 
 				# IF C_SUGGESTED_ITEMS #
 					<aside class="suggested-links">
 						<span><i class="fa fa-fw fa-lightbulb" aria-hidden="true"></i> {@common.suggestions} :</span>
-						<ul>
-							# START suggested_items #
-								<li>
-									<a href="{suggested_items.U_ITEM}# IF suggested_items.C_COMPLETED # error# ENDIF #" class="suggested-item offload">
-										<img src="{suggested_items.U_THUMBNAIL}" alt="{suggested_items.TITLE}" /> {suggested_items.TITLE}
-									</a>
-								</li>
-							# END suggested_items #
-						</ul>
+						<div class="cell-flex cell-row">
+							# START suggested #
+								<div class="flex-between flex-between-large cell">
+									<div class="cell-body">
+										<div class="cell-content">
+											<a href="{suggested.U_ITEM}# IF suggested.C_COMPLETED # error# ENDIF #" class="suggested-item offload">
+												<h6>{suggested.TITLE}</h6>
+											</a>
+											<span class="more">{suggested.DATE}</span>
+										</div>
+									</div>
+									# IF suggested.C_HAS_THUMBNAIL #
+										<div class="cell-thumbnail cell-landscape cell-center">
+											<img src="{suggested.U_THUMBNAIL}" alt="{suggested.TITLE}" />
+										</div>
+									# ENDIF #
+								</div>
+							# END suggested #
+						</div>
+
 					</aside>
 				# ENDIF #
 

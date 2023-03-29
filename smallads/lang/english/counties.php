@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
  * @version     PHPBoost 6.0 - last update: 2021 07 21
@@ -11,22 +11,23 @@
 #                      English                      #
 #####################################################
 
-$lang['location'] = 'Location';
-$lang['location.clue'] = 'Start typing an address then select it in the scrolling list.<br />You can limit to a country/state/county/city and so on, if you don\'t want to show your complete address.';
-$lang['county'] = 'County';
-$lang['other.country'] = 'Other country';
+$lang['location']              = 'Location';
+$lang['location.clue']         = 'Start typing an address then select it in the scrolling list.<br />You can limit to a country/state/county/city and so on, if you don\'t want to show your complete address.';
+$lang['county']                = 'County';
+$lang['other.country']         = 'Other country';
 $lang['other.country.explain'] = 'Out of England';
-$lang['county.other'] = 'Other country';
-$lang['county.'] = '';
-$lang['county.1'] = 'Bedfordshire';
-$lang['county.2'] = 'Berkshire';
-$lang['county.3'] = 'Bristol';
-$lang['county.4'] = 'Buckinghamshire';
-$lang['county.5'] = 'Cambridgeshire';
-$lang['county.6'] = 'Cheshire';
-$lang['county.7'] = 'City of London';
-$lang['county.8'] = 'Cornwall';
-$lang['county.9'] = 'County Durham';
+$lang['county.other']          = 'Other country';
+
+$lang['county.']   = '';
+$lang['county.1']  = 'Bedfordshire';
+$lang['county.2']  = 'Berkshire';
+$lang['county.3']  = 'Bristol';
+$lang['county.4']  = 'Buckinghamshire';
+$lang['county.5']  = 'Cambridgeshire';
+$lang['county.6']  = 'Cheshire';
+$lang['county.7']  = 'City of London';
+$lang['county.8']  = 'Cornwall';
+$lang['county.9']  = 'County Durham';
 $lang['county.10'] = 'Cumbria';
 $lang['county.11'] = 'Derbyshire';
 $lang['county.12'] = 'Devon';

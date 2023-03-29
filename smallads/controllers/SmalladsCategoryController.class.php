@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 03 06
+ * @version     PHPBoost 6.0 - last update: 2022 12 14
  * @since       PHPBoost 5.1 - 2018 03 15
  * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
 */
@@ -15,9 +15,9 @@ class SmalladsCategoryController extends DefaultModuleController
 	private $content_management_config;
 
 	protected function get_template_to_use()
-   	{
-	   	return new FileTemplate('smallads/SmalladsSeveralItemsController.tpl');
-   	}
+	{
+		return new FileTemplate('smallads/SmalladsSeveralItemsController.tpl');
+	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -95,10 +95,13 @@ class SmalladsCategoryController extends DefaultModuleController
 
 		$this->view->put_all(array(
 			'C_CATEGORY'             => true,
+			'C_CATEGORY_THUMBNAIL'   => !$this->get_category()->get_id() == Category::ROOT_CATEGORY && !empty($this->get_category()->get_thumbnail()->rel()),
 			'C_ROOT_CATEGORY'        => $this->get_category()->get_id() == Category::ROOT_CATEGORY,
 			'C_CATEGORY_THUMBNAIL'   => !empty($category_thumbnail),
 			'C_CATEGORY_DESCRIPTION' => !empty($category_description),
 			'CATEGORY_NAME'          => $this->get_category()->get_name(),
+			'CATEGORY_PARENT_ID'   	 => $this->get_category()->get_id_parent(),
+			'CATEGORY_SUB_ORDER'   	 => $this->get_category()->get_order(),
 			'CATEGORY_DESCRIPTION'   => $category_description,
 			'U_CATEGORY_THUMBNAIL'   => $category_thumbnail,
 
@@ -119,7 +122,8 @@ class SmalladsCategoryController extends DefaultModuleController
 			'ITEMS_PER_PAGE'         => $this->config->get_items_per_page(),
 			'ID_CATEGORY'            => $this->get_category()->get_id(),
 			'U_EDIT_CATEGORY'        => $this->get_category()->get_id() == Category::ROOT_CATEGORY ? SmalladsUrlBuilder::categories_configuration()->rel() : CategoriesUrlBuilder::edit($this->get_category()->get_id(), 'smallads')->rel(),
-			'U_USAGE_TERMS' 		 => SmalladsUrlBuilder::usage_terms()->rel()
+			'U_USAGE_TERMS' 		 => SmalladsUrlBuilder::usage_terms()->rel(),
+			'U_CATEGORY_THUMBNAIL' => $this->get_category()->get_thumbnail()->rel()
 		));
 
 		while($row = $result->fetch())
@@ -269,7 +273,7 @@ class SmalladsCategoryController extends DefaultModuleController
 
 	public static function get_view()
 	{
-		$object = new self();
+		$object = new self('smallads');
 		$object->check_authorizations();
 		$object->build_view(AppContext::get_request());
 		return $object->view;

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
  * @version     PHPBoost 6.0 - last update: 2021 12 16
@@ -24,9 +24,9 @@ class SmalladsFormFieldBrand extends AbstractFormField
 		$view->add_lang(LangLoader::get_all_langs('smallads'));
 
 		$view->put_all(array(
-			'NAME'       => $this->get_html_id(),
-			'ID'         => $this->get_html_id(),
-			'C_DISABLED' => $this->is_disabled()
+			'C_DISABLED' => $this->is_disabled(),
+			'NAME' => $this->get_html_id(),
+			'ID'   => $this->get_html_id()
 		));
 
 		$this->assign_common_template_variables($template);
@@ -50,9 +50,10 @@ class SmalladsFormFieldBrand extends AbstractFormField
 		}
 
 		$view->put_all(array(
+			'C_DISABLED' => $this->is_disabled(),
+
 			'NAME'          => $this->get_html_id(),
 			'ID'            => $this->get_html_id(),
-			'C_DISABLED'    => $this->is_disabled(),
 			'MAX_INPUT'     => $this->max_input,
 			'FIELDS_NUMBER' => $i == 0 ? 1 : $i
 		));
