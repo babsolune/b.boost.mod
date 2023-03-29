@@ -1,15 +1,15 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
  * @version     PHPBoost 6.0 - last update: 2021 09 17
  * @since       PHPBoost 6.0 - 2021 08 22
 */
 
- ####################################################
- #                    French                        #
- ####################################################
+####################################################
+#                    French                        #
+####################################################
 
 $lang['default.category.name']        = 'Catégorie 1';
 $lang['default.category.description'] = 'Localisations de la catégorie 1';

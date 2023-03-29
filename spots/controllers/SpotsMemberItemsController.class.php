@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 12 04
+ * @version     PHPBoost 6.0 - last update: 2023 02 08
  * @since       PHPBoost 6.0 - 2021 08 22
 */
 
@@ -11,10 +11,10 @@ class SpotsMemberItemsController extends DefaultModuleController
 {
 	private $member;
 
-   	protected function get_template_to_use()
-   	{
-	   	return new FileTemplate('spots/SpotsSeveralItemsController.tpl');
-   	}
+	protected function get_template_to_use()
+	{
+		return new FileTemplate('spots/SpotsSeveralItemsController.tpl');
+	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -56,14 +56,13 @@ class SpotsMemberItemsController extends DefaultModuleController
 		$this->view->put_all(array(
 			'C_MEMBER_ITEMS'     => true,
 			'C_MY_ITEMS'         => $this->is_current_member_displayed(),
-			'C_ITEMS'            => $result->get_rows_count() > 0,
+			'C_SELF_ITEMS'       => $result->get_rows_count() > 0,
 			'C_CONTROLS'         => CategoriesAuthorizationsService::check_authorizations()->moderation(),
 			'C_SEVERAL_ITEMS'    => $result->get_rows_count() > 1,
 			'C_GRID_VIEW'        => $config->get_display_type() == SpotsConfig::GRID_VIEW,
 			'C_TABLE_VIEW'       => $config->get_display_type() == SpotsConfig::TABLE_VIEW,
 			'C_PAGINATION'       => $pagination->has_several_pages(),
 
-			'CATEGORIES_PER_ROW' => $config->get_categories_per_row(),
 			'ITEMS_PER_ROW'      => $config->get_items_per_row(),
 			'PAGINATION'         => $pagination->display(),
 			'MEMBER_NAME'        => $this->get_member()->get_display_name()
@@ -74,7 +73,7 @@ class SpotsMemberItemsController extends DefaultModuleController
 			$item = new SpotsItem();
 			$item->set_properties($row);
 
-			$this->view->assign_block_vars('items', array_merge($item->get_template_vars()));
+			$this->view->assign_block_vars('self_items', array_merge($item->get_template_vars()));
 		}
 		$result->dispose();
 	}

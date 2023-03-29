@@ -30,7 +30,7 @@
 						# IF C_HAS_THUMBNAIL #
 							<div class="cell-body">
 								<div class="cell-thumbnail">
-									<img src="{U_THUMBNAIL}" alt="{NAME}" itemprop="image" />
+									<img src="{U_THUMBNAIL}" alt="{TITLE}" itemprop="image" />
 								</div>
 							</div>
 						# ENDIF #
@@ -76,7 +76,7 @@
 											</div>
 										# ENDIF #
 										# IF C_EMAIL #
-											<a href="mailto:{EMAIL}" aria-label="{@spots.labels.email}"><i class="fa fa-fw fa-envelope fa-lg"></i></a>
+											<a href="mailto:{EMAIL}" aria-label="{@common.email}"><i class="fa fa-fw fa-envelope fa-lg"></i></a>
 										# ENDIF #
 									</div>
 								# ELSE #
@@ -143,12 +143,21 @@
 				<aside class="sharing-container">
 					${ContentSharingActionsMenuService::display()}
 				</aside>
+				# IF C_ENABLED_COMMENTS #
+					<aside>
+						# INCLUDE COMMENTS #
+					</aside>
+				# ENDIF #
 			</article>
 		</div>
 	</div>
 	<footer>
 		<meta itemprop="url" content="{U_ITEM}">
 		<meta itemprop="description" content="${escape(DESCRIPTION)}" />
+		# IF C_ENABLED_COMMENTS #
+			<meta itemprop="discussionUrl" content="{U_COMMENTS}">
+			<meta itemprop="interactionCount" content="{COMMENTS_NUMBER} UserComments">
+		# ENDIF #
 	</footer>
 </section>
 
@@ -171,12 +180,12 @@
 			var map;
 			function initMap() {
 				map = new google.maps.Map(document.getElementById('gmap'), {
-				  	zoom: 10,
-				  	center: spot,
-					mapTypeId: 'roadmap',
-				    mapTypeControlOptions: {
-				      // position: google.maps.ControlPosition.LEFT_BOTTOM,
-				    },
+                    zoom: 10,
+                    center: spot,
+                    mapTypeId: 'roadmap',
+                    mapTypeControlOptions: {
+                        // position: google.maps.ControlPosition.LEFT_BOTTOM,
+                    },
 				});
 			}
 			initMap();

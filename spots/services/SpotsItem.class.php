@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 02 19
+ * @version     PHPBoost 6.0 - last update: 2023 02 07
  * @since       PHPBoost 6.0 - 2021 08 22
 */
 
@@ -451,6 +451,7 @@ class SpotsItem
 		$rich_content = HooksService::execute_hook_display_action('spots', $content, $this->get_properties());
 		$user = $this->get_author_user();
 		$user_group_color = User::get_group_color($user->get_groups(), $user->get_level(), true);
+		$comments_number = CommentsService::get_comments_number('spots', $this->id);
         $config = SpotsConfig::load();
 
         // Convertisseur degres decimaux -> derges, minutes, secondes
@@ -480,7 +481,9 @@ class SpotsItem
         $loca_lng_min = ($loca_lng - $loca_lng_deg)*60;
         $loca_lng_sec = ($loca_lng_min - intval($loca_lng))*60;
 
-		$category_address_values = TextHelper::deserialize($category->get_category_address());
+		$root_category = $category->get_id() == Category::ROOT_CATEGORY;
+
+        $category_address_values = TextHelper::deserialize($root_category ? GoogleMapsConfig::load()->get_default_marker_address() : $category->get_category_address());
 
 		return array_merge(
 			Date::get_array_tpl_vars($this->creation_date, 'date'),
@@ -508,22 +511,26 @@ class SpotsItem
 			'C_DEFAULT_ADDRESS'    => !empty(GoogleMapsConfig::load()->get_default_marker_address()),
 			'C_CONTACT'			   => !empty($this->phone) || !empty($this->spot_email) || !empty($this->facebook->absolute()) || !empty($this->twitter->absolute()) || !empty($this->instagram->absolute()) || !empty($this->youtube->absolute()),
 
-            // Deafult values
+            // // Deafult values
             'GMAP_API_KEY' => GoogleMapsConfig::load()->get_api_key(),
             'C_GMAP_API'   => ModulesManager::is_module_installed('GoogleMaps') && ModulesManager::is_module_activated('GoogleMaps'),
 
-			// Category
-			'C_ROOT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY,
+			// // Category
+			'C_ROOT_CATEGORY'      => $root_category,
 			'CATEGORY_ID'          => $category->get_id(),
 			'CATEGORY_NAME'        => $category->get_name(),
-			'CATEGORY_COLOR'   	   => !$category->get_id() == Category::ROOT_CATEGORY ? $category->get_color() : $config->get_default_color(),
-			'CATEGORY_INNER_ICON'  => !$category->get_id() == Category::ROOT_CATEGORY  ? (!empty($category->get_inner_icon()) ? $category->get_inner_icon() : $config->get_default_inner_icon()) : $config->get_default_inner_icon(),
-			'CATEGORY_LATITUDE'    => !empty($category->get_category_address()) ? $category_address_values['latitude'] : GoogleMapsConfig::load()->get_default_marker_latitude(),
-			'CATEGORY_LONGITUDE'   => !empty($category->get_category_address()) ? $category_address_values['longitude'] : GoogleMapsConfig::load()->get_default_marker_longitude(),
+			'CATEGORY_COLOR'   	   => !$root_category ? $category->get_color() : $config->get_default_color(),
+			'CATEGORY_INNER_ICON'  => !$root_category ? (!empty($category->get_inner_icon()) ? $category->get_inner_icon() : $config->get_default_inner_icon()) : $config->get_default_inner_icon(),
+			'CATEGORY_LATITUDE'    => TextHelper::is_serialized($root_category ? GoogleMapsConfig::load()->get_default_marker_latitude() : $category->get_category_address()) && !empty($category->get_category_address()) ? $category_address_values['latitude'] : GoogleMapsConfig::load()->get_default_marker_latitude(),
+			'CATEGORY_LONGITUDE'   => TextHelper::is_serialized($root_category ? GoogleMapsConfig::load()->get_default_marker_longitude() : $category->get_category_address()) && !empty($category->get_category_address()) ? $category_address_values['longitude'] : GoogleMapsConfig::load()->get_default_marker_longitude(),
 
-			'U_EDIT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY ? SpotsUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($category->get_id(), 'spots')->rel(),
+			'U_EDIT_CATEGORY'      => $root_category ? SpotsUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($category->get_id(), 'spots')->rel(),
 
-			// Item
+			'C_COMMENTS'      => !empty($comments_number),
+			'L_COMMENTS'      => CommentsService::get_lang_comments('spots', $this->id),
+			'COMMENTS_NUMBER' => $comments_number,
+
+			// // Item
 			'ID'                  => $this->id,
 			'TITLE'               => $this->title,
 			'REWRITED_TITLE'      => $this->rewrited_title,
@@ -550,6 +557,7 @@ class SpotsItem
 
 			'U_SYNDICATION'    => SyndicationUrlBuilder::rss('spots', $this->id_category)->rel(),
 			'U_AUTHOR_PROFILE' => UserUrlBuilder::profile($this->get_author_user()->get_id())->rel(),
+			'U_AUTHOR_CONTRIB' => SpotsUrlBuilder::display_member_items($this->get_author_user()->get_id())->rel(),
 			'U_ITEM'           => SpotsUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $this->id, $this->rewrited_title)->rel(),
 			'U_VISIT'          => SpotsUrlBuilder::visit($this->id)->rel(),
 			'U_DEADLINK'       => SpotsUrlBuilder::dead_link($this->id)->rel(),
@@ -560,7 +568,8 @@ class SpotsItem
 			'U_FACEBOOK'       => $this->facebook->absolute(),
 			'U_TWITTER'        => $this->twitter->absolute(),
 			'U_INSTAGRAM'      => $this->instagram->absolute(),
-			'U_YOUTUBE'        => $this->youtube->absolute()
+			'U_YOUTUBE'        => $this->youtube->absolute(),
+			'U_COMMENTS'       => SpotsUrlBuilder::display_comments($category->get_id(), $category->get_rewrited_name(), $this->id, $this->rewrited_title)->rel()
 			)
 		);
 

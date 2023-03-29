@@ -1,15 +1,15 @@
 <?php
 /**
- * @copyright   &copy; 2005-2022 PHPBoost
+ * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2021 12 04
+ * @version     PHPBoost 6.0 - last update: 2023 02 06
  * @since       PHPBoost 6.0 - 2021 08 22
 */
 
- ####################################################
- #						French						#
- ####################################################
+####################################################
+#						French						#
+####################################################
 
 $lang['spots.module.title'] = 'Localisations';
 
@@ -27,8 +27,8 @@ $lang['spots.edit']       = 'Modifier une localisation';
 $lang['spots.management'] = 'Gestion des localisations';
 
 $lang['spots.address']           = 'Adresse';
-$lang['spots.visit.website']     = 'Visiter le site';
-$lang['spots.no.website']        = 'Aucun site répertorié';
+$lang['spots.visit.website']     = 'Visiter le site web';
+$lang['spots.no.website']        = 'Aucun site web répertorié';
 $lang['spots.link.infos']        = 'Informations sur la localisation';
 $lang['spots.contact']           = 'Contact';
 $lang['spots.location']          = 'Coordonnées GPS';
@@ -39,6 +39,7 @@ $lang['spots.travel.type.car']   = 'en voiture';
 $lang['spots.travel.type.walk']  = 'à pied';
 $lang['spots.travel.type.bike']  = 'à vélo';
 $lang['spots.travel.type.train'] = 'en train';
+$lang['spots.osm.french']        = 'Français';
 $lang['spots.osm.satellite']     = 'Satellite';
 $lang['spots.osm.topo']          = 'Topographie';
 $lang['spots.google.hybrid']     = 'Google hybrid';
@@ -90,16 +91,17 @@ $lang['spots.root.category.description'] = '
     Une catégorie et une localisation ont été créées pour vous montrer comment fonctionne ce module. Voici quelques conseils pour bien débuter sur ce module.
     <br /><br />
     <ul class="formatter-ul">
-    	<li class="formatter-li"> Pour configurer ou personnaliser l\'accueil de votre module, rendez vous dans l\'<a class="offload" href="' . Url::to_rel(SpotsUrlBuilder::configuration('spots')) . '">administration du module</a></li>
-    	<li class="formatter-li"> Pour créer des catégories, <a class="offload" href="' . Url::to_rel(CategoriesUrlBuilder::add(Category::ROOT_CATEGORY, 'spots')) . '">cliquez ici</a> </li>
-    	<li class="formatter-li"> Pour ajouter des localisations, <a class="offload" href="' . Url::to_rel(SpotsUrlBuilder::add(Category::ROOT_CATEGORY, 'spots')) . '">cliquez ici</a></li>
+        <li class="formatter-li"> Pour configurer ou personnaliser l\'accueil de votre module, rendez vous dans l\'<a class="offload" href="' . Url::to_rel(SpotsUrlBuilder::configuration('spots')) . '">administration du module</a></li>
+        <li class="formatter-li"> Pour créer des catégories, <a class="offload" href="' . Url::to_rel(CategoriesUrlBuilder::add(Category::ROOT_CATEGORY, 'spots')) . '">cliquez ici</a> </li>
+        <li class="formatter-li"> Pour ajouter des localisations, <a class="offload" href="' . Url::to_rel(SpotsUrlBuilder::add(Category::ROOT_CATEGORY, 'spots')) . '">cliquez ici</a></li>
     </ul>
     <br />Pour en savoir plus, n\'hésitez pas à consulter la documentation du module sur le site de <a class="offload" href="https://www.phpboost.com">PHPBoost</a>.
 ';
 
 // S.E.O.
-$lang['spots.seo.description.member'] = 'Toutes les localisations publiées par :author.';
+$lang['spots.seo.description.member']  = 'Toutes les localisations publiées par :author.';
 $lang['spots.seo.description.pending'] = 'Toutes les localisations en attente.';
+$lang['spots.seo.description.root']    = 'Toutes les localisations du site :site .';
 
 // Messages
 $lang['spots.message.success.add']    = 'La localisation <b>:name</b> a été ajoutée';
