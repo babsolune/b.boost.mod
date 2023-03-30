@@ -307,7 +307,6 @@ class GuideItem
 
 	public function get_template_vars()
 	{
-        // Debug::stop(GuideService::get_initial_content($this->id));
 		$category                  = $this->get_category();
 		$content                   = FormatingHelper::second_parse($this->item_content->get_content());
 		$rich_content              = HooksService::execute_hook_display_action('guide', $content, $this->get_properties());
@@ -320,6 +319,7 @@ class GuideItem
 		$sources                   = $this->item_content->get_sources();
 		$nbr_sources               = count($sources);
 		$config                    = GuideConfig::load();
+        $tracked_list              = GuideService::get_tracked_items($this->id);
 
 		return array_merge(
 			Date::get_array_tpl_vars($this->creation_date, 'date'),
@@ -345,6 +345,7 @@ class GuideItem
 				'C_NEW_CONTENT'             => ContentManagementConfig::load()->module_new_content_is_enabled_and_check_date('guide', $this->get_publishing_start_date() != null ? $this->get_publishing_start_date()->get_timestamp() : $this->creation_date->get_timestamp()) && $this->is_published(),
 				'C_INIT'				    => GuideService::get_initial_content($this->id)->get_content_id() == $this->item_content->get_content_id(),
 				'C_CHANGE_REASON'		    => !empty($this->item_content->get_change_reason()),
+                'C_IS_TRACKED'              => isset($tracked_list[0]) && AppContext::get_current_user()->get_id() == $tracked_list[0][1] && $this->id == $tracked_list[0][0],
 
 				// Item
 				'ID'                        => $this->id,
@@ -384,6 +385,8 @@ class GuideItem
 				'U_AUTHOR_PROFILE'      => UserUrlBuilder::profile($user->get_id())->rel(),
 				'U_CONTRIBUTOR_PROFILE' => UserUrlBuilder::profile($this->item_content->get_author_user()->get_id())->rel(),
 				'U_ITEM'                => $this->get_item_url(),
+				'U_TRACK'               => GuideUrlBuilder::track_item($this->id, AppContext::get_current_user()->get_id())->rel(),
+				'U_UNTRACK'             => GuideUrlBuilder::untrack_item($this->id, AppContext::get_current_user()->get_id())->rel(),
 				'U_HISTORY'             => GuideUrlBuilder::history($this->id)->rel(),
 				'U_EDIT'                => GuideUrlBuilder::edit($this->id)->rel(),
 				'U_DELETE'              => GuideUrlBuilder::delete($this->id, 0)->rel(),

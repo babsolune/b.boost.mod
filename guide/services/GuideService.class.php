@@ -107,6 +107,8 @@ class GuideService
 
 		self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', array('module' => 'guide', 'id' => $id));
 
+        self::delete_tracked_item($id);
+
 		CommentsService::delete_comments_topic_module('guide', $id);
 		KeywordsService::get_keywords_manager()->delete_relations($id);
 		NotationService::delete_notes_id_in_module('guide', $id);
@@ -133,10 +135,9 @@ class GuideService
 	 */
 	public static function get_item(int $id)
 	{
-		$row = self::$db_querier->select_single_row_query('SELECT i.*, c.*, member.*, f.id AS fav_id, notes.average_notes, notes.notes_number, note.note
+		$row = self::$db_querier->select_single_row_query('SELECT i.*, c.*, member.*, notes.average_notes, notes.notes_number, note.note
 		FROM ' . GuideSetup::$guide_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = :module_id AND note.user_id = :current_user_id
@@ -158,7 +159,6 @@ class GuideService
 		$result = self::$db_querier->select('SELECT *
 		FROM ' . GuideSetup::$guide_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = :module_id AND note.user_id = :current_user_id
@@ -184,10 +184,9 @@ class GuideService
 	 */
 	public static function get_item_archive(int $id, int $content_id)
 	{
-		$row = self::$db_querier->select_single_row_query('SELECT i.*, c.*, member.*, f.id AS fav_id, notes.average_notes, notes.notes_number, note.note
+		$row = self::$db_querier->select_single_row_query('SELECT i.*, c.*, member.*, notes.average_notes, notes.notes_number, note.note
 		FROM ' . GuideSetup::$guide_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = :module_id AND note.user_id = :current_user_id
@@ -205,10 +204,9 @@ class GuideService
 
     public static function get_initial_content(int $id)
     {
-		$result = self::$db_querier->select('SELECT i.*, c.*, member.*, f.id AS fav_id, notes.average_notes, notes.notes_number, note.note
+		$result = self::$db_querier->select('SELECT i.*, c.*, member.*, notes.average_notes, notes.notes_number, note.note
 		FROM ' . GuideSetup::$guide_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = :module_id AND note.user_id = :current_user_id
@@ -224,10 +222,9 @@ class GuideService
             $all_content_ids[] = $row['content_id'];
         }
 
-        $row = self::$db_querier->select_single_row_query('SELECT i.*, c.*, member.*, f.id AS fav_id, notes.average_notes, notes.notes_number, note.note
+        $row = self::$db_querier->select_single_row_query('SELECT i.*, c.*, member.*, notes.average_notes, notes.notes_number, note.note
 		FROM ' . GuideSetup::$guide_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = :module_id AND note.user_id = :current_user_id
@@ -241,6 +238,59 @@ class GuideService
 		$content_item = new GuideItemContent();
         $content_item->set_properties($row);
 		return $content_item;
+    }
+
+	/**
+	 * @desc track an item.
+	 * @param int $item_id id of the item
+	 * @param int $user_id id of the user who track the item
+	 */
+	public static function track_item($item_id, $user_id)
+	{
+		$result = self::$db_querier->insert(GuideSetup::$guide_track_table, array(
+			'track_id' => $item_id,
+			'track_user_id' => $user_id
+		));
+        return $result->get_last_inserted_id();
+	}
+
+	/**
+	 * @desc untrack an item.
+	 * @param int $item_id id of the item
+	 * @param int $user_id id of the user who untrack the item
+	 */
+	public static function untrack_item($item_id, $user_id)
+	{
+		self::$db_querier->delete(GuideSetup::$guide_track_table, 'WHERE track_id = :item_id AND track_user_id = :user_id', array(
+			'item_id' => $item_id,
+			'user_id' => $user_id
+		));
+	}
+
+	/**
+	 * @desc delete all tracked item when delete main item.
+	 * @param int $item_id id of the item
+	 */
+	public static function delete_tracked_item($item_id)
+	{
+		self::$db_querier->delete(GuideSetup::$guide_track_table, 'WHERE track_id = :item_id', array(
+			'track_id' => $item_id
+		));
+	}
+
+    public static function get_tracked_items($id)
+    {
+        $result = self::$db_querier->select('SELECT f.*
+            FROM ' . GuideSetup::$guide_track_table . ' f'
+        );
+
+        $all_tracked_ids = array();
+		while ($row = $result->fetch())
+		{
+            if($row['track_id'] == $id)
+                $all_tracked_ids[] = array($row['track_id'], $row['track_user_id']);
+        }
+        return $all_tracked_ids;
     }
 
 	public static function clear_cache()

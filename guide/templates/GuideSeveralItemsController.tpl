@@ -12,6 +12,9 @@
 			# IF C_PENDING #
 				{@guide.pending.items}
 			# ELSE #
+                # IF C_TRACKED_ITEMS #
+                    {@guide.my.tracked}
+                # ENDIF #
 				# IF C_MEMBER_ITEMS #
 					# IF C_MY_ITEMS #{@guide.my.items}# ELSE #{@guide.member.items} {MEMBER_NAME}# ENDIF #
 				# ELSE #
@@ -144,6 +147,7 @@
                                                 # IF items.C_DELETE #
                                                     <a href="{items.U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a>
                                                 # ENDIF #
+                                                # IF C_TRACKED_ITEMS #<a class="offload" href="{items.U_UNTRACK}" aria-label="{@guide.untrack}"><i class="fa fa-heart-crack error" aria-hidden="true"></i></a># ENDIF #
                                             </td>
                                         # ENDIF #
                                     </tr>
@@ -188,6 +192,7 @@
                                         <div class="controls align-right">
                                             # IF items.C_EDIT #<a class="offload item-edit" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
                                             # IF items.C_DELETE #<a class="item-delete" href="{items.U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
+                                            # IF C_TRACKED_ITEMS #<a class="offload" href="{items.U_UNTRACK}" aria-label="{@guide.untrack}"><i class="fa fa-heart-crack error" aria-hidden="true"></i></a># ENDIF #
                                         </div>
                                     # ENDIF #
                                 </div>

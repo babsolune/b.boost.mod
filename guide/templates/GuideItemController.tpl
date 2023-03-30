@@ -54,7 +54,14 @@
 						# ENDIF #
 					</div>
 						<div class="controls align-right">
-							<a class="offload" href="{U_HISTORY}" aria-label="{@guide.item.history}"><i class="fa fa-fw fa-clock-rotate-left" aria-hidden="true"></i></a>
+							# IF IS_USER_CONNECTED #
+                                # IF C_IS_TRACKED #
+                                    <a class="offload" href="{U_UNTRACK}" aria-label="{@guide.untrack}"><i class="fa fa-heart-crack error" aria-hidden="true"></i></a>
+                                # ELSE #
+                                    <a class="offload" href="{U_TRACK}" aria-label="{@guide.track}"><i class="fa fa-heart error" aria-hidden="true"></i></a>
+                                # ENDIF #
+                            # ENDIF #
+                            <a class="offload" href="{U_HISTORY}" aria-label="{@guide.item.history}"><i class="fa fa-fw fa-clock-rotate-left" aria-hidden="true"></i></a>
 							# IF C_ARCHIVE #
 								# IF C_CONTROLS #
 									# IF C_RESTORE #<a class="offload" href="{U_RESTORE}" aria-label="{@guide.restore.item}"><i class="fa fa-fw fa-undo" aria-hidden="true"></i></a># ENDIF #

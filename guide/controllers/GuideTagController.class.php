@@ -52,10 +52,9 @@ class GuideTagController extends DefaultModuleController
 		$page = $request->get_getint('page', 1);
 		$pagination = $this->get_pagination($condition, $parameters, $page);
 
-		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
+		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
 		FROM ' . GuideSetup::$guide_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-		LEFT JOIN ' . GuideSetup::$guide_favs_table .' f ON f.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_KEYWORDS_RELATIONS . ' relation ON relation.module_id = \'guide\' AND relation.id_in_module = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
@@ -75,6 +74,7 @@ class GuideTagController extends DefaultModuleController
 
 			'C_TAG_ITEMS'            => true,
 			'C_ITEMS'                => $result->get_rows_count() > 0,
+			'C_CONTROLS'             => GuideAuthorizationsService::check_authorizations()->write(),
 			'C_SEVERAL_ITEMS'        => $result->get_rows_count() > 1,
 			'C_GRID_VIEW'            => $this->config->get_display_type() == GuideConfig::GRID_VIEW,
 			'C_LIST_VIEW'            => $this->config->get_display_type() == GuideConfig::LIST_VIEW,
@@ -83,7 +83,6 @@ class GuideTagController extends DefaultModuleController
 			'C_ENABLED_NOTATION'     => $this->content_management_config->module_notation_is_enabled('guide'),
 			'C_AUTHOR_DISPLAYED'     => $this->config->is_author_displayed(),
 			'C_PAGINATION'           => $pagination->has_several_pages(),
-			'C_CATEGORY_DESCRIPTION' => !empty($category_description),
 
 			'CATEGORIES_PER_ROW' => $this->config->get_categories_per_row(),
 			'ITEMS_PER_ROW'      => $this->config->get_items_per_row(),

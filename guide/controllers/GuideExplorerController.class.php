@@ -39,21 +39,20 @@ class GuideExplorerController extends DefaultModuleController
 			{
 				$root_description = FormatingHelper::second_parse($this->config->get_root_category_description());
 				$this->view->put_all(array(
-					'C_ROOT_CONTROLS'             => GuideAuthorizationsService::check_authorizations($id)->moderation(),
-                    'C_HOMEPAGE' => $this->config->get_homepage() == GuideConfig::EXPLORER,
-					'C_ROOT_CATEGORY_DESCRIPTION' => !empty($root_description),
-					'C_ROOT_ITEMS' => $category->get_elements_number() > 0,
-					'C_SEVERAL_ROOT_ITEMS' => $category->get_elements_number() > 1,
+					'C_ROOT_CONTROLS'               => GuideAuthorizationsService::check_authorizations($id)->moderation(),
+                    'C_HOMEPAGE'                    => $this->config->get_homepage() == GuideConfig::EXPLORER,
+					'C_ROOT_CATEGORY_DESCRIPTION'   => !empty($root_description),
+					'C_ROOT_ITEMS'                  => $category->get_elements_number() > 0,
+					'C_SEVERAL_ROOT_ITEMS'          => $category->get_elements_number() > 1,
 
 					'ROOT_CATEGORY_DESCRIPTION' => $root_description,
 
 					'U_REORDER_ROOT_ITEMS' => GuideUrlBuilder::reorder_items(0, 'root')->rel(),
 				));
 
-				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
+				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
 				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
@@ -80,25 +79,24 @@ class GuideExplorerController extends DefaultModuleController
 			{
 				$category_elements_number = isset($categories_elements_number[$id]) ? $categories_elements_number[$id] : $category->get_elements_number();
                 $this->view->assign_block_vars('categories', array(
-                    'C_CONTROLS'         => GuideAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
-					'C_ITEMS'            => $category_elements_number > 0,
-					'C_SEVERAL_ITEMS'    => $category_elements_number > 1,
-                    'C_CATEGORY_THUMBNAIL' => !empty($category->get_thumbnail()),
-					'ITEMS_NUMBER'       => $category->get_elements_number(),
-					'CATEGORY_ID'        => $category->get_id(),
-					'CATEGORY_SUB_ORDER' => $category->get_order(),
-					'CATEGORY_PARENT_ID' => $category->get_id_parent(),
-					'CATEGORY_NAME'      => $category->get_name(),
+                    'C_CONTROLS'            => GuideAuthorizationsService::check_authorizations()->moderation(),
+					'C_ITEMS'               => $category_elements_number > 0,
+					'C_SEVERAL_ITEMS'       => $category_elements_number > 1,
+                    'C_CATEGORY_THUMBNAIL'  => !empty($category->get_thumbnail()),
+					'ITEMS_NUMBER'          => $category->get_elements_number(),
+					'CATEGORY_ID'           => $category->get_id(),
+					'CATEGORY_SUB_ORDER'    => $category->get_order(),
+					'CATEGORY_PARENT_ID'    => $category->get_id_parent(),
+					'CATEGORY_NAME'         => $category->get_name(),
 
                     'U_CATEGORY_THUMBNAIL' => $category->get_thumbnail()->rel(),
 					'U_CATEGORY'           => GuideUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name(), self::$module_id)->rel(),
 					'U_REORDER_ITEMS'      => GuideUrlBuilder::reorder_items($category->get_id(), $category->get_rewrited_name())->rel()
 				));
 
-				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
+				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
 				FROM ' . GuideSetup::$guide_table . ' i
 				LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-				LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'

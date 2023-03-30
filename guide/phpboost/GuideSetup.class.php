@@ -12,7 +12,7 @@ class GuideSetup extends DefaultModuleSetup
 	public static $guide_table;
 	public static $guide_contents_table;
 	public static $guide_cats_table;
-	public static $guide_favs_table;
+	public static $guide_track_table;
 
 	/**
 	 * @var string[string] localized messages
@@ -24,7 +24,7 @@ class GuideSetup extends DefaultModuleSetup
 		self::$guide_table = PREFIX . 'guide';
 		self::$guide_contents_table = PREFIX . 'guide_contents';
 		self::$guide_cats_table = PREFIX . 'guide_cats';
-		self::$guide_favs_table = PREFIX . 'guide_favs';
+		self::$guide_track_table = PREFIX . 'guide_track';
 	}
 
 	public function install()
@@ -48,7 +48,7 @@ class GuideSetup extends DefaultModuleSetup
 			self::$guide_table, 
 			self::$guide_contents_table, 
 			self::$guide_cats_table,
-			self::$guide_favs_table
+			self::$guide_track_table
 		));
 	}
 
@@ -57,7 +57,7 @@ class GuideSetup extends DefaultModuleSetup
 		$this->create_guide_table();
 		$this->create_guide_contents_table();
 		$this->create_guide_cats_table();
-		$this->create_guide_favs_table();
+		$this->create_guide_track_table();
 	}
 
 	private function create_guide_table()
@@ -117,17 +117,17 @@ class GuideSetup extends DefaultModuleSetup
 		RichCategory::create_categories_table(self::$guide_cats_table);
 	}
 
-	private function create_guide_favs_table()
+	private function create_guide_track_table()
 	{
 		$fields = array(
 			'id' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
-			'user_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
-			'item_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0)
+			'track_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
+			'track_user_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0)
 		);
 		$options = array(
 			'primary' => array('id')
 		);
-		PersistenceContext::get_dbms_utils()->create_table(self::$guide_favs_table, $fields, $options);
+		PersistenceContext::get_dbms_utils()->create_table(self::$guide_track_table, $fields, $options);
 	}
 
 	private function insert_data()

@@ -31,12 +31,15 @@ $url_controller_mappers = array(
 	new UrlControllerMapper('GuideDeleteItemController', '`^/([0-9]+)/delete/([0-9]+)/?$`', array('id', 'content_id')),
 	new UrlControllerMapper('GuideItemController', '`^/([0-9]+)-([a-z0-9-_]+)/([0-9]+)-([a-z0-9-_]+)?/?$`', array('id_category', 'rewrited_name_category', 'id', 'rewrited_name')),
 	new UrlControllerMapper('GuideReorderItemsController', '`^/reorder/?([0-9]+)?-?([a-z0-9-_]+)?/?$`', array('id_category', 'rewrited_name')),
+	new UrlControllerMapper('GuideTrackItemController', '`^/([0-9]+)/track/?$`', array('id')),
+	new UrlControllerMapper('GuideUntrackItemController', '`^/([0-9]+)/untrack/?$`', array('id')),
 
 	// Keywords
 	new UrlControllerMapper('GuideTagController', '`^/tag/([a-z0-9-_]+)?/?([a-z_]+)?/?([a-z]+)?/?([0-9]+)?/?$`', array('tag', 'page')),
 
 	new UrlControllerMapper('GuidePendingItemsController', '`^/pending(?:/([a-z_]+))?/?([a-z]+)?/?([0-9]+)?/?$`', array('page')),
 	new UrlControllerMapper('GuideMemberItemsController', '`^/member/([0-9]+)?/?([0-9]+)?/?$`', array('user_id', 'page')),
+	new UrlControllerMapper('GuideTrackedItemsController', '`^/tracked/([0-9]+)?/?([0-9]+)?/?$`', array('user_id', 'page')),
 
 	new UrlControllerMapper('GuideExplorerController', '`^/explorer/?$`'),
 	new UrlControllerMapper('GuideCategoryController', '`^(?:/([0-9]+)-([a-z0-9-_]+))?/?([a-z_]+)?/?([a-z]+)?/?([0-9]+)?/?([0-9]+)?/?$`', array('id_category', 'rewrited_name', 'page', 'subcategories_page')),

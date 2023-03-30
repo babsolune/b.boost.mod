@@ -78,10 +78,9 @@ class GuideCategoryController extends DefaultModuleController
 
 		$pagination = $this->get_pagination($condition, $parameters, $page, $subcategories_page);
 
-		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
+		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
 		FROM ' . GuideSetup::$guide_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
@@ -111,7 +110,7 @@ class GuideCategoryController extends DefaultModuleController
 			'C_ENABLED_COMMENTS'         => $this->comments_config->module_comments_is_enabled('guide'),
 			'C_ENABLED_NOTATION'         => $this->content_management_config->module_notation_is_enabled('guide'),
 			'C_ENABLED_VIEWS_NUMBER'     => $this->config->get_enabled_views_number(),
-			'C_CONTROLS'                 => GuideAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
+			'C_CONTROLS'                 => GuideAuthorizationsService::check_authorizations($this->get_category()->get_id())->write(),
 			'C_PAGINATION'               => $pagination->has_several_pages(),
 			'C_CATEGORY'                 => true,
 			'C_ROOT_CATEGORY'            => $this->get_category()->get_id() == Category::ROOT_CATEGORY,

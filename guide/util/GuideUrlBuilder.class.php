@@ -156,6 +156,31 @@ class GuideUrlBuilder
 	/**
 	 * @return Url
 	 */
+	public static function track_item($item_id)
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/' . $item_id . '/track/');
+	}
+
+	/**
+	 * @return Url
+	 */
+	public static function untrack_item($item_id)
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/' . $item_id . '/untrack/');
+	}
+
+	/**
+	 * @return Url
+	 */
+	public static function tracked_member_items($user_id, $page = 1)
+	{
+		$page = $page !== 1 ? $page . '/' : '';
+		return DispatchManager::get_url(self::$dispatcher, '/tracked/' . $user_id . '/' . $page);
+	}
+
+	/**
+	 * @return Url
+	 */
 	public static function home()
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/');

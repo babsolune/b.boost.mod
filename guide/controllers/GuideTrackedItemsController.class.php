@@ -7,10 +7,9 @@
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
-class GuideMemberItemsController extends DefaultModuleController
+class GuideTrackedItemsController extends DefaultModuleController
 {
-	private $member;
-
+	private $category;
 	protected function get_template_to_use()
 	{
 		return new FileTemplate('guide/GuideSeveralItemsController.tpl');
@@ -35,7 +34,7 @@ class GuideMemberItemsController extends DefaultModuleController
 		$condition = 'WHERE id_category IN :authorized_categories
 		AND (published = 1 OR (published = 2 AND (publishing_start_date > :timestamp_now OR (publishing_end_date != 0 AND publishing_end_date < :timestamp_now))))';
 		$parameters = array(
-			'user_id' => $this->get_member()->get_id(),
+			'user_id' => AppContext::get_current_user()->get_id(),
 			'authorized_categories' => $authorized_categories,
 			'timestamp_now' => $now->get_timestamp()
 		);
@@ -46,13 +45,13 @@ class GuideMemberItemsController extends DefaultModuleController
 		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
 		FROM ' . GuideSetup::$guide_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
+		LEFT JOIN ' . GuideSetup::$guide_track_table . ' t ON t.track_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
 		' . $condition . '
 		AND c.active_content = 1
-		AND c.author_user_id = :user_id
 		ORDER BY c.update_date
 		LIMIT :number_items_per_page OFFSET :display_from', array_merge($parameters, array(
 			'number_items_per_page' => $pagination->get_number_items_per_page(),
@@ -61,14 +60,14 @@ class GuideMemberItemsController extends DefaultModuleController
 
 		$this->view->put_all(array(
             'MODULE_NAME'            => $this->config->get_module_name(),
-			'C_MEMBER_ITEMS'         => true,
-			'C_MY_ITEMS'             => $this->is_current_member_displayed(),
-			'C_CONTROLS'             => GuideAuthorizationsService::check_authorizations()->write(),
+			'C_TRACKED_ITEMS'        => true,
+			'C_CONTROLS'             => GuideAuthorizationsService::check_authorizations()->read(),
 			'C_ITEMS'                => $result->get_rows_count() > 0,
 			'C_SEVERAL_ITEMS'        => $result->get_rows_count() > 1,
 			'C_GRID_VIEW'            => $this->config->get_display_type() == GuideConfig::GRID_VIEW,
 			'C_LIST_VIEW'            => $this->config->get_display_type() == GuideConfig::LIST_VIEW,
 			'C_TABLE_VIEW'           => $this->config->get_display_type() == GuideConfig::TABLE_VIEW,
+			'C_CATEGORY_DESCRIPTION' => !empty($category_description),
 			'C_ENABLED_COMMENTS'     => $comments_config->module_comments_is_enabled('guide'),
 			'C_ENABLED_NOTATION'     => $content_management_config->module_notation_is_enabled('guide'),
 			'C_AUTHOR_DISPLAYED'     => $this->config->is_author_displayed(),
@@ -78,7 +77,6 @@ class GuideMemberItemsController extends DefaultModuleController
 			'ITEMS_PER_ROW'      => $this->config->get_items_per_row(),
 			'PAGINATION'         => $pagination->display(),
 			'TABLE_COLSPAN'      => 4 + (int)$comments_config->module_comments_is_enabled('guide') + (int)$content_management_config->module_notation_is_enabled('guide'),
-			'MEMBER_NAME'        => $this->get_member()->get_display_name()
 		));
 
 		while ($row = $result->fetch())
@@ -89,9 +87,12 @@ class GuideMemberItemsController extends DefaultModuleController
 			$keywords = $item->get_keywords();
 			$has_keywords = count($keywords) > 0;
 
-			$this->view->assign_block_vars('items', array_merge($item->get_template_vars(), array(
-				'C_KEYWORDS' => $has_keywords
-			)));
+            $tracked_list = GuideService::get_tracked_items($item->get_id());
+
+            if (isset($tracked_list[0]) && AppContext::get_current_user()->get_id() == $tracked_list[0][1] && $item->get_id() == $tracked_list[0][0])
+                $this->view->assign_block_vars('items', array_merge($item->get_template_vars(), array(
+                    'C_KEYWORDS' => $has_keywords,
+                )));
 
 			if ($has_keywords)
 				$this->build_keywords_view($keywords);
@@ -104,28 +105,12 @@ class GuideMemberItemsController extends DefaultModuleController
 		$result->dispose();
 	}
 
-	protected function get_member()
-	{
-		if ($this->member === null)
-		{
-			$this->member = UserService::get_user(AppContext::get_request()->get_getint('user_id', AppContext::get_current_user()->get_id()));
-			if (!$this->member)
-				DispatchManager::redirect(PHPBoostErrors::unexisting_element());
-		}
-		return $this->member;
-	}
-
-	protected function is_current_member_displayed()
-	{
-		return $this->member && $this->member->get_id() == AppContext::get_current_user()->get_id();
-	}
-
 	private function get_pagination($condition, $parameters, $page)
 	{
 		$items_number = GuideService::count($condition, $parameters);
 
 		$pagination = new ModulePagination($page, $items_number, (int)GuideConfig::load()->get_items_per_page());
-		$pagination->set_url(GuideUrlBuilder::display_member_items($this->get_member()->get_id(), '%d'));
+		$pagination->set_url(GuideUrlBuilder::tracked_member_items(AppContext::get_current_user()->get_id(), '%d'));
 
 		if ($pagination->current_page_is_empty() && $page > 1)
 		{
@@ -164,17 +149,17 @@ class GuideMemberItemsController extends DefaultModuleController
 	private function generate_response(HTTPRequestCustom $request)
 	{
 		$page = $request->get_getint('page', 1);
-		$page_title = $this->is_current_member_displayed() ? $this->lang['guide.my.items'] : $this->lang['guide.member.items'] . ' ' . $this->get_member()->get_display_name();
+		$page_title = $this->lang['guide.my.tracked'];
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
 		$graphical_environment->set_page_title($page_title, $this->config->get_module_name(), $page);
-		$graphical_environment->get_seo_meta_data()->set_description(StringVars::replace_vars($this->lang['guide.seo.description.member'], array('author' => $this->get_member()->get_display_name())), $page);
-		$graphical_environment->get_seo_meta_data()->set_canonical_url(GuideUrlBuilder::display_member_items($this->get_member()->get_id(), $page));
+		$graphical_environment->get_seo_meta_data()->set_description(StringVars::replace_vars($this->lang['guide.seo.description.tracked'], array('author' => AppContext::get_current_user()->get_display_name())), $page);
+		$graphical_environment->get_seo_meta_data()->set_canonical_url(GuideUrlBuilder::tracked_member_items(AppContext::get_current_user()->get_id(), $page));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->config->get_module_name(), GuideUrlBuilder::home());
-		$breadcrumb->add($page_title, GuideUrlBuilder::display_member_items($this->get_member()->get_id(), $page));
+		$breadcrumb->add($page_title, GuideUrlBuilder::tracked_member_items(AppContext::get_current_user()->get_id(), $page));
 
 		return $response;
 	}

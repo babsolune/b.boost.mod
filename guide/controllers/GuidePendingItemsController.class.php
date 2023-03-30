@@ -40,10 +40,9 @@ class GuidePendingItemsController extends DefaultModuleController
 		$page = $request->get_getint('page', 1);
 		$pagination = $this->get_pagination($condition, $parameters, $page);
 
-		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, f.id AS fav_id, com.comments_number, notes.average_notes, notes.notes_number, note.note
+		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
 		FROM ' . GuideSetup::$guide_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-		LEFT JOIN ' . GuideSetup::$guide_favs_table . ' f ON f.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
@@ -60,12 +59,12 @@ class GuidePendingItemsController extends DefaultModuleController
 		$this->view->put_all(array(
             'MODULE_NAME'            => $this->config->get_module_name(),
 			'C_PENDING'              => true,
+			'C_CONTROLS'             => GuideAuthorizationsService::check_authorizations()->write(),
 			'C_ITEMS'                => $result->get_rows_count() > 0,
 			'C_SEVERAL_ITEMS'        => $result->get_rows_count() > 1,
 			'C_GRID_VIEW'            => $this->config->get_display_type() == GuideConfig::GRID_VIEW,
 			'C_LIST_VIEW'            => $this->config->get_display_type() == GuideConfig::LIST_VIEW,
 			'C_TABLE_VIEW'           => $this->config->get_display_type() == GuideConfig::TABLE_VIEW,
-			'C_CATEGORY_DESCRIPTION' => !empty($category_description),
 			'C_ENABLED_COMMENTS'     => $comments_config->module_comments_is_enabled('guide'),
 			'C_ENABLED_NOTATION'     => $content_management_config->module_notation_is_enabled('guide'),
 			'C_AUTHOR_DISPLAYED'     => $this->config->is_author_displayed(),

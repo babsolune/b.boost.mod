@@ -32,6 +32,7 @@ $lang['guide.root']             = 'Sans catégorie';
 $lang['guide.add.item']         = 'Ajouter une fiche';
 $lang['guide.edit.item']        = 'Modifier une fiche';
 $lang['guide.my.items']         = 'Mes fiches';
+$lang['guide.my.tracked']       = 'Mes favoris';
 $lang['guide.member.items']     = 'Fiches publiées par';
 $lang['guide.pending.items']    = 'Fiches en attente';
 $lang['guide.filter.items']     = 'Filtrer les fiches';
@@ -45,6 +46,8 @@ $lang['guide.delete.version']   = 'Supprimer cette version';
 $lang['guide.archive']          = 'Archive';
 $lang['guide.archived.item']    = 'Consulter';
 $lang['guide.archived.content'] = 'Cette fiche a été mise à jour, vous consultez ici une archive!';
+$lang['guide.track'] = 'Suivre cette fiche';
+$lang['guide.untrack'] = 'Ne plus suivre cette fiche';
 
 // Levels
 $lang['guide.level'] = 'Niveau de confiance';
@@ -79,6 +82,7 @@ $lang['guide.seo.description.root']    = 'Toutes les fiches du site :site.';
 $lang['guide.seo.description.tag']     = 'Toutes les fiches sur le sujet :subject.';
 $lang['guide.seo.description.pending'] = 'Toutes les fiches en attente.';
 $lang['guide.seo.description.member']  = 'Toutes les fiches de :author.';
+$lang['guide.seo.description.tracked']  = 'Toutes les fiches suivies de :author.';
 $lang['guide.seo.description.history'] = 'Historique de la fiche :item.';
 
 // Messages helper
