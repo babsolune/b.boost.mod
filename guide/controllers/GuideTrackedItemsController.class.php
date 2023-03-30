@@ -51,6 +51,7 @@ class GuideTrackedItemsController extends DefaultModuleController
 		LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = :user_id
 		' . $condition . '
 		AND c.active_content = 1
+        AND t.track_user_id = :user_id
 		ORDER BY c.update_date
 		LIMIT :number_items_per_page OFFSET :display_from', array_merge($parameters, array(
 			'number_items_per_page' => $pagination->get_number_items_per_page(),
@@ -86,12 +87,9 @@ class GuideTrackedItemsController extends DefaultModuleController
 			$keywords = $item->get_keywords();
 			$has_keywords = count($keywords) > 0;
 
-            $tracked_list = GuideService::get_tracked_items($item->get_id());
-
-            if (isset($tracked_list[0]) && AppContext::get_current_user()->get_id() == $tracked_list[0][1] && $item->get_id() == $tracked_list[0][0])
-                $this->view->assign_block_vars('items', array_merge($item->get_template_vars(), array(
-                    'C_KEYWORDS' => $has_keywords,
-                )));
+            $this->view->assign_block_vars('items', array_merge($item->get_template_vars(), array(
+                'C_KEYWORDS' => $has_keywords,
+            )));
 
 			if ($has_keywords)
 				$this->build_keywords_view($keywords);
