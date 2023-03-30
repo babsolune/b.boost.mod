@@ -41,7 +41,7 @@ class GuideTrackedItemsController extends DefaultModuleController
 		$page = $request->get_getint('page', 1);
 		$pagination = $this->get_pagination($condition, $parameters, $page);
 
-		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
+		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, t.track_user_id, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
 		FROM ' . GuideSetup::$guide_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . GuideSetup::$guide_track_table . ' t ON t.track_id = i.id
