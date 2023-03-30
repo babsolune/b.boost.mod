@@ -84,7 +84,7 @@
 				<div id="sheet-summary" class="cell-tile">
 					<div class="cell-summary cell">
 						<div class="cell-header">
-							<h5 class="cell-name# IF C_STICKY_SUMMARY # summary-sticky# ENDIF #">{@guide.summary}</h5>
+							<h5 class="cell-name# IF C_STICKY_SUMMARY # summary-sticky# ENDIF #">{@guide.contents.table}</h5>
 						</div>
 						<div class="cell-list# IF C_STICKY_SUMMARY # summary-sticky# ENDIF #">
 							<ul id="summary-list"></ul>

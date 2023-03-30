@@ -22,32 +22,32 @@ $lang['the.item']           = 'la fiche';
 $lang['items.reorder']      = 'Réorganiser les fiches';
 $lang['items.reordering']   = 'Réorganisation des fiches';
 
-// Summary
-$lang['guide.summary']                  = 'Table des matières';
-$lang['guide.name']                     = 'Nom du guide';
-$lang['guide.display.sticky.summary']   = 'Afficher la table des matières en position fixe';
+// Table of contents
+$lang['guide.contents.table']          = 'Table des matières';
+$lang['guide.name']                    = 'Nom du guide';
+$lang['guide.sticky.contents.table']   = 'Afficher la table des matières en position fixe';
 
 // Titles
-$lang['guide.root']             = 'Sans catégorie';
-$lang['guide.add.item']         = 'Ajouter une fiche';
-$lang['guide.edit.item']        = 'Modifier une fiche';
-$lang['guide.my.items']         = 'Mes fiches';
-$lang['guide.my.tracked']       = 'Mes favoris';
-$lang['guide.member.items']     = 'Fiches publiées par';
-$lang['guide.pending.items']    = 'Fiches en attente';
-$lang['guide.filter.items']     = 'Filtrer les fiches';
-$lang['guide.items.management'] = 'Gestion des fiches';
-$lang['guide.item.history']     = 'Historique de la fiche';
-$lang['guide.restore.item']     = 'Restaurer cette version';
-$lang['guide.confirm.restore']  = 'Êtes-vous sûr de vouloir restaurer cette version ?';
-$lang['guide.history.init']     = 'Initialisation';
-$lang['guide.current.version']  = 'Version courrante';
-$lang['guide.delete.version']   = 'Supprimer cette version';
-$lang['guide.archive']          = 'Archive';
-$lang['guide.archived.item']    = 'Consulter';
-$lang['guide.archived.content'] = 'Cette fiche a été mise à jour, vous consultez ici une archive!';
-$lang['guide.track'] = 'Suivre cette fiche';
-$lang['guide.untrack'] = 'Ne plus suivre cette fiche';
+$lang['guide.root']               = 'Sans catégorie';
+$lang['guide.add.item']           = 'Ajouter une fiche';
+$lang['guide.edit.item']          = 'Modifier une fiche';
+$lang['guide.my.items']           = 'Mes fiches';
+$lang['guide.my.tracked']         = 'Mes favoris';
+$lang['guide.member.items']       = 'Fiches publiées par';
+$lang['guide.pending.items']      = 'Fiches en attente';
+$lang['guide.filter.items']       = 'Filtrer les fiches';
+$lang['guide.items.management']   = 'Gestion des fiches';
+$lang['guide.item.history']       = 'Historique de la fiche';
+$lang['guide.restore.item']       = 'Restaurer cette version';
+$lang['guide.confirm.restore']    = 'Êtes-vous sûr de vouloir restaurer cette version ?';
+$lang['guide.history.init']       = 'Initialisation';
+$lang['guide.current.version']    = 'Version courrante';
+$lang['guide.delete.version']     = 'Supprimer cette version';
+$lang['guide.archive']            = 'Archive';
+$lang['guide.archived.item']      = 'Consulter';
+$lang['guide.archived.content']   = 'Cette fiche a été mise à jour, vous consultez ici une archive !';
+$lang['guide.track']              = 'Suivre cette fiche';
+$lang['guide.untrack']            = 'Ne plus suivre cette fiche';
 
 // Levels
 $lang['guide.level'] = 'Niveau de confiance';
@@ -62,28 +62,28 @@ $lang['guide.level.trust.message']  = 'Cette fiche est de grande qualité, elle 
 $lang['guide.level.claim.message']  = 'Cette fiche a été discutée et son contenu ne paraît pas correct. Vous pouvez éventuellement consulter les discussions à ce propos et peut-être y apporter vos connaissances.';
 $lang['guide.level.redo.message']   = 'Cette fiche est à refaire, son contenu n\'est pas très fiable.';
 $lang['guide.level.sketch.message'] = 'Cette fiche manque de sources.<br />Vos connaissances sont les bienvenues afin de le compléter.';
-$lang['guide.level.wip.message']    = 'Cette fiche est en cours de travaux, des modifications sont en cours de réalisation, revenez plus tard la reconsulter. Merci.';
+$lang['guide.level.wip.message']    = 'Cette fiche est en cours de travaux, des modifications sont en cours de réalisation, n`hésitez pas à revenir plus tard la consulter.';
 
-$lang['guide.level.custom'] = 'Niveau personnalisé';
-$lang['guide.level.custom.content'] = 'Description du niveau personalisé';
+$lang['guide.level.custom']           = 'Niveau personnalisé';
+$lang['guide.level.custom.content']   = 'Description du niveau personalisé';
 
 // Form
-$lang['guide.change.reason'] = 'Nature de la modification';
-$lang['guide.suggestions.number'] = 'Nombre d\'éléments suggérés à afficher';
-$lang['guide.homepage'] = 'Choisir la page d\'accueil';
-$lang['guide.homepage.categories'] = 'Catégories';
-$lang['guide.homepage.explorer'] = 'Explorateur';
+$lang['guide.change.reason']        = 'Nature de la modification';
+$lang['guide.suggestions.number']   = 'Nombre d\'éléments suggérés à afficher';
+$lang['guide.homepage']             = 'Choisir le type de page d\'accueil';
+$lang['guide.homepage.categories']  = 'Catégories';
+$lang['guide.homepage.explorer']    = 'Explorateur';
 
 // Authorizations
-$lang['guide.manage.archives']     = 'Autorisation de gérer les archives';
+$lang['guide.manage.archives'] = 'Autorisation de gérer les archives';
 
 // SEO
-$lang['guide.seo.description.root']    = 'Toutes les fiches du site :site.';
-$lang['guide.seo.description.tag']     = 'Toutes les fiches sur le sujet :subject.';
-$lang['guide.seo.description.pending'] = 'Toutes les fiches en attente.';
-$lang['guide.seo.description.member']  = 'Toutes les fiches de :author.';
-$lang['guide.seo.description.tracked']  = 'Toutes les fiches suivies de :author.';
-$lang['guide.seo.description.history'] = 'Historique de la fiche :item.';
+$lang['guide.seo.description.root']      = 'Toutes les fiches du site :site.';
+$lang['guide.seo.description.tag']       = 'Toutes les fiches sur le sujet :subject.';
+$lang['guide.seo.description.pending']   = 'Toutes les fiches en attente.';
+$lang['guide.seo.description.member']    = 'Toutes les fiches de :author.';
+$lang['guide.seo.description.tracked']   = 'Toutes les fiches suivies de :author.';
+$lang['guide.seo.description.history']   = 'Historique de la fiche :item.';
 
 // Messages helper
 $lang['guide.message.success.add']            = 'La fiche <b>:title</b> a été ajoutée';

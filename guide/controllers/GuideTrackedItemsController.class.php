@@ -9,7 +9,6 @@
 
 class GuideTrackedItemsController extends DefaultModuleController
 {
-	private $category;
 	protected function get_template_to_use()
 	{
 		return new FileTemplate('guide/GuideSeveralItemsController.tpl');

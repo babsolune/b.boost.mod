@@ -48,7 +48,7 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 
 		$fieldset->add_field(new FormFieldTextEditor('module_name', $this->lang['guide.name'], $this->config->get_module_name()));
 
-		$fieldset->add_field(new FormFieldCheckbox('display_sticky_summary', $this->lang['guide.display.sticky.summary'], $this->config->get_sticky_summary(),
+		$fieldset->add_field(new FormFieldCheckbox('display_sticky_summary', $this->lang['guide.sticky.contents.table'], $this->config->get_sticky_summary(),
 			array('class' => 'custom-checkbox')
 		));
 
