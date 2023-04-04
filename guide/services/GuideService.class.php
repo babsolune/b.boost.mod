@@ -92,7 +92,7 @@ class GuideService
 	 * @param string $condition : Restriction to apply to the list
 	 * @param string[] $parameters : Parameters of the condition
 	 */
-	public static function delete(int $id, $content_id)
+	public static function delete(int $id, $content_id = '')
 	{
 		if (AppContext::get_current_user()->is_readonly())
         {
@@ -248,7 +248,7 @@ class GuideService
 	public static function track_item($item_id, $user_id)
 	{
 		$result = self::$db_querier->insert(GuideSetup::$guide_track_table, array(
-			'track_id' => $item_id,
+			'track_item_id' => $item_id,
 			'track_user_id' => $user_id
 		));
         return $result->get_last_inserted_id();
@@ -261,7 +261,7 @@ class GuideService
 	 */
 	public static function untrack_item($item_id, $user_id)
 	{
-		self::$db_querier->delete(GuideSetup::$guide_track_table, 'WHERE track_id = :item_id AND track_user_id = :user_id', array(
+		self::$db_querier->delete(GuideSetup::$guide_track_table, 'WHERE track_item_id = :item_id AND track_user_id = :user_id', array(
 			'item_id' => $item_id,
 			'user_id' => $user_id
 		));
@@ -273,8 +273,8 @@ class GuideService
 	 */
 	public static function delete_tracked_item($item_id)
 	{
-		self::$db_querier->delete(GuideSetup::$guide_track_table, 'WHERE track_id = :item_id', array(
-			'track_id' => $item_id
+		self::$db_querier->delete(GuideSetup::$guide_track_table, 'WHERE track_item_id = :item_id', array(
+			'track_item_id' => $item_id
 		));
 	}
 
@@ -287,8 +287,8 @@ class GuideService
         $all_tracked_ids = array();
 		while ($row = $result->fetch())
 		{
-            if($row['track_id'] == $id)
-                $all_tracked_ids[] = array($row['track_id'], $row['track_user_id']);
+            if($row['track_item_id'] == $id)
+                $all_tracked_ids[] = array($row['track_item_id'], $row['track_user_id']);
         }
         return $all_tracked_ids;
     }

@@ -163,7 +163,7 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 			array('class' => 'custom-checkbox')
 		));
 
-		$fieldset->add_field(new FormFieldCheckbox('nb_view_enabled', $this->lang['form.display.views.number'], $this->config->get_enabled_views_number(),
+		$fieldset->add_field(new FormFieldCheckbox('views_number_enabled', $this->lang['form.display.views.number'], $this->config->get_enabled_views_number(),
 			array('class' => 'custom-checkbox')
 		));
 
@@ -219,7 +219,7 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 			$this->config->hide_author();
 
 		$this->config->set_auto_cut_characters_number($this->form->get_value('auto_cut_characters_number', $this->config->get_auto_cut_characters_number()));
-		$this->config->set_enabled_views_number($this->form->get_value('nb_view_enabled'));
+		$this->config->set_enabled_views_number($this->form->get_value('views_number_enabled'));
 		$this->config->set_root_category_description($this->form->get_value('root_category_description'));
 
 		$this->config->set_default_content($this->form->get_value('default_content'));

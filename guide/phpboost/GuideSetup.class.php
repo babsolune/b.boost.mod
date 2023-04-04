@@ -120,12 +120,12 @@ class GuideSetup extends DefaultModuleSetup
 	private function create_guide_track_table()
 	{
 		$fields = array(
-			'id' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
-			'track_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
+			'track_id' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
+			'track_item_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'track_user_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0)
 		);
 		$options = array(
-			'primary' => array('id')
+			'primary' => array('track_id')
 		);
 		PersistenceContext::get_dbms_utils()->create_table(self::$guide_track_table, $fields, $options);
 	}
