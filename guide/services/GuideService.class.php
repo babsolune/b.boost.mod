@@ -12,6 +12,8 @@ class GuideService
 	private static $db_querier;
 	protected static $module_id = 'guide';
 
+	private static $categories_manager;
+
 	public static function __static()
 	{
 		self::$db_querier = PersistenceContext::get_querier();
@@ -101,9 +103,13 @@ class GuideService
         }
 
 		if ($content_id == 0)
-			self::$db_querier->delete(GuideSetup::$guide_table, 'WHERE id=:id', array('id' => $id));
+        {
+            self::$db_querier->delete(GuideSetup::$guide_table, 'WHERE id=:id', array('id' => $id));
+        }
 		else
-			self::$db_querier->delete(GuideSetup::$guide_contents_table, 'WHERE item_id=:id AND content_id = :content_id', array('id' => $id, 'content_id' => $content_id));
+        {
+            self::$db_querier->delete(GuideSetup::$guide_contents_table, 'WHERE item_id=:id AND content_id = :content_id', array('id' => $id, 'content_id' => $content_id));
+        }
 
 		self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', array('module' => 'guide', 'id' => $id));
 
@@ -273,7 +279,7 @@ class GuideService
 	 */
 	public static function delete_tracked_item($item_id)
 	{
-		self::$db_querier->delete(GuideSetup::$guide_track_table, 'WHERE track_item_id = :item_id', array(
+		self::$db_querier->delete(GuideSetup::$guide_track_table, 'WHERE track_item_id = :track_item_id', array(
 			'track_item_id' => $item_id
 		));
 	}
@@ -292,6 +298,18 @@ class GuideService
         }
         return $all_tracked_ids;
     }
+
+	public static function get_categories_manager()
+	{
+		if (self::$categories_manager === null)
+		{
+			$categories_items_parameters = new CategoriesItemsParameters();
+			$categories_items_parameters->set_table_name_contains_items(GuideSetup::$guide_table);
+			self::$categories_manager = new GuideCategoriesManager(GuideCategoriesCache::load(), $categories_items_parameters);
+			self::$categories_manager->get_categories_items_parameters()->set_field_name_id_category('id_category');
+		}
+		return self::$categories_manager;
+	}
 
 	public static function clear_cache()
 	{

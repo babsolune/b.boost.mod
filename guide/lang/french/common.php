@@ -17,6 +17,7 @@ $lang['guide.explorer']       = 'Explorateur';
 
 // TreeLinks
 $lang['item']               = 'fiche';
+$lang['items']              = 'fiches';
 $lang['an.item']            = 'une fiche';
 $lang['the.item']           = 'la fiche';
 $lang['items.reorder']      = 'Réorganiser les fiches';

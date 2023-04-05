@@ -17,8 +17,8 @@ $lang['guide.menu.title']     = 'Guide tree';
 $lang['guide.explorer']       = 'Explorer';
 
 // TreeLinks
-$lang['items']              = 'sheets';
 $lang['item']               = 'sheet';
+$lang['items']              = 'sheets';
 $lang['items.reorder']      = 'Reorder sheets';
 $lang['items.reordering']   = 'Reorganization of sheets';
 

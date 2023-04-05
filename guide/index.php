@@ -19,7 +19,7 @@ $url_controller_mappers = array(
 	new UrlControllerMapper('DefaultCategoriesManagementController', '`^/categories/?$`'),
 	new UrlControllerMapper('GuideCategoriesFormController', '`^/categories/add/?([0-9]+)?/?$`', array('id_parent')),
 	new UrlControllerMapper('GuideCategoriesFormController', '`^/categories/([0-9]+)/edit/?$`', array('id')),
-	new UrlControllerMapper('DefaultDeleteCategoryController', '`^/categories/([0-9]+)/delete/?$`', array('id')),
+	new UrlControllerMapper('GuideDeleteCategoryController', '`^/categories/([0-9]+)/delete/?$`', array('id')),
 
 	// Items Management
 	new UrlControllerMapper('GuideItemsManagerController', '`^/manage/?$`'),

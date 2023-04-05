@@ -60,7 +60,6 @@ class GuideItemsManagerController extends DefaultModuleController
 		$results = array();
 		$result = $table_model->get_sql_results('i
 			LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
-			LEFT JOIN ' . GuideSetup::$guide_track_table . ' f ON f.item_id = i.id
 			LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'guide\'
 			LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'guide\'
 			LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'guide\' AND note.user_id = ' . AppContext::get_current_user()->get_id() . '
