@@ -19,15 +19,16 @@ class GuideCategoriesManager extends CategoriesManager
 		{
 			throw new CategoryNotFoundException($id);
 		}
-
-		$result = PersistenceContext::get_querier()->select_rows(
-            GuideSetup::$guide_table,
-            array('id'),
-            'WHERE id_category = :id_category',
-            array('id_category' => $id)
-        );
+		$result = PersistenceContext::get_querier()->select('SELECT i.id
+		FROM ' . GuideSetup::$guide_table . ' i
+		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
+		WHERE id_category = :id_category AND c.item_id = i.id', array('id_category' => $id));
 		while ($row = $result->fetch())
 		{
+            for($i = 0; $i < count(GuideService::get_item_content($row['id'])); $i++ )
+			{
+				PersistenceContext::get_querier()->delete(GuideSetup::$guide_contents_table, 'WHERE item_id = :id', array('id' => $row['id']));
+			}
 			GuideService::delete($row['id'], 0);
 		}
 		$result->dispose();
