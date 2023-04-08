@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 03 27
+ * @version     PHPBoost 6.0 - last update: 2023 04 08
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -29,10 +29,6 @@ class GuideConfig extends AbstractConfigData
 	const GRID_VIEW    = 'grid_view';
 	const LIST_VIEW    = 'list_view';
 	const TABLE_VIEW   = 'table_view';
-
-    const HOMEPAGE   = 'homepage';
-    const CATEGORIES = 'categories';
-    const EXPLORER   = 'explorer';
 
 	const DEFERRED_OPERATIONS = 'deferred_operations';
 
@@ -110,16 +106,6 @@ class GuideConfig extends AbstractConfigData
 	public function set_display_type($value)
 	{
 		$this->set_property(self::DISPLAY_TYPE, $value);
-	}
-
-	public function get_homepage()
-	{
-		return $this->get_property(self::HOMEPAGE);
-	}
-
-	public function set_homepage($value)
-	{
-		$this->set_property(self::HOMEPAGE, $value);
 	}
 
 	public function get_default_content()
@@ -255,7 +241,6 @@ class GuideConfig extends AbstractConfigData
 			self::ITEMS_PER_PAGE                => 15,
 			self::ITEMS_PER_ROW                 => 2,
 			self::DISPLAY_TYPE                  => self::GRID_VIEW,
-			self::HOMEPAGE                      => self::CATEGORIES,
 			self::DEFAULT_CONTENT               => '',
 			self::SUMMARY_DISPLAYED_TO_GUESTS   => false,
 			self::AUTHOR_DISPLAYED              => true,

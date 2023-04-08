@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 11 18
+ * @version     PHPBoost 6.0 - last update: 2023 04 08
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -39,12 +39,15 @@ class GuideFeedProvider implements FeedProvider
 			$ids_categories = array_keys($categories);
 
 			$now = new Date();
-			$results = $querier->select('SELECT guide.id, guide.id_category, guide.title, guide.rewrited_title, guide.content, guide.update_date, guide.thumbnail, cat.rewrited_name AS rewrited_name_cat
-				FROM ' . GuideSetup::$guide_table . ' guide
-				LEFT JOIN '. GuideSetup::$guide_cats_table .' cat ON cat.id = guide.id_category
-				WHERE guide.id_category IN :ids_categories
+			$results = $querier->select('SELECT i.id, i.id_category, c.title, i.rewrited_title, c.content, c.update_date, c.thumbnail, cat.rewrited_name AS rewrited_name_cat
+				FROM ' . GuideSetup::$guide_table . ' i
+				LEFT JOIN '. GuideSetup::$guide_contents_table .' c ON c.item_id = i.id
+				LEFT JOIN '. GuideSetup::$guide_cats_table .' cat ON cat.id = i.id_category
+				WHERE i.id_category IN :ids_categories
+                AND c.item_id = i.id
+                AND c.active_content = 1
 				AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
-				ORDER BY guide.update_date DESC', array(
+				ORDER BY c.update_date DESC', array(
 					'ids_categories' => $ids_categories,
 					'timestamp_now' => $now->get_timestamp()
 			));

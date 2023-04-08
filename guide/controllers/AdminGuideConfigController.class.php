@@ -120,13 +120,6 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 
 		$fieldset->add_field(new FormFieldSpacer('links_options', ''));
 
-        $fieldset->add_field(new FormFieldSimpleSelectChoice('homepage', $this->lang['guide.homepage'], $this->config->get_homepage(),
-			array(
-				new FormFieldSelectChoiceOption($this->lang['guide.homepage.categories'], GuideConfig::CATEGORIES),
-				new FormFieldSelectChoiceOption($this->lang['guide.homepage.explorer'], GuideConfig::EXPLORER),
-			)
-        ));
-
 		$fieldset->add_field(new FormFieldCheckbox('enabled_navigation_links', $this->lang['form.enable.navigation'], $this->config->get_enabled_navigation_links(),
 			array(
 				'class' => 'custom-checkbox',
@@ -193,7 +186,7 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 	{
 		$this->config->set_module_name($this->form->get_value('module_name'));
 		$this->config->set_sticky_summary($this->form->get_value('display_sticky_summary'));
-        
+
 		$this->config->set_items_per_page($this->form->get_value('items_per_page'));
 
 		if($this->form->get_value('display_type') == GuideConfig::GRID_VIEW)
@@ -202,8 +195,6 @@ class AdminGuideConfigController extends DefaultAdminModuleController
 		$this->config->set_categories_per_page($this->form->get_value('categories_per_page'));
 		$this->config->set_categories_per_row($this->form->get_value('categories_per_row'));
 		$this->config->set_display_type($this->form->get_value('display_type')->get_raw_value());
-
-		$this->config->set_homepage($this->form->get_value('homepage')->get_raw_value());
 
 		if ($this->config->get_display_type() != GuideConfig::TABLE_VIEW)
 		{

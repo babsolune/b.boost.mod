@@ -134,7 +134,7 @@ class GuideItemFormController extends DefaultModuleController
 			));
 		}
 
-		if ($this->item->is_authorized_to_add() || $this->item->is_authorized_to_edit())
+		if (GuideAuthorizationsService::check_authorizations($this->get_item()->get_id_category())->write())
 		{
 			$publication_fieldset = new FormFieldsetHTML('publication', $this->lang['form.publication']);
 			$form->add_fieldset($publication_fieldset);
@@ -201,7 +201,7 @@ class GuideItemFormController extends DefaultModuleController
 		$this->build_contribution_fieldset($form);
 
 		$fieldset->add_field(new FormFieldHidden('referrer', $request->get_url_referrer()));
-		
+
 		$this->submit_button = new FormButtonDefaultSubmit();
 		$form->add_button($this->submit_button);
 		$form->add_button(new FormButtonReset());
@@ -322,7 +322,7 @@ class GuideItemFormController extends DefaultModuleController
 
         $item_content->set_sources($this->form->get_value('sources'));
 
-		if (!$item->is_authorized_to_add() || !$item->is_authorized_to_edit())
+		if (!GuideAuthorizationsService::check_authorizations($this->get_item()->get_id_category())->write())
 		{
 			$item->clean_publishing_start_and_end_date();
 
