@@ -316,7 +316,7 @@ class GuideService
 		Feed::clear_cache('guide');
 		KeywordsCache::invalidate();
 		GuideCache::invalidate();
-        CategoriesService::get_categories_manager()->regenerate_cache();
+        CategoriesService::get_categories_manager('guide')->regenerate_cache();
 	}
 }
 ?>

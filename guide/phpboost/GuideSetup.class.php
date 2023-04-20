@@ -27,6 +27,11 @@ class GuideSetup extends DefaultModuleSetup
 		self::$guide_track_table = PREFIX . 'guide_track';
 	}
 
+    public function upgrade($installed_version)
+    {
+        return '6.0.1';
+    }
+
 	public function install()
 	{
 		$this->drop_tables();
