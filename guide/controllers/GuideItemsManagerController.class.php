@@ -39,7 +39,7 @@ class GuideItemsManagerController extends DefaultModuleController
 		if (!$display_categories)
 			unset($columns[1]);
 
-		$table_model = new SQLHTMLTableModel(GuideSetup::$guide_table, 'items-manager', $columns, new HTMLTableSortingRule('creation_date', HTMLTableSortingRule::DESC));
+		$table_model = new SQLHTMLTableModel(GuideSetup::$guide_articles_table, 'items-manager', $columns, new HTMLTableSortingRule('creation_date', HTMLTableSortingRule::DESC));
 
 		$table_model->set_layout_title($this->lang['guide.items.management']);
 		$table_model->add_permanent_filter('c.active_content = 1');

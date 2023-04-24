@@ -20,7 +20,7 @@ class GuideCategoriesManager extends CategoriesManager
 			throw new CategoryNotFoundException($id);
 		}
 		$result = PersistenceContext::get_querier()->select('SELECT i.id
-		FROM ' . GuideSetup::$guide_table . ' i
+		FROM ' . GuideSetup::$guide_articles_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		WHERE id_category = :id_category AND c.item_id = i.id', array('id_category' => $id));
 		while ($row = $result->fetch())

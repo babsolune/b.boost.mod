@@ -40,7 +40,7 @@ class GuideFeedProvider implements FeedProvider
 
 			$now = new Date();
 			$results = $querier->select('SELECT i.id, i.id_category, c.title, i.rewrited_title, c.content, c.update_date, c.thumbnail, cat.rewrited_name AS rewrited_name_cat
-				FROM ' . GuideSetup::$guide_table . ' i
+				FROM ' . GuideSetup::$guide_articles_table . ' i
 				LEFT JOIN '. GuideSetup::$guide_contents_table .' c ON c.item_id = i.id
 				LEFT JOIN '. GuideSetup::$guide_cats_table .' cat ON cat.id = i.id_category
 				WHERE i.id_category IN :ids_categories

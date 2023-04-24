@@ -25,7 +25,7 @@ class GuideService
 	 */
 	public static function count($condition = '', $parameters = array())
 	{
-		return self::$db_querier->count(GuideSetup::$guide_table, $condition, $parameters);
+		return self::$db_querier->count(GuideSetup::$guide_articles_table, $condition, $parameters);
 	}
 
 	/**
@@ -34,7 +34,7 @@ class GuideService
 	 */
 	public static function add(GuideItem $item)
 	{
-		$result = self::$db_querier->insert(GuideSetup::$guide_table, $item->get_properties());
+		$result = self::$db_querier->insert(GuideSetup::$guide_articles_table, $item->get_properties());
 
 		return $result->get_last_inserted_id();
 	}
@@ -62,7 +62,7 @@ class GuideService
 	 */
 	public static function update(GuideItem $item)
 	{
-		self::$db_querier->update(GuideSetup::$guide_table, $item->get_properties(), 'WHERE id=:id', array('id' => $item->get_id()));
+		self::$db_querier->update(GuideSetup::$guide_articles_table, $item->get_properties(), 'WHERE id=:id', array('id' => $item->get_id()));
 	}
 
 	/**
@@ -81,12 +81,12 @@ class GuideService
 	 */
 	public static function update_position($id, $position)
 	{
-		self::$db_querier->update(GuideSetup::$guide_table, array('i_order' => $position), 'WHERE id=:id', array('id' => $id));
+		self::$db_querier->update(GuideSetup::$guide_articles_table, array('i_order' => $position), 'WHERE id=:id', array('id' => $id));
 	}
 
 	public static function update_views_number(GuideItem $item)
 	{
-		self::$db_querier->update(GuideSetup::$guide_table, array('views_number' => $item->get_views_number()), 'WHERE id=:id', array('id' => $item->get_id()));
+		self::$db_querier->update(GuideSetup::$guide_articles_table, array('views_number' => $item->get_views_number()), 'WHERE id=:id', array('id' => $item->get_id()));
 	}
 
 	/**
@@ -104,7 +104,7 @@ class GuideService
 
 		if ($content_id == 0)
         {
-            self::$db_querier->delete(GuideSetup::$guide_table, 'WHERE id=:id', array('id' => $id));
+            self::$db_querier->delete(GuideSetup::$guide_articles_table, 'WHERE id=:id', array('id' => $id));
         }
 		else
         {
@@ -142,7 +142,7 @@ class GuideService
 	public static function get_item(int $id)
 	{
 		$row = self::$db_querier->select_single_row_query('SELECT i.*, c.*, member.*, notes.average_notes, notes.notes_number, note.note
-		FROM ' . GuideSetup::$guide_table .' i
+		FROM ' . GuideSetup::$guide_articles_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
@@ -163,7 +163,7 @@ class GuideService
 		$content_items = array();
 
 		$result = self::$db_querier->select('SELECT *
-		FROM ' . GuideSetup::$guide_table .' i
+		FROM ' . GuideSetup::$guide_articles_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
@@ -191,7 +191,7 @@ class GuideService
 	public static function get_item_archive(int $id, int $content_id)
 	{
 		$row = self::$db_querier->select_single_row_query('SELECT i.*, c.*, member.*, notes.average_notes, notes.notes_number, note.note
-		FROM ' . GuideSetup::$guide_table .' i
+		FROM ' . GuideSetup::$guide_articles_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
@@ -211,7 +211,7 @@ class GuideService
     public static function get_initial_content(int $id)
     {
 		$result = self::$db_querier->select('SELECT i.*, c.*, member.*, notes.average_notes, notes.notes_number, note.note
-		FROM ' . GuideSetup::$guide_table .' i
+		FROM ' . GuideSetup::$guide_articles_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
@@ -229,7 +229,7 @@ class GuideService
         }
 
         $row = self::$db_querier->select_single_row_query('SELECT i.*, c.*, member.*, notes.average_notes, notes.notes_number, note.note
-		FROM ' . GuideSetup::$guide_table .' i
+		FROM ' . GuideSetup::$guide_articles_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
 		LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = :module_id
@@ -253,7 +253,7 @@ class GuideService
 	 */
 	public static function track_item($item_id, $user_id)
 	{
-		$result = self::$db_querier->insert(GuideSetup::$guide_track_table, array(
+		$result = self::$db_querier->insert(GuideSetup::$guide_favorites_table, array(
 			'track_item_id' => $item_id,
 			'track_user_id' => $user_id
 		));
@@ -267,7 +267,7 @@ class GuideService
 	 */
 	public static function untrack_item($item_id, $user_id)
 	{
-		self::$db_querier->delete(GuideSetup::$guide_track_table, 'WHERE track_item_id = :item_id AND track_user_id = :user_id', array(
+		self::$db_querier->delete(GuideSetup::$guide_favorites_table, 'WHERE track_item_id = :item_id AND track_user_id = :user_id', array(
 			'item_id' => $item_id,
 			'user_id' => $user_id
 		));
@@ -279,7 +279,7 @@ class GuideService
 	 */
 	public static function delete_tracked_item($item_id)
 	{
-		self::$db_querier->delete(GuideSetup::$guide_track_table, 'WHERE track_item_id = :track_item_id', array(
+		self::$db_querier->delete(GuideSetup::$guide_favorites_table, 'WHERE track_item_id = :track_item_id', array(
 			'track_item_id' => $item_id
 		));
 	}
@@ -287,7 +287,7 @@ class GuideService
     public static function get_tracked_items($id)
     {
         $result = self::$db_querier->select('SELECT f.*
-            FROM ' . GuideSetup::$guide_track_table . ' f'
+            FROM ' . GuideSetup::$guide_favorites_table . ' f'
         );
 
         $all_tracked_ids = array();
@@ -304,7 +304,7 @@ class GuideService
 		if (self::$categories_manager === null)
 		{
 			$categories_items_parameters = new CategoriesItemsParameters();
-			$categories_items_parameters->set_table_name_contains_items(GuideSetup::$guide_table);
+			$categories_items_parameters->set_table_name_contains_items(GuideSetup::$guide_articles_table);
 			self::$categories_manager = new GuideCategoriesManager(GuideCategoriesCache::load(), $categories_items_parameters);
 			self::$categories_manager->get_categories_items_parameters()->set_field_name_id_category('id_category');
 		}

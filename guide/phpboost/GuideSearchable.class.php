@@ -13,7 +13,7 @@ class GuideSearchable extends DefaultSearchable
 	{
 		parent::__construct('guide');
 
-		$this->table_name = GuideSetup::$guide_table;
+		$this->table_name = GuideSetup::$guide_articles_table;
 
 		$this->has_second_table = true;
 		$this->second_table_name = GuideSetup::$guide_contents_table;

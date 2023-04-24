@@ -130,7 +130,7 @@ class GuideItemController extends DefaultModuleController
 		$result = PersistenceContext::get_querier()->select('SELECT
 			i.id, c.item_id, c.title, i.id_category, i.rewrited_title, c.thumbnail, c.content, c.active_content, i.creation_date, c.update_date,
 			(2 * FT_SEARCH_RELEVANCE(c.title, :search_content) + FT_SEARCH_RELEVANCE(c.content, :search_content) / 3) AS relevance
-		FROM ' . GuideSetup::$guide_table . ' i
+		FROM ' . GuideSetup::$guide_articles_table . ' i
         LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		WHERE (FT_SEARCH(c.title, :search_content) OR FT_SEARCH(c.content, :search_content)) AND i.id <> :excluded_id
 		AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
@@ -165,12 +165,12 @@ class GuideItemController extends DefaultModuleController
 
 		$result = PersistenceContext::get_querier()->select('
 		(SELECT i.id, c.title, i.id_category, i.rewrited_title, c.thumbnail, \'PREVIOUS\' as type
-		FROM '. GuideSetup::$guide_table .' i
+		FROM '. GuideSetup::$guide_articles_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
         WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0))) AND creation_date < :item_timestamp AND id_category IN :authorized_categories ORDER BY creation_date DESC LIMIT 1 OFFSET 0)
 		UNION
 		(SELECT i.id, c.title, i.id_category, i.rewrited_title, c.thumbnail, \'NEXT\' as type
-		FROM '. GuideSetup::$guide_table .' i
+		FROM '. GuideSetup::$guide_articles_table .' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
         WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0))) AND creation_date > :item_timestamp AND id_category IN :authorized_categories ORDER BY creation_date ASC LIMIT 1 OFFSET 0)
 		', array(

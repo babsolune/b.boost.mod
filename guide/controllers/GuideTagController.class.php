@@ -53,7 +53,7 @@ class GuideTagController extends DefaultModuleController
 		$pagination = $this->get_pagination($condition, $parameters, $page);
 
 		$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
-		FROM ' . GuideSetup::$guide_table . ' i
+		FROM ' . GuideSetup::$guide_articles_table . ' i
 		LEFT JOIN ' . GuideSetup::$guide_contents_table . ' c ON c.item_id = i.id
 		LEFT JOIN ' . DB_TABLE_KEYWORDS_RELATIONS . ' relation ON relation.module_id = \'guide\' AND relation.id_in_module = i.id
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
@@ -140,7 +140,7 @@ class GuideTagController extends DefaultModuleController
 	private function get_pagination($condition, $parameters, $page)
 	{
 		$result = PersistenceContext::get_querier()->select_single_row_query('SELECT COUNT(*) AS items_number
-		FROM '. GuideSetup::$guide_table . ' guide
+		FROM '. GuideSetup::$guide_articles_table . ' guide
 		LEFT JOIN '. DB_TABLE_KEYWORDS_RELATIONS . ' relation ON relation.module_id = \'guide\' AND relation.id_in_module = guide.id
 		' . $condition, $parameters);
 
