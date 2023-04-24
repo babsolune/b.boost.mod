@@ -167,12 +167,12 @@ class DocsheetItemController extends DefaultModuleController
 		(SELECT i.id, c.title, i.id_category, i.rewrited_title, c.thumbnail, \'PREVIOUS\' as type
 		FROM '. DocsheetSetup::$docsheet_articles_table .' i
 		LEFT JOIN ' . DocsheetSetup::$docsheet_contents_table . ' c ON c.item_id = i.id
-        WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0))) AND creation_date < :item_timestamp AND id_category IN :authorized_categories ORDER BY creation_date DESC LIMIT 1 OFFSET 0)
+        WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0))) AND active_content = 1 AND creation_date < :item_timestamp AND id_category IN :authorized_categories ORDER BY creation_date DESC LIMIT 1 OFFSET 0)
 		UNION
 		(SELECT i.id, c.title, i.id_category, i.rewrited_title, c.thumbnail, \'NEXT\' as type
 		FROM '. DocsheetSetup::$docsheet_articles_table .' i
 		LEFT JOIN ' . DocsheetSetup::$docsheet_contents_table . ' c ON c.item_id = i.id
-        WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0))) AND creation_date > :item_timestamp AND id_category IN :authorized_categories ORDER BY creation_date ASC LIMIT 1 OFFSET 0)
+        WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0))) AND active_content = 1 AND creation_date > :item_timestamp AND id_category IN :authorized_categories ORDER BY creation_date ASC LIMIT 1 OFFSET 0)
 		', array(
 			'timestamp_now' => $now->get_timestamp(),
 			'item_timestamp' => $item_timestamp,

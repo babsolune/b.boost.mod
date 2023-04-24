@@ -53,27 +53,27 @@
 							# ENDIF #
 						# ENDIF #
 					</div>
-						<div class="controls align-right">
-							# IF IS_USER_CONNECTED #
-                                # IF C_IS_TRACKED #
-                                    <a class="offload" href="{U_UNTRACK}" aria-label="{@docsheet.untrack}"><i class="fa fa-heart-crack error" aria-hidden="true"></i></a>
-                                # ELSE #
-                                    <a class="offload" href="{U_TRACK}" aria-label="{@docsheet.track}"><i class="fa fa-heart error" aria-hidden="true"></i></a>
-                                # ENDIF #
+                    <div class="controls align-right">
+                        # IF IS_USER_CONNECTED #
+                            # IF C_IS_TRACKED #
+                                <a class="offload" href="{U_UNTRACK}" aria-label="{@docsheet.untrack}"><i class="fa fa-heart-crack error" aria-hidden="true"></i></a>
+                            # ELSE #
+                                <a class="offload" href="{U_TRACK}" aria-label="{@docsheet.track}"><i class="fa fa-heart error" aria-hidden="true"></i></a>
                             # ENDIF #
-                            <a class="offload" href="{U_HISTORY}" aria-label="{@docsheet.item.history}"><i class="fa fa-fw fa-clock-rotate-left" aria-hidden="true"></i></a>
-							# IF C_ARCHIVE #
-								# IF C_CONTROLS #
-									# IF C_RESTORE #<a class="offload" href="{U_RESTORE}" aria-label="{@docsheet.restore.item}"><i class="fa fa-fw fa-undo" aria-hidden="true"></i></a># ENDIF #
-									# IF C_DELETE #<a href="{U_DELETE_CONTENT}" aria-label="{@docsheet.delete.version}" data-confirmation="delete-element"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
-								# ENDIF #
-							# ELSE #
-								# IF C_CONTROLS #
-									# IF C_EDIT #<a class="offload" href="{U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
-									# IF C_DELETE #<a href="{U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
-								# ENDIF #
-							# ENDIF #
-						</div>
+                        # ENDIF #
+                        <a class="offload" href="{U_HISTORY}" aria-label="{@docsheet.item.history}"><i class="fa fa-fw fa-clock-rotate-left" aria-hidden="true"></i></a>
+                        # IF C_ARCHIVE #
+                            # IF C_CONTROLS #
+                                # IF C_RESTORE #<a class="offload" href="{U_RESTORE}" aria-label="{@docsheet.restore.item}"><i class="fa fa-fw fa-undo" aria-hidden="true"></i></a># ENDIF #
+                                # IF C_DELETE #<a href="{U_DELETE_CONTENT}" aria-label="{@docsheet.delete.version}" data-confirmation="delete-element"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
+                            # ENDIF #
+                        # ELSE #
+                            # IF C_CONTROLS #
+                                # IF C_EDIT #<a class="offload" href="{U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
+                                # IF C_DELETE #<a href="{U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
+                            # ENDIF #
+                        # ENDIF #
+                    </div>
 				</div>
 				# IF C_HAS_UPDATE_DATE #
                     <span class="pinned notice small text-italic item-modified-date">
