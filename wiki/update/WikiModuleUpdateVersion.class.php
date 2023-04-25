@@ -161,7 +161,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
         // Set custom_level from defined_status
         $result = $this->querier->select('SELECT i.id, i.title, i.rewrited_title, i.auth, i.is_cat, i.defined_status, cat.id as cat_id
             FROM ' . PREFIX . 'wiki_articles i
-            LEFT JOIN ' . PREFIX . 'wiki_cats cat ON cat.id_article = i.id
+            LEFT JOIN ' . PREFIX . 'wiki_cats cat ON cat.article_id = i.id
             LEFT JOIN ' . PREFIX . 'wiki_contents c ON c.item_id = i.id
             WHERE i.is_cat = 1'
         );
