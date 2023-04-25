@@ -351,20 +351,21 @@ class WikiSetup extends DefaultModuleSetup
 
 	private function modify_content()
 	{
-        // Set categories from old `ìs_cat` sheet without content
-			$result = $this->querier->select('SELECT i.id, i.title, i.rewrited_title, i.auth, i.is_cat, cat.id as cat_id
+        // Set categories `name`, `rewrited_name`, `auth` from old `ìs_cat`
+        // Set `custom_level` from old `defined_status`
+			$result = $this->querier->select('SELECT i.id, i.title, i.rewrited_title, i.auth, i.is_cat, i.defined_status, cat.id as cat_id
             FROM ' . PREFIX . 'wiki_articles i
             LEFT JOIN ' . PREFIX . 'wiki_cats cat ON cat.id_article = i.id
+            LEFT JOIN ' . PREFIX . 'wiki_contents c ON c.item_id = i.id
             WHERE i.is_cat = 1'
         );
 
         while ($row = $result->fetch())
         {
             $this->querier->update(PREFIX . 'wiki_cats', array('name' => $row['title'], 'rewrited_name' => $row['rewrited_title'], 'auth' => $row['auth']), 'WHERE id = :id', array('id' => $row['cat_id']));
+            $this->querier->update(PREFIX . 'wiki_contents', array('custom_level' => $row['defined_status']), 'WHERE id = :id', array('id' => $row['id']));
         }
         $result->dispose();
-
-        // TODO move content_level content from articles table to all contents table
 
         // TODO change `-- title --` to `[title=1]title[/title]`
         // TODO change `--- title ---` to `[title=2]title[/title]`
