@@ -107,7 +107,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 					'rewrited_name'          => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
                     'c_order'                => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
                     'special_authorizations' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
-                    'auth'                   => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
+                    'auth'                   => array('type' => 'text', 'length' => 65000),
                     'description'            => array('type' => 'text', 'length' => 65000),
 					'thumbnail'              => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''")
                 )
