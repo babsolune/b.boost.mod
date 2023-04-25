@@ -134,6 +134,29 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 
 	protected function execute_module_specific_changes()
 	{
+        // disable menus for old wiki
+        $wikitreemenu_id = 0;
+		try {
+			$wikitreemenu_id = PersistenceContext::get_querier()->get_column_value(DB_TABLE_MENUS, 'id', 'WHERE title = "wikitree/WikitreeModuleMiniMenu"');
+		} catch (RowNotFoundException $e) {}
+		if ($wikitreemenu_id)
+        {
+			$menu = MenuService::load($wikitreemenu_id);
+			MenuService::delete($menu);
+			MenuService::generate_cache();
+		}
+
+		$wikistatusmenu_id = 0;
+		try {
+			$wikistatusmenu_id = PersistenceContext::get_querier()->get_column_value(DB_TABLE_MENUS, 'id', 'WHERE title = "WikiStatus/WikiStatusModuleMiniMenu"');
+		} catch (RowNotFoundException $e) {}
+		if ($wikistatusmenu_id)
+        {
+			$menu = MenuService::load($wikistatusmenu_id);
+			MenuService::delete($menu);
+			MenuService::generate_cache();
+		}
+
         // Set categories name, rewrited_name, auth from old `ìs_cat`
         // Set custom_level from defined_status
         $result = $this->querier->select('SELECT i.id, i.title, i.rewrited_title, i.auth, i.is_cat, i.defined_status, cat.id as cat_id

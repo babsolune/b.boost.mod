@@ -262,6 +262,16 @@ class WikiSetup extends DefaultModuleSetup
 			MenuService::delete($menu);
 			MenuService::generate_cache();
 		}
+		$wikistatusmenu_id = 0;
+		try {
+			$wikistatusmenu_id = PersistenceContext::get_querier()->get_column_value(DB_TABLE_MENUS, 'id', 'WHERE title = "wikistatus/WikiStatusModuleMiniMenu"');
+		} catch (RowNotFoundException $e) {}
+		if ($wikistatusmenu_id)
+        {
+			$menu = MenuService::load($wikistatusmenu_id);
+			MenuService::delete($menu);
+			MenuService::generate_cache();
+		}
 	}
 
 	private function modify_fields()
