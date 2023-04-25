@@ -119,7 +119,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 		$this->database_columns_to_delete = array(
 			array(
 				'table_name' => PREFIX . 'wiki_articles',
-				'columns' => array('id_contents', 'title', 'is_cat', 'undefined_status', 'redirect', 'auth')
+				'columns' => array('id_contents', 'title', 'is_cat', 'defined_status', 'redirect', 'auth')
             ),
 			array(
 				'table_name' => PREFIX . 'wiki_contents',
