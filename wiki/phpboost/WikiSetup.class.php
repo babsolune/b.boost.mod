@@ -373,7 +373,7 @@ class WikiSetup extends DefaultModuleSetup
         while ($row = $result->fetch())
         {
             $this->querier->update(PREFIX . 'wiki_cats', array('name' => $row['title'], 'rewrited_name' => $row['rewrited_title'], 'auth' => $row['auth']), 'WHERE id = :id', array('id' => $row['cat_id']));
-            $this->querier->update(PREFIX . 'wiki_contents', array('custom_level' => $row['defined_status']), 'WHERE id = :id', array('id' => $row['id']));
+            $this->querier->update(PREFIX . 'wiki_contents', array('custom_level' => $row['defined_status']), 'WHERE item_id = :id', array('id' => $row['id']));
         }
         $result->dispose();
 
