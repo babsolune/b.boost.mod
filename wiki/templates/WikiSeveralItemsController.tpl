@@ -66,14 +66,6 @@
     # IF C_ITEMS #
         <div class="sub-section">
             <div class="content-container">
-                # IF C_SEVERAL_ITEMS #
-                    # IF NOT C_MEMBER_ITEMS #
-                        <div class="content">
-                            # INCLUDE SORT_FORM #
-                            <div class="spacer"></div>
-                        </div>
-                    # ENDIF #
-                # ENDIF #
                 # IF C_TABLE_VIEW #
                     <div class="responsive-table">
                         <table class="table">
