@@ -157,9 +157,8 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 			MenuService::generate_cache();
 		}
 
-        // Set categories name, rewrited_name, auth from old `ìs_cat`
         // Set content from old article
-        $result = $this->querier->select('SELECT i.id, i.title, i.rewrited_title, i.auth, i.is_cat, i.defined_status, cat.id as cat_id
+        $result = $this->querier->select('SELECT i.id, i.title, i.rewrited_title, i.is_cat, i.defined_status, cat.id as cat_id
             FROM ' . PREFIX . 'wiki_articles i
             LEFT JOIN ' . PREFIX . 'wiki_cats cat ON cat.article_id = i.id
             LEFT JOIN ' . PREFIX . 'wiki_contents c ON c.item_id = i.id
@@ -168,10 +167,24 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 
         while ($row = $result->fetch())
         {
-            $this->querier->update(PREFIX . 'wiki_cats', array('name' => $row['title'], 'rewrited_name' => $row['rewrited_title'], 'auth' => $row['auth']), 'WHERE id = :id', array('id' => $row['cat_id']));
-            $this->querier->update(PREFIX . 'wiki_contents', array('title' => $row['title'], 'custom_level' => $row['defined_status']), 'WHERE item_id = :id', array('id' => $row['id']));
+            $this->querier->update(PREFIX . 'wiki_contents', array('title' => $row['title'], 'custom_level' => $row['defined_status']), 'WHERE item_id = :id', array('id' => $row['id']));$this->querier->update(PREFIX . 'wiki_cats', array('name' => $row['title'], 'rewrited_name' => $row['rewrited_title']), 'WHERE id = :id', array('id' => $row['cat_id']));
+            $this->querier->update(PREFIX . 'wiki_cats', array('name' => $row['title'], 'rewrited_name' => $row['rewrited_title']), 'WHERE id = :id', array('id' => $row['cat_id']));
         }
         $result->dispose();
+
+        // Set categories name, rewrited_name, auth from old `ìs_cat`
+        // $result = $this->querier->select('SELECT i.id, i.auth, i.is_cat, i.defined_status, cat.id as cat_id
+        //     FROM ' . PREFIX . 'wiki_articles i
+        //     LEFT JOIN ' . PREFIX . 'wiki_cats cat ON cat.article_id = i.id
+        //     WHERE i.is_cat = 1'
+        // );
+
+        // while ($row = $result->fetch())
+        // {
+        //     if($row['auth'] == null || $row['auth'] == '') $row['auth'] = array();
+        //     $this->querier->update(PREFIX . 'wiki_cats', array('name' => $row['title'], 'rewrited_name' => $row['rewrited_title'], 'auth' => $row['auth']), 'WHERE id = :id', array('id' => $row['cat_id']));
+        // }
+        // $result->dispose();
 
         // TODO change `-- title --` to `[title=1]title[/title]`
         // TODO change `--- title ---` to `[title=2]title[/title]`
