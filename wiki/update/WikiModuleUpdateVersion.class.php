@@ -199,10 +199,13 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
         $result->dispose();
 
         // TODO change `-- title --` to `[title=1]title[/title]`
-        // TODO change `--- title ---` to `[title=2]title[/title]`
+        // TODO change `--- title ---` to `[title=2]title[/title]` 
         // TODO change `---- title ----` to `[title=3]title[/title]`
         // TODO change `----- title -----` to `[title=4]title[/title]`
         // TODO change `------ title ------` to `[title=5]title[/title]`
+
+        // dans la bdd, en wiki1 les `-- titre --`sont sous la forme `<h2 class="formatter-title wiki-paragraph-2" id="paragraph-{encoded_title}">titre</h2>`
+        // à transformer pour wiki 2 en `<h2 class="formatter-title">titre</h2>`
     }
 }
 ?>
