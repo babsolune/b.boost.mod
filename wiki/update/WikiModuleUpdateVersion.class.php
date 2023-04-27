@@ -167,8 +167,20 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 
         while ($row = $result->fetch())
         {
-            $this->querier->update(PREFIX . 'wiki_contents', array('title' => $row['title'], 'custom_level' => $row['defined_status']), 'WHERE item_id = :id', array('id' => $row['id']));$this->querier->update(PREFIX . 'wiki_cats', array('name' => $row['title'], 'rewrited_name' => $row['rewrited_title']), 'WHERE id = :id', array('id' => $row['cat_id']));
             $this->querier->update(PREFIX . 'wiki_cats', array('name' => $row['title'], 'rewrited_name' => $row['rewrited_title']), 'WHERE id = :id', array('id' => $row['cat_id']));
+        }
+        $result->dispose();
+
+        // Set content from old article
+        $result = $this->querier->select('SELECT i.id, i.title, i.rewrited_title, i.defined_status, cat.id as cat_id
+            FROM ' . PREFIX . 'wiki_articles i
+            LEFT JOIN ' . PREFIX . 'wiki_contents c ON c.item_id = i.id
+            WHERE i.id = c.item_id'
+        );
+
+        while ($row = $result->fetch())
+        {
+            $this->querier->update(PREFIX . 'wiki_contents', array('title' => $row['title'], 'custom_level' => $row['defined_status']), 'WHERE item_id = :id', array('id' => $row['id']));$this->querier->update(PREFIX . 'wiki_cats', array('name' => $row['title'], 'rewrited_name' => $row['rewrited_title']), 'WHERE id = :id', array('id' => $row['cat_id']));
         }
         $result->dispose();
 
