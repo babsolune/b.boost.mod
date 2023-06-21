@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 03 27
+ * @version     PHPBoost 6.0 - last update: 2023 06 21
  * @since       PHPBoost 6.0 - 2022 11 18
  * @contributor Myster <MP : https://www.phpboost.com/user/pm-3023>
  */
@@ -169,7 +169,21 @@ class WikiItemFormController extends DefaultModuleController
 							jQuery("#' . __CLASS__ . '_publishing_start_date_field").hide();
 							HTMLForms.getField("end_date_enabled").disable();
 							HTMLForms.getField("publishing_end_date").disable();
-						}'
+						}
+                        // change color
+                        if (jQuery("#' . __CLASS__ . '_published_field").hasClass("warning")) {
+                            if (HTMLForms.getField("published").getValue() !== 0) {
+                                jQuery("#' . __CLASS__ . '_published_field, #' . __CLASS__ . '_published").each(function() {
+                                    jQuery(this).removeClass("warning").addClass("success");
+                                });
+                            }
+                        } else if (jQuery("#' . __CLASS__ . '_published_field").hasClass("success")) {
+                            if (HTMLForms.getField("published").getValue() == 0) {
+                                jQuery("#' . __CLASS__ . '_published_field, #' . __CLASS__ . '_published").each(function() {
+                                    jQuery(this).removeClass("succes").addClass("warning");
+                                });
+                            }
+                        }'
 					)
 				)
 			));
