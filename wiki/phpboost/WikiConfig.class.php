@@ -10,6 +10,7 @@
 class WikiConfig extends AbstractConfigData
 {
 	const MODULE_NAME      = 'module_name';
+	const MENU_NAME        = 'menu_name';
 	const STICKY_SUMMARY   = 'sticky_summary';
 
 	const CATEGORIES_PER_PAGE = 'categories_per_page';
@@ -46,6 +47,16 @@ class WikiConfig extends AbstractConfigData
 	public function set_module_name($value)
 	{
 		$this->set_property(self::MODULE_NAME, $value);
+	}
+
+	public function get_menu_name()
+	{
+		return $this->get_property(self::MENU_NAME);
+	}
+
+	public function set_menu_name($value)
+	{
+		$this->set_property(self::MENU_NAME, $value);
 	}
 
 	public function get_sticky_summary()
@@ -234,7 +245,8 @@ class WikiConfig extends AbstractConfigData
 	public function get_default_values()
 	{
 		return array(
-			self::MODULE_NAME                    => LangLoader::get_message('wiki.module.title', 'common', 'wiki') . ' ' . GeneralConfig::load()->get_site_name(),
+			self::MODULE_NAME                   => LangLoader::get_message('wiki.module.title', 'common', 'wiki') . ' ' . GeneralConfig::load()->get_site_name(),
+			self::MENU_NAME                     => LangLoader::get_message('wiki.menu.title', 'common', 'wiki'),
 			self::STICKY_SUMMARY                => false,
 			self::CATEGORIES_PER_PAGE           => 10,
 			self::CATEGORIES_PER_ROW            => 3,

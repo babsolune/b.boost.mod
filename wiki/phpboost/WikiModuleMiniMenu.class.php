@@ -26,7 +26,7 @@ class WikiModuleMiniMenu extends ModuleMiniMenu
 
 	public function get_menu_title()
 	{
-		return LangLoader::get_message('wiki.menu.title', 'common', 'wiki');
+		return WikiConfig::load()->get_menu_name();
 	}
 
 	public function is_displayed()

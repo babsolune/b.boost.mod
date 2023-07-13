@@ -74,6 +74,8 @@ $lang['wiki.suggestions.number']   = 'Nombre d\'éléments suggérés à affiche
 $lang['wiki.homepage']             = 'Choisir le type de page d\'accueil';
 $lang['wiki.homepage.categories']  = 'Catégories';
 $lang['wiki.homepage.explorer']    = 'Explorateur';
+$lang['wiki.menu.configuration']   = 'Configuration du mini module';
+$lang['wiki.menu.title.name']      = 'Nom du mini module';
 
 // Authorizations
 $lang['wiki.manage.archives'] = 'Autorisation de gérer les archives';

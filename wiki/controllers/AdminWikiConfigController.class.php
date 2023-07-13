@@ -164,6 +164,11 @@ class AdminWikiConfigController extends DefaultAdminModuleController
 			array('rows' => 8, 'cols' => 47)
 		));
 
+        $fieldset_menu = new FormFieldsetHTML('menu_title_name', $this->lang['wiki.menu.configuration']);
+		$form->add_fieldset($fieldset_menu);
+
+		$fieldset_menu->add_field(new FormFieldTextEditor('menu_title', $this->lang['wiki.menu.title.name'], $this->config->get_menu_name()));
+
 		$fieldset_authorizations = new FormFieldsetHTML('authorizations_fieldset', $this->lang['form.authorizations'],
 			array('description' => $this->lang['form.authorizations.clue'])
 		);
@@ -221,6 +226,8 @@ class AdminWikiConfigController extends DefaultAdminModuleController
 			$this->config->set_suggested_items_nb($this->form->get_value('suggested_items_nb'));
 
 		$this->config->set_enabled_navigation_links($this->form->get_value('enabled_navigation_links'));
+
+		$this->config->set_menu_name($this->form->get_value('menu_title'));
 
 		WikiConfig::save();
 		CategoriesService::get_categories_manager()->regenerate_cache();
