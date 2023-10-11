@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 03 27
+ * @version     PHPBoost 6.0 - last update: 2023 10 11
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -59,6 +59,7 @@ class WikiCategoryController extends DefaultModuleController
 					'C_CATEGORY_THUMBNAIL' 	 => !empty($category_thumbnail),
 					'C_SEVERAL_ITEMS'      	 => $category->get_elements_number() > 1,
 					'C_CATEGORY_DESCRIPTION' => !empty($category_description),
+                    'C_DISPLAY_DESCRIPTION'  => !empty($category_description) && $this->config->get_display_description(),
 
 					'CATEGORY_ID'          => $category->get_id(),
 					'CATEGORY_NAME'        => $category->get_name(),

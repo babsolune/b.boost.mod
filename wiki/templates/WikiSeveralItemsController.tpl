@@ -40,19 +40,24 @@
                     # START sub_categories_list #
                         <div class="cell cell-category category-{sub_categories_list.CATEGORY_ID}">
                             <div class="cell-header">
-                                <div class="cell-name"><a class="subcat-title offload" itemprop="about" href="{sub_categories_list.U_CATEGORY}">{sub_categories_list.CATEGORY_NAME}</a></div>
+                                <div class="cell-name"><a class="subcat-title offload" href="{sub_categories_list.U_CATEGORY}">{sub_categories_list.CATEGORY_NAME}</a></div>
                                 <span class="small pinned notice" role="contentinfo" aria-label="{sub_categories_list.ITEMS_NUMBER} # IF sub_categories_list.C_SEVERAL_ITEMS #${TextHelper::lcfirst(@items)}# ELSE #${TextHelper::lcfirst(@item)}# ENDIF #">
                                     {sub_categories_list.ITEMS_NUMBER}
                                 </span>
                             </div>
                             # IF sub_categories_list.C_CATEGORY_THUMBNAIL #
-                                <div class="cell-body" itemprop="about">
+                                <div class="cell-body">
                                     <div class="cell-thumbnail cell-landscape cell-center">
                                         <img itemprop="thumbnailUrl" src="{sub_categories_list.U_CATEGORY_THUMBNAIL}" alt="{sub_categories_list.CATEGORY_NAME}" />
                                         <a class="cell-thumbnail-caption offload" href="{sub_categories_list.U_CATEGORY}">
                                             {@category.see.category}
                                         </a>
                                     </div>
+                                </div>
+                            # ENDIF #
+                            # IF sub_categories_list.C_DISPLAY_DESCRIPTION #
+                                <div class="cell-body" itemprop="about">
+                                    <div class="cell-content">{sub_categories_list.CATEGORY_DESCRIPTION}</div>
                                 </div>
                             # ENDIF #
                         </div>

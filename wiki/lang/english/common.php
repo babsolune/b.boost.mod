@@ -71,6 +71,7 @@ $lang['wiki.suggestions.number']   = 'Number of suggested items to display';
 $lang['wiki.homepage']             = 'Homepage type';
 $lang['wiki.homepage.categories']  = 'Categories';
 $lang['wiki.homepage.explorer']    = 'Explorer';
+$lang['wiki.display.description']  = 'Display sub-categories description';
 $lang['wiki.menu.configuration']   = 'Configuration of the mini module';
 $lang['wiki.menu.title.name']      = 'Name of the mini module';
 

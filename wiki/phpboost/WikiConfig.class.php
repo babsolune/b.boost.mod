@@ -17,10 +17,11 @@ class WikiConfig extends AbstractConfigData
 	const CATEGORIES = 'categories';
 	const EXPLORER   = 'explorer';
 
-	const CATEGORIES_PER_PAGE = 'categories_per_page';
-	const CATEGORIES_PER_ROW  = 'categories_per_row';
-	const ITEMS_PER_PAGE      = 'items_per_page';
-	const ITEMS_PER_ROW       = 'items_per_row';
+	const CATEGORIES_PER_PAGE   = 'categories_per_page';
+	const CATEGORIES_PER_ROW    = 'categories_per_row';
+	const ITEMS_PER_PAGE        = 'items_per_page';
+	const ITEMS_PER_ROW         = 'items_per_row';
+	const DISPLAY_DESCRIPTION   = 'display_description';
 
 	const DEFAULT_CONTENT = 'default_content';
 
@@ -111,6 +112,16 @@ class WikiConfig extends AbstractConfigData
 	public function set_items_per_page($value)
 	{
 		$this->set_property(self::ITEMS_PER_PAGE, $value);
+	}
+
+	public function get_display_description()
+	{
+		return $this->get_property(self::DISPLAY_DESCRIPTION);
+	}
+
+	public function set_display_description($value)
+	{
+		$this->set_property(self::DISPLAY_DESCRIPTION, $value);
 	}
 
 	public function get_items_per_row()
@@ -267,6 +278,7 @@ class WikiConfig extends AbstractConfigData
 			self::CATEGORIES_PER_ROW            => 3,
 			self::ITEMS_PER_PAGE                => 15,
 			self::ITEMS_PER_ROW                 => 2,
+			self::DISPLAY_DESCRIPTION           => false,
 			self::DISPLAY_TYPE                  => self::GRID_VIEW,
 			self::DEFAULT_CONTENT               => '',
 			self::SUMMARY_DISPLAYED_TO_GUESTS   => false,

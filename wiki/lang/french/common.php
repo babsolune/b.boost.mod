@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 03 27
+ * @version     PHPBoost 6.0 - last update: 2023 10 11
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -74,6 +74,7 @@ $lang['wiki.suggestions.number']   = 'Nombre d\'éléments suggérés à affiche
 $lang['wiki.homepage']             = 'Choisir le type de page d\'accueil';
 $lang['wiki.homepage.categories']  = 'Catégories';
 $lang['wiki.homepage.explorer']    = 'Explorateur';
+$lang['wiki.display.description']  = 'Afficher la description des sous-catégories';
 $lang['wiki.menu.configuration']   = 'Configuration du mini module';
 $lang['wiki.menu.title.name']      = 'Nom du mini module';
 

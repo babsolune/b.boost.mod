@@ -51,7 +51,7 @@
                                 data_order_id="{categories.CATEGORY_SUB_ORDER}">
                             <div class="flex-between toggle-menu-button-{categories.CATEGORY_ID}">
                                 <div class="categories-item flex-between">
-                                    <span><i class="far fa-fw fa-folder" aria-hidden="true"></i> {categories.CATEGORY_NAME}</span>
+                                    <span><i class="far fa-fw fa-folder" aria-hidden="true"></i> {categories.CATEGORY_NAME}# IF categories.C_DISPLAY_DESCRIPTION # | <span class="text-italic small">{categories.CATEGORY_DESCRIPTION}</span># ENDIF #</span>
                                 </div>
                                 <a class="offload" href="{categories.U_CATEGORY}" aria-label="{categories.CATEGORY_NAME}"><i class="fa fa-fw fa-caret-right" aria-hidden="true"></i></a>
                             </div>

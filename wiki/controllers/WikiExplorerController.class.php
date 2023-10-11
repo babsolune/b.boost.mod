@@ -83,11 +83,14 @@ class WikiExplorerController extends DefaultModuleController
 					'C_ITEMS'               => $category_elements_number > 0,
 					'C_SEVERAL_ITEMS'       => $category_elements_number > 1,
                     'C_CATEGORY_THUMBNAIL'  => !empty($category->get_thumbnail()),
+                    'C_DISPLAY_DESCRIPTION' => !empty($category->get_description()) && $this->config->get_display_description(),
+
 					'ITEMS_NUMBER'          => $category->get_elements_number(),
 					'CATEGORY_ID'           => $category->get_id(),
 					'CATEGORY_SUB_ORDER'    => $category->get_order(),
 					'CATEGORY_PARENT_ID'    => $category->get_id_parent(),
 					'CATEGORY_NAME'         => $category->get_name(),
+					'CATEGORY_DESCRIPTION'  => $category->get_description(),
 
                     'U_CATEGORY_THUMBNAIL' => $category->get_thumbnail()->rel(),
 					'U_CATEGORY'           => WikiUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name(), self::$module_id)->rel(),

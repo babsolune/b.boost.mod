@@ -66,6 +66,10 @@ class AdminWikiConfigController extends DefaultAdminModuleController
 			array(new FormFieldConstraintIntegerRange(1, 50))
 		));
 
+		$fieldset->add_field(new FormFieldCheckbox('display_description', $this->lang['wiki.display.description'], $this->config->get_display_description(),
+			array('class' => 'custom-checkbox')
+		));
+
 		$fieldset->add_field(new FormFieldSpacer('display', ''));
 
 		$fieldset->add_field(new FormFieldSimpleSelectChoice('display_type', $this->lang['form.display.type'], $this->config->get_display_type(),
@@ -197,6 +201,8 @@ class AdminWikiConfigController extends DefaultAdminModuleController
 
 		$this->config->set_categories_per_page($this->form->get_value('categories_per_page'));
 		$this->config->set_categories_per_row($this->form->get_value('categories_per_row'));
+        $this->config->set_display_description($this->form->get_value('display_description'));
+
 		$this->config->set_display_type($this->form->get_value('display_type')->get_raw_value());
 
 		if ($this->config->get_display_type() != WikiConfig::TABLE_VIEW)
