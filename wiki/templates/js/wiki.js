@@ -1,20 +1,20 @@
 // @copyright   &copy; 2005-2023 PHPBoost
 // @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
 // @author      Sebastien LARTIGUE <babsolune@phpboost.com>
-// @version     PHPBoost 6.0 - last update: 2022 11 18
+// @version     PHPBoost 6.0 - last update: 2023 10 11
 // @since       PHPBoost 6.0 - 2022 11 18
 
 // Explorer page
-jQuery('#category-nav').append(WikiCreateChild(0)).find('ul:first').remove();
+jQuery('#category-nav').append(WikiExplorerChild(0)).find('ul:first').remove();
 
-function WikiCreateChild(id) {
+function WikiExplorerChild(id) {
     var $li = jQuery('li[data_p_id="' + id + '"]').sort(function (a, b) {
         return jQuery(a).attr('data_order_id') - jQuery(b).attr('data_order_id');
     });
     if ($li.length > 0) {
         for (var i = 0; i < $li.length; i++) {
             var $this = $li.eq(i);
-            $this.append(WikiCreateChild($this.attr('data_id')));
+            $this.append(WikiExplorerChild($this.attr('data_id')));
         }
         return jQuery('<ul class="items-list-' + id + '">').append($li);
     }
@@ -23,12 +23,31 @@ function WikiCreateChild(id) {
 jQuery('#category-nav li').has('ul').addClass('has-children');
 jQuery('#category-nav').find('.toggle-menu-button-0').removeClass('flex-between').css('display', 'none');
 
-jQuery('[class*="toggle-menu-button"] .categories-item').each(function () {
+jQuery('#category-nav [class*="toggle-menu-button"] .categories-item').each(function () {
     jQuery(this).on('click', function () {
         jQuery(this).toggleClass('is-open-menu');
         jQuery(this).closest('li').children('[class*="items-list"]').toggleClass('show-list');
     });
 });
+
+// Index page
+jQuery('#index-nav').append(WikiIndexChild(0)).find('ul:first').remove();
+
+function WikiIndexChild(id) {
+    var $li = jQuery('div[data-p-id="' + id + '"]').sort(function (a, b) {
+        return jQuery(a).attr('data-order-id') - jQuery(b).attr('data-order-id');
+    });
+    if ($li.length > 0) {
+    console.log('plop');
+        for (var i = 0; i < $li.length; i++) {
+            var $this = $li.eq(i);
+            $this.append(WikiIndexChild($this.attr('data-id')));
+        }
+        return jQuery('<div class="index-list-' + id + '" data-sub="' + id + '">').append($li);
+    }
+}
+
+jQuery('#index-nav .index-list-0').addClass('cell-flex cell-columns-2');
 
 // Summary menu constructor
 var title = jQuery('.content .formatter-title:not(span)');

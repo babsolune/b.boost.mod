@@ -12,7 +12,12 @@ class WikiExtensionPointProvider extends ItemsModuleExtensionPointProvider
 	public function home_page()
 	{
         $config = WikiConfig::load();
-		return new DefaultHomePageDisplay($this->get_id(), $config->get_homepage() == WikiConfig::EXPLORER ? WikiExplorerController::get_view($this->get_id()) : WikiCategoryController::get_view($this->get_id()));
+        if ($config->get_homepage() == WikiConfig::EXPLORER)
+            return new DefaultHomePageDisplay($this->get_id(), WikiExplorerController::get_view($this->get_id()));
+        elseif ($config->get_homepage() == WikiConfig::INDEX)
+            return new DefaultHomePageDisplay($this->get_id(), WikiIndexController::get_view($this->get_id()));
+        else
+            return new DefaultHomePageDisplay($this->get_id(), WikiCategoryController::get_view($this->get_id()));
 	}
 
 	public function user()

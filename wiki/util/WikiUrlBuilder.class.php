@@ -156,6 +156,14 @@ class WikiUrlBuilder
 	/**
 	 * @return Url
 	 */
+	public static function index()
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/index/');
+	}
+
+	/**
+	 * @return Url
+	 */
 	public static function track_item($item_id)
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $item_id . '/track/');

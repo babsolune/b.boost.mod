@@ -122,6 +122,15 @@
 	height: auto;
 }
 
+#index-nav [data-p-id="0"] > span {
+    border-width: 0 0 1px;
+    border-style: solid;
+    border-color: var(--bdr-main);
+}
+
+#index-nav .cell { padding-top: 0.228em; }
+#index-nav [data-sub] { padding: 0 0 0 0.809em; }
+
 .active-content td { background-color: var(--bgc-sub); }
 
 .large-table p.ellipsis { margin: 0; }

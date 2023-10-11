@@ -3,13 +3,15 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 11 18
+ * @version     PHPBoost 6.0 - last update: 2023 10 11
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
 define('PATH_TO_ROOT', '..');
 
 require_once PATH_TO_ROOT . '/kernel/init.php';
+
+$config = WikiConfig::load();
 
 $url_controller_mappers = array(
 	// Configuration
@@ -41,7 +43,8 @@ $url_controller_mappers = array(
 	new UrlControllerMapper('WikiMemberItemsController', '`^/member/([0-9]+)?/?([0-9]+)?/?$`', array('user_id', 'page')),
 	new UrlControllerMapper('WikiTrackedItemsController', '`^/tracked/([0-9]+)?/?([0-9]+)?/?$`', array('user_id', 'page')),
 
-	new UrlControllerMapper('WikiExplorerController', '`^/explorer/?$`'),
+	new UrlControllerMapper('WikiExplorerController', $config->get_homepage() == WikiConfig::EXPLORER ? '`^/?$`' : '`^/explorer/?$`'),
+	new UrlControllerMapper('WikiIndexController', $config->get_homepage() == WikiConfig::INDEX ? '`^/?$`' : '`^/index/?$`'),
 	new UrlControllerMapper('WikiCategoryController', '`^(?:/([0-9]+)-([a-z0-9-_]+))?/?([a-z_]+)?/?([a-z]+)?/?([0-9]+)?/?([0-9]+)?/?$`', array('id_category', 'rewrited_name', 'page', 'subcategories_page')),
 );
 DispatchManager::dispatch($url_controller_mappers);

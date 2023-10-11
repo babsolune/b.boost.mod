@@ -16,6 +16,7 @@ class WikiConfig extends AbstractConfigData
 	const HOMEPAGE   = 'homepage';
 	const CATEGORIES = 'categories';
 	const EXPLORER   = 'explorer';
+	const INDEX      = 'index';
 
 	const CATEGORIES_PER_PAGE   = 'categories_per_page';
 	const CATEGORIES_PER_ROW    = 'categories_per_row';

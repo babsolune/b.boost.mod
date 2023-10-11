@@ -17,6 +17,8 @@ class WikiTreeLinks extends DefaultTreeLinks
 
 		$tree->add_link(new ModuleLink(LangLoader::get_message('wiki.my.items', 'common', $module_id), WikiUrlBuilder::display_member_items($current_user), WikiAuthorizationsService::check_authorizations()->write() || WikiAuthorizationsService::check_authorizations()->contribution() || WikiAuthorizationsService::check_authorizations()->moderation()));
 		$tree->add_link(new ModuleLink(LangLoader::get_message('wiki.my.tracked', 'common', $module_id), WikiUrlBuilder::tracked_member_items($current_user), WikiAuthorizationsService::check_authorizations()->write() || WikiAuthorizationsService::check_authorizations()->contribution() || WikiAuthorizationsService::check_authorizations()->moderation()));
+		if($config->get_homepage() !== WikiConfig::INDEX)
+            $tree->add_link(new ModuleLink(LangLoader::get_message('wiki.index', 'common', $module_id), WikiUrlBuilder::index()));
 		if($config->get_homepage() !== WikiConfig::EXPLORER)
             $tree->add_link(new ModuleLink(LangLoader::get_message('wiki.explorer', 'common', $module_id), WikiUrlBuilder::explorer()));
 	}
