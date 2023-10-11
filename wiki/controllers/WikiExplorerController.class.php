@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 04 08
+ * @version     PHPBoost 6.0 - last update: 2023 10 11
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -152,7 +152,7 @@ class WikiExplorerController extends DefaultModuleController
         }
 	}
 
-	private function generate_response(HTTPRequestCustom $request)
+	private function generate_response()
 	{
 		$response = new SiteDisplayResponse($this->view);
 
@@ -167,6 +167,14 @@ class WikiExplorerController extends DefaultModuleController
 		$breadcrumb->add($this->lang['wiki.explorer'], WikiUrlBuilder::explorer());
 
 		return $response;
+	}
+
+	public static function get_view()
+	{
+		$object = new self('wiki');
+		$object->check_authorizations();
+		$object->build_view();
+		return $object->view;
 	}
 }
 ?>

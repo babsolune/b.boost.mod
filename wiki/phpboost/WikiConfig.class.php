@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 04 08
+ * @version     PHPBoost 6.0 - last update: 2023 10 11
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -12,6 +12,10 @@ class WikiConfig extends AbstractConfigData
 	const MODULE_NAME      = 'module_name';
 	const MENU_NAME        = 'menu_name';
 	const STICKY_SUMMARY   = 'sticky_summary';
+
+	const HOMEPAGE   = 'homepage';
+	const CATEGORIES = 'categories';
+	const EXPLORER   = 'explorer';
 
 	const CATEGORIES_PER_PAGE = 'categories_per_page';
 	const CATEGORIES_PER_ROW  = 'categories_per_row';
@@ -67,6 +71,16 @@ class WikiConfig extends AbstractConfigData
 	public function set_sticky_summary($value)
 	{
 		$this->set_property(self::STICKY_SUMMARY, $value);
+	}
+
+	public function get_homepage()
+	{
+		return $this->get_property(self::HOMEPAGE);
+	}
+
+	public function set_homepage($value)
+	{
+		$this->set_property(self::HOMEPAGE, $value);
 	}
 
 	public function get_categories_per_page()
@@ -248,6 +262,7 @@ class WikiConfig extends AbstractConfigData
 			self::MODULE_NAME                   => LangLoader::get_message('wiki.module.title', 'common', 'wiki') . ' ' . GeneralConfig::load()->get_site_name(),
 			self::MENU_NAME                     => LangLoader::get_message('wiki.menu.title', 'common', 'wiki'),
 			self::STICKY_SUMMARY                => false,
+			self::HOMEPAGE                      => self::CATEGORIES,
 			self::CATEGORIES_PER_PAGE           => 10,
 			self::CATEGORIES_PER_ROW            => 3,
 			self::ITEMS_PER_PAGE                => 15,

@@ -3,19 +3,15 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 03 27
+ * @version     PHPBoost 6.0 - last update: 2023 10 11
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
 class AdminWikiConfigController extends DefaultAdminModuleController
 {
-	private $comments_config;
-	private $content_management_config;
 
 	public function execute(HTTPRequestCustom $request)
 	{
-		$this->init();
-
 		$this->build_form();
 
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
@@ -33,12 +29,6 @@ class AdminWikiConfigController extends DefaultAdminModuleController
 		return new DefaultAdminDisplayResponse($this->view);
 	}
 
-	private function init()
-	{
-		$this->comments_config = CommentsConfig::load();
-		$this->content_management_config = ContentManagementConfig::load();
-	}
-
 	private function build_form()
 	{
 		$form = new HTMLForm(__CLASS__);
@@ -51,6 +41,13 @@ class AdminWikiConfigController extends DefaultAdminModuleController
 		$fieldset->add_field(new FormFieldCheckbox('display_sticky_summary', $this->lang['wiki.sticky.contents.table'], $this->config->get_sticky_summary(),
 			array('class' => 'custom-checkbox')
 		));
+
+        $fieldset->add_field(new FormFieldSimpleSelectChoice('homepage', $this->lang['wiki.homepage'], $this->config->get_homepage(),
+			array(
+				new FormFieldSelectChoiceOption($this->lang['wiki.homepage.categories'], WikiConfig::CATEGORIES, array('data_option_icon' => 'fa fa-th-large')),
+				new FormFieldSelectChoiceOption($this->lang['wiki.homepage.explorer'], WikiConfig::EXPLORER, array('data_option_icon' => 'fa fa-list')),
+			)
+        ));
 
 		$fieldset->add_field(new FormFieldSpacer('main_config', ''));
 
@@ -191,6 +188,7 @@ class AdminWikiConfigController extends DefaultAdminModuleController
 	{
 		$this->config->set_module_name($this->form->get_value('module_name'));
 		$this->config->set_sticky_summary($this->form->get_value('display_sticky_summary'));
+		$this->config->set_homepage($this->form->get_value('homepage')->get_raw_value());
 
 		$this->config->set_items_per_page($this->form->get_value('items_per_page'));
 
