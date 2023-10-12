@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 10 11
+ * @version     PHPBoost 6.0 - last update: 2023 10 12
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -40,7 +40,6 @@ class WikiExplorerController extends DefaultModuleController
 				$root_description = FormatingHelper::second_parse($this->config->get_root_category_description());
 				$this->view->put_all(array(
 					'C_ROOT_CONTROLS'               => WikiAuthorizationsService::check_authorizations($id)->moderation(),
-                    'C_HOMEPAGE'                    => $this->config->get_homepage() == WikiConfig::EXPLORER,
 					'C_ROOT_CATEGORY_DESCRIPTION'   => !empty($root_description),
 					'C_ROOT_ITEMS'                  => $category->get_elements_number() > 0,
 					'C_SEVERAL_ROOT_ITEMS'          => $category->get_elements_number() > 1,

@@ -35,15 +35,55 @@ class WikiIndexController extends DefaultModuleController
 
 		foreach ($categories as $id => $category)
 		{
+            if ($id == Category::ROOT_CATEGORY)
+			{
+				$root_description = FormatingHelper::second_parse($this->config->get_root_category_description());
+				$this->view->put_all(array(
+					'C_ROOT_CONTROLS'               => WikiAuthorizationsService::check_authorizations($id)->moderation(),
+					'C_ROOT_CATEGORY_DESCRIPTION'   => !empty($root_description),
+					'C_ROOT_ITEMS'                  => $category->get_elements_number() > 0,
+					'C_SEVERAL_ROOT_ITEMS'          => $category->get_elements_number() > 1,
+                    'ITEMS_PER_ROW'                 => $this->config->get_items_per_row(),
+
+					'ROOT_CATEGORY_DESCRIPTION' => $root_description,
+
+					'U_REORDER_ROOT_ITEMS' => WikiUrlBuilder::reorder_items(0, 'root')->rel(),
+				));
+
+				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
+				FROM ' . WikiSetup::$wiki_articles_table . ' i
+				LEFT JOIN ' . WikiSetup::$wiki_contents_table . ' c ON c.item_id = i.id
+				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
+				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'wiki\'
+				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'wiki\'
+				LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'wiki\' AND note.user_id = :user_id
+				WHERE i.id_category = :id_category
+				AND c.active_content = 1
+				AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
+                ORDER BY i.i_order', array(
+					'user_id' => AppContext::get_current_user()->get_id(),
+					'timestamp_now' => $now->get_timestamp(),
+					'id_category' => $category->get_id()
+				));
+
+				while ($row = $result->fetch()) {
+					$item = new WikiItem();
+					$item->set_properties($row);
+
+					$this->view->assign_block_vars('root_items', $item->get_template_vars());
+				}
+				$result->dispose();
+			}
+
 			if ($id != Category::ROOT_CATEGORY && in_array($id, $authorized_categories))
 			{
 				$category_elements_number = isset($categories_elements_number[$id]) ? $categories_elements_number[$id] : $category->get_elements_number();
                 $this->view->assign_block_vars('categories', array(
-                    'C_CONTROLS'            => WikiAuthorizationsService::check_authorizations()->moderation(),
-					'C_ITEMS'               => $category_elements_number > 0,
-					'C_SEVERAL_ITEMS'       => $category_elements_number > 1,
-                    'C_CATEGORY_THUMBNAIL'  => !empty($category->get_thumbnail()),
-                    'C_DISPLAY_DESCRIPTION' => !empty($category->get_description()) && $this->config->get_display_description(),
+                    'C_CONTROLS'             => WikiAuthorizationsService::check_authorizations()->moderation(),
+					'C_ITEMS'                => $category_elements_number > 0,
+					'C_SEVERAL_ITEMS'        => $category_elements_number > 1,
+                    'C_DISPLAY_DESCRIPTION'  => !empty($category->get_description()) && $this->config->get_display_description(),
+                    'C_CATEGORY_DESCRIPTION' => !empty($category->get_description()),
 
 					'ITEMS_NUMBER'          => $category->get_elements_number(),
 					'CATEGORY_ID'           => $category->get_id(),

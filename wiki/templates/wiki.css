@@ -71,42 +71,10 @@
 	position: relative;
 }
 
-.root-ul {
+.root-items {
 	margin: 0;
 	padding-left: 1.618em;
 	position: relative;
-}
-
-#category-nav ul ul { padding-left: 1.618em; }
-
-#category-nav .categories-item:hover { background-color: rgba(var(--main-rgb-d), 0.2); }
-
-.categories-item {
-	position: relative;
-	flex: 1 1 auto;
-	padding: 0.456em;
-}
-
-.has-children>[class*="toggle-menu-button-"] > .categories-item { padding-left: 1.618em; }
-
-.has-children>[class*="toggle-menu-button-"] { cursor: pointer; }
-
-.has-children>[class*="toggle-menu-button-"] > .categories-item:before {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	left: 0.456em;
-	content: '\f0fe';
-	font-family: 'Font Awesome 6 free';
-	font-weight: 400;
-}
-
-.has-children>[class*="toggle-menu-button-"]>.is-open-menu.categories-item:before { content: '\f146'; }
-
-[class*="items-list-"]:not([class*="items-list-0"]) {
-	opacity: 0;
-	visibility: hidden;
-	height: 0;
 }
 
 .reorder-items {
@@ -116,7 +84,39 @@
 	transform: translateY(-50%);
 }
 
-[class*="items-list-"].show-list {
+#category-nav ul ul { padding-left: 1.618em; }
+
+#category-nav .categories-item:hover { background-color: rgba(var(--main-rgb-d), 0.2); }
+
+#category-nav .categories-item {
+	position: relative;
+	flex: 1 1 auto;
+	padding: 0.456em;
+}
+
+#category-nav .has-children>[class*="toggle-menu-button-"] > .categories-item { padding-left: 1.618em; }
+
+#category-nav .has-children>[class*="toggle-menu-button-"] { cursor: pointer; }
+
+#category-nav .has-children>[class*="toggle-menu-button-"] > .categories-item:before {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 0.456em;
+	content: '\f0fe';
+	font-family: 'Font Awesome 6 free';
+	font-weight: 400;
+}
+
+#category-nav .has-children>[class*="toggle-menu-button-"]>.is-open-menu.categories-item:before { content: '\f146'; }
+
+#category-nav [class*="items-list-"]:not([class*="items-list-0"]) {
+	opacity: 0;
+	visibility: hidden;
+	height: 0;
+}
+
+#category-nav [class*="items-list-"].show-list {
 	opacity: 1;
 	visibility: visible;
 	height: auto;
@@ -126,9 +126,11 @@
     border-width: 0 0 1px;
     border-style: solid;
     border-color: var(--bdr-main);
+    padding-bottom: 0.228em;
 }
 
 #index-nav .cell { padding-top: 0.228em; }
+
 #index-nav [data-sub] { padding: 0 0 0 0.809em; }
 
 .active-content td { background-color: var(--bgc-sub); }
