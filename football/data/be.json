@@ -1,0 +1,52 @@
+[
+  {
+    "code": "01",
+    "name": "Anvers (Antwerpen)",
+    "region_name": "Flandre"
+  },
+  {
+    "code": "02",
+    "name": "Brabant-flamand (Vlaams-Brabant)",
+    "region_name": "Flandre"
+  },
+  {
+    "code": "03",
+    "name": "Brabant-wallon",
+    "region_name": "Wallonie"
+  },
+  {
+    "code": "04",
+    "name": "Flandre-occidentale (West-Vlaanderen)",
+    "region_name": "Flandre"
+  },
+  {
+    "code": "05",
+    "name": "Flandre-orientale (Oost-Vlaanderen)",
+    "region_name": "Flandre"
+  },
+  {
+    "code": "06",
+    "name": "Hainaut",
+    "region_name": "Wallonie"
+  },
+  {
+    "code": "07",
+    "name": "Liége",
+    "region_name": "Wallonie"
+  },
+  {
+    "code": "08",
+    "name": "Limburg",
+    "region_name": "Flandre"
+  },
+  {
+    "code": "09",
+    "name": "Luxembourg",
+    "region_name": "Wallonie"
+  },
+  {
+    "code": "10",
+    "name": "Namur",
+    "region_name": "Wallonie"
+  }
+]
