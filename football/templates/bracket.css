@@ -1,0 +1,42 @@
+#module-brackets table.bordered-table tr td {
+    padding: 0.309em 0.618em;
+}
+
+.bracket { width: 10000px; padding: 55px 15px 5px; line-height: 100%; position: relative; overflow: hidden;}
+.round { float: left; margin-right: 70px; }
+.game { position: relative; margin-bottom: 25px; }
+.bracket h3 {display: flex; flex-direction: row; justify-content: space-between; margin: 0; font-size: 18px; font-weight: normal;}
+.team { border-width: 1px; border-style: solid; border-color: var(--bdr-main); }
+.team:last-child { border-width: 0 1px 1px; border-style: solid; border-color: var(--bdr-main); }
+.bracket h3 span[class] { display: inline-block; padding: 0.618em 0.456em;}
+.bracket h3 span.team-name { padding: 0.618em 0.456em 0.618em 0.228em;}
+.bracket h3 span.flag {
+    width: 24px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.bracket h3 span.game-details {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    background-color: rgba(var(--main-rgb-t), 0.1);
+    border-width: 1px 1px 0 1px;
+    border-style: solid;
+    border-color: var(--bdr-main);
+    border-radius: 4px 4px 0 0;
+    padding: 0 0.228em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.team-score {
+    background-color: var(--bgc-alt);
+    color: var(--txt-alt);
+}
+.round:last-child { margin-right: 20px; }
+.winner { background-color: var(--main-tone); color: var(--txt-alt); }
+.winner .team { background: none; }
+.team-hightlight { cursor: pointer; background-color: rgba(var(--success-rgb-t), 0.2) !important; }
+.round-label { top: 0.618em; font-weight: normal; color: var(--txt-main); text-align: center; font-size: 18px; }

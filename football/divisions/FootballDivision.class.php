@@ -19,7 +19,7 @@ class FootballDivision
 
 	const CHAMPIONSHIP = 'championship';
 	const CUP = 'cup';
-	const TOURNAMENT = 'tournament';
+	const TOURNEY = 'tourney';
 
 	public function get_id_division()
 	{

@@ -78,15 +78,18 @@ class FootballTeamService
 	 */
 	public static function get_team(int $id)
 	{
-		$row = self::$db_querier->select_single_row_query('SELECT teams.*
-		FROM ' . FootballSetup::$football_team_table . ' teams
-		WHERE teams.id_team = :id', array(
-			'id' => $id
-		));
+        if($id !== 0)
+        {
+            $row = self::$db_querier->select_single_row_query('SELECT teams.*
+            FROM ' . FootballSetup::$football_team_table . ' teams
+            WHERE teams.id_team = :id', array(
+                'id' => $id
+            ));
 
-		$team = new FootballTeam();
-		$team->set_properties($row);
-		return $team;
+            $team = new FootballTeam();
+            $team->set_properties($row);
+            return $team;
+        }
 	}
 
 	/**

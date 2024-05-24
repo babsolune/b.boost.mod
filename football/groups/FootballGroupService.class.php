@@ -23,10 +23,11 @@ class FootballGroupService
         return chr(64 + $number);
     }
 
-    public static function build_matches_from_groups(int $compet_id)
+    /** build the list of all matches of the competition */
+    public static function build_matches_from_groups(int $compet_id) : void
     {
         // build groups from compet teams list
-        $groups = self::group_teams_lists($compet_id);
+        $groups = self::team_list_from_group($compet_id);
         // Build schedule
         $full_schedule = [];
         $now = new Date();
@@ -42,8 +43,8 @@ class FootballGroupService
                     self::$db_querier->insert(FootballSetup::$football_match_table, array(
                         'match_compet_id' => $compet_id,
                         'match_number' => 'G'. $group . $match_nb,
-                        'match_home_team_id' => $match[0]['id_team'],
-                        'match_visit_team_id' => $match[1]['id_team'],
+                        'match_home_id' => FootballParamsService::get_params($compet_id)->get_fill_matches() ? $match[0]['id_team'] : 0,
+                        'match_away_id' => FootballParamsService::get_params($compet_id)->get_fill_matches() ? $match[1]['id_team'] : 0,
                         'match_date' => $now->get_timestamp()
                     ));
                     $match_nb++;
@@ -52,17 +53,18 @@ class FootballGroupService
         }
     }
 
-    private static function build_group_matches(array $group_teams)
+    /** Build all matches in a group */
+    private static function build_group_matches(array $group_teams) : array
     {
-        $numTeams = count($group_teams);
+        $teams_number = count($group_teams);
         $schedule = [];
-        for ($round = 0; $round < $numTeams - 1; $round++) {
-            for ($match = 0; $match < $numTeams / 2; $match++) {
-                $home = ($round + $match) % ($numTeams - 1);
-                $away = ($numTeams - 1 - $match + $round) % ($numTeams - 1);
+        for ($round = 0; $round < $teams_number - 1; $round++) {
+            for ($match = 0; $match < $teams_number / 2; $match++) {
+                $home = ($round + $match) % ($teams_number - 1);
+                $away = ($teams_number - 1 - $match + $round) % ($teams_number - 1);
 
                 if ($match == 0) {
-                    $away = $numTeams - 1;
+                    $away = $teams_number - 1;
                 }
                 $schedule[$round][] = [$group_teams[$home], $group_teams[$away]];
             }
@@ -70,7 +72,8 @@ class FootballGroupService
         return $schedule;
     }
 
-    public static function group_teams_lists($compet_id)
+    /** Get list of teams in a group */
+    public static function team_list_from_group(int $compet_id) : array
     {
         $compet_teams = FootballTeamService::get_teams($compet_id);
         $groups = [];
@@ -84,16 +87,20 @@ class FootballGroupService
         return $groups;
     }
 
-    public static function group_matches_lists($compet_id)
+    /** Get list of matches in a group */
+    public static function match_list_from_group(int $compet_id, string $stage = '') : array
     {
         $compet_matches = FootballMatchService::get_matches($compet_id);
         $groups = [];
         foreach($compet_matches as $match)
         {
-            $group_nb = TextHelper::substr($match['match_number'], 1, TextHelper::strlen($match['match_number']) - 2);
-            if(!isset($groups[$group_nb]))
-                $groups[$group_nb] = [];
-            $groups[$group_nb][] = $match;
+            if(TextHelper::substr($match['match_number'], 0, 1) == $stage)
+            {
+                $group_nb = TextHelper::substr($match['match_number'], 1, TextHelper::strlen($match['match_number']) - 2);
+                if(!isset($groups[$group_nb]))
+                    $groups[$group_nb] = [];
+                $groups[$group_nb][] = $match;
+            }
         }
         return $groups;
     }

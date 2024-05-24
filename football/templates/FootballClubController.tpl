@@ -19,14 +19,8 @@
             <article itemscope="itemscope" itemtype="https://schema.org/CreativeWork" id="club-item-{ID}" class="club-item# IF C_NEW_CONTENT # new-content# ENDIF #">
                 <div class="content">
                     <div class="flex-between">
-                        <div>
-                            <p>{@football.club.email} : # IF C_HAS_EMAIL #{EMAIL}# ELSE ## ENDIF</p>
-                            <p>{@football.club.phone} : # IF C_HAS_EMAIL #{PHONE}# ELSE ## ENDIF</p>
-                        </div>
-                        <div>
-                            <p>{@football.club.country} : # IF C_HAS_EMAIL #{COUNTRY}# ELSE ## ENDIF</p>
-                            <p>{@football.club.league} : # IF C_HAS_EMAIL #{LEAGUE}# ELSE ## ENDIF</p>
-                        </div>
+                        <span>{@football.club.email} : # IF C_HAS_EMAIL #{EMAIL}# ELSE ## ENDIF #</span>
+                        <span>{@football.club.phone} : # IF C_HAS_EMAIL #{PHONE}# ELSE ## ENDIF #</span>
                     </div>
                 </div>
                 <div class="content">

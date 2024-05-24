@@ -14,6 +14,10 @@
 }
 
 /* --- Form --- */
+.form-spacer {
+    font-size: 1.618em;
+}
+
 .checkbox-list-inline .form-field {
     display: inline-flex;
     flex-wrap: wrap;
@@ -26,6 +30,11 @@
     border-width: 1px;
     border-style: solid;
     border-color: var(--bdr-main);
+}
+
+/* params */
+.params-form .fieldset-submit {
+    width: 100%;
 }
 
 /* groups */
@@ -68,28 +77,37 @@
 }
 .playground input,
 .home-score input,
-.visit-score input {text-align: center; }
+.home-pen input,
+.away-score input,
+.away-pen input {text-align: center; }
 
+.grouped-selects .fieldset-description {
+    display: flex;
+    font-style: italic;
+    margin: 0;
+}
+.grouped-selects .fieldset-description .form-element {
+    margin: 0;
+    justify-content: center;
+}
 .grouped-selects .form-element.free-select  { width: 10%; }
 .grouped-selects .form-element.date-select  { width: 80%; }
 .grouped-selects .form-element.playground { width: 10%; }
 .grouped-selects .form-element.home-select  { width: 50%; }
-.grouped-selects .form-element.visit-select { width: 50%; }
+.grouped-selects .form-element.away-select { width: 50%; }
 @media (min-width: 1366px) {
-    .grouped-selects .form-element.free-select  { width: 4%; }
+    .grouped-selects .form-element.free-select  { width: 7%; }
     .grouped-selects .form-element.date-select  { width: 25%; }
-    .grouped-selects .form-element.playground { width: 9%; }
-    .grouped-selects .form-element.home-select  { width: 31%; }
-    .grouped-selects .form-element.visit-select { width: 31%; }
+    .grouped-selects .form-element.playground { width: 8%; }
+    .grouped-selects .form-element.home-select  { width: 25%; }
+    .grouped-selects .form-element.home-bracket  { width: 20%; }
+    .grouped-selects .form-element.home-score  { width: 5%; }
+    .grouped-selects .form-element.home-pen  { width: 5%; }
+    .grouped-selects .form-element.away-pen { width: 5%; }
+    .grouped-selects .form-element.away-score { width: 5%; }
+    .grouped-selects .form-element.away-bracket { width: 20%; }
+    .grouped-selects .form-element.away-select { width: 25%; }
 }
-
-.grouped-results .form-element.free-score  { width: 4%; }
-.grouped-results .form-element.date-score  { width: 16%; }
-.grouped-results .form-element.playground { width: 2%; }
-.grouped-results .form-element.home-name  { width: 34%; text-align: right; }
-.grouped-results .form-element.home-score  { width: 5%; }
-.grouped-results .form-element.visit-score { width: 5%; }
-.grouped-results .form-element.visit-name { width: 34%; }
 
 .grouped-selects .form-element-date-time {
     padding-bottom: 0;
@@ -103,10 +121,50 @@
 /* --- /Form --- */
 
 /* front */
+.finals-round-title {
+    text-align: center;
+}
+
+.finals-round > * {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
 .row-header{
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.finals-match {
+    margin-top: 0.309em;
+    border: 1px solid var(--bdr-main);
+}
+
+.finals-team {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.finals-details{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.309em;
+}
+.finals-home,
+.finals-away {
+    padding: 0.309em;
+}
+.finals-away {
+    border-top: 1px solid var(--bdr-main);
+}
+
+.finals-highlight {
+    background-color: var(--bgc-alt) !important;
+    color: var(--txt-alt) !important;
 }
 
 .club-logo { max-height: 70px; }

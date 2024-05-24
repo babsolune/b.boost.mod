@@ -12,12 +12,14 @@ class FootballMatch
     private $id_match;
     private $match_number;
     private $match_compet_id;
-    private $match_field;
+    private $match_playground;
     private $match_day_id;
-    private $match_home_team_id;
-    private $match_home_team_score;
-    private $match_visit_team_id;
-    private $match_visit_team_score;
+    private $match_home_id;
+    private $match_home_score;
+    private $match_home_pen;
+    private $match_away_pen;
+    private $match_away_score;
+    private $match_away_id;
     private $match_date;
 
     function get_id_match()
@@ -40,14 +42,14 @@ class FootballMatch
         $this->match_compet_id = $match_compet_id;
     }
 
-    function get_match_field()
+    function get_match_playground()
     {
-        return $this->match_field;
+        return $this->match_playground;
     }
 
-    function set_match_field($match_field)
+    function set_match_playground($match_playground)
     {
-        $this->match_field = $match_field;
+        $this->match_playground = $match_playground;
     }
 
     function get_match_number()
@@ -70,44 +72,64 @@ class FootballMatch
         $this->match_day_id = $match_day_id;
     }
 
-    function get_match_home_team_id()
+    function get_match_home_id()
     {
-        return $this->match_home_team_id;
+        return $this->match_home_id;
     }
 
-    function set_match_home_team_id($match_home_team_id)
+    function set_match_home_id($match_home_id)
     {
-        $this->match_home_team_id = $match_home_team_id;
+        $this->match_home_id = $match_home_id;
     }
 
-    function get_match_home_team_score()
+    function get_match_home_score()
     {
-        return $this->match_home_team_score;
+        return $this->match_home_score;
     }
 
-    function set_match_home_team_score($match_home_team_score)
+    function set_match_home_score($match_home_score)
     {
-        $this->match_home_team_score = $match_home_team_score;
+        $this->match_home_score = $match_home_score;
     }
 
-    function get_match_visit_team_id()
+    function get_match_home_pen()
     {
-        return $this->match_visit_team_id;
+        return $this->match_home_pen;
     }
 
-    function set_match_visit_team_id($match_visit_team_id)
+    function set_match_home_pen($match_home_pen)
     {
-        $this->match_visit_team_id = $match_visit_team_id;
+        $this->match_home_pen = $match_home_pen;
     }
 
-    function get_match_visit_team_score()
+    function get_match_away_id()
     {
-        return $this->match_visit_team_score;
+        return $this->match_away_id;
     }
 
-    function set_match_visit_team_score($match_visit_team_score)
+    function set_match_away_id($match_away_id)
     {
-        $this->match_visit_team_score = $match_visit_team_score;
+        $this->match_away_id = $match_away_id;
+    }
+
+    function get_match_away_score()
+    {
+        return $this->match_away_score;
+    }
+
+    function set_match_away_score($match_away_score)
+    {
+        $this->match_away_score = $match_away_score;
+    }
+
+    function get_match_away_pen()
+    {
+        return $this->match_away_pen;
+    }
+
+    function set_match_away_pen($match_away_pen)
+    {
+        $this->match_away_pen = $match_away_pen;
     }
 
     function get_match_date()
@@ -125,13 +147,15 @@ class FootballMatch
 		return array(
 			'id_match' => $this->get_id_match(),
 			'match_compet_id' => $this->get_match_compet_id(),
-			'match_field' => $this->get_match_field(),
+			'match_playground' => $this->get_match_playground(),
 			'match_number' => $this->get_match_number(),
 			'match_day_id' => $this->get_match_day_id(),
-			'match_home_team_id' => $this->get_match_home_team_id(),
-			'match_home_team_score' => $this->get_match_home_team_score(),
-			'match_visit_team_id' => $this->get_match_visit_team_id(),
-			'match_visit_team_score' => $this->get_match_visit_team_score(),
+			'match_home_id' => $this->get_match_home_id(),
+			'match_home_score' => $this->get_match_home_score(),
+			'match_home_pen' => $this->get_match_home_pen(),
+			'match_away_id' => $this->get_match_away_id(),
+			'match_away_score' => $this->get_match_away_score(),
+			'match_away_pen' => $this->get_match_away_pen(),
 			'match_date' => $this->get_match_date() !== null ? $this->get_match_date()->get_timestamp() : 0,
 		);
 	}
@@ -140,13 +164,15 @@ class FootballMatch
 	{
 		$this->id_match = $properties['id_match'];
 		$this->match_compet_id = $properties['match_compet_id'];
-		$this->match_field = $properties['match_field'];
+		$this->match_playground = $properties['match_playground'];
 		$this->match_number = $properties['match_number'];
 		$this->match_day_id = $properties['match_day_id'];
-		$this->match_home_team_id = $properties['match_home_team_id'];
-		$this->match_home_team_score = $properties['match_home_team_score'];
-		$this->match_visit_team_id = $properties['match_visit_team_id'];
-		$this->match_visit_team_score = $properties['match_visit_team_score'];
+		$this->match_home_id = $properties['match_home_id'];
+		$this->match_home_score = $properties['match_home_score'];
+		$this->match_home_pen = $properties['match_home_pen'];
+		$this->match_away_id = $properties['match_away_id'];
+		$this->match_away_score = $properties['match_away_score'];
+		$this->match_away_pen = $properties['match_away_pen'];
 		$this->match_date = !empty($properties['match_date']) ? new Date($properties['match_date'], Timezone::SERVER_TIMEZONE) : null;
 	}
 

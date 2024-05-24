@@ -18,16 +18,6 @@
 		</h1>
 	</header>
 
-	# IF C_CATEGORY_DESCRIPTION #
-		<div class="sub-section">
-			<div class="content-container">
-				<div class="cat-description">
-					{CATEGORY_DESCRIPTION}
-				</div>
-			</div>
-		</div>
-	# ENDIF #
-
 	# IF C_SUB_CATEGORIES #
 		<div class="sub-section">
 			<div class="content-container">
@@ -157,49 +147,11 @@
 						</table>
 					</div>
 				# ELSE #
-					<div class="cell-flex # IF C_GRID_VIEW #cell-columns-{ITEMS_PER_ROW}# ELSE #cell-row# ENDIF #">
+					<div class="cell-flex cell-row cell-tile">
 						# START items #
 							<article id="football-item-{items.ID}" class="football-item category-{items.CATEGORY_ID} cell# IF items.C_NEW_CONTENT # new-content# ENDIF #" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
-								<header class="cell-header">
-									<h2 class="cell-name"><a class="offload" href="{items.U_ITEM}" itemprop="name">{items.TITLE}</a></h2>
-								</header>
-								<div class="cell-infos">
-									<div class="more">
-										<!-- # IF C_AUTHOR_DISPLAYED #
-											<span class="pinned item-author">
-												# IF items.C_AUTHOR_CUSTOM_NAME #
-													<span class="pinned"><i class="far fa-user" aria-hidden="true"></i> <span class="custom-author">{items.AUTHOR_CUSTOM_NAME}</span></span>
-												# ELSE #
-													<span class="pinned {AUTHOR_LEVEL_CLASS}"# IF C_AUTHOR_GROUP_COLOR # style="color:{items.AUTHOR_GROUP_COLOR}; border-color:{items.AUTHOR_GROUP_COLOR}" # ENDIF #>
-														<i class="far fa-user" aria-hidden="true"></i> # IF items.C_AUTHOR_EXISTS #<a itemprop="author" rel="author" class="{items.AUTHOR_LEVEL_CLASS} offload" href="{items.U_AUTHOR_PROFILE}" # IF items.C_AUTHOR_GROUP_COLOR # style="color:{items.AUTHOR_GROUP_COLOR}" # ENDIF #>{items.AUTHOR_DISPLAY_NAME}</a># ELSE #<span class="visitor">{items.AUTHOR_DISPLAY_NAME}</span># ENDIF #
-													</span>
-												# ENDIF #
-											</span>
-										# ENDIF # -->
-										<span class="pinned item-creation-date" aria-label="{@common.creation.date}">
-											<i class="far fa-calendar-alt" aria-hidden="true"></i>
-											<time datetime="# IF items.C_DEFFERED_PUBLISHING #{items.DEFFERED_PUBLISHING_START_DATE_ISO8601}# ELSE #{items.DATE_ISO8601}# ENDIF #" itemprop="datePublished">
-												# IF items.C_DEFFERED_PUBLISHING #{items.DEFFERED_PUBLISHING_START_DATE}# ELSE #{items.DATE}# ENDIF #
-											</time>
-										</span>
-										# IF items.C_HAS_UPDATE_DATE #
-											<span class="pinned item-modified-date" aria-label="{@common.last.update}">
-												<i class="far fa-calendar-plus" aria-hidden="true"></i>
-												<time datetime="{items.UPDATE_DATE_ISO8601}" itemprop="dateModified">{items.UPDATE_DATE}</time>
-											</span>
-										# ENDIF #
-										<span class="pinned" role="contentinfo" aria-label=""><i class="fa fa-football" aria-hidden="true"></i> {items.DOWNLOADS_NUMBER}</span>
-										# IF C_ENABLED_VIEWS_NUMBER #<span class="pinned item-views-number" role="contentinfo" aria-label="{items.VIEWS_NUMBER} {@common.views.number}"><i class="fa fa-eye" aria-hidden="true"></i> {items.VIEWS_NUMBER}</span># ENDIF #
-										# IF C_ENABLED_COMMENTS #
-											<span class="pinned item-comments">
-												<i class="fa fa-comments" aria-hidden="true"></i>
-												# IF items.C_COMMENTS # {items.COMMENTS_NUMBER} # ENDIF # {items.L_COMMENTS}
-											</span>
-										# ENDIF #
-										# IF C_ENABLED_NOTATION #
-											<div class="pinned item-notation">{items.STATIC_NOTATION}</div>
-										# ENDIF #
-									</div>
+								<div class="cell-content flex-between">
+									<a class="offload" href="{items.U_ITEM}" itemprop="name">{items.TITLE}</a>
 									# IF items.C_CONTROLS #
 										<div class="controls align-right">
 											# IF items.C_EDIT #<a class="offload item-edit" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
@@ -207,41 +159,8 @@
 										</div>
 									# ENDIF #
 								</div>
-								# IF NOT C_FULL_ITEM_DISPLAY #
-									# IF items.C_HAS_THUMBNAIL #
-										<div class="cell-thumbnail cell-landscape cell-center">
-											<img src="{items.U_THUMBNAIL}" alt="{items.TITLE}" itemprop="image" />
-											<a href="{items.U_ITEM}" class="cell-thumbnail-caption offload">
-												{@common.see.details}
-											</a>
-										</div>
-									# ENDIF #
-								# ENDIF #
-								<div class="cell-body">
-									<div class="cell-content">
-										<div itemprop="text">
-											# IF C_FULL_ITEM_DISPLAY #
-												# IF items.C_HAS_THUMBNAIL #
-													<a href="{items.U_ITEM}" class="item-thumbnail offload">
-														<img src="{items.U_THUMBNAIL}" alt="{items.TITLE}" itemprop="image" />
-													</a>
-												# ENDIF #
-												{items.CONTENT}
-											# ELSE #
-												{items.SUMMARY}# IF items.C_READ_MORE # <a href="{items.U_ITEM}" class="read-more offload">[{@common.read.more}]</a># ENDIF #
-											# ENDIF #
-										</div>
-									</div>
-								</div>
-
-								<footer>
-									<meta itemprop="url" content="{items.U_ITEM}">
-									<meta itemprop="description" content="${escape(items.SUMMARY)}"/>
-									# IF C_ENABLED_COMMENTS #
-										<meta itemprop="discussionUrl" content="{items.U_COMMENTS}">
-										<meta itemprop="interactionCount" content="{items.COMMENTS_NUMBER} UserComments">
-									# ENDIF #
-								</footer>
+                                <meta itemprop="url" content="{items.U_ITEM}">
+                                <meta itemprop="description" content="{items.U_ITEM}" />
 							</article>
 						# END items #
 					</div>

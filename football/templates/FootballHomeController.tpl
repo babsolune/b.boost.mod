@@ -103,4 +103,4 @@
 	# ENDIF #
 	<footer></footer>
 </section>
-<script src="{PATH_TO_ROOT}/football/templates/js/football# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js" defer></script>
+<script src="{PATH_TO_ROOT}/football/templates/js/football.home# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js" defer></script>

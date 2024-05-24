@@ -34,11 +34,10 @@ $url_controller_mappers = array(
 	new UrlControllerMapper('FootballResultsFormController', '`^/results/?([0-9]+)?/?$`', array('id')),
 	new UrlControllerMapper('FootballParamsFormController', '`^/params/?([0-9]+)?/?$`', array('id')),
 	new UrlControllerMapper('FootballTeamsFormController', '`^/teams/?([0-9]+)?/?$`', array('id')),
-	new UrlControllerMapper('FootballStageGroupsController', '`^/groups_stage/?([0-9]+)?/?$`', array('id')),
-	new UrlControllerMapper('FootballStageFinalsController', '`^/finals_stage/?([0-9]+)?/?$`', array('id')),
+	new UrlControllerMapper('FootballTourneyGroupsController', '`^/groups_stage/?([0-9]+)?/?$`', array('id')),
+	new UrlControllerMapper('FootballTourneyFinalsController', '`^/finals_stage/?([0-9]+)?/?$`', array('id')),
 
 	// Clubs
-	new UrlControllerMapper('FootballClubAjaxCountryController', '`^/club/ajax_club/?$`'),
 	new UrlControllerMapper('FootballClubsManagerController', '`^/club/manage/?$`'),
 	new UrlControllerMapper('FootballClubFormController', '`^/club/add/?$`'),
 	new UrlControllerMapper('FootballClubFormController', '`^/club/([0-9]+)/edit/?$`', array('id')),

@@ -69,7 +69,6 @@ class FootballTeamsFormController extends DefaultModuleController
                 $team->set_team_club_name($options->get_label());
                 $id = FootballTeamService::add_team($team);
                 $team->set_id_team($id);
-                // FootballRankingService::add_ranking($this->id_compet(), $team->get_id_team());
             }
         }
 
@@ -77,7 +76,6 @@ class FootballTeamsFormController extends DefaultModuleController
         foreach(array_diff($this->get_team_ids(), $team_list) as $id)
         {
             FootballTeamService::delete_team($id);
-            FootballRankingService::delete_ranking($id);
         }
 
 		FootballCompetService::clear_cache();
@@ -92,7 +90,7 @@ class FootballTeamsFormController extends DefaultModuleController
 		$i = 1;
 		foreach($clubs_list as $club)
 		{
-			$options[] = new FormFieldMultipleCheckboxOption($club['id_club'], $club['club_acronym'] . ' - ' . $club['club_name']);
+			$options[] = new FormFieldMultipleCheckboxOption($club['id_club'], ($club['club_acronym'] ? $club['club_acronym'] . ' - ' : '') . ($club['club_name'] ? $club['club_name'] : ''));
 			$i++;
 		}
 

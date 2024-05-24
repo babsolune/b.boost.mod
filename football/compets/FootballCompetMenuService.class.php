@@ -35,7 +35,7 @@ class FootballCompetMenuService
             'C_AUTH' => CategoriesAuthorizationsService::check_authorizations()->contribution(),
             'C_CHAMPIONSHIP' => $division['division_compet_type'] == FootballDivision::CHAMPIONSHIP,
             'C_CUP' => $division['division_compet_type'] == FootballDivision::CUP,
-            'C_TOURNAMENT' => $division['division_compet_type'] == FootballDivision::TOURNAMENT,
+            'C_TOURNEY' => $division['division_compet_type'] == FootballDivision::TOURNEY,
             'C_HAS_GROUP_PARAMS' => $has_group_params,
             'C_HAS_TEAMS' => $has_teams,
             'C_HAS_MATCHES' => $has_matches,

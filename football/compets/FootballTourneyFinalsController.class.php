@@ -7,21 +7,73 @@
  * @since       PHPBoost 6.0 - 2022 12 22
 */
 
-class FootballCompetController extends DefaultModuleController
+class FootballTourneyFinalsController extends DefaultModuleController
 {
     private $compet;
+    private $params;
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('football/FootballCompetController.tpl');
+		return new FileTemplate('football/FootballTourneyFinalsController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
-		$this->build_view();
-		$this->count_views_number($request);
+		$this->build_winner_view();
+        if ($this->get_params()->get_all_places())
+        $this->build_looser_view();
 		$this->check_authorizations();
 
+        $teams_number = FootballTeamService::get_compet_teams_number($this->id_compet());
+        $teams_per_group = $this->get_params()->get_teams_per_group();
+
+        $this->view->put_all(array(
+            'MENU' => FootballCompetMenuService::build_compet_menu($this->id_compet()),
+            'C_ROUNDS_' . $teams_number . '_' . $teams_per_group => true,
+            'C_LOOSER_BRACKET' => $this->get_params()->get_looser_bracket(),
+            'C_ALL_PLACES' => $this->get_params()->get_all_places(),
+        ));
+
 		return $this->generate_response();
+	}
+
+	private function build_winner_view()
+	{
+        $matches = FootballGroupService::match_list_from_group($this->id_compet(), 'W');
+        $matches = call_user_func_array('array_merge', $matches);
+
+        foreach ($matches as $match)
+        {
+            $bracket = TextHelper::substr($match['match_number'], 0, 1);
+            $round = TextHelper::substr($match['match_number'], 1, 1);
+            $order = TextHelper::substr($match['match_number'], 2, 1);
+
+            $this->view->put_all(array(
+                'C_WINNER_MATCHES' => count($matches) > 0,
+                'C_M_W'.$round.$order => $match['match_number'] == 'W'.$round.$order,
+                'MATCH_W'.$round.$order => FootballTourneyService::build_finals_match($this->id_compet(), $bracket, $round, $order),
+            ));
+        }
+	}
+
+	private function build_looser_view()
+	{
+        $matches = FootballGroupService::match_list_from_group($this->id_compet(), 'L');
+        $matches = call_user_func_array('array_merge', $matches);
+
+        foreach ($matches as $match)
+        {
+            $bracket = TextHelper::substr($match['match_number'], 0, 1);
+            $round = TextHelper::substr($match['match_number'], 1, 1);
+            $order = TextHelper::substr($match['match_number'], 2, 1);
+
+            $this->view->put_all(array(
+                'C_LOOSER_MATCHES' => count($matches) > 0,
+                'NB' => $match['match_number'],
+                'C_M_L'.$round.$order => $match['match_number'] == 'L'.$round.$order,
+                'MATCH_L'.$round.$order => FootballTourneyService::build_finals_match($this->id_compet(), $bracket, $round, $order),
+            ));
+        }
+
 	}
 
 	private function get_compet()
@@ -49,33 +101,19 @@ class FootballCompetController extends DefaultModuleController
         return $this->get_compet()->get_id_compet();
     }
 
-	private function count_views_number(HTTPRequestCustom $request)
+    private function get_params()
 	{
-		if (!$this->compet->is_published())
-		{
-			$this->view->put('NOT_VISIBLE_MESSAGE', MessageHelper::display($this->lang['warning.element.not.visible'], MessageHelper::WARNING));
-		}
-		else
-		{
-			if ($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), FootballUrlBuilder::display($this->compet->get_category()->get_id(), $this->compet->get_category()->get_rewrited_name(), $this->compet->get_id_compet(), $this->compet->get_compet_slug())->rel()))
-			{
-				$this->compet->set_views_number($this->compet->get_views_number() + 1);
-				FootballCompetService::update_views_number($this->compet);
-			}
-		}
-	}
-
-	private function build_view()
-	{
-		$compet = $this->get_compet();
-
-		$this->view->put_all(array_merge($compet->get_template_vars(), array(
-            'MENU' => FootballCompetMenuService::build_compet_menu($this->id_compet()),
-            'TOURNEY_CALENDAR' => FootballCompetCalendarService::build_tourney_calendar($this->id_compet()),
-            'FINAL_CALENDAR' => FootballCompetCalendarService::build_group_finals_list($this->id_compet()),
-
-			'NOT_VISIBLE_MESSAGE' => MessageHelper::display($this->lang['warning.element.not.visible'], MessageHelper::WARNING),
-		)));
+        $id = $this->id_compet();
+        if (!empty($id))
+        {
+            try {
+                $this->params = FootballParamsService::get_params($id);
+            } catch (RowNotFoundException $e) {
+                $error_controller = PHPBoostErrors::unexisting_page();
+                DispatchManager::redirect($error_controller);
+            }
+        }
+		return $this->params;
 	}
 
 	private function check_authorizations()

@@ -71,11 +71,11 @@ class FootballCategoryController extends DefaultModuleController
 			'timestamp_now' => $now->get_timestamp()
 		);
 
-		$result = PersistenceContext::get_querier()->select('SELECT football.*, member.*
-		FROM ' . FootballSetup::$football_compet_table . ' football
-		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = football.author_user_id
+		$result = PersistenceContext::get_querier()->select('SELECT compet.*, member.*
+		FROM ' . FootballSetup::$football_compet_table . ' compet
+		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = compet.author_user_id
 		' . $condition . '
-		ORDER BY football.id', array_merge($params, array(
+		ORDER BY compet.id_compet', array_merge($params, array(
 			'user_id' => AppContext::get_current_user()->get_id()
 		)));
 

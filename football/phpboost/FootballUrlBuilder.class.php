@@ -60,11 +60,6 @@ class FootballUrlBuilder
 	}
 
     // Clubs
-	public static function ajax_club()
-	{
-		return DispatchManager::get_url(self::$dispatcher, '/club/ajax_club/');
-	}
-
 	public static function manage_clubs()
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/club/manage/');

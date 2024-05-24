@@ -12,6 +12,10 @@ class FootballParams
 	private $id_params;
 	private $params_compet_id;
 	private $teams_per_group;
+	private $fill_matches;
+	private $looser_bracket;
+	private $all_places;
+	private $display_playgrounds;
 	private $victory_points;
 	private $draw_points;
 	private $loss_points;
@@ -26,18 +30,15 @@ class FootballParams
 
 	private $rounds_number;
 	private $overtime;
+	private $overtime_duration;
 	private $third_place;
 	private $golden_goal;
 	private $silver_goal;
 
-	private $set_mode;
+	private $sets_mode;
 	private $sets_number;
 	private $bonus;
 	private $favorite_team_id;
-
-	private $is_sub_compet;
-	private $compet_master_id;
-	private $sub_compet_rank;
 
 	public function get_id_params()
 	{
@@ -67,6 +68,46 @@ class FootballParams
 	public function set_teams_per_group($teams_per_group)
 	{
 		$this->teams_per_group = $teams_per_group;
+	}
+
+	public function get_fill_matches()
+	{
+		return $this->fill_matches;
+	}
+
+	public function set_fill_matches($fill_matches)
+	{
+		$this->fill_matches = $fill_matches;
+	}
+
+	public function get_looser_bracket()
+	{
+		return $this->looser_bracket;
+	}
+
+	public function set_looser_bracket($looser_bracket)
+	{
+		$this->looser_bracket = $looser_bracket;
+	}
+
+	public function get_all_places()
+	{
+		return $this->all_places;
+	}
+
+	public function set_all_places($all_places)
+	{
+		$this->all_places = $all_places;
+	}
+
+	public function get_display_playgrounds()
+	{
+		return $this->display_playgrounds;
+	}
+
+	public function set_display_playgrounds($display_playgrounds)
+	{
+		$this->display_playgrounds = $display_playgrounds;
 	}
 
 	public function get_victory_points()
@@ -199,6 +240,16 @@ class FootballParams
 		$this->overtime = $overtime;
 	}
 
+	public function get_overtime_duration()
+	{
+		return $this->overtime_duration;
+	}
+
+	public function set_overtime_duration($overtime_duration)
+	{
+		$this->overtime_duration = $overtime_duration;
+	}
+
 	public function get_third_place()
 	{
 		return $this->third_place;
@@ -229,14 +280,14 @@ class FootballParams
 		$this->silver_goal = $silver_goal;
 	}
 
-	public function get_set_mode()
+	public function get_sets_mode()
 	{
-		return $this->set_mode;
+		return $this->sets_mode;
 	}
 
-	public function set_set_mode($set_mode)
+	public function set_sets_mode($sets_mode)
 	{
-		$this->set_mode = $set_mode;
+		$this->sets_mode = $sets_mode;
 	}
 
 	public function get_sets_number()
@@ -269,36 +320,6 @@ class FootballParams
 		$this->favorite_team_id = $favorite_team_id;
 	}
 
-	public function get_is_sub_compet()
-	{
-		return $this->is_sub_compet;
-	}
-
-	public function set_is_sub_compet($is_sub_compet)
-	{
-		$this->is_sub_compet = $is_sub_compet;
-	}
-
-	public function get_compet_master_id()
-	{
-		return $this->compet_master_id;
-	}
-
-	public function set_compet_master_id($compet_master_id)
-	{
-		$this->compet_master_id = $compet_master_id;
-	}
-
-	public function get_sub_compet_rank()
-	{
-		return $this->sub_compet_rank;
-	}
-
-	public function set_sub_compet_rank($sub_compet_rank)
-	{
-		$this->sub_compet_rank = $sub_compet_rank;
-	}
-
 	public function is_authorized_to_manage_params()
 	{
 		return FootballAuthorizationsService::check_authorizations()->manage_seasons();
@@ -310,6 +331,10 @@ class FootballParams
 			'id_params' => $this->get_id_params(),
 			'params_compet_id' => $this->get_params_compet_id(),
 			'teams_per_group' => $this->get_teams_per_group(),
+			'fill_matches' => $this->get_fill_matches(),
+			'looser_bracket' => $this->get_looser_bracket(),
+			'all_places' => $this->get_all_places(),
+			'display_playgrounds' => $this->get_display_playgrounds(),
 			'victory_points' => $this->get_victory_points(),
 			'draw_points' => $this->get_draw_points(),
 			'loss_points' => $this->get_loss_points(),
@@ -323,16 +348,14 @@ class FootballParams
 			'match_duration' => $this->get_match_duration(),
 			'rounds_number' => $this->get_rounds_number(),
 			'overtime' => $this->get_overtime(),
+			'overtime_duration' => $this->get_overtime_duration(),
 			'third_place' => $this->get_third_place(),
 			'golden_goal' => $this->get_golden_goal(),
 			'silver_goal' => $this->get_silver_goal(),
-			'set_mode' => $this->get_set_mode(),
+			'sets_mode' => $this->get_sets_mode(),
 			'sets_number' => $this->get_sets_number(),
 			'bonus' => $this->get_bonus(),
 			'favorite_team_id' => $this->get_favorite_team_id(),
-			'is_sub_compet' => $this->get_is_sub_compet(),
-			'compet_master_id' => $this->get_compet_master_id(),
-			'sub_compet_rank' => $this->get_sub_compet_rank(),
 		);
 	}
 
@@ -341,6 +364,10 @@ class FootballParams
 		$this->id_params = $properties['id_params'];
 		$this->params_compet_id = $properties['params_compet_id'];
 		$this->teams_per_group = $properties['teams_per_group'];
+		$this->fill_matches = $properties['fill_matches'];
+		$this->looser_bracket = $properties['looser_bracket'];
+		$this->all_places = $properties['all_places'];
+		$this->display_playgrounds = $properties['display_playgrounds'];
 		$this->victory_points = $properties['victory_points'];
 		$this->draw_points = $properties['draw_points'];
 		$this->loss_points = $properties['loss_points'];
@@ -354,16 +381,14 @@ class FootballParams
 		$this->match_duration = $properties['match_duration'];
 		$this->rounds_number = $properties['rounds_number'];
 		$this->overtime = $properties['overtime'];
+		$this->overtime_duration = $properties['overtime_duration'];
 		$this->third_place = $properties['third_place'];
 		$this->golden_goal = $properties['golden_goal'];
 		$this->silver_goal = $properties['silver_goal'];
-		$this->set_mode = $properties['set_mode'];
+		$this->sets_mode = $properties['sets_mode'];
 		$this->sets_number = $properties['sets_number'];
 		$this->bonus = $properties['bonus'];
 		$this->favorite_team_id = $properties['favorite_team_id'];
-		$this->is_sub_compet = $properties['is_sub_compet'];
-		$this->compet_master_id = $properties['compet_master_id'];
-		$this->sub_compet_rank = $properties['sub_compet_rank'];
 	}
 
 	public function init_default_properties()
@@ -374,15 +399,6 @@ class FootballParams
         $this->play_off_color = '#b0e1ff';
         $this->relegation = 0;
         $this->relegation_color = '#ffb0b0';
-	}
-
-	public function get_template_vars()
-	{
-		return array(
-            // Conditions
-
-            // Item
-		);
 	}
 }
 ?>

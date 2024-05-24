@@ -1,12 +1,5 @@
 <section id="module-football" class="category-{CATEGORY_ID} single-item">
-	<header class="section-header">
-		<div class="controls align-right">
-			<a class="offload" href="{U_SYNDICATION}" aria-label="{@common.syndication}"><i class="fa fa-rss warning" aria-hidden="true"></i></a>
-			{@football.module.title}# IF NOT C_ROOT_CATEGORY # - {CATEGORY_NAME}# ENDIF #
-			# IF IS_ADMIN #<a class="offload" href="{U_EDIT_CATEGORY}" aria-label="{@common.edit}"><i class="far fa-edit" aria-hidden="true"></i></a># ENDIF #
-		</div>
-		<h1><span id="name" itemprop="name">{TITLE}</span></h1>
-	</header>
+	# INCLUDE MENU #
 	<div class="sub-section">
 		<div class="content-container">
 			# IF NOT C_VISIBLE #
@@ -17,7 +10,6 @@
 			<article itemscope="itemscope" itemtype="https://schema.org/CreativeWork" id="football-item-{ID}" class="football-item# IF C_NEW_CONTENT # new-content# ENDIF #">
 				# IF C_CONTROLS #
 					<div class="controls align-right">
-                        # INCLUDE MENU #
                         # IF C_EDIT #<a class="offload" href="{U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
 						# IF C_DELETE #<a href="{U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
 					</div>
@@ -25,7 +17,7 @@
 
 				<div class="content">
 					<div itemprop="text"># INCLUDE RANKING #</div>
-					<div itemprop="text"># INCLUDE GROUP_CALENDAR #</div>
+					<div itemprop="text"># INCLUDE TOURNEY_CALENDAR #</div>
 				</div>
 
 				<aside>${ContentSharingActionsMenuService::display()}</aside>

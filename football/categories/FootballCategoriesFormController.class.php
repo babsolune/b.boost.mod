@@ -64,8 +64,7 @@ class FootballCategoriesFormController extends DefaultCategoriesFormController
 		$fieldset_authorizations->add_field(new FormFieldCheckbox('special_authorizations', self::$lang['form.authorizations'], $this->get_category()->has_special_authorizations(),
 			array(
 				'description' => self::$lang['category.form.authorizations.clue'],
-				'events' => array(
-					'click' => '
+				'events' => array('click' => '
 					if (HTMLForms.getField("special_authorizations").getValue()) {
 						jQuery("#' . __CLASS__ . '_authorizations").show();
 					} else {

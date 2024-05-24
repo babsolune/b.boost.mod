@@ -13,8 +13,6 @@ class FootballClub
 	private $club_name;
 	private $club_slug;
 	private $club_acronym;
-	private $club_country;
-	private $club_league;
 	private $club_logo;
 	private $club_email;
 	private $club_phone;
@@ -61,26 +59,6 @@ class FootballClub
 	public function set_club_acronym($club_acronym)
 	{
 		$this->club_acronym = $club_acronym;
-	}
-
-	public function get_club_country()
-	{
-		return $this->club_country;
-	}
-
-	public function set_club_country($club_country)
-	{
-		$this->club_country = $club_country;
-	}
-
-	public function get_club_league()
-	{
-		return $this->club_league;
-	}
-
-	public function set_club_league($club_league)
-	{
-		$this->club_league = $club_league;
 	}
 
 	public function get_club_logo()
@@ -145,8 +123,6 @@ class FootballClub
 			'club_name' => $this->get_club_name(),
 			'club_slug' => $this->get_club_slug(),
 			'club_acronym' => $this->get_club_acronym(),
-			'club_country' => $this->get_club_country(),
-			'club_league' => $this->get_club_league(),
 			'club_logo' => $this->get_club_logo(),
 			'club_email' => $this->get_club_email(),
 			'club_phone' => $this->get_club_phone(),
@@ -161,8 +137,6 @@ class FootballClub
 		$this->club_name = $properties['club_name'];
 		$this->club_slug = $properties['club_slug'];
 		$this->club_acronym = $properties['club_acronym'];
-		$this->club_country = $properties['club_country'];
-		$this->club_league = $properties['club_league'];
 		$this->club_logo = $properties['club_logo'];
 		$this->club_email = $properties['club_email'];
 		$this->club_phone = $properties['club_phone'];
@@ -207,8 +181,6 @@ class FootballClub
 			'ID'           => $this->id_club,
 			'NAME'         => $this->club_name,
 			'ACRONYM'      => $this->club_acronym,
-			'COUNTRY'      => $this->club_country,
-			'LEAGUE'       => $this->club_league,
 			'EMAIL'        => $this->club_email,
 			'PHONE'        => $this->club_phone,
 			'LOCATION'     => $club_locations,

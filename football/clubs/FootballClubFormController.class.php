@@ -73,39 +73,6 @@ class FootballClubFormController extends DefaultModuleController
             $fieldset->add_field(new FormFieldShortMultiLineTextEditor('locations', $this->lang['football.club.locations'], $this->get_club()->get_club_locations()));
         }
 
-        $fieldset->add_field(new FormFieldSimpleSelectChoice('country', $this->lang['football.club.country'], $this->get_club()->get_club_country(), $this->get_countries_list(),
-            array(
-                'events' => array('change' =>
-                    'if (jQuery.inArray(HTMLForms.getField("country").getValue(), ' . $this->get_country_files() . ') !== -1) {
-                        jQuery.ajax({
-                            url: "' . FootballUrlBuilder::ajax_club()->rel() . '",
-                            type: "POST",
-                            data: {
-                                country: HTMLForms.getField("country").getValue(),
-                                token: {TOKEN}
-                            },
-                            dataType: "json",
-                            success: function(r) {
-                                jQuery("#'.__CLASS__.'_league").empty();
-                                jQuery.each(r.options, function(index, option) {
-                                    jQuery("#'.__CLASS__.'_league").append(option);
-                                });
-                            }
-                        });
-						HTMLForms.getField("league").enable();
-					} else {
-						HTMLForms.getField("league").disable();
-					}'
-				)
-            )
-        ));
-
-        $fieldset->add_field(new FormFieldSimpleSelectChoice('league', $this->lang['football.club.league'], $this->get_club()->get_club_league(), FootballClubService::get_league_options_list($this->get_club()->get_club_country()),
-            array(
-                'hidden' => empty($this->get_club()->get_club_country()) && !in_array($this->get_club()->get_club_country(), (array)$this->get_country_files())
-            )
-        ));
-
         $fieldset->add_field(new FormFieldUploadFile('logo', $this->lang['football.club.logo'], $this->is_new_club ? FootballClub::CLUB_LOGO : $this->get_club()->get_club_logo()));
 
 		$fieldset->add_field(new FormFieldHidden('referrer', $request->get_url_referrer()));

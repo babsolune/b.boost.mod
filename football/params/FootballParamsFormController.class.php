@@ -15,7 +15,7 @@ class FootballParamsFormController extends DefaultModuleController
 	private $division;
 	private $is_championship;
 	private $is_cup;
-	private $is_tournament;
+	private $is_tourney;
 	private $compet_type;
 
 	public function execute(HTTPRequestCustom $request)
@@ -23,12 +23,12 @@ class FootballParamsFormController extends DefaultModuleController
 		$this->init();
 		$this->check_authorizations();
 
-		$this->build_form($request);
+		$this->build_form();
 
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
-			$this->redirect($request);
+			$this->redirect();
 		}
 
 		$this->view->put_all(array(
@@ -44,57 +44,94 @@ class FootballParamsFormController extends DefaultModuleController
 		$this->division = FootballDivisionCache::load()->get_division($this->get_compet()->get_compet_division_id());
 		$this->is_championship = $this->division['division_compet_type'] == FootballDivision::CHAMPIONSHIP;
 		$this->is_cup = $this->division['division_compet_type'] == FootballDivision::CUP;
-		$this->is_tournament = $this->division['division_compet_type'] == FootballDivision::TOURNAMENT;
+		$this->is_tourney = $this->division['division_compet_type'] == FootballDivision::TOURNEY;
 	}
 
-	private function build_form(HTTPRequestCustom $request)
+	private function build_form()
 	{
 		$form = new HTMLForm(__CLASS__);
-        $form->set_css_class('params-form');
+        $form->set_css_class('params-form cell-flex cell-columns-2');
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['football.params'] . '</div>');
 
-		$fieldset = new FormFieldsetHTML('compet', '');
-		$form->add_fieldset($fieldset);
-
-		if ($this->is_tournament)
+		if ($this->is_tourney)
 		{
-            $fieldset->add_field(new FormFieldNumberEditor('teams_per_group', $this->lang['football.group.teams.number'], $this->get_params()->get_teams_per_group(), array('required' => true)));
+            $tourney_fieldset = new FormFieldsetHTML('tourney', $this->lang['football.params.tourney']);
+            $form->add_fieldset($tourney_fieldset);
+
+            $tourney_fieldset->add_field(new FormFieldNumberEditor('teams_per_group', $this->lang['football.teams.per.group'], $this->get_params()->get_teams_per_group()));
+            $tourney_fieldset->add_field(new FormFieldCheckbox('fill_matches', $this->lang['football.fill.matches'], $this->get_params()->get_fill_matches()));
+            $tourney_fieldset->add_field(new FormFieldCheckbox('looser_bracket', $this->lang['football.looser.bracket'], $this->get_params()->get_looser_bracket()));
+            $tourney_fieldset->add_field(new FormFieldCheckbox('all_places', $this->lang['football.all.places'], $this->get_params()->get_all_places(),
+                array('events' => array('click' => '
+                    if (HTMLForms.getField("all_places").getValue()) {
+                        HTMLForms.getField("third_place").disable();
+                    } else {
+                        HTMLForms.getField("third_place").enable();
+                    }
+                '))
+            ));
+            $tourney_fieldset->add_field(new FormFieldCheckbox('display_playgrounds', $this->lang['football.display.playgrounds'], $this->get_params()->get_display_playgrounds()));
         }
 
-		if ($this->is_championship || $this->is_tournament)
+		if ($this->is_cup || $this->is_tourney)
 		{
-			$fieldset->add_field(new FormFieldNumberEditor('victory_points', $this->lang['football.victory.points'], $this->get_params()->get_victory_points(), array('required' => true)));
-			$fieldset->add_field(new FormFieldNumberEditor('draw_points', $this->lang['football.draw.points'], $this->get_params()->get_draw_points(), array('required' => true)));
-			$fieldset->add_field(new FormFieldNumberEditor('loss_points', $this->lang['football.loss.points'], $this->get_params()->get_loss_points(), array('required' => true)));
+			$bracket_fieldset = new FormFieldsetHTML('bracket', $this->lang['football.params.bracket']);
+            $form->add_fieldset($bracket_fieldset);
 
-			$fieldset->add_field(new FormFieldNumberEditor('promotion', $this->lang['football.promotion'], $this->get_params()->get_promotion()));
-			$fieldset->add_field(new FormFieldColorPicker('promotion_color', $this->lang['football.promotion.color'], $this->get_params()->get_promotion_color()));
-			$fieldset->add_field(new FormFieldNumberEditor('play_off', $this->lang['football.play.off'], $this->get_params()->get_play_off()));
-			$fieldset->add_field(new FormFieldColorPicker('play_off_color', $this->lang['football.play.off.color'], $this->get_params()->get_play_off_color()));
-			$fieldset->add_field(new FormFieldNumberEditor('relegation', $this->lang['football.relegation'], $this->get_params()->get_relegation()));
-			$fieldset->add_field(new FormFieldColorPicker('relegation_color', $this->lang['football.relegation.color'], $this->get_params()->get_relegation_color()));
-
-			$fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_type', $this->lang['football.ranking.type'], $this->get_params()->get_ranking_type(), $this->ranking_list()));
-		}
-		else
-		{
-			$fieldset->add_field(new FormFieldNumberEditor('rounds_number', $this->lang['football.rounds.number'], $this->get_params()->get_rounds_number()));
-			$fieldset->add_field(new FormFieldNumberEditor('overtime', $this->lang['football.overtime'], $this->get_params()->get_overtime(),
-				array('description' => $this->lang['football.minutes.clue'])
+            $bracket_fieldset->add_field(new FormFieldNumberEditor('rounds_number', $this->lang['football.rounds.number'], $this->get_params()->get_rounds_number(),
+                array('description' => $this->lang['football.rounds.number.clue'])
+            ));
+			$bracket_fieldset->add_field(new FormFieldCheckbox('overtime', $this->lang['football.overtime'], $this->get_params()->get_overtime(),
+				array('events' => array('click' => '
+                    if (HTMLForms.getField("overtime").getValue()) {
+                        HTMLForms.getField("overtime_duration").enable();
+                    } else {
+                        HTMLForms.getField("overtime_duration").disable();
+                    }
+                '))
 			));
-			$fieldset->add_field(new FormFieldCheckbox('golden_goal', $this->lang['football.golden.goal'], $this->get_params()->get_golden_goal()));
-			$fieldset->add_field(new FormFieldCheckbox('silver_goal', $this->lang['football.silver.goal'], $this->get_params()->get_silver_goal()));
-			$fieldset->add_field(new FormFieldCheckbox('third_place', $this->lang['football.third.place'], $this->get_params()->get_third_place()));
+			$bracket_fieldset->add_field(new FormFieldNumberEditor('overtime_duration', $this->lang['football.overtime.duration'], $this->get_params()->get_overtime_duration(),
+				array(
+                    'description' => $this->lang['football.minutes.clue'],
+                    'hidden' => !$this->get_params()->get_overtime()
+                )
+			));
+			$bracket_fieldset->add_field(new FormFieldCheckbox('golden_goal', $this->lang['football.golden.goal'], $this->get_params()->get_golden_goal()));
+			$bracket_fieldset->add_field(new FormFieldCheckbox('silver_goal', $this->lang['football.silver.goal'], $this->get_params()->get_silver_goal()));
+			$bracket_fieldset->add_field(new FormFieldCheckbox('third_place', $this->lang['football.third.place'], $this->get_params()->get_third_place(),
+                array('hidden' => $this->is_tourney && $this->get_params()->get_all_places())
+            ));
 		}
 
-		$fieldset->add_field(new FormFieldNumberEditor('match_duration', $this->lang['football.match.duration'], $this->get_params()->get_match_duration(),
+		if ($this->is_championship || $this->is_tourney)
+		{
+			$ranking_fieldset = new FormFieldsetHTML('ranking', $this->lang['football.params.ranking']);
+            $form->add_fieldset($ranking_fieldset);
+
+            $ranking_fieldset->add_field(new FormFieldNumberEditor('victory_points', $this->lang['football.victory.points'], $this->get_params()->get_victory_points()));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('draw_points', $this->lang['football.draw.points'], $this->get_params()->get_draw_points()));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('loss_points', $this->lang['football.loss.points'], $this->get_params()->get_loss_points()));
+
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('promotion', $this->lang['football.promotion'], $this->get_params()->get_promotion()));
+			$ranking_fieldset->add_field(new FormFieldColorPicker('promotion_color', $this->lang['football.promotion.color'], $this->get_params()->get_promotion_color()));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('play_off', $this->lang['football.play.off'], $this->get_params()->get_play_off()));
+			$ranking_fieldset->add_field(new FormFieldColorPicker('play_off_color', $this->lang['football.play.off.color'], $this->get_params()->get_play_off_color()));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('relegation', $this->lang['football.relegation'], $this->get_params()->get_relegation()));
+			$ranking_fieldset->add_field(new FormFieldColorPicker('relegation_color', $this->lang['football.relegation.color'], $this->get_params()->get_relegation_color()));
+
+			$ranking_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_type', $this->lang['football.ranking.type'], $this->get_params()->get_ranking_type(), $this->ranking_list()));
+		}
+
+		$option_fieldset = new FormFieldsetHTML('options', $this->lang['football.params.options']);
+		$form->add_fieldset($option_fieldset);
+		$option_fieldset->add_field(new FormFieldNumberEditor('match_duration', $this->lang['football.match.duration'], $this->get_params()->get_match_duration(),
 			array('description' => $this->lang['football.minutes.clue'])
 		));
 
-		$fieldset->add_field(new FormFieldCheckbox('set_mode', $this->lang['football.set.mode'], $this->get_params()->get_set_mode(),
+		$option_fieldset->add_field(new FormFieldCheckbox('sets_mode', $this->lang['football.sets.mode'], $this->get_params()->get_sets_mode(),
 			array(
 				'events' => array('click' => '
-					if (HTMLForms.getField("set_mode").getValue()) {
+					if (HTMLForms.getField("sets_mode").getValue()) {
 						HTMLForms.getField("sets_number").enable();
 					} else {
 						HTMLForms.getField("sets_number").disable();
@@ -103,40 +140,15 @@ class FootballParamsFormController extends DefaultModuleController
 			)
 		));
 
-		$fieldset->add_field(new FormFieldNumberEditor('sets_number', $this->lang['football.sets.number'], $this->get_params()->get_sets_number(),
-			array('hidden' => !$this->get_params()->get_set_mode())
+		$option_fieldset->add_field(new FormFieldNumberEditor('sets_number', $this->lang['football.sets.number'], $this->get_params()->get_sets_number(),
+			array('hidden' => !$this->get_params()->get_sets_mode())
 		));
 
-		$fieldset->add_field(new FormFieldCheckbox('bonus', $this->lang['football.bonus'], $this->get_params()->get_set_mode(),
+		$option_fieldset->add_field(new FormFieldCheckbox('bonus', $this->lang['football.bonus'], $this->get_params()->get_sets_mode(),
 			array('description' => $this->lang['football.bonus.clue'])
 		));
 
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('favorite_team_id', $this->lang['football.favorite.team'], $this->get_params()->get_favorite_team_id(), $this->teams_list()));
-
-		$fieldset->add_field(new FormFieldCheckbox('is_sub_compet', $this->lang['football.is.sub'], $this->get_params()->get_is_sub_compet(),
-			array(
-				'events' => array('click' => '
-					if (HTMLForms.getField("is_sub_compet").getValue()) {
-						HTMLForms.getField("compet_master").enable();
-						HTMLForms.getField("sub_compet_rank").enable();
-					} else {
-						HTMLForms.getField("compet_master").disable();
-						HTMLForms.getField("sub_compet_rank").disable();
-					}'
-				)
-			)
-		));
-
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('compet_master', $this->lang['football.master'], $this->get_params()->get_compet_master_id(), $this->teams_list(),
-			array('hidden' => !$this->get_params()->get_is_sub_compet())
-		));
-
-		$fieldset->add_field(new FormFieldNumberEditor('sub_compet_rank', $this->lang['football.sub.rank'], $this->get_params()->get_sub_compet_rank(),
-			array('hidden' => !$this->get_params()->get_is_sub_compet())
-		));
-
-
-		$fieldset->add_field(new FormFieldHidden('referrer', $request->get_url_referrer()));
+		$option_fieldset->add_field(new FormFieldSimpleSelectChoice('favorite_team_id', $this->lang['football.favorite.team'], $this->get_params()->get_favorite_team_id(), $this->teams_list()));
 
 		$this->submit_button = new FormButtonDefaultSubmit();
 		$form->add_button($this->submit_button);
@@ -150,12 +162,22 @@ class FootballParamsFormController extends DefaultModuleController
 		$params = $this->get_params();
         $params->set_params_compet_id($this->id_compet());
 
-        if ($this->is_tournament)
+        if ($this->is_tourney)
         {
             $params->set_teams_per_group($this->form->get_value('teams_per_group'));
+            $params->set_fill_matches($this->form->get_value('fill_matches'));
+            $params->set_looser_bracket($this->form->get_value('looser_bracket'));
+            $params->set_all_places($this->form->get_value('all_places'));
+            $params->set_display_playgrounds($this->form->get_value('display_playgrounds'));
         }
 
-        if ($this->is_championship || $this->is_tournament)
+        if ($this->is_cup || $this->is_tourney)
+        {
+            $params->set_third_place($this->form->get_value('third_place'));
+            $params->set_rounds_number($this->form->get_value('rounds_number'));
+        }
+
+        if ($this->is_championship || $this->is_tourney)
         {
             $params->set_victory_points($this->form->get_value('victory_points'));
             $params->set_draw_points($this->form->get_value('draw_points'));
@@ -168,7 +190,6 @@ class FootballParamsFormController extends DefaultModuleController
             $params->set_relegation($this->form->get_value('relegation'));
             $params->set_relegation_color($this->form->get_value('relegation_color'));
             $params->set_ranking_type($this->form->get_value('ranking_type'));
-            $params->set_favorite_team_id($this->form->get_value('favorite_team_id')->get_raw_value());
         }
         else
         {
@@ -176,6 +197,10 @@ class FootballParamsFormController extends DefaultModuleController
         }
 
         $params->set_match_duration($this->form->get_value('match_duration'));
+        $params->set_bonus($this->form->get_value('bonus'));
+        $params->set_sets_mode($this->form->get_value('sets_mode'));
+        $params->set_sets_number($this->form->get_value('sets_number'));
+        $params->set_favorite_team_id($this->form->get_value('favorite_team_id')->get_raw_value());
 
 		if ($this->is_new_params)
 		{

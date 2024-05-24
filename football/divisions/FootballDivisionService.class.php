@@ -92,8 +92,8 @@ class FootballDivisionService
             case('cup') :
                 $compet_type = $lang['football.cup'];
                 break;
-            case('tournament') :
-                $compet_type = $lang['football.tournament'];
+            case('tourney') :
+                $compet_type = $lang['football.tourney'];
                 break;
         };
 

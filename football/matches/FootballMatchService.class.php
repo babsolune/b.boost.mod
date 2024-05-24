@@ -50,9 +50,9 @@ class FootballMatchService
 	 * @desc Update a match entry.
 	 * @param FootballMatch $match : FootballMatch to update
 	 */
-	public static function update_score(int $id, string $home_score, string $visit_score)
+	public static function update_score(int $id, string $home_score, string $away_score)
 	{
-		self::$db_querier->update(FootballSetup::$football_match_table, array('match_home_team_score' => $home_score, 'match_visit_team_score' => $visit_score), 'WHERE id_match = :id', array('id' => $id));
+		self::$db_querier->update(FootballSetup::$football_match_table, array('match_home_score' => $home_score, 'match_away_score' => $away_score), 'WHERE id_match = :id', array('id' => $id));
 	}
 
 	/** Delete a match entry. */
@@ -92,7 +92,7 @@ class FootballMatchService
             FROM ' . FootballSetup::$football_match_table . ' matches
             LEFT JOIN ' . FootballSetup::$football_compet_table . ' compet ON compet.id_compet = matches.match_compet_id
             WHERE matches.match_compet_id = :id
-            ORDER BY matches.id_match', array(
+            ORDER BY matches.match_number ASC', array(
                 'id' => $compet_id
             )
         );
@@ -134,23 +134,27 @@ class FootballMatchService
     {
         $matches = self::get_matches($compet_id);
 
-        $first_day = date('j', $matches[0]['match_date']);
-        $first_month = date('n', $matches[0]['match_date']);
-        $first_year = date('Y', $matches[0]['match_date']);
+        if(count($matches) > 0)
+        {
+            $first_day = date('j', $matches[0]['match_date']);
+            $first_month = date('n', $matches[0]['match_date']);
+            $first_year = date('Y', $matches[0]['match_date']);
 
-        $same_day = true;
-        for ($i = 1; $i < count($matches); $i++) {
-            $day = date('j', $matches[$i]['match_date']);
-            $month = date('n', $matches[$i]['match_date']);
-            $year = date('Y', $matches[$i]['match_date']);
+            $same_day = true;
+            for ($i = 1; $i < count($matches); $i++) {
+                $day = date('j', $matches[$i]['match_date']);
+                $month = date('n', $matches[$i]['match_date']);
+                $year = date('Y', $matches[$i]['match_date']);
 
-            if ($day != $first_day || $month != $first_month || $year != $first_year) {
-                $same_day = false;
-                break;
+                if ($day != $first_day || $month != $first_month || $year != $first_year) {
+                    $same_day = false;
+                    break;
+                }
             }
+            return $same_day;
         }
-
-        return $same_day;
+        else
+            return false;
     }
 }
 ?>
