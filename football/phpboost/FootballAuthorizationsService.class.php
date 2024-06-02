@@ -9,42 +9,29 @@
 
 class FootballAuthorizationsService extends CategoriesAuthorizationsService
 {
-	const MANAGE_DIVISIONS_AUTHORIZATIONS = 32;
-	const MANAGE_CLUBS_AUTHORIZATIONS = 64;
-	const MANAGE_SEASONS_AUTHORIZATIONS = 128;
-	const MANAGE_PARAMETERS_AUTHORIZATIONS = 256;
-	const MANAGE_TEAMS_AUTHORIZATIONS = 512;
-	const MANAGE_MATCHES_AUTHORIZATIONS = 1024;
-	const MANAGE_RESULTS_AUTHORIZATIONS = 2048;
+	const CLUBS_AUTHORIZATIONS = 32;
+	const DIVISIONS_AUTHORIZATIONS = 64;
+	const SEASONS_AUTHORIZATIONS = 128;
+	const COMPETITION_AUTHORIZATIONS = 256;
 
 	public function manage_divisions()
 	{
-		return $this->is_authorized(self::MANAGE_DIVISIONS_AUTHORIZATIONS);
+		return $this->is_authorized(self::DIVISIONS_AUTHORIZATIONS);
 	}
 
 	public function manage_clubs()
 	{
-		return $this->is_authorized(self::MANAGE_CLUBS_AUTHORIZATIONS);
+		return $this->is_authorized(self::CLUBS_AUTHORIZATIONS);
 	}
 
 	public function manage_seasons()
 	{
-		return $this->is_authorized(self::MANAGE_SEASONS_AUTHORIZATIONS);
+		return $this->is_authorized(self::SEASONS_AUTHORIZATIONS);
 	}
 
-	public function manage_params()
+	public function manage_compets()
 	{
-		return $this->is_authorized(self::MANAGE_PARAMETERS_AUTHORIZATIONS);
-	}
-
-	public function manage_matches()
-	{
-		return $this->is_authorized(self::MANAGE_MATCHES_AUTHORIZATIONS);
-	}
-
-	public function manage_results()
-	{
-		return $this->is_authorized(self::MANAGE_RESULTS_AUTHORIZATIONS);
+		return $this->is_authorized(self::COMPETITION_AUTHORIZATIONS);
 	}
 
 	protected function is_authorized($bit, $mode = Authorizations::AUTH_CHILD_PRIORITY)

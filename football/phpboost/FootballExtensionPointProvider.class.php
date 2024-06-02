@@ -13,13 +13,5 @@ class FootballExtensionPointProvider extends ItemsModuleExtensionPointProvider
 	{
 		return new DefaultHomePageDisplay($this->get_id(), FootballHomeController::get_view($this->get_id()));
 	}
-
-	public function css_files()
-	{
-		$module_css_files = new ModuleCssFiles();
-        $module_css_files->adding_running_module_displayed_file('football.css');
-        $module_css_files->adding_running_module_displayed_file('bracket.css');
-		return $module_css_files;
-	}
 }
 ?>

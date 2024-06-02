@@ -50,9 +50,9 @@ class FootballTeamService
 	 * @desc Update a team entry.
 	 * @param FootballTeam $team : FootballTeam to update
 	 */
-	public static function update_team_group($id, $group)
+	public static function update_team_group($id, $group, $order)
 	{
-		self::$db_querier->update(FootballSetup::$football_team_table, array('team_group' => $group), 'WHERE id_team = :id', array('id' => $id));
+		self::$db_querier->update(FootballSetup::$football_team_table, ['team_group' => $group, 'team_order' => $order], 'WHERE id_team = :id', array('id' => $id));
 	}
 
 	/**
@@ -60,16 +60,23 @@ class FootballTeamService
 	 * @param string $condition : Restriction to apply to the list
 	 * @param string[] $params : Params of the condition
 	 */
-	public static function delete_team(int $id)
+	public static function delete_team(int $compet_id, int $club_id)
 	{
-		if (AppContext::get_current_user()->is_readonly())
-        {
-            $controller = PHPBoostErrors::user_in_read_only();
-            DispatchManager::redirect($controller);
-        }
-		self::$db_querier->delete(FootballSetup::$football_team_table, 'WHERE team_club_id = :id', array('id' => $id));
+        self::$db_querier->delete(FootballSetup::$football_team_table, 'WHERE team_compet_id = :compet_id AND team_club_id = :club_id', array('compet_id' => $compet_id, 'club_id' => $club_id));
+	}
 
-		// self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', array('module' => 'football', 'id' => $id));
+	/**
+	 * @desc Delete a team entry.
+	 * @param string $condition : Restriction to apply to the list
+	 * @param string[] $params : Params of the condition
+	 */
+	public static function delete_teams(int $id)
+	{
+        $teams = self::get_teams($id);
+        foreach ($teams as $team)
+        {
+            self::$db_querier->delete(FootballSetup::$football_team_table, 'WHERE team_compet_id = :id', array('id' => $id));
+        }
 	}
 
 	/**
@@ -102,7 +109,7 @@ class FootballTeamService
             FROM ' . FootballSetup::$football_team_table . ' teams
             LEFT JOIN ' . FootballSetup::$football_compet_table . ' compet ON compet.id_compet = teams.team_compet_id
             WHERE teams.team_compet_id = :id
-            ORDER BY teams.id_team', array(
+            ORDER BY teams.team_club_name', array(
                 'id' => $compet_id
             )
         );
@@ -115,22 +122,24 @@ class FootballTeamService
         return $teams;
 	}
 
-	public static function get_team_in_group($compet_id, $group)
+	public static function get_team_in_group(int $compet_id, int $group, int $order)
 	{
-        $groups = [];
+        $team_numbers = [];
         foreach (FootballTeamService::get_teams($compet_id) as $team_group)
         {
-            $groups[] = $team_group['team_group'];
+            $team_numbers[] = $team_group['team_group'].$team_group['team_order'];
         }
 
-        if (in_array($group, $groups))
+        if (in_array($group.$order, $team_numbers))
         {
             $row = self::$db_querier->select_single_row_query('SELECT teams.*
                 FROM ' . FootballSetup::$football_team_table . ' teams
                 WHERE teams.team_compet_id = :id
-                AND teams.team_group = :group', array(
+                AND teams.team_group = :group
+                AND teams.team_order = :order', array(
                     'id' => $compet_id,
-                    'group' => $group
+                    'group' => $group,
+                    'order' => $order
                 )
             );
             $team = new FootballTeam();
@@ -140,24 +149,9 @@ class FootballTeamService
         }
 	}
 
-	public static function get_compet_teams_number($compet_id)
+	public static function get_teams_number($compet_id)
 	{
-		$teams_list = array();
-
-		$result = PersistenceContext::get_querier()->select('SELECT team.*, compet.*
-			FROM ' . FootballSetup::$football_team_table . ' team
-			LEFT JOIN ' . FootballSetup::$football_compet_table . ' compet ON compet.id_compet = team.team_compet_id
-			WHERE team.team_compet_id = :id', array(
-				'id' => $compet_id
-			)
-		);
-
-		while ($row = $result->fetch())
-		{
-			$teams_list[] = $row['id_team'];
-		}
-
-		return count($teams_list);
+		return count(self::get_teams($compet_id));
 	}
 }
 ?>

@@ -66,7 +66,7 @@ class FootballCompetCache implements CacheData
 	 */
 	public static function load()
 	{
-		return CacheManager::load(__CLASS__, 'football', 'minimenu');
+		return CacheManager::load(__CLASS__, 'football', 'compet');
 	}
 
 	/**
@@ -74,7 +74,7 @@ class FootballCompetCache implements CacheData
 	 */
 	public static function invalidate()
 	{
-		CacheManager::invalidate('football', 'minimenu');
+		CacheManager::invalidate('football', 'compet');
 	}
 }
 ?>

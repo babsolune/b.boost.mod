@@ -35,7 +35,7 @@ class FootballCompetFormController extends DefaultModuleController
 	private function build_form(HTTPRequestCustom $request)
 	{
 		$form = new HTMLForm(__CLASS__);
-		$form->set_layout_title($this->id_compet() === null ? $this->lang['football.add.compet'] : ($this->lang['football.edit.compet']));
+		$form->set_layout_title($this->compet_id() === null ? $this->lang['football.add.compet'] : ($this->lang['football.edit.compet']));
 
 		$fieldset = new FormFieldsetHTML('football', $this->lang['form.parameters']);
 		$form->add_fieldset($fieldset);
@@ -132,7 +132,7 @@ class FootballCompetFormController extends DefaultModuleController
 
 	private function build_contribution_fieldset($form)
 	{
-		if ($this->id_compet() === null && $this->is_contributor_member())
+		if ($this->compet_id() === null && $this->is_contributor_member())
 		{
 			$fieldset = new FormFieldsetHTML('contribution', $this->lang['contribution.contribution']);
 			$fieldset->set_description(MessageHelper::display($this->lang['contribution.extended.warning'], MessageHelper::WARNING)->render());
@@ -221,7 +221,7 @@ class FootballCompetFormController extends DefaultModuleController
 		return $this->compet;
 	}
 
-    private function id_compet()
+    private function compet_id()
     {
         return $this->get_compet()->get_id_compet();
     }
@@ -263,7 +263,6 @@ class FootballCompetFormController extends DefaultModuleController
 		$division_title = $this->form->get_value('division')->get_label();
 		$season_title = $this->form->get_value('season')->get_label();
 		$compet->set_compet_name($season_title . ' - ' . $division_title);
-		$compet->set_compet_slug(Url::encode_rewrite($compet->get_compet_name()));
 
 		if (CategoriesService::get_categories_manager()->get_categories_cache()->has_categories())
 			$compet->set_id_category($this->form->get_value('id_category')->get_raw_value());
@@ -279,7 +278,6 @@ class FootballCompetFormController extends DefaultModuleController
 		}
 		else
 		{
-
 			if ($this->form->get_value('update_creation_date'))
 				$compet->set_creation_date(new Date());
 			else
@@ -401,16 +399,16 @@ class FootballCompetFormController extends DefaultModuleController
 		elseif ($compet->is_published())
 		{
 			if ($this->is_new_compet)
-				AppContext::get_response()->redirect(FootballUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $compet->get_id_compet(), $compet->get_compet_slug()), StringVars::replace_vars($this->lang['football.message.success.add'], array('title' => $compet->get_compet_name())));
+				AppContext::get_response()->redirect(FootballUrlBuilder::calendar($compet->get_id_compet()), StringVars::replace_vars($this->lang['football.message.success.add'], array('title' => $compet->get_compet_name())));
 			else
-				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : FootballUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $compet->get_id_compet(), $compet->get_compet_slug())), StringVars::replace_vars($this->lang['football.message.success.edit'], array('title' => $compet->get_compet_name())));
+				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : FootballUrlBuilder::calendar($compet->get_id_compet())), StringVars::replace_vars($this->lang['football.message.success.edit'], array('title' => $compet->get_compet_name())));
 		}
 		else
 		{
-			if ($this->is_new_compet)
-				AppContext::get_response()->redirect(FootballUrlBuilder::display_pending(), StringVars::replace_vars($this->lang['football.message.success.add'], array('title' => $compet->get_compet_name())));
-			else
-				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : FootballUrlBuilder::display_pending()), StringVars::replace_vars($this->lang['football.message.success.edit'], array('title' => $compet->get_compet_name())));
+			// if ($this->is_new_compet)
+			// 	AppContext::get_response()->redirect(FootballUrlBuilder::display_pending(), StringVars::replace_vars($this->lang['football.message.success.add'], array('title' => $compet->get_compet_name())));
+			// else
+			// 	AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : FootballUrlBuilder::display_pending()), StringVars::replace_vars($this->lang['football.message.success.edit'], array('title' => $compet->get_compet_name())));
 		}
 	}
 
@@ -449,7 +447,7 @@ class FootballCompetFormController extends DefaultModuleController
 					$breadcrumb->add($category->get_name(), FootballUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
 			}
 			$category = $compet->get_category();
-			$breadcrumb->add($compet->get_compet_name(), FootballUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $compet->get_id_compet(), $compet->get_compet_slug()));
+			$breadcrumb->add($compet->get_compet_name(), FootballUrlBuilder::calendar($compet->get_id_compet()));
 			$breadcrumb->add($this->lang['football.edit.compet'], FootballUrlBuilder::edit($compet->get_id_compet()));
 		}
 

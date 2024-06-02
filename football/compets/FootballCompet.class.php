@@ -12,10 +12,8 @@ class FootballCompet
 	private $id_compet;
 	private $id_category;
 	private $compet_name;
-	private $compet_slug;
 	private $compet_season_id;
 	private $compet_division_id;
-	private $has_matches;
 	private $views_number;
 
 	private $published;
@@ -70,16 +68,6 @@ class FootballCompet
 		$this->compet_name = $compet_name;
 	}
 
-	public function get_compet_slug()
-	{
-		return $this->compet_slug;
-	}
-
-	public function set_compet_slug($compet_slug)
-	{
-		$this->compet_slug = $compet_slug;
-	}
-
 	public function get_compet_season_id()
 	{
 		return $this->compet_season_id;
@@ -98,16 +86,6 @@ class FootballCompet
 	public function set_compet_division_id($compet_division_id)
 	{
 		$this->compet_division_id = $compet_division_id;
-	}
-
-	public function get_has_matches()
-	{
-		return $this->has_matches;
-	}
-
-	public function set_has_matches($has_matches)
-	{
-		$this->has_matches = $has_matches;
 	}
 
 	public function get_views_number()
@@ -242,9 +220,9 @@ class FootballCompet
 		return FootballAuthorizationsService::check_authorizations($this->id_category)->moderation() || ((FootballAuthorizationsService::check_authorizations($this->id_category)->write() || (FootballAuthorizationsService::check_authorizations($this->id_category)->contribution() && !$this->is_published())) && $this->get_author_user()->get_id() == AppContext::get_current_user()->get_id() && AppContext::get_current_user()->check_level(User::MEMBER_LEVEL));
 	}
 
-	public function is_authorized_to_set_up()
+	public function is_authorized_to_manage_compets()
 	{
-		return FootballAuthorizationsService::check_authorizations($this->id_category)->moderation() || FootballAuthorizationsService::check_authorizations($this->id_category)->manage_params();
+		return FootballAuthorizationsService::check_authorizations($this->id_category)->moderation() || FootballAuthorizationsService::check_authorizations($this->id_category)->manage_compets();
 	}
 
 	public function get_properties()
@@ -253,10 +231,8 @@ class FootballCompet
 			'id_compet' => $this->get_id_compet(),
 			'id_category' => $this->get_id_category(),
 			'compet_name' => $this->get_compet_name(),
-			'compet_slug' => $this->get_compet_slug(),
 			'compet_season_id' => $this->get_compet_season_id(),
 			'compet_division_id' => $this->get_compet_division_id(),
-			'has_matches' => $this->get_has_matches(),
 			'views_number' => $this->get_views_number(),
 			'published' => $this->get_publishing_state(),
 			'publishing_start_date' => $this->get_publishing_start_date() !== null ? $this->get_publishing_start_date()->get_timestamp() : 0,
@@ -273,10 +249,8 @@ class FootballCompet
 		$this->id_compet = $properties['id_compet'];
 		$this->id_category = $properties['id_category'];
 		$this->compet_name = $properties['compet_name'];
-		$this->compet_slug = $properties['compet_slug'];
 		$this->compet_season_id = $properties['compet_season_id'];
 		$this->compet_division_id = $properties['compet_division_id'];
-		$this->has_matches = $properties['has_matches'];
 		$this->views_number = $properties['views_number'];
 		$this->published = $properties['published'];
 		$this->publishing_start_date = !empty($properties['publishing_start_date']) ? new Date($properties['publishing_start_date'], Timezone::SERVER_TIMEZONE) : null;
@@ -322,8 +296,7 @@ class FootballCompet
 
 	public function get_compet_url()
 	{
-		$category = $this->get_category();
-		return FootballUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $this->id_compet, $this->compet_slug)->rel();
+		return FootballUrlBuilder::calendar($this->id_compet)->rel();
 	}
 
 	public function get_template_vars()
@@ -339,13 +312,13 @@ class FootballCompet
 			array(
 				// Conditions
 				'C_VISIBLE'              => $this->is_published(),
-				'C_CONTROLS'			 => $this->is_authorized_to_edit() || $this->is_authorized_to_delete() || $this->is_authorized_to_set_up(),
+				'C_CONTROLS'			 => $this->is_authorized_to_edit() || $this->is_authorized_to_delete() || $this->is_authorized_to_manage_compets(),
 				'C_EDIT'                 => $this->is_authorized_to_edit(),
 				'C_DELETE'               => $this->is_authorized_to_delete(),
-				'C_PARAMETERS'           => $this->is_authorized_to_set_up(),
+				'C_PARAMETERS'           => $this->is_authorized_to_manage_compets(),
 				'C_HAS_UPDATE_DATE'      => $this->has_update_date(),
 				'C_DIFFERED'             => $this->published == self::DEFERRED_PUBLICATION,
-                
+
 				// Item
 				'ID'                  => $this->id_compet,
 				'TITLE'               => $this->compet_name,
@@ -355,9 +328,9 @@ class FootballCompet
 				'C_ROOT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY,
 				'CATEGORY_ID'          => $category->get_id(),
 				'CATEGORY_NAME'        => $category->get_name(),
-				'CATEGORY_DESCRIPTION' => $category->get_description(),
+				// 'CATEGORY_DESCRIPTION' => $category->get_description(),
 				'U_CATEGORY'           => FootballUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel(),
-				'U_CATEGORY_THUMBNAIL' => $category->get_thumbnail()->rel(),
+				// 'U_CATEGORY_THUMBNAIL' => $category->get_thumbnail()->rel(),
 				'U_EDIT_CATEGORY'      => $category->get_id() == Category::ROOT_CATEGORY ? FootballUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($category->get_id(), 'football')->rel(),
 
 				// Links

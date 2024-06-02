@@ -47,7 +47,7 @@ class FootballDivisionFormController extends DefaultModuleController
 			array(
 				new FormFieldSelectChoiceOption($this->lang['football.championship'], FootballDivision::CHAMPIONSHIP),
 				new FormFieldSelectChoiceOption($this->lang['football.cup'], FootballDivision::CUP),
-				new FormFieldSelectChoiceOption($this->lang['football.tourney'], FootballDivision::TOURNEY)
+				new FormFieldSelectChoiceOption($this->lang['football.tournament'], FootballDivision::TOURNAMENT)
 			)
 		));
 

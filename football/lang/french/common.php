@@ -21,6 +21,7 @@ $lang['an.item']  = 'une compétition';
 $lang['the.item']  = 'la compétition';
 
 // Titles
+$lang['football.category.history'] = 'Voir l\'historique des compétitions de cette catégorie';
 $lang['football.last.items']       = 'Récentes compétitions';
 $lang['football.add.compet']       = 'Ajouter une compétition';
 $lang['football.edit.compet']      = 'Modifier une compétition';
@@ -31,24 +32,37 @@ $lang['football.pending.compets']    = 'Compétitions en attente';
 $lang['football.filter.compets']     = 'Filtrer les compétitions';
 $lang['football.compets.management'] = 'Gestion des compétitions';
 
+// Calendar
+$lang['football.calendar']  = 'Calendrier';
+
 // Groups
+$lang['football.groups.management'] = 'Gestion des groupes';
 $lang['football.group']  = 'Groupe';
 $lang['football.round']  = 'Tour';
 $lang['football.place']  = 'Place';
-$lang['football.round.1']  = 'F';
-$lang['football.round.2']  = 'D';
-$lang['football.round.3']  = 'Q';
-$lang['football.round.4']  = 'H';
-$lang['football.round.5']  = 'S';
-$lang['football.round.6']  = 'T';
-$lang['football.round.2']  = 'D';
+$lang['football.round.1']  = 'Finale';
+$lang['football.round.2']  = '1/2 finale';
+$lang['football.round.3']  = '1/4 finale';
+$lang['football.round.4']  = '1/8 finale';
+$lang['football.round.5']  = '1/16 finale';
+$lang['football.round.6']  = '1/32 finale';
+$lang['football.round.7']  = '1/64 finale';
 $lang['football.round.of.1']  = 'Finale';
 $lang['football.round.of.2']  = '1/2 finale';
 $lang['football.round.of.4']  = '1/4 finale';
 $lang['football.round.of.8']  = '1/8 finale';
 $lang['football.round.of.16']  = '1/16 finale';
+$lang['football.round.of.32']  = '1/32 finale';
+$lang['football.round.of.64']  = '1/64 finale';
 $lang['football.winner.bracket']  = 'Tableau principal';
 $lang['football.looser.bracket']  = 'Tableau consolante';
+$lang['football.bracket.ranking'] = 'perdant';
+$lang['football.bracket.winner'] = 'gagnant';
+$lang['football.bracket.from.groups'] = 'des groupes';
+$lang['football.bracket.hour.tag'] = 'H';
+
+$lang['football.warning.group.update'] = 'Les groupes de la compétition ont été mis à jour.';
+$lang['football.warning.groups.has.matches'] = 'Les matchs de cette compétition ont été définis. Pour toute modification, si des résultats ont déjà été renseignés, ils seront supprimés.';
 
 // Tables
 $lang['football.th.playground']  = 'Terrain';
@@ -68,25 +82,13 @@ $lang['football.th.goals.for']  = 'B+';
 $lang['football.th.goals.against']  = 'B-';
 $lang['football.th.goal.average']  = 'GA';
 
-// Menu
-$lang['football.menu.compet.group']  = 'Phase de groupes';
-$lang['football.menu.compet.bracket']  = 'Phases finales';
-$lang['football.menu.compet.calendar']  = 'Calendrier';
-$lang['football.menu.compet.results']  = 'Résultats';
-$lang['football.menu.compet.ranking']  = 'Classement';
-$lang['football.menu.compet']  = 'Accueil de la compétition';
-$lang['football.menu.teams']   = 'Gérer les équipes de la compétition';
-$lang['football.menu.groups']  = 'Gérer les groupes de la compétition';
-$lang['football.menu.matches'] = 'Gérer les matches de la compétition';
-$lang['football.menu.results'] = 'Gérer les résultats de la compétition';
-$lang['football.menu.params']  = 'Gérer les paramètres de la compétition';
-
-// Compet management
-$lang['football.groups.management'] = 'Gestion des groupes';
+// Matches
+$lang['football.compet.id'] = 'Id';
 $lang['football.matches.management'] = 'Gestion des matches';
-$lang['football.matches.groups.management'] = 'Phase de groupes';
-$lang['football.matches.final.management'] = 'Phases finales';
-$lang['football.results.management'] = 'Gestion des résultats';
+$lang['football.matches.groups.stage'] = 'Phases de groupes';
+$lang['football.matches.bracket.stage'] = 'Phases finales';
+
+$lang['football.warning.matches.update'] = 'Les matchs de la compétition ont été mis à jour.';
 
 // Divisions
 $lang['football.division']           = 'Division';
@@ -97,10 +99,12 @@ $lang['football.divisions.manager']   = 'Gestion des divisions';
 $lang['football.compet.type']   = 'Type de compétition';
 $lang['football.championship']   = 'Championnat';
 $lang['football.cup']   = 'Coupe';
-$lang['football.tourney']   = 'Tournoi';
+$lang['football.tournament']   = 'Tournoi';
 $lang['football.match.type']   = 'Type de match';
 $lang['football.single.matches']   = 'Matches simples';
 $lang['football.return.matches']   = 'Matches aller-retour';
+$lang['football.first.leg']   = 'Matchs aller';
+$lang['football.second.leg']   = 'Matchs retour';
 $lang['football.warning.delete.division']   = '
 Attention !!!
 
@@ -134,46 +138,16 @@ $lang['football.teams'] = 'Équipes de la compétition';
 $lang['football.clubs.list'] = 'Liste des clubs';
 $lang['football.field'] = 'Terrain';
 
-// Params
-$lang['football.params'] = 'Paramètres de la compétition';
-$lang['football.params.tourney'] = 'Tournois';
-$lang['football.params.bracket'] = 'Phases finales';
-$lang['football.params.ranking'] = 'Classement';
-$lang['football.params.options'] = 'Autres options';
-$lang['football.set.up'] = 'Paramétrer la compétition';
-$lang['football.teams.per.group'] = 'Nombre d\'équipes par groupe';
-$lang['football.fill.matches'] = 'Remplir les matchs automatiquement';
-$lang['football.all.places'] = 'Matchs pour toutes les places';
-$lang['football.display.playgrounds'] = 'Afficher les terrains';
-$lang['football.victory.points'] = 'Points pour une victoire';
-$lang['football.draw.points'] = 'Points pour un match nul';
-$lang['football.loss.points'] = 'Points pour une défaite';
-$lang['football.promotion'] = 'Nomdre d\'équipes promues';
-$lang['football.promotion.color'] = 'Couleur des équipes promues';
-$lang['football.play.off'] = 'Nomdre d\'équipes en barrage';
-$lang['football.play.off.color'] = 'Couleur des équipes en barrage';
-$lang['football.relegation'] = 'Nomdre d\'équipes reléguées';
-$lang['football.relegation.color'] = 'Couleur des équipes reléguées';
-$lang['football.ranking.type'] = 'Mode de calcul du classement';
+$lang['football.warning.add.teams'] = ':teams_number équipes ont été ajoutées à la compétition <strong>:compet_name</strong>.';
+$lang['football.warning.add.teams.odd'] = '
+    Attention! vous avez défini un nombre impair d\'équipes (:teams_number). 
+    Ajoutez ou retirez une équipe ou ajoutez l\'équipe <strong>"Exempt"</strong>.
+';
 
-$lang['football.rounds.number'] = 'Nombre de tours';
-$lang['football.rounds.number.clue'] = 'En phase finale';
-$lang['football.golden.goal'] = 'But en or';
-$lang['football.silver.goal'] = 'But en argent';
-$lang['football.overtime'] = 'Matchs avec prolongations';
-$lang['football.overtime.duration'] = 'Durée des prolongations';
-$lang['football.third.place'] = 'Match pour la troisième place';
-
-$lang['football.minutes.clue'] = 'En minutes';
-$lang['football.match.duration'] = 'Temps de jeu d\'un match';
-$lang['football.sets.mode'] = 'Matchs en sets';
-$lang['football.sets.number'] = 'Nombre de sets';
-$lang['football.bonus'] = 'Bonus offensif/défensif';
-$lang['football.bonus.clue'] = 'Pour le rugby';
-$lang['football.favorite.team'] = 'Équipe favorite';
+$lang['football.warning.teams.has.matches'] = 'Les matchs de cette compétition ont été définis. Pour toute modification, recréez la liste des équipes de groupe et si des résultats ont déjà été renseignés, ils seront supprimés.';
 
 // Mini module sorting
-$lang['football.last.compets']      = 'Les plus récents';
+$lang['football.last.compets'] = 'Les plus récents';
 $lang['football.ranking']         = 'Position';
 
 // Configuration
@@ -187,10 +161,7 @@ $lang['football.config.max.compets.age']   = 'Age maximum (en jours)';
 $lang['football.manage.clubs.auth'] = 'Autorisation de gérer les clubs';
 $lang['football.manage.divisions.auth'] = 'Autorisation de gérer les divisions';
 $lang['football.manage.seasons.auth'] = 'Autorisation de gérer les saisons';
-$lang['football.manage.params.auth'] = 'Autorisation de gérer les paramètres';
-$lang['football.manage.teams.auth'] = 'Autorisation de gérer les équipes';
-$lang['football.manage.matches.auth'] = 'Autorisation de gérer les matches';
-$lang['football.manage.results.auth'] = 'Autorisation de gérer les résultats';
+$lang['football.manage.compets.auth'] = 'Autorisation de gérer les compétitions';
 
 // SEO
 $lang['football.seo.description.root']    = 'Toutes les compétitions en téléchargement du site :site.';

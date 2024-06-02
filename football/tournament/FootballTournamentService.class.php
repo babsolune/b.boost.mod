@@ -7,7 +7,7 @@
  * @since       PHPBoost 6.0 - 2022 12 22
 */
 
-class FootballGroupService
+class FootballTournamentService
 {
 	private static $db_querier;
 	protected static $module_id = 'football';
@@ -26,6 +26,7 @@ class FootballGroupService
     /** build the list of all matches of the competition */
     public static function build_matches_from_groups(int $compet_id) : void
     {
+        $return_matches = FootballCompetService::get_compet_match_type($compet_id) == FootballDivision::RETURN_MATCHES;
         // build groups from compet teams list
         $groups = self::team_list_from_group($compet_id);
         // Build schedule
@@ -37,17 +38,37 @@ class FootballGroupService
         }
         // Build match list
         foreach ($full_schedule as $group => $schedule) {
-            $match_nb = 1;
+            $match_order = 1;
             foreach ($schedule as $round => $matches) {
                 foreach ($matches as $i => $match) {
                     self::$db_querier->insert(FootballSetup::$football_match_table, array(
                         'match_compet_id' => $compet_id,
-                        'match_number' => 'G'. $group . $match_nb,
+                        'match_type' => 'G',
+                        'match_group' => $group,
+                        'match_order' => $match_order,
                         'match_home_id' => FootballParamsService::get_params($compet_id)->get_fill_matches() ? $match[0]['id_team'] : 0,
                         'match_away_id' => FootballParamsService::get_params($compet_id)->get_fill_matches() ? $match[1]['id_team'] : 0,
                         'match_date' => $now->get_timestamp()
                     ));
-                    $match_nb++;
+                    $match_order++;
+                }
+            }
+            if ($return_matches)
+            {
+                $match_order_r = $match_order;
+                foreach ($schedule as $round => $matches) {
+                    foreach ($matches as $i => $match) {
+                        self::$db_querier->insert(FootballSetup::$football_match_table, array(
+                            'match_compet_id' => $compet_id,
+                            'match_type' => 'G',
+                            'match_group' => $group,
+                            'match_order' => $match_order_r,
+                            'match_home_id' => FootballParamsService::get_params($compet_id)->get_fill_matches() ? $match[1]['id_team'] : 0,
+                            'match_away_id' => FootballParamsService::get_params($compet_id)->get_fill_matches() ? $match[0]['id_team'] : 0,
+                            'match_date' => $now->get_timestamp()
+                        ));
+                        $match_order_r++;
+                    }
                 }
             }
         }
@@ -88,20 +109,35 @@ class FootballGroupService
     }
 
     /** Get list of matches in a group */
-    public static function match_list_from_group(int $compet_id, string $stage = '') : array
+    public static function matches_list_from_group(int $compet_id, string $stage = '') : array
     {
         $compet_matches = FootballMatchService::get_matches($compet_id);
         $groups = [];
         foreach($compet_matches as $match)
         {
-            if(TextHelper::substr($match['match_number'], 0, 1) == $stage)
+            if($match['match_type'] == $stage)
             {
-                $group_nb = TextHelper::substr($match['match_number'], 1, TextHelper::strlen($match['match_number']) - 2);
+                $group_nb = $match['match_group'];
                 if(!isset($groups[$group_nb]))
                     $groups[$group_nb] = [];
                 $groups[$group_nb][] = $match;
             }
         }
         return $groups;
+    }
+
+    // Doc of matches
+    public static function build_bracket_js_matches($compet_id, $teams_number, $teams_per_group)
+    {
+        $view = new FileTemplate('football/js/bracket-matches-'.$teams_number.'-'.$teams_per_group.'.tpl');
+        $view->add_lang(LangLoader::get_all_langs('football'));
+
+        $view->put_all(array(
+            'TNB' => $teams_number,
+            'TPG' => $teams_per_group,
+            'C_LOOSER_BRACKET' => FootballParamsService::get_params($compet_id)->get_looser_bracket(),
+            'C_THIRD_PLACE' => FootballParamsService::get_params($compet_id)->get_third_place()
+        ));
+        return $view;
     }
 }

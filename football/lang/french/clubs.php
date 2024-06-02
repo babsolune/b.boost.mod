@@ -2,6 +2,8 @@
 
 $lang['football.club']               = 'Club';
 $lang['football.clubs']              = 'Clubs';
+$lang['football.club.place']         = 'Emplacement du club';
+$lang['football.club.place.clue']    = 'Ville pour un club<br />Pays pour une équipe nationale';
 $lang['football.club.name']          = 'Nom du club';
 $lang['football.club.acronym']       = 'Sigle';
 $lang['football.club.not.specified'] = 'Non renseigné';
@@ -19,6 +21,7 @@ $lang['football.edit.club']          = 'Modifier un club';
 $lang['football.clubs.manager']      = 'Gestion des clubs';
 $lang['football.clubs.no.logo']      = 'Aucun logo';
 $lang['football.alt.logo']           = 'Logo du club :name';
+$lang['football.warning.add.club']   = 'Le club :name à été ajouté';
 $lang['football.warning.delete.club']   = '
 Attention !!!
 

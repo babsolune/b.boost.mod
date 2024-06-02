@@ -29,13 +29,5 @@ class FootballCategoriesCache extends DefaultRichCategoriesCache
 	{
 		return FootballConfig::load()->get_authorizations();
 	}
-	
-	protected function get_root_category_description()
-	{
-		$description = FootballConfig::load()->get_root_category_description();
-		if (empty($description))
-			$description = StringVars::replace_vars(LangLoader::get_message('football.seo.description.root', 'common', 'football'), array('site' => GeneralConfig::load()->get_site_name()));
-		return $description;
-	}
 }
 ?>

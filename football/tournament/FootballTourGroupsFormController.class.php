@@ -7,7 +7,7 @@
  * @since       PHPBoost 6.0 - 2022 12 22
 */
 
-class FootballGroupsFormController extends DefaultModuleController
+class FootballTourGroupsFormController extends DefaultModuleController
 {
     private $compet;
     private $params;
@@ -21,12 +21,13 @@ class FootballGroupsFormController extends DefaultModuleController
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
-			$this->redirect();
+            $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['football.warning.group.update'], MessageHelper::SUCCESS, 4));
 		}
 
 		$this->view->put_all(array(
-            'MENU' => FootballCompetMenuService::build_compet_menu($this->id_compet()),
-            'CONTENT' => $this->form->display()
+            'MENU' => FootballMenuService::build_compet_menu($this->compet_id()),
+            'CONTENT' => $this->form->display(),
+            'HAS_MATCHES_WARNING' => FootballMatchService::has_matches($this->compet_id())? MessageHelper::display($this->lang['football.warning.groups.has.matches'], MessageHelper::NOTICE) : MessageHelper::display('', '')
         ));
 
 		return $this->generate_response($this->view);
@@ -38,20 +39,20 @@ class FootballGroupsFormController extends DefaultModuleController
         $form->set_css_class('cell-flex cell-columns-4');
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['football.groups.management'] . '</div>');
 
-		$teams_number = FootballTeamService::get_compet_teams_number($this->id_compet());
+		$teams_number = FootballTeamService::get_teams_number($this->compet_id());
         $teams_per_group = $this->get_params()->get_teams_per_group();
-        $groups_number = (int)($teams_number / $teams_per_group);
+        $groups_number = $teams_number ? (int)($teams_number / $teams_per_group) : 0;
 
         for ($i = 1; $i <= $groups_number; $i++)
         {
-            $fieldset = new FormFieldsetHTML('group_' . $i, $this->lang['football.group'] . ' ' . FootballGroupService::ntl($i));
+            $fieldset = new FormFieldsetHTML('group_' . $i, $this->lang['football.group'] . ' ' . FootballTournamentService::ntl($i));
             $form->add_fieldset($fieldset);
 
             for ($j = 1; $j <= $teams_per_group; $j++)
             {
-                $team_id = FootballTeamService::get_team_in_group($this->id_compet(), $i . $j) ? FootballTeamService::get_team_in_group($this->id_compet(), $i . $j)->get_id_team() : '';
+                $team_id = FootballTeamService::get_team_in_group($this->compet_id(), $i, $j) ? FootballTeamService::get_team_in_group($this->compet_id(), $i, $j)->get_id_team() : '';
                 $fieldset->add_field(new FormFieldSimpleSelectChoice('group_teams_' . $i . $j, '', $team_id,
-                    $this->get_teams_list($this->id_compet()),
+                    $this->get_teams_list($this->compet_id()),
                     array('class' => 'groups-select')
                 ));
             }
@@ -66,28 +67,37 @@ class FootballGroupsFormController extends DefaultModuleController
 
 	private function save()
 	{
-        $teams_number = FootballTeamService::get_compet_teams_number($this->id_compet());
+        $teams_number = FootballTeamService::get_teams_number($this->compet_id());
         $teams_per_group = $this->get_params()->get_teams_per_group();
         $groups_number = (int)($teams_number / $teams_per_group);
 
         // unselect all teams to manage changes
-        foreach(FootballTeamService::get_teams($this->id_compet()) as $team)
+        foreach(FootballTeamService::get_teams($this->compet_id()) as $team)
         {
-            FootballTeamService::update_team_group($team['id_team'], 0);
+            FootballTeamService::update_team_group($team['id_team'], null, null);
         }
 
+        $count_teams = 0;
         for ($i = 1; $i <= $groups_number; $i++)
         {
             for ($j = 1; $j <= $teams_per_group; $j++)
             {
                 $id = $this->form->get_value('group_teams_' . $i . $j)->get_raw_value();
-                FootballTeamService::update_team_group($id, $i.$j);
+                FootballTeamService::update_team_group($id, $i, $j);
+                if ($this->form->get_value('group_teams_' . $i . $j)->get_raw_value())
+                    $count_teams++;
             }
         }
 
-        if (!$this->get_compet()->get_has_matches())
-            FootballGroupService::build_matches_from_groups($this->id_compet());
-        FootballCompetService::set_matches_flag($this->id_compet());
+        if (!FootballMatchService::has_matches($this->compet_id()) && $count_teams == FootballTeamService::get_teams_number($this->compet_id()))
+        {
+            FootballTournamentService::build_matches_from_groups($this->compet_id());
+        }
+        elseif (FootballMatchService::has_matches($this->compet_id()) && $count_teams == FootballTeamService::get_teams_number($this->compet_id()))
+        {
+            FootballMatchService::delete_matches($this->compet_id());
+            FootballTournamentService::build_matches_from_groups($this->compet_id());
+        }
 
 		FootballCompetService::clear_cache();
 	}
@@ -112,7 +122,7 @@ class FootballGroupsFormController extends DefaultModuleController
         $options = array();
 
         $options[] = new FormFieldSelectChoiceOption('', '');
-		foreach(FootballTeamService::get_teams($this->id_compet()) as $team)
+		foreach(FootballTeamService::get_teams($this->compet_id()) as $team)
 		{
 			$options[] = new FormFieldSelectChoiceOption($team['team_club_name'], $team['id_team']);
 		}
@@ -132,31 +142,19 @@ class FootballGroupsFormController extends DefaultModuleController
 		return $this->compet;
 	}
 
-    private function id_compet()
+    private function compet_id()
     {
         return $this->get_compet()->get_id_compet();
     }
 
 	private function check_authorizations()
 	{
-		// $compet = $this->get_compet();
+		if (!$this->get_compet()->is_authorized_to_manage_compets())
+        {
+            $error_controller = PHPBoostErrors::user_not_authorized();
+            DispatchManager::redirect($error_controller);
+        }
 
-		// if ($compet->get_id_compet() === null)
-		// {
-		// 	if (!$compet->is_authorized_to_manage())
-		// 	{
-		// 		$error_controller = PHPBoostErrors::user_not_authorized();
-		// 		DispatchManager::redirect($error_controller);
-		// 	}
-		// }
-		// else
-		// {
-		// 	if (!$compet->is_authorized_to_manage())
-		// 	{
-		// 		$error_controller = PHPBoostErrors::user_not_authorized();
-		// 		DispatchManager::redirect($error_controller);
-		// 	}
-		// }
 		if (AppContext::get_current_user()->is_readonly())
 		{
 			$controller = PHPBoostErrors::user_in_read_only();
@@ -164,16 +162,12 @@ class FootballGroupsFormController extends DefaultModuleController
 		}
 	}
 
-	private function redirect()
-	{
-		AppContext::get_response()->redirect(FootballUrlBuilder::groups($this->id_compet()));
-	}
-
 	protected function get_template_string_content()
 	{
 		return '
             # INCLUDE MESSAGE_HELPER #
             # INCLUDE MENU #
+            # INCLUDE HAS_MATCHES_WARNING #
             # INCLUDE CONTENT #
         ';
 	}
@@ -195,17 +189,17 @@ class FootballGroupsFormController extends DefaultModuleController
 
         $graphical_environment->set_page_title($this->lang['football.teams.management'], $this->lang['football.module.title']);
         $graphical_environment->get_seo_meta_data()->set_description($this->lang['football.teams.management']);
-        $graphical_environment->get_seo_meta_data()->set_canonical_url(FootballUrlBuilder::groups($compet->get_id_compet()));
+        $graphical_environment->get_seo_meta_data()->set_canonical_url(FootballUrlBuilder::edit_groups($compet->get_id_compet()));
 
         $categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($compet->get_id_category(), true));
         foreach ($categories as $id => $category)
         {
             if ($category->get_id() != Category::ROOT_CATEGORY)
-                $breadcrumb->add($category->get_name(), RecipeUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
+                $breadcrumb->add($category->get_name(), FootballUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
         }
         $category = $compet->get_category();
-        $breadcrumb->add($compet->get_compet_name(), FootballUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $compet->get_id_compet(), $compet->get_compet_slug()));
-        $breadcrumb->add($this->lang['football.teams.management'], FootballUrlBuilder::groups($compet->get_id_compet()));
+        $breadcrumb->add($compet->get_compet_name(), FootballUrlBuilder::calendar($compet->get_id_compet()));
+        $breadcrumb->add($this->lang['football.teams.management'], FootballUrlBuilder::edit_groups($compet->get_id_compet()));
 
 		return $response;
 	}

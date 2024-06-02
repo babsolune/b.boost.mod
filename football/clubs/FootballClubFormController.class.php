@@ -24,6 +24,7 @@ class FootballClubFormController extends DefaultModuleController
 		{
 			$this->save();
 			$this->redirect();
+            $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['football.warning.add.club'], array('name' => $this->get_club()->get_club_name())), MessageHelper::SUCCESS, 4));
 		}
 
 		$this->view->put('CONTENT', $this->form->display());
@@ -39,11 +40,16 @@ class FootballClubFormController extends DefaultModuleController
 		$fieldset = new FormFieldsetHTML('football', $this->lang['form.parameters']);
 		$form->add_fieldset($fieldset);
 
-        $fieldset->add_field(new FormFieldTextEditor('name', $this->lang['football.club.name'], $this->get_club()->get_club_name(), 
-			array('required' => true)
+        $fieldset->add_field(new FormFieldTextEditor('place', $this->lang['football.club.place'], $this->get_club()->get_club_place(), 
+			array(
+                'required' => true,
+                'description' => $this->lang['football.club.place.clue']
+            )
 		));
 
         $fieldset->add_field(new FormFieldTextEditor('acronym', $this->lang['football.club.acronym'], $this->get_club()->get_club_acronym()));
+
+        $fieldset->add_field(new FormFieldTextEditor('name', $this->lang['football.club.name'], $this->get_club()->get_club_name()));
 
         $fieldset->add_field(new FormFieldMailEditor('email', $this->lang['football.club.email'], $this->get_club()->get_club_email()));
 
@@ -84,33 +90,32 @@ class FootballClubFormController extends DefaultModuleController
 		$this->form = $form;
 	}
 
-    private function get_country_files()
-    {
-        $countries_filepath = new Folder(PATH_TO_ROOT . '/football/data');
-        $countries = [];
-        foreach($countries_filepath->get_files() as $country)
-        {
-            $country_file = new File($country->get_path());
-            $countries[] = $country_file->get_name_without_extension();
+	private function save()
+	{
+		$club = $this->get_club();
+
+        $club->set_club_place($this->form->get_value('place'));
+		$club->set_club_slug(Url::encode_rewrite($club->get_club_place()));
+        $club->set_club_acronym($this->form->get_value('acronym'));
+        $club->set_club_name($this->form->get_value('name'));
+        $club->set_club_email($this->form->get_value('email'));
+        $club->set_club_phone($this->form->get_value('phone'));
+        $club->set_club_logo($this->form->get_value('logo'));
+        $club->set_club_locations($this->form->get_value('locations'));
+        $club->set_club_map_display($this->form->get_value('map_display'));
+
+		if ($this->is_new_club)
+		{
+			$id = FootballClubService::add_club($club);
+			$club->set_id_club($id);
         }
-        $countries = '["' . implode('","', $countries) . '"]';
-        return $countries;
-    }
-
-    private function get_countries_list()
-    {
-		$countries = array();
-		$countries[] = new FormFieldSelectChoiceOption('', '');
-
-        $countries_lang = LangLoader::get('countries');
-        foreach($countries_lang as $code => $name)
-        {
-            $countries[] = new FormFieldSelectChoiceOption($code . ' - ' . $name, $code);
+		else
+		{
+			FootballClubService::update_club($club);
         }
 
-        sort($countries);
-        return $countries;
-    }
+		FootballCompetService::clear_cache();
+	}
 
 	private function get_club()
 	{
@@ -163,36 +168,6 @@ class FootballClubFormController extends DefaultModuleController
 		}
 	}
 
-	private function save()
-	{
-		$club = $this->get_club();
-
-        $club->set_club_name($this->form->get_value('name'));
-		$club->set_club_slug(Url::encode_rewrite($club->get_club_name()));
-        $club->set_club_acronym($this->form->get_value('acronym'));
-        $club->set_club_email($this->form->get_value('email'));
-        $club->set_club_phone($this->form->get_value('phone'));
-        $club->set_club_logo($this->form->get_value('logo'));
-        if($this->form->get_value('country'))
-            $club->set_club_country($this->form->get_value('country')->get_raw_value());
-        if($this->form->get_value('league'))
-            $club->set_club_league($this->form->get_value('league')->get_raw_value());
-        $club->set_club_locations($this->form->get_value('locations'));
-        $club->set_club_map_display($this->form->get_value('map_display'));
-
-		if ($this->is_new_club)
-		{
-			$id = FootballClubService::add_club($club);
-			$club->set_id_club($id);
-        }
-		else
-		{
-			FootballClubService::update_club($club);
-        }
-
-		FootballCompetService::clear_cache();
-	}
-
 	private function redirect()
 	{
 		$club = $this->get_club();
@@ -231,7 +206,8 @@ class FootballClubFormController extends DefaultModuleController
 			$graphical_environment->get_seo_meta_data()->set_description($this->lang['football.edit.club']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(FootballUrlBuilder::edit_club($club->get_id_club()));
 
-			$breadcrumb->add($club->get_club_name(), '');
+            $breadcrumb->add($this->lang['football.clubs.manager'], FootballUrlBuilder::manage_clubs());
+			$breadcrumb->add($club->get_club_name() ? $club->get_club_name() : $club->get_club_place(), FootballUrlBuilder::display_club($club->get_id_club()));
 			$breadcrumb->add($this->lang['football.edit.club'], FootballUrlBuilder::edit_club($club->get_id_club()));
 		}
 

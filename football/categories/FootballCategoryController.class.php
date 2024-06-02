@@ -48,17 +48,17 @@ class FootballCategoryController extends DefaultModuleController
 		{
 			$categories_number_displayed++;
 
-            $category_thumbnail = $category->get_thumbnail()->rel();
+            // $category_thumbnail = $category->get_thumbnail()->rel();
 
             $this->view->assign_block_vars('sub_categories_list', array(
-                'C_CATEGORY_THUMBNAIL' => !empty($category_thumbnail),
+                // 'C_CATEGORY_THUMBNAIL' => !empty($category_thumbnail),
                 'C_SEVERAL_ITEMS'      => $category->get_elements_number() > 1,
 
                 'CATEGORY_ID'          => $category->get_id(),
                 'CATEGORY_NAME'        => $category->get_name(),
                 'CATEGORY_PARENT_ID'   => $category->get_id_parent(),
                 'CATEGORY_SUB_ORDER'   => $category->get_order(),
-                'U_CATEGORY_THUMBNAIL' => $category_thumbnail,
+                // 'U_CATEGORY_THUMBNAIL' => $category_thumbnail,
                 'ITEMS_NUMBER'         => $category->get_elements_number(),
                 'U_CATEGORY'           => FootballUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
             ));
@@ -75,21 +75,21 @@ class FootballCategoryController extends DefaultModuleController
 		FROM ' . FootballSetup::$football_compet_table . ' compet
 		LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = compet.author_user_id
 		' . $condition . '
-		ORDER BY compet.id_compet', array_merge($params, array(
+		ORDER BY compet.compet_name DESC', array_merge($params, array(
 			'user_id' => AppContext::get_current_user()->get_id()
 		)));
 
-		$category_description = FormatingHelper::second_parse($this->get_category()->get_description());
+		// $category_description = FormatingHelper::second_parse($this->get_category()->get_description());
 
 		$this->view->put_all(array(
 			'C_ITEMS'                    => $result->get_rows_count() > 0,
 			'C_SEVERAL_ITEMS'            => $result->get_rows_count() > 1,
-			'C_CATEGORY_DESCRIPTION'     => !empty($category_description),
+			// 'C_CATEGORY_DESCRIPTION'     => !empty($category_description),
 			'C_ENABLED_COMMENTS'         => $this->comments_config->module_comments_is_enabled('football'),
 			'C_ENABLED_NOTATION'         => $this->content_management_config->module_notation_is_enabled('football'),
 			'C_CONTROLS'                 => FootballAuthorizationsService::check_authorizations($this->get_category()->get_id())->moderation(),
 			'C_CATEGORY'                 => true,
-			'C_CATEGORY_THUMBNAIL' 		 => !$this->get_category()->get_id() == Category::ROOT_CATEGORY && !empty($this->get_category()->get_thumbnail()->rel()),
+			// 'C_CATEGORY_THUMBNAIL' 		 => !$this->get_category()->get_id() == Category::ROOT_CATEGORY && !empty($this->get_category()->get_thumbnail()->rel()),
 			'C_ROOT_CATEGORY'            => $this->get_category()->get_id() == Category::ROOT_CATEGORY,
 			'C_HIDE_NO_ITEM_MESSAGE'     => $this->get_category()->get_id() == Category::ROOT_CATEGORY && ($categories_number_displayed != 0 || !empty($category_description)),
 			'C_SUB_CATEGORIES'           => $categories_number_displayed > 0,
@@ -99,9 +99,9 @@ class FootballCategoryController extends DefaultModuleController
 			'CATEGORY_NAME'            => $this->get_category()->get_name(),
 			'CATEGORY_PARENT_ID' 	   => $this->get_category()->get_id_parent(),
 			'CATEGORY_SUB_ORDER' 	   => $this->get_category()->get_order(),
-			'CATEGORY_DESCRIPTION'     => $category_description,
+			// 'CATEGORY_DESCRIPTION'     => $category_description,
 
-			'U_CATEGORY_THUMBNAIL' => $this->get_category()->get_thumbnail()->rel(),
+			// 'U_CATEGORY_THUMBNAIL' => $this->get_category()->get_thumbnail()->rel(),
 			'U_EDIT_CATEGORY'  	   => $this->get_category()->get_id() == Category::ROOT_CATEGORY ? FootballUrlBuilder::configuration()->rel() : CategoriesUrlBuilder::edit($this->get_category()->get_id(), 'football')->rel()
 		));
 
@@ -142,7 +142,7 @@ class FootballCategoryController extends DefaultModuleController
 	{
 		if (AppContext::get_current_user()->is_guest())
 		{
-			if (($this->config->is_summary_displayed_to_guests() && (!Authorizations::check_auth(RANK_TYPE, User::MEMBER_LEVEL, $this->get_category()->get_authorizations(), Category::READ_AUTHORIZATIONS) || $this->config->get_display_type() == FootballConfig::LIST_VIEW)) || (!$this->config->is_summary_displayed_to_guests() && !FootballAuthorizationsService::check_authorizations($this->get_category()->get_id())->read()))
+			if (!FootballAuthorizationsService::check_authorizations($this->get_category()->get_id())->manage_compets())
 			{
 				$error_controller = PHPBoostErrors::user_not_authorized();
 				DispatchManager::redirect($error_controller);
@@ -150,7 +150,7 @@ class FootballCategoryController extends DefaultModuleController
 		}
 		else
 		{
-			if (!FootballAuthorizationsService::check_authorizations($this->get_category()->get_id())->read())
+			if (!FootballAuthorizationsService::check_authorizations($this->get_category()->get_id())->read() || !FootballAuthorizationsService::check_authorizations($this->get_category()->get_id())->manage_compets())
 			{
 				$error_controller = PHPBoostErrors::user_not_authorized();
 				DispatchManager::redirect($error_controller);
@@ -170,10 +170,10 @@ class FootballCategoryController extends DefaultModuleController
 		else
 			$graphical_environment->set_page_title($this->lang['football.module.title'], '', $page);
 
-		$description = $this->get_category()->get_description();
-		if (empty($description))
-			$description = StringVars::replace_vars($this->lang['football.seo.description.root'], array('site' => GeneralConfig::load()->get_site_name())) . ($this->get_category()->get_id() != Category::ROOT_CATEGORY ? ' ' . $this->lang['category.category'] . ' ' . $this->get_category()->get_name() : '');
-		$graphical_environment->get_seo_meta_data()->set_description($description, $page);
+		// $description = $this->get_category()->get_description();
+		// if (empty($description))
+		// 	$description = StringVars::replace_vars($this->lang['football.seo.description.root'], array('site' => GeneralConfig::load()->get_site_name())) . ($this->get_category()->get_id() != Category::ROOT_CATEGORY ? ' ' . $this->lang['category.category'] . ' ' . $this->get_category()->get_name() : '');
+		// $graphical_environment->get_seo_meta_data()->set_description($description, $page);
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(FootballUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name(), $page));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();

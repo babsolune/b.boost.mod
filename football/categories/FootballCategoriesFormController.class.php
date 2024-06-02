@@ -50,13 +50,13 @@ class FootballCategoriesFormController extends DefaultCategoriesFormController
 			$fieldset->add_field(self::$categories_manager->get_select_categories_form_field('id_parent', self::$lang['category.location'], $this->get_category()->get_id_parent(), $search_category_children_options));
 		}
 
-		$fieldset->add_field(new FormFieldThumbnail('thumbnail', self::$lang['form.thumbnail'], $this->get_category()->get_thumbnail()->relative(), FootballCategory::THUMBNAIL_URL,
-			array()
-		));
+		// $fieldset->add_field(new FormFieldThumbnail('thumbnail', self::$lang['form.thumbnail'], $this->get_category()->get_thumbnail()->relative(), FootballCategory::THUMBNAIL_URL,
+		// 	array()
+		// ));
 
-		$fieldset->add_field(new FormFieldRichTextEditor('description', self::$lang['form.description'], $this->get_category()->get_description(),
-			array()
-		));
+		// $fieldset->add_field(new FormFieldRichTextEditor('description', self::$lang['form.description'], $this->get_category()->get_description(),
+		// 	array()
+		// ));
 
 		$fieldset_authorizations = new FormFieldsetHTML('authorizations_fieldset', self::$lang['form.authorizations']);
 		$form->add_fieldset($fieldset_authorizations);
@@ -79,6 +79,7 @@ class FootballCategoriesFormController extends DefaultCategoriesFormController
 			<script>
 				<!--
 					jQuery(document).ready(function() {
+						jQuery("#' . __CLASS__ . '_authorizations > div").eq(2).hide();
 						jQuery("#' . __CLASS__ . '_authorizations > div").eq(4).hide();
 					});
 				-->
@@ -89,13 +90,10 @@ class FootballCategoriesFormController extends DefaultCategoriesFormController
             array_merge(
                 RootCategory::get_authorizations_settings(),
                 array(
-                    new VisitorDisabledActionAuthorization(self::$lang['football.manage.divisions.auth'], FootballAuthorizationsService::MANAGE_DIVISIONS_AUTHORIZATIONS),
-                    new VisitorDisabledActionAuthorization(self::$lang['football.manage.clubs.auth'], FootballAuthorizationsService::MANAGE_CLUBS_AUTHORIZATIONS),
-                    new VisitorDisabledActionAuthorization(self::$lang['football.manage.seasons.auth'], FootballAuthorizationsService::MANAGE_SEASONS_AUTHORIZATIONS),
-                    new VisitorDisabledActionAuthorization(self::$lang['football.manage.params.auth'], FootballAuthorizationsService::MANAGE_PARAMETERS_AUTHORIZATIONS),
-                    new VisitorDisabledActionAuthorization(self::$lang['football.manage.teams.auth'], FootballAuthorizationsService::MANAGE_TEAMS_AUTHORIZATIONS),
-                    new VisitorDisabledActionAuthorization(self::$lang['football.manage.matches.auth'], FootballAuthorizationsService::MANAGE_MATCHES_AUTHORIZATIONS),
-                    new VisitorDisabledActionAuthorization(self::$lang['football.manage.results.auth'], FootballAuthorizationsService::MANAGE_RESULTS_AUTHORIZATIONS)
+                    new MemberDisabledActionAuthorization(self::$lang['football.manage.clubs.auth'], FootballAuthorizationsService::CLUBS_AUTHORIZATIONS),
+                    new MemberDisabledActionAuthorization(self::$lang['football.manage.divisions.auth'], FootballAuthorizationsService::DIVISIONS_AUTHORIZATIONS),
+                    new MemberDisabledActionAuthorization(self::$lang['football.manage.seasons.auth'], FootballAuthorizationsService::SEASONS_AUTHORIZATIONS),
+                    new MemberDisabledActionAuthorization(self::$lang['football.manage.compets.auth'], FootballAuthorizationsService::COMPETITION_AUTHORIZATIONS)
                 )
             )
         );
@@ -130,7 +128,7 @@ class FootballCategoriesFormController extends DefaultCategoriesFormController
 
 	protected function check_authorizations()
 	{
-		if (!FootballAuthorizationsService::check_authorizations()->manage())
+		if (!FootballAuthorizationsService::check_authorizations()->manage_compets())
 		{
 			$error_controller = PHPBoostErrors::user_not_authorized();
 			DispatchManager::redirect($error_controller);

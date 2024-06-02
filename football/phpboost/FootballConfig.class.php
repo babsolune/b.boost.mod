@@ -9,19 +9,40 @@
 
 class FootballConfig extends AbstractConfigData
 {
-	const ROOT_CATEGORY_DESCRIPTION = 'root_category_description';
-	const AUTHORIZATIONS = 'authorizations';
+	const LEFT_COLUMN_DISABLED  = 'left_column_disabled';
+	const RIGHT_COLUMN_DISABLED = 'right_column_disabled';
+	const AUTHORIZATIONS        = 'authorizations';
 
 	const DEFERRED_OPERATIONS = 'deferred_operations';
 
-	public function get_root_category_description()
+	public function disable_left_column()
 	{
-		return $this->get_property(self::ROOT_CATEGORY_DESCRIPTION);
+		$this->set_property(self::LEFT_COLUMN_DISABLED, true);
 	}
 
-	public function set_root_category_description($value)
+	public function enable_left_column()
 	{
-		$this->set_property(self::ROOT_CATEGORY_DESCRIPTION, $value);
+		$this->set_property(self::LEFT_COLUMN_DISABLED, false);
+	}
+
+	public function is_left_column_disabled()
+	{
+		return $this->get_property(self::LEFT_COLUMN_DISABLED);
+	}
+
+	public function disable_right_column()
+	{
+		$this->set_property(self::RIGHT_COLUMN_DISABLED, true);
+	}
+
+	public function enable_right_column()
+	{
+		$this->set_property(self::RIGHT_COLUMN_DISABLED, false);
+	}
+
+	public function is_right_column_disabled()
+	{
+		return $this->get_property(self::RIGHT_COLUMN_DISABLED);
 	}
 
 	public function get_authorizations()
@@ -51,11 +72,12 @@ class FootballConfig extends AbstractConfigData
 
 	public function get_default_values()
 	{
-		return array(
-			self::ROOT_CATEGORY_DESCRIPTION             => CategoriesService::get_default_root_category_description('football'),
-			self::AUTHORIZATIONS                        => array('r-1' => 33, 'r0' => 37, 'r1' => 61),
-			self::DEFERRED_OPERATIONS                   => array()
-		);
+		return [
+			self::LEFT_COLUMN_DISABLED  => false,
+			self::RIGHT_COLUMN_DISABLED => false,
+			self::AUTHORIZATIONS        => ['r-1' => 1, 'r0' => 5, 'r1' => 29],
+			self::DEFERRED_OPERATIONS   => []
+        ];
 	}
 
 	/**

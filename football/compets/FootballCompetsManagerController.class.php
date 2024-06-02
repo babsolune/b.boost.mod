@@ -28,7 +28,7 @@ class FootballCompetsManagerController extends DefaultModuleController
 		$display_categories = CategoriesService::get_categories_manager()->get_categories_cache()->has_categories();
 
 		$columns = array(
-			new HTMLTableColumn($this->lang['football.compet'], 'id_compet'),
+			new HTMLTableColumn($this->lang['football.compet.id'], 'id_compet'),
 			new HTMLTableColumn($this->lang['category.category'], 'id_category'),
 			new HTMLTableColumn($this->lang['football.division'], 'division_name'),
 			new HTMLTableColumn($this->lang['football.season'], 'season_name'),
@@ -39,7 +39,7 @@ class FootballCompetsManagerController extends DefaultModuleController
 		if (!$display_categories)
 			unset($columns[1]);
 
-		$table_model = new SQLHTMLTableModel(FootballSetup::$football_compet_table, 'compets-manager', $columns, new HTMLTableSortingRule('creation_date', HTMLTableSortingRule::DESC));
+		$table_model = new SQLHTMLTableModel(FootballSetup::$football_compet_table, 'compets-manager', $columns, new HTMLTableSortingRule('season_name', HTMLTableSortingRule::DESC));
 
 		$table_model->set_layout_title($this->lang['football.compets.management']);
 
@@ -77,10 +77,10 @@ class FootballCompetsManagerController extends DefaultModuleController
 			$delete_link = new DeleteLinkHTMLElement(FootballUrlBuilder::delete($compet->get_id_compet()));
 
 			$user_group_color = User::get_group_color($user->get_groups(), $user->get_level(), true);
-			$author = $user->get_id() !== User::AWAYOR_LEVEL ? new LinkHTMLElement(UserUrlBuilder::profile($user->get_id()), $user->get_display_name(), (!empty($user_group_color) ? array('style' => 'color: ' . $user_group_color) : array()), UserService::get_level_class($user->get_level())) : $user->get_display_name();
+			$author = $user->get_id() !== User::VISITOR_LEVEL ? new LinkHTMLElement(UserUrlBuilder::profile($user->get_id()), $user->get_display_name(), (!empty($user_group_color) ? array('style' => 'color: ' . $user_group_color) : array()), UserService::get_level_class($user->get_level())) : $user->get_display_name();
 
 			$row = array(
-				new HTMLTableRowCell(new LinkHTMLElement(FootballUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $compet->get_id_compet(), $compet->get_compet_slug()), '<i class="fa fa-eye"></i>'), 'left'),
+				new HTMLTableRowCell(new LinkHTMLElement(FootballUrlBuilder::calendar($compet->get_id_compet()),'#' . $compet->get_id_compet())),
 				new HTMLTableRowCell(new LinkHTMLElement(FootballUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()), ($category->get_id() == Category::ROOT_CATEGORY ? $this->lang['common.none.alt'] : $category->get_name()))),
 				new HTMLTableRowCell($row['division_name']),
 				new HTMLTableRowCell($row['season_name']),

@@ -63,9 +63,11 @@
 										<div class="flex-between toggle-menu-button-{categories.CATEGORY_ID}">
 											<div class="categories-item flex-between">
 												<span><i class="far fa-fw fa-folder" aria-hidden="true"></i> {categories.CATEGORY_NAME}</span>
-												<span class="small" aria-label="{@items.number}">({categories.ITEMS_NUMBER})</span>
 											</div>
-											<a class="offload" href="{categories.U_CATEGORY}" aria-label="{categories.CATEGORY_NAME}"><i class="fa fa-fw fa-caret-right" aria-hidden="true"></i></a>
+											<a class="offload" href="{categories.U_CATEGORY}" aria-label="{@football.category.history}">
+                                                <i class="fa fa-fw fa-clock-rotate-left" aria-hidden="true"></i>
+												<span class="small">({categories.ITEMS_NUMBER})</span>
+                                            </a>
 										</div>
 										# IF categories.C_ITEMS #
 											<ul class="items-list-{categories.CATEGORY_ID}">

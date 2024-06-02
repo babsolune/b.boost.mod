@@ -14,7 +14,6 @@ class FootballParams
 	private $teams_per_group;
 	private $fill_matches;
 	private $looser_bracket;
-	private $all_places;
 	private $display_playgrounds;
 	private $victory_points;
 	private $draw_points;
@@ -29,7 +28,7 @@ class FootballParams
 	private $match_duration;
 
 	private $rounds_number;
-	private $overtime;
+	private $has_overtime;
 	private $overtime_duration;
 	private $third_place;
 	private $golden_goal;
@@ -88,16 +87,6 @@ class FootballParams
 	public function set_looser_bracket($looser_bracket)
 	{
 		$this->looser_bracket = $looser_bracket;
-	}
-
-	public function get_all_places()
-	{
-		return $this->all_places;
-	}
-
-	public function set_all_places($all_places)
-	{
-		$this->all_places = $all_places;
 	}
 
 	public function get_display_playgrounds()
@@ -230,14 +219,14 @@ class FootballParams
 		$this->rounds_number = $rounds_number;
 	}
 
-	public function get_overtime()
+	public function get_has_overtime()
 	{
-		return $this->overtime;
+		return $this->has_overtime;
 	}
 
-	public function set_overtime($overtime)
+	public function set_has_overtime($has_overtime)
 	{
-		$this->overtime = $overtime;
+		$this->has_overtime = $has_overtime;
 	}
 
 	public function get_overtime_duration()
@@ -322,7 +311,7 @@ class FootballParams
 
 	public function is_authorized_to_manage_params()
 	{
-		return FootballAuthorizationsService::check_authorizations()->manage_seasons();
+		return FootballAuthorizationsService::check_authorizations()->manage_compets();
 	}
 
 	public function get_properties()
@@ -333,7 +322,6 @@ class FootballParams
 			'teams_per_group' => $this->get_teams_per_group(),
 			'fill_matches' => $this->get_fill_matches(),
 			'looser_bracket' => $this->get_looser_bracket(),
-			'all_places' => $this->get_all_places(),
 			'display_playgrounds' => $this->get_display_playgrounds(),
 			'victory_points' => $this->get_victory_points(),
 			'draw_points' => $this->get_draw_points(),
@@ -347,7 +335,7 @@ class FootballParams
 			'ranking_type' => $this->get_ranking_type(),
 			'match_duration' => $this->get_match_duration(),
 			'rounds_number' => $this->get_rounds_number(),
-			'overtime' => $this->get_overtime(),
+			'has_overtime' => $this->get_has_overtime(),
 			'overtime_duration' => $this->get_overtime_duration(),
 			'third_place' => $this->get_third_place(),
 			'golden_goal' => $this->get_golden_goal(),
@@ -366,7 +354,6 @@ class FootballParams
 		$this->teams_per_group = $properties['teams_per_group'];
 		$this->fill_matches = $properties['fill_matches'];
 		$this->looser_bracket = $properties['looser_bracket'];
-		$this->all_places = $properties['all_places'];
 		$this->display_playgrounds = $properties['display_playgrounds'];
 		$this->victory_points = $properties['victory_points'];
 		$this->draw_points = $properties['draw_points'];
@@ -380,7 +367,7 @@ class FootballParams
 		$this->ranking_type = $properties['ranking_type'];
 		$this->match_duration = $properties['match_duration'];
 		$this->rounds_number = $properties['rounds_number'];
-		$this->overtime = $properties['overtime'];
+		$this->has_overtime = $properties['has_overtime'];
 		$this->overtime_duration = $properties['overtime_duration'];
 		$this->third_place = $properties['third_place'];
 		$this->golden_goal = $properties['golden_goal'];

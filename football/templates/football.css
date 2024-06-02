@@ -4,36 +4,86 @@
 */
 
 /* common */
+@media (min-width: 769px) {
+    .floating-message-container {
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+.responsive {
+    width: 100%;
+    overflow-x: scroll;
+}
+.responsive .cell-flex {
+    flex-wrap: nowrap;
+}
 .has-score-color td {
     background-color: var(--bgc-sub);
 }
-
 /* compet menu */
 .compet-menu {
     margin-top: 0.618em;
 }
 
 /* --- Form --- */
-.form-spacer {
-    font-size: 1.618em;
-}
-
-.checkbox-list-inline .form-field {
-    display: inline-flex;
-    flex-wrap: wrap;
+.fieldset-submit {
     width: 100%;
 }
 
-.checkbox-list-inline .form-field-checkbox {
+.floating-submit { position: relative;}
+
+.floating-submit .fieldset-submit {
+    width: auto;
+    position: fixed;
+    bottom: 0.618em;
+    right: 0.618em;
+    margin: 0;
+    padding: 0;
+}
+
+.floating-submit .fieldset-inset {
+    padding: 0;
+}
+
+.form-spacer {
+    font-size: 1.309em;
+}
+.form-spacer-big {
+    font-size: 1.618em;
+}
+
+.teams-checkbox .form-field {
+    width: 100%;
+}
+
+@media (min-width: 769px) {
+    .teams-checkbox .form-field-multiple-checkbox {
+        columns: 2;
+    }
+}
+@media (min-width: 1025px) {
+    .teams-checkbox .form-field-multiple-checkbox {
+        columns: 4;
+    }
+}
+
+.teams-checkbox .form-field-checkbox {
     padding: 0.309em;
-    margin: 0 0.618em 0.618em 0;
+    margin: 0 0 0.309em;
     border-width: 1px;
     border-style: solid;
     border-color: var(--bdr-main);
 }
+.teams-checkbox .form-field-checkbox .checkbox {
+    display: flex;
+}
+.teams-checkbox .form-field-checkbox .checkbox input {
+    margin-right: 0.309em;
+}
 
 /* params */
-.params-form .fieldset-submit {
+.params-form .fieldset-submit,
+.params-form p {
     width: 100%;
 }
 
@@ -96,8 +146,8 @@
 .grouped-selects .form-element.home-select  { width: 50%; }
 .grouped-selects .form-element.away-select { width: 50%; }
 @media (min-width: 1366px) {
-    .grouped-selects .form-element.free-select  { width: 7%; }
-    .grouped-selects .form-element.date-select  { width: 25%; }
+    .grouped-selects .form-element.free-select  { width: 9%; }
+    .grouped-selects .form-element.date-select  { width: 23%; }
     .grouped-selects .form-element.playground { width: 8%; }
     .grouped-selects .form-element.home-select  { width: 25%; }
     .grouped-selects .form-element.home-bracket  { width: 20%; }
@@ -121,14 +171,24 @@
 /* --- /Form --- */
 
 /* front */
-.finals-round-title {
+.bracket-round {
+    display: flex;
+    flex-direction: column;
+}
+
+.bracket-round-title {
     text-align: center;
 }
 
-.finals-round > * {
+.bracket-round-matches {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+}
+
+.bracket-round:last-child .bracket-round-matches {
+    justify-content: center;
 }
 
 .row-header{
@@ -137,32 +197,33 @@
     align-items: center;
 }
 
-.finals-match {
+.bracket-match {
     margin-top: 0.309em;
     border: 1px solid var(--bdr-main);
 }
 
-.finals-team {
+.bracket-team,
+.bracket-details {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-
-.finals-details{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.bracket-details > *,
+.bracket-team > * {
     padding: 0.309em;
 }
-.finals-home,
-.finals-away {
-    padding: 0.309em;
-}
-.finals-away {
+.bracket-away {
     border-top: 1px solid var(--bdr-main);
 }
 
-.finals-highlight {
+.bracket-score {
+    background-color: var(--bgc-sub);
+    color: var(--txt-sub);
+    text-align: center;
+    min-width: 2.618em;
+}
+
+.bracket-highlight {
     background-color: var(--bgc-alt) !important;
     color: var(--txt-alt) !important;
 }
@@ -178,11 +239,6 @@
 .medium-logo  { max-width: 64px; }
 .big-logo 	  { max-width: 96px; }
 .bigger-logo  { max-width: 128px; }
-
-/*
-* Copy this file into your theme to customize the module.
-* https://www.phpboost.com/wiki/structure-d-un-theme#paragraph-le-repertoire-modules
-*/
 
 .root-list,
 .football-list ul {
@@ -236,4 +292,38 @@
 	opacity: 1;
 	visibility: visible;
 	height: auto;
+}
+
+/* bracket */
+.cell-bracket {
+    display: flex;
+    flex-direction: column;
+	/* flex-wrap: wrap; */
+    width: 100%;
+    overflow: scroll;
+}
+
+.cell-bracket::before,
+.cell-bracket::after {
+	display: block;
+	clear: both;
+	content: "";
+}
+
+.cell-bracket > * {
+	width: 100%;
+	margin: 0 0 var(--cell-gap);
+}
+
+@media (min-width: 1025px) {
+    .cell-bracket {
+        flex-direction: row;
+		margin: 0 var(--cell-container-gap) 0 0;
+    }
+
+    .cell-bracket > * {
+        width: 320px;
+        margin: 0 var(--cell-gap) var(--cell-gap) 0;
+        flex-shrink: 0;
+    }
 }

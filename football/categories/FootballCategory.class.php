@@ -9,48 +9,48 @@
 
 class FootballCategory extends Category
 {
-	const THUMBNAIL_URL = '/templates/__default__/images/default_category.webp';
+	// const THUMBNAIL_URL = '/templates/__default__/images/default_category.webp';
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->set_additional_property('description', '');
-		$this->set_additional_property('thumbnail', FormFieldThumbnail::DEFAULT_VALUE);
+		// $this->set_additional_property('description', '');
+		// $this->set_additional_property('thumbnail', FormFieldThumbnail::DEFAULT_VALUE);
 	}
 
-	protected function set_additional_attributes_list()
-	{
-		$this->add_additional_attribute('description', array('type' => 'text', 'length' => 65000));
-		$this->add_additional_attribute('thumbnail', array(
-			'type'    => 'string',
-			'length'  => 255,
-			'notnull' => 1,
-			'default' => "''",
-			'attribute_field_params' => array(
-				'field_class'     => 'FormFieldThumbnail',
-				'label'           => LangLoader::get_message('form.thumbnail', 'form-lang'),
-				'default_value'   => FormFieldThumbnail::DEFAULT_VALUE,
-				'default_picture' => self::THUMBNAIL_URL
-			)
-		));
-	}
+	// protected function set_additional_attributes_list()
+	// {
+	// 	$this->add_additional_attribute('description', array('type' => 'text', 'length' => 65000));
+	// 	$this->add_additional_attribute('thumbnail', array(
+	// 		'type'    => 'string',
+	// 		'length'  => 255,
+	// 		'notnull' => 1,
+	// 		'default' => "''",
+	// 		'attribute_field_params' => array(
+	// 			'field_class'     => 'FormFieldThumbnail',
+	// 			'label'           => LangLoader::get_message('form.thumbnail', 'form-lang'),
+	// 			'default_value'   => FormFieldThumbnail::DEFAULT_VALUE,
+	// 			'default_picture' => self::THUMBNAIL_URL
+	// 		)
+	// 	));
+	// }
 
-	public function get_description()
-	{
-		return $this->get_additional_property('description');
-	}
+	// public function get_description()
+	// {
+	// 	return $this->get_additional_property('description');
+	// }
 
-	public function get_thumbnail()
-	{
-		if (!$this->get_additional_property('thumbnail') instanceof Url)
-			return new Url($this->get_additional_property('thumbnail') == FormFieldThumbnail::DEFAULT_VALUE ? FormFieldThumbnail::get_default_thumbnail_url(self::THUMBNAIL_URL) : $this->get_additional_property('thumbnail'));
+	// public function get_thumbnail()
+	// {
+	// 	if (!$this->get_additional_property('thumbnail') instanceof Url)
+	// 		return new Url($this->get_additional_property('thumbnail') == FormFieldThumbnail::DEFAULT_VALUE ? FormFieldThumbnail::get_default_thumbnail_url(self::THUMBNAIL_URL) : $this->get_additional_property('thumbnail'));
 
-		return $this->get_additional_property('thumbnail');
-	}
+	// 	return $this->get_additional_property('thumbnail');
+	// }
 
-	protected function set_additional_properties(array $properties)
-	{
-		parent::set_additional_properties($properties);
-	}
+	// protected function set_additional_properties(array $properties)
+	// {
+	// 	parent::set_additional_properties($properties);
+	// }
 }
 ?>

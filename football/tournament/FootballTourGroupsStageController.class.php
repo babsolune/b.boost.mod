@@ -7,12 +7,12 @@
  * @since       PHPBoost 6.0 - 2022 12 22
 */
 
-class FootballTourneyGroupsController extends DefaultModuleController
+class FootballTourGroupsStageController extends DefaultModuleController
 {
     private $compet;
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('football/FootballTourneyGroupsController.tpl');
+		return new FileTemplate('football/FootballTournamentGroupsController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
@@ -20,37 +20,27 @@ class FootballTourneyGroupsController extends DefaultModuleController
 		$this->build_view();
 		$this->check_authorizations();
 
-        $this->view->put('C_ONE_DAY', FootballMatchService::one_day_compet($this->id_compet()));
+        $this->view->put('C_ONE_DAY', FootballMatchService::one_day_compet($this->compet_id()));
 
 		return $this->generate_response();
 	}
 
 	private function build_view()
 	{
-        $groups = FootballGroupService::match_list_from_group($this->id_compet(), 'G');
+        $groups = FootballTournamentService::matches_list_from_group($this->compet_id(), 'G');
 
         foreach ($groups as $group => $matches)
         {
             $this->view->assign_block_vars('groups',array(
-                'GROUP' => FootballGroupService::ntl($group)
+                'GROUP' => FootballTournamentService::ntl((int)$group)
             ));
             $ranks = [];
             foreach ($matches as $match)
             {
-                $c_home_score = $match['match_home_score'] != '';
-                $c_away_score = $match['match_away_score'] != '';
+                $item = new FootballMatch();
+                $item->set_properties($match);
 
-                $this->view->assign_block_vars('groups.matches', array_merge(
-                    Date::get_array_tpl_vars(new Date($match['match_date'], Timezone::SERVER_TIMEZONE), 'match_date'),
-                    array(
-                        'C_HAS_SCORE' => $c_home_score && $c_away_score,
-                        'PLAYGROUND' => $match['match_playground'],
-                        'HOME_TEAM' => !empty($match['match_home_id']) ? FootballTeamService::get_team($match['match_home_id'])->get_team_club_name() : '',
-                        'HOME_SCORE' => $match['match_home_score'],
-                        'AWAY_SCORE' => $match['match_away_score'],
-                        'AWAY_TEAM' => !empty($match['match_home_id']) ? FootballTeamService::get_team($match['match_away_id'])->get_team_club_name() : ''
-                    )
-                ));
+                $this->view->assign_block_vars('groups.matches', $item->get_array_tpl_vars());
 
                 $ranks[] = [
                     'team_id' => $match['match_home_id'],
@@ -70,17 +60,17 @@ class FootballTourneyGroupsController extends DefaultModuleController
                 $points = $played = $win = $draw = $loss = 0;
                 if ($ranks[$i]['goals_for'] > $ranks[$i]['goals_against'])
                 {
-                    $points = FootballParamsService::get_params($this->id_compet())->get_victory_points();
+                    $points = FootballParamsService::get_params($this->compet_id())->get_victory_points();
                     $win = $played = 1;
                 }
                 elseif ($ranks[$i]['goals_for'] != '' && ($ranks[$i]['goals_for'] === $ranks[$i]['goals_against']))
                 {
-                    $points = FootballParamsService::get_params($this->id_compet())->get_draw_points();
+                    $points = FootballParamsService::get_params($this->compet_id())->get_draw_points();
                     $draw = $played = 1;
                 }
                 elseif (($ranks[$i]['goals_for'] < $ranks[$i]['goals_against']))
                 {
-                    $points = FootballParamsService::get_params($this->id_compet())->get_loss_points();
+                    $points = FootballParamsService::get_params($this->compet_id())->get_loss_points();
                     $loss = $played = 1;
                 }
                 $teams[] = [
@@ -133,24 +123,31 @@ class FootballTourneyGroupsController extends DefaultModuleController
                 return $b['points'] - $a['points'];
             });
 
+            $prom = FootballParamsService::get_params($this->compet_id())->get_promotion();
+            $playoff = FootballParamsService::get_params($this->compet_id())->get_play_off();
+            $releg = FootballParamsService::get_params($this->compet_id())->get_relegation();
+            $prom_color = FootballParamsService::get_params($this->compet_id())->get_promotion_color();
+            $playoff_color = FootballParamsService::get_params($this->compet_id())->get_play_off_color();
+            $releg_color = FootballParamsService::get_params($this->compet_id())->get_relegation_color();
             $color_count = count($ranks);
+
             foreach ($ranks as $i => $team_rank)
             {
-                $prom = FootballParamsService::get_params($this->id_compet())->get_promotion();
-                $releg = FootballParamsService::get_params($this->id_compet())->get_relegation();
-                $c_prom = $c_releg = false;
-                if ($i < $prom)
-                    $c_prom = true;
-                if ($i >= $color_count - $releg)
-                    $c_releg = true;
+                if ($prom && $i < $prom) {
+                    $rank_color = $prom_color;
+                } elseif ($playoff && $i >= $prom && $i < ($prom + $playoff)) {
+                    $rank_color = $playoff_color;
+                } else if ($releg && $i >= $color_count - $releg) {
+                    $rank_color = $releg_color;
+                } else {
+                    $rank_color = 'rgba(0,0,0,0)';
+                }
                 $this->view->assign_block_vars('groups.ranks', array_merge(
                     Date::get_array_tpl_vars(new Date($match['match_date'], Timezone::SERVER_TIMEZONE), 'match_date'),
                     array(
-                        'C_PROM' => $c_prom,
-                        'C_RELEG' => $c_releg,
-                        'PROM_COLOR' => FootballParamsService::get_params($this->id_compet())->get_promotion_color(),
-                        'RELEG_COLOR' => FootballParamsService::get_params($this->id_compet())->get_relegation_color(),
+                        'C_FAV' => FootballParamsService::check_fav($this->compet_id(), $team_rank['team_id']),
                         'RANK' => $i + 1,
+                        'RANK_COLOR' => $rank_color,
                         'TEAM_NAME' => !empty($team_rank['team_id']) ? FootballTeamService::get_team($team_rank['team_id'])->get_team_club_name() : '',
                         'POINTS' => $team_rank['points'],
                         'PLAYED' => $team_rank['played'],
@@ -166,15 +163,10 @@ class FootballTourneyGroupsController extends DefaultModuleController
         }
 
         $this->view->put_all(array(
-            'MENU' => FootballCompetMenuService::build_compet_menu($this->id_compet()),
-            'C_MATCHES' => count(FootballMatchService::get_matches($this->id_compet())) > 0
+            'MENU' => FootballMenuService::build_compet_menu($this->compet_id()),
+            'C_HAS_MATCHES' => FootballMatchService::has_matches($this->compet_id())
         ));
 	}
-
-    private function build_ranking()
-    {
-        
-    }
 
 	private function get_compet()
 	{
@@ -196,7 +188,7 @@ class FootballTourneyGroupsController extends DefaultModuleController
 		return $this->compet;
 	}
 
-    private function id_compet()
+    private function compet_id()
     {
         return $this->get_compet()->get_id_compet();
     }
@@ -217,14 +209,14 @@ class FootballTourneyGroupsController extends DefaultModuleController
 				}
 			break;
 			case FootballCompet::NOT_PUBLISHED:
-				if ($not_authorized || ($current_user->get_id() == User::AWAYOR_LEVEL))
+				if ($not_authorized || ($current_user->get_id() == User::VISITOR_LEVEL))
 				{
 					$error_controller = PHPBoostErrors::user_not_authorized();
 					DispatchManager::redirect($error_controller);
 				}
 			break;
 			case FootballCompet::DEFERRED_PUBLICATION:
-				if (!$compet->is_published() && ($not_authorized || ($current_user->get_id() == User::AWAYOR_LEVEL)))
+				if (!$compet->is_published() && ($not_authorized || ($current_user->get_id() == User::VISITOR_LEVEL)))
 				{
 					$error_controller = PHPBoostErrors::user_not_authorized();
 					DispatchManager::redirect($error_controller);
@@ -246,7 +238,7 @@ class FootballTourneyGroupsController extends DefaultModuleController
 		$graphical_environment = $response->get_graphical_environment();
 		$graphical_environment->set_page_title($compet->get_compet_name(), ($category->get_id() != Category::ROOT_CATEGORY ? $category->get_name() . ' - ' : '') . $this->lang['football.module.title']);
 		$graphical_environment->get_seo_meta_data()->set_description('');
-		$graphical_environment->get_seo_meta_data()->set_canonical_url(FootballUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $compet->get_id_compet(), $compet->get_compet_slug()));
+		$graphical_environment->get_seo_meta_data()->set_canonical_url(FootballUrlBuilder::calendar($compet->get_id_compet()));
 
 		// if ($compet->has_thumbnail())
 		// 	$graphical_environment->get_seo_meta_data()->set_picture_url($compet->get_thumbnail());
@@ -260,7 +252,8 @@ class FootballTourneyGroupsController extends DefaultModuleController
 			if ($category->get_id() != Category::ROOT_CATEGORY)
 				$breadcrumb->add($category->get_name(), FootballUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
 		}
-		$breadcrumb->add($compet->get_compet_name(), FootballUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $compet->get_id_compet(), $compet->get_compet_slug()));
+		$breadcrumb->add($compet->get_compet_name(), FootballUrlBuilder::calendar($compet->get_id_compet()));
+		$breadcrumb->add($this->lang['football.matches.groups.stage'], FootballUrlBuilder::display_groups_stage($compet->get_id_compet()));
 
 		return $response;
 	}

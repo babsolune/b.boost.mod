@@ -58,7 +58,14 @@ class FootballDivisionService
             $controller = PHPBoostErrors::user_in_read_only();
             DispatchManager::redirect($controller);
         }
+        foreach(FootballCompetService::get_compets() as $compet)
+        {
+            if ($compet['compet_division_id'] == $id) {
+                FootballCompetService::delete($compet['id_compet']);
+            }
+        }
 		self::$db_querier->delete(FootballSetup::$football_division_table, 'WHERE id_division = :id', array('id' => $id));
+
 
 		self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', array('module' => 'football', 'id_division' => $id));
 	}
@@ -92,8 +99,8 @@ class FootballDivisionService
             case('cup') :
                 $compet_type = $lang['football.cup'];
                 break;
-            case('tourney') :
-                $compet_type = $lang['football.tourney'];
+            case('tournament') :
+                $compet_type = $lang['football.tournament'];
                 break;
         };
 

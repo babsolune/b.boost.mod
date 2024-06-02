@@ -56,27 +56,28 @@ class FootballMatchService
 	}
 
 	/** Delete a match entry. */
-	public static function delete_match(int $id)
+	public static function delete_matches(int $id)
 	{
-		if (AppContext::get_current_user()->is_readonly())
+        $matches = self::get_matches($id);
+        foreach ($matches as $match)
         {
-            $controller = PHPBoostErrors::user_in_read_only();
-            DispatchManager::redirect($controller);
+            self::$db_querier->delete(FootballSetup::$football_match_table, 'WHERE match_compet_id = :id', array('id' => $id));
         }
-		self::$db_querier->delete(FootballSetup::$football_match_table, 'WHERE id_match = :id', array('id' => $id));
-
-		// self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', array('module' => 'football', 'id_match' => $id));
-	}
+    }
 
 	/** the match with all its properties from its id and group. */
-	public static function get_match(int $id, string $group) : FootballMatch
+	public static function get_match(int $id, string $type, string $group, string $order) : FootballMatch
 	{
 		$row = self::$db_querier->select_single_row_query('SELECT matches.*
 		FROM ' . FootballSetup::$football_match_table . ' matches
 		WHERE matches.id_match = :id
-        AND matches.match_number = :group', array(
+        AND matches.match_type = :type
+        AND matches.match_group = :group
+        AND matches.match_order = :order', array(
             'id' => $id,
-            'group' => $group
+            'type' => $type,
+            'group' => $group,
+            'order' => $order
         ));
 
 		$match = new FootballMatch();
@@ -92,7 +93,7 @@ class FootballMatchService
             FROM ' . FootballSetup::$football_match_table . ' matches
             LEFT JOIN ' . FootballSetup::$football_compet_table . ' compet ON compet.id_compet = matches.match_compet_id
             WHERE matches.match_compet_id = :id
-            ORDER BY matches.match_number ASC', array(
+            ORDER BY matches.match_group ASC, matches.match_order ASC', array(
                 'id' => $compet_id
             )
         );
@@ -105,22 +106,31 @@ class FootballMatchService
         return $matches;
 	}
 
-	public static function get_match_in_group(int $compet_id, string $match_number)
+    public static function has_matches($compet_id)
+    {
+        return count(self::get_matches($compet_id)) > 0;
+    }
+
+	public static function get_match_in_group(int $compet_id, string $type, int $group, int $order)
 	{
-        $numbers = [];
+        $match_numbers = [];
         foreach (FootballMatchService::get_matches($compet_id) as $match)
         {
-            $numbers[] = $match['match_number'];
+            $match_numbers[] = $match['match_type'].$match['match_group'].$match['match_order'];
         }
 
-        if (in_array($match_number, $numbers))
+        if (in_array($type.$group.$order, $match_numbers))
         {
             $row = self::$db_querier->select_single_row_query('SELECT matches.*
                 FROM ' . FootballSetup::$football_match_table . ' matches
                 WHERE matches.match_compet_id = :compet_id
-                AND matches.match_number = :group', array(
+                AND matches.match_type = :type
+                AND matches.match_group = :group
+                AND matches.match_order = :order', array(
                     'compet_id' => $compet_id,
-                    'group' => $match_number
+                    'type' => $type,
+                    'group' => $group,
+                    'order' => $order,
                 )
             );
             $match = new FootballMatch();
@@ -128,6 +138,8 @@ class FootballMatchService
 
             return $match;
         }
+        else 
+            return null;
 	}
 
     public static function one_day_compet(int $compet_id) : bool

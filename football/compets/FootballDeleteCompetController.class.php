@@ -29,7 +29,7 @@ class FootballDeleteCompetController extends DefaultModuleController
 		FootballCompetService::clear_cache();
 		HooksService::execute_hook_action('delete', self::$module_id, $compet->get_properties());
 
-		AppContext::get_response()->redirect(($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), FootballUrlBuilder::display($compet->get_category()->get_id(), $compet->get_category()->get_rewrited_name(), $compet->get_id_compet(), $compet->get_compet_slug())->rel()) ? $request->get_url_referrer() : FootballUrlBuilder::home()), StringVars::replace_vars($this->lang['football.message.success.delete'], array('title' => $compet->get_compet_name())));
+		AppContext::get_response()->redirect(($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), FootballUrlBuilder::calendar($compet->get_id_compet())->rel()) ? $request->get_url_referrer() : FootballUrlBuilder::home()), StringVars::replace_vars($this->lang['football.message.success.delete'], array('title' => $compet->get_compet_name())));
 	}
 
 	private function get_compet(HTTPRequestCustom $request)

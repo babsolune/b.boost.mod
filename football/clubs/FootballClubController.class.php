@@ -46,7 +46,6 @@ class FootballClubController extends DefaultModuleController
 
 	private function build_view()
 	{
-		$config = FootballConfig::load();
 		$club = $this->get_club();
 
 		$this->view->put_all($club->get_template_vars());
@@ -63,17 +62,11 @@ class FootballClubController extends DefaultModuleController
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-		// $graphical_environment->set_page_title($club->get_club_name(), ($category->get_id() != Category::ROOT_CATEGORY ? $category->get_name() . ' - ' : '') . $this->lang['football.module.title']);
-		// $graphical_environment->get_seo_meta_data()->set_description('');
-		// $graphical_environment->get_seo_meta_data()->set_canonical_url(FootballUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $club->get_id_club(), $club->get_slug()));
-
-		// if ($club->has_thumbnail())
-		// 	$graphical_environment->get_seo_meta_data()->set_picture_url($club->get_thumbnail());
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['football.module.title'],FootballUrlBuilder::home());
 		$breadcrumb->add($this->lang['football.clubs.manager'], FootballUrlBuilder::manage_clubs());
-		$breadcrumb->add($club->get_club_name(), FootballUrlBuilder::display_club($club->get_id_club()));
+		$breadcrumb->add($club->get_club_name() ? $club->get_club_name() : $club->get_club_place(), FootballUrlBuilder::display_club($club->get_id_club()));
 
 		return $response;
 	}

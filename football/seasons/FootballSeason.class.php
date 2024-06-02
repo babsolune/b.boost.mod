@@ -101,12 +101,12 @@ class FootballSeason
 				// Conditions
 
 				// Item
-				'ID'                  => $this->id_season,
-				'NAME'               => $this->season_name,
+				'ID'   => $this->id_season,
+				'NAME' => $this->season_name,
 
 				// Links
-				'U_EDIT_SEASON'           => FootballUrlBuilder::edit($this->id_season)->rel(),
-				'U_DELETE_SEASON'         => FootballUrlBuilder::delete($this->id_season)->rel(),
+				'U_EDIT_SEASON'   => FootballUrlBuilder::edit_season($this->id_season)->rel(),
+				'U_DELETE_SEASON' => FootballUrlBuilder::delete_season($this->id_season)->rel(),
 			)
 		);
 	}

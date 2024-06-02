@@ -44,16 +44,7 @@ class FootballCompetService
 	 */
 	public static function update(FootballCompet $compet)
 	{
-		self::$db_querier->update(FootballSetup::$football_compet_table, $compet->get_properties(), 'WHERE id=:id', array('id' => $compet->get_id_compet()));
-	}
-
-	/**
-	 * @desc Update an entry.
-	 * @param FootballCompet $compet : FootballCompet to update
-	 */
-	public static function set_matches_flag(int $compet_id)
-	{
-		self::$db_querier->update(FootballSetup::$football_compet_table, array('has_matches' => 1), 'WHERE id_compet=:id', array('id' => $compet_id));
+		self::$db_querier->update(FootballSetup::$football_compet_table, $compet->get_properties(), 'WHERE id_compet = :id', array('id' => $compet->get_id_compet()));
 	}
 
 	/**
@@ -79,11 +70,11 @@ class FootballCompetService
         }
 		self::$db_querier->delete(FootballSetup::$football_compet_table, 'WHERE id_compet = :id', array('id' => $id));
 
-		self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', array('module' => 'football', 'id' => $id));
+		FootballTeamService::delete_teams($id);
+		FootballParamsService::delete_params($id);
+		FootballMatchService::delete_matches($id);
 
-		CommentsService::delete_comments_topic_module('football', $id);
-		KeywordsService::get_keywords_manager()->delete_relations($id);
-		NotationService::delete_notes_id_in_module('football', $id);
+		self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', array('module' => 'football', 'id' => $id));
 	}
 
 	/**
@@ -105,6 +96,18 @@ class FootballCompetService
 		$compet->set_properties($row);
 		return $compet;
 	}
+    
+	/**
+	 * @desc Return the compet with all its properties from its id.
+	 * @param int $id Item identifier
+	 */
+	public static function get_compets()
+	{
+		$results = self::$db_querier->select('SELECT compet.*
+		FROM ' . FootballSetup::$football_compet_table . ' compet');
+
+		return $results;
+	}
 
 	/**
 	 * @desc Return the compet with all its properties from its id.
@@ -123,6 +126,11 @@ class FootballCompetService
 		$params->set_properties($row);
 		return $params;
 	}
+
+    public static function get_compet_match_type(int $compet_id)
+    {
+        return FootballDivisionService::get_division(self::get_compet($compet_id)->get_compet_division_id())->get_division_match_type();
+    }
 
 	public static function clear_cache()
 	{

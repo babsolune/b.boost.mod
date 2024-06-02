@@ -22,7 +22,7 @@ class FootballHomeController extends DefaultModuleController
 
 		$this->build_view();
 
-		return $this->generate_response($request);
+		return $this->generate_response();
 	}
 
 	private function build_view()
@@ -35,14 +35,10 @@ class FootballHomeController extends DefaultModuleController
 		{
 			if ($id == Category::ROOT_CATEGORY)
 			{
-				$root_description = FormatingHelper::second_parse($this->config->get_root_category_description());
 				$this->view->put_all(array(
-					'C_ROOT_CONTROLS'               => FootballAuthorizationsService::check_authorizations($id)->moderation(),
-                    'C_ROOT_CATEGORY_DESCRIPTION'   => !empty($root_description),
-					'C_ROOT_ITEMS'                  => $category->get_elements_number() > 0,
-					'C_SEVERAL_ROOT_ITEMS'          => $category->get_elements_number() > 1,
-
-					'ROOT_CATEGORY_DESCRIPTION' => $root_description,
+					'C_ROOT_CONTROLS'      => FootballAuthorizationsService::check_authorizations($id)->moderation(),
+                    'C_ROOT_ITEMS'         => $category->get_elements_number() > 0,
+					'C_SEVERAL_ROOT_ITEMS' => $category->get_elements_number() > 1,
 				));
 
 				$result = PersistenceContext::get_querier()->select('SELECT i.*, member.*
@@ -72,14 +68,14 @@ class FootballHomeController extends DefaultModuleController
                     'C_CONTROLS'            => FootballAuthorizationsService::check_authorizations()->moderation(),
 					'C_ITEMS'               => $category_elements_number > 0,
 					'C_SEVERAL_ITEMS'       => $category_elements_number > 1,
-                    'C_CATEGORY_THUMBNAIL'  => !empty($category->get_thumbnail()),
+                    // 'C_CATEGORY_THUMBNAIL'  => !empty($category->get_thumbnail()),
 					'ITEMS_NUMBER'          => $category->get_elements_number(),
 					'CATEGORY_ID'           => $category->get_id(),
 					'CATEGORY_SUB_ORDER'    => $category->get_order(),
 					'CATEGORY_PARENT_ID'    => $category->get_id_parent(),
 					'CATEGORY_NAME'         => $category->get_name(),
 
-                    'U_CATEGORY_THUMBNAIL' => $category->get_thumbnail()->rel(),
+                    // 'U_CATEGORY_THUMBNAIL' => $category->get_thumbnail()->rel(),
 					'U_CATEGORY'           => FootballUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel(),
 				));
 
@@ -98,12 +94,22 @@ class FootballHomeController extends DefaultModuleController
 					$item = new FootballCompet();
 					$item->set_properties($row);
 
-					$this->view->assign_block_vars('categories.items', $item->get_template_vars());
+                    if ($this->check_season($item->get_compet_season_id()))
+                    $this->view->assign_block_vars('categories.items', $item->get_template_vars());
 				}
 				$result->dispose();
 			}
 		}
 	}
+
+    private function check_season(int $season_id)
+    {
+        $now = new Date();
+        $season_name = FootballSeasonService::get_season($season_id)->get_season_name();
+        $season_parts = explode('-', $season_name);
+
+        return in_array($now->get_year(),$season_parts);
+    }
 
 	private function get_category()
 	{
@@ -136,14 +142,14 @@ class FootballHomeController extends DefaultModuleController
         }
 	}
 
-	private function generate_response(HTTPRequestCustom $request)
+	private function generate_response()
 	{
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
         $graphical_environment->set_page_title($this->lang['football.module.title']);
-		$description = StringVars::replace_vars($this->lang['football.seo.description.root'], array('site' => GeneralConfig::load()->get_site_name()));
-		$graphical_environment->get_seo_meta_data()->set_description($description);
+		// $description = StringVars::replace_vars($this->lang['football.seo.description.root'], array('site' => GeneralConfig::load()->get_site_name()));
+		// $graphical_environment->get_seo_meta_data()->set_description($description);
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(FootballUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name()));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();

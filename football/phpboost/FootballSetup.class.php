@@ -12,7 +12,7 @@ class FootballSetup extends DefaultModuleSetup
 	public static $football_cats_table;
 	public static $football_compet_table;
 	public static $football_club_table;
-	public static $football_day_table;
+	// public static $football_day_table;
 	public static $football_division_table;
 	public static $football_match_table;
 	public static $football_params_table;
@@ -26,7 +26,7 @@ class FootballSetup extends DefaultModuleSetup
 		self::$football_cats_table = PREFIX . 'football_cats';
 		self::$football_compet_table = PREFIX . 'football';
 		self::$football_club_table = PREFIX . 'football_club';
-		self::$football_day_table = PREFIX . 'football_day';
+		// self::$football_day_table = PREFIX . 'football_day';
 		self::$football_division_table = PREFIX . 'football_division';
 		self::$football_params_table = PREFIX . 'football_params';
 		self::$football_match_table = PREFIX . 'football_match';
@@ -57,7 +57,7 @@ class FootballSetup extends DefaultModuleSetup
 			self::$football_cats_table,
 			self::$football_compet_table,
 			self::$football_club_table,
-			self::$football_day_table,
+			// self::$football_day_table,
 			self::$football_division_table,
 			self::$football_match_table,
 			self::$football_params_table,
@@ -73,7 +73,7 @@ class FootballSetup extends DefaultModuleSetup
 		$this->create_football_cats_table();
 		$this->create_football_compet_table();
 		$this->create_football_club_table();
-		$this->create_football_day_table();
+		// $this->create_football_day_table();
 		$this->create_football_division_table();
 		$this->create_football_match_table();
 		$this->create_football_params_table();
@@ -94,11 +94,9 @@ class FootballSetup extends DefaultModuleSetup
 			'id_compet' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
 			'id_category' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'compet_name' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
-			'compet_slug' => array('type' => 'string', 'length' => 255, 'default' => "''"),
 			'compet_season_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'compet_division_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 
-			'has_matches' => array('type' => 'boolean', 'default' => 0),
 			'views_number' => array('type' => 'integer', 'length' => 11, 'default' => 0),
 			'author_user_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'published' => array('type' => 'integer', 'length' => 1, 'notnull' => 1, 'default' => 0),
@@ -122,9 +120,10 @@ class FootballSetup extends DefaultModuleSetup
 	{
 		$fields = array(
 			'id_club' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
-			'club_name' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
+			'club_place' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
 			'club_slug' => array('type' => 'string', 'length' => 255, 'default' => "''"),
 			'club_acronym' => array('type' => 'string', 'length' => 255, 'notnull' => 0, 'default' => "''"),
+			'club_name' => array('type' => 'string', 'length' => 255, 'notnull' => 0, 'default' => "''"),
 			'club_logo' => array('type' => 'string', 'length' => 255, 'default' => "''"),
 			'club_email' => array('type' => 'string', 'length' => 255, 'default' => "''"),
 			'club_phone' => array('type' => 'string', 'length' => 25, 'default' => "''"),
@@ -140,23 +139,23 @@ class FootballSetup extends DefaultModuleSetup
 		PersistenceContext::get_dbms_utils()->create_table(self::$football_club_table, $fields, $options);
 	}
 
-	private function create_football_day_table()
-	{
-		$fields = array(
-			'id_day' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
-			'days_number' => array('type' => 'integer', 'length' => 11, 'notnull' => 1),
-			'day_matches_number' => array('type' => 'integer', 'length' => 11, 'notnull' => 1),
-			'day_compet_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1),
-			'day_compet_name' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
-		);
-		$options = array(
-			'primary' => array('id_day'),
-			'indexes' => array(
-				'day_compet_id' => array('type' => 'key', 'fields' => 'day_compet_id')
-			)
-		);
-		PersistenceContext::get_dbms_utils()->create_table(self::$football_day_table, $fields, $options);
-	}
+	// private function create_football_day_table()
+	// {
+	// 	$fields = array(
+	// 		'id_day' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
+	// 		'days_number' => array('type' => 'integer', 'length' => 11, 'notnull' => 1),
+	// 		'day_matches_number' => array('type' => 'integer', 'length' => 11, 'notnull' => 1),
+	// 		'day_compet_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1),
+	// 		'day_compet_name' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
+	// 	);
+	// 	$options = array(
+	// 		'primary' => array('id_day'),
+	// 		'indexes' => array(
+	// 			'day_compet_id' => array('type' => 'key', 'fields' => 'day_compet_id')
+	// 		)
+	// 	);
+	// 	PersistenceContext::get_dbms_utils()->create_table(self::$football_day_table, $fields, $options);
+	// }
 
 	private function create_football_division_table()
 	{
@@ -181,8 +180,10 @@ class FootballSetup extends DefaultModuleSetup
 			'id_match' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
 			'match_compet_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1),
 			'match_playground' => array('type' => 'string', 'length' => 11),
-			'match_number' => array('type' => 'string', 'length' => 11),
-			'match_day_id' => array('type' => 'integer', 'length' => 11),
+			'match_type' => array('type' => 'string', 'length' => 11),
+			'match_group' => array('type' => 'integer', 'length' => 11),
+			'match_order' => array('type' => 'integer', 'length' => 11),
+			'match_day' => array('type' => 'integer', 'length' => 11),
 			'match_home_id' => array('type' => 'integer', 'length' => 11),
 			'match_home_score' => array('type' => 'string', 'length' => 2),
 			'match_home_pen' => array('type' => 'string', 'length' => 2),
@@ -206,11 +207,17 @@ class FootballSetup extends DefaultModuleSetup
 			'id_params' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
 			'params_compet_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1),
 
-			'teams_per_group' => array('type' => 'integer', 'length' => 11, 'default' => 0),
+			'teams_per_group' => array('type' => 'integer', 'length' => 11),
 			'fill_matches' => array('type' => 'boolean', 'default' => 0),
 			'looser_bracket' => array('type' => 'boolean', 'default' => 0),
-			'all_places' => array('type' => 'boolean', 'default' => 0),
 			'display_playgrounds' => array('type' => 'boolean', 'default' => 0),
+
+			'rounds_number' => array('type' => 'integer', 'length' => 11, 'not'),
+			'has_overtime' => array('type' => 'boolean', 'default' => 0),
+			'overtime_duration' => array('type' => 'integer', 'length' => 11, 'default' => 0),
+			'third_place' => array('type' => 'boolean', 'default' => 0),
+			'golden_goal' => array('type' => 'boolean', 'default' => 0),
+			'silver_goal' => array('type' => 'boolean', 'default' => 0),
 
 			'victory_points' => array('type' => 'integer', 'length' => 11, 'default' => 0),
 			'draw_points' => array('type' => 'integer', 'length' => 11, 'default' => 0),
@@ -223,15 +230,8 @@ class FootballSetup extends DefaultModuleSetup
 			'relegation_color' => array('type' => 'string', 'length' => 9, 'default' => "'#ffb0b0'"),
 			'ranking_type' => array('type' => 'string', 'length' => 255, 'default' => "''"),
 
-			'rounds_number' => array('type' => 'integer', 'length' => 11, 'default' => 0),
-			'set_overtime' => array('type' => 'boolean', 'default' => 0),
-			'overtime' => array('type' => 'integer', 'length' => 11, 'default' => 0),
-			'third_place' => array('type' => 'boolean', 'default' => 0),
-			'golden_goal' => array('type' => 'boolean', 'default' => 0),
-			'silver_goal' => array('type' => 'boolean', 'default' => 0),
-
 			'match_duration' => array('type' => 'integer', 'length' => 11, 'default' => 0),
-			'set_mode' => array('type' => 'boolean', 'default' => 0),
+			'sets_mode' => array('type' => 'boolean', 'default' => 0),
 			'sets_number' => array('type' => 'integer', 'length' => 11),
 			'bonus' => array('type' => 'boolean', 'default' => 0),
 			'favorite_team_id' => array('type' => 'integer', 'length' => 11, 'default' => 0)
@@ -313,8 +313,8 @@ class FootballSetup extends DefaultModuleSetup
 		$fields = array(
 			'id_team' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
 			'team_compet_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
-			'team_group' => array('type' => 'integer', 'length' => 11, 'default' => 0),
-			'team_round' => array('type' => 'integer', 'length' => 11, 'default' => 0),
+			'team_group_number' => array('type' => 'integer', 'length' => 11, 'default' => 0),
+			'team_group_order' => array('type' => 'integer', 'length' => 11, 'default' => 0),
 			'team_club_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'team_club_name' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
 			'team_penalty' => array('type' => 'integer', 'length' => 11, 'default' => 0),
@@ -331,21 +331,24 @@ class FootballSetup extends DefaultModuleSetup
 	private function insert_data()
 	{
 		$categories_file = PATH_TO_ROOT . '/football/data/' . AppContext::get_current_user()->get_locale() . '/categories.csv';
+        $row = 1;
         if (($handle = fopen($categories_file, 'r')) !== FALSE)
         {
-            while(($data = fgetcsv($handle, 1000, ';')) !== FALSE)
+            while(($data = fgetcsv($handle, 1000, '|')) !== FALSE)
             {
+                if($row == 1){ $row++; continue; }
                 PersistenceContext::get_querier()->insert(self::$football_cats_table, array(
-                    'id'     				 => $data[0],
-                    'name'        			 => $data[1],
-                    'rewrited_name'     	 => $data[2],
-                    'c_order'  				 => $data[3],
-                    'special_authorizations' => $data[4],
-                    'auth'  				 => $data[5],
-                    'id_parent'  			 => $data[6],
-                    'description'  			 => $data[7],
-                    'thumbnail'  			 => $data[8],
+                    'id'     				 => null,
+                    'name'        			 => $data[0],
+                    'rewrited_name'     	 => $data[1],
+                    'c_order'  				 => $data[2],
+                    'special_authorizations' => $data[3],
+                    'auth'  				 => $data[4],
+                    'id_parent'  			 => $data[5],
+                    'description'  			 => $data[6],
+                    'thumbnail'  			 => $data[7],
                 ));
+                $row++;
             }
             fclose($handle);
         }
@@ -354,19 +357,23 @@ class FootballSetup extends DefaultModuleSetup
             echo '<div class="message-helper bgc-full error">Erreur lors de l\'ouverture du fichier CSV.</div>';
         }
 		$clubs_file = PATH_TO_ROOT . '/football/data/' . AppContext::get_current_user()->get_locale() . '/clubs.csv';
+        $row = 1;
         if (($handle = fopen($clubs_file, 'r')) !== FALSE)
         {
             while(($data = fgetcsv($handle, 1000, '|')) !== FALSE)
             {
+                if($row == 1){ $row++; continue; }
                 PersistenceContext::get_querier()->insert(self::$football_club_table, array(
-                    'id_club'          => $data[0],
-                    'club_name'        => $data[1],
-                    'club_slug'        => $data[2],
-                    'club_acronym'     => $data[3],
+                    'id_club'          => null,
+                    'club_place'       => $data[0],
+                    'club_slug'        => $data[1],
+                    'club_acronym'     => $data[2],
+                    'club_name'        => $data[3],
                     'club_logo'        => $data[4],
                     'club_locations'   => $data[7],
                     'club_map_display' => $data[8],
                 ));
+                $row++;
             }
             fclose($handle);
         }

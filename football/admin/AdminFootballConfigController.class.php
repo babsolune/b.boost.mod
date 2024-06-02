@@ -9,9 +9,6 @@
 
 class AdminFootballConfigController extends DefaultAdminModuleController
 {
-	// private $comments_config;
-	// private $content_management_config;
-
 	public function execute(HTTPRequestCustom $request)
 	{
 		// $this->init();
@@ -29,12 +26,6 @@ class AdminFootballConfigController extends DefaultAdminModuleController
 		return new DefaultAdminDisplayResponse($this->view);
 	}
 
-	// private function init()
-	// {
-	// 	$this->comments_config = CommentsConfig::load();
-	// 	$this->content_management_config = ContentManagementConfig::load();
-	// }
-
 	private function build_form()
 	{
 		$form = new HTMLForm(__CLASS__);
@@ -42,22 +33,38 @@ class AdminFootballConfigController extends DefaultAdminModuleController
 		$fieldset = new FormFieldsetHTML('configuration', StringVars::replace_vars($this->lang['form.module.title'], array('module_name' => self::get_module()->get_configuration()->get_name())));
 		$form->add_fieldset($fieldset);
 
+		$fieldset->add_field(new FormFieldCheckbox('left_column_disabled', StringVars::replace_vars($this->lang['form.hide.left.column'], array('module' => $this->lang['football.module.title'])), $this->config->is_left_column_disabled(),
+            array('class' => 'custom-checkbox')
+        ));
+
+        $fieldset->add_field(new FormFieldCheckbox('right_column_disabled', StringVars::replace_vars($this->lang['form.hide.right.column'], array('module' => $this->lang['football.module.title'])), $this->config->is_right_column_disabled(),
+            array('class' => 'custom-checkbox')
+        ));
+
 		$fieldset_authorizations = new FormFieldsetHTML('authorizations_fieldset', $this->lang['form.authorizations'],
 			array('description' => $this->lang['form.authorizations.clue'])
 		);
 		$form->add_fieldset($fieldset_authorizations);
 
+        $fieldset_authorizations->add_field(new FormFieldFree('hide_authorizations', '', '
+			<script>
+				<!--
+					jQuery(document).ready(function() {
+						jQuery("#' . __CLASS__ . '_authorizations > div").eq(2).hide();
+						jQuery("#' . __CLASS__ . '_authorizations > div").eq(4).hide();
+					});
+				-->
+			</script>
+        '));
+
 		$auth_settings = new AuthorizationsSettings(
 			array_merge(
 				RootCategory::get_authorizations_settings(), 
                 array(
-					new VisitorDisabledActionAuthorization($this->lang['football.manage.divisions.auth'],  FootballAuthorizationsService::MANAGE_DIVISIONS_AUTHORIZATIONS),
-					new VisitorDisabledActionAuthorization($this->lang['football.manage.clubs.auth'],  FootballAuthorizationsService::MANAGE_CLUBS_AUTHORIZATIONS),
-					new VisitorDisabledActionAuthorization($this->lang['football.manage.seasons.auth'],  FootballAuthorizationsService::MANAGE_SEASONS_AUTHORIZATIONS),
-					new VisitorDisabledActionAuthorization($this->lang['football.manage.params.auth'],  FootballAuthorizationsService::MANAGE_PARAMETERS_AUTHORIZATIONS),
-					new VisitorDisabledActionAuthorization($this->lang['football.manage.teams.auth'], FootballAuthorizationsService::MANAGE_TEAMS_AUTHORIZATIONS),
-					new VisitorDisabledActionAuthorization($this->lang['football.manage.matches.auth'], FootballAuthorizationsService::MANAGE_MATCHES_AUTHORIZATIONS),
-					new VisitorDisabledActionAuthorization($this->lang['football.manage.results.auth'], FootballAuthorizationsService::MANAGE_RESULTS_AUTHORIZATIONS)
+					new MemberDisabledActionAuthorization($this->lang['football.manage.clubs.auth'],  FootballAuthorizationsService::CLUBS_AUTHORIZATIONS),
+					new MemberDisabledActionAuthorization($this->lang['football.manage.divisions.auth'],  FootballAuthorizationsService::DIVISIONS_AUTHORIZATIONS),
+					new MemberDisabledActionAuthorization($this->lang['football.manage.seasons.auth'],  FootballAuthorizationsService::SEASONS_AUTHORIZATIONS),
+					new MemberDisabledActionAuthorization($this->lang['football.manage.compets.auth'],  FootballAuthorizationsService::COMPETITION_AUTHORIZATIONS)
 				)
 			)
 		);
@@ -73,6 +80,16 @@ class AdminFootballConfigController extends DefaultAdminModuleController
 
 	private function save()
 	{
+		if ($this->form->get_value('left_column_disabled'))
+			$this->config->disable_left_column();
+		else
+			$this->config->enable_left_column();
+
+		if ($this->form->get_value('right_column_disabled'))
+			$this->config->disable_right_column();
+		else
+			$this->config->enable_right_column();
+
 		$this->config->set_authorizations($this->form->get_value('authorizations')->build_auth_array());
 
 		FootballConfig::save();

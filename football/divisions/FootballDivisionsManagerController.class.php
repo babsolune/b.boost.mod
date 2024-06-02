@@ -63,8 +63,8 @@ class FootballDivisionsManagerController extends DefaultModuleController
                 case FootballDivision::CHAMPIONSHIP :
                     $compet_type = $this->lang['football.championship'];
                     break;
-                case FootballDivision::TOURNEY :
-                    $compet_type = $this->lang['football.tourney'];
+                case FootballDivision::TOURNAMENT :
+                    $compet_type = $this->lang['football.tournament'];
                     break;
             }
 

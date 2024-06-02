@@ -10,9 +10,10 @@
 class FootballClub
 {
 	private $id_club;
-	private $club_name;
+	private $club_place;
 	private $club_slug;
 	private $club_acronym;
+	private $club_name;
 	private $club_logo;
 	private $club_email;
 	private $club_phone;
@@ -31,14 +32,14 @@ class FootballClub
 		$this->id_club = $id_club;
 	}
 
-	public function get_club_name()
+	public function get_club_place()
 	{
-		return $this->club_name;
+		return $this->club_place;
 	}
 
-	public function set_club_name($club_name)
+	public function set_club_place($club_place)
 	{
-		$this->club_name = $club_name;
+		$this->club_place = $club_place;
 	}
 
 	public function get_club_slug()
@@ -59,6 +60,16 @@ class FootballClub
 	public function set_club_acronym($club_acronym)
 	{
 		$this->club_acronym = $club_acronym;
+	}
+
+	public function get_club_name()
+	{
+		return $this->club_name;
+	}
+
+	public function set_club_name($club_name)
+	{
+		$this->club_name = $club_name;
 	}
 
 	public function get_club_logo()
@@ -120,9 +131,10 @@ class FootballClub
 	{
 		return array(
 			'id_club' => $this->get_id_club(),
-			'club_name' => $this->get_club_name(),
+			'club_place' => $this->get_club_place(),
 			'club_slug' => $this->get_club_slug(),
 			'club_acronym' => $this->get_club_acronym(),
+			'club_name' => $this->get_club_name(),
 			'club_logo' => $this->get_club_logo(),
 			'club_email' => $this->get_club_email(),
 			'club_phone' => $this->get_club_phone(),
@@ -134,9 +146,10 @@ class FootballClub
 	public function set_properties(array $properties)
 	{
 		$this->id_club = $properties['id_club'];
-		$this->club_name = $properties['club_name'];
+		$this->club_place = $properties['club_place'];
 		$this->club_slug = $properties['club_slug'];
 		$this->club_acronym = $properties['club_acronym'];
+		$this->club_name = $properties['club_name'];
 		$this->club_logo = $properties['club_logo'];
 		$this->club_email = $properties['club_email'];
 		$this->club_phone = $properties['club_phone'];
@@ -150,8 +163,6 @@ class FootballClub
 
 	public function get_template_vars()
 	{
-        $football_lang = LangLoader::get_module_langs('football');
-
         $club_locations_value = TextHelper::deserialize($this->get_club_locations());
         $club_locations = '';
 		if (is_array($club_locations_value) && isset($club_locations_value['address']))
@@ -173,14 +184,15 @@ class FootballClub
             'C_CONTROLS' => $this->is_authorized_to_manage(),
             'C_LOCATION_MAP' => $has_club_locations_map,
             'C_HAS_LOGO' => !empty($this->club_logo),
-            'C_HAS_EMAIL' => !empty($this->club_logo),
-            'C_HAS_PHONE' => !empty($this->club_logo),
-            'C_HAS_COUNTRY' => !empty($this->club_logo),
-            'C_HAS_LEAGUE' => !empty($this->club_logo),
+            'C_HAS_EMAIL' => !empty($this->club_email),
+            'C_HAS_PHONE' => !empty($this->club_phone),
+            'C_HAS_NAME' => !empty($this->club_name),
+            'C_HAS_ACRONYM' => !empty($this->club_acronym),
 			// Item
 			'ID'           => $this->id_club,
-			'NAME'         => $this->club_name,
+			'PLACE'        => $this->club_place,
 			'ACRONYM'      => $this->club_acronym,
+			'NAME'         => $this->club_name,
 			'EMAIL'        => $this->club_email,
 			'PHONE'        => $this->club_phone,
 			'LOCATION'     => $club_locations,

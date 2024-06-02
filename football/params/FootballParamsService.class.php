@@ -18,14 +18,18 @@ class FootballParamsService
 	}
 
 	/**
-	 * @desc Create a new entry in the database table.
-	 * @param FootballParams $params : new FootballParams
+	 * @desc Create a params for a new entry in the database table.
 	 */
-	public static function add_params($compet_id)
+	public static function add_params(int $compet_id)
 	{
 		$result = self::$db_querier->insert(FootballSetup::$football_params_table, array('params_compet_id' => $compet_id));
 		return $result->get_last_inserted_id();
 	}
+
+    public static function delete_params(int $id)
+	{
+		self::$db_querier->delete(FootballSetup::$football_params_table, 'WHERE params_compet_id = :id', array('id' => $id));
+    }
 
 	/**
 	 * @desc Update params of an entry.
@@ -52,6 +56,15 @@ class FootballParamsService
 		$params = new FootballParams();
 		$params->set_properties($row);
 		return $params;
+	}
+
+	/**
+	 * Check if team id is favorite team id
+	 * @param int $compet_id Item identifier
+	 */
+	public static function check_fav(int $compet_id, int $team_id)
+	{
+		return $team_id == self::get_params($compet_id)->get_favorite_team_id();
 	}
 }
 ?>

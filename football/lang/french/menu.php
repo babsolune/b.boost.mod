@@ -12,14 +12,15 @@
 ####################################################
 
 $lang['football.menu.compet.calendar']  = 'Calendrier';
-$lang['football.menu.compet.group']  = 'Phase de groupes';
-$lang['football.menu.compet.brackets']  = 'Phases finales';
+$lang['football.menu.compet.group']  = 'Phases de groupes';
+$lang['football.menu.compet.bracket']  = 'Phases finales';
 $lang['football.menu.compet.results']  = 'Résultats';
 $lang['football.menu.compet.ranking']  = 'Classement';
-$lang['football.menu.teams']   = 'Gérer les équipes de la compétition';
-$lang['football.menu.groups']  = 'Gérer les groupes de la compétition';
-$lang['football.menu.matches'] = 'Gérer les matches de la compétition';
-$lang['football.menu.results'] = 'Gérer les résultats de la compétition';
-$lang['football.menu.params']  = 'Gérer les paramètres de la compétition';
+$lang['football.menu.teams']   = 'Gérer les équipes';
+$lang['football.menu.groups']  = 'Gérer les groupes';
+$lang['football.menu.matches'] = 'Gérer les matches';
+$lang['football.menu.groups.matches'] = 'Gérer les matches de groupe';
+$lang['football.menu.bracket.matches'] = 'Gérer les phases finales';
+$lang['football.menu.params']  = 'Gérer les paramètres';
 
 ?>
