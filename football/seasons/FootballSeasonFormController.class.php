@@ -1,0 +1,188 @@
+<?php
+/**
+ * @copyright   &copy; 2005-2022 PHPBoost
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
+ * @version     PHPBoost 6.0 - last update: 2022 12 22
+ * @since       PHPBoost 6.0 - 2022 12 22
+*/
+
+class FootballSeasonFormController extends DefaultModuleController
+{
+	private $season;
+	private $is_new_season;
+
+	public function execute(HTTPRequestCustom $request)
+	{
+		$this->check_authorizations();
+
+		$this->build_form($request);
+
+		if ($this->submit_button->has_been_submited() && $this->form->validate())
+		{
+			$this->save();
+			$this->redirect();
+		}
+
+		$this->view->put('CONTENT', $this->form->display());
+
+		return $this->generate_response($this->view);
+	}
+
+	private function build_form(HTTPRequestCustom $request)
+	{
+		$form = new HTMLForm(__CLASS__);
+		$form->set_layout_title($this->get_season()->get_id_season() === null ? $this->lang['football.add.season'] : ($this->lang['football.edit.season']));
+
+		$fieldset = new FormFieldsetHTML('football', $this->lang['form.parameters']);
+		$form->add_fieldset($fieldset);
+
+		$fieldset->add_field(new FormFieldSimpleSelectChoice('year', $this->lang['football.season.year'], $this->is_new_season ? date("Y") : $this->get_season()->get_season_year(), $this->get_years_list()));
+
+        $fieldset->add_field(new FormFieldCheckbox('calendar_year', $this->lang['football.calendar.year'], $this->get_season()->get_season_calendar_year(),
+            array('description' => $this->lang['football.calendar.year.clue'])
+        ));
+
+        $fieldset->add_field(new FormFieldHidden('referrer', $request->get_url_referrer()));
+
+		$this->submit_button = new FormButtonDefaultSubmit();
+		$form->add_button($this->submit_button);
+		$form->add_button(new FormButtonReset());
+
+		$this->form = $form;
+	}
+
+    private function get_years_list()
+    {
+		$options = array();
+		$options[] = new FormFieldSelectChoiceOption('', '');
+        for($i = 1950; $i <= 2140; $i++)
+        {
+            $options[] = new FormFieldSelectChoiceOption($i, $i);
+        }
+        return $options;
+    }
+
+	private function get_season()
+	{
+		if ($this->season === null)
+		{
+			$id = AppContext::get_request()->get_getint('id', 0);
+			if (!empty($id))
+			{
+				try {
+					$this->season = FootballSeasonService::get_season($id);
+				} catch (RowNotFoundException $e) {
+					$error_controller = PHPBoostErrors::unexisting_page();
+					DispatchManager::redirect($error_controller);
+				}
+			}
+			else
+			{
+				$this->is_new_season = true;
+				$this->season = new FootballSeason();
+				$this->season->init_default_properties();
+			}
+		}
+		return $this->season;
+	}
+
+	private function check_authorizations()
+	{
+		$season = $this->get_season();
+
+		if ($season->get_id_season() === null)
+		{
+			if (!$season->is_authorized_to_manage())
+			{
+				$error_controller = PHPBoostErrors::user_not_authorized();
+				DispatchManager::redirect($error_controller);
+			}
+		}
+		else
+		{
+			if (!$season->is_authorized_to_manage())
+			{
+				$error_controller = PHPBoostErrors::user_not_authorized();
+				DispatchManager::redirect($error_controller);
+			}
+		}
+		if (AppContext::get_current_user()->is_readonly())
+		{
+			$controller = PHPBoostErrors::user_in_read_only();
+			DispatchManager::redirect($controller);
+		}
+	}
+
+	private function save()
+	{
+		$season = $this->get_season();
+
+        $season->set_season_year($this->form->get_value('year')->get_raw_value());
+        $season->set_season_calendar_year($this->form->get_value('calendar_year'));
+        
+        if ($this->form->get_value('calendar_year'))
+            $season->set_season_name($season->get_season_year());
+        else
+        $season->set_season_name($season->get_season_year() . ' - ' . $season->get_season_year() + 1);
+
+		if ($this->is_new_season)
+		{
+			$id = FootballSeasonService::add_season($season);
+			$season->set_id_season($id);
+        }
+		else
+		{
+			FootballSeasonService::update_season($season);
+        }
+
+		FootballCompetService::clear_cache();
+	}
+
+	private function redirect()
+	{
+		$season = $this->get_season();
+
+        if ($this->is_new_season)
+            AppContext::get_response()->redirect(FootballUrlBuilder::manage_seasons());
+        else
+            AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : FootballUrlBuilder::manage_seasons()));
+	}
+
+	private function generate_response(View $view)
+	{
+		$season = $this->get_season();
+
+		$location_id = $season->get_id_season() ? 'football-edit-'. $season->get_id_season() : '';
+
+		$response = new SiteDisplayResponse($view, $location_id);
+		$graphical_environment = $response->get_graphical_environment();
+
+		$breadcrumb = $graphical_environment->get_breadcrumb();
+		$breadcrumb->add($this->lang['football.module.title'], FootballUrlBuilder::home());
+
+		if ($season->get_id_season() === null)
+		{
+			$breadcrumb->add($this->lang['football.add.season'], FootballUrlBuilder::add_season($season->get_id_season()));
+			$graphical_environment->set_page_title($this->lang['football.add.season'], $this->lang['football.module.title']);
+			$graphical_environment->get_seo_meta_data()->set_description($this->lang['football.add.season']);
+			$graphical_environment->get_seo_meta_data()->set_canonical_url(FootballUrlBuilder::add_season($season->get_id_season()));
+		}
+		else
+		{
+			if (!AppContext::get_session()->location_id_already_exists($location_id))
+				$graphical_environment->set_location_id($location_id);
+
+			$graphical_environment->set_page_title($this->lang['football.edit.season'], $this->lang['football.module.title']);
+			$graphical_environment->get_seo_meta_data()->set_description($this->lang['football.edit.season']);
+			$graphical_environment->get_seo_meta_data()->set_canonical_url(FootballUrlBuilder::edit_season($season->get_id_season()));
+
+            $breadcrumb->add($this->lang['football.seasons.manager'], FootballUrlBuilder::manage_seasons());
+			$breadcrumb->add($season->get_name(), '');
+			$breadcrumb->add($this->lang['football.edit.season'], FootballUrlBuilder::edit_season($season->get_id_season()));
+		}
+
+		return $response;
+	}
+}
+?>
