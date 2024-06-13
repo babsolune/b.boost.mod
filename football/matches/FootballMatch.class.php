@@ -209,6 +209,7 @@ class FootballMatch
 
 	public function get_array_tpl_vars()
 	{
+        $club = FootballClubCache::load();
         $c_home_score = $this->match_home_score != '';
         $c_home_pen   = $this->match_home_pen != '';
         $c_away_pen   = $this->match_away_pen != '';
@@ -228,16 +229,16 @@ class FootballMatch
                 'MATCH_ID' => $this->match_type.$this->match_group.$this->match_order,
                 'PLAYGROUND' => $this->match_playground,
                 'HOME_ID' => $this->match_home_id,
-                'HOME_LOGO' => $this->match_home_id ? FootballClubService::get_club($this->match_home_id)->get_club_logo() : '',
-                'HOME_TEAM' => $this->match_home_id ? FootballTeamService::get_team($this->match_home_id)->get_team_club_name() : '&nbsp;',
+                'HOME_LOGO' => $this->match_home_id ? $club->get_club_logo(FootballTeamService::get_team($this->match_home_id)->get_team_club_id()) : '',
+                'HOME_TEAM' => $this->match_home_id ? $club->get_club_name(FootballTeamService::get_team($this->match_home_id)->get_team_club_id()) : '',
                 'U_HOME_CALENDAR' => $this->match_home_id ? FootballUrlBuilder::display_team_calendar($this->match_compet_id, $this->match_home_id)->rel() : '#',
                 'HOME_SCORE' => $this->match_home_score,
                 'HOME_PEN' => $this->match_home_pen,
                 'AWAY_PEN' => $this->match_away_pen,
                 'AWAY_SCORE' => $this->match_away_score,
                 'U_AWAY_CALENDAR' => $this->match_away_id ? FootballUrlBuilder::display_team_calendar($this->match_compet_id, $this->match_away_id)->rel() : '#',
-                'AWAY_TEAM' => $this->match_away_id ? FootballTeamService::get_team($this->match_away_id)->get_team_club_name() : '&nbsp;',
-                'AWAY_LOGO' => $this->match_away_id ? FootballClubService::get_club($this->match_away_id)->get_club_logo() : '',
+                'AWAY_TEAM' => $this->match_away_id ? $club->get_club_name(FootballTeamService::get_team($this->match_away_id)->get_team_club_id()) : '',
+                'AWAY_LOGO' => $this->match_away_id ? $club->get_club_logo(FootballTeamService::get_team($this->match_away_id)->get_team_club_id()) : '',
                 'AWAY_ID' => $this->match_away_id
             )
         );

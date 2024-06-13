@@ -128,11 +128,11 @@ class FootballGroupsFormController extends DefaultModuleController
     private function get_teams_list()
     {
         $options = array();
-
+        $clubs = FootballClubCache::load();
         $options[] = new FormFieldSelectChoiceOption('', '');
 		foreach(FootballTeamService::get_teams($this->compet_id()) as $team)
 		{
-			$options[] = new FormFieldSelectChoiceOption($team['team_club_name'], $team['id_team']);
+			$options[] = new FormFieldSelectChoiceOption($clubs->get_club_name($team['team_club_id']), $team['id_team']);
 		}
 
 		return $options;

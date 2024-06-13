@@ -17,7 +17,7 @@ class FootballBracketService
 		self::$db_querier = PersistenceContext::get_querier();
 	}
 
-    // Doc of matches
+    // Add matches
     public static function set_bracket_matches($compet_id, $rounds_number)
     {
         $now = new Date();
@@ -57,7 +57,6 @@ class FootballBracketService
                 ));
             }
         }
-        // Debug::stop();
     }
 
     // Doc of matches
@@ -67,8 +66,7 @@ class FootballBracketService
         $view->add_lang(LangLoader::get_all_langs('football'));
 
         $view->put_all(array(
-            'TNB' => $teams_number,
-            'TPG' => $teams_per_group,
+            'C_'.$teams_number.'_'.$teams_per_group => true,
             'C_LOOSER_BRACKET' => FootballParamsService::get_params($compet_id)->get_looser_bracket(),
             'C_THIRD_PLACE' => FootballParamsService::get_params($compet_id)->get_third_place()
         ));

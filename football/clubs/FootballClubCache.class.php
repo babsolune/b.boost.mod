@@ -49,6 +49,24 @@ class FootballClubCache implements CacheData
 		return null;
 	}
 
+	public function get_club_name($id)
+	{
+		if ($this->club_exists($id))
+		{
+			return $this->get_club($id)['club_name'] ? $this->get_club($id)['club_name'] : $this->get_club($id)['club_place'];
+		}
+		return null;
+	}
+
+	public function get_club_logo($id)
+	{
+		if ($this->club_exists($id))
+		{
+			return $this->get_club($id)['club_logo'];
+		}
+		return null;
+	}
+
 	public function get_clubs_number()
 	{
 		return count($this->clubs);

@@ -379,15 +379,10 @@
     }
 }
 
-.team-logo {
-    width: 17px;
-    /* display: inline-block;
-    vertical-align: middle; */
-}
-
 .flex-team {
     display: flex;
     align-items: center;
+    /* justify-content: center; */
 }
 
 .flex-team img {

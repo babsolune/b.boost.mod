@@ -179,7 +179,7 @@ class FootballSetup extends DefaultModuleSetup
 		$fields = array(
 			'id_match' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
 			'match_compet_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1),
-			'match_playground' => array('type' => 'string', 'length' => 11),
+			'match_playground' => array('type' => 'string', 'length' => 65),
 			'match_type' => array('type' => 'string', 'length' => 11),
 			'match_group' => array('type' => 'integer', 'length' => 11),
 			'match_order' => array('type' => 'integer', 'length' => 11),

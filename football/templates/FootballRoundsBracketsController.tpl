@@ -35,10 +35,12 @@
                                             <div  class="id-{rounds.matches.HOME_ID} bracket-team bracket-home# IF rounds.matches.C_HOME_FAV # text-strong# ENDIF #"
                                                     # IF rounds.matches.C_HOME_WIN # style="background-color: {rounds.matches.WIN_COLOR}"# ENDIF #>
                                                 <div class="home-{rounds.matches.MATCH_ID} home-team">
-                                                    <div class="flex-team flex-left">
-                                                        <img src="{PATH_TO_ROOT}/{rounds.matches.HOME_LOGO}" alt="{rounds.matches.HOME_TEAM}">
-                                                        <span>{rounds.matches.HOME_TEAM}</span>
-                                                    </div>
+                                                    # IF rounds.matches.HOME_ID #
+                                                        <div class="flex-team flex-left">
+                                                            <img src="{PATH_TO_ROOT}/{rounds.matches.HOME_LOGO}" alt="{rounds.matches.HOME_TEAM}">
+                                                            <span>{rounds.matches.HOME_TEAM}</span>
+                                                        </div>
+                                                    # ENDIF #
                                                 </div>
                                                 <div class="bracket-team# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-px-100# ENDIF ## ENDIF #">
                                                     <div class="bracket-score home-score# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-pc-50# ELSE # width-px-50# ENDIF ## ELSE # width-px-50# ENDIF #">{rounds.matches.HOME_SCORE}</div>
@@ -52,10 +54,12 @@
                                             <div class="id-{rounds.matches.AWAY_ID} bracket-team bracket-away# IF rounds.matches.C_AWAY_FAV # text-strong# ENDIF #"
                                                     # IF rounds.matches.C_AWAY_WIN # style="background-color: {rounds.matches.WIN_COLOR}"# ENDIF #>
                                                 <div class="away-{rounds.matches.MATCH_ID} away-team">
-                                                    <div class="flex-team flex-left">
-                                                        <img src="{PATH_TO_ROOT}/{rounds.matches.AWAY_LOGO}" alt="{rounds.matches.AWAY_TEAM}">
-                                                        <span>{rounds.matches.AWAY_TEAM}</span>
-                                                    </div>
+                                                    # IF rounds.matches.AWAY_ID #
+                                                        <div class="flex-team flex-left">
+                                                            <img src="{PATH_TO_ROOT}/{rounds.matches.AWAY_LOGO}" alt="{rounds.matches.AWAY_TEAM}">
+                                                            <span>{rounds.matches.AWAY_TEAM}</span>
+                                                        </div>
+                                                    # ENDIF #
                                                 </div>
                                                 <div class="bracket-team# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-px-100# ENDIF ## ENDIF #">
                                                     <div class="bracket-score away-score# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-pc-50# ELSE # width-px-50# ENDIF ## ELSE # width-px-50# ENDIF #">{rounds.matches.AWAY_SCORE}</div>
@@ -92,20 +96,24 @@
                                                 <div  class="id-{l_rounds.matches.HOME_ID} bracket-team bracket-home# IF l_rounds.matches.C_HOME_FAV # text-strong# ENDIF #"
                                                         # IF l_rounds.matches.C_HOME_WIN # style="background-color: {l_rounds.matches.WIN_COLOR}"# ENDIF #>
                                                     <div class="home-{l_rounds.matches.MATCH_ID} home-team">
-                                                        <div class="flex-team flex-left">
-                                                            <img src="{PATH_TO_ROOT}/{l_rounds.matches.HOME_LOGO}" alt="{l_rounds.matches.HOME_TEAM}">
-                                                            <span>{l_rounds.matches.HOME_TEAM}</span>
-                                                        </div>
+                                                        # IF l_rounds.matches.HOME_ID #
+                                                            <div class="flex-team flex-left">
+                                                                <img src="{PATH_TO_ROOT}/{l_rounds.matches.HOME_LOGO}" alt="{l_rounds.matches.HOME_TEAM}">
+                                                                <span>{l_rounds.matches.HOME_TEAM}</span>
+                                                            </div>
+                                                        # ENDIF #
                                                     </div>
                                                     <div class="bracket-score home-score width-px-50">{l_rounds.matches.HOME_SCORE}# IF l_rounds.matches.C_HAS_PEN # <span class="small">({l_rounds.matches.HOME_PEN})</span># ENDIF #</div>
                                                 </div>
                                                 <div class="id-{l_rounds.matches.AWAY_ID} bracket-team bracket-away# IF l_rounds.matches.C_AWAY_FAV # text-strong# ENDIF #"
                                                         # IF l_rounds.matches.C_AWAY_WIN # style="background-color: {l_rounds.matches.WIN_COLOR}"# ENDIF #>
                                                     <div class="away-{l_rounds.matches.MATCH_ID} away-team">
-                                                        <div class="flex-team flex-left">
-                                                            <img src="{PATH_TO_ROOT}/{l_rounds.matches.AWAY_LOGO}" alt="{l_rounds.matches.AWAY_TEAM}">
-                                                            <span>{l_rounds.matches.AWAY_TEAM}</span>
-                                                        </div>
+                                                        # IF l_rounds.matches.AWAY_ID #
+                                                            <div class="flex-team flex-left">
+                                                                <img src="{PATH_TO_ROOT}/{l_rounds.matches.AWAY_LOGO}" alt="{l_rounds.matches.AWAY_TEAM}">
+                                                                <span>{l_rounds.matches.AWAY_TEAM}</span>
+                                                            </div>
+                                                        # ENDIF #
                                                     </div>
                                                     <div class="bracket-score away-score width-px-50">{l_rounds.matches.AWAY_SCORE}# IF l_rounds.matches.C_HAS_PEN # <span class="small">({l_rounds.matches.AWAY_PEN})</span># ENDIF #</div>
                                                 </div>
@@ -141,20 +149,24 @@
                                             <div class="id-{w_rounds.matches.HOME_ID} bracket-team bracket-home# IF w_rounds.matches.C_HOME_FAV # text-strong# ENDIF #"
                                                     # IF C_HOME_WIN # style="background-color: {w_rounds.matches.WIN_COLOR}"# ENDIF #>
                                                 <div class="home-{w_rounds.matches.MATCH_ID} home-team">
-                                                    <div class="flex-team flex-left">
-                                                        <img src="{PATH_TO_ROOT}/{w_rounds.matches.HOME_LOGO}" alt="{w_rounds.matches.HOME_TEAM}">
-                                                        <span>{w_rounds.matches.HOME_TEAM}</span>
-                                                    </div>
+                                                    # IF w_rounds.matches.HOME_ID #
+                                                        <div class="flex-team flex-left">
+                                                            <img src="{PATH_TO_ROOT}/{w_rounds.matches.HOME_LOGO}" alt="{w_rounds.matches.HOME_TEAM}">
+                                                            <span>{w_rounds.matches.HOME_TEAM}</span>
+                                                        </div>
+                                                    # ENDIF #
                                                 </div>
                                                 <div class="bracket-score home-score width-px-50 align-center">{w_rounds.matches.HOME_SCORE}# IF w_rounds.matches.C_HAS_PEN # <span class="small">({w_rounds.matches.HOME_PEN})</span># ENDIF #</div>
                                             </div>
                                             <div class="id-{w_rounds.matches.AWAY_ID} bracket-team bracket-away# IF w_rounds.matches.C_AWAY_FAV # text-strong# ENDIF #"
                                                     # IF C_AWAY_WIN # style="background-color: {w_rounds.matches.WIN_COLOR}"# ENDIF #>
                                                 <div class="away-{w_rounds.matches.MATCH_ID} away-team">
-                                                    <div class="flex-team flex-left">
-                                                        <img src="{PATH_TO_ROOT}/{w_rounds.matches.AWAY_LOGO}" alt="{w_rounds.matches.AWAY_TEAM}">
-                                                        <span>{w_rounds.matches.AWAY_TEAM}</span>
-                                                    </div>
+                                                    # IF w_rounds.matches.AWAY_ID #
+                                                        <div class="flex-team flex-left">
+                                                            <img src="{PATH_TO_ROOT}/{w_rounds.matches.AWAY_LOGO}" alt="{w_rounds.matches.AWAY_TEAM}">
+                                                            <span>{w_rounds.matches.AWAY_TEAM}</span>
+                                                        </div>
+                                                    # ENDIF #
                                                 </div>
                                                 <div class="bracket-score away-score width-px-50 align-center">{w_rounds.matches.AWAY_SCORE}# IF w_rounds.matches.C_HAS_PEN # <span class="small">({w_rounds.matches.AWAY_PEN})</span># ENDIF #</div>
                                             </div>

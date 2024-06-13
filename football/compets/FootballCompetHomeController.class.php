@@ -43,7 +43,7 @@ class FootballCompetHomeController extends DefaultModuleController
             array(
                 'MENU' => FootballMenuService::build_compet_menu($this->compet_id()),
                 // tournament
-                'TOURNAMENT_CALENDAR' => FootballCalendarService::build_rounds_calendar($this->compet_id()),
+                'TOURNAMENT_CALENDAR' => FootballCompetHomeService::build_rounds_calendar($this->compet_id()),
                 'JS_DOC' => FootballBracketService::get_bracket_js_matches($this->compet_id(), $teams_number, $teams_per_group),
 
                 'NOT_VISIBLE_MESSAGE' => MessageHelper::display($this->lang['warning.element.not.visible'], MessageHelper::WARNING),

@@ -170,7 +170,7 @@ $lang['football.warning.add.teams.odd'] = '
     Ajoutez ou retirez une équipe ou ajoutez l\'équipe <strong>"Exempt"</strong>.
 ';
 
-$lang['football.warning.teams.has.matches'] = 'Les matchs de cette compétition ont été définis. Pour toute modification, recréez la liste des équipes de groupe et si des résultats ont déjà été renseignés, ils seront supprimés.';
+$lang['football.warning.teams.has.matches'] = 'Les matchs de cette compétition ont été définis. Toute modification réinitialise la liste des matchs.';
 
 // Mini module sorting
 $lang['football.last.compets'] = 'Les plus récents';

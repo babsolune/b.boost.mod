@@ -76,19 +76,6 @@ class FootballBracketsFormController extends DefaultModuleController
 		return $this->params;
 	}
 
-    private function get_teams_list()
-    {
-        $options = array();
-
-        $options[] = new FormFieldSelectChoiceOption('', '');
-		foreach(FootballTeamService::get_teams($this->compet_id()) as $team)
-		{
-			$options[] = new FormFieldSelectChoiceOption($team['team_club_name'], $team['id_team']);
-		}
-
-		return $options;
-    }
-
 	private function get_compet()
 	{
 		$id = AppContext::get_request()->get_getint('compet_id', 0);

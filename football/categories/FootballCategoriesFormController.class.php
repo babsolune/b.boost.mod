@@ -49,10 +49,18 @@ class FootballCategoriesFormController extends DefaultCategoriesFormController
 			$fieldset->add_field(self::$categories_manager->get_select_categories_form_field('id_parent', self::$lang['category.location'], $this->get_category()->get_id_parent(), $search_category_children_options));
 		}
 
-		// $fieldset->add_field(new FormFieldThumbnail('thumbnail', self::$lang['form.thumbnail'], $this->get_category()->get_thumbnail()->relative(), FootballCategory::THUMBNAIL_URL,
-		// 	array()
-		// ));
-
+		$fieldset->add_field(new FormFieldThumbnail('thumbnail', self::$lang['form.thumbnail'], $this->get_category()->get_thumbnail()->relative(), FootballCategory::THUMBNAIL_URL,
+			array()
+		));
+        $fieldset->add_field(new FormFieldFree('hide_extra', '', '
+        <script>
+            <!--
+                jQuery(document).ready(function() {
+                    jQuery("#' . __CLASS__ . '_thumbnail_field > div").hide();
+                });
+            -->
+        </script>
+    '));
 		// $fieldset->add_field(new FormFieldRichTextEditor('description', self::$lang['form.description'], $this->get_category()->get_description(),
 		// 	array()
 		// ));
@@ -109,8 +117,8 @@ class FootballCategoriesFormController extends DefaultCategoriesFormController
 	protected function set_properties()
 	{
 		parent::set_properties();
-		$this->get_category()->set_additional_property('description', $this->form->get_value('description'));
-		$this->get_category()->set_additional_property('thumbnail', $this->form->get_value('thumbnail'));
+		// $this->get_category()->set_additional_property('description', $this->form->get_value('description'));
+		// $this->get_category()->set_additional_property('thumbnail', $this->form->get_value('thumbnail'));
 
 		if ($this->form->get_value('special_authorizations'))
 		{

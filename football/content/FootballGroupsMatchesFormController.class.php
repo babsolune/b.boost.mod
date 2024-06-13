@@ -33,6 +33,7 @@ class FootballGroupsMatchesFormController extends DefaultModuleController
 		$this->view->put_all(array(
             'MENU' => FootballMenuService::build_compet_menu($this->compet_id()),
             'CONTENT' => $this->form->display(),
+            'JS_DOC' => FootballBracketService::get_bracket_js_matches($this->compet_id(), $this->teams_number, $this->teams_per_group),
         ));
 
 		return $this->generate_response($this->view);
@@ -73,7 +74,7 @@ class FootballGroupsMatchesFormController extends DefaultModuleController
                 $match_away_id = $this->get_match('G', $i, $j) ? $this->get_match('G', $i, $j)->get_match_away_id() : 0;
 
                 $fieldset->add_field(new FormFieldFree('group_match_number_' . $i . $j, '', $match_number,
-                    array('class' => 'match-select free-select small text-italic align-right')
+                    array('class' => 'match-select free-select small text-italic align-right form-G' . $i . $j)
                 ));
                 $fieldset->add_field(new FormFieldDateTime('group_match_date_' . $i . $j, '', $match_date,
                     array('class' => 'match-select date-select')
@@ -127,7 +128,7 @@ class FootballGroupsMatchesFormController extends DefaultModuleController
                 $match_away_id = $this->get_match('G', $i, $j) ? $this->get_match('G', $i, $j)->get_match_away_id() : 0;
 
                 $fieldset->add_field(new FormFieldFree('group_match_number_' . $i . $j, '', $match_number,
-                    array('class' => 'match-select free-select small text-italic align-right')
+                    array('class' => 'match-select free-select small text-italic align-right form-G' . $i . $j)
                 ));
                 $fieldset->add_field(new FormFieldDateTime('group_match_date_' . $i . $j, '', $match_date,
                     array('class' => 'match-select date-select')
@@ -281,10 +282,11 @@ class FootballGroupsMatchesFormController extends DefaultModuleController
         }
         $options = array();
 
+        $clubs = FootballClubCache::load();
         $options[] = new FormFieldSelectChoiceOption('', 0);
 		foreach($teams_list as $team)
 		{
-			$options[] = new FormFieldSelectChoiceOption($team['team_club_name'], $team['id_team']);
+			$options[] = new FormFieldSelectChoiceOption($clubs->get_club_name($team['team_club_id']), $team['id_team']);
 		}
 
 		return $options;
@@ -294,10 +296,11 @@ class FootballGroupsMatchesFormController extends DefaultModuleController
     {
         $options = array();
 
+        $clubs = FootballClubCache::load();
         $options[] = new FormFieldSelectChoiceOption('', '');
 		foreach(FootballTeamService::get_teams($this->compet_id()) as $team)
 		{
-			$options[] = new FormFieldSelectChoiceOption($team['team_club_name'], $team['id_team']);
+			$options[] = new FormFieldSelectChoiceOption($clubs->get_club_name($team['team_club_id']), $team['id_team']);
 		}
 
 		return $options;
@@ -324,6 +327,7 @@ class FootballGroupsMatchesFormController extends DefaultModuleController
             # INCLUDE MESSAGE_HELPER #
             # INCLUDE MENU #
             # INCLUDE CONTENT #
+            # INCLUDE JS_DOC #
         ';
 	}
 

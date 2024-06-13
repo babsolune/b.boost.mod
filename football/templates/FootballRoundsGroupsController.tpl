@@ -16,6 +16,7 @@
                         <div class="content-panel">
                             <table class="table bordered-table">
                                 <colgroup class="hidden-small-screens">
+                                    # IF NOT C_ONE_DAY #<col class="width-pc-8" /># ENDIF #
                                     <col class="width-pc-4" />
                                     <col class="width-pc-40" />
                                     <col class="width-pc-8" />
@@ -24,7 +25,8 @@
                                 </colgroup>
                                 <thead>
                                     <tr>
-                                        <th># IF C_ONE_DAY #{@football.th.hourly}# ELSE #{@football.th.date}# ENDIF #</th>
+                                        # IF NOT C_ONE_DAY #<th>{@football.th.date}</th># ENDIF #
+                                        <th>{@football.th.hourly}</th>
                                         <th>{@football.th.team} 1</th>
                                         <th colspan="2">{@football.th.score}</th>
                                         <th>{@football.th.team} 2</th>
@@ -33,7 +35,8 @@
                                 <tbody>
                                     # START days.matches #
                                         <tr# IF days.matches.C_HAS_SCORE # class="has-score-color"# ENDIF #>
-                                            <td># IF C_ONE_DAY #{days.matches.MATCH_DATE_HOUR_MINUTE}# ELSE #{days.matches.MATCH_DATE_FULL}# ENDIF #</td>
+                                            # IF NOT C_ONE_DAY #<td>{days.matches.MATCH_DATE_SHORT}</td># ENDIF #
+                                            <td>{days.matches.MATCH_DATE_HOUR_MINUTE}</td>
                                             <td class="align-right# IF days.matches.C_HOME_FAV # text-strong# ENDIF #">
                                                 <div class="flex-team flex-right">
                                                     <span>{days.matches.HOME_TEAM}</span>
@@ -123,6 +126,7 @@
                             <div>
                                 <table class="table bordered-table">
                                     <colgroup class="hidden-small-screens">
+                                        # IF NOT C_ONE_DAY #<col class="width-pc-8" /># ENDIF #
                                         <col class="width-pc-4" />
                                         <col class="width-pc-40" />
                                         <col class="width-pc-8" />
@@ -131,7 +135,8 @@
                                     </colgroup>
                                     <thead>
                                         <tr>
-                                            <th># IF C_ONE_DAY #{@football.th.hourly}# ELSE #{@football.th.date}# ENDIF #</th>
+                                            # IF NOT C_ONE_DAY #<th>{@football.th.date}</th># ENDIF #
+                                            <th>{@football.th.hourly}</th>
                                             <th>{@football.th.team} 1</th>
                                             <th colspan="2">{@football.th.score}</th>
                                             <th>{@football.th.team} 2</th>
@@ -140,7 +145,8 @@
                                     <tbody>
                                         # START groups.matches #
                                             <tr# IF groups.matches.C_HAS_SCORE # class="has-score-color"# ENDIF #>
-                                                <td># IF C_ONE_DAY #{groups.matches.MATCH_DATE_HOUR_MINUTE}# ELSE #{groups.matches.MATCH_DATE_FULL}# ENDIF #</td>
+                                                # IF NOT C_ONE_DAY #<td>{groups.matches.MATCH_DATE_SHORT}</td># ENDIF #
+                                                <td>{groups.matches.MATCH_DATE_HOUR_MINUTE}</td>
                                                 <td class="align-right# IF groups.matches.C_HOME_FAV # text-strong# ENDIF #">
                                                     <div class="flex-team flex-right">
                                                         <span>{groups.matches.HOME_TEAM}</span>
