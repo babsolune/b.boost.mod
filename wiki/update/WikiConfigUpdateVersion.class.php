@@ -38,25 +38,42 @@ class WikiConfigUpdateVersion extends ConfigUpdateVersion
 		return false;
 	}
 
-	private function build_authorizations($old_auth)
+	private function build_authorizations($old_auth_array)
 	{
-        // 5.2 to 6.0
-		// $new_auth = array();
+        $build_auth = [];
+		$auth_translation = [
+			// Old auth => New auth
+			0x01 => 2,  // Create article => WRITE_AUTHORIZATIONS
+			0x02 => 16, // Create Category => CATEGORIES_MANAGEMENT_AUTHORIZATIONS
+			0x04 => 32, // Restaure Archive => MANAGE_ARCHIVES_AUTHORIZATIONS
+			0x08 => 32, // Delete Archive => MANAGE_ARCHIVES_AUTHORIZATIONS
+			0x10 => 2,  // Edit => WRITE_AUTHORIZATIONS
+			0x20 => 8,  // Delete => MODERATION_AUTHORIZATIONS
+			0x40 => 8,  // Rename => MODERATION_AUTHORIZATIONS
+			0x80 => 8,  // Redirect => MODERATION_AUTHORIZATIONS
+			0x100 => 2, // Move => => WRITE_AUTHORIZATIONS
+			0x200 => 8, // Statut => MODERATION_AUTHORIZATIONS
+			// 0x400 => Comments are managed by kernel comments
+			0x800 => 8, // Restrictions => MODERATION_AUTHORIZATIONS
+			0x1000 => 1 // Read => READ_AUTHORIZATIONS
+		];
 
-		// foreach ($old_auth as $level => $auth)
-		// {
-		// 	if (($auth - 4096) < 0 && in_array($level, array("r-1", "r0", "r1")))
-		// 		$new_auth[$level] = $auth + 4096;
-		// }
+		foreach ($old_auth_array as $level => $auth) {
+			$bits = 0x00;
+			if ($level === 'r1' || $level === 'r0') {
+				// We add Contribution Auth for members and admins
+				$bits = 0x04;
+			}
+			foreach ($auth_translation as $old_auth => $new_auth)
+			{
+				if (($auth & $old_auth) && !($bits & $new_auth)) {
+					$bits += $new_auth;
+				}
 
-		// if (!isset($new_auth['r-1']))
-		// 	$new_auth['r-1'] = 5120;
-		// if (!isset($new_auth['r0']))
-		// 	$new_auth['r0'] = 5395;
-		// if (!isset($new_auth['r1']))
-		// 	$new_auth['r1'] = 8191;
-
-		// return $new_auth;
+			}
+			$build_auth[$level] = $bits;
+		}
+		return $build_auth;
 	}
 }
 ?>
