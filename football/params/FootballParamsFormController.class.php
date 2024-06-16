@@ -145,11 +145,8 @@ class FootballParamsFormController extends DefaultModuleController
 			$ranking_fieldset->add_field(new FormFieldNumberEditor('loss_points', $this->lang['football.loss.points'], $this->get_params()->get_loss_points(), array('min' => 0)));
 
 			$ranking_fieldset->add_field(new FormFieldNumberEditor('promotion', $this->lang['football.promotion'], $this->get_params()->get_promotion(), array('min' => 0)));
-			$ranking_fieldset->add_field(new FormFieldColorPicker('promotion_color', $this->lang['football.promotion.color'], $this->get_params()->get_promotion_color()));
-			$ranking_fieldset->add_field(new FormFieldNumberEditor('play_off', $this->lang['football.play.off'], $this->get_params()->get_play_off(), array('min' => 0)));
-			$ranking_fieldset->add_field(new FormFieldColorPicker('play_off_color', $this->lang['football.play.off.color'], $this->get_params()->get_play_off_color()));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('playoff', $this->lang['football.playoff'], $this->get_params()->get_playoff(), array('min' => 0)));
 			$ranking_fieldset->add_field(new FormFieldNumberEditor('relegation', $this->lang['football.relegation'], $this->get_params()->get_relegation(), array('min' => 0)));
-			$ranking_fieldset->add_field(new FormFieldColorPicker('relegation_color', $this->lang['football.relegation.color'], $this->get_params()->get_relegation_color()));
 
 			$ranking_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_type', $this->lang['football.ranking.type'], $this->get_params()->get_ranking_type(), $this->ranking_list()));
 		}
@@ -163,16 +160,17 @@ class FootballParamsFormController extends DefaultModuleController
 
             foreach ($teams as $team)
             {
-                $penalties_fieldset->add_field(new FormFieldNumberEditor('penalties_' . $team['id_team'], $team['team_club_name'], $team['team_penalty'],
-                    array('max' => 0)
-                ));
+                if ($this->is_championship)
+                    $penalties_fieldset->add_field(new FormFieldNumberEditor('penalties_' . $team['id_team'], $team['club_name'], $team['team_penalty'],
+                        array('max' => 0)
+                    ));
             }
         }
 
 		$option_fieldset = new FormFieldsetHTML('options', $this->lang['football.params.options']);
 		$form->add_fieldset($option_fieldset);
 		$option_fieldset->add_field(new FormFieldNumberEditor('match_duration', $this->lang['football.match.duration'], $this->get_params()->get_match_duration(),
-			array('description' => $this->lang['football.minutes.clue'], 'min' => 0)
+			array('description' => $this->lang['football.match.duration.clue'], 'min' => 0)
 		));
 
 		$option_fieldset->add_field(new FormFieldSimpleSelectChoice('favorite_team_id', $this->lang['football.favorite.team'], $this->get_params()->get_favorite_team_id(), $this->teams_list()));
@@ -214,11 +212,8 @@ class FootballParamsFormController extends DefaultModuleController
             $params->set_loss_points($this->form->get_value('loss_points'));
 
             $params->set_promotion($this->form->get_value('promotion'));
-            $params->set_promotion_color($this->form->get_value('promotion_color'));
-            $params->set_play_off($this->form->get_value('play_off'));
-            $params->set_play_off_color($this->form->get_value('play_off_color'));
+            $params->set_playoff($this->form->get_value('playoff'));
             $params->set_relegation($this->form->get_value('relegation'));
-            $params->set_relegation_color($this->form->get_value('relegation_color'));
             $params->set_ranking_type($this->form->get_value('ranking_type'));
         }
 
@@ -228,7 +223,8 @@ class FootballParamsFormController extends DefaultModuleController
 
             foreach ($teams as $team)
             {
-                FootballTeamService::update_team_penalty($team['id_team'], $this->form->get_value('penalties_' . $team['id_team']));
+                if ($this->is_championship)
+                    FootballTeamService::update_team_penalty($team['id_team'], $this->form->get_value('penalties_' . $team['id_team']));
             }
         }
 
@@ -271,7 +267,8 @@ class FootballParamsFormController extends DefaultModuleController
         $options[] = new FormFieldSelectChoiceOption('', 0);
 		foreach(FootballTeamService::get_teams($this->compet_id()) as $team)
 		{
-			$options[] = new FormFieldSelectChoiceOption($team['team_club_name'], $team['id_team']);
+            if ($this->is_championship)
+                $options[] = new FormFieldSelectChoiceOption($team['club_name'], $team['id_team']);
 		}
 
 		return $options;

@@ -10,10 +10,9 @@
 class FootballClub
 {
 	private $id_club;
-	private $club_place;
-	private $club_slug;
-	private $club_acronym;
 	private $club_name;
+	private $club_slug;
+	private $club_full_name;
 	private $club_logo;
 	private $club_email;
 	private $club_phone;
@@ -32,14 +31,14 @@ class FootballClub
 		$this->id_club = $id_club;
 	}
 
-	public function get_club_place()
+	public function get_club_name()
 	{
-		return $this->club_place;
+		return $this->club_name;
 	}
 
-	public function set_club_place($club_place)
+	public function set_club_name($club_name)
 	{
-		$this->club_place = $club_place;
+		$this->club_name = $club_name;
 	}
 
 	public function get_club_slug()
@@ -52,24 +51,14 @@ class FootballClub
 		$this->club_slug = $club_slug;
 	}
 
-	public function get_club_acronym()
+	public function get_club_full_name()
 	{
-		return $this->club_acronym;
+		return $this->club_full_name;
 	}
 
-	public function set_club_acronym($club_acronym)
+	public function set_club_full_name($club_full_name)
 	{
-		$this->club_acronym = $club_acronym;
-	}
-
-	public function get_club_name()
-	{
-		return $this->club_name;
-	}
-
-	public function set_club_name($club_name)
-	{
-		$this->club_name = $club_name;
+		$this->club_full_name = $club_full_name;
 	}
 
 	public function get_club_logo()
@@ -131,10 +120,9 @@ class FootballClub
 	{
 		return array(
 			'id_club' => $this->get_id_club(),
-			'club_place' => $this->get_club_place(),
-			'club_slug' => $this->get_club_slug(),
-			'club_acronym' => $this->get_club_acronym(),
 			'club_name' => $this->get_club_name(),
+			'club_slug' => $this->get_club_slug(),
+			'club_full_name' => $this->get_club_full_name(),
 			'club_logo' => $this->get_club_logo(),
 			'club_email' => $this->get_club_email(),
 			'club_phone' => $this->get_club_phone(),
@@ -146,10 +134,9 @@ class FootballClub
 	public function set_properties(array $properties)
 	{
 		$this->id_club = $properties['id_club'];
-		$this->club_place = $properties['club_place'];
-		$this->club_slug = $properties['club_slug'];
-		$this->club_acronym = $properties['club_acronym'];
 		$this->club_name = $properties['club_name'];
+		$this->club_slug = $properties['club_slug'];
+		$this->club_full_name = $properties['club_full_name'];
 		$this->club_logo = $properties['club_logo'];
 		$this->club_email = $properties['club_email'];
 		$this->club_phone = $properties['club_phone'];
@@ -159,6 +146,7 @@ class FootballClub
 
 	public function init_default_properties()
 	{
+		$this->club_map_display = true;
 	}
 
 	public function get_template_vars()
@@ -187,12 +175,11 @@ class FootballClub
             'C_HAS_EMAIL' => !empty($this->club_email),
             'C_HAS_PHONE' => !empty($this->club_phone),
             'C_HAS_NAME' => !empty($this->club_name),
-            'C_HAS_ACRONYM' => !empty($this->club_acronym),
+            'C_HAS_FULL_NAME' => !empty($this->club_full_name),
 			// Item
 			'ID'           => $this->id_club,
-			'PLACE'        => $this->club_place,
-			'ACRONYM'      => $this->club_acronym,
 			'NAME'         => $this->club_name,
+			'FULL_NAME'    => $this->club_full_name,
 			'EMAIL'        => $this->club_email,
 			'PHONE'        => $this->club_phone,
 			'LOCATION'     => $club_locations,

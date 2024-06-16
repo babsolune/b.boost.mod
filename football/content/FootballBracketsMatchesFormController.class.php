@@ -49,12 +49,12 @@ class FootballBracketsMatchesFormController extends DefaultModuleController
 
 	private function build_form()
 	{
-        $i = $id = AppContext::get_request()->get_getint('round', 0);
+        $i = AppContext::get_request()->get_getint('round', 0);
 		$form = new HTMLForm(__CLASS__);
         $form->set_css_class('floating-submit');
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['football.matches.management'] . '</div>');
 
-		$bracket_fieldset = new FormFieldsetHTML('looser_bracket', $this->lang['football.matches.bracket.stage']);
+		$bracket_fieldset = new FormFieldsetHTML('looser_bracket', $this->lang['football.matches.brackets.stage']);
 		$bracket_fieldset->set_css_class('grouped-selects');
         $bracket_fieldset->set_description('
             <div class="form-element free-select small">' . $this->lang['football.group'] . '</div>
@@ -140,7 +140,7 @@ class FootballBracketsMatchesFormController extends DefaultModuleController
         $winner_fieldset->add_field(new FormFieldSpacer('round_' . $i, ($this->hat_ranking && $i == $rounds_number + 1) ? $this->lang['football.playoff.matches'] : $this->lang['football.round.' . $i . ''], array('class' => 'form-spacer-big')));
         if ($this->return_matches) {
             if ($this->hat_ranking && $i == $rounds_number + 1)
-                $matches_number = $this->get_params()->get_play_off() / 2;
+                $matches_number = $this->get_params()->get_playoff() / 2;
             elseif ($i == 1)
                 $matches_number = $this->get_params()->get_looser_bracket() ? $this->teams_number / 4 : $this->round_matches_number($i);
             else
@@ -260,7 +260,7 @@ class FootballBracketsMatchesFormController extends DefaultModuleController
         if ($this->return_matches) {
             if ($this->hat_ranking && $i == $rounds_number) {
                 // Debug::stop('a/r hat');
-                $matches_number = $this->get_params()->get_play_off() / 2;
+                $matches_number = $this->get_params()->get_playoff() / 2;
             } elseif ($i == 1) {
                 // Debug::stop('a/r last');
                 $matches_number = $this->get_params()->get_looser_bracket() ? $this->teams_number / 4 : $this->round_matches_number($i);

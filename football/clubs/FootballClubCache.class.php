@@ -20,7 +20,7 @@ class FootballClubCache implements CacheData
 
 		$result = PersistenceContext::get_querier()->select('SELECT club.*
 			FROM ' . FootballSetup::$football_club_table . ' club
-			ORDER BY club.club_place ASC, club.club_name ASC'
+			ORDER BY club.club_name ASC'
 		);
 
 		while ($row = $result->fetch())
@@ -53,7 +53,7 @@ class FootballClubCache implements CacheData
 	{
 		if ($this->club_exists($id))
 		{
-			return $this->get_club($id)['club_name'] ? $this->get_club($id)['club_name'] : $this->get_club($id)['club_place'];
+			return $this->get_club($id)['club_name'];
 		}
 		return null;
 	}

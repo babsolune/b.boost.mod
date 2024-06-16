@@ -27,24 +27,28 @@ class FootballRoundsGroupsController extends DefaultModuleController
 
 	private function build_view()
 	{
+        $round = AppContext::get_request()->get_getint('round', 0);
         if($this->get_params()->get_hat_days())
         {
-            $this->view->put('C_HAT_DAYS', true);
+            $this->view->put_all(array(
+                'C_HAT_DAYS' => true,
+                'DAY' => $round
+            ));
             $days = FootballGroupService::matches_list_from_group($this->compet_id(), 'G');
+
+            $days_matches = FootballGroupService::matches_list_from_group($this->compet_id(), 'G', $round);
+            foreach($days_matches as $match)
+            {
+                $item = new FootballMatch();
+                $item->set_properties($match);
+                $this->view->assign_block_vars('matches', $item->get_array_tpl_vars());
+            }
+
             $ranks = [];
             foreach ($days as $day => $matches)
             {
-                $this->view->assign_block_vars('days',array(
-                    'C_FIRST_DAY' => $day == 1,
-                    'DAY' => $day
-                ));
                 foreach ($matches as $match)
                 {
-                    $item = new FootballMatch();
-                    $item->set_properties($match);
-
-                    $this->view->assign_block_vars('days.matches', $item->get_array_tpl_vars());
-
                     $ranks[] = [
                         'team_id' => $match['match_home_id'],
                         'goals_for' => $match['match_home_score'],
@@ -59,7 +63,7 @@ class FootballRoundsGroupsController extends DefaultModuleController
             }
 
             $teams = [];
-            for($i=0; $i < count($ranks); $i++)
+            for($i = 0; $i < count($ranks); $i++)
             {
                 $points = $played = $win = $draw = $loss = 0;
                 if ($ranks[$i]['goals_for'] > $ranks[$i]['goals_against'])
@@ -129,11 +133,11 @@ class FootballRoundsGroupsController extends DefaultModuleController
             });
 
             $prom = $this->get_params()->get_promotion();
-            $playoff = $this->get_params()->get_play_off();
+            $playoff = $this->get_params()->get_playoff();
             $releg = $this->get_params()->get_relegation();
-            $prom_color = $this->get_params()->get_promotion_color();
-            $playoff_color = $this->get_params()->get_play_off_color();
-            $releg_color = $this->get_params()->get_relegation_color();
+            $prom_color = FootballConfig::load()->get_promotion_color();
+            $playoff_color = FootballConfig::load()->get_playoff_color();
+            $releg_color = FootballConfig::load()->get_relegation_color();
             $color_count = count($ranks);
 
             foreach ($ranks as $i => $team_rank)
@@ -153,8 +157,8 @@ class FootballRoundsGroupsController extends DefaultModuleController
                         'C_FAV' => FootballParamsService::check_fav($this->compet_id(), $team_rank['team_id']),
                         'RANK' => $i + 1,
                         'RANK_COLOR' => $rank_color,
-                        'TEAM_NAME' => !empty($team_rank['team_id']) ? FootballTeamService::get_team($team_rank['team_id'])->get_team_club_name() : '',
-                        'TEAM_LOGO' => !empty($team_rank['team_id']) ? FootballClubService::get_club($team_rank['team_id'])->get_club_logo() : '',
+                        'TEAM_NAME' => !empty($team_rank['team_id']) ? FootballTeamService::get_team_name($team_rank['team_id']) : '',
+                        'TEAM_LOGO' => !empty($team_rank['team_id']) ? FootballTeamService::get_team_logo($team_rank['team_id']) : '',
                         'POINTS' => $team_rank['points'],
                         'PLAYED' => $team_rank['played'],
                         'WIN' => $team_rank['win'],
@@ -169,143 +173,139 @@ class FootballRoundsGroupsController extends DefaultModuleController
         }
         else
         {
-            $groups = FootballGroupService::matches_list_from_group($this->compet_id(), 'G');
+            $round_matches = FootballGroupService::matches_list_from_group($this->compet_id(), 'G', $round);
 
-            foreach ($groups as $group => $matches)
+            $this->view->put('GROUP', FootballGroupService::ntl($round));
+            $ranks = [];
+            foreach ($round_matches as $match)
             {
-                $this->view->assign_block_vars('groups',array(
-                    'C_FIRST_GROUP' => $group == 1,
-                    'GROUP' => FootballGroupService::ntl((int)$group)
-                ));
-                $ranks = [];
-                foreach ($matches as $match)
+                $item = new FootballMatch();
+                $item->set_properties($match);
+
+                $this->view->assign_block_vars('matches', $item->get_array_tpl_vars());
+
+                $ranks[] = [
+                    'team_id' => $match['match_home_id'],
+                    'goals_for' => $match['match_home_score'],
+                    'goals_against' => $match['match_away_score'],
+                ];
+                $ranks[] = [
+                    'team_id' => $match['match_away_id'],
+                    'goals_for' => $match['match_away_score'],
+                    'goals_against' => $match['match_home_score'],
+                ];
+            }
+
+            $teams = [];
+            for($i = 0; $i < count($ranks); $i++)
+            {
+                $points = $played = $win = $draw = $loss = 0;
+                if ($ranks[$i]['goals_for'] > $ranks[$i]['goals_against'])
                 {
-                    $item = new FootballMatch();
-                    $item->set_properties($match);
-
-                    $this->view->assign_block_vars('groups.matches', $item->get_array_tpl_vars());
-
-                    $ranks[] = [
-                        'team_id' => $match['match_home_id'],
-                        'goals_for' => $match['match_home_score'],
-                        'goals_against' => $match['match_away_score'],
-                    ];
-                    $ranks[] = [
-                        'team_id' => $match['match_away_id'],
-                        'goals_for' => $match['match_away_score'],
-                        'goals_against' => $match['match_home_score'],
-                    ];
+                    $points = $this->get_params()->get_victory_points();
+                    $win = $played = 1;
                 }
-
-                $teams = [];
-                for($i=0; $i < count($ranks); $i++)
+                elseif ($ranks[$i]['goals_for'] != '' && ($ranks[$i]['goals_for'] === $ranks[$i]['goals_against']))
                 {
-                    $points = $played = $win = $draw = $loss = 0;
-                    if ($ranks[$i]['goals_for'] > $ranks[$i]['goals_against'])
-                    {
-                        $points = $this->get_params()->get_victory_points();
-                        $win = $played = 1;
-                    }
-                    elseif ($ranks[$i]['goals_for'] != '' && ($ranks[$i]['goals_for'] === $ranks[$i]['goals_against']))
-                    {
-                        $points = $this->get_params()->get_draw_points();
-                        $draw = $played = 1;
-                    }
-                    elseif (($ranks[$i]['goals_for'] < $ranks[$i]['goals_against']))
-                    {
-                        $points = $this->get_params()->get_loss_points();
-                        $loss = $played = 1;
-                    }
-                    if ($ranks[$i]['team_id'])
-                    $teams[] = [
-                        'team_id' => $ranks[$i]['team_id'],
-                        'points' => $points,
-                        'played' => $played,
-                        'win' => $win,
-                        'draw' => $draw,
-                        'loss' => $loss,
-                        'goals_for' => (int)$ranks[$i]['goals_for'],
-                        'goals_against' => (int)$ranks[$i]['goals_against'],
-                        'goal_average' => (int)$ranks[$i]['goals_for'] - (int)$ranks[$i]['goals_against'],
-                    ];
+                    $points = $this->get_params()->get_draw_points();
+                    $draw = $played = 1;
                 }
-
-                $ranks = [];
-                foreach ($teams as $team) {
-                    $team_id = $team['team_id'];
-
-                    if (!isset($ranks[$team_id])) {
-                        $ranks[$team_id] = $team;
-                    } else {
-                        $ranks[$team_id]['points'] += $team['points'];
-                        $ranks[$team_id]['played'] += $team['played'];
-                        $ranks[$team_id]['win'] += $team['win'];
-                        $ranks[$team_id]['draw'] += $team['draw'];
-                        $ranks[$team_id]['loss'] += $team['loss'];
-                        $ranks[$team_id]['goals_for'] += $team['goals_for'];
-                        $ranks[$team_id]['goals_against'] += $team['goals_against'];
-                        $ranks[$team_id]['goal_average'] += $team['goals_for'] - $team['goals_against'];
-                    }
+                elseif (($ranks[$i]['goals_for'] < $ranks[$i]['goals_against']))
+                {
+                    $points = $this->get_params()->get_loss_points();
+                    $loss = $played = 1;
                 }
-                $ranks = array_values($ranks);
-                usort($ranks, function($a, $b)
-                {
-                    if ($a['points'] == $b['points']) {
-                        if ($a['win'] == $b['win']) {
-                            if ($a['goal_average'] == $b['goal_average']) {
-                                if ($a['goals_for'] == $b['goals_for']) {
-                                    if ($a['goals_for'] == $b['goals_for']) {
-                                        return 0;
-                                    }
-                                }
-                                return $b['goals_for'] - $a['goals_for'];
-                            }
-                            return $b['goal_average'] - $a['goal_average'];
-                        }
-                        return $b['win'] - $a['win'];
-                    }
-                    return $b['points'] - $a['points'];
-                });
+                if ($ranks[$i]['team_id'])
+                $teams[] = [
+                    'team_id' => $ranks[$i]['team_id'],
+                    'points' => $points,
+                    'played' => $played,
+                    'win' => $win,
+                    'draw' => $draw,
+                    'loss' => $loss,
+                    'goals_for' => (int)$ranks[$i]['goals_for'],
+                    'goals_against' => (int)$ranks[$i]['goals_against'],
+                    'goal_average' => (int)$ranks[$i]['goals_for'] - (int)$ranks[$i]['goals_against'],
+                ];
+            }
 
-                $prom = $this->get_params()->get_promotion();
-                $playoff = $this->get_params()->get_play_off();
-                $releg = $this->get_params()->get_relegation();
-                $prom_color = $this->get_params()->get_promotion_color();
-                $playoff_color = $this->get_params()->get_play_off_color();
-                $releg_color = $this->get_params()->get_relegation_color();
-                $color_count = count($ranks);
+            $ranks = [];
+            foreach ($teams as $team) {
+                $team_id = $team['team_id'];
 
-                foreach ($ranks as $i => $team_rank)
-                {
-                    if ($prom && $i < $prom) {
-                        $rank_color = $prom_color;
-                    } elseif ($playoff && $i >= $prom && $i < ($prom + $playoff)) {
-                        $rank_color = $playoff_color;
-                    } else if ($releg && $i >= $color_count - $releg) {
-                        $rank_color = $releg_color;
-                    } else {
-                        $rank_color = 'rgba(0,0,0,0)';
-                    }
-                    $this->view->assign_block_vars('groups.ranks', array_merge(
-                        Date::get_array_tpl_vars(new Date($match['match_date'], Timezone::SERVER_TIMEZONE), 'match_date'),
-                        array(
-                            'C_FAV' => FootballParamsService::check_fav($this->compet_id(), $team_rank['team_id']),
-                            'RANK' => $i + 1,
-                            'RANK_COLOR' => $rank_color,
-                            'TEAM_NAME' => !empty($team_rank['team_id']) ? FootballTeamService::get_team($team_rank['team_id'])->get_team_club_name() : '',
-                            'TEAM_LOGO' => !empty($team_rank['team_id']) ? FootballClubService::get_club($team_rank['team_id'])->get_club_logo() : '',
-                            'POINTS' => $team_rank['points'],
-                            'PLAYED' => $team_rank['played'],
-                            'WIN' => $team_rank['win'],
-                            'DRAW' => $team_rank['draw'],
-                            'LOSS' => $team_rank['loss'],
-                            'GOALS_FOR' => $team_rank['goals_for'],
-                            'GOALS_AGAINST' => $team_rank['goals_against'],
-                            'GOAL_AVERAGE' => $team_rank['goal_average'],
-                        )
-                    ));
+                if (!isset($ranks[$team_id])) {
+                    $ranks[$team_id] = $team;
+                } else {
+                    $ranks[$team_id]['points'] += $team['points'];
+                    $ranks[$team_id]['played'] += $team['played'];
+                    $ranks[$team_id]['win'] += $team['win'];
+                    $ranks[$team_id]['draw'] += $team['draw'];
+                    $ranks[$team_id]['loss'] += $team['loss'];
+                    $ranks[$team_id]['goals_for'] += $team['goals_for'];
+                    $ranks[$team_id]['goals_against'] += $team['goals_against'];
+                    $ranks[$team_id]['goal_average'] += $team['goals_for'] - $team['goals_against'];
                 }
             }
+            $ranks = array_values($ranks);
+
+            usort($ranks, function($a, $b)
+            {
+                if ($a['points'] == $b['points']) {
+                    if ($a['win'] == $b['win']) {
+                        if ($a['goal_average'] == $b['goal_average']) {
+                            if ($a['goals_for'] == $b['goals_for']) {
+                                if ($a['goals_for'] == $b['goals_for']) {
+                                    return 0;
+                                }
+                            }
+                            return $b['goals_for'] - $a['goals_for'];
+                        }
+                        return $b['goal_average'] - $a['goal_average'];
+                    }
+                    return $b['win'] - $a['win'];
+                }
+                return $b['points'] - $a['points'];
+            });
+
+            $prom = $this->get_params()->get_promotion();
+            $playoff = $this->get_params()->get_playoff();
+            $releg = $this->get_params()->get_relegation();
+            $prom_color = FootballConfig::load()->get_promotion_color();
+            $playoff_color = FootballConfig::load()->get_playoff_color();
+            $releg_color = FootballConfig::load()->get_relegation_color();
+            $color_count = count($ranks);
+
+            foreach ($ranks as $i => $team_rank)
+            {
+                if ($prom && $i < $prom) {
+                    $rank_color = $prom_color;
+                } elseif ($playoff && $i >= $prom && $i < ($prom + $playoff)) {
+                    $rank_color = $playoff_color;
+                } else if ($releg && $i >= $color_count - $releg) {
+                    $rank_color = $releg_color;
+                } else {
+                    $rank_color = 'rgba(0,0,0,0)';
+                }
+                $this->view->assign_block_vars('ranks', array_merge(
+                    Date::get_array_tpl_vars(new Date($match['match_date'], Timezone::SERVER_TIMEZONE), 'match_date'),
+                    array(
+                        'C_FAV' => FootballParamsService::check_fav($this->compet_id(), $team_rank['team_id']),
+                        'RANK' => $i + 1,
+                        'RANK_COLOR' => $rank_color,
+                        'TEAM_NAME' => !empty($team_rank['team_id']) ? FootballTeamService::get_team_name($team_rank['team_id']) : '',
+                        'TEAM_LOGO' => !empty($team_rank['team_id']) ? FootballTeamService::get_team_logo($team_rank['team_id']) : '',
+                        'POINTS' => $team_rank['points'],
+                        'PLAYED' => $team_rank['played'],
+                        'WIN' => $team_rank['win'],
+                        'DRAW' => $team_rank['draw'],
+                        'LOSS' => $team_rank['loss'],
+                        'GOALS_FOR' => $team_rank['goals_for'],
+                        'GOALS_AGAINST' => $team_rank['goals_against'],
+                        'GOAL_AVERAGE' => $team_rank['goal_average'],
+                    )
+                ));
+            }
+
         }
 
         $this->view->put_all(array(

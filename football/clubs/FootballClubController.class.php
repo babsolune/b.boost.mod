@@ -24,6 +24,13 @@ class FootballClubController extends DefaultModuleController
 		return $this->generate_response();
 	}
 
+	private function build_view()
+	{
+		$club = $this->get_club();
+
+		$this->view->put_all($club->get_template_vars());
+	}
+
 	private function get_club()
 	{
 		if ($this->club === null)
@@ -44,13 +51,6 @@ class FootballClubController extends DefaultModuleController
 		return $this->club;
 	}
 
-	private function build_view()
-	{
-		$club = $this->get_club();
-
-		$this->view->put_all($club->get_template_vars());
-	}
-
 	private function check_authorizations()
 	{
 		$club = $this->get_club();
@@ -66,7 +66,7 @@ class FootballClubController extends DefaultModuleController
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['football.module.title'],FootballUrlBuilder::home());
 		$breadcrumb->add($this->lang['football.clubs.manager'], FootballUrlBuilder::manage_clubs());
-		$breadcrumb->add($club->get_club_name() ? $club->get_club_name() : $club->get_club_place(), FootballUrlBuilder::display_club($club->get_id_club()));
+		$breadcrumb->add($club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name(), FootballUrlBuilder::display_club($club->get_id_club()));
 
 		return $response;
 	}

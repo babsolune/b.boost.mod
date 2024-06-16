@@ -209,7 +209,6 @@ class FootballMatch
 
 	public function get_array_tpl_vars()
 	{
-        $club = FootballClubCache::load();
         $c_home_score = $this->match_home_score != '';
         $c_home_pen   = $this->match_home_pen != '';
         $c_away_pen   = $this->match_away_pen != '';
@@ -218,27 +217,27 @@ class FootballMatch
         return array_merge(
             Date::get_array_tpl_vars($this->match_date, 'match_date'),
             array(
-                'C_ONE_DAY' => FootballMatchService::one_day_compet($this->match_compet_id),
+                'C_IS_LIVE' => FootballMatchService::is_live($this->match_compet_id, $this->id_match),
                 'C_HAS_SCORE' => $c_home_score && $c_away_score,
+                'WIN_COLOR' => FootballConfig::load()->get_promotion_color(),
                 'C_HAS_PEN' => $c_home_pen && $c_away_pen,
                 'C_HOME_FAV' => FootballParamsService::check_fav($this->match_compet_id, $this->match_home_id) && $this->match_home_id,
                 'C_HOME_WIN' => $this->match_home_score > $this->match_away_score || $this->match_home_pen > $this->match_away_pen,
                 'C_AWAY_FAV' => FootballParamsService::check_fav($this->match_compet_id, $this->match_away_id) && $this->match_away_id,
                 'C_AWAY_WIN' => $this->match_home_score < $this->match_away_score || $this->match_home_pen < $this->match_away_pen,
-                'WIN_COLOR' => FootballParamsService::get_params($this->match_compet_id)->get_promotion_color(),
                 'MATCH_ID' => $this->match_type.$this->match_group.$this->match_order,
                 'PLAYGROUND' => $this->match_playground,
                 'HOME_ID' => $this->match_home_id,
-                'HOME_LOGO' => $this->match_home_id ? $club->get_club_logo(FootballTeamService::get_team($this->match_home_id)->get_team_club_id()) : '',
-                'HOME_TEAM' => $this->match_home_id ? $club->get_club_name(FootballTeamService::get_team($this->match_home_id)->get_team_club_id()) : '',
+                'HOME_LOGO' => $this->match_home_id ? FootballTeamService::get_team_logo($this->match_home_id) : '',
+                'HOME_TEAM' => $this->match_home_id ? FootballTeamService::get_team_name($this->match_home_id) : '',
                 'U_HOME_CALENDAR' => $this->match_home_id ? FootballUrlBuilder::display_team_calendar($this->match_compet_id, $this->match_home_id)->rel() : '#',
                 'HOME_SCORE' => $this->match_home_score,
                 'HOME_PEN' => $this->match_home_pen,
                 'AWAY_PEN' => $this->match_away_pen,
                 'AWAY_SCORE' => $this->match_away_score,
                 'U_AWAY_CALENDAR' => $this->match_away_id ? FootballUrlBuilder::display_team_calendar($this->match_compet_id, $this->match_away_id)->rel() : '#',
-                'AWAY_TEAM' => $this->match_away_id ? $club->get_club_name(FootballTeamService::get_team($this->match_away_id)->get_team_club_id()) : '',
-                'AWAY_LOGO' => $this->match_away_id ? $club->get_club_logo(FootballTeamService::get_team($this->match_away_id)->get_team_club_id()) : '',
+                'AWAY_TEAM' => $this->match_away_id ? FootballTeamService::get_team_name($this->match_away_id) : '',
+                'AWAY_LOGO' => $this->match_away_id ? FootballTeamService::get_team_logo($this->match_away_id) : '',
                 'AWAY_ID' => $this->match_away_id
             )
         );

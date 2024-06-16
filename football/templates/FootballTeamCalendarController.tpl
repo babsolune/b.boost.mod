@@ -15,7 +15,7 @@
                 <thead>
                     <tr>
                         # IF NOT C_ONE_DAY #<th>{@football.th.date}</th># ENDIF #
-                        <th>{@football.th.hourly}</th>
+                        <th aria-label="{@football.th.hourly}"><i class="far fa-clock"></i></th>
                         <th>{@football.th.team} 1</th>
                         <th colspan="2">{@football.th.score}</th>
                         <th>{@football.th.team} 2</th>
@@ -45,7 +45,7 @@
                 </tbody>
             </table>
         # ELSE #
-            yenapadmatch
+            <div class="message-helper bgc notice">{@football.message.no.matches}</div>
         # ENDIF #
     </div>
 </article>

@@ -130,20 +130,29 @@ class FootballGroupService
     }
 
     /** Get list of matches in a day or group */
-    public static function matches_list_from_group(int $compet_id, string $stage = '') : array
+    public static function matches_list_from_group(int $compet_id, string $stage = '', string $group = '') : array
     {
         $compet_matches = FootballMatchService::get_matches($compet_id);
-        $groups = [];
+        $matches = [];
+        if ($group)
+            foreach($compet_matches as $match)
+            {
+                if($match['match_type'] == $stage && $match['match_group'] == $group)
+                {
+                    $matches[] = $match;
+                }
+            }
+        else
         foreach($compet_matches as $match)
         {
             if($match['match_type'] == $stage)
             {
                 $group_nb = $match['match_group'];
-                if(!isset($groups[$group_nb]))
-                    $groups[$group_nb] = [];
-                $groups[$group_nb][] = $match;
+                if(!isset($matches[$group_nb]))
+                    $matches[$group_nb] = [];
+                $matches[$group_nb][] = $match;
             }
         }
-        return $groups;
+        return $matches;
     }
 }

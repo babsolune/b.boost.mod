@@ -10,8 +10,6 @@
 class FootballTeamsFormController extends DefaultModuleController
 {
     private $compet;
-    private $team;
-    private $compet_type;
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -56,6 +54,36 @@ class FootballTeamsFormController extends DefaultModuleController
 
 		$fieldset->add_field(new FormFieldMultipleCheckbox('teams', '', $this->get_teams_list(), $this->get_clubs_list()));
 
+        $fieldset->add_field(new FormFieldFree('teams_counter', '', '
+			<script>
+					// Select all checkboxes
+                    let checkboxes = document.querySelectorAll("input[type=checkbox]");
+                    // Add span to display the counter
+                    let target = document.getElementById("'. self::class.'_compet");
+                    let span = document.createElement("span");
+                    span.classList.add("checkbox-counter");
+                    target.prepend(span);
+
+                    // Initialize checked count
+                    let checked_count = 0;
+
+                    // Function to count checked checkboxes
+                    function count_checked_checkboxes() {
+                        checked_count = document.querySelectorAll("input[type=checkbox]:checked").length;
+                        const counter = checked_count + " ' . $this->lang['football.selected.teams'] . '";
+                        const span_target = document.querySelector(".checkbox-counter");
+                        span_target.innerHTML = counter;
+                    }
+                    // Add event listener to each checkbox
+                    checkboxes.forEach((checkbox) => {
+                        checkbox.addEventListener("change", count_checked_checkboxes);
+                    });
+
+                    // Call the function initially to get the current count
+                    count_checked_checkboxes();
+			</script>
+        '));
+
 		$this->submit_button = new FormButtonDefaultSubmit();
 		$form->add_button($this->submit_button);
 
@@ -75,7 +103,6 @@ class FootballTeamsFormController extends DefaultModuleController
             {
                 $team->set_team_compet_id($this->compet_id());
                 $team->set_team_club_id($options->get_id());
-                $team->set_team_club_name($options->get_label());
                 $id = FootballTeamService::add_team($team);
                 $team->set_id_team($id);
             }
@@ -99,7 +126,7 @@ class FootballTeamsFormController extends DefaultModuleController
 		$i = 1;
 		foreach($clubs_list as $club)
 		{
-			$options[] = new FormFieldMultipleCheckboxOption($club['id_club'], ($club['club_name'] ? $club['club_name'] : $club['club_place']));
+			$options[] = new FormFieldMultipleCheckboxOption($club['id_club'], ($club['club_name']));
 			$i++;
 		}
 

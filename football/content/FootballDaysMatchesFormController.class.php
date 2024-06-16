@@ -44,7 +44,7 @@ class FootballDaysMatchesFormController extends DefaultModuleController
 
 	private function build_form()
 	{
-        $i = $id = AppContext::get_request()->get_getint('round', 0);
+        $i = AppContext::get_request()->get_getint('round', 0);
 		$form = new HTMLForm(__CLASS__);
         $form->set_css_class('floating-submit');
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['football.matches.management'] . '</div>');
@@ -107,7 +107,7 @@ class FootballDaysMatchesFormController extends DefaultModuleController
 
 	private function save()
 	{
-        $i = $id = AppContext::get_request()->get_getint('round', 0);
+        $i = AppContext::get_request()->get_getint('round', 0);
 
         for($j = 1; $j <= $this->teams_number / 2; $j++)
         {
@@ -181,7 +181,7 @@ class FootballDaysMatchesFormController extends DefaultModuleController
         $options[] = new FormFieldSelectChoiceOption('', 0);
         foreach (FootballTeamService::get_teams($this->compet_id()) as $team)
         {
-			$options[] = new FormFieldSelectChoiceOption($team['team_club_name'] ? $team['team_club_name'] : $team['team_club_place'], $team['id_team']);
+			$options[] = new FormFieldSelectChoiceOption($team['club_name'], $team['id_team']);
         }
 
 		return $options;

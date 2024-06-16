@@ -338,7 +338,7 @@ class FootballRoundsBracketsController extends DefaultModuleController
 				$breadcrumb->add($category->get_name(), FootballUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
 		}
 		$breadcrumb->add($compet->get_compet_name(), FootballUrlBuilder::compet_home($compet->get_id_compet()));
-        $breadcrumb->add($this->lang['football.matches.bracket.stage'], FootballUrlBuilder::display_brackets_rounds($compet->get_id_compet()));
+        $breadcrumb->add($this->lang['football.matches.brackets.stage'], FootballUrlBuilder::display_brackets_rounds($compet->get_id_compet()));
 
 		return $response;
 	}

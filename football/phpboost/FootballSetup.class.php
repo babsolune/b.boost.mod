@@ -120,10 +120,9 @@ class FootballSetup extends DefaultModuleSetup
 	{
 		$fields = array(
 			'id_club' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
-			'club_place' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
-			'club_slug' => array('type' => 'string', 'length' => 255, 'default' => "''"),
-			'club_acronym' => array('type' => 'string', 'length' => 255, 'notnull' => 0, 'default' => "''"),
 			'club_name' => array('type' => 'string', 'length' => 255, 'notnull' => 0, 'default' => "''"),
+			'club_slug' => array('type' => 'string', 'length' => 255, 'default' => "''"),
+			'club_full_name' => array('type' => 'string', 'length' => 255, 'notnull' => 0, 'default' => "''"),
 			'club_logo' => array('type' => 'string', 'length' => 255, 'default' => "''"),
 			'club_email' => array('type' => 'string', 'length' => 255, 'default' => "''"),
 			'club_phone' => array('type' => 'string', 'length' => 25, 'default' => "''"),
@@ -225,11 +224,8 @@ class FootballSetup extends DefaultModuleSetup
 			'draw_points' => array('type' => 'integer', 'length' => 11, 'default' => 0),
 			'loss_points' => array('type' => 'integer', 'length' => 11, 'default' => 0),
 			'promotion' => array('type' => 'integer', 'length' => 11, 'default' => 0),
-			'promotion_color' => array('type' => 'string', 'length' => 9, 'default' => "'#baffb0'"),
-			'play_off' => array('type' => 'integer', 'length' => 11, 'default' => 0),
-			'play_off_color' => array('type' => 'string', 'length' => 9, 'default' => "'#b0e1ff'"),
+			'playoff' => array('type' => 'integer', 'length' => 11, 'default' => 0),
 			'relegation' => array('type' => 'integer', 'length' => 11, 'default' => 0),
-			'relegation_color' => array('type' => 'string', 'length' => 9, 'default' => "'#ffb0b0'"),
 			'ranking_type' => array('type' => 'string', 'length' => 255, 'default' => "''"),
 
 			'match_duration' => array('type' => 'integer', 'length' => 11, 'default' => 0),
@@ -315,7 +311,6 @@ class FootballSetup extends DefaultModuleSetup
 			'team_group' => array('type' => 'integer', 'length' => 11, 'default' => 0),
 			'team_order' => array('type' => 'integer', 'length' => 11, 'default' => 0),
 			'team_club_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
-			'team_club_name' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
 			'team_penalty' => array('type' => 'integer', 'length' => 11),
 		);
 		$options = array(
@@ -364,13 +359,12 @@ class FootballSetup extends DefaultModuleSetup
                 if($row == 1){ $row++; continue; }
                 PersistenceContext::get_querier()->insert(self::$football_club_table, array(
                     'id_club'          => null,
-                    'club_place'       => $data[0],
+                    'club_name'        => $data[0],
                     'club_slug'        => $data[1],
-                    'club_acronym'     => $data[2],
-                    'club_name'        => $data[3],
-                    'club_logo'        => $data[4],
-                    'club_locations'   => $data[7],
-                    'club_map_display' => $data[8],
+                    'club_full_name'   => $data[2],
+                    'club_logo'        => $data[3],
+                    'club_locations'   => $data[6],
+                    'club_map_display' => $data[7],
                 ));
                 $row++;
             }

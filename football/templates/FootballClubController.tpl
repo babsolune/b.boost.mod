@@ -1,10 +1,10 @@
 <section id="module-football">
     <header class="section-header row-header">
-        # IF C_HAS_LOGO #<img class="club-logo" src="{U_LOGO}" alt="{ACRONYM}"># ENDIF #
+        # IF C_HAS_LOGO #<img class="club-logo" src="{U_LOGO}" alt="{FULL_NAME}"># ENDIF #
         <div class="club-name">
-            <h1># IF C_HAS_NAME #{NAME}# ELSE #{PLACE}# ENDIF #</h1>
+            <h1># IF C_HAS_FULL_NAME #{FULL_NAME}# ELSE #{NAME}# ENDIF #</h1>
             <div class="flex-between">
-                <span class="big"># IF C_HAS_NAME #{PLACE}# ENDIF # # IF C_HAS_ACRONYM #{ACRONYM}# ENDIF #</span>
+                <span class="big"># IF C_HAS_NAME #{NAME}# ENDIF #</span>
                 # IF C_CONTROLS #
                     <div class="controls align-right">
                         <a class="offload" href="{U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a>

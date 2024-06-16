@@ -178,5 +178,26 @@ class FootballMatchService
         else
             return false;
     }
+
+    // Check if match is live
+    public static function is_live($compet_id, $match_id)
+	{
+        $now = new Date();
+        $match = FootballMatchCache::load()->get_match($match_id);
+        $match_duration = FootballParamsService::get_params($compet_id)->get_match_duration();
+        $overtime_duration = FootballParamsService::get_params($compet_id)->get_overtime_duration();
+        $full_duration = $match['match_type'] == 'G' || $match['match_type'] == 'D' ? $match_duration : $match_duration + $overtime_duration;
+
+        $is_live = false;
+        if ($now->get_timestamp() > $match['match_date'])
+        {
+            if ($now->get_timestamp() > ($match['match_date'] + ($full_duration * 60))) {
+                $is_live = false;
+            } else {
+                $is_live = true;
+            }
+        }
+		return $is_live;
+	}
 }
 ?>

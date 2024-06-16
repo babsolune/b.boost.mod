@@ -50,13 +50,21 @@ class FootballDaysFormController extends DefaultModuleController
         $fieldset = new FormFieldsetHTML('days', $this->lang['football.days.date']);
         $fieldset->set_css_class('days-form');
         $form->add_fieldset($fieldset);
+
         for ($i = 1; $i <= $this->days_number; $i++)
         {
-            $day_date = $this->get_day($i) ? $this->get_day($i)->get_day_date() : new Date();
-            $fieldset->add_field(new FormFieldDateTime('day_date_' . $i, $this->lang['football.day'] . ' ' . $i, $day_date,
+            $day_date = $this->get_day($i)->get_day_date() ?? new Date();
+            $fieldset->add_field(new FormFieldDate('day_date_' . $i, $this->lang['football.day'] . ' ' . $i, $day_date,
                 array('class' => 'groups-select')
             ));
         }
+
+        $fieldset->add_field(new FormFieldFree('inset', '', '
+            <script>
+                const inset = document.querySelector(".days-form .fieldset-inset");
+                inset.classList.add("cell-flex", "cell-columns-4");
+            </script>
+        '));
 
 		$this->submit_button = new FormButtonDefaultSubmit();
 		$form->add_button($this->submit_button);

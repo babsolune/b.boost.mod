@@ -44,8 +44,8 @@ $url_controller_mappers = array(
 	new UrlControllerMapper('FootballTeamCalendarController', '`^/team/calendar/?([0-9]+)?/?([0-9]+)?/?$`', array('compet_id', 'team_id')),
 	new UrlControllerMapper('FootballDaysCalendarController', '`^/days/calendar/?([0-9]+)?/?$`', array('compet_id')),
 	new UrlControllerMapper('FootballDaysRankingController', '`^/days/ranking/?([0-9]+)?/?([a-z]+)?/?([0-9]+)?/?$`', array('compet_id', 'section', 'day')),
-	new UrlControllerMapper('FootballRoundsGroupsController', '`^/groups/rounds/?([0-9]+)?/?$`', array('compet_id')),
-	new UrlControllerMapper('FootballRoundsBracketsController', '`^/brackets/rounds/?([0-9]+)?/?$`', array('compet_id')),
+	new UrlControllerMapper('FootballRoundsGroupsController', '`^/rounds/?([0-9]+)?/group/?([0-9]+)?/?$`', array('compet_id', 'round')),
+	new UrlControllerMapper('FootballRoundsBracketsController', '`^/rounds/?([0-9]+)?/brackets/?$`', array('compet_id')),
     // Content edit
     new UrlControllerMapper('FootballDaysFormController', '`^/days/edit/?([0-9]+)?/?$`', array('compet_id')),
 	new UrlControllerMapper('FootballDaysMatchesFormController', '`^/days/matches/edit/?([0-9]+)?/round/?([0-9]+)?/?$`', array('compet_id', 'round')),

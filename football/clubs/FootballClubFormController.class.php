@@ -40,16 +40,11 @@ class FootballClubFormController extends DefaultModuleController
 		$fieldset = new FormFieldsetHTML('football', $this->lang['form.parameters']);
 		$form->add_fieldset($fieldset);
 
-        $fieldset->add_field(new FormFieldTextEditor('place', $this->lang['football.club.place'], $this->get_club()->get_club_place(), 
-			array(
-                'required' => true,
-                'description' => $this->lang['football.club.place.clue']
-            )
-		));
+        $fieldset->add_field(new FormFieldTextEditor('name', $this->lang['football.club.name'], $this->get_club()->get_club_name(),
+            array('required' => true,)
+        ));
 
-        $fieldset->add_field(new FormFieldTextEditor('acronym', $this->lang['football.club.acronym'], $this->get_club()->get_club_acronym()));
-
-        $fieldset->add_field(new FormFieldTextEditor('name', $this->lang['football.club.name'], $this->get_club()->get_club_name()));
+        $fieldset->add_field(new FormFieldTextEditor('full_name', $this->lang['football.club.full.name'], $this->get_club()->get_club_full_name()));
 
         $fieldset->add_field(new FormFieldMailEditor('email', $this->lang['football.club.email'], $this->get_club()->get_club_email()));
 
@@ -94,10 +89,9 @@ class FootballClubFormController extends DefaultModuleController
 	{
 		$club = $this->get_club();
 
-        $club->set_club_place($this->form->get_value('place'));
-		$club->set_club_slug(Url::encode_rewrite($club->get_club_place()));
-        $club->set_club_acronym($this->form->get_value('acronym'));
         $club->set_club_name($this->form->get_value('name'));
+		$club->set_club_slug(Url::encode_rewrite($club->get_club_name()));
+        $club->set_club_full_name($this->form->get_value('full_name'));
         $club->set_club_email($this->form->get_value('email'));
         $club->set_club_phone($this->form->get_value('phone'));
         $club->set_club_logo($this->form->get_value('logo'));
@@ -207,7 +201,7 @@ class FootballClubFormController extends DefaultModuleController
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(FootballUrlBuilder::edit_club($club->get_id_club()));
 
             $breadcrumb->add($this->lang['football.clubs.manager'], FootballUrlBuilder::manage_clubs());
-			$breadcrumb->add($club->get_club_name() ? $club->get_club_name() : $club->get_club_place(), FootballUrlBuilder::display_club($club->get_id_club()));
+			$breadcrumb->add($club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name(), FootballUrlBuilder::display_club($club->get_id_club()));
 			$breadcrumb->add($this->lang['football.edit.club'], FootballUrlBuilder::edit_club($club->get_id_club()));
 		}
 

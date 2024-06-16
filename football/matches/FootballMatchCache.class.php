@@ -18,9 +18,9 @@ class FootballMatchCache implements CacheData
 	{
 		$this->matches = array();
 
-		$result = PersistenceContext::get_querier()->select('SELECT match.*
-			FROM ' . FootballSetup::$football_match_table . ' match
-			ORDER BY match.id_match DESC'
+		$result = PersistenceContext::get_querier()->select('SELECT game.*
+			FROM ' . FootballSetup::$football_match_table . ' game
+			ORDER BY game.id_match'
 		);
 
 		while ($row = $result->fetch())

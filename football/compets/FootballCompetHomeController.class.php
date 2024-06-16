@@ -27,24 +27,27 @@ class FootballCompetHomeController extends DefaultModuleController
 
 	private function build_view()
 	{
-		$compet = $this->get_compet();
-        $teams_number = FootballTeamService::get_teams_number($this->compet_id());
+		$compet          = $this->get_compet();
+        $teams_number    = FootballTeamService::get_teams_number($this->compet_id());
         $teams_per_group = FootballParamsService::get_params($this->compet_id())->get_teams_per_group();
 
+        $c_championship = FootballCompetService::get_compet_type($this->compet_id()) == FootballDivision::CHAMPIONSHIP;
+        $c_cup          = FootballCompetService::get_compet_type($this->compet_id()) == FootballDivision::CUP;
+        $c_tournament   = FootballCompetService::get_compet_type($this->compet_id()) == FootballDivision::TOURNAMENT;
 		$this->view->put_all(array(
-            'C_CHAMPIONSHIP' => FootballCompetService::get_compet_type($this->compet_id()) == FootballDivision::CHAMPIONSHIP,
-            'C_CUP' => FootballCompetService::get_compet_type($this->compet_id()) == FootballDivision::CUP,
-            'C_TOURNAMENT' => FootballCompetService::get_compet_type($this->compet_id()) == FootballDivision::TOURNAMENT,
-            'C_HAS_MATCHES' => FootballMatchService::has_matches($this->compet_id())
+            'C_CHAMPIONSHIP' => $c_championship,
+            'C_CUP'          => $c_cup,
+            'C_TOURNAMENT'   => $c_tournament,
+            'C_HAS_MATCHES'  => FootballMatchService::has_matches($this->compet_id())
         ));
 
         $this->view->put_all(array_merge(
             $compet->get_template_vars(),
             array(
-                'MENU' => FootballMenuService::build_compet_menu($this->compet_id()),
-                // tournament
-                'TOURNAMENT_CALENDAR' => FootballCompetHomeService::build_rounds_calendar($this->compet_id()),
-                'JS_DOC' => FootballBracketService::get_bracket_js_matches($this->compet_id(), $teams_number, $teams_per_group),
+                'MENU'                => FootballMenuService::build_compet_menu($this->compet_id()),
+                // Rounds
+                'ROUNDS_CALENDAR'     => $c_tournament ? FootballCompetHomeService::build_rounds_calendar($this->compet_id()) : '',
+                'JS_DOC'              => $c_tournament ? FootballBracketService::get_bracket_js_matches($this->compet_id(), $teams_number, $teams_per_group) : '',
 
                 'NOT_VISIBLE_MESSAGE' => MessageHelper::display($this->lang['warning.element.not.visible'], MessageHelper::WARNING),
             )

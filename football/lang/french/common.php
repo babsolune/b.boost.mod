@@ -26,15 +26,14 @@ $lang['football.last.items']       = 'Récentes compétitions';
 $lang['football.add.compet']       = 'Ajouter une compétition';
 $lang['football.edit.compet']      = 'Modifier une compétition';
 
-$lang['football.my.compets']         = 'Mes compétitions';
-$lang['football.member.compets']     = 'Compétitions publiées par';
-$lang['football.pending.compets']    = 'Compétitions en attente';
 $lang['football.filter.compets']     = 'Filtrer les compétitions';
 $lang['football.compets.management'] = 'Gestion des compétitions';
 
-// Calendar
+// Infos
 $lang['football.infos']  = 'Informations générales';
 $lang['football.calendar']  = 'Calendrier';
+$lang['football.calendar.rounds']  = 'Calendrier des phases de groupes';
+$lang['football.calendar.brackets']  = 'Calendrier des phases finales';
 
 // Days
 $lang['football.days.management'] = 'Créer la liste les matchs par journée';
@@ -53,33 +52,34 @@ $lang['football.prev.day']  = 'Journée précédente';
 $lang['football.next.day']  = 'Prochaine journée';
 
 // Groups
-$lang['football.groups.management'] = 'Gestion des groupes';
+$lang['football.groups.management']   = 'Gestion des groupes';
 $lang['football.brackets.management'] = 'Créer les matchs';
-$lang['football.group']  = 'Groupe';
-$lang['football.round']  = 'Tour';
-$lang['football.playoff.matches']  = 'Matchs de barrage';
-$lang['football.place']  = 'Place';
-$lang['football.round.1']  = 'Finale';
-$lang['football.round.2']  = '1/2 finale';
-$lang['football.round.3']  = '1/4 finale';
-$lang['football.round.4']  = '1/8 finale';
-$lang['football.round.5']  = '1/16 finale';
-$lang['football.round.6']  = '1/32 finale';
-$lang['football.round.7']  = '1/64 finale';
-$lang['football.round.playoff']  = 'Barrages';
-$lang['football.round.of.1']  = 'Finale';
-$lang['football.round.of.2']  = '1/2 finale';
-$lang['football.round.of.4']  = '1/4 finale';
-$lang['football.round.of.8']  = '1/8 finale';
-$lang['football.round.of.16']  = '1/16 finale';
-$lang['football.round.of.32']  = '1/32 finale';
-$lang['football.round.of.64']  = '1/64 finale';
-$lang['football.winner.bracket']  = 'Tableau principal';
-$lang['football.looser.bracket']  = 'Tableau consolante';
-$lang['football.bracket.ranking'] = 'perdant';
-$lang['football.bracket.winner'] = 'gagnant';
+$lang['football.group']               = 'Groupe';
+$lang['football.groups']              = 'Groupes';
+$lang['football.round']               = 'Tour';
+$lang['football.playoff.matches']     = 'Matchs de barrage';
+$lang['football.place']               = 'Place';
+$lang['football.round.1']             = 'Finale';
+$lang['football.round.2']             = '1/2 finale';
+$lang['football.round.3']             = '1/4 finale';
+$lang['football.round.4']             = '1/8 finale';
+$lang['football.round.5']             = '1/16 finale';
+$lang['football.round.6']             = '1/32 finale';
+$lang['football.round.7']             = '1/64 finale';
+$lang['football.round.playoff']       = 'Barrages';
+$lang['football.round.of.1']          = 'Finale';
+$lang['football.round.of.2']          = '1/2 finale';
+$lang['football.round.of.4']          = '1/4 finale';
+$lang['football.round.of.8']          = '1/8 finale';
+$lang['football.round.of.16']         = '1/16 finale';
+$lang['football.round.of.32']         = '1/32 finale';
+$lang['football.round.of.64']         = '1/64 finale';
+$lang['football.winner.bracket']      = 'Tableau principal';
+$lang['football.looser.bracket']      = 'Tableau consolante';
+$lang['football.bracket.ranking']     = 'perdant';
+$lang['football.bracket.winner']      = 'gagnant';
 $lang['football.bracket.from.groups'] = 'des groupes';
-$lang['football.bracket.hour.tag'] = 'H';
+$lang['football.bracket.hour.tag']    = 'H';
 
 $lang['football.warning.bracket.update'] = 'Les matchs ont été générés.';
 $lang['football.warning.group.update'] = 'Les groupes de la compétition ont été mis à jour et les matchs ont été générés.';
@@ -92,6 +92,7 @@ $lang['football.th.hourly']  = 'Horaire';
 $lang['football.th.team']  = 'Équipe';
 $lang['football.th.score']  = 'Score';
 $lang['football.th.pen']  = 'Pen';
+$lang['football.is.live']  = 'En Direct';
 
 $lang['football.th.rank']  = 'Pl';
 $lang['football.th.points']  = 'Pts';
@@ -107,7 +108,7 @@ $lang['football.th.goal.average']  = 'GA';
 $lang['football.compet.id'] = 'Id';
 $lang['football.matches.management'] = 'Gestion des matches';
 $lang['football.matches.groups.stage'] = 'Phases de groupes';
-$lang['football.matches.bracket.stage'] = 'Phases finales';
+$lang['football.matches.brackets.stage'] = 'Phases finales';
 
 $lang['football.warning.matches.update'] = 'Les matchs de la compétition ont été mis à jour.';
 
@@ -157,8 +158,7 @@ Toute suppression d\'une saison entraine la suppression des compétitions qui la
 // Teams
 $lang['football.teams.management'] = 'Gestion des équipes';
 $lang['football.associate.clubs'] = 'Associer les clubs à cette compétition';
-$lang['football.associate'] = 'Associer';
-$lang['football.dissociate'] = 'Dissocier';
+$lang['football.selected.teams'] = 'clubs sélectionnés';
 $lang['football.teams'] = 'Équipes de la compétition';
 $lang['football.team.results'] = 'Calendrier de l`équipe';
 $lang['football.clubs.list'] = 'Liste des clubs';
@@ -177,11 +177,12 @@ $lang['football.last.compets'] = 'Les plus récents';
 $lang['football.ranking']         = 'Position';
 
 // Configuration
-$lang['football.config.mini.module']     = 'Mini module';
-$lang['football.config.sort.type.clue']  = 'Sens décroissant';
-$lang['football.config.compets.number']    = 'Nombre maximum d\'éléments affichés';
-$lang['football.config.limit.compets.age'] = 'Limiter l\'âge des éléments dans le menu';
-$lang['football.config.max.compets.age']   = 'Age maximum (en jours)';
+$lang['football.promotion.color'] = 'Couleur des équipes promues';
+$lang['football.playoff.color'] = 'Couleur des équipes en barrage';
+$lang['football.relegation.color'] = 'Couleur des équipes reléguées';
+$lang['football.live.color'] = 'Couleur des matchs en direct';
+$lang['football.played.color'] = 'Couleur des matchs joués';
+$lang['football.win.color'] = 'Couleur des matchs gagnés';
 
 // Authorizations
 $lang['football.manage.clubs.auth'] = 'Autorisation de gérer les clubs';
@@ -196,19 +197,20 @@ $lang['football.seo.description.pending'] = 'Toutes les compétitions en attente
 $lang['football.seo.description.member']  = 'Toutes les compétitions de :author.';
 
 // Messages helper
-$lang['football.message.success.add']                   = 'La compétition <b>:title</b> a été ajoutée';
-$lang['football.message.success.edit']                  = 'La compétition <b>:title</b> a été modifiée';
-$lang['football.message.success.delete']                = 'La compétition <b>:title</b> a été supprimée';
+$lang['football.message.no.matches'] = 'Aucun matchs pour l\'instant';
+$lang['football.message.success.add'] = 'La compétition <b>:title</b> a été ajoutée';
+$lang['football.message.success.edit'] = 'La compétition <b>:title</b> a été modifiée';
+$lang['football.message.success.delete'] = 'La compétition <b>:title</b> a été supprimée';
 
-$lang['football.club.message.success.add']                   = 'Le club <b>:name</b> a été ajouté';
-$lang['football.club.message.success.edit']                  = 'Le club <b>:name</b> a été modifié';
-$lang['football.club.message.success.delete']                = 'Le club <b>:name</b> a été supprimé';
+$lang['football.club.message.success.add'] = 'Le club <b>:name</b> a été ajouté';
+$lang['football.club.message.success.edit'] = 'Le club <b>:name</b> a été modifié';
+$lang['football.club.message.success.delete'] = 'Le club <b>:name</b> a été supprimé';
 
-$lang['football.division.message.success.add']                   = 'La division <b>:title</b> a été ajoutée';
-$lang['football.division.message.success.edit']                  = 'La division <b>:title</b> a été modifiée';
-$lang['football.division.message.success.delete']                = 'La division <b>:title</b> a été supprimée';
+$lang['football.division.message.success.add'] = 'La division <b>:title</b> a été ajoutée';
+$lang['football.division.message.success.edit'] = 'La division <b>:title</b> a été modifiée';
+$lang['football.division.message.success.delete'] = 'La division <b>:title</b> a été supprimée';
 
-$lang['football.season.message.success.add']                   = 'La saison <b>:title</b> a été ajoutée';
-$lang['football.season.message.success.edit']                  = 'La saison <b>:title</b> a été modifiée';
-$lang['football.season.message.success.delete']                = 'La saison <b>:title</b> a été supprimée';
+$lang['football.season.message.success.add']    = 'La saison <b>:title</b> a été ajoutée';
+$lang['football.season.message.success.edit']   = 'La saison <b>:title</b> a été modifiée';
+$lang['football.season.message.success.delete'] = 'La saison <b>:title</b> a été supprimée';
 ?>

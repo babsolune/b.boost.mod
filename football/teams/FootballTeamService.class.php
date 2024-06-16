@@ -115,11 +115,11 @@ class FootballTeamService
 	 */
 	public static function get_teams($compet_id)
 	{
-		$results = self::$db_querier->select('SELECT teams.*, compet.*
+		$results = self::$db_querier->select('SELECT teams.*, clubs.*
             FROM ' . FootballSetup::$football_team_table . ' teams
-            LEFT JOIN ' . FootballSetup::$football_compet_table . ' compet ON compet.id_compet = teams.team_compet_id
+            LEFT JOIN ' . FootballSetup::$football_club_table . ' clubs ON clubs.id_club = teams.team_club_id
             WHERE teams.team_compet_id = :id
-            ORDER BY teams.team_club_name', array(
+            ORDER BY clubs.club_name', array(
                 'id' => $compet_id
             )
         );
@@ -162,6 +162,20 @@ class FootballTeamService
 	public static function get_teams_number($compet_id)
 	{
 		return count(self::get_teams($compet_id));
+	}
+
+    public static function get_team_name($team_id)
+	{
+        $club = FootballClubCache::load();
+        $team = self::get_team($team_id);
+		return $club->get_club_name($team->get_team_club_id());
+	}
+
+    public static function get_team_logo($team_id)
+	{
+        $club = FootballClubCache::load();
+        $team = self::get_team($team_id);
+		return $club->get_club_logo($team->get_team_club_id());
 	}
 }
 ?>

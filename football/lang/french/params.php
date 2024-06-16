@@ -33,11 +33,8 @@ $lang['football.victory.points'] = 'Points pour une victoire';
 $lang['football.draw.points'] = 'Points pour un match nul';
 $lang['football.loss.points'] = 'Points pour une défaite';
 $lang['football.promotion'] = 'Nombre d\'équipes promues';
-$lang['football.promotion.color'] = 'Couleur des équipes promues';
-$lang['football.play.off'] = 'Nombre d\'équipes en barrage';
-$lang['football.play.off.color'] = 'Couleur des équipes en barrage';
+$lang['football.playoff'] = 'Nombre d\'équipes en barrage';
 $lang['football.relegation'] = 'Nombre d\'équipes reléguées';
-$lang['football.relegation.color'] = 'Couleur des équipes reléguées';
 $lang['football.ranking.type'] = 'Mode de calcul du classement';
 
 $lang['football.rounds.number'] = 'Nombre de tours';
@@ -53,10 +50,7 @@ $lang['football.third.place'] = 'Match pour la troisième place';
 
 $lang['football.minutes.clue'] = 'En minutes';
 $lang['football.match.duration'] = 'Temps de jeu d\'un match';
-$lang['football.sets.mode'] = 'Matchs en sets';
-$lang['football.sets.number'] = 'Nombre de sets';
-$lang['football.bonus'] = 'Bonus offensif/défensif';
-$lang['football.bonus.clue'] = 'Pour le rugby';
+$lang['football.match.duration.clue'] = 'En minutes<br />Prendre en compte la durée de la mi-temps.';
 $lang['football.favorite.team'] = 'Équipe favorite';
 
 $lang['football.warning.params.update'] = 'Les paramètres de la compétition <strong>:compet_name</strong> ont été mis à jour.';

@@ -30,7 +30,7 @@ class FootballBracketService
         for ($i = $rounds_number; $i >= 1; $i--)
         {
             if ($c_hat_ranking && $i == $rounds_number && $c_return_matches)
-                $matches_number = FootballParamsService::get_params($compet_id)->get_play_off() / 2;
+                $matches_number = FootballParamsService::get_params($compet_id)->get_playoff() / 2;
             else
                 $matches_number = $c_looser_bracket ? $teams_number : self::round_matches_number($i, $c_return_matches);
 

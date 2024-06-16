@@ -21,11 +21,8 @@ class FootballParams
 	private $draw_points;
 	private $loss_points;
 	private $promotion;
-	private $promotion_color;
-	private $play_off;
-	private $play_off_color;
+	private $playoff;
 	private $relegation;
-	private $relegation_color;
 	private $ranking_type;
 	private $match_duration;
 
@@ -158,34 +155,14 @@ class FootballParams
 		$this->promotion = $promotion;
 	}
 
-	public function get_promotion_color()
+	public function get_playoff()
 	{
-		return $this->promotion_color;
+		return $this->playoff;
 	}
 
-	public function set_promotion_color($promotion_color)
+	public function set_playoff($playoff)
 	{
-		$this->promotion_color = $promotion_color;
-	}
-
-	public function get_play_off()
-	{
-		return $this->play_off;
-	}
-
-	public function set_play_off($play_off)
-	{
-		$this->play_off = $play_off;
-	}
-
-	public function get_play_off_color()
-	{
-		return $this->play_off_color;
-	}
-
-	public function set_play_off_color($play_off_color)
-	{
-		$this->play_off_color = $play_off_color;
+		$this->playoff = $playoff;
 	}
 
 	public function get_relegation()
@@ -196,16 +173,6 @@ class FootballParams
 	public function set_relegation($relegation)
 	{
 		$this->relegation = $relegation;
-	}
-
-	public function get_relegation_color()
-	{
-		return $this->relegation_color;
-	}
-
-	public function set_relegation_color($relegation_color)
-	{
-		$this->relegation_color = $relegation_color;
 	}
 
 	public function get_ranking_type()
@@ -318,11 +285,8 @@ class FootballParams
 			'draw_points' => $this->get_draw_points(),
 			'loss_points' => $this->get_loss_points(),
 			'promotion' => $this->get_promotion(),
-			'promotion_color' => $this->get_promotion_color(),
-			'play_off' => $this->get_play_off(),
-			'play_off_color' => $this->get_play_off_color(),
+			'playoff' => $this->get_playoff(),
 			'relegation' => $this->get_relegation(),
-			'relegation_color' => $this->get_relegation_color(),
 			'ranking_type' => $this->get_ranking_type(),
 			'match_duration' => $this->get_match_duration(),
 			'rounds_number' => $this->get_rounds_number(),
@@ -349,11 +313,8 @@ class FootballParams
 		$this->draw_points = $properties['draw_points'];
 		$this->loss_points = $properties['loss_points'];
 		$this->promotion = $properties['promotion'];
-		$this->promotion_color = $properties['promotion_color'];
-		$this->play_off = $properties['play_off'];
-		$this->play_off_color = $properties['play_off_color'];
+		$this->playoff = $properties['playoff'];
 		$this->relegation = $properties['relegation'];
-		$this->relegation_color = $properties['relegation_color'];
 		$this->ranking_type = $properties['ranking_type'];
 		$this->match_duration = $properties['match_duration'];
 		$this->rounds_number = $properties['rounds_number'];
@@ -367,12 +328,9 @@ class FootballParams
 
 	public function init_default_properties()
 	{
-        $this->promotion = 0;
-        $this->promotion_color = '#baffb0';
-        $this->play_off = 0;
-        $this->play_off_color = '#b0e1ff';
-        $this->relegation = 0;
-        $this->relegation_color = '#ffb0b0';
+        $this->promotion        = 0;
+        $this->playoff          = 0;
+        $this->relegation       = 0;
 	}
 }
 ?>

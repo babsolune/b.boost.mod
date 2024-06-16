@@ -14,7 +14,6 @@ class FootballTeam
 	private $team_group;
 	private $team_order;
 	private $team_club_id;
-	private $team_club_name;
 	private $team_penalty;
 
 	public function get_id_team()
@@ -25,16 +24,6 @@ class FootballTeam
 	public function set_id_team($id_team)
 	{
 		$this->id_team = $id_team;
-	}
-
-	public function get_team_club_name()
-	{
-		return $this->team_club_name;
-	}
-
-	public function set_team_club_name($team_club_name)
-	{
-		$this->team_club_name = $team_club_name;
 	}
 
 	public function get_team_compet_id()
@@ -100,7 +89,6 @@ class FootballTeam
 			'team_group' => $this->get_team_group(),
 			'team_order' => $this->get_team_order(),
 			'team_club_id' => $this->get_team_club_id(),
-			'team_club_name' => $this->get_team_club_name(),
 			'team_penalty' => $this->get_team_penalty()
 		);
 	}
@@ -112,7 +100,6 @@ class FootballTeam
 		$this->team_group = $properties['team_group'];
 		$this->team_order = $properties['team_order'];
 		$this->team_club_id = $properties['team_club_id'];
-		$this->team_club_name = $properties['team_club_name'];
 		$this->team_penalty = $properties['team_penalty'];
 	}
 
@@ -128,7 +115,6 @@ class FootballTeam
 
 				// Item
 				'TEAM_ID' => $this->id_team,
-				'TEAM_NAME' => $this->team_club_name,
 
 				// Links
 				// 'U_EDIT_PARAMETERS'           => FootballUrlBuilder::edit_params($this->team_compet_id)->rel(),

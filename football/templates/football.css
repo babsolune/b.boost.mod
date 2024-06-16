@@ -14,6 +14,10 @@
     padding: 0.309em;
 }
 
+.is-live > * {
+    background-color: rgba(var(--success-rgb-t), 0.2);
+}
+
 #main-content th.sortable-thead {
     padding-bottom: 1.809em;
 }
@@ -68,10 +72,8 @@
 }
 
 /* --- Form --- */
-.days-form .fieldset-inset {
-    columns: 3;
-    column-rule: solid 1px;
-}
+.days-form .form-element  { flex-direction: column; }
+.days-form .form-element > label { width: 100%; }
 
 .fieldset-submit {
     width: 100%;
@@ -244,39 +246,31 @@
     align-items: center;
 }
 
-.bracket-match {
-    margin-top: 0.309em;
+/* Match layout */
+.game-match {
+    margin-bottom: 1.618em;
+    padding: 0.809em;
     border: 1px solid var(--bdr-main);
 }
 
-.bracket-team,
-.bracket-details {
+.game-team,
+.game-details {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-.bracket-details > *,
-.bracket-team > * {
-    padding: 0.309em;
+.game-team > * {
+    padding: 0.618em;
 }
-.bracket-details > .bracket-details,
-.bracket-team > .bracket-team {
-    padding: 0;
-}
-.bracket-away {
-    border-top: 1px solid var(--bdr-main);
+.game-details > * {
+    padding: 0 0 0.309em;
 }
 
-.bracket-score {
-    background-color: var(--bgc-sub);
+.game-score {
+    /* background-color: var(--bgc-sub); */
     color: var(--txt-sub);
     text-align: center;
     min-width: 2.618em;
-}
-
-.bracket-highlight {
-    background-color: var(--bgc-alt) !important;
-    color: var(--txt-alt) !important;
 }
 
 .club-logo { max-height: 70px; }
@@ -284,6 +278,8 @@
     padding-left: 0.618em;
     flex: 1 1 auto;
 }
+
+/* groups layout */
 
 .smaller-logo { max-width: 16px; }
 .small-logo   { max-width: 32px; }

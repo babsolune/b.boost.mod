@@ -11,6 +11,12 @@ class FootballConfig extends AbstractConfigData
 {
 	const LEFT_COLUMN_DISABLED  = 'left_column_disabled';
 	const RIGHT_COLUMN_DISABLED = 'right_column_disabled';
+	const PROMOTION_COLOR       = 'promotion_color';
+	const PLAYOFF_COLOR         = 'playoff_color';
+	const RELEGATION_COLOR      = 'relegation_color';
+	const LIVE_COLOR            = 'live_color';
+	const PLAYED_COLOR          = 'played_color';
+	const WIN_COLOR             = 'win_color';
 	const AUTHORIZATIONS        = 'authorizations';
 
 	const DEFERRED_OPERATIONS = 'deferred_operations';
@@ -45,6 +51,66 @@ class FootballConfig extends AbstractConfigData
 		return $this->get_property(self::RIGHT_COLUMN_DISABLED);
 	}
 
+	public function get_promotion_color()
+	{
+		return $this->get_property(self::PROMOTION_COLOR);
+	}
+
+	public function set_promotion_color($promotion_color)
+	{
+		$this->set_property(self::PROMOTION_COLOR, $promotion_color);
+	}
+
+	public function get_playoff_color()
+	{
+		return $this->get_property(self::PLAYOFF_COLOR);
+	}
+
+	public function set_playoff_color($playoff_color)
+	{
+		$this->set_property(self::PLAYOFF_COLOR, $playoff_color);
+	}
+
+	public function get_relegation_color()
+	{
+		return $this->get_property(self::RELEGATION_COLOR);
+	}
+
+	public function set_relegation_color($relegation_color)
+	{
+		$this->set_property(self::RELEGATION_COLOR, $relegation_color);
+	}
+
+	public function get_live_color()
+	{
+		return $this->get_property(self::LIVE_COLOR);
+	}
+
+	public function set_live_color($live_color)
+	{
+		$this->set_property(self::LIVE_COLOR, $live_color);
+	}
+
+	public function get_played_color()
+	{
+		return $this->get_property(self::PLAYED_COLOR);
+	}
+
+	public function set_played_color($played_color)
+	{
+		$this->set_property(self::PLAYED_COLOR, $played_color);
+	}
+
+	public function get_win_color()
+	{
+		return $this->get_property(self::WIN_COLOR);
+	}
+
+	public function set_win_color($win_color)
+	{
+		$this->set_property(self::WIN_COLOR, $win_color);
+	}
+
 	public function get_authorizations()
 	{
 		return $this->get_property(self::AUTHORIZATIONS);
@@ -75,6 +141,12 @@ class FootballConfig extends AbstractConfigData
 		return [
 			self::LEFT_COLUMN_DISABLED  => false,
 			self::RIGHT_COLUMN_DISABLED => false,
+			self::PROMOTION_COLOR       => '#baffb0',
+			self::PLAYOFF_COLOR         => '#b0e1ff',
+			self::RELEGATION_COLOR      => '#deddda',
+			self::LIVE_COLOR            => '#baffb0',
+			self::PLAYED_COLOR          => '#deddda',
+			self::WIN_COLOR          => '#baffb0',
 			self::AUTHORIZATIONS        => ['r-1' => 1, 'r0' => 5, 'r1' => 29],
 			self::DEFERRED_OPERATIONS   => []
         ];

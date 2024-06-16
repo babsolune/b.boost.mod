@@ -23,9 +23,11 @@ class FootballCompetHomeService
         $view->add_lang(LangLoader::get_all_langs('football'));
 
         // Display group team list
-        $club = FootballClubCache::load();
         $groups = FootballGroupService::get_group_teams_list($compet_id);
         ksort($groups);
+
+        $view->put('GROUPS_NUMBER', count($groups));
+
         foreach ($groups as $k => $group)
         {
             $view->assign_block_vars('team_groups', array(
@@ -33,38 +35,86 @@ class FootballCompetHomeService
             ));
             foreach ($group as $team)
             {
+                // debug::dump($team);
                 $view->assign_block_vars('team_groups.teams', array(
-                    'TEAM_NAME' => $club->get_club_name($team['team_club_id']),
-                    'TEAM_LOGO' => $club->get_club_logo($team['team_club_id']),
+                    'TEAM_NAME' => $team['club_name'],
+                    'TEAM_LOGO' => $team['club_logo'],
                 ));
             }
         }
 
-        // Display groups calendar
-        $results = self::$db_querier->select('SELECT matches.*, compet.*
-            FROM ' . FootballSetup::$football_match_table . ' matches
-            LEFT JOIN ' . FootballSetup::$football_compet_table . ' compet ON compet.id_compet = matches.match_compet_id
-            WHERE matches.match_compet_id = :id
-            ORDER BY matches.match_date ASC, matches.match_playground ASC, matches.match_group DESC, matches.match_order ASC', array(
+        // Display matches of the day
+        $results = self::$db_querier->select('SELECT games.*
+            FROM ' . FootballSetup::$football_match_table . ' games
+            WHERE games.match_compet_id = :id
+            ORDER BY games.match_date ASC, games.match_order ASC', array(
                 'id' => $compet_id
             )
         );
 
+        $now = new Date();
+        $c_one_day = FootballMatchService::one_day_compet($compet_id);
         $view->put_all(array(
-            'C_PLAYGROUNDS' => FootballParamsService::get_params($compet_id)->get_display_playgrounds(),
-            'C_HAS_MATCHES' => FootballMatchService::has_matches($compet_id),
-            'C_ONE_DAY' => FootballMatchService::one_day_compet($compet_id),
-            'TEAMS_NUMBER' => FootballTeamService::get_teams_number($compet_id),
-            'TEAMS_PER_GROUP' => FootballParamsService::get_params($compet_id)->get_teams_per_group()
+            'C_HAT_RANKING'   => FootballParamsService::get_params($compet_id)->get_hat_ranking(),
+            'C_PLAYGROUNDS'   => FootballParamsService::get_params($compet_id)->get_display_playgrounds(),
+            'C_HAS_MATCHES'   => FootballMatchService::has_matches($compet_id),
+            'C_ONE_DAY'       => $c_one_day,
+            'TEAMS_NUMBER'    => FootballTeamService::get_teams_number($compet_id),
+            'TEAMS_PER_GROUP' => FootballParamsService::get_params($compet_id)->get_teams_per_group(),
+            'TODAY'           => Date::to_format($now->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT),
         ));
 
-        while($row = $results->fetch())
+        if($c_one_day)
         {
-            $match = new FootballMatch();
-            $match->set_properties($row);
-            $items = $row['match_type'] == 'G' ? 'groups' : 'bracket';
+            while($row = $results->fetch())
+            {
+                $match = new FootballMatch();
+                $match->set_properties($row);
 
-            $view->assign_block_vars($items, $match->get_array_tpl_vars());
+                $items = $match->get_match_type() == 'G' ? 'groups' : 'brackets';
+
+                // Debug::dump(FootballMatchService::is_live($compet_id, $match->get_id_match()));
+                $view->assign_block_vars($items, array_merge($match->get_array_tpl_vars(), array(
+                    'GROUP_NAME' => FootballGroupService::ntl($match->get_match_group()),
+                    'DAY_NAME' => $match->get_match_group(),
+                    'U_GROUP' => FootballUrlBuilder::display_groups_rounds($compet_id, $match->get_match_group())->rel()
+                )));
+            }
+        }
+        else 
+        {
+            $matchdays = [];
+            foreach($results as $item)
+            {
+                $date = Date::to_format($item['match_date'], Date::FORMAT_DAY_MONTH_YEAR);
+                if (!array_key_exists($date, $matchdays))
+                $matchdays[$date][] = $item;
+            }
+
+            foreach ($matchdays as $date => $matches)
+            {
+                $date_elements = explode("/", $date);
+                $date_elements = array_reverse($date_elements);
+                $reversed_date = implode("/", $date_elements);
+                $view->assign_block_vars('matchdays', array(
+                    'DATE' => Date::to_format(strtotime($reversed_date), Date::FORMAT_DAY_MONTH_YEAR_TEXT),
+                ));
+                foreach($results as $row)
+                {
+                    $match = new FootballMatch();
+                    $match->set_properties($row);
+
+                    $items = $match->get_match_type() == 'G' ? 'groups' : 'brackets';
+                    if($date == Date::to_format($row['match_date'], Date::FORMAT_DAY_MONTH_YEAR))
+                    {
+                        $view->assign_block_vars('matchdays.' . $items, array_merge($match->get_array_tpl_vars(), array(
+                            'GROUP_NAME' => FootballGroupService::ntl($match->get_match_group()),
+                            'DAY_NAME' => $match->get_match_group(),
+                            'U_GROUP' => FootballUrlBuilder::display_groups_rounds($compet_id, $match->get_match_group())->rel()
+                        )));
+                    }
+                }
+            }
         }
         return $view;
     }

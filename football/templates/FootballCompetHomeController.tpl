@@ -13,7 +13,7 @@
 					# IF C_CHAMPIONSHIP #<div itemprop="text">championship</div># ENDIF #
 					# IF C_CUP #<div itemprop="text">cup</div># ENDIF #
 					# IF C_TOURNAMENT #
-                        <div itemprop="text"># INCLUDE TOURNAMENT_CALENDAR #</div>
+                        <div itemprop="text"># INCLUDE ROUNDS_CALENDAR #</div>
                         # IF C_HAS_MATCHES #<div itemprop="text"># INCLUDE JS_DOC #</div># ENDIF #
                     # ENDIF #
 				</div>

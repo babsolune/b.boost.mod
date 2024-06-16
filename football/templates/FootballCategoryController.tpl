@@ -21,7 +21,7 @@
 	# IF C_SUB_CATEGORIES #
 		<div class="sub-section">
 			<div class="content-container">
-				<div class="cell-flex cell-tile cell-columns-{CATEGORIES_PER_ROW}">
+				<div class="cell-flex cell-tile cell-columns-4">
 					# START sub_categories_list #
 						<div class="cell cell-category category-{sub_categories_list.CATEGORY_ID}">
 							<div class="cell-header">
@@ -59,7 +59,7 @@
 						</div>
 					# ENDIF #
 				# ENDIF #
-                <div class="cell-flex cell-row cell-tile">
+                <div class="cell-flex cell-columns-3 cell-tile">
                     # START items #
                         <article id="football-item-{items.ID}" class="football-item category-{items.CATEGORY_ID} cell# IF items.C_NEW_CONTENT # new-content# ENDIF #" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
                             <div class="cell-content flex-between">

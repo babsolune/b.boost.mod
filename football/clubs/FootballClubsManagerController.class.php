@@ -26,8 +26,7 @@ class FootballClubsManagerController extends DefaultModuleController
 	private function build_table()
 	{
 		$columns = array(
-			new HTMLTableColumn($this->lang['football.club.place'], 'club_place'),
-			new HTMLTableColumn($this->lang['football.club.acronym'], 'club_acronym'),
+			new HTMLTableColumn($this->lang['football.club.full.name'], 'club_full_name'),
 			new HTMLTableColumn($this->lang['football.club.name'], 'club_name'),
 			new HTMLTableColumn($this->lang['football.club.logo'], 'club_logo'),
 			new HTMLTableColumn('<a class="offload" href="' . FootballUrlBuilder::add_club()->rel() . '" aria-label="' . $this->lang['football.add.club'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>')
@@ -56,12 +55,11 @@ class FootballClubsManagerController extends DefaultModuleController
 			$delete_link = new DeleteLinkHTMLElement(FootballUrlBuilder::delete_club($club->get_id_club()), '', array('data-confirmation' => $this->lang['football.warning.delete.club']));
 
 			$row = array(
-				new HTMLTableRowCell(new LinkHTMLElement(FootballUrlBuilder::display_club($club->get_id_club()), $club->get_club_place())),
-				new HTMLTableRowCell(new SpanHTMLElement($club->get_club_acronym())),
+				new HTMLTableRowCell(new LinkHTMLElement(FootballUrlBuilder::display_club($club->get_id_club()), $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name())),
 				new HTMLTableRowCell(new SpanHTMLElement($club->get_club_name())),
 				new HTMLTableRowCell(new ImgHTMLElement(
 					Url::to_rel($club->get_club_logo()),
-					array('alt' => !empty($club->get_club_logo()) ? StringVars::replace_vars($this->lang['football.alt.logo'], array('name' => $club->get_club_name() ? $club->get_club_name() : $club->get_club_place())) : $this->lang['football.clubs.no.logo']), 
+					array('alt' => !empty($club->get_club_logo()) ? StringVars::replace_vars($this->lang['football.alt.logo'], array('name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name())) : $this->lang['football.clubs.no.logo']), 
 					'small-logo'
 				)),
 				new HTMLTableRowCell($edit_link->display() . $delete_link->display(), 'controls')

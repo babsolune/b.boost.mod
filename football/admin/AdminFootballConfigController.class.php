@@ -41,6 +41,16 @@ class AdminFootballConfigController extends DefaultAdminModuleController
             array('class' => 'custom-checkbox')
         ));
 
+        $fieldset->add_field(new FormFieldSpacer('ranking_colors', ''));
+        $fieldset->add_field(new FormFieldColorPicker('live_color', $this->lang['football.live.color'], $this->config->get_live_color()));
+        $fieldset->add_field(new FormFieldColorPicker('played_color', $this->lang['football.played.color'], $this->config->get_played_color()));
+        $fieldset->add_field(new FormFieldColorPicker('win_color', $this->lang['football.win.color'], $this->config->get_win_color()));
+
+        $fieldset->add_field(new FormFieldSpacer('colors', ''));
+        $fieldset->add_field(new FormFieldColorPicker('promotion_color', $this->lang['football.promotion.color'], $this->config->get_promotion_color()));
+        $fieldset->add_field(new FormFieldColorPicker('playoff_color', $this->lang['football.playoff.color'], $this->config->get_playoff_color()));
+        $fieldset->add_field(new FormFieldColorPicker('relegation_color', $this->lang['football.relegation.color'], $this->config->get_relegation_color()));
+
 		$fieldset_authorizations = new FormFieldsetHTML('authorizations_fieldset', $this->lang['form.authorizations'],
 			array('description' => $this->lang['form.authorizations.clue'])
 		);
@@ -89,6 +99,13 @@ class AdminFootballConfigController extends DefaultAdminModuleController
 			$this->config->disable_right_column();
 		else
 			$this->config->enable_right_column();
+
+        $this->config->set_live_color($this->form->get_value('live_color'));
+        $this->config->set_played_color($this->form->get_value('played_color'));
+        $this->config->set_win_color($this->form->get_value('win_color'));
+        $this->config->set_promotion_color($this->form->get_value('promotion_color'));
+        $this->config->set_playoff_color($this->form->get_value('playoff_color'));
+        $this->config->set_relegation_color($this->form->get_value('relegation_color'));
 
 		$this->config->set_authorizations($this->form->get_value('authorizations')->build_auth_array());
 

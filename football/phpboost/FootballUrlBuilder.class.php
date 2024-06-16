@@ -122,15 +122,15 @@ class FootballUrlBuilder
 	}
 
     // Groups
-	public static function display_groups_rounds($compet_id)
+	public static function display_groups_rounds($compet_id, $group = 1)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/groups/rounds/' . $compet_id);
+		return DispatchManager::get_url(self::$dispatcher, '/rounds/' . $compet_id . '/group/' . $group);
 	}
 
     // Brackets
 	public static function display_brackets_rounds($compet_id)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/brackets/rounds/' . $compet_id);
+		return DispatchManager::get_url(self::$dispatcher, '/rounds/' . $compet_id . '/brackets/');
 	}
 
     // Days ranking

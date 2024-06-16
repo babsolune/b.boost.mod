@@ -28,106 +28,6 @@ class FootballDaysRankingController extends DefaultModuleController
 
 	private function build_view()
 	{
-        // $matches = FootballMatchService::get_matches($this->compet_id());
-        // $ranks = [];
-        // // Get results of all matches
-        // foreach ($matches as $match)
-        // {
-        //     $ranks[] = [
-        //         'team_id' => $match['match_home_id'],
-        //         'goals_for' => $match['match_home_score'],
-        //         'goals_against' => $match['match_away_score'],
-        //     ];
-        //     $ranks[] = [
-        //         'team_id' => $match['match_away_id'],
-        //         'goals_for' => $match['match_away_score'],
-        //         'goals_against' => $match['match_home_score'],
-        //     ];
-        // }
-
-        // // Set rank details for each team in all matches
-        // $teams = [];
-        // for($i = 0; $i < count($ranks); $i++)
-        // {
-        //     $points = $played = $win = $draw = $loss = 0;
-        //     if ($ranks[$i]['goals_for'] > $ranks[$i]['goals_against'])
-        //     {
-        //         $points = FootballParamsService::get_params($this->compet_id())->get_victory_points();
-        //         $win = $played = 1;
-        //     }
-        //     elseif ($ranks[$i]['goals_for'] != '' && ($ranks[$i]['goals_for'] === $ranks[$i]['goals_against']))
-        //     {
-        //         $points = FootballParamsService::get_params($this->compet_id())->get_draw_points();
-        //         $draw = $played = 1;
-        //     }
-        //     elseif (($ranks[$i]['goals_for'] < $ranks[$i]['goals_against']))
-        //     {
-        //         $points = FootballParamsService::get_params($this->compet_id())->get_loss_points();
-        //         $loss = $played = 1;
-        //     }
-        //     if ($ranks[$i]['team_id'])
-        //         $teams[] = [
-        //             'team_id' => $ranks[$i]['team_id'],
-        //             'points' => $points,
-        //             'played' => $played,
-        //             'win' => $win,
-        //             'draw' => $draw,
-        //             'loss' => $loss,
-        //             'goals_for' => (int)$ranks[$i]['goals_for'],
-        //             'goals_against' => (int)$ranks[$i]['goals_against'],
-        //             'goal_average' => (int)$ranks[$i]['goals_for'] - (int)$ranks[$i]['goals_against'],
-        //         ];
-        // }
-
-        // // Count points/goals for each team
-        // $ranks = [];
-        // foreach ($teams as $team) 
-        // {
-        //     $team_id = $team['team_id'];
-        //     $penalties = FootballTeamService::get_team($team['team_id'])->get_team_penalty();
-        //     if (!isset($ranks[$team_id])) {
-        //         $ranks[$team_id] = $team;
-        //     } else {
-        //         $ranks[$team_id]['points'] += $team['points'];
-        //         $ranks[$team_id]['played'] += $team['played'];
-        //         $ranks[$team_id]['win'] += $team['win'];
-        //         $ranks[$team_id]['draw'] += $team['draw'];
-        //         $ranks[$team_id]['loss'] += $team['loss'];
-        //         $ranks[$team_id]['goals_for'] += $team['goals_for'];
-        //         $ranks[$team_id]['goals_against'] += $team['goals_against'];
-        //         $ranks[$team_id]['goal_average'] += $team['goals_for'] - $team['goals_against'];
-        //     }
-        // }
-
-        // // Add team penalties to points
-        // $final_ranks = [];
-        // $ranks = array_values($ranks);
-        // foreach ($ranks as $rank)
-        // {
-        //     $penalties = FootballTeamService::get_team($rank['team_id'])->get_team_penalty();
-        //     $rank['points'] = $rank['points'] + $penalties;
-        //     $final_ranks[] = $rank;
-        // }
-
-        // // Reorder ranks
-        // usort($final_ranks, function($a, $b)
-        // {
-        //     if ($a['points'] == $b['points']) {
-        //         if ($a['win'] == $b['win']) {
-        //             if ($a['goal_average'] == $b['goal_average']) {
-        //                 if ($a['goals_for'] == $b['goals_for']) {
-        //                     if ($a['goals_for'] == $b['goals_for']) {
-        //                         return 0;
-        //                     }
-        //                 }
-        //                 return $b['goals_for'] - $a['goals_for'];
-        //             }
-        //             return $b['goal_average'] - $a['goal_average'];
-        //         }
-        //         return $b['win'] - $a['win'];
-        //     }
-        //     return $b['points'] - $a['points'];
-        // });
         $section = AppContext::get_request()->get_getstring('section', '');
         $day = AppContext::get_request()->get_getint('day', 0);
         switch($section) {
@@ -156,11 +56,11 @@ class FootballDaysRankingController extends DefaultModuleController
 
         // Display ranks to view
         $prom = FootballParamsService::get_params($this->compet_id())->get_promotion();
-        $playoff = FootballParamsService::get_params($this->compet_id())->get_play_off();
+        $playoff = FootballParamsService::get_params($this->compet_id())->get_playoff();
         $releg = FootballParamsService::get_params($this->compet_id())->get_relegation();
-        $prom_color = FootballParamsService::get_params($this->compet_id())->get_promotion_color();
-        $playoff_color = FootballParamsService::get_params($this->compet_id())->get_play_off_color();
-        $releg_color = FootballParamsService::get_params($this->compet_id())->get_relegation_color();
+        $prom_color = FootballConfig::load()->get_promotion_color();
+        $playoff_color = FootballConfig::load()->get_playoff_color();
+        $releg_color = FootballConfig::load()->get_relegation_color();
         $color_count = count($final_ranks);
 
         foreach ($final_ranks as $i => $team_rank)
@@ -179,8 +79,8 @@ class FootballDaysRankingController extends DefaultModuleController
                 'RANK' => $i + 1,
                 'RANK_COLOR' => $rank_color,
                 'U_TEAM_CALENDAR' => !empty($team_rank['team_id']) ? FootballUrlBuilder::display_team_calendar($this->compet_id(), $team_rank['team_id'])->rel() : '#',
-                'TEAM_NAME' => !empty($team_rank['team_id']) ? FootballTeamService::get_team($team_rank['team_id'])->get_team_club_name() : '',
-                'TEAM_LOGO' => !empty($team_rank['team_id']) ? FootballClubService::get_club($team_rank['team_id'])->get_club_logo() : '',
+                'TEAM_NAME' => !empty($team_rank['team_id']) ? FootballTeamService::get_team_name($team_rank['team_id']) : '',
+                'TEAM_LOGO' => !empty($team_rank['team_id']) ? FootballTeamService::get_team_logo($team_rank['team_id']) : '',
                 'POINTS' => $team_rank['points'],
                 'PLAYED' => $team_rank['played'],
                 'WIN' => $team_rank['win'],

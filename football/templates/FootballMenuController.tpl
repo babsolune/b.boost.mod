@@ -1,6 +1,6 @@
 <header class="section-header">
     <div class="align-right">{HEADER_TYPE} - {HEADER_CATEGORY}</div>
-    <h1>{HEADER_NAME}</h1>
+    <h1>{HEADER_DIVISION} - {HEADER_SEASON}</h1>
 </header>
 <div class="compet-menu flex-between controls">
     <nav class="cssmenu cssmenu-horizontal">
@@ -70,6 +70,15 @@
             </nav>
         # ENDIF #
         # IF C_EDIT_GROUPS_MATCHES #
+            <nav class="roundmenu roundmenu-horizontal">
+                <ul>
+                    # START groups #
+                        <li><a href="{groups.U_GROUP}" aria-label="{groups.L_TYPE} {groups.NUMBER}" class="roundmenu-title"><span>{groups.NUMBER}</span></a></li>
+                    # END groups #
+                </ul>
+            </nav>
+        # ENDIF #
+        # IF C_GROUPS_MATCHES #
             <nav class="roundmenu roundmenu-horizontal">
                 <ul>
                     # START groups #
