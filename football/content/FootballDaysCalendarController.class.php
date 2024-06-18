@@ -27,22 +27,22 @@ class FootballDaysCalendarController extends DefaultModuleController
 
 	private function build_view()
 	{
-        $days = FootballGroupService::matches_list_from_group($this->compet_id(), 'D');
-        $ranks = [];
-        foreach ($days as $day => $matches)
-        {
-            $this->view->assign_block_vars('days',array(
-                'C_FIRST_DAY' => $day == 1,
-                'DAY' => $day
+        $round = AppContext::get_request()->get_getint('round', 0);
+        $matches = FootballGroupService::matches_list_from_group($this->compet_id(), 'D', $round);
+        // $ranks = [];
+        // foreach ($days as $day => $matches)
+        // {
+            $this->view->put_all(array(
+                'DAY' => $round
             ));
             foreach ($matches as $match)
             {
                 $item = new FootballMatch();
                 $item->set_properties($match);
 
-                $this->view->assign_block_vars('days.matches', $item->get_array_tpl_vars());
+                $this->view->assign_block_vars('matches', $item->get_array_tpl_vars());
             }
-        }
+        // }
 
         $this->view->put_all(array(
             'MENU' => FootballMenuService::build_compet_menu($this->compet_id()),

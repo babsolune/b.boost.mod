@@ -12,7 +12,7 @@ class FootballCategoriesFormController extends DefaultCategoriesFormController
 	protected function build_form(HTTPRequestCustom $request)
 	{
 		self::$lang = LangLoader::get_all_langs('football');
-		$form = new HTMLForm(__CLASS__);
+		$form = new HTMLForm(self::class);
 		$form->set_layout_title($this->get_title());
 
 		$fieldset = new FormFieldsetHTML('category', self::$lang['form.parameters']);
@@ -49,16 +49,14 @@ class FootballCategoriesFormController extends DefaultCategoriesFormController
 			$fieldset->add_field(self::$categories_manager->get_select_categories_form_field('id_parent', self::$lang['category.location'], $this->get_category()->get_id_parent(), $search_category_children_options));
 		}
 
-		$fieldset->add_field(new FormFieldThumbnail('thumbnail', self::$lang['form.thumbnail'], $this->get_category()->get_thumbnail()->relative(), FootballCategory::THUMBNAIL_URL,
+		$fieldset->add_field(new FormFieldThumbnail('thumbnail', self::$lang['form.thumbnail'], '', FootballCategory::THUMBNAIL_URL,
 			array()
 		));
-        $fieldset->add_field(new FormFieldFree('hide_extra', '', '
+        $fieldset->add_field(new FormFieldFree('hide_thumbnail', '', '
         <script>
-            <!--
-                jQuery(document).ready(function() {
-                    jQuery("#' . __CLASS__ . '_thumbnail_field > div").hide();
-                });
-            -->
+            jQuery(document).ready(function() {
+                jQuery("#' . self::class . '_thumbnail_field > div").hide();
+            });
         </script>
     '));
 		// $fieldset->add_field(new FormFieldRichTextEditor('description', self::$lang['form.description'], $this->get_category()->get_description(),
@@ -73,9 +71,9 @@ class FootballCategoriesFormController extends DefaultCategoriesFormController
 				'description' => self::$lang['category.form.authorizations.clue'],
 				'events' => array('click' => '
 					if (HTMLForms.getField("special_authorizations").getValue()) {
-						jQuery("#' . __CLASS__ . '_authorizations").show();
+						jQuery("#' . self::class . '_authorizations").show();
 					} else {
-						jQuery("#' . __CLASS__ . '_authorizations").hide();
+						jQuery("#' . self::class . '_authorizations").hide();
 					}'
 				)
 			)
@@ -84,26 +82,14 @@ class FootballCategoriesFormController extends DefaultCategoriesFormController
 		// Hide categories authorizations but keep its bit in auth
 		$fieldset_authorizations->add_field(new FormFieldFree('hide_authorizations', '', '
 			<script>
-				<!--
-					jQuery(document).ready(function() {
-						jQuery("#' . __CLASS__ . '_authorizations > div").eq(2).hide();
-						jQuery("#' . __CLASS__ . '_authorizations > div").eq(4).hide();
-					});
-				-->
+                jQuery(document).ready(function() {
+                    jQuery("#' . self::class . '_authorizations > div").eq(2).hide();
+                    jQuery("#' . self::class . '_authorizations > div").eq(4).hide();
+                });
 			</script>
         '));
 
-		$auth_settings = new AuthorizationsSettings(
-            array_merge(
-                RootCategory::get_authorizations_settings(),
-                array(
-                    new MemberDisabledActionAuthorization(self::$lang['football.manage.clubs.auth'], FootballAuthorizationsService::CLUBS_AUTHORIZATIONS),
-                    new MemberDisabledActionAuthorization(self::$lang['football.manage.divisions.auth'], FootballAuthorizationsService::DIVISIONS_AUTHORIZATIONS),
-                    new MemberDisabledActionAuthorization(self::$lang['football.manage.seasons.auth'], FootballAuthorizationsService::SEASONS_AUTHORIZATIONS),
-                    new MemberDisabledActionAuthorization(self::$lang['football.manage.compets.auth'], FootballAuthorizationsService::COMPETITION_AUTHORIZATIONS)
-                )
-            )
-        );
+		$auth_settings = new AuthorizationsSettings(RootCategory::get_authorizations_settings());
 		$auth_settings->build_from_auth_array($this->get_category()->get_authorizations());
 		$fieldset_authorizations->add_field(new FormFieldAuthorizationsSetter('authorizations', $auth_settings, array('hidden' => !$this->get_category()->has_special_authorizations())));
 

@@ -21,7 +21,7 @@
 						<tr class="category-{items.CATEGORY_ID}">
 							<td># IF C_SORT_BY_DATE #<time datetime="{items.DATE_ISO8601}">{items.DATE_DAY_MONTH}</time># ELSE #{items.DISPLAYED_POSITION}# ENDIF #</td>
 							<td# IF C_SORT_BY_NOTATION # class="mini-football-table-name"# ENDIF #>
-								<a class="offload" href="{items.U_ITEM}">
+								<a class="offload" href="{items.U_COMPET}">
 									{items.TITLE}
 								</a>
 								<p class="align-right small">

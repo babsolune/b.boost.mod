@@ -187,6 +187,7 @@ class FootballClub
 
 			// Links
 			'U_LOGO'   => Url::to_rel($this->club_logo),
+			'U_CLUB'   => FootballUrlBuilder::display_club($this->id_club)->rel(),
 			'U_EDIT'   => FootballUrlBuilder::edit_club($this->id_club)->rel(),
 			'U_DELETE' => FootballUrlBuilder::delete_club($this->id_club)->rel(),
 		);

@@ -126,7 +126,8 @@ class FootballDayService
             if($day['day_played'])
                 $ids[] = $day['day_round'];
         }
-        return end($ids);
+
+        return !empty(end($ids)) ? end($ids) : 1;
     }
 
     public static function get_next_day($compet_id)

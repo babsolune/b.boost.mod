@@ -17,6 +17,9 @@ class FootballConfig extends AbstractConfigData
 	const LIVE_COLOR            = 'live_color';
 	const PLAYED_COLOR          = 'played_color';
 	const WIN_COLOR             = 'win_color';
+	const CURRENT_MATCHES       = 'current_matches';
+	const NEXT_MATCHES          = 'next_matches';
+	const NEXT_MATCHES_NUMBER   = 'next_matches_number';
 	const AUTHORIZATIONS        = 'authorizations';
 
 	const DEFERRED_OPERATIONS = 'deferred_operations';
@@ -111,6 +114,36 @@ class FootballConfig extends AbstractConfigData
 		$this->set_property(self::WIN_COLOR, $win_color);
 	}
 
+	public function get_current_matches()
+	{
+		return $this->get_property(self::CURRENT_MATCHES);
+	}
+
+	public function set_current_matches($current_matches)
+	{
+		$this->set_property(self::CURRENT_MATCHES, $current_matches);
+	}
+
+	public function get_next_matches()
+	{
+		return $this->get_property(self::NEXT_MATCHES);
+	}
+
+	public function set_next_matches($next_matches)
+	{
+		$this->set_property(self::NEXT_MATCHES, $next_matches);
+	}
+
+	public function get_next_matches_number()
+	{
+		return $this->get_property(self::NEXT_MATCHES_NUMBER);
+	}
+
+	public function set_next_matches_number($next_matches_number)
+	{
+		$this->set_property(self::NEXT_MATCHES_NUMBER, $next_matches_number);
+	}
+
 	public function get_authorizations()
 	{
 		return $this->get_property(self::AUTHORIZATIONS);
@@ -146,7 +179,10 @@ class FootballConfig extends AbstractConfigData
 			self::RELEGATION_COLOR      => '#deddda',
 			self::LIVE_COLOR            => '#baffb0',
 			self::PLAYED_COLOR          => '#deddda',
-			self::WIN_COLOR          => '#baffb0',
+			self::WIN_COLOR             => '#baffb0',
+			self::CURRENT_MATCHES       => false,
+			self::NEXT_MATCHES          => false,
+			self::NEXT_MATCHES_NUMBER   => 4,
 			self::AUTHORIZATIONS        => ['r-1' => 1, 'r0' => 5, 'r1' => 29],
 			self::DEFERRED_OPERATIONS   => []
         ];

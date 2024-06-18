@@ -56,7 +56,7 @@ class FootballMenuService
 
             'U_ROUND_GROUPS'         => FootballUrlBuilder::display_groups_rounds($compet_id, $round)->rel(),
             'U_ROUND_BRACKETS'       => FootballUrlBuilder::display_brackets_rounds($compet_id)->rel(),
-            'U_DAYS_CALENDAR'        => FootballUrlBuilder::display_days_calendar($compet_id)->rel(),
+            'U_DAYS_CALENDAR'        => FootballUrlBuilder::display_days_calendar($compet_id, FootballDayService::get_last_day($compet_id))->rel(),
             'U_DAYS_RANKING'         => FootballUrlBuilder::display_days_ranking($compet_id)->rel(),
 
             'U_EDIT_TEAMS'           => FootballUrlBuilder::edit_teams($compet_id)->rel(),
@@ -76,12 +76,14 @@ class FootballMenuService
         {
             $current_url      = $_SERVER['REQUEST_URI'];
             $c_edit_days      = self::compare_url($current_url) == self::compare_url(FootballUrlBuilder::edit_days_matches($compet_id, $round)->rel());
+            $c_display_days   = self::compare_url($current_url) == self::compare_url(FootballUrlBuilder::display_days_calendar($compet_id, $round)->rel());
             $c_edit_groups    = self::compare_url($current_url) == self::compare_url(FootballUrlBuilder::edit_groups_matches($compet_id, $round)->rel());
             $c_display_groups = self::compare_url($current_url) == self::compare_url(FootballUrlBuilder::display_groups_rounds($compet_id, $round)->rel());
             $c_edit_brackets  = self::compare_url($current_url) == self::compare_url(FootballUrlBuilder::edit_brackets_matches($compet_id, $round)->rel());
 
             $view->put_all(array(
                 'C_EDIT_DAYS_MATCHES'     => $c_edit_days,
+                'C_DAYS_MATCHES'          => $c_display_days,
                 'C_EDIT_GROUPS_MATCHES'   => $c_edit_groups,
                 'C_GROUPS_MATCHES'        => $c_display_groups,
                 'C_EDIT_BRACKETS_MATCHES' => $c_edit_brackets,
@@ -146,6 +148,12 @@ class FootballMenuService
                         'L_TYPE' => $type,
                         'NUMBER' => $group_details[1],
                         'U_DAY'  => FootballUrlBuilder::edit_days_matches($compet_id, $group_details[1])->rel()
+                    ));
+                elseif ($c_display_days && $c_days)
+                    $view->assign_block_vars('days', array(
+                        'L_TYPE' => $type,
+                        'NUMBER' => $group_details[1],
+                        'U_DAY'  => FootballUrlBuilder::display_days_calendar($compet_id, $group_details[1])->rel()
                     ));
                 elseif ($c_edit_groups && $c_groups)
                     $view->assign_block_vars('groups', array(

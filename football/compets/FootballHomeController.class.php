@@ -31,6 +31,32 @@ class FootballHomeController extends DefaultModuleController
 		$categories = CategoriesService::get_categories_manager(self::$module_id)->get_categories_cache()->get_categories();
 		$authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, true, self::$module_id);
 
+        $this->view->put_all(array(
+            'C_CURRENT_MATCHES' => FootballConfig::load()->get_current_matches() && count(FootballMatchService::get_current_matches()),
+            'C_NEXT_MATCHES' => FootballConfig::load()->get_next_matches() && count(FootballMatchService::get_next_matches())
+        ));
+        // Display current matches
+        foreach(FootballMatchService::get_current_matches() as $current_match)
+        {
+            $match = new FootballMatch();
+            $match->set_properties($current_match);
+            $this->view->assign_block_vars('current_matches', array_merge($match->get_array_tpl_vars(), [
+                'COMPET_NAME' => FootballCompetService::get_compet($match->get_match_compet_id())->get_compet_name(),
+                'U_COMPET' => FootballUrlBuilder::compet_home($match->get_match_compet_id())->rel()
+            ]));
+        }
+        // Display next matches
+        foreach(FootballMatchService::get_next_matches() as $next_match)
+        {
+            $match = new FootballMatch();
+            $match->set_properties($next_match);
+            $this->view->assign_block_vars('next_matches', array_merge($match->get_array_tpl_vars(), [
+                'COMPET_NAME' => FootballCompetService::get_compet($match->get_match_compet_id())->get_compet_name(),
+                'U_COMPET' => FootballUrlBuilder::compet_home($match->get_match_compet_id())->rel()
+            ]));
+        }
+
+        // Display categories
 		foreach ($categories as $id => $category)
 		{
 			if ($id == Category::ROOT_CATEGORY)
@@ -108,7 +134,7 @@ class FootballHomeController extends DefaultModuleController
         $season_name = FootballSeasonService::get_season($season_id)->get_season_name();
         $season_parts = explode('-', $season_name);
 
-        return in_array($now->get_year(),$season_parts);
+        return in_array($now->get_year(), $season_parts);
     }
 
 	private function get_category()

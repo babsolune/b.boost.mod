@@ -33,7 +33,7 @@ class FootballTeamCalendarController extends DefaultModuleController
     {
         $this->team_id = $request->get_getint('team_id', 0);
         $team_club_id = FootballTeamService::get_team($this->team_id)->get_team_club_id();
-        $this->team_name = FootballClubService::get_club($team_club_id)->get_club_name();
+        $this->team_name = FootballClubCache::load()->get_club_full_name($team_club_id);
     }
 
 	private function build_view()

@@ -63,7 +63,7 @@
                     # START items #
                         <article id="football-item-{items.ID}" class="football-item category-{items.CATEGORY_ID} cell# IF items.C_NEW_CONTENT # new-content# ENDIF #" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
                             <div class="cell-content flex-between">
-                                <a class="offload" href="{items.U_ITEM}" itemprop="name">{items.TITLE}</a>
+                                <a class="offload" href="{items.U_COMPET}" itemprop="name">{items.TITLE}</a>
                                 # IF items.C_CONTROLS #
                                     <div class="controls align-right">
                                         # IF items.C_EDIT #<a class="offload item-edit" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
@@ -71,8 +71,8 @@
                                     </div>
                                 # ENDIF #
                             </div>
-                            <meta itemprop="url" content="{items.U_ITEM}">
-                            <meta itemprop="description" content="{items.U_ITEM}" />
+                            <meta itemprop="url" content="{items.U_COMPET}">
+                            <meta itemprop="description" content="{items.U_COMPET}" />
                         </article>
                     # END items #
                 </div>

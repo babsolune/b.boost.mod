@@ -19,6 +19,7 @@ class FootballClubController extends DefaultModuleController
 	public function execute(HTTPRequestCustom $request)
 	{
 		$this->build_view();
+		$this->build_compet_view();
 		$this->check_authorizations();
 
 		return $this->generate_response();
@@ -28,6 +29,24 @@ class FootballClubController extends DefaultModuleController
 	{
 		$club = $this->get_club();
 
+		$this->view->put_all($club->get_template_vars());
+	}
+
+	private function build_compet_view()
+	{
+		$club = $this->get_club();
+        $compet_cache = FootballCompetCache::load();
+        $teams = FootballTeamCache::load()->get_teams();
+        $compet_list = [];
+        foreach ($teams as $team)
+        {
+            if ($team['team_club_id'] == $club->get_id_club())
+            {
+                $compet = new FootballCompet();
+                $compet->set_properties($compet_cache->get_item($team['team_compet_id']));
+                $this->view->assign_block_vars('compets', $compet->get_template_vars());
+            }
+        }
 		$this->view->put_all($club->get_template_vars());
 	}
 
@@ -53,20 +72,26 @@ class FootballClubController extends DefaultModuleController
 
 	private function check_authorizations()
 	{
-		$club = $this->get_club();
+		if (!FootballAuthorizationsService::check_authorizations()->read())
+        {
+            $error_controller = PHPBoostErrors::user_not_authorized();
+            DispatchManager::redirect($error_controller);
+        }
 	}
 
 	private function generate_response()
 	{
 		$club = $this->get_club();
-		$response = new SiteDisplayResponse($this->view);
+        $cache = FootballClubCache::load();
+        $response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
+		$graphical_environment->set_page_title($cache->get_club_full_name($club->get_id_club()), $this->lang['football.module.title']);
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
-		$breadcrumb->add($this->lang['football.module.title'],FootballUrlBuilder::home());
-		$breadcrumb->add($this->lang['football.clubs.manager'], FootballUrlBuilder::manage_clubs());
-		$breadcrumb->add($club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name(), FootballUrlBuilder::display_club($club->get_id_club()));
+		$breadcrumb->add($this->lang['football.module.title'], FootballUrlBuilder::home());
+		$breadcrumb->add($this->lang['football.clubs'], FootballUrlBuilder::display_clubs());
+		$breadcrumb->add($cache->get_club_full_name($club->get_id_club()), FootballUrlBuilder::display_club($club->get_id_club()));
 
 		return $response;
 	}

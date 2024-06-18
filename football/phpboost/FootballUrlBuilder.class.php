@@ -50,7 +50,7 @@ class FootballUrlBuilder
 ################################ Clubs
 	public static function manage_clubs()
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/club/manage/');
+		return DispatchManager::get_url(self::$dispatcher, '/clubs/manage/');
 	}
 
 	public static function add_club()
@@ -66,6 +66,11 @@ class FootballUrlBuilder
     public static function delete_club($id)
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/club/' . $id . '/delete/?' . 'token=' . AppContext::get_session()->get_token());
+	}
+
+    public static function display_clubs()
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/clubs/');
 	}
 
     public static function display_club($id)
@@ -138,13 +143,13 @@ class FootballUrlBuilder
 	{
         $section = !empty($section) ? '/' . $section : '';
         $day = !empty($day) ? '/' . $day : '';
-		return DispatchManager::get_url(self::$dispatcher, '/days/ranking/' . $compet_id . $section . $day);
+		return DispatchManager::get_url(self::$dispatcher, '/matchdays/ranking/' . $compet_id . $section . $day);
 	}
 
     // Days calendar
-	public static function display_days_calendar($compet_id)
+	public static function display_days_calendar($compet_id, $day = '')
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/days/calendar/' . $compet_id);
+		return DispatchManager::get_url(self::$dispatcher, '/matchdays/calendar/' . $compet_id . '/round/' . $day);
 	}
 
     // Team calendar
@@ -170,12 +175,12 @@ class FootballUrlBuilder
     // Edit days and build days matches list
 	public static function edit_days($compet_id)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/days/edit/' . $compet_id);
+		return DispatchManager::get_url(self::$dispatcher, '/matchdays/edit/' . $compet_id);
 	}
     // Edit days matches
 	public static function edit_days_matches($compet_id, $round = 1)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/days/matches/edit/' . $compet_id . '/round/' . $round);
+		return DispatchManager::get_url(self::$dispatcher, '/matchdays/matches/edit/' . $compet_id . '/round/' . $round);
 	}
 
     // Groups 

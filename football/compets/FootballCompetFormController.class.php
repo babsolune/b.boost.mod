@@ -119,8 +119,6 @@ class FootballCompetFormController extends DefaultModuleController
 			$publishing_end_date->add_form_constraint(new FormConstraintFieldsDifferenceSuperior($publishing_start_date, $publishing_end_date));
 		}
 
-		$this->build_contribution_fieldset($form);
-
 		$fieldset->add_field(new FormFieldHidden('referrer', $request->get_url_referrer()));
 
 		$this->submit_button = new FormButtonDefaultSubmit();
@@ -128,35 +126,6 @@ class FootballCompetFormController extends DefaultModuleController
 		$form->add_button(new FormButtonReset());
 
 		$this->form = $form;
-	}
-
-	private function build_contribution_fieldset($form)
-	{
-		if ($this->compet_id() === null && $this->is_contributor_member())
-		{
-			$fieldset = new FormFieldsetHTML('contribution', $this->lang['contribution.contribution']);
-			$fieldset->set_description(MessageHelper::display($this->lang['contribution.extended.warning'], MessageHelper::WARNING)->render());
-			$form->add_fieldset($fieldset);
-
-			$fieldset->add_field(new FormFieldRichTextEditor('contribution_description', $this->lang['contribution.description'], '',
-				array('description' => $this->lang['contribution.description.clue'])
-			));
-		}
-		elseif ($this->get_compet()->is_published() && $this->get_compet()->is_authorized_to_edit() && $this->is_contributor_member())
-		{
-			$fieldset = new FormFieldsetHTML('member_edition', $this->lang['contribution.member.edition']);
-			$fieldset->set_description(MessageHelper::display($this->lang['contribution.edition.warning'], MessageHelper::WARNING)->render());
-			$form->add_fieldset($fieldset);
-
-			$fieldset->add_field(new FormFieldRichTextEditor('edition_description', $this->lang['contribution.edition.description'], '',
-				array('description' => $this->lang['contribution.edition.description.clue'])
-			));
-		}
-	}
-
-	private function is_contributor_member()
-	{
-		return (!FootballAuthorizationsService::check_authorizations()->write() && FootballAuthorizationsService::check_authorizations()->contribution());
 	}
 
 	private function seasons_list()
@@ -331,72 +300,24 @@ class FootballCompetFormController extends DefaultModuleController
 			$id = FootballCompetService::add($compet);
 			$compet->set_id($id);
 
-			if (!$this->is_contributor_member())
-				HooksService::execute_hook_action('add', self::$module_id, array_merge($compet->get_properties(), array('compet_url' => $compet->get_compet_url())));
+			HooksService::execute_hook_action('add', self::$module_id, array_merge($compet->get_properties(), array('compet_url' => $compet->get_compet_url())));
 		}
 		else
 		{
 			$compet->set_update_date(new Date());
 			FootballCompetService::update($compet);
 
-			if (!$this->is_contributor_member())
-				HooksService::execute_hook_action('edit', self::$module_id, array_merge($compet->get_properties(), array('compet_url' => $compet->get_compet_url())));
+			HooksService::execute_hook_action('edit', self::$module_id, array_merge($compet->get_properties(), array('compet_url' => $compet->get_compet_url())));
 		}
-
-		$this->contribution_actions($compet);
 
 		FootballCompetService::clear_cache();
-	}
-
-	private function contribution_actions(FootballCompet $compet)
-	{
-		if ($this->is_contributor_member())
-		{
-			$contribution = new Contribution();
-			$contribution->set_id_in_module($compet->get_id_compet());
-			if ($this->is_new_compet)
-				$contribution->set_description(stripslashes($this->form->get_value('contribution_description')));
-			else
-				$contribution->set_description(stripslashes($this->form->get_value('edition_description')));
-
-			$contribution->set_entitled($compet->get_compet_name());
-			$contribution->set_fixing_url(FootballUrlBuilder::edit($compet->get_id_compet())->relative());
-			$contribution->set_poster_id(AppContext::get_current_user()->get_id());
-			$contribution->set_module('football');
-			$contribution->set_auth(
-				Authorizations::capture_and_shift_bit_auth(
-					CategoriesService::get_categories_manager()->get_heritated_authorizations($compet->get_id_category(), Category::MODERATION_AUTHORIZATIONS, Authorizations::AUTH_CHILD_PRIORITY),
-					Category::MODERATION_AUTHORIZATIONS, Contribution::CONTRIBUTION_AUTH_BIT
-				)
-			);
-			ContributionService::save_contribution($contribution);
-			HooksService::execute_hook_action($this->is_new_compet ? 'add_contribution' : 'edit_contribution', self::$module_id, array_merge($contribution->get_properties(), $compet->get_properties(), array('compet_url' => $compet->get_compet_url())));
-		}
-		else
-		{
-			$corresponding_contributions = ContributionService::find_by_criteria('football', $compet->get_id_compet());
-			if (count($corresponding_contributions) > 0)
-			{
-				foreach ($corresponding_contributions as $contribution)
-				{
-					$contribution->set_status(Event::EVENT_STATUS_PROCESSED);
-					ContributionService::save_contribution($contribution);
-				}
-				HooksService::execute_hook_action('process_contribution', self::$module_id, array_merge($contribution->get_properties(), $compet->get_properties(), array('compet_url' => $compet->get_compet_url())));
-			}
-		}
 	}
 
 	private function redirect()
 	{
 		$compet = $this->get_compet();
-		$category = $compet->get_category();
 
-		if ($this->is_new_compet && $this->is_contributor_member() && !$compet->is_published())
-		{
-			DispatchManager::redirect(new UserContributionSuccessController());
-		}
-		elseif ($compet->is_published())
+		if ($compet->is_published())
 		{
 			if ($this->is_new_compet)
 				AppContext::get_response()->redirect(FootballUrlBuilder::compet_home($compet->get_id_compet()), StringVars::replace_vars($this->lang['football.message.success.add'], array('title' => $compet->get_compet_name())));

@@ -109,6 +109,11 @@ $lang['football.compet.id'] = 'Id';
 $lang['football.matches.management'] = 'Gestion des matches';
 $lang['football.matches.groups.stage'] = 'Phases de groupes';
 $lang['football.matches.brackets.stage'] = 'Phases finales';
+$lang['football.current.matches'] = 'Matchs en cours';
+$lang['football.config.current.matches'] = 'Afficher les matchs en cours sur l\'accueil';
+$lang['football.next.matches'] = 'Prochains matchs';
+$lang['football.config.next.matches'] = 'Afficher les prochains matchs sur l\'accueil';
+$lang['football.config.next.matches.number'] = 'Nombre de prochains matchs à afficher';
 
 $lang['football.warning.matches.update'] = 'Les matchs de la compétition ont été mis à jour.';
 
@@ -186,6 +191,7 @@ $lang['football.win.color'] = 'Couleur des matchs gagnés';
 
 // Authorizations
 $lang['football.manage.clubs.auth'] = 'Autorisation de gérer les clubs';
+$lang['football.read.clubs.auth'] = 'Autorisation de voir les clubs';
 $lang['football.manage.divisions.auth'] = 'Autorisation de gérer les divisions';
 $lang['football.manage.seasons.auth'] = 'Autorisation de gérer les saisons';
 $lang['football.manage.compets.auth'] = 'Autorisation de gérer les compétitions';

@@ -47,6 +47,7 @@ class FootballGroupService
     /** Add all matches of all groups of the $compet_id competition to database */
     public static function set_groups_matches(int $compet_id) : void
     {
+        // Debug::stop(FootballCompetService::get_compet($compet_id)->get_creation_date()->get_timestamp());
         $c_return_matches = FootballCompetService::get_compet_match_type($compet_id) == FootballDivision::RETURN_MATCHES;
         // build groups from compet teams list
         $groups = self::get_group_teams_list($compet_id);
@@ -69,7 +70,7 @@ class FootballGroupService
                         'match_order' => $match_order,
                         'match_home_id' => FootballParamsService::get_params($compet_id)->get_fill_matches() ? $match[0]['id_team'] : 0,
                         'match_away_id' => FootballParamsService::get_params($compet_id)->get_fill_matches() ? $match[1]['id_team'] : 0,
-                        'match_date' => $now->get_timestamp()
+                        'match_date' => FootballParamsService::get_params($compet_id)->get_fill_matches() ? FootballCompetService::get_compet($compet_id)->get_creation_date()->get_timestamp() : $now->get_timestamp()
                     ));
                     $match_order++;
                 }

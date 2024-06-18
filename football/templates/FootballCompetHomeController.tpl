@@ -32,7 +32,7 @@
 		</div>
 	</div>
 	<footer>
-		<meta itemprop="url" content="{U_ITEM}">
+		<meta itemprop="url" content="{U_COMPET}">
 		<meta itemprop="description" content="${escape(SUMMARY)}" />
 	</footer>
 </section>

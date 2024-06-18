@@ -69,6 +69,15 @@
                 </ul>
             </nav>
         # ENDIF #
+        # IF C_DAYS_MATCHES #
+            <nav class="roundmenu roundmenu-horizontal">
+                <ul>
+                    # START days #
+                        <li><a href="{days.U_DAY}" aria-label="{days.L_TYPE} {days.NUMBER}" class="roundmenu-title"><span>{days.NUMBER}</span></a></li>
+                    # END days #
+                </ul>
+            </nav>
+        # ENDIF #
         # IF C_EDIT_GROUPS_MATCHES #
             <nav class="roundmenu roundmenu-horizontal">
                 <ul>

@@ -180,7 +180,7 @@ class FootballMatchService
     }
 
     // Check if match is live
-    public static function is_live($compet_id, $match_id)
+    public static function is_live(int $compet_id, int $match_id) : bool
 	{
         $now = new Date();
         $match = FootballMatchCache::load()->get_match($match_id);
@@ -188,16 +188,45 @@ class FootballMatchService
         $overtime_duration = FootballParamsService::get_params($compet_id)->get_overtime_duration();
         $full_duration = $match['match_type'] == 'G' || $match['match_type'] == 'D' ? $match_duration : $match_duration + $overtime_duration;
 
-        $is_live = false;
-        if ($now->get_timestamp() > $match['match_date'])
+        if ($now->get_timestamp() > $match['match_date'] && $now->get_timestamp() < ($match['match_date'] + ($full_duration * 60)))
+            return true;
+		return false;
+	}
+
+    // Check current matches
+    public static function get_current_matches()
+	{
+        $now = new Date();
+        $matches = FootballMatchCache::load()->get_matches();
+        $current_matches = [];
+        foreach ($matches as $match)
         {
-            if ($now->get_timestamp() > ($match['match_date'] + ($full_duration * 60))) {
-                $is_live = false;
-            } else {
-                $is_live = true;
-            }
+            $match_duration = FootballParamsService::get_params($match['match_compet_id'])->get_match_duration();
+            $overtime_duration = FootballParamsService::get_params($match['match_compet_id'])->get_overtime_duration();
+            $full_duration = $match['match_type'] == 'G' || $match['match_type'] == 'D' ? $match_duration : $match_duration + $overtime_duration;
+
+            if ($now->get_timestamp() > $match['match_date'] && $now->get_timestamp() < ($match['match_date'] + ($full_duration * 60)))
+                $current_matches[] = $match;
         }
-		return $is_live;
+        return $current_matches;
+	}
+
+    // Check current matches
+    public static function get_next_matches()
+	{
+        $now = new Date();
+        $full_matches = FootballMatchCache::load()->get_matches();
+        usort($full_matches, function($a, $b) {
+            return $a['match_date'] - $b['match_date'];
+        });
+        $matches = [];
+        foreach ($full_matches as $match)
+        {
+            if ($now->get_timestamp() < $match['match_date'])
+                $matches[] = $match;
+        }
+        $next_matches = array_slice($matches, 0, FootballConfig::load()->get_next_matches_number());
+        return $next_matches;
 	}
 }
 ?>

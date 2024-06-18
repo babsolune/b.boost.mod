@@ -166,7 +166,7 @@ class FootballDaysRankingController extends DefaultModuleController
 		$compet = $this->get_compet();
 
 		$current_user = AppContext::get_current_user();
-		$not_authorized = !FootballAuthorizationsService::check_authorizations($compet->get_id_category())->moderation() && !FootballAuthorizationsService::check_authorizations($compet->get_id_category())->write() && (!FootballAuthorizationsService::check_authorizations($compet->get_id_category())->contribution() || $compet->get_author_user()->get_id() != $current_user->get_id());
+		$not_authorized = !FootballAuthorizationsService::check_authorizations($compet->get_id_category())->moderation() && !FootballAuthorizationsService::check_authorizations($compet->get_id_category())->write();
 
 		switch ($compet->get_publishing_state()) {
 			case FootballCompet::PUBLISHED:

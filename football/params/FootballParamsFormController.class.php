@@ -267,8 +267,7 @@ class FootballParamsFormController extends DefaultModuleController
         $options[] = new FormFieldSelectChoiceOption('', 0);
 		foreach(FootballTeamService::get_teams($this->compet_id()) as $team)
 		{
-            if ($this->is_championship)
-                $options[] = new FormFieldSelectChoiceOption($team['club_name'], $team['id_team']);
+            $options[] = new FormFieldSelectChoiceOption($team['club_name'], $team['id_team']);
 		}
 
 		return $options;

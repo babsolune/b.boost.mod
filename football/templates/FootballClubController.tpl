@@ -18,17 +18,27 @@
         <div class="content-container">
             <article itemscope="itemscope" itemtype="https://schema.org/CreativeWork" id="club-item-{ID}" class="club-item# IF C_NEW_CONTENT # new-content# ENDIF #">
                 <div class="content">
-                    <div class="flex-between">
-                        <span>{@football.club.email} : # IF C_HAS_EMAIL #{EMAIL}# ELSE ## ENDIF #</span>
-                        <span>{@football.club.phone} : # IF C_HAS_EMAIL #{PHONE}# ELSE ## ENDIF #</span>
+                    <div class="cell-flex cell-columns-2">
+                        <div class="cell">
+                            <p>{@football.club.email} : # IF C_HAS_EMAIL #{EMAIL}# ELSE ## ENDIF #</p>
+                            <p>{@football.club.phone} : # IF C_HAS_EMAIL #{PHONE}# ELSE ## ENDIF #</p>
+
+                            # START compets #
+                                # IF compets.C_VISIBLE #
+                                    <article class="flex-team flex-left">
+                                        <span><a href="{compets.U_COMPET}" class="offload">{compets.TITLE}</a></span>
+                                    </article>
+                                # ENDIF #
+                            # END compets #
+                        </div>
+                        <div class="cell">
+                            # IF C_LOCATION_MAP #
+                                {LOCATION_MAP}
+                            # ELSE #
+                                {LOCATION}
+                            # ENDIF #
+                        </div>
                     </div>
-                </div>
-                <div class="content">
-                    # IF C_LOCATION_MAP #
-                        {LOCATION_MAP}
-                    # ELSE #
-                        {LOCATION}
-                    # ENDIF #
                 </div>
             </article>
         </div>

@@ -24,7 +24,7 @@ class FootballCompetCache implements CacheData
 		$result = PersistenceContext::get_querier()->select('SELECT compet.*
 			FROM ' . FootballSetup::$football_compet_table . ' compet
 			WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
-			ORDER BY id DESC
+			ORDER BY id_compet DESC
 			LIMIT 5 OFFSET 0', array(
 				'timestamp_now' => $now->get_timestamp()
 		));

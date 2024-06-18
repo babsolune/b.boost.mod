@@ -336,7 +336,7 @@ class FootballCompet
 				// Links
 
 				'U_SYNDICATION'    => SyndicationUrlBuilder::rss('football', $this->id_category)->rel(),
-				'U_ITEM'           => $this->get_compet_url(),
+				'U_COMPET'         => $this->get_compet_url(),
 				'U_EDIT'           => FootballUrlBuilder::edit($this->id_compet)->rel(),
 				'U_DELETE'         => FootballUrlBuilder::delete($this->id_compet)->rel(),
 			)
