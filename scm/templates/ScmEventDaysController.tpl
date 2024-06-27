@@ -1,5 +1,8 @@
 
 <div class="cell-flex cell-columns-2">
+    # IF C_EVENT_STARTING #
+        <div></div>
+    # ELSE #
     <div>
         <table class="table bordered-table">
             <caption>{@scm.prev.day} ({LAST_DAY})</caption>
@@ -47,7 +50,10 @@
             </tbody>
         </table>
     </div>
-    # IF NOT C_EVENT_ENDING #
+    # ENDIF #
+    # IF C_EVENT_ENDING #
+        <div></div>
+    # ELSE #
         <div>
             <table class="table bordered-table">
                 <caption>{@scm.next.day} ({NEXT_DAY})</caption>

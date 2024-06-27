@@ -40,23 +40,16 @@ th.bgc-sub a {
     padding-bottom: 1.809em;
 }
 
-.responsive {
-    width: 100%;
-    overflow-x: scroll;
-}
-
-.responsive .cell-flex {
-    flex-wrap: nowrap;
-}
-
 .has-score-color td {
     background-color: var(--bgc-sub);
 }
-/* event menu */
+
+/* event sub-menu */
 .event-menu {
     margin-top: 0.618em;
 }
 
+/* sub-menu */
 .roundmenu {
     margin: 0 0 1.618em;
 }
@@ -89,7 +82,7 @@ th.bgc-sub a {
     background-color: var(--bgc-sub);
 }
 
-/* --- Form --- */
+/* --- Form --- ####################################################################" */
 .days-form .form-element  { flex-direction: column; }
 .days-form .form-element > label { width: 100%; }
 
@@ -160,6 +153,10 @@ th.bgc-sub a {
 .params-form p {
     width: 100%;
 }
+.params-form .form-element {
+    margin: 0;
+    padding: 0.236em;
+}
 
 /* fields */
 .grouped-fields {
@@ -204,124 +201,28 @@ th.bgc-sub a {
 
 .round-fields .game-name { width: 90px; }
 
-/* groups */
-.grouped-selects .form-field,
-.grouped-results .form-field,
-.grouped-selects select,
-.groups-select .form-field,
-.groups-select select,
-#ScmGroupsFormController_captcha_fieldset,
-#ScmGroupsFormController_fbuttons {
-    width: 100%;
-}
-.groups-select {
-    margin: 0;
-}
-
-/* games */
-.grouped-selects .fieldset-inset,
-.grouped-results .fieldset-inset {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 0;
-}
-.grouped-selects .form-element.game-select,
-.grouped-results .form-element.game-score {
-    margin: 0;
-    padding: 0.309em 0.309em 0;
-}
-.grouped-selects .grouped-inputs,
-.grouped-results .grouped-inputs {
-    margin: 0;
-}
-.grouped-selects .label-time::after {
-    display: none;
-}
-#module-scm td {
-    padding: 0.309em;
-}
 .playground input,
 .home-score input,
 .home-pen input,
 .away-score input,
-.away-pen input {text-align: center; }
+.away-pen input { text-align: center; }
+/* --- /Form --- ####################################################################" */
 
-.grouped-selects .fieldset-description {
-    display: flex;
-    font-style: italic;
-    margin: 0;
+#module-scm td {
+    padding: 0.309em;
 }
-.grouped-selects .fieldset-description .form-element {
-    margin: 0;
-    justify-content: center;
-}
-.grouped-selects .form-element.free-select  { width: 10%; }
-.grouped-selects .form-element.date-select  { width: 80%; }
-.grouped-selects .form-element.playground { width: 10%; }
-.grouped-selects .form-element.home-select  { width: 50%; }
-.grouped-selects .form-element.away-select { width: 50%; }
-@media (min-width: 1366px) {
-    .grouped-selects .form-element.free-select  { width: 9%; }
-    .grouped-selects .form-element.date-select  { width: 23%; }
-    .grouped-selects .form-element.playground { width: 8%; }
-    .grouped-selects .form-element.home-select  { width: 25%; }
-    .grouped-selects .form-element.home-bracket  { width: 20%; }
-    .grouped-selects .form-element.home-score  { width: 5%; }
-    .grouped-selects .form-element.home-pen  { width: 5%; }
-    .grouped-selects .form-element.away-pen { width: 5%; }
-    .grouped-selects .form-element.away-score { width: 5%; }
-    .grouped-selects .form-element.away-bracket { width: 20%; }
-    .grouped-selects .form-element.away-select { width: 25%; }
-}
-
-.grouped-selects .form-element-date-time {
-    padding-bottom: 0;
-}
-
-/* params */
-.params-form .form-element {
-    margin: 0;
-    padding: 0.236em;
-}
-/* --- /Form --- */
 
 /* front */
+/* button to select next match in event home page */
 #next-game { width: auto; }
 
+/* Build club colors */
 .club-colors {
 	width: 25px;
 	height: 25px;
 	border: 1px solid var(--bdr-main);
 	display: inline-block;
     vertical-align: middle;
-}
-
-.bracket-round {
-    display: flex;
-    flex-direction: column;
-}
-
-.bracket-round-title {
-    text-align: center;
-}
-
-.bracket-round-games {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.bracket-round:last-child .bracket-round-games {
-    justify-content: center;
-}
-
-.row-header{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
 }
 
 /* Game layout */
@@ -357,13 +258,7 @@ th.bgc-sub a {
     flex: 1 1 auto;
 }
 
-/* groups layout */
-
-.smaller-logo { max-width: 16px; }
-.small-logo   { max-width: 32px; }
-.medium-logo  { max-width: 64px; }
-.big-logo 	  { max-width: 96px; }
-.bigger-logo  { max-width: 128px; }
+/* scm home layout */
 
 .root-list,
 .scm-list ul {
@@ -420,13 +315,40 @@ th.bgc-sub a {
 }
 
 /* bracket */
+
+/* bracket layout */
+.bracket-round {
+    display: flex;
+    flex-direction: column;
+}
+
+.bracket-round-title {
+    text-align: center;
+}
+
+.bracket-round-games {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.bracket-round:last-child .bracket-round-games {
+    justify-content: center;
+}
+
+.row-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .bracket-highlight {
     background-color: var(--bgc-sub) !important;
 }
 .cell-bracket {
     display: flex;
     flex-direction: column;
-	/* flex-wrap: wrap; */
     width: 100%;
     overflow: scroll;
 }
@@ -456,6 +378,7 @@ th.bgc-sub a {
     }
 }
 
+/* Team layout */
 .flex-team {
     display: flex;
     align-items: center;
@@ -464,7 +387,7 @@ th.bgc-sub a {
 .flex-team img {
     max-height: 19px;
     max-width: 19px;
-    margin: 0 0.228em; 
+    margin: 0 0.228em;
 }
 
 .flex-right {
@@ -476,6 +399,6 @@ th.bgc-sub a {
 }
 
 @media (max-width: 568px) {
-    .flex-team span {order: 2;}
-    .flex-team img {order: 1;}
+    .flex-team span { order: 2; }
+    .flex-team img  { order: 1; }
 }

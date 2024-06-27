@@ -82,51 +82,57 @@
             </table>
 
             <div class="cell-flex cell-columns-2">
-                <div>
-                    <table class="table bordered-table">
-                        <caption>&nbsp;</caption>
-                        <colgroup class="hidden-small-screens">
-                            # IF NOT C_ONE_DAY #<col class="width-pc-9" /># ENDIF #
-                            <col class="width-pc-05" />
-                            <col class="width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
-                            <col class="width-pc-8" />
-                            <col class="width-pc-8" />
-                            <col class="width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                # IF NOT C_ONE_DAY #<th>{@scm.th.date}</th># ENDIF #
-                                <th aria-label="{@scm.th.hourly}"><i class="far fa-clock"></i></th>
-                                <th>{@scm.th.team} 1</th>
-                                <th colspan="2">{@scm.th.score}</th>
-                                <th>{@scm.th.team} 2</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            # START prev_days #
-                                <tr# IF prev_days.C_HAS_SCORE # class="has-score-color"# ENDIF #>
-                                    # IF NOT C_ONE_DAY #<td class="small">{prev_days.GAME_DATE_SHORT}</td># ENDIF #
-                                    <td class="small">{prev_days.GAME_DATE_HOUR_MINUTE}</td>
-                                    <td class="align-right home-{prev_days.ID}# IF prev_days.C_HOME_FAV # text-strong# ENDIF #">
-                                        <div class="flex-team flex-right">
-                                            <span><a href="{prev_days.U_HOME_CALENDAR}" class="offload">{prev_days.HOME_TEAM}</a></span>
-                                            <img src="{PATH_TO_ROOT}/{prev_days.HOME_LOGO}" alt="{prev_days.HOME_TEAM}">
-                                        </div>
-                                    </td>
-                                    <td>{prev_days.HOME_SCORE}</td>
-                                    <td>{prev_days.AWAY_SCORE}</td>
-                                    <td class="align-left away-{prev_days.ID}# IF prev_days.C_AWAY_FAV # text-strong# ENDIF #">
-                                        <div class="flex-team flex-left">
-                                            <img src="{PATH_TO_ROOT}/{prev_days.AWAY_LOGO}" alt="{prev_days.AWAY_TEAM}">
-                                            <span><a href="{prev_days.U_AWAY_CALENDAR}" class="offload">{prev_days.AWAY_TEAM}</a></span>
-                                        </div>
-                                    </td>
+                # IF C_EVENT_STARTING #
+                    <div></div>
+                # ELSE #
+                    <div>
+                        <table class="table bordered-table">
+                            <caption>&nbsp;</caption>
+                            <colgroup class="hidden-small-screens">
+                                # IF NOT C_ONE_DAY #<col class="width-pc-9" /># ENDIF #
+                                <col class="width-pc-05" />
+                                <col class="width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
+                                <col class="width-pc-8" />
+                                <col class="width-pc-8" />
+                                <col class="width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    # IF NOT C_ONE_DAY #<th>{@scm.th.date}</th># ENDIF #
+                                    <th aria-label="{@scm.th.hourly}"><i class="far fa-clock"></i></th>
+                                    <th>{@scm.th.team} 1</th>
+                                    <th colspan="2">{@scm.th.score}</th>
+                                    <th>{@scm.th.team} 2</th>
                                 </tr>
-                            # END prev_days #
-                        </tbody>
-                    </table>
-                </div>
-                # IF NOT C_EVENT_ENDING #
+                            </thead>
+                            <tbody>
+                                # START prev_days #
+                                    <tr# IF prev_days.C_HAS_SCORE # class="has-score-color"# ENDIF #>
+                                        # IF NOT C_ONE_DAY #<td class="small">{prev_days.GAME_DATE_SHORT}</td># ENDIF #
+                                        <td class="small">{prev_days.GAME_DATE_HOUR_MINUTE}</td>
+                                        <td class="align-right home-{prev_days.ID}# IF prev_days.C_HOME_FAV # text-strong# ENDIF #">
+                                            <div class="flex-team flex-right">
+                                                <span><a href="{prev_days.U_HOME_CALENDAR}" class="offload">{prev_days.HOME_TEAM}</a></span>
+                                                <img src="{PATH_TO_ROOT}/{prev_days.HOME_LOGO}" alt="{prev_days.HOME_TEAM}">
+                                            </div>
+                                        </td>
+                                        <td>{prev_days.HOME_SCORE}</td>
+                                        <td>{prev_days.AWAY_SCORE}</td>
+                                        <td class="align-left away-{prev_days.ID}# IF prev_days.C_AWAY_FAV # text-strong# ENDIF #">
+                                            <div class="flex-team flex-left">
+                                                <img src="{PATH_TO_ROOT}/{prev_days.AWAY_LOGO}" alt="{prev_days.AWAY_TEAM}">
+                                                <span><a href="{prev_days.U_AWAY_CALENDAR}" class="offload">{prev_days.AWAY_TEAM}</a></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                # END prev_days #
+                            </tbody>
+                        </table>
+                    </div>
+                # ENDIF #
+                # IF C_EVENT_ENDING #
+                    <div></div>
+                # ELSE #
                     <div>
                         <table class="table bordered-table">
                             <caption>{@scm.next.day} ({NEXT_DAY})</caption>

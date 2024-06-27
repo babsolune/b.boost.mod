@@ -54,7 +54,7 @@ $lang['scm.days.ranking.defense'] = 'Défense';
 $lang['scm.day']  = 'Journée';
 $lang['scm.days.date']  = 'Date des journées';
 $lang['scm.prev.day']  = 'Journée précédente';
-$lang['scm.next.day']  = 'Prochaine journée';
+$lang['scm.next.day']  = 'Journée suivante';
 
 // Rounds
 $lang['scm.groups.management']   = 'Gestion des groupes';

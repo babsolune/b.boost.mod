@@ -55,7 +55,6 @@ class ScmGroupGamesFormController extends DefaultModuleController
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.games.management'] . '</div>');
 
 		$groups_fieldset = new FormFieldsetHTML('groups_bracket', $this->lang['scm.games.groups.stage']);
-		$groups_fieldset->set_css_class('grouped-selects');
         $form->add_fieldset($groups_fieldset);
 
         $odd_filled = $this->teams_number % 2 != 0 && $this->get_params()->get_fill_games();
@@ -63,7 +62,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
         if ($this->hat_ranking)
         {
             $fieldset = new FormFieldsetHTML('group_' . $i, $this->lang['scm.day'] . ' ' . $i);
-            $fieldset->set_css_class('grouped-selects');
+            $fieldset->set_css_class('grouped-fields');
             $form->add_fieldset($fieldset);
             for ($j = 1; $j <= ($this->teams_number / 2); $j++)
             {
@@ -116,7 +115,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
                 $games_number = $this->teams_per_group * ($this->teams_per_group - 1) / 2;
 
             $fieldset = new FormFieldsetHTML('group_' . $i, $this->lang['scm.group'] . ' ' . ScmGroupService::ntl($i));
-            $fieldset->set_css_class('grouped-selects');
+            $fieldset->set_css_class('grouped-fields');
             $form->add_fieldset($fieldset);
 
             for ($j = 1; $j <= $games_number; $j++)

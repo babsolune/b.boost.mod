@@ -30,8 +30,7 @@ class ScmEventHomeService
             $item->set_properties($game);
             $view->assign_block_vars('prev_days', $item->get_array_tpl_vars());
         }
-        $days_number = count(ScmDayService::get_days($event_id));
-        $view->put('C_EVENT_ENDING', $prev_day == $days_number);
+
         $next_day = ScmDayService::get_next_day($event_id);
         foreach (ScmGameService::get_games_in_day($event_id, $next_day) as $game)
         {
@@ -39,7 +38,10 @@ class ScmEventHomeService
             $item->set_properties($game);
             $view->assign_block_vars('next_days', $item->get_array_tpl_vars());
         }
+
         $view->put_all([
+            'C_EVENT_STARTING' => $prev_day == 1,
+            'C_EVENT_ENDING' => $prev_day == count(ScmDayService::get_days($event_id)),
             'LAST_DAY' => $prev_day,
             'NEXT_DAY' => $next_day,
         ]);

@@ -117,23 +117,25 @@ class ScmDaysRankingController extends DefaultModuleController
     private function build_days_view()
     {
         $day = AppContext::get_request()->get_getint('day', 0);
-        $prev_day = empty($day) ? ScmDayService::get_last_day($this->event_id()) : $day;
+        $prev_day = ScmDayService::get_last_day($this->event_id());
         foreach (ScmGameService::get_games_in_day($this->event_id(), $prev_day) as $game)
         {
             $item = new ScmGame();
             $item->set_properties($game);
             $this->view->assign_block_vars('prev_days', $item->get_array_tpl_vars());
         }
-        $days_number = count(ScmDayService::get_days($this->event_id()));
-        $this->view->put('C_EVENT_ENDING', $day == $days_number);
-        $next_day = empty($day) ? ScmDayService::get_next_day($this->event_id()) : $day + 1;
+
+        $next_day = ScmDayService::get_next_day($this->event_id());
         foreach (ScmGameService::get_games_in_day($this->event_id(), $next_day) as $game)
         {
             $item = new ScmGame();
             $item->set_properties($game);
             $this->view->assign_block_vars('next_days', $item->get_array_tpl_vars());
         }
+
         $this->view->put_all([
+            'C_EVENT_STARTING' => empty($day) && ScmDayService::get_last_day($this->event_id()) == 1,
+            'C_EVENT_ENDING' => empty($day) && ScmDayService::get_last_day($this->event_id()) == count(ScmDayService::get_days($this->event_id())) || $day == count(ScmDayService::get_days($this->event_id())),
             'LAST_DAY' => $prev_day,
             'NEXT_DAY' => $next_day,
         ]);
