@@ -13,8 +13,8 @@ class ScmGame
     private $game_event_id;
     private $game_type;
     private $game_group;
+    private $game_round;
     private $game_order;
-    private $game_day;
     private $game_playground;
     private $game_home_id;
     private $game_home_score;
@@ -64,6 +64,16 @@ class ScmGame
         $this->game_group = $game_group;
     }
 
+    function get_game_round()
+    {
+        return $this->game_round;
+    }
+
+    function set_game_round($game_round)
+    {
+        $this->game_round = $game_round;
+    }
+
     function get_game_order()
     {
         return $this->game_order;
@@ -72,16 +82,6 @@ class ScmGame
     function set_game_order($game_order)
     {
         $this->game_order = $game_order;
-    }
-
-    function get_game_day()
-    {
-        return $this->game_day;
-    }
-
-    function set_game_day($game_day)
-    {
-        $this->game_day = $game_day;
     }
 
     function get_game_playground()
@@ -171,8 +171,8 @@ class ScmGame
 			'game_event_id' => $this->get_game_event_id(),
 			'game_type' => $this->get_game_type(),
 			'game_group' => $this->get_game_group(),
+			'game_round' => $this->get_game_round(),
 			'game_order' => $this->get_game_order(),
-			'game_day' => $this->get_game_day(),
 			'game_playground' => $this->get_game_playground(),
 			'game_home_id' => $this->get_game_home_id(),
 			'game_home_score' => $this->get_game_home_score(),
@@ -190,8 +190,8 @@ class ScmGame
 		$this->game_event_id = $properties['game_event_id'];
 		$this->game_type = $properties['game_type'];
 		$this->game_group = $properties['game_group'];
+		$this->game_round = $properties['game_round'];
 		$this->game_order = $properties['game_order'];
-		$this->game_day = $properties['game_day'];
 		$this->game_playground = $properties['game_playground'];
 		$this->game_home_id = $properties['game_home_id'];
 		$this->game_home_score = $properties['game_home_score'];
@@ -207,7 +207,7 @@ class ScmGame
         $this->game_date = new Date();
 	}
 
-	public function get_array_tpl_vars()
+	public function get_template_vars()
 	{
         $c_home_score = $this->game_home_score != '';
         $c_home_pen   = $this->game_home_pen != '';

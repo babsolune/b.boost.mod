@@ -28,7 +28,7 @@ class ScmEventHomeService
         {
             $item = new ScmGame();
             $item->set_properties($game);
-            $view->assign_block_vars('prev_days', $item->get_array_tpl_vars());
+            $view->assign_block_vars('prev_days', $item->get_template_vars());
         }
 
         $next_day = ScmDayService::get_next_day($event_id);
@@ -36,7 +36,7 @@ class ScmEventHomeService
         {
             $item = new ScmGame();
             $item->set_properties($game);
-            $view->assign_block_vars('next_days', $item->get_array_tpl_vars());
+            $view->assign_block_vars('next_days', $item->get_template_vars());
         }
 
         $view->put_all([
@@ -107,7 +107,7 @@ class ScmEventHomeService
 
                 $items = $game->get_game_type() == 'G' ? 'groups' : 'brackets';
 
-                $view->assign_block_vars($items, array_merge($game->get_array_tpl_vars(), [
+                $view->assign_block_vars($items, array_merge($game->get_template_vars(), [
                     'GROUP_NAME' => ScmGroupService::ntl($game->get_game_group()),
                     'DAY_NAME' => $game->get_game_group(),
                     'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $game->get_game_group())->rel()
@@ -140,7 +140,7 @@ class ScmEventHomeService
                     $items = $game->get_game_type() == 'G' ? 'groups' : 'brackets';
                     if($date == Date::to_format($row['game_date'], Date::FORMAT_DAY_MONTH_YEAR))
                     {
-                        $view->assign_block_vars('matchdays.' . $items, array_merge($game->get_array_tpl_vars(), [
+                        $view->assign_block_vars('matchdays.' . $items, array_merge($game->get_template_vars(), [
                             'GROUP_NAME' => ScmGroupService::ntl($game->get_game_group()),
                             'DAY_NAME' => $game->get_game_group(),
                             'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $game->get_game_group())->rel()

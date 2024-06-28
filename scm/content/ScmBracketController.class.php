@@ -112,7 +112,7 @@ class ScmBracketController extends DefaultModuleController
                                 $total_away = (int)$game_a['game_away_score'] + (int)$game_b['game_home_score'];
 
                                 $this->view->assign_block_vars('rounds.games', array_merge(
-                                    $game->get_array_tpl_vars(),
+                                    $game->get_template_vars(),
                                     Date::get_array_tpl_vars($game_a['game_date'], 'game_date_a'),
                                     Date::get_array_tpl_vars($game_b['game_date'], 'game_date_b'),
                                     array(
@@ -137,7 +137,7 @@ class ScmBracketController extends DefaultModuleController
                         $game->set_properties($game_a);
 
                         if ($game->get_game_group() == $round)
-                        $this->view->assign_block_vars('rounds.games', $game->get_array_tpl_vars());
+                        $this->view->assign_block_vars('rounds.games', $game->get_template_vars());
                     }
                 }
             }
@@ -149,7 +149,7 @@ class ScmBracketController extends DefaultModuleController
                     $game->set_properties($games[$i]);
 
                     if ($game->get_game_group() == $round)
-                    $this->view->assign_block_vars('rounds.games', $game->get_array_tpl_vars());
+                    $this->view->assign_block_vars('rounds.games', $game->get_template_vars());
                 }
             }
         }
@@ -185,7 +185,7 @@ class ScmBracketController extends DefaultModuleController
 
                 if ($game->get_game_group() == $round)
                 {
-                    $this->view->assign_block_vars('w_rounds.games', $game->get_array_tpl_vars());
+                    $this->view->assign_block_vars('w_rounds.games', $game->get_template_vars());
                 }
             }
         }
@@ -221,7 +221,7 @@ class ScmBracketController extends DefaultModuleController
 
                 if ($game->get_game_group() == $round)
                 {
-                    $this->view->assign_block_vars('l_rounds.games', $game->get_array_tpl_vars());
+                    $this->view->assign_block_vars('l_rounds.games', $game->get_template_vars());
                 }
             }
         }

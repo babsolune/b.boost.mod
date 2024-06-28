@@ -81,29 +81,25 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     array('class' => 'game-name small text-italic form-G' . $i . $j)
                 ));
                 $groups_fieldset->add_field(new FormFieldDateTime('group_game_date_' . $i . $j, '', $game_date,
-                    array('class' => 'game-select date-select')
+                    array('class' => 'game-date date-select')
                 ));
                 if($this->get_params()->get_display_playgrounds())
                     $groups_fieldset->add_field(new FormFieldTextEditor('group_game_playground_' . $i . $j, '', $game_playground,
-                        array('class' => 'game-select playground', 'placeholder' => $this->lang['scm.field'])
-                    ));
-                else
-                    $groups_fieldset->add_field(new FormFieldFree('group_game_playground_' . $i . $j, '', '',
-                        array('class' => 'game-select playground')
+                        array('class' => 'game-playground', 'placeholder' => $this->lang['scm.field'])
                     ));
                 $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_home_team_' . $i . $j, '', $game_home_id,
                     $this->get_teams_list(),
-                    array('class' => 'home-team game-select home-select')
+                    array('class' => 'home-team game-team')
                 ));
                 $groups_fieldset->add_field(new FormFieldTextEditor('group_home_score_' . $i . $j, '', $game_home_score,
-                    array('class' => 'home-team game-select home-score', 'pattern' => '[0-9]*')
+                    array('class' => 'home-team game-score', 'pattern' => '[0-9]*')
                 ));
                 $groups_fieldset->add_field(new FormFieldTextEditor('group_away_score_' . $i . $j, '', $game_away_score,
-                    array('class' => 'away-team game-select away-score', 'pattern' => '[0-9]*')
+                    array('class' => 'away-team game-score', 'pattern' => '[0-9]*')
                 ));
                 $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_away_team_' . $i . $j, '', $game_away_id,
                     $this->get_teams_list(),
-                    array('class' => 'away-team game-select away-select')
+                    array('class' => 'away-team game-team')
                 ));
             }
         }

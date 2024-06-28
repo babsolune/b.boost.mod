@@ -45,7 +45,7 @@ class ScmTeamCalendarController extends DefaultModuleController
             $item = new ScmGame();
             $item->set_properties($game);
 
-            $this->view->assign_block_vars('games', array_merge($item->get_array_tpl_vars(),[
+            $this->view->assign_block_vars('games', array_merge($item->get_template_vars(),[
                 'DAY' => $item->get_game_group()
             ]));
         }

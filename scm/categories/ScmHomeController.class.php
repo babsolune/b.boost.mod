@@ -40,7 +40,7 @@ class ScmHomeController extends DefaultModuleController
         {
             $game = new ScmGame();
             $game->set_properties($current_game);
-            $this->view->assign_block_vars('current_games', array_merge($game->get_array_tpl_vars(), [
+            $this->view->assign_block_vars('current_games', array_merge($game->get_template_vars(), [
                 'EVENT_NAME' => ScmEventService::get_event($game->get_game_event_id())->get_event_name(),
                 'U_EVENT' => ScmUrlBuilder::event_home($game->get_game_event_id(), ScmEventService::get_event_slug($game->get_game_event_id()))->rel()
             ]));
@@ -50,7 +50,7 @@ class ScmHomeController extends DefaultModuleController
         {
             $game = new ScmGame();
             $game->set_properties($next_game);
-            $this->view->assign_block_vars('next_games', array_merge($game->get_array_tpl_vars(), [
+            $this->view->assign_block_vars('next_games', array_merge($game->get_template_vars(), [
                 'EVENT_NAME' => ScmEventService::get_event($game->get_game_event_id())->get_event_name(),
                 'U_EVENT' => ScmUrlBuilder::event_home($game->get_game_event_id(), ScmEventService::get_event_slug($game->get_game_event_id()))->rel()
             ]));

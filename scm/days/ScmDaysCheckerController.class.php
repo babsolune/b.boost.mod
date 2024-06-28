@@ -66,13 +66,13 @@ class ScmDaysCheckerController extends DefaultModuleController
 
             if($c_check_error)
             {
-                $game_days = $error_days = [];
+                $game_rounds = $error_days = [];
                 foreach ($games as $game)
                 {
                     if($game['game_home_id'] == $team_item->get_id_team() || $game['game_away_id'] == $team_item->get_id_team())
-                        $game_days[] = ['day' => $game['game_group']];
+                        $game_rounds[] = ['day' => $game['game_group']];
                 }
-                $ids = array_column($game_days, 'day');
+                $ids = array_column($game_rounds, 'day');
                 $id_counts = array_count_values($ids);
 
                 foreach ($id_counts as $id => $count) {

@@ -20,8 +20,6 @@ class ScmDaysCalendarController extends DefaultModuleController
 		$this->build_view();
 		$this->check_authorizations();
 
-        $this->view->put('C_ONE_DAY', ScmGameService::one_day_event($this->event_id()));
-
 		return $this->generate_response();
 	}
 
@@ -29,25 +27,33 @@ class ScmDaysCalendarController extends DefaultModuleController
 	{
         $round = AppContext::get_request()->get_getint('round', 0);
         $games = ScmGroupService::games_list_from_group($this->event_id(), 'D', $round);
-        // $ranks = [];
-        // foreach ($days as $day => $games)
-        // {
-            $this->view->put_all(array(
+        $this->view->put_all(array(
+            'C_ONE_DAY' => ScmGameService::one_day_event($this->event_id()),
+            'MENU' => ScmMenuService::build_event_menu($this->event_id()),
+            'C_HAS_GAMES' => ScmGameService::has_games($this->event_id()),
                 'DAY' => $round
-            ));
-            foreach ($games as $game)
+        ));
+
+
+        $dates = [];
+        foreach($games as $game)
+        {
+            $dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
+        }
+
+        foreach (array_unique($dates) as $date)
+        {
+            $this->view->assign_block_vars('dates', [
+                'DATE' => $date
+            ]);
+            foreach($games as $game)
             {
                 $item = new ScmGame();
                 $item->set_properties($game);
-
-                $this->view->assign_block_vars('games', $item->get_array_tpl_vars());
+                if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
+                    $this->view->assign_block_vars('dates.games', $item->get_template_vars());
             }
-        // }
-
-        $this->view->put_all(array(
-            'MENU' => ScmMenuService::build_event_menu($this->event_id()),
-            'C_HAS_GAMES' => ScmGameService::has_games($this->event_id())
-        ));
+        }
 	}
 
 	private function get_event()

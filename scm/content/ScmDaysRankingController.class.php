@@ -122,7 +122,7 @@ class ScmDaysRankingController extends DefaultModuleController
         {
             $item = new ScmGame();
             $item->set_properties($game);
-            $this->view->assign_block_vars('prev_days', $item->get_array_tpl_vars());
+            $this->view->assign_block_vars('prev_days', $item->get_template_vars());
         }
 
         $next_day = ScmDayService::get_next_day($this->event_id());
@@ -130,7 +130,7 @@ class ScmDaysRankingController extends DefaultModuleController
         {
             $item = new ScmGame();
             $item->set_properties($game);
-            $this->view->assign_block_vars('next_days', $item->get_array_tpl_vars());
+            $this->view->assign_block_vars('next_days', $item->get_template_vars());
         }
 
         $this->view->put_all([
