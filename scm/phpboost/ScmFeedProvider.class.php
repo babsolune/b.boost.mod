@@ -39,28 +39,28 @@ class ScmFeedProvider implements FeedProvider
 			$ids_categories = array_keys($categories);
 
 			$now = new Date();
-			$results = $querier->select('SELECT scm.id, scm.id_category, scm.title, scm.rewrited_title, scm.content, scm.update_date, scm.thumbnail, cat.rewrited_name AS rewrited_name_cat
+			$results = $querier->select('SELECT scm.id, scm.id_category, scm.event_slug, scm.update_date, cat.rewrited_name AS rewrited_name_cat, div.division_name
 				FROM ' . ScmSetup::$scm_event_table . ' scm
 				LEFT JOIN '. ScmSetup::$scm_cats_table .' cat ON cat.id = scm.id_category
+				LEFT JOIN '. ScmSetup::$scm_division_table .' div ON div.id_division = scm.division_id
+				LEFT JOIN '. ScmSetup::$scm_season_table .' seasion ON seasion.id_season = scm.season_id
 				WHERE scm.id_category IN :ids_categories
 				AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
-				ORDER BY scm.update_date DESC', array(
+				ORDER BY scm.update_date DESC', [
 					'ids_categories' => $ids_categories,
 					'timestamp_now' => $now->get_timestamp()
-			));
+			]);
 
 			foreach ($results as $row)
 			{
 				$row['rewrited_name_cat'] = !empty($row['id_category']) ? $row['rewrited_name_cat'] : 'root';
-				$link = ScmUrlBuilder::event_home($row['id']);
+				$link = ScmUrlBuilder::event_home($row['id'], $row['event_slug']);
 
 				$item = new FeedItem();
-				$item->set_title($row['title']);
+				$item->set_title($row['division_name'] . ' - ' . $row['season_name']);
 				$item->set_link($link);
 				$item->set_guid($link);
-				$item->set_desc(FormatingHelper::second_parse($row['content']));
 				$item->set_date(new Date($row['update_date'], Timezone::SERVER_TIMEZONE));
-				$item->set_image_url(Url::to_rel($row['thumbnail']));
 				$item->set_auth(CategoriesService::get_categories_manager($module_id)->get_heritated_authorizations($row['id_category'], Category::READ_AUTHORIZATIONS, Authorizations::AUTH_PARENT_PRIORITY));
 				$data->add_item($item);
 			}

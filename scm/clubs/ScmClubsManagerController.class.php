@@ -10,7 +10,7 @@
 class ScmClubsManagerController extends DefaultModuleController
 {
 	private $elements_number = 0;
-	private $ids = array();
+	private $ids = [];
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -25,14 +25,14 @@ class ScmClubsManagerController extends DefaultModuleController
 
 	private function build_table()
 	{
-		$columns = array(
+		$columns = [
 			new HTMLTableColumn($this->lang['scm.club.full.name'], 'club_full_name'),
 			new HTMLTableColumn($this->lang['scm.club.name'], 'club_name'),
 			new HTMLTableColumn($this->lang['scm.club.colors'], ''),
 			new HTMLTableColumn($this->lang['scm.club.flag'], ''),
 			new HTMLTableColumn($this->lang['scm.club.logo'], ''),
 			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_club()->rel() . '" aria-label="' . $this->lang['scm.add.club'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>')
-		);
+        ];
 
 		$table_model = new SQLHTMLTableModel(ScmSetup::$scm_club_table, 'clubs-manager', $columns, new HTMLTableSortingRule('club_name', HTMLTableSortingRule::ASC));
 
@@ -45,9 +45,9 @@ class ScmClubsManagerController extends DefaultModuleController
         $table = new HTMLTable($table_model);
 		$table->set_filters_fieldset_class_HTML();
 
-		$results = array();
+		$results = [];
 		$result = $table_model->get_sql_results('club',
-			array('*', 'club.id_club')
+			['*', 'club.id_club']
 		);
 		foreach ($result as $row)
 		{
@@ -58,29 +58,29 @@ class ScmClubsManagerController extends DefaultModuleController
 			$this->ids[$this->elements_number] = $club->get_id_club();
 
 			$edit_link = new EditLinkHTMLElement(ScmUrlBuilder::edit_club($club->get_id_club(), $club->get_club_slug()));
-			$delete_link = new DeleteLinkHTMLElement(ScmUrlBuilder::delete_club($club->get_id_club()), '', array('data-confirmation' => $this->lang['scm.warning.delete.club']));
+			$delete_link = new DeleteLinkHTMLElement(ScmUrlBuilder::delete_club($club->get_id_club()), '', ['data-confirmation' => $this->lang['scm.warning.delete.club']]);
 
             $colors = '';
             foreach(TextHelper::deserialize($club->get_club_colors()) as $color)
             {
                 $colors .= '<span class="club-colors" style="background-color:' . $color . '"></span>';
             }
-			$row = array(
+			$row = [
 				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_club($club->get_id_club(), $club->get_club_slug()), $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name())),
 				new HTMLTableRowCell(new SpanHTMLElement($club->get_club_name())),
 				new HTMLTableRowCell(new SpanHTMLElement($colors)),
 				new HTMLTableRowCell(new ImgHTMLElement(
 					Url::to_rel('/images/stats/countries/' . $club->get_club_flag() . '.png'),
-					array('alt' => !empty($club->get_club_flag()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], array('name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name())) : ''), 
+					['alt' => !empty($club->get_club_flag()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name()]) : ''], 
 					'small-logo'
 				)),
 				new HTMLTableRowCell(new ImgHTMLElement(
 					Url::to_rel($club->get_club_logo()),
-					array('alt' => !empty($club->get_club_logo()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], array('name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name())) : ''), 
+					['alt' => !empty($club->get_club_logo()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name()]) : ''], 
 					'small-logo'
 				)),
 				new HTMLTableRowCell($edit_link->display() . $delete_link->display(), 'controls')
-			);
+            ];
 
 			$results[] = new HTMLTableRow($row);
 		}

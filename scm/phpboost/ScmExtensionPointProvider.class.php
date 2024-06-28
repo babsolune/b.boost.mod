@@ -16,10 +16,10 @@ class ScmExtensionPointProvider extends ItemsModuleExtensionPointProvider
 
     public function menus()
     {
-        return new ModuleMenus(array(
+        return new ModuleMenus([
             new ScmMiniNextGame(),
             new ScmMiniPrevGame()
-        ));
+        ]);
     }
 }
 ?>

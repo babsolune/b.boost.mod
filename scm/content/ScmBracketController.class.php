@@ -32,7 +32,7 @@ class ScmBracketController extends DefaultModuleController
             $this->check_authorizations();
         }
 
-        $this->view->put_all(array(
+        $this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
             'C_HAT_RANKING' => ScmParamsService::get_params($this->event_id())->get_hat_ranking(),
             'C_RETURN_GAMES' => $this->return_games(),
@@ -40,7 +40,7 @@ class ScmBracketController extends DefaultModuleController
             'C_LOOSER_BRACKET' => $this->get_params()->get_looser_bracket(),
             'JS_DOC' => ScmBracketService::get_bracket_js_games($this->event_id(), $this->teams_number, $this->teams_per_group),
             'C_HAS_GAMES' => ScmGameService::has_games($this->event_id())
-        ));
+        ]);
 
 		return $this->generate_response();
 	}
@@ -72,13 +72,13 @@ class ScmBracketController extends DefaultModuleController
 
         foreach ($rounds_count as $key => $round)
         {
-            $this->view->assign_block_vars('rounds', array(
+            $this->view->assign_block_vars('rounds', [
                 'C_ALL_PLACES' => $key !== $first_key && $this->looser_bracket,
                 'C_FINAL' => $key == $last_key,
                 'C_HAT_PLAYOFF' => $c_hat_ranking  && $key == $first_key,
                 'C_DRAW_GAMES' => $c_draw_games,
                 'L_TITLE' => $c_hat_ranking && $key == $first_key ? $this->lang['scm.round.playoff'] : $this->lang['scm.round.of.'.$this->round_title($round).'']
-            ));
+            ]);
             $round_games = [];
             for ($i = 0; $i < count($games); $i++)
             {
@@ -115,7 +115,7 @@ class ScmBracketController extends DefaultModuleController
                                     $game->get_template_vars(),
                                     Date::get_array_tpl_vars($game_a['game_date'], 'game_date_a'),
                                     Date::get_array_tpl_vars($game_b['game_date'], 'game_date_b'),
-                                    array(
+                                    [
                                         'C_HOME_WIN' => $total_home > $total_away || $game_b['game_away_pen'] > $game_b['game_home_pen'],
                                         'C_AWAY_WIN' => $total_away > $total_home || $game_b['game_home_pen'] > $game_b['game_away_pen'],
                                         'C_HAS_PEN' => $game_b['game_home_pen'] != '' && $game_b['game_away_pen'] != '',
@@ -127,7 +127,7 @@ class ScmBracketController extends DefaultModuleController
                                         'HOME_PEN' => $game_b['game_away_pen'],
                                         'AWAY_SCORE_B' => $game_b['game_home_score'],
                                         'AWAY_PEN' => $game_b['game_home_pen'],
-                                    )
+                                    ]
                                 ));
                             }
                         }
@@ -172,11 +172,11 @@ class ScmBracketController extends DefaultModuleController
 
         foreach($rounds_count  as $key => $round)
         {
-            $this->view->assign_block_vars('w_rounds', array(
+            $this->view->assign_block_vars('w_rounds', [
                 'C_ALL_PLACES' => $key !== $first_key && $this->looser_bracket,
                 'ROUND_ID' => $round,
                 'L_TITLE' => $this->lang['scm.round.of.'.$this->round_title($round).'']
-            ));
+            ]);
 
             for ($i = 0; $i < count($games); $i++)
             {
@@ -208,11 +208,11 @@ class ScmBracketController extends DefaultModuleController
         $last_key = end($key_rounds_count);
         foreach($rounds_count  as $key => $round)
         {
-            $this->view->assign_block_vars('l_rounds', array(
+            $this->view->assign_block_vars('l_rounds', [
                 'C_ALL_PLACES' => $key !== $first_key && $this->looser_bracket,
                 'ROUND_ID' => $round,
                 'L_TITLE' => $this->lang['scm.round.of.'.$this->round_title($round).'']
-            ));
+            ]);
 
             for ($i = 0; $i < count($games); $i++)
             {

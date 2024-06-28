@@ -41,8 +41,8 @@ class ScmClubFormController extends DefaultModuleController
 		$form->add_fieldset($fieldset);
 
         $fieldset->add_field(new FormFieldTextEditor('name', $this->lang['scm.club.name'], $this->get_club()->get_club_name(),
-            array('required' => true),
-			array($this->is_new_club ? new ScmConstraintClubNameExists() : '')
+            ['required' => true],
+			[$this->is_new_club ? new ScmConstraintClubNameExists() : '']
         ));
 
         $fieldset->add_field(new FormFieldTextEditor('full_name', $this->lang['scm.club.full.name'], $this->get_club()->get_club_full_name()));
@@ -50,27 +50,25 @@ class ScmClubFormController extends DefaultModuleController
         $fieldset->add_field(new FormFieldMailEditor('email', $this->lang['scm.club.email'], $this->get_club()->get_club_email()));
 
         $fieldset->add_field(new FormFieldTelEditor('phone', $this->lang['scm.club.phone'], $this->get_club()->get_club_phone(),
-            array('description' => $this->lang['scm.club.phone.clue'])
+            ['description' => $this->lang['scm.club.phone.clue']]
         ));
 
         $fieldset->add_field(new ScmFormFieldColors('colors', $this->lang['scm.club.colors'], $this->get_club()->get_club_colors(),
-			array(
-				'description' => $this->lang['scm.club.colors.clue'],
-			)
+			['description' => $this->lang['scm.club.colors.clue']]
 		));
 
 		if ($this->config->is_googlemaps_available())
 		{
 			$fieldset->add_field(new GoogleMapsFormFieldMultipleMarkers('locations', $this->lang['scm.club.locations'], $this->get_club()->get_club_locations(),
-				array(
-					'events' => array('blur' => '
+				[
+					'events' => ['blur' => '
 						if (HTMLForms.getField("locations").getValue()) {
 							HTMLForms.getField("map_displayed").enable();
 						} else {
 							HTMLForms.getField("map_displayed").disable();
 						}'
-					)
-				)
+					]
+				]
 			));
 
 			$fieldset->add_field(new FormFieldCheckbox('map_display', $this->lang['scm.club.display.map'], $this->get_club()->get_club_map_display()));
@@ -111,12 +109,22 @@ class ScmClubFormController extends DefaultModuleController
 		{
 			$id = ScmClubService::add_club($club);
 			$club->set_id_club($id);
-            HooksService::execute_hook_action('club_add', 'scm', array_merge($club->get_properties(), array('action' => $this->lang['scm.hook.add.club'], 'id' => $club->get_id_club(), 'title' => $club->get_club_name(), 'url' => $club->get_club_url())));
+            HooksService::execute_hook_action('club_add', 'scm', array_merge($club->get_properties(), [
+                'action' => $this->lang['scm.hook.add.club'],
+                'id' => $club->get_id_club(),
+                'title' => $club->get_club_name(),
+                'url' => $club->get_club_url()
+            ]));
         }
 		else
 		{
 			ScmClubService::update_club($club);
-            HooksService::execute_hook_action('club_edit', 'scm', array_merge($club->get_properties(), array('action' => $this->lang['scm.hook.edit.club'], 'id' => $club->get_id_club(), 'title' => $club->get_club_name(), 'url' => $club->get_club_url())));
+            HooksService::execute_hook_action('club_edit', 'scm', array_merge($club->get_properties(), [
+                'action' => $this->lang['scm.hook.edit.club'],
+                'id' => $club->get_id_club(),
+                'title' => $club->get_club_name(),
+                'url' => $club->get_club_url()
+            ]));
         }
 
 		ScmEventService::clear_cache();

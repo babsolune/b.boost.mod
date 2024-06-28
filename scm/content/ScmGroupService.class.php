@@ -31,7 +31,7 @@ class ScmGroupService
         {
             for ($game = 1; $game <= ($teams_number / 2); $game++)
             {
-                self::$db_querier->insert(ScmSetup::$scm_game_table, array(
+                self::$db_querier->insert(ScmSetup::$scm_game_table, [
                     'game_event_id' => $event_id,
                     'game_type' => 'G',
                     'game_group' => $day,
@@ -39,7 +39,7 @@ class ScmGroupService
                     'game_home_id' => 0,
                     'game_away_id' => 0,
                     'game_date' => $now->get_timestamp()
-                ));
+                ]);
             }
         }
     }
@@ -65,7 +65,7 @@ class ScmGroupService
             $game_order = 1;
             foreach ($schedule as $round => $games) {
                 foreach ($games as $i => $game) {
-                    self::$db_querier->insert(ScmSetup::$scm_game_table, array(
+                    self::$db_querier->insert(ScmSetup::$scm_game_table, [
                         'game_event_id' => $event_id,
                         'game_type' => 'G',
                         'game_group' => $group,
@@ -73,7 +73,7 @@ class ScmGroupService
                         'game_home_id' => ScmParamsService::get_params($event_id)->get_fill_games() ? $game[0]['id_team'] : 0,
                         'game_away_id' => ScmParamsService::get_params($event_id)->get_fill_games() ? $game[1]['id_team'] : 0,
                         'game_date' => ScmParamsService::get_params($event_id)->get_fill_games() ? ScmEventService::get_event($event_id)->get_start_date()->get_timestamp() : $now->get_timestamp()
-                    ));
+                    ]);
                     $game_order++;
                 }
             }
@@ -82,7 +82,7 @@ class ScmGroupService
                 $game_order_r = $game_order;
                 foreach ($schedule as $round => $games) {
                     foreach ($games as $i => $game) {
-                        self::$db_querier->insert(ScmSetup::$scm_game_table, array(
+                        self::$db_querier->insert(ScmSetup::$scm_game_table, [
                             'game_event_id' => $event_id,
                             'game_type' => 'G',
                             'game_group' => $group,
@@ -90,7 +90,7 @@ class ScmGroupService
                             'game_home_id' => ScmParamsService::get_params($event_id)->get_fill_games() ? $game[1]['id_team'] : 0,
                             'game_away_id' => ScmParamsService::get_params($event_id)->get_fill_games() ? $game[0]['id_team'] : 0,
                             'game_date' => $now->get_timestamp()
-                        ));
+                        ]);
                         $game_order_r++;
                     }
                 }

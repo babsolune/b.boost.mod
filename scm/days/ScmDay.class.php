@@ -72,22 +72,22 @@ class ScmDay
 
 	public function get_properties()
 	{
-		return array(
-			'id_day' => $this->get_id_day(),
+		return [
+			'id_day'       => $this->get_id_day(),
 			'day_event_id' => $this->get_day_event_id(),
-			'day_round' => $this->get_day_round(),
-			'day_date' => $this->get_day_date() !== null ? $this->get_day_date()->get_timestamp() : 0,
-			'day_played' => $this->get_day_played(),
-		);
+			'day_round'    => $this->get_day_round(),
+			'day_date'     => $this->get_day_date() !== null ? $this->get_day_date()->get_timestamp() : 0,
+			'day_played'   => $this->get_day_played(),
+        ];
 	}
 
 	public function set_properties(array $properties)
 	{
-		$this->id_day = $properties['id_day'];
+		$this->id_day       = $properties['id_day'];
 		$this->day_event_id = $properties['day_event_id'];
-		$this->day_round = $properties['day_round'];
-		$this->day_date = !empty($properties['day_date']) ? new Date($properties['day_date'], Timezone::SERVER_TIMEZONE) : null;
-		$this->day_played = $properties['day_played'];
+		$this->day_round    = $properties['day_round'];
+		$this->day_date     = !empty($properties['day_date']) ? new Date($properties['day_date'], Timezone::SERVER_TIMEZONE) : null;
+		$this->day_played   = $properties['day_played'];
 	}
 
 	public function init_default_properties()

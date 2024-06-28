@@ -28,10 +28,10 @@ class ScmDayGamesFormController extends DefaultModuleController
             $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.games.update'], MessageHelper::SUCCESS, 4));
 		}
 
-		$this->view->put_all(array(
+		$this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
             'CONTENT' => $this->form->display(),
-        ));
+        ]);
 
 		return $this->generate_response($this->view);
 	}
@@ -66,28 +66,28 @@ class ScmDayGamesFormController extends DefaultModuleController
             $game_away_id = $this->get_game('D', $i, $j) ? $this->get_game('D', $i, $j)->get_game_away_id() : 0;
 
             $game_fieldset->add_field(new FormFieldFree('day_game_number_' . $i . $j, '', $game_number,
-                array('class' => 'game-name small text-italic form-D' . $i . $j)
+                ['class' => 'game-name small text-italic form-D' . $i . $j]
             ));
             $game_fieldset->add_field(new FormFieldDateTime('day_game_date_' . $i . $j, '', $game_date,
-                array('class' => 'game-date')
+                ['class' => 'game-date']
             ));
             if($this->get_params()->get_display_playgrounds())
                 $game_fieldset->add_field(new FormFieldTextEditor('day_game_playground_' . $i . $j, '', $game_playground,
-                    array('class' => 'game-playground', 'placeholder' => $this->lang['scm.field'])
+                    ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                 ));
             $game_fieldset->add_field(new FormFieldSimpleSelectChoice('day_home_team_' . $i . $j, '', $game_home_id,
                 $this->get_teams_list(),
-                array('class' => 'home-team game-team')
+                ['class' => 'home-team game-team']
             ));
             $game_fieldset->add_field(new FormFieldTextEditor('day_home_score_' . $i . $j, '', $game_home_score,
-                array('class' => 'game-score', 'pattern' => '[0-9]*')
+                ['class' => 'game-score', 'pattern' => '[0-9]*']
             ));
             $game_fieldset->add_field(new FormFieldTextEditor('day_away_score_' . $i . $j, '', $game_away_score,
-                array('class' => 'game-score', 'pattern' => '[0-9]*')
+                ['class' => 'game-score', 'pattern' => '[0-9]*']
             ));
             $game_fieldset->add_field(new FormFieldSimpleSelectChoice('day_away_team_' . $i . $j, '', $game_away_id,
                 $this->get_teams_list(),
-                array('class' => 'away-team game-team')
+                ['class' => 'away-team game-team']
             ));
         }
 

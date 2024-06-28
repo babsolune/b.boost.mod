@@ -39,16 +39,16 @@ class ScmConstraintClubNameExists extends AbstractFormFieldConstraint
 	{
 		if (!empty($this->club_id))
 		{
-			return PersistenceContext::get_querier()->row_exists(ScmSetup::$scm_club_table, 'WHERE club_name = :club_name AND id_club != :club_id', array(
+			return PersistenceContext::get_querier()->row_exists(ScmSetup::$scm_club_table, 'WHERE club_name = :club_name AND id_club != :club_id', [
 				'club_name' => $field->get_value(),
 				'club_id' => $this->club_id
-			));
+			]);
 		}
 		else if ($field->get_value())
 		{
-			return PersistenceContext::get_querier()->row_exists(ScmSetup::$scm_club_table, 'WHERE club_name=:club_name', array(
+			return PersistenceContext::get_querier()->row_exists(ScmSetup::$scm_club_table, 'WHERE club_name=:club_name', [
 				'club_name' => $field->get_value()
-			));
+			]);
 		}
 		return false;
 	}

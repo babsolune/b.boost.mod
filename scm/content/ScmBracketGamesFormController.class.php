@@ -30,11 +30,11 @@ class ScmBracketGamesFormController extends DefaultModuleController
             $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.games.update'], MessageHelper::SUCCESS, 4));
 		}
 
-		$this->view->put_all(array(
+		$this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
             'CONTENT' => $this->form->display(),
             'JS_DOC' => $this->teams_number ? ScmBracketService::get_bracket_js_games($this->event_id(), $this->teams_number, $this->teams_per_group) : MessageHelper::display('', '')
-        ));
+        ]);
 
 		return $this->generate_response($this->view);
 	}
@@ -64,7 +64,9 @@ class ScmBracketGamesFormController extends DefaultModuleController
             $looser_fieldset = new FormFieldsetHTML('looser_bracket', $this->lang['scm.looser.bracket']);
             $form->add_fieldset($looser_fieldset);
 
-            $looser_fieldset->add_field(new FormFieldSpacer('round_' . $i, $this->lang['scm.round.' . $i . ''], array('class' => 'form-spacer-big')));
+            $looser_fieldset->add_field(new FormFieldSpacer('round_' . $i, $this->lang['scm.round.' . $i . ''],
+                ['class' => 'form-spacer-big']
+            ));
             $games_number = $this->get_params()->get_looser_bracket() ? $this->teams_number / 4 : $this->round_games_number($i);
 
             if ($this->return_games)
@@ -85,34 +87,34 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 $game_away_id = $this->get_game('L', $i, $j) ? $this->get_game('L', $i, $j)->get_game_away_id() : 0;
 
                 $looser_bracket_fieldset->add_field(new FormFieldFree('l_round_game_number_' . $i . $j, '', $game_number,
-                    array('class' => 'game-name small text-italic align-right form-L' . $i . $j)
+                    ['class' => 'game-name small text-italic align-right form-L' . $i . $j]
                 ));
                 $looser_bracket_fieldset->add_field(new FormFieldDateTime('l_round_game_date_' . $i . $j, '', $game_date,
-                    array('class' => 'game-date')
+                    ['class' => 'game-date']
                 ));
                 if($this->get_params()->get_display_playgrounds())
                     $looser_bracket_fieldset->add_field(new FormFieldTextEditor('l_round_game_playground_' . $i . $j, '', $game_playground,
-                        array('class' => 'game-playground', 'placeholder' => $this->lang['scm.field'])
+                        ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                     ));
                 $looser_bracket_fieldset->add_field(new FormFieldSimpleSelectChoice('l_round_home_team_' . $i . $j, '', $game_home_id,
                     $this->get_teams_list(),
-                    array('class' => 'home-team game-team')
+                    ['class' => 'home-team game-team']
                 ));
                 $looser_bracket_fieldset->add_field(new FormFieldTextEditor('l_round_home_score_' . $i . $j, '', $game_home_score,
-                    array('class' => 'home-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.score'] . '1')
+                    ['class' => 'home-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.score'] . '1']
                 ));
                 $looser_bracket_fieldset->add_field(new FormFieldTextEditor('l_round_home_pen_' . $i . $j, '', $game_home_pen,
-                    array('class' => 'home-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . '1')
+                    ['class' => 'home-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . '1']
                 ));
                 $looser_bracket_fieldset->add_field(new FormFieldTextEditor('l_round_away_pen_' . $i . $j, '', $game_away_pen,
-                    array('class' => 'away-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . '2')
+                    ['class' => 'away-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . '2']
                 ));
                 $looser_bracket_fieldset->add_field(new FormFieldTextEditor('l_round_away_score_' . $i . $j, '', $game_away_score,
-                    array('class' => 'away-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.score'] . '2')
+                    ['class' => 'away-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.score'] . '2']
                 ));
                 $looser_bracket_fieldset->add_field(new FormFieldSimpleSelectChoice('l_round_away_team_' . $i . $j, '', $game_away_id,
                     $this->get_teams_list(),
-                    array('class' => 'away-team game-team')
+                    ['class' => 'away-team game-team']
                 ));
                 if ($this->return_games && $j == $games_number / 2)
                     $looser_fieldset->add_field(new FormFieldSpacer('looser_second_leg_' . $i, '<hr />' . $this->lang['scm.second.leg']));
@@ -122,7 +124,9 @@ class ScmBracketGamesFormController extends DefaultModuleController
 		$winner_fieldset = new FormFieldsetHTML('winner_bracket', $this->get_params()->get_looser_bracket() ? $this->lang['scm.winner.bracket'] : '');
 		$form->add_fieldset($winner_fieldset);
 
-        $winner_fieldset->add_field(new FormFieldSpacer('round_' . $i, ($this->hat_ranking && $i == $rounds_number + 1) ? $this->lang['scm.playoff.games'] : $this->lang['scm.round.' . $i . ''], array('class' => 'form-spacer-big')));
+        $winner_fieldset->add_field(new FormFieldSpacer('round_' . $i, ($this->hat_ranking && $i == $rounds_number + 1) ? $this->lang['scm.playoff.games'] : $this->lang['scm.round.' . $i . ''],
+            ['class' => 'form-spacer-big']
+        ));
         if ($this->return_games) {
             if ($this->hat_ranking && $i == $rounds_number + 1)
                 $games_number = $this->get_params()->get_playoff() / 2;
@@ -154,50 +158,50 @@ class ScmBracketGamesFormController extends DefaultModuleController
             $game_away_id = $this->get_game('W', $i, $j) ? $this->get_game('W', $i, $j)->get_game_away_id() : 0;
 
             $winner_bracket_fieldset->add_field(new FormFieldFree('w_round_game_number_' . $i . $j, '', $game_number,
-                array('class' => 'game-name small text-italic align-right form-W' . $i . $j)
+                ['class' => 'game-name small text-italic align-right form-W' . $i . $j]
             ));
             $winner_bracket_fieldset->add_field(new FormFieldDateTime('w_round_game_date_' . $i . $j, '', $game_date,
-                array('class' => 'game-date')
+                ['class' => 'game-date']
             ));
             if($this->get_params()->get_display_playgrounds())
                 $winner_bracket_fieldset->add_field(new FormFieldTextEditor('w_round_game_playground_' . $i . $j, '', $game_playground,
-                    array('class' => 'game-playground', 'placeholder' => $this->lang['scm.field'])
+                    ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                 ));
             $winner_bracket_fieldset->add_field(new FormFieldSimpleSelectChoice('w_round_home_team_' . $i . $j, '', $game_home_id,
                 $this->get_teams_list(),
-                array('class' => 'home-team game-team')
+                ['class' => 'home-team game-team']
             ));
             $winner_bracket_fieldset->add_field(new FormFieldTextEditor('w_round_home_score_' . $i . $j, '', $game_home_score,
-                array('class' => 'home-team game-score', 'pattern' => '[0-9]*')
+                ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
             ));
             if ((($j <= $games_number / 2) && $this->return_games) && ($i != $rounds_number + 1 && $this->hat_ranking)) {
                 $winner_bracket_fieldset->add_field(new FormFieldTextEditor('w_round_home_pen_' . $i . $j, '', '',
-                    array('class' => 'home-team game-score', 'disabled' => true)
+                    ['class' => 'home-team game-score', 'disabled' => true]
                 ));
                 $winner_bracket_fieldset->add_field(new FormFieldTextEditor('w_round_away_pen_' . $i . $j, '', '',
-                    array('class' => 'away-team game-score', 'disabled' => true)
+                    ['class' => 'away-team game-score', 'disabled' => true]
                 ));
             } elseif (($j <= $games_number / 2) && $this->return_games) {
                 $winner_bracket_fieldset->add_field(new FormFieldTextEditor('w_round_home_pen_' . $i . $j, '', '',
-                    array('class' => 'home-team game-score', 'disabled' => true)
+                    ['class' => 'home-team game-score', 'disabled' => true]
                 ));
                 $winner_bracket_fieldset->add_field(new FormFieldTextEditor('w_round_away_pen_' . $i . $j, '', '',
-                    array('class' => 'away-team game-score', 'disabled' => true)
+                    ['class' => 'away-team game-score', 'disabled' => true]
                 ));
             } else {
                 $winner_bracket_fieldset->add_field(new FormFieldTextEditor('w_round_home_pen_' . $i . $j, '', $game_home_pen,
-                    array('class' => 'home-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . 1)
+                    ['class' => 'home-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . 1]
                 ));
                 $winner_bracket_fieldset->add_field(new FormFieldTextEditor('w_round_away_pen_' . $i . $j, '', $game_away_pen,
-                    array('class' => 'away-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . 2)
+                    ['class' => 'away-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . 2]
                 ));
             }
             $winner_bracket_fieldset->add_field(new FormFieldTextEditor('w_round_away_score_' . $i . $j, '', $game_away_score,
-                array('class' => 'away-team game-score', 'pattern' => '[0-9]*')
+                ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
             ));
             $winner_bracket_fieldset->add_field(new FormFieldSimpleSelectChoice('w_round_away_team_' . $i . $j, '', $game_away_id,
                 $this->get_teams_list(),
-                array('class' => 'away-team game-team')
+                ['class' => 'away-team game-team']
             ));
             if (($this->return_games && $j == $games_number / 2) && ($this->hat_ranking && $i != $rounds_number + 1))
                 $winner_bracket_fieldset->add_field(new FormFieldSpacer('winner_second_leg_' . $i, '<hr />' . $this->lang['scm.second.leg']));

@@ -37,7 +37,7 @@ class ScmBracketService
             for ($j = 1; $j <= $games_number; $j++)
             {
                 if ($c_looser_bracket)
-                    self::$db_querier->insert(ScmSetup::$scm_game_table, array(
+                    self::$db_querier->insert(ScmSetup::$scm_game_table, [
                         'game_event_id' => $event_id,
                         'game_type' => 'L',
                         'game_group' => $i,
@@ -45,8 +45,8 @@ class ScmBracketService
                         'game_home_id' => 0,
                         'game_away_id' => 0,
                         'game_date' => $now->get_timestamp()
-                    ));
-                self::$db_querier->insert(ScmSetup::$scm_game_table, array(
+                    ]);
+                self::$db_querier->insert(ScmSetup::$scm_game_table, [
                     'game_event_id' => $event_id,
                     'game_type' => 'W',
                     'game_group' => $i,
@@ -54,7 +54,7 @@ class ScmBracketService
                     'game_home_id' => 0,
                     'game_away_id' => 0,
                     'game_date' => ScmParamsService::get_params($event_id)->get_fill_games() ? ScmEventService::get_event($event_id)->get_start_date()->get_timestamp() : $now->get_timestamp()
-                ));
+                ]);
             }
         }
     }
@@ -65,11 +65,11 @@ class ScmBracketService
         $view = new FileTemplate('scm/js/bracket-games.tpl');
         $view->add_lang(LangLoader::get_all_langs('scm'));
 
-        $view->put_all(array(
+        $view->put_all([
             'C_'.$teams_number.'_'.$teams_per_group => true,
             'C_LOOSER_BRACKET' => ScmParamsService::get_params($event_id)->get_looser_bracket(),
             'C_THIRD_PLACE' => ScmParamsService::get_params($event_id)->get_third_place()
-        ));
+        ]);
         return $view;
     }
 

@@ -9,14 +9,14 @@
 
 class ScmDayCache implements CacheData
 {
-	private $days = array();
+	private $days = [];
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function synchronize()
 	{
-		$this->days = array();
+		$this->days = [];
 
 		$result = PersistenceContext::get_querier()->select('SELECT day.*
 			FROM ' . ScmSetup::$scm_day_table . ' day

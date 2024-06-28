@@ -9,14 +9,14 @@
 
 class ScmSeasonCache implements CacheData
 {
-	private $seasons = array();
+	private $seasons = [];
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function synchronize()
 	{
-		$this->seasons = array();
+		$this->seasons = [];
 
 		$result = PersistenceContext::get_querier()->select('SELECT season.*
 			FROM ' . ScmSetup::$scm_season_table . ' season

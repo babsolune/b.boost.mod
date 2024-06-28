@@ -21,7 +21,7 @@ class ScmEventService
 	 * Count events number.
 	 * @param string $condition (optional) : Restriction to apply to the list of events
 	 */
-	public static function count($condition = '', $params = array())
+	public static function count($condition = '', $params = [])
 	{
 		return self::$db_querier->count(ScmSetup::$scm_event_table, $condition, $params);
 	}
@@ -44,7 +44,7 @@ class ScmEventService
 	 */
 	public static function update(ScmEvent $event)
 	{
-		self::$db_querier->update(ScmSetup::$scm_event_table, $event->get_properties(), 'WHERE id = :id', array('id' => $event->get_id()));
+		self::$db_querier->update(ScmSetup::$scm_event_table, $event->get_properties(), 'WHERE id = :id', ['id' => $event->get_id()]);
 	}
 
 	/**
@@ -53,7 +53,7 @@ class ScmEventService
 	 */
 	public static function update_views_number(ScmEvent $event)
 	{
-		self::$db_querier->update(ScmSetup::$scm_event_table, array('views_number' => $event->get_views_number()), 'WHERE id = :id', array('id' => $event->get_id()));
+		self::$db_querier->update(ScmSetup::$scm_event_table, ['views_number' => $event->get_views_number()], 'WHERE id = :id', ['id' => $event->get_id()]);
 	}
 
 	/**
@@ -68,14 +68,14 @@ class ScmEventService
             $controller = PHPBoostErrors::user_in_read_only();
             DispatchManager::redirect($controller);
         }
-		self::$db_querier->delete(ScmSetup::$scm_event_table, 'WHERE id = :id', array('id' => $id));
+		self::$db_querier->delete(ScmSetup::$scm_event_table, 'WHERE id = :id', ['id' => $id]);
 
 		ScmTeamService::delete_teams($id);
 		ScmParamsService::delete_params($id);
 		ScmDayService::delete_days($id);
 		ScmGameService::delete_games($id);
 
-		self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', array('module' => 'scm', 'id' => $id));
+		self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', ['module' => 'scm', 'id' => $id]);
 	}
 
 	/**
@@ -85,11 +85,12 @@ class ScmEventService
 	public static function get_event(int $event_id)
 	{
 		$row = self::$db_querier->select_single_row_query('SELECT event.*
-		FROM ' . ScmSetup::$scm_event_table . ' event
-		WHERE event.id = :event_id', array(
-			'module_id' => self::$module_id,
-			'event_id' => $event_id
-		));
+            FROM ' . ScmSetup::$scm_event_table . ' event
+            WHERE event.id = :event_id', [
+                'module_id' => self::$module_id,
+                'event_id' => $event_id
+            ]
+        );
 
 		$event = new ScmEvent();
 		$event->set_properties($row);
@@ -121,11 +122,12 @@ class ScmEventService
 	public static function get_params(int $id)
 	{
 		$row = self::$db_querier->select_single_row_query('SELECT params.*, event.*
-		FROM ' . ScmSetup::$scm_params_table . ' params
-		LEFT JOIN ' . ScmSetup::$scm_event_table . ' event ON event.id = params.params_event_id
-		WHERE params.params_event_id = :id', array(
-			'id' => $id
-		));
+            FROM ' . ScmSetup::$scm_params_table . ' params
+            LEFT JOIN ' . ScmSetup::$scm_event_table . ' event ON event.id = params.params_event_id
+            WHERE params.params_event_id = :id', [
+                'id' => $id
+            ]
+        );
 
 		$params = new ScmParams();
 		$params->set_properties($row);

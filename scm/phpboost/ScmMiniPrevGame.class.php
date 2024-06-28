@@ -53,13 +53,13 @@ class ScmMiniPrevGame extends ModuleMiniMenu
 
 		// $items = $scm_cache->get_items();
 
-		$view->put_all(array(
+		$view->put_all([
 			// 'C_ITEMS'                    => !empty($items),
 			// 'C_SORT_BY_DATE'             => $config->is_sort_type_date(),
 			// 'C_SORT_BY_NOTATION'         => $config->is_sort_type_notation(),
 			// 'C_SORT_BY_DOWNLOADS_NUMBER' => $config->is_sort_type_scms_number(),
 			// 'C_SORT_BY_VIEWS_NUMBERS'    => $config->is_sort_type_views_numbers()
-		));
+		]);
 
 		$displayed_position = 1;
 		// foreach ($items as $file)
@@ -67,9 +67,9 @@ class ScmMiniPrevGame extends ModuleMiniMenu
 		// 	$item = new ScmEvent();
 		// 	$item->set_properties($file);
 
-		// 	$view->assign_block_vars('items', array_merge($item->get_template_vars(), array(
+		// 	$view->assign_block_vars('items', array_merge($item->get_template_vars(), [
 		// 		'DISPLAYED_POSITION' => $displayed_position
-		// 	)));
+		// 	]));
 
 		// 	$displayed_position++;
 		// }

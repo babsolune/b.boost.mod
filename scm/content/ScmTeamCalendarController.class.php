@@ -50,11 +50,11 @@ class ScmTeamCalendarController extends DefaultModuleController
             ]));
         }
 
-        $this->view->put_all(array(
+        $this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
             'C_HAS_GAMES' => ScmGameService::has_games($this->event_id()),
             'TEAM_NAME' => $this->team_name
-        ));
+        ]);
 	}
 
 	private function get_event()

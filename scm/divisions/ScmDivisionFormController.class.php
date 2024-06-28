@@ -40,7 +40,7 @@ class ScmDivisionFormController extends DefaultModuleController
 		$form->add_fieldset($fieldset);
 
         $fieldset->add_field(new FormFieldTextEditor('name', $this->lang['form.name'], $this->get_division()->get_division_name(), 
-			array('required' => true)
+			['required' => true]
 		));
 
         $description = $this->lang['scm.championship.clue'];
@@ -51,29 +51,30 @@ class ScmDivisionFormController extends DefaultModuleController
         elseif ($this->get_division()->get_event_type() == ScmDivision::TOURNAMENT)
             $description = $this->lang['scm.tournament.clue'];
 		$fieldset->add_field(new FormFieldSimpleSelectChoice('event_type', $this->lang['scm.event.type'], $this->get_division()->get_event_type(),
-			array(
+			[
 				new FormFieldSelectChoiceOption($this->lang['scm.championship'], ScmDivision::CHAMPIONSHIP),
 				new FormFieldSelectChoiceOption($this->lang['scm.cup'], ScmDivision::CUP),
 				new FormFieldSelectChoiceOption($this->lang['scm.tournament'], ScmDivision::TOURNAMENT)
-            ),
-            array(
+            ],
+            [
                 'description' => $description,
-                'events' => array('click' => '
-                if (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::CHAMPIONSHIP .'") {
-                    jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.championship.clue'] . '");
-                } else if (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::CUP .'") {
-                    jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.cup.clue'] . '");
-                } else if  (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::TOURNAMENT .'") {
-                    jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.tournament.clue'] . '");
-                }
-            '))
+                'events' => ['click' => '
+                    if (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::CHAMPIONSHIP .'") {
+                        jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.championship.clue'] . '");
+                    } else if (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::CUP .'") {
+                        jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.cup.clue'] . '");
+                    } else if  (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::TOURNAMENT .'") {
+                        jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.tournament.clue'] . '");
+                    }
+                ']
+            ]
 		));
 
 		$fieldset->add_field(new FormFieldSimpleSelectChoice('game_type', $this->lang['scm.game.type'], $this->get_division()->get_game_type(),
-			array(
+			[
 				new FormFieldSelectChoiceOption($this->lang['scm.single.games'], ScmDivision::SINGLE_GAMES),
 				new FormFieldSelectChoiceOption($this->lang['scm.return.games'], ScmDivision::RETURN_GAMES)
-			)
+            ]
 		));
 
 		$fieldset->add_field(new FormFieldHidden('referrer', $request->get_url_referrer()));

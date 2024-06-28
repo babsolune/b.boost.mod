@@ -34,16 +34,16 @@ class ScmEventHomeController extends DefaultModuleController
         $c_championship = ScmEventService::get_event_type($this->event_id()) == ScmDivision::CHAMPIONSHIP;
         $c_cup          = ScmEventService::get_event_type($this->event_id()) == ScmDivision::CUP;
         $c_tournament   = ScmEventService::get_event_type($this->event_id()) == ScmDivision::TOURNAMENT;
-		$this->view->put_all(array(
+		$this->view->put_all([
             'C_CHAMPIONSHIP' => $c_championship,
             'C_CUP'          => $c_cup,
             'C_TOURNAMENT'   => $c_tournament,
-            'C_HAS_GAMES'  => ScmGameService::has_games($this->event_id())
-        ));
+            'C_HAS_GAMES'    => ScmGameService::has_games($this->event_id())
+        ]);
 
         $this->view->put_all(array_merge(
             $event->get_template_vars(),
-            array(
+            [
                 'MENU'                => ScmMenuService::build_event_menu($this->event_id()),
                 // Rounds
                 'DAYS_CALENDAR'       => $c_championship ? ScmEventHomeService::build_days_calendar($this->event_id()) : '',
@@ -51,7 +51,7 @@ class ScmEventHomeController extends DefaultModuleController
                 'JS_DOC'              => $c_tournament ? ScmBracketService::get_bracket_js_games($this->event_id(), $teams_number, $teams_per_group) : '',
 
                 'NOT_VISIBLE_MESSAGE' => MessageHelper::display($this->lang['warning.element.not.visible'], MessageHelper::WARNING),
-            )
+            ]
         ));
 	}
 

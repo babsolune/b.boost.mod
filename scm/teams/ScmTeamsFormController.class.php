@@ -26,19 +26,19 @@ class ScmTeamsFormController extends DefaultModuleController
             if ($event_type == ScmDivision::TOURNAMENT || $event_type == ScmDivision::CUP)
             {
                 if (is_numeric($teams_number) && $teams_number % 2 == 0)
-                    $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['scm.warning.add.teams'], array('teams_number' => $teams_number, 'event_name' => $event_name)), MessageHelper::SUCCESS, 4));
+                    $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['scm.warning.add.teams'], ['teams_number' => $teams_number, 'event_name' => $event_name]), MessageHelper::SUCCESS, 4));
                 else
-                    $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['scm.warning.add.teams.odd'], array('teams_number' => $teams_number, 'event_name' => $event_name)), MessageHelper::SUCCESS, 10));
+                    $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['scm.warning.add.teams.odd'], ['teams_number' => $teams_number, 'event_name' => $event_name]), MessageHelper::SUCCESS, 10));
             }
             else
-                $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['scm.warning.add.teams'], array('teams_number' => $teams_number, 'event_name' => $event_name)), MessageHelper::SUCCESS, 4));
+                $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['scm.warning.add.teams'], ['teams_number' => $teams_number, 'event_name' => $event_name]), MessageHelper::SUCCESS, 4));
         }
 
-        $this->view->put_all(array(
-            'MENU' => ScmMenuService::build_event_menu($this->event_id()),
-            'CONTENT' => $this->form->display(),
+        $this->view->put_all([
+            'MENU'              => ScmMenuService::build_event_menu($this->event_id()),
+            'CONTENT'           => $this->form->display(),
             'HAS_GAMES_WARNING' => ScmGameService::has_games($this->event_id()) ? MessageHelper::display($this->lang['scm.warning.teams.has.games'], MessageHelper::NOTICE) : MessageHelper::display('', '')
-        ));
+        ]);
 
 		return $this->generate_response($this->view);
 	}
@@ -119,7 +119,7 @@ class ScmTeamsFormController extends DefaultModuleController
 
     private function get_clubs_list()
     {
-        $options = array();
+        $options = [];
 		$cache = ScmClubCache::load();
 		$clubs_list = $cache->get_clubs();
 
@@ -135,7 +135,7 @@ class ScmTeamsFormController extends DefaultModuleController
 
     private function get_teams_list()
     {
-        $teams = array();
+        $teams = [];
         foreach(ScmTeamService::get_teams($this->event_id()) as $team)
         {
             $teams[] = $team['team_club_id'];

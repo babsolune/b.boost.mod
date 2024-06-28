@@ -172,7 +172,7 @@ class ScmClub
 		$this->club_phone       = $properties['club_phone'];
 		$this->club_locations   = $properties['club_locations'];
 		$this->club_map_display = $properties['club_map_display'];
-        $this->club_colors      = !empty($properties['club_colors']) ? TextHelper::unserialize($properties['club_colors']) : array();
+        $this->club_colors      = !empty($properties['club_colors']) ? TextHelper::unserialize($properties['club_colors']) : [];
     }
 
 	public function init_default_properties()

@@ -24,11 +24,11 @@ class ScmGroupsFormController extends DefaultModuleController
             $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.group.update'], MessageHelper::SUCCESS, 4));
 		}
 
-		$this->view->put_all(array(
+		$this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
             'CONTENT' => $this->form->display(),
             'HAS_GAMES_WARNING' => ScmGameService::has_games($this->event_id()) ? MessageHelper::display($this->lang['scm.warning.has.games'], MessageHelper::NOTICE) : MessageHelper::display('', '')
-        ));
+        ]);
 
 		return $this->generate_response($this->view);
 	}
@@ -57,7 +57,7 @@ class ScmGroupsFormController extends DefaultModuleController
                 $team_id = ScmTeamService::get_team_in_group($this->event_id(), $i, $j) ? ScmTeamService::get_team_in_group($this->event_id(), $i, $j)->get_id_team() : '';
                 $fieldset->add_field(new FormFieldSimpleSelectChoice('group_teams_' . $i . $j, '', $team_id,
                     $this->get_teams_list($this->event_id()),
-                    array('class' => 'groups-select')
+                    ['class' => 'groups-select']
                 ));
             }
         }
@@ -135,7 +135,7 @@ class ScmGroupsFormController extends DefaultModuleController
 
     private function get_teams_list()
     {
-        $options = array();
+        $options = [];
         $clubs = ScmClubCache::load();
         $options[] = new FormFieldSelectChoiceOption('', '');
 		foreach(ScmTeamService::get_teams($this->event_id()) as $team)

@@ -29,13 +29,13 @@ class ScmParamsFormController extends DefaultModuleController
 		{
 			$this->save();
             $event_name = $this->get_event()->get_event_name();
-            $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['scm.warning.params.update'], array('event_name' => $event_name)), MessageHelper::SUCCESS, 4));
+            $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['scm.warning.params.update'], ['event_name' => $event_name]), MessageHelper::SUCCESS, 4));
         }
 
-		$this->view->put_all(array(
+		$this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
             'CONTENT' => $this->form->display()
-        ));
+        ]);
 
 		return $this->generate_response($this->view);
 	}
@@ -60,46 +60,48 @@ class ScmParamsFormController extends DefaultModuleController
             $form->add_fieldset($tournament_fieldset);
 
             $tournament_fieldset->add_field(new FormFieldNumberEditor('groups_number', $this->lang['scm.groups.number'], $this->get_params()->get_groups_number(),
-                array('min' => 0, 'required' => true)
+                ['min' => 0, 'required' => true]
             ));
             $tournament_fieldset->add_field(new FormFieldNumberEditor('teams_per_group', $this->lang['scm.teams.per.group'], $this->get_params()->get_teams_per_group(),
-                array('min' => 0, 'required' => true)
+                ['min' => 0, 'required' => true]
             ));
             $tournament_fieldset->add_field(new FormFieldCheckbox('hat_ranking', $this->lang['scm.hat.ranking'], $this->get_params()->get_hat_ranking(),
-                array(
+                [
                     'description' => '<span aria-label="' . $this->lang['scm.hat.ranking.clue'] . '"><i class="far fa-circle-question"></i></span>',
-                    'events' => array('click' => '
-                    if (HTMLForms.getField("hat_ranking").getValue()) {
-                        HTMLForms.getField("hat_days").enable();
-                        HTMLForms.getField("fill_games").disable();
-                    } else {
-                        HTMLForms.getField("hat_days").disable();
-                        HTMLForms.getField("fill_games").enable();
-                    }
-                ')
-                )
+                    'events' => ['click' => '
+                        if (HTMLForms.getField("hat_ranking").getValue()) {
+                            HTMLForms.getField("hat_days").enable();
+                            HTMLForms.getField("fill_games").disable();
+                        } else {
+                            HTMLForms.getField("hat_days").disable();
+                            HTMLForms.getField("fill_games").enable();
+                        }
+                    ']
+                ]
             ));
             $tournament_fieldset->add_field(new FormFieldNumberEditor('hat_days', $this->lang['scm.hat.days'], $this->get_params()->get_hat_days(),
-                array(
+                [
                     'description' => $this->lang['scm.hat.days.clue'],
                     'min' => 0, 'required' => true,
                     'hidden' => !$this->get_params()->get_hat_ranking()
-                )
+                ]
             ));
             $tournament_fieldset->add_field(new FormFieldCheckbox('fill_games', $this->lang['scm.fill.games'], $this->get_params()->get_fill_games(),
-                array(
+                [
                     'description' => '<span aria-label="' . $this->lang['scm.fill.games.clue'] . '"><i class="far fa-circle-question"></i></span>',
                     'hidden' => $this->get_params()->get_hat_ranking()
-                )
+                ]
             ));
             $tournament_fieldset->add_field(new FormFieldCheckbox('looser_bracket', $this->lang['scm.looser.bracket'], $this->get_params()->get_looser_bracket(),
-                array('events' => array('click' => '
-                    if (HTMLForms.getField("looser_bracket").getValue()) {
-                        HTMLForms.getField("third_place").disable();
-                    } else {
-                        HTMLForms.getField("third_place").enable();
-                    }
-                '))
+                [
+                    'events' => ['click' => '
+                        if (HTMLForms.getField("looser_bracket").getValue()) {
+                            HTMLForms.getField("third_place").disable();
+                        } else {
+                            HTMLForms.getField("third_place").enable();
+                        }
+                    ']
+                ]
             ));
             $tournament_fieldset->add_field(new FormFieldCheckbox('display_playgrounds', $this->lang['scm.display.playgrounds'], $this->get_params()->get_display_playgrounds()));
         }
@@ -110,34 +112,36 @@ class ScmParamsFormController extends DefaultModuleController
             $form->add_fieldset($bracket_fieldset);
 
             $bracket_fieldset->add_field(new FormFieldNumberEditor('rounds_number', $this->lang['scm.rounds.number'], $this->get_params()->get_rounds_number(),
-                array(
+                [
                     'description' => '<span aria-label="' . $this->lang['scm.rounds.number.clue'] . '"><i class="far fa-circle-question"></i></span>', 
                     'min' => 0, 'max' => 7, 'required' => true
-                )
+                ]
             ));
 
             $bracket_fieldset->add_field(new FormFieldCheckbox('draw_games', $this->lang['scm.draw.games'], $this->get_params()->get_draw_games()));
 
             $bracket_fieldset->add_field(new FormFieldCheckbox('has_overtime', $this->lang['scm.has.overtime'], $this->get_params()->get_has_overtime(),
-				array('events' => array('click' => '
-                    if (HTMLForms.getField("has_overtime").getValue()) {
-                        HTMLForms.getField("overtime_duration").enable();
-                    } else {
-                        HTMLForms.getField("overtime_duration").disable();
-                    }
-                '))
+				[
+                    'events' => ['click' => '
+                        if (HTMLForms.getField("has_overtime").getValue()) {
+                            HTMLForms.getField("overtime_duration").enable();
+                        } else {
+                            HTMLForms.getField("overtime_duration").disable();
+                        }
+                    ']
+                ]
 			));
 			$bracket_fieldset->add_field(new FormFieldNumberEditor('overtime_duration', $this->lang['scm.overtime.duration'], $this->get_params()->get_overtime_duration(),
-				array(
+				[
                     'min' => 0,
                     'description' => $this->lang['scm.minutes.clue'],
                     'hidden' => !$this->get_params()->get_has_overtime()
-                )
+                ]
 			));
 			$bracket_fieldset->add_field(new FormFieldCheckbox('golden_goal', $this->lang['scm.golden.goal'], $this->get_params()->get_golden_goal()));
 			$bracket_fieldset->add_field(new FormFieldCheckbox('silver_goal', $this->lang['scm.silver.goal'], $this->get_params()->get_silver_goal()));
 			$bracket_fieldset->add_field(new FormFieldCheckbox('third_place', $this->lang['scm.third.place'], $this->get_params()->get_third_place(),
-                array('hidden' => $this->is_tournament && $this->get_params()->get_looser_bracket())
+                ['hidden' => $this->is_tournament && $this->get_params()->get_looser_bracket()]
             ));
 		}
 
@@ -146,13 +150,13 @@ class ScmParamsFormController extends DefaultModuleController
 			$ranking_fieldset = new FormFieldsetHTML('ranking', $this->lang['scm.params.ranking']);
             $form->add_fieldset($ranking_fieldset);
 
-            $ranking_fieldset->add_field(new FormFieldNumberEditor('victory_points', $this->lang['scm.victory.points'], $this->get_params()->get_victory_points(), array('min' => 0)));
-			$ranking_fieldset->add_field(new FormFieldNumberEditor('draw_points', $this->lang['scm.draw.points'], $this->get_params()->get_draw_points(), array('min' => 0)));
-			$ranking_fieldset->add_field(new FormFieldNumberEditor('loss_points', $this->lang['scm.loss.points'], $this->get_params()->get_loss_points(), array('min' => 0)));
+            $ranking_fieldset->add_field(new FormFieldNumberEditor('victory_points', $this->lang['scm.victory.points'], $this->get_params()->get_victory_points(), ['min' => 0]));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('draw_points', $this->lang['scm.draw.points'], $this->get_params()->get_draw_points(), ['min' => 0]));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('loss_points', $this->lang['scm.loss.points'], $this->get_params()->get_loss_points(), ['min' => 0]));
 
-			$ranking_fieldset->add_field(new FormFieldNumberEditor('promotion', $this->lang['scm.promotion'], $this->get_params()->get_promotion(), array('min' => 0)));
-			$ranking_fieldset->add_field(new FormFieldNumberEditor('playoff', $this->lang['scm.playoff'], $this->get_params()->get_playoff(), array('min' => 0)));
-			$ranking_fieldset->add_field(new FormFieldNumberEditor('relegation', $this->lang['scm.relegation'], $this->get_params()->get_relegation(), array('min' => 0)));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('promotion', $this->lang['scm.promotion'], $this->get_params()->get_promotion(), ['min' => 0]));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('playoff', $this->lang['scm.playoff'], $this->get_params()->get_playoff(), ['min' => 0]));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('relegation', $this->lang['scm.relegation'], $this->get_params()->get_relegation(), ['min' => 0]));
 
 			$ranking_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_type', $this->lang['scm.ranking.type'], $this->get_params()->get_ranking_type(), $this->ranking_mode_list()));
 		}
@@ -168,7 +172,7 @@ class ScmParamsFormController extends DefaultModuleController
             {
                 if ($this->is_championship)
                     $penalties_fieldset->add_field(new FormFieldNumberEditor('penalties_' . $team['id_team'], $team['club_name'], $team['team_penalty'],
-                        array('max' => 0)
+                        ['max' => 0]
                     ));
             }
         }
@@ -176,7 +180,7 @@ class ScmParamsFormController extends DefaultModuleController
 		$option_fieldset = new FormFieldsetHTML('options', $this->lang['scm.params.options']);
 		$form->add_fieldset($option_fieldset);
 		$option_fieldset->add_field(new FormFieldNumberEditor('game_duration', $this->lang['scm.game.duration'], $this->get_params()->get_game_duration(),
-			array('description' => $this->lang['scm.game.duration.clue'], 'min' => 0)
+			['description' => $this->lang['scm.game.duration.clue'], 'min' => 0]
 		));
 
 		$option_fieldset->add_field(new FormFieldSimpleSelectChoice('favorite_team_id', $this->lang['scm.favorite.team'], $this->get_params()->get_favorite_team_id(), $this->fav_teams_list()));
@@ -254,7 +258,7 @@ class ScmParamsFormController extends DefaultModuleController
 
 	private function ranking_mode_list()
 	{
-		$options = array();
+		$options = [];
 		// $cache = ScmSeasonCache::load();
 		// $seasons_list = $cache->get_seasons();
 
@@ -270,7 +274,7 @@ class ScmParamsFormController extends DefaultModuleController
 
 	private function fav_teams_list()
 	{
-		$options = array();
+		$options = [];
 
         $options[] = new FormFieldSelectChoiceOption('', 0);
 		foreach(ScmTeamService::get_teams($this->event_id()) as $team)

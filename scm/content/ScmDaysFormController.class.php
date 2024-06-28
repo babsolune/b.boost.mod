@@ -26,11 +26,11 @@ class ScmDaysFormController extends DefaultModuleController
             $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.bracket.update'], MessageHelper::SUCCESS, 4));
 		}
 
-		$this->view->put_all(array(
-            'MENU' => ScmMenuService::build_event_menu($this->event_id()),
-            'CONTENT' => $this->form->display(),
+		$this->view->put_all([
+            'MENU'              => ScmMenuService::build_event_menu($this->event_id()),
+            'CONTENT'           => $this->form->display(),
             'HAS_GAMES_WARNING' => ScmGameService::has_games($this->event_id()) ? MessageHelper::display($this->lang['scm.warning.has.games'], MessageHelper::NOTICE) : MessageHelper::display('', '')
-        ));
+        ]);
 
 		return $this->generate_response($this->view);
 	}
@@ -55,7 +55,7 @@ class ScmDaysFormController extends DefaultModuleController
         {
             $day_date = $this->get_day($i)->get_day_date() ?? ScmEventService::get_event($this->event_id())->get_start_date();
             $fieldset->add_field(new FormFieldDate('day_date_' . $i, $this->lang['scm.day'] . ' ' . $i, $day_date,
-                array('class' => 'groups-select')
+                ['class' => 'groups-select']
             ));
         }
 

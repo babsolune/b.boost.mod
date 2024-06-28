@@ -245,14 +245,14 @@ class ScmEvent
 
 	public function get_properties()
 	{
-		return array(
-			'id'             => $this->get_id(),
+		return [
+			'id'                    => $this->get_id(),
 			'id_category'           => $this->get_id_category(),
-			'event_slug'           => $this->get_event_slug(),
-			'season_id'      => $this->get_season_id(),
-			'division_id'    => $this->get_division_id(),
-			'start_date'     => $this->get_start_date() !== null ? $this->get_start_date()->get_timestamp() : 0,
-			'end_date'       => $this->get_end_date() !== null ? $this->get_end_date()->get_timestamp() : 0,
+			'event_slug'            => $this->get_event_slug(),
+			'season_id'             => $this->get_season_id(),
+			'division_id'           => $this->get_division_id(),
+			'start_date'            => $this->get_start_date() !== null ? $this->get_start_date()->get_timestamp() : 0,
+			'end_date'              => $this->get_end_date() !== null ? $this->get_end_date()->get_timestamp() : 0,
 			'views_number'          => $this->get_views_number(),
 			'published'             => $this->get_publishing_state(),
 			'publishing_start_date' => $this->get_publishing_start_date() !== null ? $this->get_publishing_start_date()->get_timestamp() : 0,
@@ -260,7 +260,7 @@ class ScmEvent
 			'creation_date'         => $this->get_creation_date()->get_timestamp(),
 			'update_date'           => $this->get_update_date() !== null ? $this->get_update_date()->get_timestamp() : $this->get_creation_date()->get_timestamp(),
 			'sources'               => TextHelper::serialize($this->get_sources())
-		);
+        ];
 	}
 
 	public function set_properties(array $properties)
@@ -279,7 +279,7 @@ class ScmEvent
 		$this->end_date_enabled      = !empty($properties['publishing_end_date']);
 		$this->creation_date         = new Date($properties['creation_date'], Timezone::SERVER_TIMEZONE);
 		$this->update_date           = !empty($properties['update_date']) ? new Date($properties['update_date'], Timezone::SERVER_TIMEZONE) : null;
-		$this->sources               = !empty($properties['sources']) ? TextHelper::unserialize($properties['sources']) : array();
+		$this->sources               = !empty($properties['sources']) ? TextHelper::unserialize($properties['sources']) : [];
     }
 
 	public function init_default_properties($id_category = Category::ROOT_CATEGORY)
@@ -321,7 +321,7 @@ class ScmEvent
 			Date::get_array_tpl_vars($this->creation_date, 'date'),
 			Date::get_array_tpl_vars($this->update_date, 'update_date'),
 			Date::get_array_tpl_vars($this->publishing_start_date, 'differed_publishing_start_date'),
-			array(
+			[
 				// Conditions
 				'C_VISIBLE'         => $this->is_published(),
 				'C_CONTROLS'        => $this->is_authorized_to_edit() || $this->is_authorized_to_delete() || $this->is_authorized_to_manage_events(),
@@ -349,22 +349,22 @@ class ScmEvent
 				'U_EVENT'      => $this->get_event_url(),
 				'U_EDIT'        => ScmUrlBuilder::edit($this->id, $this->event_slug)->rel(),
 				'U_DELETE'      => ScmUrlBuilder::delete($this->id)->rel(),
-			)
+            ]
 		);
 	}
 
 	public function get_array_tpl_source_vars($source_name)
 	{
-		$vars = array();
+		$vars = [];
 		$sources = $this->get_sources();
 
 		if (isset($sources[$source_name]))
 		{
-			$vars = array(
+			$vars = [
 				'C_SEPARATOR' => array_search($source_name, array_keys($sources)) < count($sources) - 1,
 				'NAME' => $source_name,
 				'URL'  => $sources[$source_name]
-			);
+            ];
 		}
 
 		return $vars;

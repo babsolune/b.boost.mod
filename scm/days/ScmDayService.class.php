@@ -28,7 +28,7 @@ class ScmDayService
 	/** Update a day entry */
 	public static function update_day(ScmDay $day, int $id)
 	{
-		self::$db_querier->update(ScmSetup::$scm_day_table, $day->get_properties(), 'WHERE id_day = :id', array('id' => $id));
+		self::$db_querier->update(ScmSetup::$scm_day_table, $day->get_properties(), 'WHERE id_day = :id', ['id' => $id]);
 	}
 
 	/** Delete all day entries of a event */
@@ -37,7 +37,7 @@ class ScmDayService
         $days = self::get_days($event_id);
         foreach ($days as $day)
         {
-            self::$db_querier->delete(ScmSetup::$scm_day_table, 'WHERE day_event_id = :event_id', array('event_id' => $event_id));
+            self::$db_querier->delete(ScmSetup::$scm_day_table, 'WHERE day_event_id = :event_id', ['event_id' => $event_id]);
         }
     }
 
@@ -54,10 +54,10 @@ class ScmDayService
             $row = self::$db_querier->select_single_row_query('SELECT days.*
                 FROM ' . ScmSetup::$scm_day_table . ' days
                 WHERE days.day_event_id = :event_id
-                AND days.day_round = :day_round', array(
+                AND days.day_round = :day_round', [
                     'event_id' => $event_id,
                     'day_round' => $day_round,
-                )
+                ]
             );
             $day = new ScmDay();
             $day->set_properties($row);
@@ -73,9 +73,9 @@ class ScmDayService
 		$results = self::$db_querier->select('SELECT days.*
             FROM ' . ScmSetup::$scm_day_table . ' days
             WHERE days.day_event_id = :event_id
-            ORDER BY days.id_day', array(
+            ORDER BY days.id_day', [
                 'event_id' => $event_id
-            )
+            ]
         );
 
         $days = [];
@@ -99,7 +99,7 @@ class ScmDayService
         {
             for ($j = 1; $j <= $teams_number / 2; $j++)
             {
-                self::$db_querier->insert(ScmSetup::$scm_game_table, array(
+                self::$db_querier->insert(ScmSetup::$scm_game_table, [
                     'game_event_id' => $event_id,
                     'game_type' => 'D',
                     'game_group' => $i,
@@ -107,14 +107,14 @@ class ScmDayService
                     'game_home_id' => 0,
                     'game_away_id' => 0,
                     'game_date' => $now->get_timestamp()
-                ));
+                ]);
             }
         }
     }
 
     public static function update_day_played($event_id, $day_round, $check)
     {
-		self::$db_querier->update(ScmSetup::$scm_day_table, ['day_played' => $check], 'WHERE day_event_id = :event_id AND day_round = :day_round', array('event_id' => $event_id, 'day_round' => $day_round));
+		self::$db_querier->update(ScmSetup::$scm_day_table, ['day_played' => $check], 'WHERE day_event_id = :event_id AND day_round = :day_round', ['event_id' => $event_id, 'day_round' => $day_round]);
     }
 
     public static function get_last_day($event_id)

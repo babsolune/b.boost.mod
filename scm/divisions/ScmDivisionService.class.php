@@ -21,7 +21,7 @@ class ScmDivisionService
 	 * @desc Count items number.
 	 * @param string $condition (optional) : Restriction to apply to the list of items
 	 */
-	public static function count_divisions($condition = '', $params = array())
+	public static function count_divisions($condition = '', $params = [])
 	{
 		return self::$db_querier->count(ScmSetup::$scm_division_table, $condition, $params);
 	}
@@ -43,7 +43,7 @@ class ScmDivisionService
 	 */
 	public static function update_division(ScmDivision $division)
 	{
-		self::$db_querier->update(ScmSetup::$scm_division_table, $division->get_properties(), 'WHERE id_division = :id', array('id' => $division->get_id_division()));
+		self::$db_querier->update(ScmSetup::$scm_division_table, $division->get_properties(), 'WHERE id_division = :id', ['id' => $division->get_id_division()]);
 	}
 
 	/**
@@ -64,7 +64,7 @@ class ScmDivisionService
                 ScmEventService::delete($event['id']);
             }
         }
-		self::$db_querier->delete(ScmSetup::$scm_division_table, 'WHERE id_division = :id', array('id' => $id));
+		self::$db_querier->delete(ScmSetup::$scm_division_table, 'WHERE id_division = :id', ['id' => $id]);
 	}
 
 	/**
@@ -74,8 +74,11 @@ class ScmDivisionService
 	public static function get_division(int $id)
 	{
 		$row = self::$db_querier->select_single_row_query('SELECT division.*
-		FROM ' . ScmSetup::$scm_division_table . ' division
-		WHERE division.id_division = :id', array('id' => $id));
+            FROM ' . ScmSetup::$scm_division_table . ' division
+            WHERE division.id_division = :id', [
+                'id' => $id
+            ]
+        );
 
 		$division = new ScmDivision();
 		$division->set_properties($row);

@@ -10,7 +10,7 @@
 class ScmEventsManagerController extends DefaultModuleController
 {
 	private $elements_number = 0;
-	private $ids = array();
+	private $ids = [];
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -27,14 +27,14 @@ class ScmEventsManagerController extends DefaultModuleController
 	{
 		$display_categories = CategoriesService::get_categories_manager()->get_categories_cache()->has_categories();
 
-		$columns = array(
+		$columns = [
 			new HTMLTableColumn($this->lang['scm.event.id'], 'id'),
 			new HTMLTableColumn($this->lang['category.category'], 'id_category'),
 			new HTMLTableColumn($this->lang['scm.division'], 'division_name'),
 			new HTMLTableColumn($this->lang['scm.season'], 'season_name'),
 			new HTMLTableColumn($this->lang['common.status'], 'published'),
-			new HTMLTableColumn($this->lang['common.actions'], '', array('sr-only' => true))
-		);
+			new HTMLTableColumn($this->lang['common.actions'], '', ['sr-only' => true])
+        ];
 
 		if (!$display_categories)
 			unset($columns[1]);
@@ -49,17 +49,21 @@ class ScmEventsManagerController extends DefaultModuleController
 		if ($display_categories)
 			$table_model->add_filter(new HTMLTableCategorySQLFilter('filter4'));
 
-		$status_list = array(Item::PUBLISHED => $this->lang['common.status.published'], Item::NOT_PUBLISHED => $this->lang['common.status.draft'], Item::DEFERRED_PUBLICATION => $this->lang['common.status.deffered.date']);
+		$status_list = [
+            Item::PUBLISHED => $this->lang['common.status.published'],
+            Item::NOT_PUBLISHED => $this->lang['common.status.draft'],
+            Item::DEFERRED_PUBLICATION => $this->lang['common.status.deffered.date']
+        ];
 		$table_model->add_filter(new HTMLTableEqualsFromListSQLFilter('published', 'filter5', $this->lang['common.status.publication'], $status_list));
 
 		$table = new HTMLTable($table_model);
 		$table->set_filters_fieldset_class_HTML();
 
-		$results = array();
+		$results = [];
 		$result = $table_model->get_sql_results('event
 			LEFT JOIN ' . ScmSetup::$scm_season_table . ' season ON season.id_season = event.season_id
 			LEFT JOIN ' . ScmSetup::$scm_division_table . ' division ON division.id_division = event.division_id',
-			array('*', 'event.id')
+			['*', 'event.id']
 		);
 		foreach ($result as $row)
 		{
@@ -73,14 +77,14 @@ class ScmEventsManagerController extends DefaultModuleController
 			$edit_link = new EditLinkHTMLElement(ScmUrlBuilder::edit($event->get_id(), $event->get_event_slug()));
 			$delete_link = new DeleteLinkHTMLElement(ScmUrlBuilder::delete($event->get_id()));
 
-			$row = array(
+			$row = [
 				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()), $this->lang['item'] . ' #' . $event->get_id()), 'align-left'),
 				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()), ($category->get_id() == Category::ROOT_CATEGORY ? $this->lang['common.none.alt'] : $category->get_name()))),
 				new HTMLTableRowCell($row['division_name']),
 				new HTMLTableRowCell($row['season_name']),
 				new HTMLTableRowCell($event->get_status()),
 				new HTMLTableRowCell($edit_link->display() . $delete_link->display(), 'controls')
-			);
+            ];
 
 			if (!$display_categories)
 				unset($row[1]);

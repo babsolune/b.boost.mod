@@ -11,7 +11,7 @@ class ScmFormFieldColors extends AbstractFormField
 {
 	private $max_input = 20;
 
-	public function __construct($id, $label, array $value = array(), array $field_options = array(), array $constraints = array())
+	public function __construct($id, $label, array $value = [], array $field_options = [], array $constraints = [])
 	{
 		parent::__construct($id, $label, $value, $field_options, $constraints);
 	}
@@ -23,45 +23,45 @@ class ScmFormFieldColors extends AbstractFormField
 		$view = new FileTemplate('scm/fields/ScmFormFieldColors.tpl');
 		$view->add_lang(array_merge(LangLoader::get('common', 'scm'), LangLoader::get('common-lang')));
 
-		$view->put_all(array(
+		$view->put_all([
 			'NAME' => $this->get_html_id(),
 			'ID' => $this->get_html_id(),
 			'C_DISABLED' => $this->is_disabled()
-		));
+		]);
 
 		$this->assign_common_template_variables($template);
 
 		$i = 0;
 		foreach ($this->get_value() as $name => $value)
 		{
-			$view->assign_block_vars('fieldelements', array(
+			$view->assign_block_vars('fieldelements', [
 				'ID' => $i,
 				'VALUE' => $value,
 				'NAME' => $name
-			));
+			]);
 			$i++;
 		}
 
 		if ($i == 0)
 		{
-			$view->assign_block_vars('fieldelements', array(
+			$view->assign_block_vars('fieldelements', [
 				'ID'    => $i,
 				'VALUE' => '',
 				'NAME'  => ''
-			));
+			]);
 		}
 
-		$view->put_all(array(
+		$view->put_all([
 			'NAME'          => $this->get_html_id(),
 			'ID'            => $this->get_html_id(),
 			'C_DISABLED'    => $this->is_disabled(),
 			'MAX_INPUT'     => $this->max_input,
 			'FIELDS_NUMBER' => $i == 0 ? 1 : $i
-		));
+		]);
 
-		$template->assign_block_vars('fieldelements', array(
+		$template->assign_block_vars('fieldelements', [
 			'ELEMENT' => $view->render()
-		));
+		]);
 
 		return $template;
 	}
@@ -69,7 +69,7 @@ class ScmFormFieldColors extends AbstractFormField
 	public function retrieve_value()
 	{
 		$request = AppContext::get_request();
-		$values = array();
+		$values = [];
 		for ($i = 0; $i < $this->max_input; $i++)
 		{
             $field_name_id = 'field_name_' . $this->get_html_id() . '_' . $i;

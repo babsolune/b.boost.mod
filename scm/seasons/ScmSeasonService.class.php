@@ -21,7 +21,7 @@ class ScmSeasonService
 	 * @desc Count items number.
 	 * @param string $condition (optional) : Restriction to apply to the list of items
 	 */
-	public static function count_seasons($condition = '', $params = array())
+	public static function count_seasons($condition = '', $params = [])
 	{
 		return self::$db_querier->count(ScmSetup::$scm_season_table, $condition, $params);
 	}
@@ -43,7 +43,7 @@ class ScmSeasonService
 	 */
 	public static function update_season(ScmSeason $season)
 	{
-		self::$db_querier->update(ScmSetup::$scm_season_table, $season->get_properties(), 'WHERE id_season = :id', array('id' => $season->get_id_season()));
+		self::$db_querier->update(ScmSetup::$scm_season_table, $season->get_properties(), 'WHERE id_season = :id', ['id' => $season->get_id_season()]);
 	}
 
 	/**
@@ -58,9 +58,9 @@ class ScmSeasonService
             $controller = PHPBoostErrors::user_in_read_only();
             DispatchManager::redirect($controller);
         }
-		self::$db_querier->delete(ScmSetup::$scm_season_table, 'WHERE id_season = :id', array('id' => $id));
+		self::$db_querier->delete(ScmSetup::$scm_season_table, 'WHERE id_season = :id', ['id' => $id]);
 
-		// self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', array('module' => 'scm', 'id_season' => $id));
+		// self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', ['module' => 'scm', 'id_season' => $id]);
 	}
 
 	/**
@@ -71,7 +71,7 @@ class ScmSeasonService
 	{
 		$row = self::$db_querier->select_single_row_query('SELECT season.*
 		FROM ' . ScmSetup::$scm_season_table . ' season
-		WHERE season.id_season = :id', array('id' => $id));
+		WHERE season.id_season = :id', ['id' => $id]);
 
 		$season = new ScmSeason();
 		$season->set_properties($row);

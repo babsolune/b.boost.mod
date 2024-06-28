@@ -10,7 +10,7 @@
 class ScmSeasonsManagerController extends DefaultModuleController
 {
 	private $elements_number = 0;
-	private $ids = array();
+	private $ids = [];
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -25,11 +25,11 @@ class ScmSeasonsManagerController extends DefaultModuleController
 
 	private function build_table()
 	{
-		$columns = array(
+		$columns = [
 			new HTMLTableColumn('ID', 'id_season'),
 			new HTMLTableColumn($this->lang['common.name'], 'season_name'),
 			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_season()->rel() . '" aria-label="' . $this->lang['scm.add.season'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>')
-		);
+        ];
 
 		$table_model = new SQLHTMLTableModel(ScmSetup::$scm_season_table, 'seasons-manager', $columns, new HTMLTableSortingRule('season_name', HTMLTableSortingRule::DESC));
 
@@ -38,9 +38,9 @@ class ScmSeasonsManagerController extends DefaultModuleController
 		$table = new HTMLTable($table_model);
 		$table->set_filters_fieldset_class_HTML();
 
-		$results = array();
+		$results = [];
 		$result = $table_model->get_sql_results('season',
-			array('*', 'season.id_season')
+			['*', 'season.id_season']
 		);
 		foreach ($result as $row)
 		{
@@ -51,13 +51,13 @@ class ScmSeasonsManagerController extends DefaultModuleController
 			$this->ids[$this->elements_number] = $season->get_id_season();
 
 			$edit_link = new EditLinkHTMLElement(ScmUrlBuilder::edit_season($season->get_id_season()));
-			$delete_link = new DeleteLinkHTMLElement(ScmUrlBuilder::delete_season($season->get_id_season()), '', array('data-confirmation' => $this->lang['scm.warning.delete.season']));
+			$delete_link = new DeleteLinkHTMLElement(ScmUrlBuilder::delete_season($season->get_id_season()), '', ['data-confirmation' => $this->lang['scm.warning.delete.season']]);
 
-			$row = array(
+			$row = [
 				new HTMLTableRowCell('#' . $season->get_id_season()),
 				new HTMLTableRowCell($season->get_season_name()),
 				new HTMLTableRowCell($edit_link->display() . $delete_link->display(), 'controls')
-			);
+            ];
 
 			$results[] = new HTMLTableRow($row);
 		}

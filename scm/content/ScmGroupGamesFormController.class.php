@@ -30,11 +30,11 @@ class ScmGroupGamesFormController extends DefaultModuleController
             $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.games.update'], MessageHelper::SUCCESS, 4));
 		}
 
-		$this->view->put_all(array(
+		$this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
             'CONTENT' => $this->form->display(),
             'JS_DOC' => ScmBracketService::get_bracket_js_games($this->event_id(), $this->teams_number, $this->teams_per_group),
-        ));
+        ]);
 
 		return $this->generate_response($this->view);
 	}
@@ -78,28 +78,28 @@ class ScmGroupGamesFormController extends DefaultModuleController
                 $game_away_id = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_away_id() : 0;
 
                 $groups_fieldset->add_field(new FormFieldFree('group_game_number_' . $i . $j, '', $game_number,
-                    array('class' => 'game-name small text-italic form-G' . $i . $j)
+                    ['class' => 'game-name small text-italic form-G' . $i . $j]
                 ));
                 $groups_fieldset->add_field(new FormFieldDateTime('group_game_date_' . $i . $j, '', $game_date,
-                    array('class' => 'game-date date-select')
+                    ['class' => 'game-date date-select']
                 ));
                 if($this->get_params()->get_display_playgrounds())
                     $groups_fieldset->add_field(new FormFieldTextEditor('group_game_playground_' . $i . $j, '', $game_playground,
-                        array('class' => 'game-playground', 'placeholder' => $this->lang['scm.field'])
+                        ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                     ));
                 $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_home_team_' . $i . $j, '', $game_home_id,
                     $this->get_teams_list(),
-                    array('class' => 'home-team game-team')
+                    ['class' => 'home-team game-team']
                 ));
                 $groups_fieldset->add_field(new FormFieldTextEditor('group_home_score_' . $i . $j, '', $game_home_score,
-                    array('class' => 'home-team game-score', 'pattern' => '[0-9]*')
+                    ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
                 ));
                 $groups_fieldset->add_field(new FormFieldTextEditor('group_away_score_' . $i . $j, '', $game_away_score,
-                    array('class' => 'away-team game-score', 'pattern' => '[0-9]*')
+                    ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
                 ));
                 $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_away_team_' . $i . $j, '', $game_away_id,
                     $this->get_teams_list(),
-                    array('class' => 'away-team game-team')
+                    ['class' => 'away-team game-team']
                 ));
             }
         }
@@ -130,28 +130,28 @@ class ScmGroupGamesFormController extends DefaultModuleController
                 if ($this->return_games && $j == 1)
                     $groups_fieldset->add_field(new FormFieldSpacer('group_first_leg_' . $i, $this->lang['scm.first.leg']));
                 $groups_fieldset->add_field(new FormFieldFree('group_game_number_' . $i . $j, '', $game_number,
-                    array('class' => 'game-name small text-italic align-right form-G' . $i . $j)
+                    ['class' => 'game-name small text-italic align-right form-G' . $i . $j]
                 ));
                 $groups_fieldset->add_field(new FormFieldDateTime('group_game_date_' . $i . $j, '', $game_date,
-                    array('class' => 'game-date')
+                    ['class' => 'game-date']
                 ));
                 if($this->get_params()->get_display_playgrounds())
                     $groups_fieldset->add_field(new FormFieldTextEditor('group_game_playground_' . $i . $j, '', $game_playground,
-                        array('class' => 'game-playground', 'placeholder' => $this->lang['scm.field'])
+                        ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                     ));
                 $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_home_team_' . $i . $j, '', $game_home_id,
                     $odd_filled && $game_home_id == 0 ? [] : $this->get_group_teams_list($i),
-                    array('class' => 'home-team game-team')
+                    ['class' => 'home-team game-team']
                 ));
                 $groups_fieldset->add_field(new FormFieldTextEditor('group_home_score_' . $i . $j, '', $game_home_score,
-                    array('class' => 'home-team game-score', 'pattern' => '[0-9]*')
+                    ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
                 ));
                 $groups_fieldset->add_field(new FormFieldTextEditor('group_away_score_' . $i . $j, '', $game_away_score,
-                    array('class' => 'away-team game-score', 'pattern' => '[0-9]*')
+                    ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
                 ));
                 $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_away_team_' . $i . $j, '', $game_away_id,
                     $odd_filled && $game_away_id == 0 ? [] : $this->get_group_teams_list($i),
-                    array('class' => 'away-team game-team')
+                    ['class' => 'away-team game-team']
                 ));
                 if ($this->return_games && $j == $games_number / 2)
                     $groups_fieldset->add_field(new FormFieldSpacer('group_second_leg_' . $i, '<hr />' . $this->lang['scm.second.leg']));
@@ -278,7 +278,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
             if ($team_group == $group)
                 $teams_list[] = $team;
         }
-        $options = array();
+        $options = [];
 
         $clubs = ScmClubCache::load();
         $options[] = new FormFieldSelectChoiceOption('', 0);
@@ -292,7 +292,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
 
     private function get_teams_list()
     {
-        $options = array();
+        $options = [];
 
         $clubs = ScmClubCache::load();
         $options[] = new FormFieldSelectChoiceOption('', '');

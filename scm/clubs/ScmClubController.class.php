@@ -42,11 +42,11 @@ class ScmClubController extends DefaultModuleController
 		$i = 1;
 		foreach ($colors as $name => $color)
 		{
-			$this->view->assign_block_vars('colors', array(
+			$this->view->assign_block_vars('colors', [
 				'C_SEPARATOR' => $i < $colors_number,
 				'NAME' => $name,
 				'COLOR' => $color,
-			));
+			]);
 			$i++;
 		}
 	}

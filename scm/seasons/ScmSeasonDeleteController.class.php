@@ -26,7 +26,7 @@ class ScmSeasonDeleteController extends DefaultModuleController
 		ScmEventService::clear_cache();
 		HooksService::execute_hook_action('delete', self::$module_id, $season->get_properties());
 
-		AppContext::get_response()->redirect(($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), ScmUrlBuilder::manage_seasons()->rel()) ? $request->get_url_referrer() : ScmUrlBuilder::manage_seasons()), StringVars::replace_vars($this->lang['scm.season.message.success.delete'], array('title' => $season->get_season_name())));
+		AppContext::get_response()->redirect(($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), ScmUrlBuilder::manage_seasons()->rel()) ? $request->get_url_referrer() : ScmUrlBuilder::manage_seasons()), StringVars::replace_vars($this->lang['scm.season.message.success.delete'], ['title' => $season->get_season_name()]));
 	}
 
 	private function get_season(HTTPRequestCustom $request)

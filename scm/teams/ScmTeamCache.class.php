@@ -9,14 +9,14 @@
 
 class ScmTeamCache implements CacheData
 {
-	private $teams = array();
+	private $teams = [];
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function synchronize()
 	{
-		$this->teams = array();
+		$this->teams = [];
 
 		$result = PersistenceContext::get_querier()->select('SELECT team.*, event.*
 			FROM ' . ScmSetup::$scm_team_table . ' team

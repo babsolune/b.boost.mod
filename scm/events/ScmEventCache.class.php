@@ -9,14 +9,14 @@
 
 class ScmEventCache implements CacheData
 {
-	private $events = array();
+	private $events = [];
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function synchronize()
 	{
-		$this->events = array();
+		$this->events = [];
 
 		$now = new Date();
 		$config = ScmConfig::load();
@@ -24,9 +24,10 @@ class ScmEventCache implements CacheData
 		$result = PersistenceContext::get_querier()->select('SELECT event.*
 			FROM ' . ScmSetup::$scm_event_table . ' event
 			WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
-			ORDER BY id DESC', array(
+			ORDER BY id DESC', [
 				'timestamp_now' => $now->get_timestamp()
-		));
+            ]
+        );
 
 		while ($row = $result->fetch())
 		{

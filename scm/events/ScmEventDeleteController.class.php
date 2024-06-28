@@ -29,7 +29,7 @@ class ScmEventDeleteController extends DefaultModuleController
 		ScmEventService::clear_cache();
 		HooksService::execute_hook_action('delete', self::$module_id, $event->get_properties());
 
-		AppContext::get_response()->redirect(($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug())->rel()) ? $request->get_url_referrer() : ScmUrlBuilder::home()), StringVars::replace_vars($this->lang['scm.message.success.delete'], array('title' => $event->get_event_name())));
+		AppContext::get_response()->redirect(($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug())->rel()) ? $request->get_url_referrer() : ScmUrlBuilder::home()), StringVars::replace_vars($this->lang['scm.message.success.delete'], ['title' => $event->get_event_name()]));
 	}
 
 	private function get_event(HTTPRequestCustom $request)

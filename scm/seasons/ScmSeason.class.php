@@ -61,12 +61,12 @@ class ScmSeason
 
 	public function get_properties()
 	{
-		return array(
-			'id_season'            => $this->get_id_season(),
-			'season_name'          => $this->get_season_name(),
-			'first_year'          => $this->get_first_year(),
+		return [
+			'id_season'     => $this->get_id_season(),
+			'season_name'   => $this->get_season_name(),
+			'first_year'    => $this->get_first_year(),
 			'calendar_year' => $this->get_calendar_year()
-		);
+        ];
 	}
 
 	public function set_properties(array $properties)
@@ -84,7 +84,7 @@ class ScmSeason
 	public function get_template_vars()
 	{
 		return array_merge(
-			array(
+			[
 				// Conditions
 
 				// Item
@@ -94,7 +94,7 @@ class ScmSeason
 				// Links
 				'U_EDIT_SEASON'   => ScmUrlBuilder::edit_season($this->id_season)->rel(),
 				'U_DELETE_SEASON' => ScmUrlBuilder::delete_season($this->id_season)->rel(),
-			)
+            ]
 		);
 	}
 }

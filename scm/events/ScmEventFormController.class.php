@@ -49,25 +49,25 @@ class ScmEventFormController extends DefaultModuleController
 		}
 
 		$fieldset->add_field(new FormFieldSimpleSelectChoice('division', $this->lang['scm.division'], $this->event->get_division_id(), $this->divisions_list(),
-			array('required' => true)
+			['required' => true]
 		));
 
 		$fieldset->add_field(new FormFieldSimpleSelectChoice('season', $this->lang['scm.season'], $this->event->get_season_id(), $this->seasons_list(),
-			array('required' => true)
+			['required' => true]
 		));
 
         $fieldset->add_field($start_date = new FormFieldDateTime('start_date', $this->lang['scm.event.start.date'], $this->get_event()->get_start_date(),
-            array('required' => true)
+            ['required' => true]
         ));
 
         $fieldset->add_field($end_date = new FormFieldDateTime('end_date', $this->lang['scm.event.end.date'], $this->get_event()->get_end_date(),
-            array('required' => true)
+            ['required' => true]
         ));
 
         $end_date->add_form_constraint(new FormConstraintFieldsDifferenceSuperior($start_date, $end_date));
 
         $fieldset->add_field(new FormFieldSelectSources('sources', $this->lang['form.sources'], $this->get_event()->get_sources(),
-            array('description' => $this->lang['scm.source.clue'])
+            ['description' => $this->lang['scm.source.clue']]
         ));
 
 		if (ScmAuthorizationsService::check_authorizations($this->get_event()->get_id_category())->moderation())
@@ -76,24 +76,24 @@ class ScmEventFormController extends DefaultModuleController
 			$form->add_fieldset($publication_fieldset);
 
 			$publication_fieldset->add_field(new FormFieldDateTime('creation_date', $this->lang['form.creation.date'], $this->get_event()->get_creation_date(),
-				array('required' => true)
+				['required' => true]
 			));
 
 			if (!$this->get_event()->is_published())
 			{
 				$publication_fieldset->add_field(new FormFieldCheckbox('update_creation_date', $this->lang['form.update.creation.date'], false,
-					array('hidden' => $this->get_event()->get_publishing_state() != ScmEvent::NOT_PUBLISHED)
+					['hidden' => $this->get_event()->get_publishing_state() != ScmEvent::NOT_PUBLISHED]
 				));
 			}
 
 			$publication_fieldset->add_field(new FormFieldSimpleSelectChoice('published', $this->lang['form.publication'], $this->get_event()->get_publishing_state(),
-				array(
+				[
 					new FormFieldSelectChoiceOption($this->lang['form.publication.draft'], ScmEvent::NOT_PUBLISHED),
 					new FormFieldSelectChoiceOption($this->lang['form.publication.now'], ScmEvent::PUBLISHED),
 					new FormFieldSelectChoiceOption($this->lang['form.publication.deffered'], ScmEvent::DEFERRED_PUBLICATION),
-				),
-				array(
-					'events' => array('change' => '
+                ],
+				[
+					'events' => ['change' => '
 						if (HTMLForms.getField("published").getValue() == ' . ScmEvent::DEFERRED_PUBLICATION . ') {
 							jQuery("#' . self::class . '_publishing_start_date_field").show();
 							HTMLForms.getField("end_date_enabled").enable();
@@ -105,29 +105,29 @@ class ScmEventFormController extends DefaultModuleController
 							HTMLForms.getField("end_date_enabled").disable();
 							HTMLForms.getField("publishing_end_date").disable();
 						}'
-					)
-				)
+                    ]
+                ]
 			));
 
 			$publication_fieldset->add_field($publishing_start_date = new FormFieldDateTime('publishing_start_date', $this->lang['form.start.date'], ($this->get_event()->get_publishing_start_date() === null ? new Date() : $this->get_event()->get_publishing_start_date()),
-				array('hidden' => ($request->is_post_method() ? ($request->get_postint(self::class . '_publication_state', 0) != ScmEvent::DEFERRED_PUBLICATION) : ($this->get_event()->get_publishing_state() != ScmEvent::DEFERRED_PUBLICATION)))
+				['hidden' => ($request->is_post_method() ? ($request->get_postint(self::class . '_publication_state', 0) != ScmEvent::DEFERRED_PUBLICATION) : ($this->get_event()->get_publishing_state() != ScmEvent::DEFERRED_PUBLICATION))]
 			));
 
 			$publication_fieldset->add_field(new FormFieldCheckbox('end_date_enabled', $this->lang['form.enable.end.date'], $this->get_event()->is_end_date_enabled(),
-				array(
+				[
 					'hidden' => ($request->is_post_method() ? ($request->get_postint(self::class . '_publication_state', 0) != ScmEvent::DEFERRED_PUBLICATION) : ($this->get_event()->get_publishing_state() != ScmEvent::DEFERRED_PUBLICATION)),
-					'events' => array('click' => '
+					'events' => ['click' => '
 						if (HTMLForms.getField("end_date_enabled").getValue()) {
 							HTMLForms.getField("publishing_end_date").enable();
 						} else {
 							HTMLForms.getField("publishing_end_date").disable();
 						}'
-					)
-				)
+                    ]
+                ]
 			));
 
 			$publication_fieldset->add_field($publishing_end_date = new FormFieldDateTime('publishing_end_date', $this->lang['form.end.date'], ($this->get_event()->get_publishing_end_date() === null ? new Date() : $this->get_event()->get_publishing_end_date()),
-				array('hidden' => ($request->is_post_method() ? !$request->get_postbool(self::class . '_end_date_enabled', false) : !$this->get_event()->is_end_date_enabled()))
+				['hidden' => ($request->is_post_method() ? !$request->get_postbool(self::class . '_end_date_enabled', false) : !$this->get_event()->is_end_date_enabled())]
 			));
 
 			$publishing_end_date->add_form_constraint(new FormConstraintFieldsDifferenceSuperior($publishing_start_date, $publishing_end_date));
@@ -224,14 +224,20 @@ class ScmEventFormController extends DefaultModuleController
 			$id = ScmEventService::add($event);
 			$event->set_id($id);
 
-			HooksService::execute_hook_action('event_add', 'scm', array_merge($event->get_properties(), array('title' => $event->get_event_name(), 'url' => $event->get_event_url())));
+			HooksService::execute_hook_action('event_add', 'scm', array_merge($event->get_properties(), [
+                'title' => $event->get_event_name(),
+                'url' => $event->get_event_url()
+            ]));
 		}
 		else
 		{
 			$event->set_update_date(new Date());
 			ScmEventService::update($event);
 
-			HooksService::execute_hook_action('event_edit', 'scm', array_merge($event->get_properties(), array('title' => $event->get_event_name(), 'url' => $event->get_event_url())));
+			HooksService::execute_hook_action('event_edit', 'scm', array_merge($event->get_properties(), [
+                'title' => $event->get_event_name(),
+                'url' => $event->get_event_url()
+            ]));
 		}
 
 		ScmEventService::clear_cache();
@@ -239,7 +245,7 @@ class ScmEventFormController extends DefaultModuleController
 
 	private function seasons_list()
 	{
-		$options = array();
+		$options = [];
 		$cache = ScmSeasonCache::load();
 		$seasons_list = $cache->get_seasons();
 
@@ -258,7 +264,7 @@ class ScmEventFormController extends DefaultModuleController
 
 	private function divisions_list()
 	{
-		$options = array();
+		$options = [];
 		$cache = ScmDivisionCache::load();
 		$divisions_list = $cache->get_divisions();
 
@@ -338,16 +344,16 @@ class ScmEventFormController extends DefaultModuleController
 		if ($event->is_published())
 		{
 			if ($this->is_new_event)
-				AppContext::get_response()->redirect(ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()), StringVars::replace_vars($this->lang['scm.message.success.add'], array('title' => $event->get_event_name())));
+				AppContext::get_response()->redirect(ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()), StringVars::replace_vars($this->lang['scm.message.success.add'], ['title' => $event->get_event_name()]));
 			else
-				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug())), StringVars::replace_vars($this->lang['scm.message.success.edit'], array('title' => $event->get_event_name())));
+				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug())), StringVars::replace_vars($this->lang['scm.message.success.edit'], ['title' => $event->get_event_name()]));
 		}
 		else
 		{
 			// if ($this->is_new_event)
-			// 	AppContext::get_response()->redirect(ScmUrlBuilder::display_pending(), StringVars::replace_vars($this->lang['scm.message.success.add'], array('title' => $event->get_event_name())));
+			// 	AppContext::get_response()->redirect(ScmUrlBuilder::display_pending(), StringVars::replace_vars($this->lang['scm.message.success.add'], ['title' => $event->get_event_name()]));
 			// else
-			// 	AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : ScmUrlBuilder::display_pending()), StringVars::replace_vars($this->lang['scm.message.success.edit'], array('title' => $event->get_event_name())));
+			// 	AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : ScmUrlBuilder::display_pending()), StringVars::replace_vars($this->lang['scm.message.success.edit'], ['title' => $event->get_event_name()]));
 		}
 	}
 

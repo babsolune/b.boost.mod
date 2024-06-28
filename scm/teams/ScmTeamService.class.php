@@ -21,7 +21,7 @@ class ScmTeamService
 	 * @desc Count items number.
 	 * @param string $condition (optional) : Restriction to apply to the list of items
 	 */
-	public static function count_teams($condition = '', $params = array())
+	public static function count_teams($condition = '', $params = [])
 	{
 		return self::$db_querier->count(ScmSetup::$scm_team_table, $condition, $params);
 	}
@@ -43,7 +43,7 @@ class ScmTeamService
 	 */
 	public static function update_team(ScmTeam $team)
 	{
-		self::$db_querier->update(ScmSetup::$scm_team_table, $team->get_properties(), 'WHERE id_team=:id', array('id' => $team->get_id_team()));
+		self::$db_querier->update(ScmSetup::$scm_team_table, $team->get_properties(), 'WHERE id_team=:id', ['id' => $team->get_id_team()]);
 	}
 
 	/**
@@ -52,7 +52,7 @@ class ScmTeamService
 	 */
 	public static function update_team_group($id, $group, $order)
 	{
-		self::$db_querier->update(ScmSetup::$scm_team_table, ['team_group' => $group, 'team_order' => $order], 'WHERE id_team = :id', array('id' => $id));
+		self::$db_querier->update(ScmSetup::$scm_team_table, ['team_group' => $group, 'team_order' => $order], 'WHERE id_team = :id', ['id' => $id]);
 	}
 
 	/**
@@ -62,7 +62,7 @@ class ScmTeamService
 	public static function update_team_penalty($id, $penalty)
 	{
         if (empty($penalty)) $penalty = 0;
-		self::$db_querier->update(ScmSetup::$scm_team_table, ['team_penalty' => $penalty], 'WHERE id_team = :id', array('id' => $id));
+		self::$db_querier->update(ScmSetup::$scm_team_table, ['team_penalty' => $penalty], 'WHERE id_team = :id', ['id' => $id]);
 	}
 
 	/**
@@ -72,7 +72,7 @@ class ScmTeamService
 	 */
 	public static function delete_team(int $event_id, int $club_id)
 	{
-        self::$db_querier->delete(ScmSetup::$scm_team_table, 'WHERE team_event_id = :event_id AND team_club_id = :club_id', array('event_id' => $event_id, 'club_id' => $club_id));
+        self::$db_querier->delete(ScmSetup::$scm_team_table, 'WHERE team_event_id = :event_id AND team_club_id = :club_id', ['event_id' => $event_id, 'club_id' => $club_id]);
 	}
 
 	/**
@@ -85,7 +85,7 @@ class ScmTeamService
         $teams = self::get_teams($id);
         foreach ($teams as $team)
         {
-            self::$db_querier->delete(ScmSetup::$scm_team_table, 'WHERE team_event_id = :id', array('id' => $id));
+            self::$db_querier->delete(ScmSetup::$scm_team_table, 'WHERE team_event_id = :id', ['id' => $id]);
         }
 	}
 
@@ -98,10 +98,11 @@ class ScmTeamService
         if($id !== 0)
         {
             $row = self::$db_querier->select_single_row_query('SELECT teams.*
-            FROM ' . ScmSetup::$scm_team_table . ' teams
-            WHERE teams.id_team = :id', array(
-                'id' => $id
-            ));
+                FROM ' . ScmSetup::$scm_team_table . ' teams
+                WHERE teams.id_team = :id', [
+                    'id' => $id
+                ]
+            );
 
             $team = new ScmTeam();
             $team->set_properties($row);
@@ -119,9 +120,9 @@ class ScmTeamService
             FROM ' . ScmSetup::$scm_team_table . ' teams
             LEFT JOIN ' . ScmSetup::$scm_club_table . ' clubs ON clubs.id_club = teams.team_club_id
             WHERE teams.team_event_id = :id
-            ORDER BY clubs.club_name', array(
+            ORDER BY clubs.club_name', [
                 'id' => $event_id
-            )
+            ]
         );
 
         $teams = [];
@@ -146,11 +147,11 @@ class ScmTeamService
                 FROM ' . ScmSetup::$scm_team_table . ' teams
                 WHERE teams.team_event_id = :id
                 AND teams.team_group = :group
-                AND teams.team_order = :order', array(
+                AND teams.team_order = :order', [
                     'id' => $event_id,
                     'group' => $group,
                     'order' => $order
-                )
+                ]
             );
             $team = new ScmTeam();
             $team->set_properties($row);

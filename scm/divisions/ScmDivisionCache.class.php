@@ -9,14 +9,14 @@
 
 class ScmDivisionCache implements CacheData
 {
-	private $divisions = array();
+	private $divisions = [];
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function synchronize()
 	{
-		$this->divisions = array();
+		$this->divisions = [];
 
 		$result = PersistenceContext::get_querier()->select('SELECT division.*
 			FROM ' . ScmSetup::$scm_division_table . ' division

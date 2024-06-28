@@ -22,13 +22,13 @@ class ScmParamsService
 	 */
 	public static function add_params(int $event_id)
 	{
-		$result = self::$db_querier->insert(ScmSetup::$scm_params_table, array('params_event_id' => $event_id));
+		$result = self::$db_querier->insert(ScmSetup::$scm_params_table, ['params_event_id' => $event_id]);
 		return $result->get_last_inserted_id();
 	}
 
     public static function delete_params(int $id)
 	{
-		self::$db_querier->delete(ScmSetup::$scm_params_table, 'WHERE params_event_id = :id', array('id' => $id));
+		self::$db_querier->delete(ScmSetup::$scm_params_table, 'WHERE params_event_id = :id', ['id' => $id]);
     }
 
 	/**
@@ -37,7 +37,7 @@ class ScmParamsService
 	 */
 	public static function update_params(ScmParams $params)
 	{
-		self::$db_querier->update(ScmSetup::$scm_params_table, $params->get_properties(), 'WHERE id_params = :id', array('id' => $params->get_id_params()));
+		self::$db_querier->update(ScmSetup::$scm_params_table, $params->get_properties(), 'WHERE id_params = :id', ['id' => $params->get_id_params()]);
 	}
 
 	/**
@@ -47,11 +47,12 @@ class ScmParamsService
 	public static function get_params(int $event_id)
 	{
 		$row = self::$db_querier->select_single_row_query('SELECT params.*, event.*
-		FROM ' . ScmSetup::$scm_params_table . ' params
-		LEFT JOIN ' . ScmSetup::$scm_event_table . ' event ON event.id = params.params_event_id
-		WHERE params.params_event_id = :id', array(
-			'id' => $event_id
-		));
+            FROM ' . ScmSetup::$scm_params_table . ' params
+            LEFT JOIN ' . ScmSetup::$scm_event_table . ' event ON event.id = params.params_event_id
+            WHERE params.params_event_id = :id', [
+                'id' => $event_id
+            ]
+        );
 
 		$params = new ScmParams();
 		$params->set_properties($row);

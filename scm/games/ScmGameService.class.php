@@ -28,13 +28,13 @@ class ScmGameService
 	/** Update a game entry */
 	public static function update_game(ScmGame $game, int $id)
 	{
-		self::$db_querier->update(ScmSetup::$scm_game_table, $game->get_properties(), 'WHERE id_game = :id', array('id' => $id));
+		self::$db_querier->update(ScmSetup::$scm_game_table, $game->get_properties(), 'WHERE id_game = :id', ['id' => $id]);
 	}
 
 	/** Update a game date */
 	public static function update_game_date(int $event_id, int $game_group, int $day_date)
 	{
-		self::$db_querier->update(ScmSetup::$scm_game_table, array('game_date' => $day_date), 'WHERE game_event_id = :event_id AND game_group = :game_group', array('event_id' => $event_id, 'game_group' => $game_group));
+		self::$db_querier->update(ScmSetup::$scm_game_table, ['game_date' => $day_date], 'WHERE game_event_id = :event_id AND game_group = :game_group', ['event_id' => $event_id, 'game_group' => $game_group]);
 	}
 
 	/** Delete all game entries of a event */
@@ -43,7 +43,7 @@ class ScmGameService
         $games = self::get_games($event_id);
         foreach ($games as $game)
         {
-            self::$db_querier->delete(ScmSetup::$scm_game_table, 'WHERE game_event_id = :event_id', array('event_id' => $event_id));
+            self::$db_querier->delete(ScmSetup::$scm_game_table, 'WHERE game_event_id = :event_id', ['event_id' => $event_id]);
         }
     }
 
@@ -53,9 +53,9 @@ class ScmGameService
 		$results = self::$db_querier->select('SELECT games.*
             FROM ' . ScmSetup::$scm_game_table . ' games
             WHERE games.game_event_id = :event_id
-            ORDER BY games.game_group ASC, games.game_order ASC', array(
+            ORDER BY games.game_group ASC, games.game_order ASC', [
                 'event_id' => $event_id
-            )
+            ]
         );
 
         $games = [];
@@ -72,9 +72,9 @@ class ScmGameService
 		$results = self::$db_querier->select('SELECT games.*
             FROM ' . ScmSetup::$scm_game_table . ' games
             WHERE games.game_event_id = :event_id
-            ORDER BY games.game_group ASC, games.game_order ASC', array(
+            ORDER BY games.game_group ASC, games.game_order ASC', [
                 'event_id' => $event_id
-            )
+            ]
         );
 
         $games = [];
@@ -94,10 +94,10 @@ class ScmGameService
             LEFT JOIN ' . ScmSetup::$scm_event_table . ' event ON event.id = games.game_event_id
             WHERE games.game_event_id = :event_id
             AND (games.game_home_id = :team_id OR games.game_away_id = :team_id)
-            ORDER BY games.game_group ASC, games.game_order ASC', array(
+            ORDER BY games.game_group ASC, games.game_order ASC', [
                 'event_id' => $event_id,
                 'team_id' => $team_id
-            )
+            ]
         );
 
         $games = [];
@@ -136,12 +136,12 @@ class ScmGameService
                 WHERE games.game_event_id = :event_id
                 AND games.game_type = :type
                 AND games.game_group = :group
-                AND games.game_order = :order', array(
+                AND games.game_order = :order', [
                     'event_id' => $event_id,
                     'type' => $type,
                     'group' => $group,
                     'order' => $order,
-                )
+                ]
             );
             $game = new ScmGame();
             $game->set_properties($row);

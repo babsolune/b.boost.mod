@@ -83,43 +83,24 @@ class ScmTeam
 
 	public function get_properties()
 	{
-		return array(
-			'id_team' => $this->get_id_team(),
+		return [
+			'id_team'       => $this->get_id_team(),
 			'team_event_id' => $this->get_team_event_id(),
-			'team_group' => $this->get_team_group(),
-			'team_order' => $this->get_team_order(),
-			'team_club_id' => $this->get_team_club_id(),
-			'team_penalty' => $this->get_team_penalty()
-		);
+			'team_group'    => $this->get_team_group(),
+			'team_order'    => $this->get_team_order(),
+			'team_club_id'  => $this->get_team_club_id(),
+			'team_penalty'  => $this->get_team_penalty()
+        ];
 	}
 
 	public function set_properties(array $properties)
 	{
-		$this->id_team = $properties['id_team'];
+		$this->id_team       = $properties['id_team'];
 		$this->team_event_id = $properties['team_event_id'];
-		$this->team_group = $properties['team_group'];
-		$this->team_order = $properties['team_order'];
-		$this->team_club_id = $properties['team_club_id'];
-		$this->team_penalty = $properties['team_penalty'];
-	}
-
-	public function init_default_properties()
-	{
-	}
-
-	public function get_template_vars()
-	{
-		return array_merge(
-			array(
-				// Conditions
-
-				// Item
-				'TEAM_ID' => $this->id_team,
-
-				// Links
-				// 'U_EDIT_PARAMETERS'           => ScmUrlBuilder::edit_params($this->team_event_id)->rel(),
-			)
-		);
+		$this->team_group    = $properties['team_group'];
+		$this->team_order    = $properties['team_order'];
+		$this->team_club_id  = $properties['team_club_id'];
+		$this->team_penalty  = $properties['team_penalty'];
 	}
 }
 ?>

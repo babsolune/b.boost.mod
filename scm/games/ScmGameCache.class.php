@@ -9,14 +9,14 @@
 
 class ScmGameCache implements CacheData
 {
-	private $games = array();
+	private $games = [];
 
 	/**
 	 * {@inheritdoc}
 	 */
 	public function synchronize()
 	{
-		$this->games = array();
+		$this->games = [];
 
 		$result = PersistenceContext::get_querier()->select('SELECT game.*
 			FROM ' . ScmSetup::$scm_game_table . ' game

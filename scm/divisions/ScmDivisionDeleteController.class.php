@@ -31,7 +31,7 @@ class ScmDivisionDeleteController extends DefaultModuleController
 		ScmEventService::clear_cache();
 		HooksService::execute_hook_action('delete', self::$module_id, $division->get_properties());
 
-		AppContext::get_response()->redirect(($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), ScmUrlBuilder::manage_divisions()->rel()) ? $request->get_url_referrer() : ScmUrlBuilder::manage_divisions()), StringVars::replace_vars($this->lang['scm.division.message.success.delete'], array('title' => $division->get_division_name())));
+		AppContext::get_response()->redirect(($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), ScmUrlBuilder::manage_divisions()->rel()) ? $request->get_url_referrer() : ScmUrlBuilder::manage_divisions()), StringVars::replace_vars($this->lang['scm.division.message.success.delete'], ['title' => $division->get_division_name()]));
 	}
 
 	private function get_division(HTTPRequestCustom $request)

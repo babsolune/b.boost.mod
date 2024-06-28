@@ -40,7 +40,7 @@ class ScmSeasonFormController extends DefaultModuleController
 		$fieldset->add_field(new FormFieldSimpleSelectChoice('year', $this->lang['scm.season.year'], $this->is_new_season ? date("Y") : $this->get_season()->get_first_year(), $this->get_years_list()));
 
         $fieldset->add_field(new FormFieldCheckbox('calendar_year', $this->lang['scm.calendar.year'], $this->get_season()->get_calendar_year(),
-            array('description' => $this->lang['scm.calendar.year.clue'])
+            ['description' => $this->lang['scm.calendar.year.clue']]
         ));
 
         $fieldset->add_field(new FormFieldHidden('referrer', $request->get_url_referrer()));
@@ -54,7 +54,7 @@ class ScmSeasonFormController extends DefaultModuleController
 
     private function get_years_list()
     {
-		$options = array();
+		$options = [];
 		$options[] = new FormFieldSelectChoiceOption('', '');
         for($i = 1950; $i <= 2140; $i++)
         {
