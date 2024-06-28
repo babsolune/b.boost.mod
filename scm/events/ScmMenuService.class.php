@@ -64,6 +64,7 @@ class ScmMenuService
             'U_ROUND_BRACKETS' => ScmUrlBuilder::display_brackets_rounds($event_id, $event->get_event_slug())->rel(),
             'U_DAYS_CALENDAR'  => ScmUrlBuilder::display_days_calendar($event_id, $event->get_event_slug(), ScmDayService::get_last_day($event_id))->rel(),
             'U_DAYS_RANKING'   => ScmUrlBuilder::display_days_ranking($event_id, $event->get_event_slug())->rel(),
+            'U_CHECK_DAYS'     => ScmUrlBuilder::days_checker($event_id, $event->get_event_slug())->rel(),
 
             'U_EDIT_TEAMS'         => ScmUrlBuilder::edit_teams($event_id, $event->get_event_slug())->rel(),
             'U_EDIT_PARAMS'        => ScmUrlBuilder::edit_params($event_id, $event->get_event_slug())->rel(),

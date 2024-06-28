@@ -152,6 +152,12 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/matchday/' . $day);
 	}
 
+    // Days calendar
+	public static function days_checker($event_id, $event_slug)
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/checker/');
+	}
+
     // Team calendar
 	public static function display_team_calendar($event_id, $event_slug, $team_id)
 	{

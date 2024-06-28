@@ -55,6 +55,12 @@ $lang['scm.day']  = 'Journée';
 $lang['scm.days.date']  = 'Date des journées';
 $lang['scm.prev.day']  = 'Journée précédente';
 $lang['scm.next.day']  = 'Journée suivante';
+$lang['scm.check.days']  = 'Vérifier la cohérence du calendrier';
+$lang['scm.duplicate.matches']  = 'Doublons';
+$lang['scm.matches'] = 'Matchs';
+$lang['scm.matchdays.missing']  = 'Journées manquantes';
+$lang['scm.matchdays.number']  = 'Nombre de matchs';
+$lang['scm.total']  = 'Total';
 
 // Rounds
 $lang['scm.groups.management']   = 'Gestion des groupes';

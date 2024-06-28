@@ -19,6 +19,12 @@
     content: none;
 }
 
+@media (min-width: 769px) {
+    .cell-inline .cell {
+        max-width: 305px;
+    }
+}
+
 #main-content th,
 #main-content td,
 #main-content tfoot td {
@@ -82,7 +88,7 @@ th.bgc-sub a {
     background-color: var(--bgc-sub);
 }
 
-/* --- Form --- ####################################################################" */
+/* --- Form --- ##################################################################### */
 .days-form .form-element  { flex-direction: column; }
 .days-form .form-element > label { width: 100%; }
 
@@ -201,16 +207,23 @@ th.bgc-sub a {
 
 .round-fields .game-name { width: 90px; }
 
-.playground input,
+.game-playground input,
 .home-score input,
 .home-pen input,
 .away-score input,
 .away-pen input { text-align: center; }
-/* --- /Form --- ####################################################################" */
 
-#module-scm td {
-    padding: 0.309em;
+/* groups */
+.form-element.groups-select .form-field,
+.form-element.groups-select select,
+#FootballGroupsFormController_captcha_fieldset,
+#FootballGroupsFormController_fbuttons {
+    width: 100%;
 }
+.form-element.groups-select {
+    padding: 0;
+}
+/* --- /Form --- ##################################################################### */
 
 /* front */
 /* button to select next match in event home page */

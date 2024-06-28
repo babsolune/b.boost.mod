@@ -53,7 +53,7 @@ class ScmBracketService
                     'game_order' => $j,
                     'game_home_id' => 0,
                     'game_away_id' => 0,
-                    'game_date' => $now->get_timestamp()
+                    'game_date' => ScmParamsService::get_params($event_id)->get_fill_games() ? ScmEventService::get_event($event_id)->get_start_date()->get_timestamp() : $now->get_timestamp()
                 ));
             }
         }
