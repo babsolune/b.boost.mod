@@ -33,6 +33,7 @@ class ScmClubController extends DefaultModuleController
 		$this->view->put_all($club->get_template_vars());
 	}
 
+    /** Display colors of the club */
 	private function build_colors_view()
 	{
 		$colors = $this->get_club()->get_club_colors();
@@ -51,6 +52,7 @@ class ScmClubController extends DefaultModuleController
 		}
 	}
 
+    /** Display the event list of the club */
 	private function build_event_view()
 	{
 		$club = $this->get_club();

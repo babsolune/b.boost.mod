@@ -69,16 +69,22 @@ class ScmClubsManagerController extends DefaultModuleController
 				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_club($club->get_id_club(), $club->get_club_slug()), $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name())),
 				new HTMLTableRowCell(new SpanHTMLElement($club->get_club_name())),
 				new HTMLTableRowCell(new SpanHTMLElement($colors)),
-				new HTMLTableRowCell(new ImgHTMLElement(
-					Url::to_rel('/images/stats/countries/' . $club->get_club_flag() . '.png'),
-					['alt' => !empty($club->get_club_flag()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name()]) : ''], 
-					'small-logo'
-				)),
-				new HTMLTableRowCell(new ImgHTMLElement(
-					Url::to_rel($club->get_club_logo()),
-					['alt' => !empty($club->get_club_logo()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name()]) : ''], 
-					'small-logo'
-				)),
+				new HTMLTableRowCell(
+                    $club->get_club_flag() ?
+                    new ImgHTMLElement(
+                        Url::to_rel('images/stats/countries/' . $club->get_club_flag() . '.png'),
+                        ['alt' => !empty($club->get_club_flag()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name()]) : ''], 
+                        'logo-small'
+                    ) : ''
+                ),
+				new HTMLTableRowCell(
+                    $club->get_club_logo() ?
+                    new ImgHTMLElement(
+                        Url::to_rel($club->get_club_logo()),
+                        ['alt' => !empty($club->get_club_logo()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name()]) : ''], 
+                        'logo-small'
+                    ) : ''
+                ),
 				new HTMLTableRowCell($edit_link->display() . $delete_link->display(), 'controls')
             ];
 
