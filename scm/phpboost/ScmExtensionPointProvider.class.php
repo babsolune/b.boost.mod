@@ -21,5 +21,10 @@ class ScmExtensionPointProvider extends ItemsModuleExtensionPointProvider
             new ScmMiniPrevGame()
         ]);
     }
+
+    public function user()
+    {
+        return false;
+    }
 }
 ?>
