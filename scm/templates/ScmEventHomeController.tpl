@@ -33,6 +33,6 @@
 	</div>
 	<footer>
 		<meta itemprop="url" content="{U_EVENT}">
-		<meta itemprop="description" content="${escape(SUMMARY)}" />
+		<meta itemprop="description" content="" />
 	</footer>
 </section>

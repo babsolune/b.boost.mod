@@ -1,4 +1,4 @@
-<section id="module-scm">
+<section id="module-scm" class="single-item">
     <header class="section-header row-header">
         # IF C_HAS_LOGO #<img class="club-logo" src="{U_LOGO}" alt="{FULL_NAME}"># ENDIF #
         <div class="club-name">
@@ -70,4 +70,5 @@
             </article>
         </div>
     </div>
+    <footer></footer>
 </section>

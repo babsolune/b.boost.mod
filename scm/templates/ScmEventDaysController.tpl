@@ -1,4 +1,3 @@
-
 <div class="cell-flex cell-columns-2">
     # IF C_EVENT_STARTING #
         <div></div>

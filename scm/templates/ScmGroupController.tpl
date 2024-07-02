@@ -1,4 +1,4 @@
-<section id="module-scm" class="single-item">
+<section id="module-scm" class="several-items">
 	# INCLUDE MENU #
     <h2># IF C_HAT_DAYS #{@scm.day} {DAY}# ELSE #{@scm.group} {GROUP}# ENDIF #</h2>
     # IF C_HAS_GAMES #
@@ -107,6 +107,7 @@
     # ELSE #
         <div class="message-helper bgc notice">{@scm.message.no.games}</div>
     # ENDIF #
+    <footer></footer>
 </section>
 <script src="{PATH_TO_ROOT}/scm/templates/js/scm.width# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
 <script src="{PATH_TO_ROOT}/scm/templates/js/scm.highlight# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>

@@ -3,13 +3,13 @@
         <header class="article-header"><h3>{@scm.groups}</h3></header>
         <div class="content">
             <div class="responsive-table">
-                <table class="table width-auto m-a">
+                <table class="bordered-table width-auto m-a">
                     <thead>
                         <tr>
                             # START team_groups #
                                 <th class="bgc-sub"><a href="{team_groups.U_GROUP}" class="offload">{@scm.group} {team_groups.GROUP}</a></th>
                             # END team_groups #
-                            </tr>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr>

@@ -50,6 +50,12 @@ th.bgc-sub a {
     background-color: var(--bgc-sub);
 }
 
+.logo-smaller { max-width: 16px; max-height: 16px; }
+.logo-small   { max-width: 32px; max-height: 32px; }
+.logo-medium  { max-width: 64px; max-height: 64px; }
+.logo-big 	  { max-width: 96px; max-height: 96px; }
+.logo-bigger  { max-width: 128px; max-height: 128px; }
+
 /* event sub-menu */
 .event-menu {
     margin-top: 0.618em;
