@@ -80,9 +80,10 @@ class AdminScmConfigController extends DefaultAdminModuleController
 
         $fieldset_authorizations->add_field(new FormFieldFree('hide_authorizations', '', '
 			<script>
-					jQuery(document).ready(function() {
-						jQuery("#' . self::class . '_authorizations > div").eq(2).hide(); // Contributions
-					});
+                document.addEventListener("DOMContentLoaded", () => {
+                    const div = document.querySelector("#' . self::class . '_authorizations > div:nth-child(3)"); // Contributions
+                    div.style.display = "none";
+                });
 			</script>
         '));
 
@@ -90,10 +91,10 @@ class AdminScmConfigController extends DefaultAdminModuleController
 			array_merge(
 				RootCategory::get_authorizations_settings(), 
                 [
-					new MemberDisabledActionAuthorization($this->lang['scm.manage.clubs.auth'],  ScmAuthorizationsService::CLUBS_AUTH),
-					new MemberDisabledActionAuthorization($this->lang['scm.manage.divisions.auth'],  ScmAuthorizationsService::DIVISIONS_AUTH),
-					new MemberDisabledActionAuthorization($this->lang['scm.manage.seasons.auth'],  ScmAuthorizationsService::SEASONS_AUTH),
-					new MemberDisabledActionAuthorization($this->lang['scm.manage.events.auth'],  ScmAuthorizationsService::EVENTITIONS_AUTH)
+					new MemberDisabledActionAuthorization($this->lang['scm.manage.clubs.auth'], ScmAuthorizationsService::CLUBS_AUTH),
+					new MemberDisabledActionAuthorization($this->lang['scm.manage.divisions.auth'], ScmAuthorizationsService::DIVISIONS_AUTH),
+					new MemberDisabledActionAuthorization($this->lang['scm.manage.seasons.auth'], ScmAuthorizationsService::SEASONS_AUTH),
+					new MemberDisabledActionAuthorization($this->lang['scm.manage.events.auth'], ScmAuthorizationsService::EVENTITIONS_AUTH)
 				]
 			)
 		);

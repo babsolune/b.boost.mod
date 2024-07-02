@@ -56,8 +56,9 @@ class ScmCategoriesFormController extends DefaultCategoriesFormController
 		));
         $fieldset->add_field(new FormFieldFree('hide_thumbnail', '', '
             <script>
-                jQuery(document).ready(function() {
-                    jQuery("#' . self::class . '_thumbnail_field > div").hide();
+                document.addEventListener("DOMContentLoaded", () => {
+                    const thumbnail = document.getElementById("' . self::class . '_thumbnail_field");
+                    thumbnail.style.display = "none";
                 });
             </script>
         '));
