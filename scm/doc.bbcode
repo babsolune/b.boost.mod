@@ -1,18 +1,91 @@
-[title=1]Création d'une compétition[/title]
-[list=ordered]
-    [*]Créer des clubs
-    [*]Créer une saison (dates de la compétition)
-    [*]Créer une division (nom de la compétition)
-    [*]Créer une compétition
+[title=1]Présentation générale[/title]
+Le module Sport Competition Manager permet de gérer des compétitions sportives entre clubs. 
+3 modes de compétitions sont présents :
+[b]Championnat[/b]: tous les clubs se rencontrent au sein de journées
+[b]Coupe[/b]: rencontres à élimination directe
+[b]Tournoi[/b]: tous les clubs d'un même groupe se rencontrent, puis les qualifiés de chaque groupe s'affrontent en rencontres à élimination directe
+
+[title=1]Créer une compétition[/title]
+Pour créer une compétition, vous devez d'abord vous assurer qu'au moins une saison et une division soient créées.
+
+[title=2]Les Catégories[/title]
+Bien que simplifiées et fonctionnant comme dans tout module PHPBoost, elle sont destinées à classer les compétitions selon les catégories d'age des équipes d'un club.
+ex: U13, U15, Séniors A, Sénior B, Féminine à 8, International, etc
+
+[title=2]Les Divisions[/title]
+La division défini le nom, le mode de compétition et le type de matchs de la compétition.
+[title=3]Créer une division[/title]
+[container class="page-path"]
+[list]
+	[*][fa]cog[/fa]
+	[*]Gestion des divisions
+	[*]Ajouter une division
 [/list]
-[title=1]Créer un club[/title]
+[/container]
+[b]Nom[/b]: Nom de la division
+[b]Type de compétition[/b]: Championnat | Coupe | Tournoi
+[b]Type de matchs[/b]: Matchs simples | Matchs Aller/Retour
+[title=3]Gestion des divisions[/title]
+[container class="page-path"]
+[list]
+	[*][fa]cog[/fa]
+	[*]Gestion des divisions
+[/list]
+[/container]
+la page de gestion des divisions permet d'en afficher la liste où on pourra les modifier ou les supprimer.
+[style=warning]Attention! la suppression d'une division entrainera la suppression de toutes les competitions qui y sont rattachées.[/style]
+
+[title=2]Les Saisons[/title]
+La saison défini l'année de la compétition. Elle peut être double (1950-1951) ou calendaire (1971). 
+Elle suivra la competition dans toutes ses urls, et est utilisée pour la limite d'affichage des compétitions sur la page d'accueil du module à l'année en cours
+[title=3]Créer une saison[/title]
+[container class="page-path"]
+[list]
+	[*][fa]cog[/fa]
+	[*]Gestion des saisons
+	[*]Ajouter une saison
+[/list]
+[/container]
+[b]Année[/b]: première année de la saison.
+[b]Année calendaire[/b]: si coché, l'année sera unique (2024), sinon, elle sera double => Année - Année +1 (2024-2025)
+[title=3]Gestion des saisons[/title]
+[container class="page-path"]
+[list]
+	[*][fa]cog[/fa]
+	[*]Gestion des saisons
+[/list]
+[/container]
+la page de gestion des saisons permet d'en afficher la liste où on pourra les modifier ou les supprimer.
+[style=warning]Attention! la suppression d'une saison entrainera la suppression de toutes les competitions qui y sont rattachées.[/style]
+
+[title=2]Les Compétitions[/title]
+[title=3]Créer une competition[/title]
+[container class="page-path"]
+[list]
+	[*][fa]cog[/fa]
+	[*]Gestion des compétitions
+	[*]Ajouter une compétition
+[/list]
+[/container]
+[b]Catégorie[/b]: emplacement de la compétition (ex: U13, U15, Séniors, International, etc)
+[b]Division[/b]: nom de la compétition
+[b]Saison[/b]: saison de la compétition
+[b]Date de début[/b]
+[b]Date de fin[/b]
+[b]Sources[/b]: liens vers des sites internet en lien avec la compétition
+[b]Publication[/b] gestion complète de la publication (publié, brouillon, publication différée)
+
+// Clubs
+[title=1]Les clubs[/title]
 La notion de [code=text,0,1]club[/code] est à différencier de la notion d'[code=text,0,1]équipe[/code].
-Un club est défini une seule fois et servira de référent équipe dans une compétition.
+Un club est défini une seule fois et servira de référent "équipe" dans une compétition.
 Ainsi il n'est pas nécessaire de créer plusieurs fois le même club pour qu'il participe à plusieurs compétitions.
 
-[title=4]Formulaire de création[/title]
+Les clubs sont donc indépendants des compétitions, mais, bien sur, nécessaires à la gestion d'une compétitions.
+
+[title=2]Créer un club[/title]
 [b]Nom d'affichage[/b] : Club01
-Nom qui sera affiché dans les différentes pages d'une compétition.
+Nom qui sera affiché dans les différents emplacements (matchs, classements) d'une compétition.
 [b]Nom Complet[/b] : FC Club01
 Nom complet du club. Il est utilisé pour le titre de la page du club. S'il n'est pas renseigné, il sera remplacé par le nom d'affichage.
 [b]Email[/b] :
@@ -25,11 +98,13 @@ Plusieurs adresses sont possibles (Siege, Stade 1, Stade 2, ...).
 [b]Afficher la/les maps[/b]
 Si GoogleMaps est installé et configuré, on peut décider d'afficher ou non la map regroupant toutes les adresses sur la page du club.
 [b]Drapeau[/b]
-Drapeau du pays du club, affiché dans les différentes pages d'une compétition [b]si aucun[/b] logo n'est déclaré.
+Drapeau du pays du club, affiché dans les différents emplacements d'une compétition [b]si aucun[/b] logo n'est déclaré.
 [b]Logo du club[/b]
-Logo du club, affiché dans les différentes pages d'une compétition.
+Logo du club, affiché dans les différents emplacements d'une compétition.
 
-[b]Exemple de page d'un club[/b] : 
+[b]Les pages club[/b] : 
+[lightbox=Lien][img style="width: 150px;"]Lien[/img][/lightbox]
+[lightbox=Lien][img style="width: 150px;"]Lien[/img][/lightbox]
 [lightbox=Lien][img style="width: 150px;"]Lien[/img][/lightbox]
 
 
