@@ -33,13 +33,13 @@ class ScmBracketController extends DefaultModuleController
         }
 
         $this->view->put_all([
-            'MENU' => ScmMenuService::build_event_menu($this->event_id()),
-            'C_HAT_RANKING' => ScmParamsService::get_params($this->event_id())->get_hat_ranking(),
-            'C_RETURN_GAMES' => $this->return_games(),
-            'C_ONE_DAY' => ScmGameService::one_day_event($this->event_id()),
+            'MENU'             => ScmMenuService::build_event_menu($this->event_id()),
+            'C_HAT_RANKING'    => ScmParamsService::get_params($this->event_id())->get_hat_ranking(),
+            'C_RETURN_GAMES'   => $this->return_games(),
+            'C_ONE_DAY'        => ScmGameService::one_day_event($this->event_id()),
             'C_LOOSER_BRACKET' => $this->get_params()->get_looser_bracket(),
-            'JS_DOC' => ScmBracketService::get_bracket_js_games($this->event_id(), $this->teams_number, $this->teams_per_group),
-            'C_HAS_GAMES' => ScmGameService::has_games($this->event_id())
+            'JS_DOC'           => ScmBracketService::get_bracket_js_games($this->event_id(), $this->teams_number, $this->teams_per_group),
+            'C_HAS_GAMES'      => ScmGameService::has_games($this->event_id())
         ]);
 
 		return $this->generate_response();

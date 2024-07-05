@@ -121,6 +121,4 @@
         # ENDIF #
     </div>
 # ENDIF #
-
-
 <script src="{PATH_TO_ROOT}/scm/templates/js/scm.highlight# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>

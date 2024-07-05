@@ -17,6 +17,7 @@ class ScmParams
 	private $hat_days;
 	private $fill_games;
 	private $looser_bracket;
+	private $brackets_number;
 	private $display_playgrounds;
 	private $victory_points;
 	private $draw_points;
@@ -115,6 +116,16 @@ class ScmParams
 	public function set_looser_bracket($looser_bracket)
 	{
 		$this->looser_bracket = $looser_bracket;
+	}
+
+	public function get_brackets_number()
+	{
+		return $this->brackets_number;
+	}
+
+	public function set_brackets_number($brackets_number)
+	{
+		$this->brackets_number = $brackets_number;
 	}
 
 	public function get_display_playgrounds()
@@ -303,6 +314,7 @@ class ScmParams
 			'hat_days'            => $this->get_hat_days(),
 			'fill_games'          => $this->get_fill_games(),
 			'looser_bracket'      => $this->get_looser_bracket(),
+			'brackets_number'     => $this->get_brackets_number(),
 			'display_playgrounds' => $this->get_display_playgrounds(),
 			'victory_points'      => $this->get_victory_points(),
 			'draw_points'         => $this->get_draw_points(),
@@ -333,6 +345,7 @@ class ScmParams
 		$this->hat_days            = $properties['hat_days'];
 		$this->fill_games          = $properties['fill_games'];
 		$this->looser_bracket      = $properties['looser_bracket'];
+		$this->brackets_number     = $properties['brackets_number'];
 		$this->display_playgrounds = $properties['display_playgrounds'];
 		$this->victory_points      = $properties['victory_points'];
 		$this->draw_points         = $properties['draw_points'];

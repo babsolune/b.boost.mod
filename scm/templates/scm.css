@@ -14,6 +14,10 @@
     width: auto;
 }
 
+.nowrap {
+    white-space: nowrap;
+}
+
 .cell-flex::before,
 .cell-flex::after {
     content: none;
@@ -205,13 +209,13 @@ th.bgc-sub a {
     display: none;
 }
 
-.grouped-fields .game-name  { width: 50px; }
-.grouped-fields .game-date  { width: 270px; }
+.grouped-fields .game-name        { width: 50px; }
+.grouped-fields .game-date        { width: 270px; }
 .grouped-fields .game-playground  { width: 80px; }
-.grouped-fields .game-team  { min-width: 120px; }
-.grouped-fields .game-score { width: 50px; text-align: center; }
+.grouped-fields .game-team        { min-width: 120px; }
+.grouped-fields .game-score       { width: 50px; text-align: center; }
 
-.round-fields .game-name { width: 90px; }
+.round-fields .game-name { width: 105px; }
 
 .game-playground input,
 .home-score input,

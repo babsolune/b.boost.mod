@@ -72,7 +72,7 @@ class ScmClubsManagerController extends DefaultModuleController
 				new HTMLTableRowCell(
                     $club->get_club_flag() ?
                     new ImgHTMLElement(
-                        Url::to_rel('images/stats/countries/' . $club->get_club_flag() . '.png'),
+                        TPL_PATH_TO_ROOT . '/images/stats/countries/' . $club->get_club_flag() . '.png',
                         ['alt' => !empty($club->get_club_flag()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name()]) : ''], 
                         'logo-small'
                     ) : ''

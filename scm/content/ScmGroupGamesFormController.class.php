@@ -33,7 +33,6 @@ class ScmGroupGamesFormController extends DefaultModuleController
 		$this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
             'CONTENT' => $this->form->display(),
-            'JS_DOC' => ScmBracketService::get_bracket_js_games($this->event_id(), $this->teams_number, $this->teams_per_group),
         ]);
 
 		return $this->generate_response($this->view);
@@ -41,10 +40,10 @@ class ScmGroupGamesFormController extends DefaultModuleController
 
     private function init()
     {
-        $this->hat_ranking = $this->get_params()->get_hat_ranking();
-        $this->teams_number = ScmTeamService::get_teams_number($this->event_id());
+        $this->hat_ranking     = $this->get_params()->get_hat_ranking();
+        $this->teams_number    = ScmTeamService::get_teams_number($this->event_id());
         $this->teams_per_group = $this->get_params()->get_teams_per_group();
-        $this->return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $this->return_games    = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
     }
 
 	private function build_form()
@@ -70,7 +69,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
                 $groups_fieldset->set_css_class('grouped-fields round-fields');
                 $form->add_fieldset($groups_fieldset);
                 $game_number = '<strong>G' . $i . $j . '</strong>';
-                $game_date = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_date() : new Date();
+                $game_date = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_date() : $this->get_event()->get_start_date();
                 $game_playground = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_playground() : '';
                 $game_home_id = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_home_id() : 0;
                 $game_home_score = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_home_score() : '';
@@ -116,11 +115,13 @@ class ScmGroupGamesFormController extends DefaultModuleController
 
             for ($j = 1; $j <= $games_number; $j++)
             {
+                $c_one_day = ScmGameService::one_day_event($this->event_id());
+                $round_title = $c_one_day ? $this->lang['scm.round'] : $this->lang['scm.day'];
                 $groups_fieldset = new FormFieldsetHTML('round_' . $i, '');
                 $groups_fieldset->set_css_class('grouped-fields round-fields');
                 $form->add_fieldset($groups_fieldset);
-                $game_number = '<strong>G' . $i . $j . '</strong>';
-                $game_date = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_date() : new Date();
+                $game_number = '<strong>G' . $i . $j . '</strong>'. ' - ' . $round_title . ' ' . $this->get_game('G', $i, $j)->get_game_round();
+                $game_date = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_date() : $this->get_event()->get_start_date();
                 $game_playground = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_playground() : '';
                 $game_home_id = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_home_id() : 0;
                 $game_home_score = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_home_score() : '';
@@ -325,7 +326,6 @@ class ScmGroupGamesFormController extends DefaultModuleController
             # INCLUDE MESSAGE_HELPER #
             # INCLUDE MENU #
             # INCLUDE CONTENT #
-            # INCLUDE JS_DOC #
         ';
 	}
 

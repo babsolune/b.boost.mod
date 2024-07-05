@@ -71,7 +71,7 @@ class ScmClubCache implements CacheData
 	{
 		if ($this->club_exists($id))
 		{
-			return $this->get_club($id)['club_logo'] ? $this->get_club($id)['club_logo'] : 'images/stats/countries/' . $this->get_club($id)['club_flag'] . '.png';
+			return $this->get_club($id)['club_logo'] ? TPL_PATH_TO_ROOT . $this->get_club($id)['club_logo'] : ($this->get_club($id)['club_flag'] ? TPL_PATH_TO_ROOT . '/images/stats/countries/' . $this->get_club($id)['club_flag'] . '.png' : '#');
 		}
 		return null;
 	}

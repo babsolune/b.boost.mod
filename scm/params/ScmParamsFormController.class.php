@@ -28,6 +28,10 @@ class ScmParamsFormController extends DefaultModuleController
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
+            if($this->is_tournament)
+			$this->form->get_field_by_id('hat_days')->set_hidden(!$this->get_params()->get_hat_ranking());
+            if($this->is_tournament || $this->is_cup)
+			$this->form->get_field_by_id('brackets_number')->set_hidden(!$this->get_params()->get_looser_bracket());
             $event_name = $this->get_event()->get_event_name();
             $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['scm.warning.params.update'], ['event_name' => $event_name]), MessageHelper::SUCCESS, 4));
         }
@@ -82,7 +86,7 @@ class ScmParamsFormController extends DefaultModuleController
             $tournament_fieldset->add_field(new FormFieldNumberEditor('hat_days', $this->lang['scm.hat.days'], $this->get_params()->get_hat_days(),
                 [
                     'description' => $this->lang['scm.hat.days.clue'],
-                    'min' => 0, 'required' => true,
+                    'min' => 1, 'required' => true,
                     'hidden' => !$this->get_params()->get_hat_ranking()
                 ]
             ));
@@ -92,15 +96,24 @@ class ScmParamsFormController extends DefaultModuleController
                     'hidden' => $this->get_params()->get_hat_ranking()
                 ]
             ));
-            $tournament_fieldset->add_field(new FormFieldCheckbox('looser_bracket', $this->lang['scm.looser.bracket'], $this->get_params()->get_looser_bracket(),
+            $tournament_fieldset->add_field(new FormFieldCheckbox('looser_bracket', $this->lang['scm.looser.brackets'], $this->get_params()->get_looser_bracket(),
                 [
+                    'description' => '<span aria-label="' . $this->lang['scm.looser.brackets.clue'] . '"><i class="far fa-circle-question"></i></span>',
                     'events' => ['click' => '
                         if (HTMLForms.getField("looser_bracket").getValue()) {
                             HTMLForms.getField("third_place").disable();
+                            HTMLForms.getField("brackets_number").enable();
                         } else {
                             HTMLForms.getField("third_place").enable();
+                            HTMLForms.getField("brackets_number").disable();
                         }
                     ']
+                ]
+            ));
+            $tournament_fieldset->add_field(new FormFieldNumberEditor('brackets_number', $this->lang['scm.brackets.number'], $this->get_params()->get_brackets_number(),
+                [
+                    'min' => 1, 'required' => true,
+                    'hidden' => $this->is_tournament && !$this->get_params()->get_looser_bracket()
                 ]
             ));
             $tournament_fieldset->add_field(new FormFieldCheckbox('display_playgrounds', $this->lang['scm.display.playgrounds'], $this->get_params()->get_display_playgrounds()));
@@ -205,12 +218,19 @@ class ScmParamsFormController extends DefaultModuleController
             $params->set_hat_days($this->form->get_value('hat_days'));
             $params->set_fill_games($this->form->get_value('fill_games'));
             $params->set_looser_bracket($this->form->get_value('looser_bracket'));
+            if ($this->form->get_value('looser_bracket'))
+                $params->set_brackets_number($this->form->get_value('brackets_number'));
+            else 
+                $params->set_brackets_number(0);
             $params->set_display_playgrounds($this->form->get_value('display_playgrounds'));
         }
 
         if ($this->is_cup || $this->is_tournament)
         {
-            $params->set_third_place($this->form->get_value('third_place'));
+            if ($this->form->get_value('looser_bracket'))
+                $params->set_third_place(0);
+            else
+                $params->set_third_place($this->form->get_value('third_place'));
             $params->set_rounds_number($this->form->get_value('rounds_number'));
             $params->set_draw_games($this->form->get_value('draw_games'));
             $params->set_has_overtime($this->form->get_value('has_overtime'));

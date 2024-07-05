@@ -30,16 +30,16 @@ class ScmGroupController extends DefaultModuleController
             'C_ONE_DAY' => ScmGameService::one_day_event($this->event_id()),
             'C_DISPLAY_PLAYGROUNDS' => $this->get_params()->get_display_playgrounds()
         ]);
-        $round = AppContext::get_request()->get_getint('round', 0);
+        $group = AppContext::get_request()->get_getint('round', 0);
         if($this->get_params()->get_hat_days())
         {
             $this->view->put_all([
                 'C_HAT_DAYS' => true,
-                'DAY' => $round
+                'DAY' => $group
             ]);
             $days = ScmGroupService::games_list_from_group($this->event_id(), 'G');
 
-            $days_games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $round);
+            $days_games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $group);
             $dates = [];
             foreach($days_games as $game)
             {
@@ -189,31 +189,36 @@ class ScmGroupController extends DefaultModuleController
         }
         else
         {
-            $round_games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $round);
-            $this->view->put('GROUP', ScmGroupService::ntl($round));
+            $group_games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $group);
+            $this->view->put('GROUP', ScmGroupService::ntl($group));
 
-            $dates = [];
-            foreach($round_games as $game)
+            $matchdays = [];
+            foreach($group_games as $game)
             {
-                $dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
+                $matchdays[$game['game_round']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
             }
 
-            foreach (array_unique($dates) as $date)
+            foreach ($matchdays as $matchday => $dates)
             {
-                $this->view->assign_block_vars('dates', [
-                    'DATE' => $date
+                $this->view->assign_block_vars('matchdays', [
+                    'MATCHDAY' => $matchday
                 ]);
-                foreach($round_games as $game)
+                foreach ($dates as $date => $games)
                 {
-                    $item = new ScmGame();
-                    $item->set_properties($game);
-                    if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
-                        $this->view->assign_block_vars('dates.games', $item->get_template_vars());
+                    $this->view->assign_block_vars('matchdays.dates', [
+                        'DATE' => $date
+                    ]);
+                    foreach($games as $game)
+                    {
+                        $item = new ScmGame();
+                        $item->set_properties($game);
+                        $this->view->assign_block_vars('matchdays.dates.games', $item->get_template_vars());
+                    }
                 }
             }
 
             $ranks = [];
-            foreach ($round_games as $game)
+            foreach ($group_games as $game)
             {
                 $item = new ScmGame();
                 $item->set_properties($game);

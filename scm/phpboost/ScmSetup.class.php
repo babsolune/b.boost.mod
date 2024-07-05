@@ -184,6 +184,7 @@ class ScmSetup extends DefaultModuleSetup
 			'game_playground' => ['type' => 'string', 'length' => 65],
 			'game_type'       => ['type' => 'string', 'length' => 11],
 			'game_group'      => ['type' => 'integer', 'length' => 11],
+			'game_round'      => ['type' => 'integer', 'length' => 11],
 			'game_order'      => ['type' => 'integer', 'length' => 11],
 			'game_home_id'    => ['type' => 'integer', 'length' => 11],
 			'game_home_score' => ['type' => 'string', 'length' => 2],
@@ -214,6 +215,7 @@ class ScmSetup extends DefaultModuleSetup
 			'hat_days'            => ['type' => 'integer', 'length' => 11],
 			'fill_games'          => ['type' => 'boolean', 'default' => 0],
 			'looser_bracket'      => ['type' => 'boolean', 'default' => 0],
+			'brackets_number'     => ['type' => 'integer', 'length' => 11],
 			'display_playgrounds' => ['type' => 'boolean', 'default' => 0],
 
 			'rounds_number'     => ['type' => 'integer', 'length' => 11, 'not'],

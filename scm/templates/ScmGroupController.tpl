@@ -23,33 +23,38 @@
                         </tr>
                     </thead>
                     <tbody>
-                    # START dates #
-                        # IF NOT C_ONE_DAY #
-                            <tr>
-                                <td colspan="# IF C_DISPLAY_PLAYGROUNDS #6# ELSE #5# ENDIF #">{dates.DATE}</td>
-                            </tr>
-                        # ENDIF #
-                        # START dates.games #
-                            <tr# IF dates.games.C_HAS_SCORE # class="has-score-color"# ENDIF #>
-                                <td>{dates.games.GAME_DATE_HOUR_MINUTE}</td>
-                                <td class="align-right# IF dates.games.C_HOME_FAV # text-strong# ENDIF #">
-                                    <div class="flex-team flex-right">
-                                        <span>{dates.games.HOME_TEAM}</span>
-                                        <img src="{PATH_TO_ROOT}/{dates.games.HOME_LOGO}" alt="{dates.games.HOME_TEAM}">
-                                    </div>
-                                </td>
-                                <td>{dates.games.HOME_SCORE}</td>
-                                <td>{dates.games.AWAY_SCORE}</td>
-                                <td class="align-left# IF dates.games.C_AWAY_FAV # text-strong# ENDIF #">
-                                    <div class="flex-team flex-left">
-                                        <img src="{PATH_TO_ROOT}/{dates.games.AWAY_LOGO}" alt="{dates.games.AWAY_TEAM}">
-                                        <span>{dates.games.AWAY_TEAM}</span>
-                                    </div>
-                                </td>
-                                # IF C_DISPLAY_PLAYGROUNDS #<td>{dates.games.PLAYGROUND}</td># ENDIF #
-                            </tr>
-                        # END dates.games #
-                    # END dates #
+                    # START matchdays #
+                        <tr>
+                            <td colspan="# IF C_DISPLAY_PLAYGROUNDS #6# ELSE #5# ENDIF #"># IF C_ONE_DAY #{@scm.round}# ELSE #{@scm.day}# ENDIF # {matchdays.MATCHDAY}</td>
+                        </tr>
+                        # START matchdays.dates #
+                            # IF NOT C_ONE_DAY #
+                                <tr>
+                                    <td colspan="# IF C_DISPLAY_PLAYGROUNDS #6# ELSE #5# ENDIF #">{matchdays.dates.DATE}</td>
+                                </tr>
+                            # ENDIF #
+                            # START matchdays.dates.games #
+                                <tr# IF matchdays.dates.games.C_HAS_SCORE # class="has-score-color"# ENDIF #>
+                                    <td>{matchdays.dates.games.GAME_DATE_HOUR_MINUTE}</td>
+                                    <td class="align-right# IF matchdays.dates.games.C_HOME_FAV # text-strong# ENDIF #">
+                                        <div class="flex-team flex-right">
+                                            <span>{matchdays.dates.games.HOME_TEAM}</span>
+                                            <img src="{matchdays.dates.games.HOME_LOGO}" alt="{matchdays.dates.games.HOME_TEAM}">
+                                        </div>
+                                    </td>
+                                    <td>{matchdays.dates.games.HOME_SCORE}</td>
+                                    <td>{matchdays.dates.games.AWAY_SCORE}</td>
+                                    <td class="align-left# IF matchdays.dates.games.C_AWAY_FAV # text-strong# ENDIF #">
+                                        <div class="flex-team flex-left">
+                                            <img src="{matchdays.dates.games.AWAY_LOGO}" alt="{matchdays.dates.games.AWAY_TEAM}">
+                                            <span>{matchdays.dates.games.AWAY_TEAM}</span>
+                                        </div>
+                                    </td>
+                                    # IF C_DISPLAY_PLAYGROUNDS #<td>{matchdays.dates.games.PLAYGROUND}</td># ENDIF #
+                                </tr>
+                            # END matchdays.dates.games #
+                        # END matchdays.dates #
+                    # END matchdays #
                     </tbody>
                 </table>
             </div>
@@ -86,7 +91,7 @@
                                 <td>{ranks.RANK}</td>
                                 <td class="">
                                     <div class="flex-team flex-left">
-                                        <img src="{PATH_TO_ROOT}/{ranks.TEAM_LOGO}" alt="{ranks.TEAM_NAME}">
+                                        <img src="{ranks.TEAM_LOGO}" alt="{ranks.TEAM_NAME}">
                                         <span>{ranks.TEAM_NAME}</span>
                                     </div>
                                 </td>

@@ -33,14 +33,14 @@
                                     <td class="# IF dates.games.C_HOME_FAV #text-strong# ENDIF #">
                                         <div class="flex-team flex-right">
                                             <span><a href="{dates.games.U_HOME_CALENDAR}" class="offload">{dates.games.HOME_TEAM}</a></span>
-                                            <img src="{PATH_TO_ROOT}/{dates.games.HOME_LOGO}" alt="{dates.games.HOME_TEAM}">
+                                            <img src="{dates.games.HOME_LOGO}" alt="{dates.games.HOME_TEAM}">
                                         </div>
                                     </td>
                                     <td>{dates.games.HOME_SCORE}</td>
                                     <td>{dates.games.AWAY_SCORE}</td>
                                     <td class="# IF dates.games.C_AWAY_FAV #text-strong# ENDIF #">
                                         <div class="flex-team flex-left">
-                                            <img src="{PATH_TO_ROOT}/{dates.games.AWAY_LOGO}" alt="{dates.games.AWAY_TEAM}">
+                                            <img src="{dates.games.AWAY_LOGO}" alt="{dates.games.AWAY_TEAM}">
                                             <span><a href="{dates.games.U_AWAY_CALENDAR}" class="offload">{dates.games.AWAY_TEAM}</a></span>
                                         </div>
                                     </td>

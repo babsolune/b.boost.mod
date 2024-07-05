@@ -39,7 +39,7 @@
                                                     <div class="home-{rounds.games.GAME_ID} home-team">
                                                         # IF rounds.games.HOME_ID #
                                                             <div class="flex-team flex-left">
-                                                                <img src="{PATH_TO_ROOT}/{rounds.games.HOME_LOGO}" alt="{rounds.games.HOME_TEAM}">
+                                                                <img src="{rounds.games.HOME_LOGO}" alt="{rounds.games.HOME_TEAM}">
                                                                 <span>{rounds.games.HOME_TEAM}</span>
                                                             </div>
                                                         # ENDIF #
@@ -58,7 +58,7 @@
                                                     <div class="away-{rounds.games.GAME_ID} away-team">
                                                         # IF rounds.games.AWAY_ID #
                                                             <div class="flex-team flex-left">
-                                                                <img src="{PATH_TO_ROOT}/{rounds.games.AWAY_LOGO}" alt="{rounds.games.AWAY_TEAM}">
+                                                                <img src="{rounds.games.AWAY_LOGO}" alt="{rounds.games.AWAY_TEAM}">
                                                                 <span>{rounds.games.AWAY_TEAM}</span>
                                                             </div>
                                                         # ENDIF #
@@ -101,7 +101,7 @@
                                                         <div class="home-{l_rounds.games.GAME_ID} home-team">
                                                             # IF l_rounds.games.HOME_ID #
                                                                 <div class="flex-team flex-left">
-                                                                    <img src="{PATH_TO_ROOT}/{l_rounds.games.HOME_LOGO}" alt="{l_rounds.games.HOME_TEAM}">
+                                                                    <img src="{l_rounds.games.HOME_LOGO}" alt="{l_rounds.games.HOME_TEAM}">
                                                                     <span>{l_rounds.games.HOME_TEAM}</span>
                                                                 </div>
                                                             # ENDIF #
@@ -113,7 +113,7 @@
                                                         <div class="away-{l_rounds.games.GAME_ID} away-team">
                                                             # IF l_rounds.games.AWAY_ID #
                                                                 <div class="flex-team flex-left">
-                                                                    <img src="{PATH_TO_ROOT}/{l_rounds.games.AWAY_LOGO}" alt="{l_rounds.games.AWAY_TEAM}">
+                                                                    <img src="{l_rounds.games.AWAY_LOGO}" alt="{l_rounds.games.AWAY_TEAM}">
                                                                     <span>{l_rounds.games.AWAY_TEAM}</span>
                                                                 </div>
                                                             # ENDIF #
@@ -154,7 +154,7 @@
                                                     <div class="home-{w_rounds.games.GAME_ID} home-team">
                                                         # IF w_rounds.games.HOME_ID #
                                                             <div class="flex-team flex-left">
-                                                                <img src="{PATH_TO_ROOT}/{w_rounds.games.HOME_LOGO}" alt="{w_rounds.games.HOME_TEAM}">
+                                                                <img src="{w_rounds.games.HOME_LOGO}" alt="{w_rounds.games.HOME_TEAM}">
                                                                 <span>{w_rounds.games.HOME_TEAM}</span>
                                                             </div>
                                                         # ENDIF #
@@ -166,7 +166,7 @@
                                                     <div class="away-{w_rounds.games.GAME_ID} away-team">
                                                         # IF w_rounds.games.AWAY_ID #
                                                             <div class="flex-team flex-left">
-                                                                <img src="{PATH_TO_ROOT}/{w_rounds.games.AWAY_LOGO}" alt="{w_rounds.games.AWAY_TEAM}">
+                                                                <img src="{w_rounds.games.AWAY_LOGO}" alt="{w_rounds.games.AWAY_TEAM}">
                                                                 <span>{w_rounds.games.AWAY_TEAM}</span>
                                                             </div>
                                                         # ENDIF #

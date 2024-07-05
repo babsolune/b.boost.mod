@@ -226,7 +226,7 @@ class ScmClub
 
 			// Links
 			'U_LOGO'   => Url::to_rel($this->club_logo),
-			'U_FLAG'   => Url::to_rel('images/stats/countries/' . $this->club_flag . '.png'),
+			'U_FLAG'   => TPL_PATH_TO_ROOT . '/images/stats/countries/' . $this->club_flag . '.png',
 			'U_CLUB'   => $this->get_club_url(),
 			'U_EDIT'   => ScmUrlBuilder::edit_club($this->id_club, $this->club_slug)->rel(),
 			'U_DELETE' => ScmUrlBuilder::delete_club($this->id_club)->rel(),

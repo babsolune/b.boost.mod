@@ -18,7 +18,7 @@
 				jQuery('<input/> ', {type : 'color', id : 'field_value_' + id, 'class' : 'grouped-element', name : 'field_value_' + id, pattern : '#[A-Fa-f0-9]'}).appendTo('#' + id);
 				jQuery('#' + id).append(' ');
 
-				jQuery('<a/> ', {href : 'javascript:ScmFormFieldColors.delete_field('+ this.integer +');', 'class' : 'grouped-element', 'aria-label' : '{@common.delete}'}).html('<i class="far fa-trash-alt" aria-hidden="true"></i>').appendTo('#' + id);
+				jQuery('<a/> ', {href : 'javascript:ScmFormFieldColors.delete_field('+ this.integer +');', 'class' : 'grouped-element bgc-full error', 'aria-label' : '{@common.delete}'}).html('<i class="far fa-trash-alt" aria-hidden="true"></i>').appendTo('#' + id);
 
 				this.integer++;
 			}
@@ -42,7 +42,7 @@
 		<div id="${escape(ID)}_{fieldelements.ID}" class="grouped-inputs">
 			<input class="grouped-element" type="text" name="field_name_${escape(ID)}_{fieldelements.ID}" id="field_name_${escape(ID)}_{fieldelements.ID}" value="{fieldelements.NAME}" placeholder="{@common.name}">
 			<input class="grouped-element" type="color" name="field_value_${escape(ID)}_{fieldelements.ID}" id="field_value_${escape(ID)}_{fieldelements.ID}" value="{fieldelements.VALUE}">
-			<a class="grouped-element" href="javascript:ScmFormFieldColors.delete_field({fieldelements.ID});" data-confirmation="delete-element" aria-label="{@common.delete}"><i class="far fa-trash-alt"></i></a>
+			<a class="grouped-element bgc-full error" href="javascript:ScmFormFieldColors.delete_field({fieldelements.ID});" data-confirmation="delete-element" aria-label="{@common.delete}"><i class="far fa-trash-alt"></i></a>
 		</div>
 	# END fieldelements #
 </div>

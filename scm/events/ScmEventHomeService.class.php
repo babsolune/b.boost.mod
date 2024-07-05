@@ -24,19 +24,45 @@ class ScmEventHomeService
 
         // Display previous and next days games
         $prev_day = ScmDayService::get_last_day($event_id);
-        foreach (ScmGameService::get_games_in_day($event_id, $prev_day) as $game)
+        $prev_dates = [];
+        foreach(ScmGameService::get_games_in_day($event_id, $prev_day) as $game)
         {
-            $item = new ScmGame();
-            $item->set_properties($game);
-            $view->assign_block_vars('prev_days', $item->get_template_vars());
+            $prev_dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
+        }
+
+        foreach (array_unique($prev_dates) as $date)
+        {
+            $view->assign_block_vars('prev_dates', [
+                'DATE' => $date
+            ]);
+            foreach(ScmGameService::get_games_in_day($event_id, $prev_day) as $game)
+            {
+                $item = new ScmGame();
+                $item->set_properties($game);
+                if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
+                    $view->assign_block_vars('prev_dates.prev_days', $item->get_template_vars());
+            }
         }
 
         $next_day = ScmDayService::get_next_day($event_id);
-        foreach (ScmGameService::get_games_in_day($event_id, $next_day) as $game)
+        $next_dates = [];
+        foreach(ScmGameService::get_games_in_day($event_id, $next_day) as $game)
         {
-            $item = new ScmGame();
-            $item->set_properties($game);
-            $view->assign_block_vars('next_days', $item->get_template_vars());
+            $next_dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
+        }
+
+        foreach (array_unique($next_dates) as $date)
+        {
+            $view->assign_block_vars('next_dates', [
+                'DATE' => $date
+            ]);
+            foreach(ScmGameService::get_games_in_day($event_id, $next_day) as $game)
+            {
+                $item = new ScmGame();
+                $item->set_properties($game);
+                if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
+                    $view->assign_block_vars('next_dates.next_days', $item->get_template_vars());
+            }
         }
 
         $view->put_all([
@@ -64,8 +90,8 @@ class ScmEventHomeService
         foreach ($groups as $k => $group)
         {
             $view->assign_block_vars('team_groups', [
-                'GROUP' => ScmGroupService::ntl($k),
-                'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $k)->rel()
+                'GROUP'   => ScmGroupService::ntl($k),
+                'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $k)->rel(),
             ]);
             foreach ($group as $team)
             {
@@ -86,66 +112,86 @@ class ScmEventHomeService
         );
 
         $now = new Date();
-        $c_one_day = ScmGameService::one_day_event($event_id);
+        $c_return_matches = ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES;
+        $c_hat_ranking = ScmParamsService::get_params($event_id)->get_hat_ranking();
         $view->put_all([
-            'C_HAT_RANKING'   => ScmParamsService::get_params($event_id)->get_hat_ranking(),
-            'C_PLAYGROUNDS'   => ScmParamsService::get_params($event_id)->get_display_playgrounds(),
-            'C_HAS_GAMES'   => ScmGameService::has_games($event_id),
-            'C_ONE_DAY'       => $c_one_day,
-            'ONE_DAY_DATE'    => Date::to_format(ScmEventService::get_event($event_id)->get_start_date()->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT),
-            'TEAMS_NUMBER'    => ScmTeamService::get_teams_number($event_id),
-            'TEAMS_PER_GROUP' => ScmParamsService::get_params($event_id)->get_teams_per_group(),
-            'TODAY'           => Date::to_format($now->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT),
+            'C_RETURN_MATCHES' => $c_return_matches,
+            'C_HAT_RANKING'    => $c_hat_ranking,
+            'C_PLAYGROUNDS'    => ScmParamsService::get_params($event_id)->get_display_playgrounds(),
+            'C_HAS_GAMES'      => ScmGameService::has_games($event_id),
+            'C_ONE_DAY'        => ScmGameService::one_day_event($event_id),
+            'ONE_DAY_DATE'     => Date::to_format(ScmEventService::get_event($event_id)->get_start_date()->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT),
+            'TEAMS_NUMBER'     => ScmTeamService::get_teams_number($event_id),
+            'TEAMS_PER_GROUP'  => ScmParamsService::get_params($event_id)->get_teams_per_group(),
+            'TODAY'            => Date::to_format($now->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT),
         ]);
 
-        if($c_one_day)
+        $matchdays = [];
+        foreach($results as $game)
         {
-            while($row = $results->fetch())
+            if($game['game_type'] == 'G')
+                $matchdays[$game['game_round']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
+        }
+        foreach ($matchdays as $matchday => $dates)
+        {
+            $view->assign_block_vars('matchdays', [
+                'MATCHDAY' => $matchday
+            ]);
+            foreach ($dates as $date => $games)
             {
-                $game = new ScmGame();
-                $game->set_properties($row);
+                $view->assign_block_vars('matchdays.dates', [
+                    'DATE' => $date
+                ]);
+                foreach($games as $game)
+                {
+                    $item = new ScmGame();
+                    $item->set_properties($game);
 
-                $items = $game->get_game_type() == 'G' ? 'groups' : 'brackets';
-
-                $view->assign_block_vars($items, array_merge($game->get_template_vars(), [
-                    'GROUP_NAME' => ScmGroupService::ntl($game->get_game_group()),
-                    'DAY_NAME' => $game->get_game_group(),
-                    'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $game->get_game_group())->rel()
-                ]));
+                    $view->assign_block_vars('matchdays.dates.groups', array_merge($item->get_template_vars(), [
+                        'GROUP_NAME' => ScmGroupService::ntl($item->get_game_group()),
+                        'DAY_NAME' => $item->get_game_group(),
+                        'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $item->get_game_group())->rel()
+                    ]));
+                }
             }
         }
-        else 
+
+        $matchrounds = $matchdays = [];
+        foreach($results as $game)
         {
-            $matchdays = [];
-            foreach($results as $item)
+            if($game['game_type'] != 'G')
             {
-                $date = Date::to_format($item['game_date'], Date::FORMAT_DAY_MONTH_YEAR);
-                if (!array_key_exists($date, $matchdays))
-                $matchdays[$date][] = $item;
+                $matchdays[] = $game['game_group'];
+                $matchrounds[$game['game_group']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
             }
+        }
+        krsort($matchrounds);
 
-            foreach ($matchdays as $date => $games)
+        array_values($matchdays);
+        rsort($matchdays);
+        $rounds_unique = array_unique($matchdays);
+        $c_first_round = reset($rounds_unique);
+
+        foreach ($matchrounds as $matchround => $dates)
+        {
+            $view->assign_block_vars('matchrounds', [
+                'MATCHROUND' => $matchround == $c_first_round && $c_hat_ranking ?  LangLoader::get_message('scm.playoff.games', 'common', 'scm') : LangLoader::get_message('scm.round.'.$matchround.'', 'common', 'scm')
+            ]);
+            foreach ($dates as $date => $games)
             {
-                $date_elements = explode("/", $date);
-                $date_elements = array_reverse($date_elements);
-                $reversed_date = implode("/", $date_elements);
-                $view->assign_block_vars('matchdays', [
-                    'DATE' => Date::to_format(strtotime($reversed_date), Date::FORMAT_DAY_MONTH_YEAR_TEXT),
+                $view->assign_block_vars('matchrounds.dates', [
+                    'DATE' => $date
                 ]);
-                foreach($results as $row)
+                foreach($games as $game)
                 {
-                    $game = new ScmGame();
-                    $game->set_properties($row);
+                    $item = new ScmGame();
+                    $item->set_properties($game);
 
-                    $items = $game->get_game_type() == 'G' ? 'groups' : 'brackets';
-                    if($date == Date::to_format($row['game_date'], Date::FORMAT_DAY_MONTH_YEAR))
-                    {
-                        $view->assign_block_vars('matchdays.' . $items, array_merge($game->get_template_vars(), [
-                            'GROUP_NAME' => ScmGroupService::ntl($game->get_game_group()),
-                            'DAY_NAME' => $game->get_game_group(),
-                            'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $game->get_game_group())->rel()
-                        ]));
-                    }
+                    $view->assign_block_vars('matchrounds.dates.brackets', array_merge($item->get_template_vars(), [
+                        'GROUP_NAME' => ScmGroupService::ntl($item->get_game_group()),
+                        'DAY_NAME' => $item->get_game_group(),
+                        'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $item->get_game_group())->rel()
+                    ]));
                 }
             }
         }

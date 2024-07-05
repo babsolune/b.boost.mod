@@ -154,12 +154,14 @@ class ScmGameService
     /** Check if all games date are on the same day */
     public static function one_day_event(int $event_id) : bool
     {
-        $cache = ScmEventCache::load()->get_event($event_id);
-        $start_day = Date::to_format($cache['start_date'], Date::FORMAT_DAY_MONTH_YEAR);
-        $end_day = Date::to_format($cache['end_date'], Date::FORMAT_DAY_MONTH_YEAR);
+        if (self::has_games($event_id))
+        {
+            $cache = ScmEventCache::load()->get_event($event_id);
+            $start_day = Date::to_format($cache['start_date'], Date::FORMAT_DAY_MONTH_YEAR);
+            $end_day = Date::to_format($cache['end_date'], Date::FORMAT_DAY_MONTH_YEAR);
 
-        if ($start_day == $end_day)
-            return true;
+            return $start_day == $end_day;
+        }
         return false;
     }
 

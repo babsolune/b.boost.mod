@@ -37,7 +37,7 @@
                                         <div class="home-{next_games.GAME_ID} home-team">
                                             # IF next_games.HOME_ID #
                                                 <div class="flex-team flex-left">
-                                                    <img src="{PATH_TO_ROOT}/{next_games.HOME_LOGO}" alt="{next_games.HOME_TEAM}">
+                                                    <img src="{next_games.HOME_LOGO}" alt="{next_games.HOME_TEAM}">
                                                     <span>{next_games.HOME_TEAM}</span>
                                                 </div>
                                             # ENDIF #
@@ -49,7 +49,7 @@
                                         <div class="away-{next_games.GAME_ID} away-team">
                                             # IF next_games.AWAY_ID #
                                                 <div class="flex-team flex-left">
-                                                    <img src="{PATH_TO_ROOT}/{next_games.AWAY_LOGO}" alt="{next_games.AWAY_TEAM}">
+                                                    <img src="{next_games.AWAY_LOGO}" alt="{next_games.AWAY_TEAM}">
                                                     <span>{next_games.AWAY_TEAM}</span>
                                                 </div>
                                             # ENDIF #
@@ -77,7 +77,7 @@
                                         <div class="home-{current_games.GAME_ID} home-team">
                                             # IF current_games.HOME_ID #
                                                 <div class="flex-team flex-left">
-                                                    <img src="{PATH_TO_ROOT}/{current_games.HOME_LOGO}" alt="{current_games.HOME_TEAM}">
+                                                    <img src="{current_games.HOME_LOGO}" alt="{current_games.HOME_TEAM}">
                                                     <span>{current_games.HOME_TEAM}</span>
                                                 </div>
                                             # ENDIF #
@@ -89,7 +89,7 @@
                                         <div class="away-{current_games.GAME_ID} away-team">
                                             # IF current_games.AWAY_ID #
                                                 <div class="flex-team flex-left">
-                                                    <img src="{PATH_TO_ROOT}/{current_games.AWAY_LOGO}" alt="{current_games.AWAY_TEAM}">
+                                                    <img src="{current_games.AWAY_LOGO}" alt="{current_games.AWAY_TEAM}">
                                                     <span>{current_games.AWAY_TEAM}</span>
                                                 </div>
                                             # ENDIF #
