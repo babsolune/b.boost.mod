@@ -117,30 +117,32 @@ class ScmGameService
     /** 
      * get a game based on game group ids
      * @param int $event_id the id of its event
-     * @param string $type its type of group 'G' = group or 'D' = day | 'W' or 'L' = bracket
+     * @param string $type 'G' = group or 'D' = day | 'B' = bracket
      * @param int $group its group number
+     * @param int $group its round number
      * @param int $order its order number
     */
-	public static function get_game(int $event_id, string $type, int $group, int $order)
+	public static function get_game(int $event_id, string $type, int $group, int $round = null, int $order)
 	{
         $event_games = [];
         foreach (self::get_games($event_id) as $game)
         {
-            $event_games[] = $game['game_type'].$game['game_group'].$game['game_order'];
+            $event_games[] = $game['game_type'].$game['game_group'].$game['game_round'].$game['game_order'];
         }
-
-        if (in_array($type.$group.$order, $event_games))
+        if (in_array($type.$group.$round.$order, $event_games))
         {
             $row = self::$db_querier->select_single_row_query('SELECT games.*
                 FROM ' . ScmSetup::$scm_game_table . ' games
                 WHERE games.game_event_id = :event_id
                 AND games.game_type = :type
                 AND games.game_group = :group
+                AND games.game_round = :round
                 AND games.game_order = :order', [
                     'event_id' => $event_id,
-                    'type' => $type,
-                    'group' => $group,
-                    'order' => $order,
+                    'type'     => $type,
+                    'group'    => $group,
+                    'round'    => $round,
+                    'order'    => $order,
                 ]
             );
             $game = new ScmGame();

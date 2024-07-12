@@ -90,7 +90,7 @@ class ScmEventHomeService
         foreach ($groups as $k => $group)
         {
             $view->assign_block_vars('team_groups', [
-                'GROUP'   => ScmGroupService::ntl($k),
+                'GROUP'   => $k ? ScmGroupService::ntl($k) : '',
                 'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $k)->rel(),
             ]);
             foreach ($group as $team)
@@ -106,14 +106,14 @@ class ScmEventHomeService
         $results = self::$db_querier->select('SELECT games.*
             FROM ' . ScmSetup::$scm_game_table . ' games
             WHERE games.game_event_id = :id
-            ORDER BY games.game_date ASC, games.game_order ASC', [
+            ORDER BY games.game_date ASC, games.game_group ASC, games.game_order ASC', [
                 'id' => $event_id
             ]
         );
 
         $now = new Date();
         $c_return_matches = ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES;
-        $c_hat_ranking = ScmParamsService::get_params($event_id)->get_hat_ranking();
+        $c_hat_ranking    = ScmParamsService::get_params($event_id)->get_hat_ranking();
         $view->put_all([
             'C_RETURN_MATCHES' => $c_return_matches,
             'C_HAT_RANKING'    => $c_hat_ranking,

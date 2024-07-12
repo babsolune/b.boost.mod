@@ -12,9 +12,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
     private $event;
     private $params;
     private $hat_ranking;
-    private $game;
     private $teams_number;
-    private $teams_per_group;
     private $return_games;
 
 	public function execute(HTTPRequestCustom $request)
@@ -42,120 +40,107 @@ class ScmGroupGamesFormController extends DefaultModuleController
     {
         $this->hat_ranking     = $this->get_params()->get_hat_ranking();
         $this->teams_number    = ScmTeamService::get_teams_number($this->event_id());
-        $this->teams_per_group = $this->get_params()->get_teams_per_group();
         $this->return_games    = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
     }
 
 	private function build_form()
 	{
-        $i = AppContext::get_request()->get_getint('round', 0);
-		$form = new HTMLForm(__CLASS__);
+        $gr = AppContext::get_request()->get_getint('round', 0);
+
+        $form = new HTMLForm(__CLASS__);
         $form->set_css_class('floating-submit');
-		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.games.management'] . '</div>');
-
-		$groups_fieldset = new FormFieldsetHTML('groups_bracket', $this->lang['scm.games.groups.stage']);
-        $form->add_fieldset($groups_fieldset);
-
-        $odd_filled = $this->teams_number % 2 != 0 && $this->get_params()->get_fill_games();
+		$form->set_layout_title(
+            '<div class="align-center small">' . $this->lang['scm.games.management'] . '</div>'
+            . '<div class="align-center smaller">' . $this->lang['scm.games.groups.stage'] . ' - ' . ($this->hat_ranking ? $this->lang['scm.day'] . ' ' . $gr : $this->lang['scm.group'] . ' ' . ScmGroupService::ntl($gr)) . '</div>'
+        );
 
         if ($this->hat_ranking)
         {
-            $fieldset = new FormFieldsetHTML('group_' . $i, $this->lang['scm.day'] . ' ' . $i);
-            $fieldset->set_css_class('grouped-fields');
-            $form->add_fieldset($fieldset);
-            for ($j = 1; $j <= ($this->teams_number / 2); $j++)
+            $games_number = count($this->get_hat_games($gr));
+            foreach ($this->get_hat_games($gr) as $group_game)
             {
-                $groups_fieldset = new FormFieldsetHTML('round_' . $i, '');
+                $game = new ScmGame();
+                $game->set_properties($group_game);
+                $or = $game->get_game_order();
+                $groups_fieldset = new FormFieldsetHTML('round_' . $gr . $or, '');
                 $groups_fieldset->set_css_class('grouped-fields round-fields');
                 $form->add_fieldset($groups_fieldset);
-                $game_number = '<strong>G' . $i . $j . '</strong>';
-                $game_date = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_date() : $this->get_event()->get_start_date();
-                $game_playground = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_playground() : '';
-                $game_home_id = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_home_id() : 0;
-                $game_home_score = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_home_score() : '';
-                $game_away_score = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_away_score() : '';
-                $game_away_id = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_away_id() : 0;
 
-                $groups_fieldset->add_field(new FormFieldFree('group_game_number_' . $i . $j, '', $game_number,
-                    ['class' => 'game-name small text-italic form-G' . $i . $j]
-                ));
-                $groups_fieldset->add_field(new FormFieldDateTime('group_game_date_' . $i . $j, '', $game_date,
+                $groups_fieldset->add_field(new FormFieldDateTime('group_game_date_' . $gr . $or, '', $game->get_game_date(),
                     ['class' => 'game-date date-select']
                 ));
                 if($this->get_params()->get_display_playgrounds())
-                    $groups_fieldset->add_field(new FormFieldTextEditor('group_game_playground_' . $i . $j, '', $game_playground,
+                    $groups_fieldset->add_field(new FormFieldTextEditor('group_game_playground_' . $gr . $or, '', $game->get_game_playground(),
                         ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                     ));
-                $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_home_team_' . $i . $j, '', $game_home_id,
+                $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_home_team_' . $gr . $or, '', $game->get_game_home_id(),
                     $this->get_teams_list(),
                     ['class' => 'home-team game-team']
                 ));
-                $groups_fieldset->add_field(new FormFieldTextEditor('group_home_score_' . $i . $j, '', $game_home_score,
+                $groups_fieldset->add_field(new FormFieldTextEditor('group_home_score_' . $gr . $or, '', $game->get_game_home_score(),
                     ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
                 ));
-                $groups_fieldset->add_field(new FormFieldTextEditor('group_away_score_' . $i . $j, '', $game_away_score,
+                $groups_fieldset->add_field(new FormFieldTextEditor('group_away_score_' . $gr . $or, '', $game->get_game_away_score(),
                     ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
                 ));
-                $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_away_team_' . $i . $j, '', $game_away_id,
+                $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_away_team_' . $gr . $or, '', $game->get_game_away_id(),
                     $this->get_teams_list(),
                     ['class' => 'away-team game-team']
+                ));
+                $groups_fieldset->add_field(new FormFieldFree('group_game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong>',
+                    ['class' => 'game-name small text-italic form-G' . $gr . $or]
                 ));
             }
         }
         else
         {
-            if ($this->return_games)
-                $games_number = $this->teams_per_group * ($this->teams_per_group - 1);
-            else
-                $games_number = $this->teams_per_group * ($this->teams_per_group - 1) / 2;
+            // Empty list of teams if odd number
+            $odd_filled = $this->teams_number % 2 != 0 && $this->get_params()->get_fill_games();
 
-            $fieldset = new FormFieldsetHTML('group_' . $i, $this->lang['scm.group'] . ' ' . ScmGroupService::ntl($i));
-            $fieldset->set_css_class('grouped-fields');
-            $form->add_fieldset($fieldset);
+            $c_one_day = ScmGameService::one_day_event($this->event_id());
+            $round_title = $c_one_day ? $this->lang['scm.round'] : $this->lang['scm.day'];
+            $games_number = count($this->get_group_games($gr));
 
-            for ($j = 1; $j <= $games_number; $j++)
+            foreach($this->get_group_games($gr) as $round => $games)
             {
-                $c_one_day = ScmGameService::one_day_event($this->event_id());
-                $round_title = $c_one_day ? $this->lang['scm.round'] : $this->lang['scm.day'];
-                $groups_fieldset = new FormFieldsetHTML('round_' . $i, '');
-                $groups_fieldset->set_css_class('grouped-fields round-fields');
-                $form->add_fieldset($groups_fieldset);
-                $game_number = '<strong>G' . $i . $j . '</strong>'. ' - ' . $round_title . ' ' . $this->get_game('G', $i, $j)->get_game_round();
-                $game_date = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_date() : $this->get_event()->get_start_date();
-                $game_playground = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_playground() : '';
-                $game_home_id = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_home_id() : 0;
-                $game_home_score = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_home_score() : '';
-                $game_away_score = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_away_score() : '';
-                $game_away_id = $this->get_game('G', $i, $j) ? $this->get_game('G', $i, $j)->get_game_away_id() : 0;
+                foreach ($games as $group_game)
+                {
+                    $game = new ScmGame();
+                    $game->set_properties($group_game);
+                    $or = $game->get_game_order();
+                    ${'groups_fieldset' . $or} = new FormFieldsetHTML('round_' . $or, '');
+                    ${'groups_fieldset' . $or}->set_css_class('grouped-fields round-fields');
+                    $form->add_fieldset(${'groups_fieldset' . $or});
 
-                if ($this->return_games && $j == 1)
-                    $groups_fieldset->add_field(new FormFieldSpacer('group_first_leg_' . $i, $this->lang['scm.first.leg']));
-                $groups_fieldset->add_field(new FormFieldFree('group_game_number_' . $i . $j, '', $game_number,
-                    ['class' => 'game-name small text-italic align-right form-G' . $i . $j]
-                ));
-                $groups_fieldset->add_field(new FormFieldDateTime('group_game_date_' . $i . $j, '', $game_date,
-                    ['class' => 'game-date']
-                ));
-                if($this->get_params()->get_display_playgrounds())
-                    $groups_fieldset->add_field(new FormFieldTextEditor('group_game_playground_' . $i . $j, '', $game_playground,
-                        ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
+                    if ($this->return_games && $or == 1)
+                        ${'groups_fieldset' . $or}->add_field(new FormFieldSpacer('group_first_leg_' . $gr, $this->lang['scm.first.leg']));
+                    ${'groups_fieldset' . $or}->add_field(new FormFieldDateTime('group_game_date_' . $gr . $or, '', $game->get_game_date(),
+                        ['class' => 'game-date']
                     ));
-                $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_home_team_' . $i . $j, '', $game_home_id,
-                    $odd_filled && $game_home_id == 0 ? [] : $this->get_group_teams_list($i),
-                    ['class' => 'home-team game-team']
-                ));
-                $groups_fieldset->add_field(new FormFieldTextEditor('group_home_score_' . $i . $j, '', $game_home_score,
-                    ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
-                ));
-                $groups_fieldset->add_field(new FormFieldTextEditor('group_away_score_' . $i . $j, '', $game_away_score,
-                    ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
-                ));
-                $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('group_away_team_' . $i . $j, '', $game_away_id,
-                    $odd_filled && $game_away_id == 0 ? [] : $this->get_group_teams_list($i),
-                    ['class' => 'away-team game-team']
-                ));
-                if ($this->return_games && $j == $games_number / 2)
-                    $groups_fieldset->add_field(new FormFieldSpacer('group_second_leg_' . $i, '<hr />' . $this->lang['scm.second.leg']));
+                    if($this->get_params()->get_display_playgrounds())
+                        ${'groups_fieldset' . $or}->add_field(new FormFieldTextEditor('group_game_playground_' . $gr . $or, '', $game->get_game_playground(),
+                            ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
+                        ));
+                    ${'groups_fieldset' . $or}->add_field(new FormFieldSimpleSelectChoice('group_home_team_' . $gr . $or, '', $game->get_game_home_id(),
+                        $odd_filled && $game_home_id == 0 ? [] : $this->get_group_teams_list($gr),
+                        ['class' => 'home-team game-team']
+                    ));
+                    ${'groups_fieldset' . $or}->add_field(new FormFieldTextEditor('group_home_score_' . $gr . $or, '', $game->get_game_home_score(),
+                        ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
+                    ));
+                    ${'groups_fieldset' . $or}->add_field(new FormFieldTextEditor('group_away_score_' . $gr . $or, '', $game->get_game_away_score(),
+                        ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
+                    ));
+                    ${'groups_fieldset' . $or}->add_field(new FormFieldSimpleSelectChoice('group_away_team_' . $gr . $or, '', $game->get_game_away_id(),
+                        $odd_filled && $game_away_id == 0 ? [] : $this->get_group_teams_list($gr),
+                        ['class' => 'away-team game-team']
+                    ));
+                    ${'groups_fieldset' . $or}->add_field(new FormFieldFree('group_game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong>'. ' - ' . $round_title . ' ' . $round,
+                        ['class' => 'game-name small text-italic form-G' . $gr . $or]
+                    ));
+                    if ($this->return_games && $or == $games_number / 2)
+                        ${'groups_fieldset' . $or}->add_field(new FormFieldSpacer('group_second_leg_' . $gr, '<hr />' . $this->lang['scm.second.leg']));
+                }
             }
         }
 
@@ -167,62 +152,46 @@ class ScmGroupGamesFormController extends DefaultModuleController
 
 	private function save()
 	{
-        $i = AppContext::get_request()->get_getint('round', 0);
+        $gr = AppContext::get_request()->get_getint('round', 0);
         if ($this->hat_ranking)
         {
-            for ($j = 1; $j <= ($this->teams_number / 2); $j++)
-            {
-                $game = $this->get_game('G', $i, $j);
-                $game->set_game_event_id($this->event_id());
-                $game->set_game_type('G');
-                $game->set_game_group($i);
-                $game->set_game_order($j);
-                $game->set_game_date($this->form->get_value('group_game_date_' . $i . $j));
-                if($this->get_params()->get_display_playgrounds())
-                    $game->set_game_playground($this->form->get_value('group_game_playground_' . $i . $j));
-                $game->set_game_home_id((int)$this->form->get_value('group_home_team_' . $i . $j)->get_raw_value());
-                $game->set_game_home_score($this->form->get_value('group_home_score_' . $i . $j));
-                $game->set_game_away_score($this->form->get_value('group_away_score_' . $i . $j));
-                $game->set_game_away_id((int)$this->form->get_value('group_away_team_' . $i . $j)->get_raw_value());
+            $games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $gr);
 
-                if ($game->get_id_game() == null)
-                {
-                    $id = ScmGameService::add_game($game);
-                    $game->set_id_game($id);
-                }
-                else {
-                    ScmGameService::update_game($game, $game->get_id_game());
-                }
+            foreach($games as $hat_game)
+            {
+                $game = new ScmGame();
+                $game->set_properties($hat_game);
+                $or = $game->get_game_order();
+                $game->set_game_event_id($this->event_id());
+                $game->set_game_date($this->form->get_value('group_game_date_' . $gr . $or));
+                if($this->get_params()->get_display_playgrounds())
+                    $game->set_game_playground($this->form->get_value('group_game_playground_' . $gr . $or));
+                $game->set_game_home_id((int)$this->form->get_value('group_home_team_' . $gr . $or)->get_raw_value());
+                $game->set_game_home_score($this->form->get_value('group_home_score_' . $gr . $or));
+                $game->set_game_away_score($this->form->get_value('group_away_score_' . $gr . $or));
+                $game->set_game_away_id((int)$this->form->get_value('group_away_team_' . $gr . $or)->get_raw_value());
+
+                ScmGameService::update_game($game, $game->get_id_game());
             }
         }
         else
         {
-            if ($this->return_games)
-                $games_number = $this->teams_per_group * ($this->teams_per_group - 1);
-            else
-                $games_number = $this->teams_per_group * ($this->teams_per_group - 1) / 2;
-
-            for ($j = 1; $j <= $games_number; $j++)
+            foreach($this->get_group_games($gr) as $games)
             {
-                $game = $this->get_game('G', $i, $j);
-                $game->set_game_event_id($this->event_id());
-                $game->set_game_type('G');
-                $game->set_game_group($i);
-                $game->set_game_order($j);
-                $game->set_game_date($this->form->get_value('group_game_date_' . $i . $j));
-                if($this->get_params()->get_display_playgrounds())
-                    $game->set_game_playground($this->form->get_value('group_game_playground_' . $i . $j));
-                $game->set_game_home_id((int)$this->form->get_value('group_home_team_' . $i . $j)->get_raw_value());
-                $game->set_game_home_score($this->form->get_value('group_home_score_' . $i . $j));
-                $game->set_game_away_score($this->form->get_value('group_away_score_' . $i . $j));
-                $game->set_game_away_id((int)$this->form->get_value('group_away_team_' . $i . $j)->get_raw_value());
-
-                if ($game->get_id_game() == null)
+                foreach ($games as $group_game)
                 {
-                    $id = ScmGameService::add_game($game);
-                    $game->set_id_game($id);
-                }
-                else {
+                    $game = new ScmGame();
+                    $game->set_properties($group_game);
+                    $or = $game->get_game_order();
+                    $game->set_game_event_id($this->event_id());
+                    $game->set_game_date($this->form->get_value('group_game_date_' . $gr . $or));
+                    if($this->get_params()->get_display_playgrounds())
+                        $game->set_game_playground($this->form->get_value('group_game_playground_' . $gr . $or));
+                    $game->set_game_home_id((int)$this->form->get_value('group_home_team_' . $gr . $or)->get_raw_value());
+                    $game->set_game_home_score($this->form->get_value('group_home_score_' . $gr . $or));
+                    $game->set_game_away_score($this->form->get_value('group_away_score_' . $gr . $or));
+                    $game->set_game_away_id((int)$this->form->get_value('group_away_team_' . $gr . $or)->get_raw_value());
+
                     ScmGameService::update_game($game, $game->get_id_game());
                 }
             }
@@ -231,26 +200,37 @@ class ScmGroupGamesFormController extends DefaultModuleController
 		ScmEventService::clear_cache();
 	}
 
-	private function get_game($type, $group, $order)
-	{
-        $event_id = $this->event_id();
-        $id = ScmGameService::get_game($event_id, $type, $group, $order) ? ScmGameService::get_game($event_id, $type, $group, $order)->get_id_game() : null;
+    private function get_hat_games($gr)
+    {
+        $games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $gr);
 
-        if($id !== null)
-        {
-            try {
-                $this->game = ScmGameService::get_game($event_id, $type, $group, $order);
-            } catch (RowNotFoundException $e) {
-                $error_controller = PHPBoostErrors::unexisting_page();
-                DispatchManager::redirect($error_controller);
+        usort($games, function($a, $b) {
+            return $a['game_order'] - $b['game_order'];
+        });
+
+        return $games;
+    }
+
+    private function get_group_games($gr)
+    {
+        $games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $gr);
+
+        usort($games, function($a, $b) {
+            if ($a['game_round'] == $b['game_round']) {
+                return $a['game_order'] - $b['game_order'];
+            } else {
+                return $a['game_round'] - $b['game_round'];
             }
-        }
-        else
+        });
+
+        $rounds = [];
+        foreach($games as $game)
         {
-            $this->game = new ScmGame();
+            $rounds[$game['game_round']][] = $game;
         }
-		return $this->game;
-	}
+
+        return $rounds;
+    }
 
 	private function get_event()
 	{

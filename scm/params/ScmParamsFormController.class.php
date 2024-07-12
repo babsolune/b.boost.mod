@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2024 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.0 - last update: 2024 08 10
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -28,10 +28,13 @@ class ScmParamsFormController extends DefaultModuleController
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
-            if($this->is_tournament)
-			$this->form->get_field_by_id('hat_days')->set_hidden(!$this->get_params()->get_hat_ranking());
-            if($this->is_tournament || $this->is_cup)
-			$this->form->get_field_by_id('brackets_number')->set_hidden(!$this->get_params()->get_looser_bracket());
+            if ($this->is_tournament) {
+                $this->form->get_field_by_id('hat_days')->set_hidden(!$this->get_params()->get_hat_ranking());
+                $this->form->get_field_by_id('brackets_number')->set_hidden(!$this->get_params()->get_looser_bracket());
+            }
+            if (!$this->is_championship) {
+                $this->form->get_field_by_id('third_place')->set_hidden($this->get_params()->get_looser_bracket());
+            }
             $event_name = $this->get_event()->get_event_name();
             $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['scm.warning.params.update'], ['event_name' => $event_name]), MessageHelper::SUCCESS, 4));
         }
@@ -64,14 +67,14 @@ class ScmParamsFormController extends DefaultModuleController
             $form->add_fieldset($tournament_fieldset);
 
             $tournament_fieldset->add_field(new FormFieldNumberEditor('groups_number', $this->lang['scm.groups.number'], $this->get_params()->get_groups_number(),
-                ['min' => 0, 'required' => true]
+                ['min' => 1, 'required' => true]
             ));
             $tournament_fieldset->add_field(new FormFieldNumberEditor('teams_per_group', $this->lang['scm.teams.per.group'], $this->get_params()->get_teams_per_group(),
-                ['min' => 0, 'required' => true]
+                ['min' => 1, 'required' => true]
             ));
             $tournament_fieldset->add_field(new FormFieldCheckbox('hat_ranking', $this->lang['scm.hat.ranking'], $this->get_params()->get_hat_ranking(),
                 [
-                    'description' => '<span aria-label="' . $this->lang['scm.hat.ranking.clue'] . '"><i class="far fa-circle-question"></i></span>',
+                    'description' => $this->lang['scm.hat.ranking.clue'],
                     'events' => ['click' => '
                         if (HTMLForms.getField("hat_ranking").getValue()) {
                             HTMLForms.getField("hat_days").enable();
@@ -92,13 +95,13 @@ class ScmParamsFormController extends DefaultModuleController
             ));
             $tournament_fieldset->add_field(new FormFieldCheckbox('fill_games', $this->lang['scm.fill.games'], $this->get_params()->get_fill_games(),
                 [
-                    'description' => '<span aria-label="' . $this->lang['scm.fill.games.clue'] . '"><i class="far fa-circle-question"></i></span>',
+                    'description' => $this->lang['scm.fill.games.clue'],
                     'hidden' => $this->get_params()->get_hat_ranking()
                 ]
             ));
             $tournament_fieldset->add_field(new FormFieldCheckbox('looser_bracket', $this->lang['scm.looser.brackets'], $this->get_params()->get_looser_bracket(),
                 [
-                    'description' => '<span aria-label="' . $this->lang['scm.looser.brackets.clue'] . '"><i class="far fa-circle-question"></i></span>',
+                    'description' => $this->lang['scm.looser.brackets.clue'],
                     'events' => ['click' => '
                         if (HTMLForms.getField("looser_bracket").getValue()) {
                             HTMLForms.getField("third_place").disable();
@@ -110,10 +113,10 @@ class ScmParamsFormController extends DefaultModuleController
                     ']
                 ]
             ));
-            $tournament_fieldset->add_field(new FormFieldNumberEditor('brackets_number', $this->lang['scm.brackets.number'], $this->get_params()->get_brackets_number(),
+            $tournament_fieldset->add_field(new FormFieldNumberEditor('brackets_number', $this->lang['scm.brackets.number'], $this->get_params()->get_looser_bracket() ? $this->get_params()->get_brackets_number() : '',
                 [
                     'min' => 1, 'required' => true,
-                    'hidden' => $this->is_tournament && !$this->get_params()->get_looser_bracket()
+                    'hidden' => !$this->get_params()->get_looser_bracket()
                 ]
             ));
             $tournament_fieldset->add_field(new FormFieldCheckbox('display_playgrounds', $this->lang['scm.display.playgrounds'], $this->get_params()->get_display_playgrounds()));
@@ -126,7 +129,7 @@ class ScmParamsFormController extends DefaultModuleController
 
             $bracket_fieldset->add_field(new FormFieldNumberEditor('rounds_number', $this->lang['scm.rounds.number'], $this->get_params()->get_rounds_number(),
                 [
-                    'description' => '<span aria-label="' . $this->lang['scm.rounds.number.clue'] . '"><i class="far fa-circle-question"></i></span>', 
+                    'description' => $this->lang['scm.rounds.number.clue'],
                     'min' => 0, 'max' => 7, 'required' => true
                 ]
             ));
@@ -151,11 +154,11 @@ class ScmParamsFormController extends DefaultModuleController
                     'hidden' => !$this->get_params()->get_has_overtime()
                 ]
 			));
-			$bracket_fieldset->add_field(new FormFieldCheckbox('golden_goal', $this->lang['scm.golden.goal'], $this->get_params()->get_golden_goal()));
-			$bracket_fieldset->add_field(new FormFieldCheckbox('silver_goal', $this->lang['scm.silver.goal'], $this->get_params()->get_silver_goal()));
 			$bracket_fieldset->add_field(new FormFieldCheckbox('third_place', $this->lang['scm.third.place'], $this->get_params()->get_third_place(),
                 ['hidden' => $this->is_tournament && $this->get_params()->get_looser_bracket()]
             ));
+			// $bracket_fieldset->add_field(new FormFieldCheckbox('golden_goal', $this->lang['scm.golden.goal'], $this->get_params()->get_golden_goal()));
+			// $bracket_fieldset->add_field(new FormFieldCheckbox('silver_goal', $this->lang['scm.silver.goal'], $this->get_params()->get_silver_goal()));
 		}
 
 		if ($this->is_championship || $this->is_tournament)

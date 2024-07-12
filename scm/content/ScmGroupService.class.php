@@ -24,27 +24,26 @@ class ScmGroupService
     }
 
     /** Add all games of all days of the $event_id event when it's a hat ranking event into database */
-    public static function set_hat_days_games(int $event_id, int $days, int $teams_number)
+    public static function set_hat_days_games(int $event_id, int $days_number, int $teams_number)
     {
-        $now = new Date();
-        for ($day = 1; $day <= $days; $day++)
+        for ($day = 1; $day <= $days_number; $day++)
         {
             for ($game = 1; $game <= ($teams_number / 2); $game++)
             {
                 self::$db_querier->insert(ScmSetup::$scm_game_table, [
                     'game_event_id' => $event_id,
-                    'game_type' => 'G',
-                    'game_group' => $day,
-                    'game_order' => $game,
-                    'game_home_id' => 0,
-                    'game_away_id' => 0,
-                    'game_date' => $now->get_timestamp()
+                    'game_type'     => 'G',
+                    'game_group'    => $day,
+                    'game_order'    => $game,
+                    'game_home_id'  => 0,
+                    'game_away_id'  => 0,
+                    'game_date'     => ScmEventService::get_event($event_id)->get_start_date()->get_timestamp()
                 ]);
             }
         }
     }
 
-    /** Add all games of all groups of the $event_id event to database */
+    /** Set all games of all groups */
     public static function set_groups_games(int $event_id) : void
     {
         $c_return_games = ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES;
@@ -56,7 +55,7 @@ class ScmGroupService
             if (count($teams) % 2 != 0) {
                 $teams[] = ['id_team' => 0];
             }
-            $schedule = self::get_group_games($teams);
+            $schedule = self::build_group_games($teams);
             $full_schedule[$index] = $schedule;
         }
         // Build game list
@@ -66,13 +65,13 @@ class ScmGroupService
                 foreach ($games as $i => $game) {
                     self::$db_querier->insert(ScmSetup::$scm_game_table, [
                         'game_event_id' => $event_id,
-                        'game_type' => 'G',
-                        'game_group' => $group,
-                        'game_round' => $game_round,
-                        'game_order' => $game_order,
-                        'game_home_id' => ScmParamsService::get_params($event_id)->get_fill_games() ? $game[0]['id_team'] : 0,
-                        'game_away_id' => ScmParamsService::get_params($event_id)->get_fill_games() ? $game[1]['id_team'] : 0,
-                        'game_date' => ScmEventService::get_event($event_id)->get_start_date()->get_timestamp()
+                        'game_type'     => 'G',
+                        'game_group'    => $group,
+                        'game_round'    => $game_round,
+                        'game_order'    => $game_order,
+                        'game_home_id'  => ScmParamsService::get_params($event_id)->get_fill_games() ? $game[0]['id_team'] : 0,
+                        'game_away_id'  => ScmParamsService::get_params($event_id)->get_fill_games() ? $game[1]['id_team'] : 0,
+                        'game_date'     => ScmEventService::get_event($event_id)->get_start_date()->get_timestamp()
                     ]);
                     $game_order++;
                 }
@@ -102,8 +101,8 @@ class ScmGroupService
         }
     }
 
-    /** get all games in a group */
-    private static function get_group_games(array $group_teams) : array
+    /** set all games of one group */
+    private static function build_group_games(array $group_teams) : array
     {
         $teams_number = count($group_teams);
         $schedule = [];
@@ -137,11 +136,12 @@ class ScmGroupService
     }
 
     /** Get list of games in a day or group */
-    public static function games_list_from_group(int $event_id, string $stage = '', string $group = '') : array
+    public static function games_list_from_group(int $event_id, string $stage = '', int $group = null) : array
     {
         $event_games = ScmGameService::get_games($event_id);
         $games = [];
-        if ($group)
+        if (!is_null($group))
+        {
             foreach($event_games as $game)
             {
                 if($game['game_type'] == $stage && $game['game_group'] == $group)
@@ -149,17 +149,21 @@ class ScmGroupService
                     $games[] = $game;
                 }
             }
+        }
         else
-        foreach($event_games as $game)
         {
-            if($game['game_type'] == $stage)
+            foreach($event_games as $game)
             {
-                $group_nb = $game['game_group'];
-                if(!isset($games[$group_nb]))
-                    $games[$group_nb] = [];
-                $games[$group_nb][] = $game;
+                if($game['game_type'] == $stage)
+                {
+                    $group_nb = $game['game_group'];
+                    if(!isset($games[$group_nb]))
+                        $games[$group_nb] = [];
+                    $games[$group_nb][] = $game;
+                }
             }
         }
+
         return $games;
     }
 }

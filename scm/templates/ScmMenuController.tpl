@@ -5,15 +5,16 @@
     </div>
     <div class="flex-between">
         <h1>{HEADER_DIVISION} - {HEADER_SEASON}</h1>
-        # IF C_SOURCES #
-            <aside class="sources-container">
-                <span aria-label="{@common.sources}"><i class="fa fa-map-signs" aria-hidden="true"></i> </span> :
-                # START sources #
-                    <a itemprop="isBasedOnUrl" href="{sources.URL}" class="pinned link-color offload" target="_blank" rel="noopener noreferrer nofollow">{sources.NAME}</a># IF sources.C_SEPARATOR # | # ENDIF #
-                # END sources #
-            </aside>
-        # ENDIF #
+        # INCLUDE EVENT_LIST #
     </div>
+    # IF C_SOURCES #
+        <aside class="sources-container">
+            <span aria-label="{@common.sources}"><i class="fa fa-map-signs" aria-hidden="true"></i> </span> :
+            # START sources #
+                <a itemprop="isBasedOnUrl" href="{sources.URL}" class="pinned link-color offload" target="_blank" rel="noopener noreferrer nofollow">{sources.NAME}</a># IF sources.C_SEPARATOR # | # ENDIF #
+            # END sources #
+        </aside>
+    # ENDIF #
 </header>
 <div class="event-menu flex-between controls">
     <nav class="cssmenu cssmenu-horizontal">
@@ -122,3 +123,10 @@
     </div>
 # ENDIF #
 <script src="{PATH_TO_ROOT}/scm/templates/js/scm.highlight# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
+<script>
+    const selectElement = document.getElementById('ScmMenuService_event_list');
+    selectElement.addEventListener('change', (event) => {
+        const event_id = event.target.value;
+        window.location.href = '{PATH_TO_ROOT}/scm/' + event_id + '-redirect/informations';
+    });
+</script>

@@ -73,11 +73,7 @@ class ScmMenuService
             'U_EDIT_GROUPS'        => ScmUrlBuilder::edit_groups($event_id, $event->get_event_slug())->rel(),
             'U_EDIT_GROUPS_GAMES'  => ScmUrlBuilder::edit_groups_games($event_id, $event->get_event_slug(), $active_round)->rel(),
             'U_EDIT_BRACKET'       => ScmUrlBuilder::edit_brackets($event_id, $event->get_event_slug())->rel(),
-            'U_EDIT_BRACKET_GAMES' => ScmUrlBuilder::edit_brackets_games($event_id, $event->get_event_slug(), $bracket_round)->rel(),            'HEADER_CATEGORY' => $category->get_name(),
-
-            'HEADER_TYPE'     => ScmDivisionService::get_event_type_lang($event->get_division_id()),
-            'HEADER_DIVISION' => $division['division_name'],
-            'HEADER_SEASON'   => $season['season_name'],
+            'U_EDIT_BRACKET_GAMES' => ScmUrlBuilder::edit_brackets_games($event_id, $event->get_event_slug(), $bracket_round)->rel(),
         ]);
 
         foreach ($event->get_sources() as $name => $url)
@@ -111,17 +107,17 @@ class ScmMenuService
             usort($array_groups, function($a, $b) {
                 $aParts = explode('|', $a);
                 $bParts = explode('|', $b);
-                // Sort 'G' first, then 'L', then 'W'
+                // Sort 'G' first, then 'B'
                 if ($aParts[0] != $bParts[0]) {
                     if ($aParts[0] == 'D') return -1;
                     if ($bParts[0] == 'D') return 1;
                     if ($aParts[0] == 'G') return -1;
                     if ($bParts[0] == 'G') return 1;
-                    if ($aParts[0] == 'L') return -1;
-                    if ($bParts[0] == 'L') return 1;
+                    if ($aParts[0] == 'B') return -1;
+                    if ($bParts[0] == 'B') return 1;
                 }
 
-                // Sort 'L' and 'W' descending, 'G' ascending || 'D' ascending
+                // Sort 'G' ascending || 'D' ascending
                 if ($aParts[0] == 'G' || $aParts[0] == 'D') {
                     if ($aParts[1] == $bParts[1]) return 0;
                     return ($aParts[1] < $bParts[1]) ? -1 : 1;
@@ -147,7 +143,7 @@ class ScmMenuService
                         $c_groups = true;
                         $type = $c_hat_ranking ? $lang['scm.day'] : $lang['scm.group'];
                         break;
-                    case 'W':
+                    case 'B':
                         $c_brackets = true;
                         $type = $lang['scm.round'];
                         break;
@@ -156,39 +152,77 @@ class ScmMenuService
                         break;
                 }
 
-                if ($c_edit_days && $c_days)
+                if ($c_edit_days && $c_days) {
                     $view->assign_block_vars('days', [
                         'L_TYPE' => $type,
                         'NUMBER' => $group_details[1],
                         'U_DAY'  => ScmUrlBuilder::edit_days_games($event_id, $event->get_event_slug(), $group_details[1])->rel()
                     ]);
-                elseif ($c_display_days && $c_days)
+                }
+                elseif ($c_display_days && $c_days) {
                     $view->assign_block_vars('days', [
                         'L_TYPE' => $type,
                         'NUMBER' => $group_details[1],
                         'U_DAY'  => ScmUrlBuilder::display_days_calendar($event_id, $event->get_event_slug(), $group_details[1])->rel()
                     ]);
-                elseif ($c_edit_groups && $c_groups)
+                }
+                elseif ($c_edit_groups && $c_groups) {
                     $view->assign_block_vars('groups', [
                         'L_TYPE'  => $type,
                         'NUMBER'  => $c_hat_ranking ? $group_details[1] : ScmGroupService::ntl($group_details[1]),
                         'U_GROUP' => ScmUrlBuilder::edit_groups_games($event_id, $event->get_event_slug(), $group_details[1])->rel()
                     ]);
-                elseif ($c_display_groups && $c_groups)
+                }
+                elseif ($c_display_groups && $c_groups) {
                     $view->assign_block_vars('groups', [
                         'L_TYPE'  => $type,
                         'NUMBER'  => $c_hat_ranking ? $group_details[1] : ScmGroupService::ntl($group_details[1]),
                         'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, $event->get_event_slug(), $group_details[1])->rel()
                     ]);
-                elseif ($c_edit_brackets && $c_brackets)
+                }
+                elseif ($c_edit_brackets && $c_brackets) {
                     $view->assign_block_vars('bracket', [
                         'BRACKET_ROUND' => $c_hat_ranking && ($group_details[1] == $rounds_number + 1) ? $lang['scm.round.playoff'] : $lang['scm.round.' . $group_details[1] . ''],
                         'U_BRACKET'     => ScmUrlBuilder::edit_brackets_games($event_id, $event->get_event_slug(), $group_details[1])->rel()
                     ]);
+                }
             }
         }
 
+        $event_id = AppContext::get_request()->get_getint('event_id', 0);
+        $form = new HTMLForm(self::class);
+        $form->set_css_class('options');
+
+        $fieldset = new FormFieldsetHorizontal('events');
+        $form->add_fieldset($fieldset);
+        $fieldset->add_field(new FormFieldSimpleSelectChoice('event_list', '', '', self::current_event_list()));
+
+        $view->put('EVENT_LIST', $form->display());
+
 		return $view;
+    }
+
+    private static function current_event_list()
+    {
+        $event_id = AppContext::get_request()->get_getint('event_id', 0);
+        $event = ScmEventService::get_event($event_id);
+
+        $events = ScmEventCache::load()->get_events();
+        usort($events, function ($a, $b) {
+            return $a['start_date'] - $b['start_date'];
+        });
+        $options = [];
+        $options[] = new FormFieldSelectChoiceOption(LangLoader::get_message('scm.change.event', 'common', 'scm'), 0);
+        foreach ($events as $event)
+        {
+            if (ScmSeasonService::check_season($event['season_id']))
+                $options[] = new FormFieldSelectChoiceOption(
+                    ScmDivisionService::get_division($event['division_id'])->get_division_name()
+                    . ' - ' . ScmSeasonService::get_season($event['season_id'])->get_season_name(), 
+                    $event['id']
+                );
+        }
+        return $options;
     }
 
     private static function compare_url($url)

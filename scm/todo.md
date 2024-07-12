@@ -25,6 +25,8 @@
 
 ## bugs
 - [X] For 2 legs games, group stage, if not all games results are filled, a new line is added in ranking (for the team 0, I guess)
+- [ ] Date for bracket on game creation must be start_date
+- [X] Match for third place
 ## Event home
 - [X] bg color for ongoing games
 - [X] Ongoing games list

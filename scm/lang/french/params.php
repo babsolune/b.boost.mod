@@ -22,13 +22,13 @@ $lang['scm.params.penalties']  = 'Pénalités';
 $lang['scm.groups.number']        = 'Nombre de groupes';
 $lang['scm.teams.per.group']      = 'Nombre maximum d\'équipes par groupe';
 $lang['scm.hat.ranking']          = 'Classement au chapeau';
-$lang['scm.hat.ranking.clue']     = 'Chaque équipe rencontre x équipes de chaque groupe';
+$lang['scm.hat.ranking.clue']     = '<span aria-label="Chaque équipe rencontre x équipes de chaque groupe"><i class="far fa-circle-question"></i></span>';
 $lang['scm.hat.days']             = 'Nombre de matchs par équipe';
 $lang['scm.hat.days.clue']        = 'En phase de groupes';
 $lang['scm.fill.games']           = 'Remplir les matchs';
-$lang['scm.fill.games.clue']      = 'Tous les matchs de groupe sont définis automatiquement avec les équipes de chaque groupe';
+$lang['scm.fill.games.clue']      = '<span aria-label="Tous les matchs de groupe sont définis automatiquement avec les équipes de chaque groupe."><i class="far fa-circle-question"></i></span>';
 $lang['scm.looser.brackets']      = 'Tableaux consolante';
-$lang['scm.looser.brackets.clue'] = 'Créer tous les matchs nécessaires pour attribuer un classement final pour toutes les équipes';
+$lang['scm.looser.brackets.clue'] = '<span aria-label="Créer tous les matchs nécessaires pour attribuer un classement final pour toutes les équipes."><i class="far fa-circle-question"></i></span>';
 $lang['scm.brackets.number']      = 'Nombre de tableaux consolante';
 $lang['scm.display.playgrounds']  = 'Afficher les terrains';
 $lang['scm.victory.points']       = 'Points pour une victoire';
@@ -41,8 +41,8 @@ $lang['scm.ranking.type']         = 'Mode de calcul du classement';
 
 $lang['scm.rounds.number'] = 'Nombre de tours';
 $lang['scm.rounds.number.clue'] = '
-    Par exemple <strong>3</strong> donnera <strong>1/4 de finale, 1/2 finale, finale</strong>.
-    <br /> Un tour de barrage est automatiquement ajouté si <strong>Classement au chapeau</strong> est coché.
+    <span aria-label="Par exemple <strong>3</strong> donnera <strong>1/4 de finale, 1/2 finale, finale</strong>.
+    <br /> Un tour de barrage est automatiquement ajouté si <strong>Classement au chapeau</strong> est coché."><i class="far fa-circle-question"></i></span>
 ';
 $lang['scm.draw.games']        = 'Matchs par tirage au sort';
 $lang['scm.golden.goal']       = 'But en or';

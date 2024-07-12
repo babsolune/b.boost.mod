@@ -1,6 +1,6 @@
 <section id="module-scm" class="several-items">
 	# INCLUDE MENU #
-    <h2># IF C_HAT_DAYS #{@scm.day} {DAY}# ELSE #{@scm.group} {GROUP}# ENDIF #</h2>
+    <h2># IF C_HAT_RANKING #{@scm.day} {DAY}# ELSE #{@scm.group} {GROUP}# ENDIF #</h2>
     # IF C_HAS_GAMES #
         <div class="cell-flex cell-columns-2">
             <div class="responsive-table">
@@ -24,9 +24,11 @@
                     </thead>
                     <tbody>
                     # START matchdays #
-                        <tr>
-                            <td colspan="# IF C_DISPLAY_PLAYGROUNDS #6# ELSE #5# ENDIF #"># IF C_ONE_DAY #{@scm.round}# ELSE #{@scm.day}# ENDIF # {matchdays.MATCHDAY}</td>
-                        </tr>
+                        # IF NOT C_HAT_RANKING #
+                            <tr>
+                                <td colspan="# IF C_DISPLAY_PLAYGROUNDS #6# ELSE #5# ENDIF #"># IF C_ONE_DAY #{@scm.round}# ELSE #{@scm.day}# ENDIF # {matchdays.MATCHDAY}</td>
+                            </tr>
+                        # ENDIF #
                         # START matchdays.dates #
                             # IF NOT C_ONE_DAY #
                                 <tr>

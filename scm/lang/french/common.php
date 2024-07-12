@@ -33,6 +33,7 @@ $lang['scm.edit.event']       = 'Modifier une compétition';
 
 $lang['scm.filter.events']     = 'Filtrer les compétitions';
 $lang['scm.events.management'] = 'Gestion des compétitions';
+$lang['scm.change.event'] = 'Changer de compétition';
 
 // Front titles
 $lang['scm.infos']  = 'Informations générales';

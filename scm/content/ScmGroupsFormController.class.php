@@ -35,7 +35,7 @@ class ScmGroupsFormController extends DefaultModuleController
 
 	private function build_form()
 	{
-		$form = new HTMLForm(__CLASS__);
+		$form = new HTMLForm(self::class);
         $form->set_css_class('cell-flex cell-columns-4');
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.groups.management'] . '</div>');
 

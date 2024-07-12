@@ -26,11 +26,9 @@ class ScmBracketController extends DefaultModuleController
             $this->build_round_trip_view();
         else
         {
-            if ($this->looser_bracket)
-                $this->build_looser_view();
-            $this->build_winner_view();
-            $this->check_authorizations();
+            $this->build_bracket_view();
         }
+        $this->check_authorizations();
 
         $this->view->put_all([
             'MENU'             => ScmMenuService::build_event_menu($this->event_id()),
@@ -54,7 +52,7 @@ class ScmBracketController extends DefaultModuleController
 
 	private function build_round_trip_view()
 	{
-        $games = ScmGroupService::games_list_from_group($this->event_id(), 'W');
+        $games = ScmGroupService::games_list_from_group($this->event_id(), 'B');
         $games = call_user_func_array('array_merge', $games);
         $c_hat_ranking = ScmParamsService::get_params($this->event_id())->get_hat_ranking();
         $c_draw_games = ScmParamsService::get_params($this->event_id())->get_draw_games();
@@ -155,73 +153,55 @@ class ScmBracketController extends DefaultModuleController
         }
     }
 
-	private function build_winner_view()
+	private function build_bracket_view()
 	{
-        $games = ScmGroupService::games_list_from_group($this->event_id(), 'W');
+        $games = ScmGroupService::games_list_from_group($this->event_id(), 'B');
         $games = call_user_func_array('array_merge', $games);
 
-        $rounds = [];
-        foreach ($games as $game)
-        {
-            $rounds[] = $game['game_group'];
-        }
-
-        $rounds_count = array_reverse(array_unique($rounds));
-        $key_rounds_count = array_keys($rounds_count);
-        $first_key = reset($key_rounds_count);
-
-        foreach($rounds_count  as $key => $round)
-        {
-            $this->view->assign_block_vars('w_rounds', [
-                'C_ALL_PLACES' => $key !== $first_key && $this->looser_bracket,
-                'ROUND_ID' => $round,
-                'L_TITLE' => $this->lang['scm.round.of.'.$this->round_title($round).'']
-            ]);
-
-            for ($i = 0; $i < count($games); $i++)
-            {
-                $game = new ScmGame();
-                $game->set_properties($games[$i]);
-
-                if ($game->get_game_group() == $round)
-                {
-                    $this->view->assign_block_vars('w_rounds.games', $game->get_template_vars());
-                }
+        usort($games, function($a, $b) {
+            if ($a['game_round'] == $b['game_round']) {
+                return $a['game_order'] - $b['game_order'];
+            } else {
+                return $b['game_round'] - $a['game_round'];
             }
-        }
-	}
+        });
 
-	private function build_looser_view()
-	{
-        $games = ScmGroupService::games_list_from_group($this->event_id(), 'L');
-        $games = call_user_func_array('array_merge', $games);
-
-        $rounds = [];
-        foreach ($games as $game)
+        $brackets = [];
+        foreach($games as $game)
         {
-            $rounds[] = $game['game_group'];
+            $brackets[$game['game_round']][$game['game_group']][] = $game;
         }
 
-        $rounds_count = array_reverse(array_unique($rounds));
-        $key_rounds_count = array_keys($rounds_count);
-        $first_key = reset($key_rounds_count);
-        $last_key = end($key_rounds_count);
-        foreach($rounds_count  as $key => $round)
+        foreach($brackets as $bracket => $rounds)
         {
-            $this->view->assign_block_vars('l_rounds', [
-                'C_ALL_PLACES' => $key !== $first_key && $this->looser_bracket,
-                'ROUND_ID' => $round,
-                'L_TITLE' => $this->lang['scm.round.of.'.$this->round_title($round).'']
+            $this->view->assign_block_vars('brackets', [
+                'BRACKET_NAME' => $bracket == 1 ? $this->lang['scm.winner.bracket'] : (count($brackets) == 2 ? $this->lang['scm.looser.bracket'] : $this->lang['scm.looser.bracket'] . ' ' . ScmBracketService::ntl($bracket)),
+                'BRACKET_ID' => $bracket,
             ]);
 
-            for ($i = 0; $i < count($games); $i++)
-            {
-                $game = new ScmGame();
-                $game->set_properties($games[$i]);
+            // Reverse brackets to be looser.n, looser.n-1, looser.1, winner
+            $keys = array_reverse(array_keys($rounds));
+            $values = array_reverse(array_values($rounds));
+            $r_rounds = array_combine($keys, $values);
 
-                if ($game->get_game_group() == $round)
+            // Isolate first round
+            $key_rounds_count = array_keys($r_rounds);
+            $first_key = reset($key_rounds_count);
+
+            foreach($r_rounds as $round => $games)
+            {
+                $this->view->assign_block_vars('brackets.rounds', [
+                    'C_ALL_PLACES' => $round !== $first_key && $this->looser_bracket,
+                    'ROUND_ID' => $round,
+                    'L_TITLE' => $this->lang['scm.round.of.'.$this->round_title($round).'']
+                ]);
+
+                foreach ($games as $game)
                 {
-                    $this->view->assign_block_vars('l_rounds.games', $game->get_template_vars());
+                    $item = new ScmGame();
+                    $item->set_properties($game);
+
+                    $this->view->assign_block_vars('brackets.rounds.games', $item->get_template_vars());
                 }
             }
         }

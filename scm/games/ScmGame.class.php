@@ -226,7 +226,7 @@ class ScmGame
                 'C_HOME_WIN'      => $this->game_home_score > $this->game_away_score || $this->game_home_pen > $this->game_away_pen,
                 'C_AWAY_FAV'      => ScmParamsService::check_fav($this->game_event_id, $this->game_away_id) && $this->game_away_id,
                 'C_AWAY_WIN'      => $this->game_home_score < $this->game_away_score || $this->game_home_pen < $this->game_away_pen,
-                'GAME_ID'         => $this->game_type.$this->game_group.$this->game_order,
+                'GAME_ID'         => $this->game_type.$this->game_group.$this->game_round.$this->game_order,
                 'MATCHDAY'        => $this->game_round,
                 'PLAYGROUND'      => $this->game_playground,
                 'HOME_ID'         => $this->game_home_id,

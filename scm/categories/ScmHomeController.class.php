@@ -115,22 +115,13 @@ class ScmHomeController extends DefaultModuleController
 					$item = new ScmEvent();
 					$item->set_properties($row);
 
-                    if ($this->check_season($item->get_season_id()))
+                    if (ScmSeasonService::check_season($item->get_season_id()))
                         $this->view->assign_block_vars('categories.items', $item->get_template_vars());
 				}
 				$result->dispose();
 			}
 		}
 	}
-
-    private function check_season(int $season_id)
-    {
-        $now = new Date();
-        $season_name = ScmSeasonService::get_season($season_id)->get_season_name();
-        $season_parts = explode('-', $season_name);
-
-        return in_array($now->get_year(), $season_parts);
-    }
 
 	private function get_category()
 	{
