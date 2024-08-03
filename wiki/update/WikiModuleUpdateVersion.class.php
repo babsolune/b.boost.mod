@@ -20,10 +20,9 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 	public function __construct()
 	{
 		parent::__construct('wiki');
-
-		$this->content_tables = [['name' => PREFIX . 'wiki', 'content_field' => 'content']];
+		$this->content_tables = [['name' => PREFIX . 'wiki_contents', 'content_field' => 'content']];
 		$this->modify_content_before_change_tables();
-		
+
 		self::$delete_old_files_list = [
 			'/phpboost/WikiCategoriesCache.class.php',
 			'/phpboost/WikiHomePageExtensionPoint.class.php',
@@ -103,12 +102,13 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 			[
 				'table_name' => PREFIX . 'wiki_contents',
 				'columns' => [
-					'title' 		=> ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
-					'summary' 		=> ['type' => 'text', 'length' => 65000],
-					'thumbnail' 	=> ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
-					'content_level' => ['type' => 'integer', 'length' => 1, 'default' => 0],
-					'custom_level' 	=> ['type' => 'text', 'length' => 65000],
-					'sources' 		=> ['type' => 'text', 'length' => 65000]
+					'title' 		     => ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
+					'summary' 		     => ['type' => 'text', 'length' => 65000],
+					'thumbnail' 	     => ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
+                    'author_custom_name' => ['type' =>  'string', 'length' => 255, 'default' => "''"],
+					'content_level'      => ['type' => 'integer', 'length' => 1, 'default' => 0],
+					'custom_level' 	     => ['type' => 'text', 'length' => 65000],
+					'sources' 		     => ['type' => 'text', 'length' => 65000]
 				]
 			],
 			[
@@ -125,7 +125,16 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 			]
 		];
 
-		// TODO : modify keys/indexes
+		$this->database_keys_to_add = [
+            [
+                'table_name' => PREFIX . 'wiki_contents',
+                'keys' => 
+                [
+                    'content' => true, // True to add key FULLTEXT,
+                    'title' => true
+                ]
+            ]
+        ];
 
 		$this->database_columns_to_delete = [
 			[
@@ -152,7 +161,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 			$this->articles_encoded_title[$row['id']] = $row['encoded_title'];
 		}
 		$result->dispose();
-		
+
 		// get categories
 		$result = PersistenceContext::get_querier()->select("SELECT * FROM " . PREFIX . "wiki_cats");
 		while ($row = $result->fetch()) {
@@ -167,7 +176,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 			$contents[$row['id_contents']] = $row;
 		}
 		$result->dispose();
-		
+
 		foreach ($contents as $id => &$row) {
 			$this->actual_article = $id;
 			// replace wiki links
@@ -179,12 +188,11 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 				$contents[$id]['content'] = preg_replace($regex, $replacement, $row['content'],-1,$count);
 			}
 		}
-		
+
 		// Save contents
 		foreach ($contents as $row) {
 			PersistenceContext::get_querier()->update(PREFIX . "wiki_contents", $row, "WHERE id_contents = " . $row['id_contents']);
 		}
-
 	}
 
 	protected function replace_wiki_link($matches)
@@ -228,7 +236,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 			MenuService::delete($menu);
 			MenuService::generate_cache();
 		}
-		
+
 		$wikistatusmenu_id = 0;
 		try {
 			$wikistatusmenu_id = PersistenceContext::get_querier()->get_column_value(DB_TABLE_MENUS, 'id', 'WHERE title = "WikiStatus/WikiStatusModuleMiniMenu"');
@@ -239,46 +247,28 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 			MenuService::delete($menu);
 			MenuService::generate_cache();
 		}
-		
-		// Set category from old `ìs_cat`
-		$result = $this->querier->select('SELECT i.id, i.title, i.rewrited_title, i.is_cat, i.defined_status, cat.id as cat_id
+
+		$result = $this->querier->select('SELECT i.id, i.title, i.rewrited_title, i.is_cat, i.defined_status, i.auth, c.content, cat.id as cat_id
             FROM ' . PREFIX . 'wiki_articles i
             LEFT JOIN ' . PREFIX . 'wiki_cats cat ON cat.article_id = i.id
-            LEFT JOIN ' . PREFIX . 'wiki_contents c ON c.item_id = i.id
-            WHERE i.is_cat = 1'
-		);
-		
-		while ($row = $result->fetch()) {
-			$this->querier->update(PREFIX . 'wiki_cats', ['name' => $row['title'], 'rewrited_name' => $row['rewrited_title']], 'WHERE id = :id', ['id' => $row['cat_id']]);
-		}
-		$result->dispose();
-		
-		// Set content from old article
-		$result = $this->querier->select('SELECT i.id, i.title, i.rewrited_title, i.defined_status, cat.id as cat_id
-            FROM ' . PREFIX . 'wiki_articles i
-            LEFT JOIN ' . PREFIX . 'wiki_contents c ON c.item_id = i.id
-			LEFT JOIN ' . PREFIX . 'wiki_cats cat ON cat.article_id = i.id
-            WHERE i.id = c.item_id'
+            LEFT JOIN ' . PREFIX . 'wiki_contents c ON c.item_id = i.id'
 		);
 
-		while ($row = $result->fetch()) {
-			$this->querier->update(PREFIX . 'wiki_contents', ['title' => $row['title'], 'custom_level' => $row['defined_status']], 'WHERE item_id = :id', ['id' => $row['id']]);
-			$this->querier->update(PREFIX . 'wiki_cats', ['name' => $row['title'], 'rewrited_name' => $row['rewrited_title']], 'WHERE id = :id', ['id' => $row['cat_id']]);
-		}
-		$result->dispose();
-		
-		// Set categories auth from old `ìs_cat`
-		$result = $this->querier->select('SELECT i.id, i.auth, i.is_cat, i.defined_status, cat.id as cat_id, cat.name as cat_name, cat.rewrited_name as cat_rewrited_name
-            FROM ' . PREFIX . 'wiki_articles i
-            LEFT JOIN ' . PREFIX . 'wiki_cats cat ON cat.article_id = i.id
-            WHERE i.is_cat = 1'
-		);
-
-		while ($row = $result->fetch()) {
-			if ($row['auth'] == null || $row['auth'] == '')
-				$row['auth'] = [];
-			$this->querier->update(PREFIX . 'wiki_cats', ['name' => $row['cat_name'], 'rewrited_name' => $row['cat_rewrited_name'], 'auth' => $row['auth']], 'WHERE id = :id', ['id' => $row['cat_id']]);
-		}
+		while ($row = $result->fetch())
+        {
+            // If the article is a category
+            if ($row['is_cat'] == 1) 
+            {
+                // Set the article as category
+                $this->querier->update(PREFIX . 'wiki_cats', ['name' => $row['title'], 'rewrited_name' => $row['rewrited_title'], 'description' => $row['content'], 'auth' => $row['auth']], 'WHERE id = :id', ['id' => $row['cat_id']]);
+                //  Then delete the article
+                $this->querier->delete(PREFIX . 'wiki_articles', 'WHERE id = :id', ['id' => $row['id']]);
+            }
+            // Set content from old article
+            $this->querier->update(PREFIX . 'wiki_contents', ['title' => $row['title'], 'content_level' => $row['defined_status']], 'WHERE item_id = :id', ['id' => $row['id']]);
+            // Set articles to "published"
+            $this->querier->update(PREFIX . 'wiki_articles', ['published' => 1], 'WHERE id = :id', ['id' => $row['id']]);
+        }
 		$result->dispose();
 	}
 }
