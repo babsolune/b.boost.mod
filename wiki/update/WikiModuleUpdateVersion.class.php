@@ -177,7 +177,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 		}
 		$result->dispose();
 
-		foreach ($contents as $id => &$row) {
+ 		foreach ($contents as $id => &$row) {
 			$this->actual_article = $id;
 			// replace wiki links
 			$contents[$id]['content'] = preg_replace_callback('#href="\/wiki\/(.+)"#isU', [$this, 'replace_wiki_link'], $row['content']);
@@ -191,6 +191,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 
 		// Save contents
 		foreach ($contents as $row) {
+			$row['content'] = preg_replace('#<br \/>(\s*<br \/>)+#', '<br />', $row['content']);
 			PersistenceContext::get_querier()->update(PREFIX . "wiki_contents", $row, "WHERE id_contents = " . $row['id_contents']);
 		}
 	}
@@ -201,20 +202,24 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 		$encoded_title_requested = $parts[0];
 		$paragraph = $parts[1] ?? false;
 		$target = array_search($encoded_title_requested, $this->articles_encoded_title);
-		if ($target !== false) {
+		if ($target !== false) 
+		{
 			// article founded
 			$id_cat = $this->articles[$target]['id_cat'];
-				$link = 'href="/wiki/' . $id_cat . '-' . $this->articles_encoded_title[$this->categories[$id_cat]['article_id']] . '/';
-				$link .= $this->articles[$target]['id'] . '-' . $this->articles[$target]['encoded_title'];
-				if ($paragraph !== false)
-				{
-					$link .= "#$paragraph";
-				}
-				$link .= '"';
-				return $link;
+			$link = 'href="/wiki/' . $id_cat . '-' . $this->articles_encoded_title[$this->categories[$id_cat]['article_id']];
+			if ($this->articles[$target]['is_cat'] == 0) 
+			{
+				$link .= '/' . $this->articles[$target]['id'] . '-' . $this->articles[$target]['encoded_title'];
+			}
+			if ($paragraph !== false)
+			{
+				$link .= "#$paragraph";
+			}
+			$link .= '"';
+			return $link;
 		}
 		// If title not found or id_cat is not a category, report a 404 link error
-		$id_cat = $this->articles[$this->actual_article]['id_cat'] ?? 0;
+		$id_cat = $this->articles[$this->actual_article]['id_cat'] ?? '0';
 		$page_url = $id_cat . '-' . $this->articles_encoded_title[$this->categories[$id_cat]['article_id']] . '/';
 		$page_url .= $this->articles[$this->actual_article]['id'] . '-' . $this->articles[$this->actual_article]['encoded_title'];
 		$error_404 = new AdminError404($matches[1], $page_url);
@@ -266,9 +271,10 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
             }
             // Set content from old article
             $this->querier->update(PREFIX . 'wiki_contents', ['title' => $row['title'], 'content_level' => $row['defined_status']], 'WHERE item_id = :id', ['id' => $row['id']]);
-            // Set articles to "published"
-            $this->querier->update(PREFIX . 'wiki_articles', ['published' => 1], 'WHERE id = :id', ['id' => $row['id']]);
         }
 		$result->dispose();
+
+		// Set articles to "published"
+		$this->querier->update(PREFIX . 'wiki_articles', ['published' => 1], 'WHERE published = 0');
 	}
 }
