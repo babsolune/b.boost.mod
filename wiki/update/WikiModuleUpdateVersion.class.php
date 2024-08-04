@@ -218,12 +218,6 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 			$link .= '"';
 			return $link;
 		}
-		// If title not found or id_cat is not a category, report a 404 link error
-		$id_cat = $this->articles[$this->actual_article]['id_cat'] ?? '0';
-		$page_url = $id_cat . '-' . $this->articles_encoded_title[$this->categories[$id_cat]['article_id']] . '/';
-		$page_url .= $this->articles[$this->actual_article]['id'] . '-' . $this->articles[$this->actual_article]['encoded_title'];
-		$error_404 = new AdminError404($matches[1], $page_url);
-		AdminError404DAO::instance()->save($error_404, 'times');
 		// We leave the original link (in error) intact
 		return $matches[0];
 	}
