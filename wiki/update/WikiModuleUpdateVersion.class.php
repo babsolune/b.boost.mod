@@ -174,6 +174,10 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 		$contents = [];
 		while ($row = $result->fetch()) {
 			$contents[$row['id_contents']] = $row;
+			if (!isset($this->articles[$row['id_article']]['creation']) || $this->articles[$row['id_article']]['creation'] < $row['timestamp'])
+			{
+				$this->articles[$row['id_article']]['creation'] = $row['timestamp'];
+			}
 		}
 		$result->dispose();
 
@@ -265,6 +269,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
             }
             // Set content from old article
             $this->querier->update(PREFIX . 'wiki_contents', ['title' => $row['title'], 'content_level' => $row['defined_status']], 'WHERE item_id = :id', ['id' => $row['id']]);
+			$this->querier->update(PREFIX . 'wiki_articles', ['creation_date' => $this->articles[$row['id']]['creation_date']], 'WHERE id = ' . $row['id']);
         }
 		$result->dispose();
 
