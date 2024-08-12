@@ -154,6 +154,9 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 
 	protected function modify_content_before_change_tables()
 	{
+		// Delete redirections
+		$this->querier->delete(PREFIX . 'wiki_articles', 'WHERE redirect > 0');
+
 		// get articles
 		$result = PersistenceContext::get_querier()->select("SELECT * FROM " . PREFIX . "wiki_articles");
 		while ($row = $result->fetch()) {
@@ -174,9 +177,9 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 		$contents = [];
 		while ($row = $result->fetch()) {
 			$contents[$row['id_contents']] = $row;
-			if (!isset($this->articles[$row['id_article']]['creation']) || $this->articles[$row['id_article']]['creation'] < $row['timestamp'])
+			if (!isset($this->articles[$row['id_article']]['creation']) || $this->articles[$row['id_article']]['creation'] < (int)$row['timestamp'])
 			{
-				$this->articles[$row['id_article']]['creation'] = $row['timestamp'];
+				$this->articles[$row['id_article']]['creation'] = (int)$row['timestamp'];
 			}
 		}
 		$result->dispose();
@@ -269,7 +272,8 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
             }
             // Set content from old article
             $this->querier->update(PREFIX . 'wiki_contents', ['title' => $row['title'], 'content_level' => $row['defined_status']], 'WHERE item_id = :id', ['id' => $row['id']]);
-			$this->querier->update(PREFIX . 'wiki_articles', ['creation_date' => $this->articles[$row['id']]['creation_date']], 'WHERE id = ' . $row['id']);
+			// Set dates creation from old contents
+			$this->querier->update(PREFIX . 'wiki_articles', ['creation_date' => $this->articles[$row['id']]['creation']], 'WHERE id = ' . $row['id']);
         }
 		$result->dispose();
 
