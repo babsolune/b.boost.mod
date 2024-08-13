@@ -19,15 +19,11 @@ class WikiCache implements CacheData
 		$this->items = array();
 
 		$now = new Date();
-		$config = WikiConfig::load();
 
-		$result = PersistenceContext::get_querier()->select('
-			SELECT wiki.*, notes.average_notes, notes.notes_number
-			FROM ' . WikiSetup::$wiki_articles_table . ' wiki
-			LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = wiki.id AND notes.module_name = \'wiki\'
-			WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))' . ($config->is_limit_oldest_file_day_in_menu_enabled() ? 'AND update_date > :oldest_file_date' : '') . '
-			ORDER BY i_order ASC
-			LIMIT :files_number_in_menu OFFSET 0', array(
+		$result = PersistenceContext::get_querier()->select('SELECT i.*
+			FROM ' . WikiSetup::$wiki_articles_table . ' i
+			WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
+            ORDER BY i_order ASC', array(
 				'timestamp_now' => $now->get_timestamp()
 		));
 

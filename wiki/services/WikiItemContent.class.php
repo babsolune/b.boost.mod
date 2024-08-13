@@ -11,7 +11,6 @@ class WikiItemContent
 {
 	private $content_id;
 	private $item_id;
-	private $title;
 	private $summary;
 	private $content;
 	private $active_content;
@@ -58,16 +57,6 @@ class WikiItemContent
 	public function set_item_id($item_id)
 	{
 		$this->item_id = $item_id;
-	}
-
-	public function get_title()
-	{
-		return $this->title;
-	}
-
-	public function set_title($title)
-	{
-		$this->title = $title;
 	}
 
 	public function get_summary()
@@ -222,7 +211,6 @@ class WikiItemContent
 		return array(
 			'content_id'            => $this->get_content_id(),
 			'item_id'               => $this->get_item_id(),
-			'title'                 => $this->get_title(),
 			'summary'               => $this->get_summary(),
 			'content'               => $this->get_content(),
 			'active_content'        => $this->get_active_content(),
@@ -241,7 +229,6 @@ class WikiItemContent
 	{
 		$this->content_id       = $properties['content_id'];
 		$this->item_id          = $properties['item_id'];
-		$this->title            = $properties['title'];
 		$this->summary          = $properties['summary'];
 		$this->content          = $properties['content'];
 		$this->active_content   = $properties['active_content'];

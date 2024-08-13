@@ -20,11 +20,19 @@ class WikiReorderItemsController extends DefaultModuleController
 	{
 		$this->check_authorizations();
 
+Debug::dump($request->get_url_referrer());
 		if ($request->get_value('submit', false))
 		{
 			$this->update_position($request);
-			AppContext::get_response()->redirect(WikiUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name()), $this->lang['warning.success.position.update']);
-		}
+            WikiService::clear_cache();
+            // AppContext::get_response()->redirect(WikiUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name()), $this->lang['warning.success.position.update']);
+			AppContext::get_response()->redirect(
+                (
+                    $request->get_url_referrer() ? $request->get_url_referrer() : WikiUrlBuilder::home()
+                ),
+                $this->lang['warning.success.position.update']
+            );
+	}
 
 		$this->build_view($request);
 
@@ -75,7 +83,7 @@ class WikiReorderItemsController extends DefaultModuleController
 
 			$this->view->assign_block_vars('items', array(
                 'ID' => $item->get_id(),
-                'TITLE' => $item->get_item_content()->get_title(),
+                'TITLE' => $item->get_title(),
                 'U_EDIT' => WikiUrlBuilder::edit($item->get_id())->rel(),
                 'U_DELETE' => WikiUrlBuilder::delete($item->get_id(), 0)->rel(),
             ));

@@ -128,16 +128,16 @@ class WikiItemController extends DefaultModuleController
 		$now = new Date();
 
 		$result = PersistenceContext::get_querier()->select('SELECT
-			i.id, c.item_id, c.title, i.id_category, i.rewrited_title, c.thumbnail, c.content, c.active_content, i.creation_date, c.update_date,
-			(2 * FT_SEARCH_RELEVANCE(c.title, :search_content) + FT_SEARCH_RELEVANCE(c.content, :search_content) / 3) AS relevance
+			i.id, c.item_id, i.title, i.id_category, i.rewrited_title, c.thumbnail, c.content, c.active_content, i.creation_date, c.update_date,
+			(2 * FT_SEARCH_RELEVANCE(i.title, :search_content) + FT_SEARCH_RELEVANCE(c.content, :search_content) / 3) AS relevance
 		FROM ' . WikiSetup::$wiki_articles_table . ' i
         LEFT JOIN ' . WikiSetup::$wiki_contents_table . ' c ON c.item_id = i.id
-		WHERE (FT_SEARCH(c.title, :search_content) OR FT_SEARCH(c.content, :search_content)) AND i.id <> :excluded_id
+		WHERE (FT_SEARCH(i.title, :search_content) OR FT_SEARCH(c.content, :search_content)) AND i.id <> :excluded_id
 		AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
 		AND c.active_content = 1
 		ORDER BY relevance DESC LIMIT 0, :limit_nb', array(
 			'excluded_id' => $item->get_id(),
-			'search_content' => $item->get_item_content()->get_title() .','. $item->get_item_content()->get_content(),
+			'search_content' => $item->get_title() .','. $item->get_item_content()->get_content(),
 			'timestamp_now' => $now->get_timestamp(),
 			'limit_nb' => (int)WikiConfig::load()->get_suggested_items_nb()
 		));
@@ -164,12 +164,12 @@ class WikiItemController extends DefaultModuleController
 		$item_timestamp = $item->get_creation_date()->get_timestamp();
 
 		$result = PersistenceContext::get_querier()->select('
-		(SELECT i.id, c.title, i.id_category, i.rewrited_title, c.thumbnail, \'PREVIOUS\' as type
+		(SELECT i.id, i.title, i.id_category, i.rewrited_title, c.thumbnail, \'PREVIOUS\' as type
 		FROM '. WikiSetup::$wiki_articles_table .' i
 		LEFT JOIN ' . WikiSetup::$wiki_contents_table . ' c ON c.item_id = i.id
         WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0))) AND active_content = 1 AND creation_date < :item_timestamp AND id_category IN :authorized_categories ORDER BY creation_date DESC LIMIT 1 OFFSET 0)
 		UNION
-		(SELECT i.id, c.title, i.id_category, i.rewrited_title, c.thumbnail, \'NEXT\' as type
+		(SELECT i.id, i.title, i.id_category, i.rewrited_title, c.thumbnail, \'NEXT\' as type
 		FROM '. WikiSetup::$wiki_articles_table .' i
 		LEFT JOIN ' . WikiSetup::$wiki_contents_table . ' c ON c.item_id = i.id
         WHERE (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0))) AND active_content = 1 AND creation_date > :item_timestamp AND id_category IN :authorized_categories ORDER BY creation_date ASC LIMIT 1 OFFSET 0)
@@ -256,7 +256,7 @@ class WikiItemController extends DefaultModuleController
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-		$graphical_environment->set_page_title($item_content->get_title(), ($category->get_id() != Category::ROOT_CATEGORY ? $category->get_name() . ' - ' : '') . $this->config->get_module_name());
+		$graphical_environment->set_page_title($item->get_title(), ($category->get_id() != Category::ROOT_CATEGORY ? $category->get_name() . ' - ' : '') . $this->config->get_module_name());
 		$graphical_environment->get_seo_meta_data()->set_description($item_content->get_real_summary());
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()));
 
@@ -272,7 +272,7 @@ class WikiItemController extends DefaultModuleController
 			if ($category->get_id() != Category::ROOT_CATEGORY)
 				$breadcrumb->add($category->get_name(), WikiUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
 		}
-		$breadcrumb->add($item_content->get_title(), WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()));
+		$breadcrumb->add($item->get_title(), WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()));
 
 		return $response;
 	}

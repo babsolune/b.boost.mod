@@ -36,8 +36,8 @@ class WikiDeleteItemController extends DefaultModuleController
 				$request->get_url_referrer(),
 				WikiUrlBuilder::display($this->item->get_category()->get_id(), $this->item->get_category()->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title())->rel()) ? $request->get_url_referrer() : WikiUrlBuilder::home()),
 				$request->get_int('content_id') === 0 ?
-					StringVars::replace_vars($this->lang['wiki.message.success.delete'], array('title' => $this->item->get_item_content()->get_title())) :
-					StringVars::replace_vars($this->lang['wiki.message.success.delete.content'], array('content' => $request->get_int('content_id'),'title' => $this->item->get_item_content()->get_title())
+					StringVars::replace_vars($this->lang['wiki.message.success.delete'], array('title' => $this->item->get_title())) :
+					StringVars::replace_vars($this->lang['wiki.message.success.delete.content'], array('content' => $request->get_int('content_id'),'title' => $this->item->get_title())
 		));
 	}
 

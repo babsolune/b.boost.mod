@@ -48,8 +48,9 @@ richCategories avec ajout des droits de gestion des archives
     + ~~item~~
         + ~~id~~
         + ~~id_category~~
-        + ~~i_order~~
+        + ~~title~~
         + ~~rewrited_title~~
+        + ~~i_order~~
         + ~~publication (published, start, end)~~
         + ~~creation_date~~
         + ~~views_number~~
@@ -59,7 +60,6 @@ richCategories avec ajout des droits de gestion des archives
     + contenu
         + ~~content_id (id du contenu)~~
         + ~~item_id (relation avec l'item)~~
-        + ~~title~~
         + ~~summary (résumé)~~
         + ~~active_content (1 = contenu affiché, 0 = contenu archivé)~~
         + ~~content~~

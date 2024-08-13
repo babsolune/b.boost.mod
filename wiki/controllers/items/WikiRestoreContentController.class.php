@@ -29,7 +29,7 @@ class WikiRestoreContentController extends DefaultModuleController
 		WikiService::clear_cache();
 		HooksService::execute_hook_action('restore', self::$module_id, $this->item->get_properties());
 
-		AppContext::get_response()->redirect(($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), WikiUrlBuilder::display($this->item->get_category()->get_id(), $this->item->get_category()->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title())->rel()) ? $request->get_url_referrer() : WikiUrlBuilder::home()), StringVars::replace_vars($this->lang['wiki.message.success.restore'], array('content' => $request->get_int('content_id'),'title' => $this->item->get_item_content()->get_title())));
+		AppContext::get_response()->redirect(($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), WikiUrlBuilder::display($this->item->get_category()->get_id(), $this->item->get_category()->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title())->rel()) ? $request->get_url_referrer() : WikiUrlBuilder::home()), StringVars::replace_vars($this->lang['wiki.message.success.restore'], array('content' => $request->get_int('content_id'),'title' => $this->item->get_title())));
 	}
 
 	private function check_authorizations()

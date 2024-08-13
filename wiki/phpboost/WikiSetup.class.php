@@ -92,8 +92,9 @@ class WikiSetup extends DefaultModuleSetup
 		$fields = array(
 			'id' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
 			'id_category' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
-			'i_order' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
+			'title' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
 			'rewrited_title' => array('type' => 'string', 'length' => 255, 'default' => "''"),
+			'i_order' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'published' => array('type' => 'integer', 'length' => 1, 'notnull' => 1, 'default' => 0),
 			'publishing_start_date' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
 			'publishing_end_date' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
@@ -103,6 +104,7 @@ class WikiSetup extends DefaultModuleSetup
 		$options = array(
 			'primary' => array('id'),
 			'indexes' => array(
+				'title' => array('type' => 'fulltext', 'fields' => 'title'),
 				'id_category' => array('type' => 'key', 'fields' => 'id_category'),
 				'i_order' => array('type' => 'key', 'fields' => 'i_order'),
 			)
@@ -115,7 +117,6 @@ class WikiSetup extends DefaultModuleSetup
 		$fields = array(
 			'content_id' => array('type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1),
 			'item_id' => array('type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0),
-			'title' => array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"),
 			'summary' => array('type' => 'text', 'length' => 65000),
 			'active_content' => array('type' => 'boolean', 'length' => 1, 'notnull' => 1, 'default' => 0),
 			'content' => array('type' => 'text', 'length' => 16777215),
@@ -131,7 +132,6 @@ class WikiSetup extends DefaultModuleSetup
 		$options = array(
 			'primary' => array('content_id'),
 			'indexes' => array(
-				'title' => array('type' => 'fulltext', 'fields' => 'title'),
 				'item_id' => array('type' => 'key', 'fields' => 'item_id'),
 				'content' => array('type' => 'fulltext', 'fields' => 'content'),
 			)
@@ -184,8 +184,9 @@ class WikiSetup extends DefaultModuleSetup
 		PersistenceContext::get_querier()->insert(self::$wiki_articles_table, array(
 			'id'               		=> 1,
 			'id_category'           => 1,
-			'i_order'               => 1,
+			'title'                 => $this->messages['default.sheet.name'],
 			'rewrited_title'        => Url::encode_rewrite($this->messages['default.sheet.name']),
+			'i_order'               => 1,
 			'published'             => WikiItem::PUBLISHED,
 			'publishing_start_date' => 0,
 			'publishing_end_date'   => 0,
@@ -199,7 +200,6 @@ class WikiSetup extends DefaultModuleSetup
 		PersistenceContext::get_querier()->insert(self::$wiki_contents_table, array(
 			'content_id'     	    => 1,
 			'item_id'        	    => 1,
-			'title'                 => $this->messages['default.sheet.name'],
 			'active_content'        => 1,
 			'summary'        	    => '',
 			'author_custom_name'    => '',
@@ -330,8 +330,6 @@ class WikiSetup extends DefaultModuleSetup
         if (!isset($this->articles_column['i_order']['key']) || !$this->articles_column['i_order']['key'])
             PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'wiki_articles ADD KEY `i_order` (`i_order`)');
 
-        if (!isset($this->contents_column['title']))
-			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'wiki_contents', 'title', array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"));
         if (!isset($this->contents_column['thumbnail']))
 			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'wiki_contents', 'thumbnail', array('type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"));
         if (!isset($this->contents_column['custom_level']))
@@ -340,8 +338,6 @@ class WikiSetup extends DefaultModuleSetup
         if (!isset($this->contents_column['sources']))
 			PersistenceContext::get_dbms_utils()->add_column(PREFIX . 'wiki_contents', 'sources', array('type' => 'string', 'length' => 65000));
 
-        if (!isset($this->contents_column['title']['key']) || !$this->contents_column['title']['key'])
-            PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'wiki_contents ADD KEY `title` (`title`)');
         if (!isset($this->contents_column['item_id']['key']) || !$this->contents_column['item_id']['key'])
             PersistenceContext::get_querier()->inject('ALTER TABLE ' . PREFIX . 'wiki_contents ADD KEY `item_id` (`item_id`)');
 
@@ -388,8 +384,6 @@ class WikiSetup extends DefaultModuleSetup
 	{
 		if (isset($this->articles_column['id_contents']))
 			PersistenceContext::get_dbms_utils()->drop_column(PREFIX . 'wiki_articles', 'id_contents');
-		if (isset($this->articles_column['title']))
-			PersistenceContext::get_dbms_utils()->drop_column(PREFIX . 'wiki_articles', 'title');
 		if (isset($this->articles_column['is_cat']))
 			PersistenceContext::get_dbms_utils()->drop_column(PREFIX . 'wiki_articles', 'is_cat');
 		if (isset($this->articles_column['undefined_status']))

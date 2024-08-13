@@ -39,7 +39,7 @@ class WikiFeedProvider implements FeedProvider
 			$ids_categories = array_keys($categories);
 
 			$now = new Date();
-			$results = $querier->select('SELECT i.id, i.id_category, c.title, i.rewrited_title, c.content, c.update_date, c.thumbnail, cat.rewrited_name AS rewrited_name_cat
+			$results = $querier->select('SELECT i.id, i.id_category, i.title, i.rewrited_title, c.content, c.update_date, c.thumbnail, cat.rewrited_name AS rewrited_name_cat
 				FROM ' . WikiSetup::$wiki_articles_table . ' i
 				LEFT JOIN '. WikiSetup::$wiki_contents_table .' c ON c.item_id = i.id
 				LEFT JOIN '. WikiSetup::$wiki_cats_table .' cat ON cat.id = i.id_category

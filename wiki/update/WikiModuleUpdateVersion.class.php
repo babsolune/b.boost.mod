@@ -102,7 +102,6 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 			[
 				'table_name' => PREFIX . 'wiki_contents',
 				'columns' => [
-					'title' 		     => ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
 					'summary' 		     => ['type' => 'text', 'length' => 65000],
 					'thumbnail' 	     => ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
                     'author_custom_name' => ['type' =>  'string', 'length' => 255, 'default' => "''"],
@@ -130,8 +129,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
                 'table_name' => PREFIX . 'wiki_contents',
                 'keys' => 
                 [
-                    'content' => true, // True to add key FULLTEXT,
-                    'title' => true
+                    'content' => true, // True to add key FULLTEXT
                 ]
             ]
         ];
@@ -139,7 +137,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 		$this->database_columns_to_delete = [
 			[
 				'table_name' => PREFIX . 'wiki_articles',
-				'columns' 	 => ['id_contents', 'title', 'is_cat', 'defined_status', 'redirect', 'auth']
+				'columns' 	 => ['id_contents', 'is_cat', 'defined_status', 'redirect', 'auth']
 			],
 			[
 				'table_name' => PREFIX . 'wiki_contents',
@@ -184,7 +182,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 		}
 		$result->dispose();
 
- 		foreach ($contents as $id => &$row) {
+        foreach ($contents as $id => &$row) {
 			$this->actual_article = $id;
 			// replace wiki links
 			$contents[$id]['content'] = preg_replace_callback('#href="\/wiki\/(.+)"#isU', [$this, 'replace_wiki_link'], $row['content']);
@@ -266,14 +264,14 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
             if ($row['is_cat'] == 1) 
             {
                 // Set the article as category
-                $this->querier->update(PREFIX . 'wiki_cats', ['name' => $row['title'], 'rewrited_name' => $row['rewrited_title'], 'description' => $row['content'], 'auth' => $row['auth']], 'WHERE id = :id', ['id' => $row['cat_id']]);
+                $this->querier->update(PREFIX . 'wiki_cats', ['name' => stripslashes($row['title']), 'rewrited_name' => $row['rewrited_title'], 'description' => $row['content'], 'auth' => $row['auth']], 'WHERE id = :id', ['id' => $row['cat_id']]);
                 //  Then delete the article
                 $this->querier->delete(PREFIX . 'wiki_articles', 'WHERE id = :id', ['id' => $row['id']]);
             }
             // Set content from old article
-            $this->querier->update(PREFIX . 'wiki_contents', ['title' => $row['title'], 'content_level' => $row['defined_status']], 'WHERE item_id = :id', ['id' => $row['id']]);
+            $this->querier->update(PREFIX . 'wiki_contents', ['content_level' => $row['defined_status']], 'WHERE item_id = :id', ['id' => $row['id']]);
 			// Set dates creation from old contents
-			$this->querier->update(PREFIX . 'wiki_articles', ['creation_date' => $this->articles[$row['id']]['creation']], 'WHERE id = ' . $row['id']);
+			$this->querier->update(PREFIX . 'wiki_articles', ['title' => stripslashes($row['title']), 'creation_date' => $this->articles[$row['id']]['creation']], 'WHERE id = ' . $row['id']);
         }
 		$result->dispose();
 

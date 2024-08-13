@@ -31,13 +31,6 @@
                     # START root_items #
                         <li class="flex-between">
                             <a class="d-block categories-item offload" href="{root_items.U_ITEM}"><i class="fa fa-fw fa-file-alt"></i> {root_items.TITLE}</a>
-                            <div class="controls">
-                                <a href="{root_items.U_ITEM}" aria-label="<h5>{root_items.TITLE}</h5>{root_items.SUMMARY}"><i class="fa fa-eye"></i></a>
-                                # IF root_items.C_CONTROLS #
-                                    # IF root_items.C_EDIT #<a class="offload" href="{root_items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
-                                    # IF root_items.C_DELETE #<a href="{root_items.U_DELETE}" data-confirmation="delete-element" aria-label="{@common.delete}" id="delete-{root_items.ID}"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
-                                # ENDIF #
-                            </div>
                         </li>
                     # END root_items #
                 </ul>
@@ -53,9 +46,9 @@
                                 <div class="categories-item flex-between">
                                     <span>
                                         <i class="far fa-fw fa-folder" aria-hidden="true"></i> 
-                                        {categories.CATEGORY_NAME}
-                                        # IF categories.C_DISPLAY_DESCRIPTION # | <span class="text-italic small">{categories.CATEGORY_DESCRIPTION}</span># ENDIF #
+                                        {categories.CATEGORY_NAME} 
                                     </span>
+                                    <span class="small">({categories.ITEMS_NUMBER})</span>
                                 </div>
                                 <a class="offload" href="{categories.U_CATEGORY}" aria-label="{categories.CATEGORY_NAME}"><i class="fa fa-fw fa-caret-right" aria-hidden="true"></i></a>
                             </div>
@@ -69,13 +62,6 @@
                                     # START categories.items #
                                         <li class="flex-between">
                                             <a class="d-block categories-item offload" href="{categories.items.U_ITEM}"><i class="fa fa-fw fa-file-alt"></i> {categories.items.TITLE}</a>
-                                            <div class="controls">
-                                                <a href="{categories.items.U_ITEM}" aria-label="<h5>{categories.items.TITLE}</h5>{categories.items.SUMMARY}"><i class="fa fa-eye"></i></a>
-                                                # IF categories.items.C_CONTROLS #
-                                                    # IF categories.items.C_EDIT #<a class="offload" href="{categories.items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
-                                                    # IF categories.items.C_DELETE #<a href="{categories.items.U_DELETE}" data-confirmation="delete-element" aria-label="{@common.delete}" id="delete-{categories.items.ID}"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
-                                                # ENDIF #
-                                            </div>
                                         </li>
                                     # END categories.items #
                                 </ul>

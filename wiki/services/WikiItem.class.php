@@ -11,9 +11,10 @@ class WikiItem
 {
 	private $id;
 	private $id_category;
+	private $title;
+	private $rewrited_title;
 	private $i_order;
 	private $item_content;
-	private $rewrited_title;
 
 	private $published;
 	private $publishing_start_date;
@@ -51,14 +52,14 @@ class WikiItem
 		$this->id_category = $id_category;
 	}
 
-	public function get_i_order()
+	public function get_title()
 	{
-		return $this->i_order;
+		return $this->title;
 	}
 
-	public function set_i_order($i_order)
+	public function set_title($title)
 	{
-		$this->i_order = $i_order;
+		$this->title = $title;
 	}
 
 	public function get_rewrited_title()
@@ -69,6 +70,16 @@ class WikiItem
 	public function set_rewrited_title($rewrited_title)
 	{
 		$this->rewrited_title = $rewrited_title;
+	}
+
+	public function get_i_order()
+	{
+		return $this->i_order;
+	}
+
+	public function set_i_order($i_order)
+	{
+		$this->i_order = $i_order;
 	}
 
 	public function set_item_content(WikiItemContent $item_content)
@@ -239,8 +250,9 @@ class WikiItem
 		return array(
 			'id'                    => $this->get_id(),
 			'id_category'           => $this->get_id_category(),
-			'i_order'               => $this->get_i_order(),
+			'title'                 => $this->get_title(),
 			'rewrited_title'        => $this->get_rewrited_title(),
+			'i_order'               => $this->get_i_order(),
 			'published'             => $this->get_publishing_state(),
 			'publishing_start_date' => $this->get_publishing_start_date() !== null ? $this->get_publishing_start_date()->get_timestamp() : 0,
 			'publishing_end_date'   => $this->get_publishing_end_date() !== null ? $this->get_publishing_end_date()->get_timestamp() : 0,
@@ -256,8 +268,9 @@ class WikiItem
 
 		$this->id                      = $properties['id'];
 		$this->id_category             = $properties['id_category'];
-		$this->i_order                 = $properties['i_order'];
+		$this->title                   = $properties['title'];
 		$this->rewrited_title          = $properties['rewrited_title'];
+		$this->i_order                 = $properties['i_order'];
 		$this->item_content            = $item_content;
 		$this->views_number            = $properties['views_number'];
 		$this->published               = $properties['published'];
@@ -349,7 +362,7 @@ class WikiItem
 
 				// Item
 				'ID'                        => $this->id,
-				'TITLE'                     => $this->item_content->get_title(),
+				'TITLE'                     => $this->title,
 				'CONTENT'                   => $rich_content,
 				'SUMMARY' 		            => $real_summary,
 				'CHANGE_REASON'             => $this->item_content->get_change_reason(),

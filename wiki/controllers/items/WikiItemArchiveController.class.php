@@ -161,7 +161,7 @@ class WikiItemArchiveController extends DefaultModuleController
 			if ($category->get_id() != Category::ROOT_CATEGORY)
 				$breadcrumb->add($category->get_name(), WikiUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
 		}
-		$breadcrumb->add($item->get_item_content()->get_title(), WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()));
+		$breadcrumb->add($item->get_title(), WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()));
 		$breadcrumb->add($this->lang['wiki.archive'] . ' ' . $item->get_item_content()->get_content_id(), WikiUrlBuilder::archive($item->get_id(), $item->get_item_content()->get_content_id()));
 		
 		return $response;

@@ -41,7 +41,7 @@ class WikiItemFormController extends DefaultModuleController
 		if ($this->get_item()->get_id() !== null)
 			$fieldset->set_description($this->lang['wiki.message.draft']);
 
-		$fieldset->add_field(new FormFieldTextEditor('title', $this->lang['form.title'], $item_content->get_title(), array('required' => true)));
+		$fieldset->add_field(new FormFieldTextEditor('title', $this->lang['form.title'], $this->get_item()->get_title(), array('required' => true)));
 
 		if (CategoriesService::get_categories_manager()->get_categories_cache()->has_categories())
 		{
@@ -317,8 +317,8 @@ class WikiItemFormController extends DefaultModuleController
 			$item->set_i_order($items_number_in_category + 1);
 		}
 
-		$item_content->set_title($this->form->get_value('title'));
-		$item->set_rewrited_title(Url::encode_rewrite($item_content->get_title()));
+		$item->set_title($this->form->get_value('title'));
+		$item->set_rewrited_title(Url::encode_rewrite($item->get_title()));
 
 		if (CategoriesService::get_categories_manager()->get_categories_cache()->has_categories())
 			$item->set_id_category($this->form->get_value('id_category')->get_raw_value());
@@ -463,7 +463,7 @@ class WikiItemFormController extends DefaultModuleController
 			else
 				$contribution->set_description(stripslashes($this->form->get_value('edition_description')));
 
-			$contribution->set_entitled($item_content->get_title());
+			$contribution->set_entitled($this->get_item()->get_title());
 			$contribution->set_fixing_url(WikiUrlBuilder::edit($item->get_id())->relative());
 			$contribution->set_poster_id(AppContext::get_current_user()->get_id());
 			$contribution->set_module('wiki');
@@ -504,16 +504,16 @@ class WikiItemFormController extends DefaultModuleController
 		elseif ($item->is_published())
 		{
 			if ($this->is_new_item)
-				AppContext::get_response()->redirect(WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()), StringVars::replace_vars($this->lang['wiki.message.success.add'], array('title' => $item_content->get_title())));
+				AppContext::get_response()->redirect(WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()), StringVars::replace_vars($this->lang['wiki.message.success.add'], array('title' => $item->get_title())));
 			else
-				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title())), StringVars::replace_vars($this->lang['wiki.message.success.edit'], array('title' => $item_content->get_title())));
+				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title())), StringVars::replace_vars($this->lang['wiki.message.success.edit'], array('title' => $item->get_title())));
 		}
 		else
 		{
 			if ($this->is_new_item)
-				AppContext::get_response()->redirect(WikiUrlBuilder::display_pending(), StringVars::replace_vars($this->lang['wiki.message.success.add'], array('title' => $item_content->get_title())));
+				AppContext::get_response()->redirect(WikiUrlBuilder::display_pending(), StringVars::replace_vars($this->lang['wiki.message.success.add'], array('title' => $item->get_title())));
 			else
-				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : WikiUrlBuilder::display_pending()), StringVars::replace_vars($this->lang['wiki.message.success.edit'], array('title' => $item_content->get_title())));
+				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : WikiUrlBuilder::display_pending()), StringVars::replace_vars($this->lang['wiki.message.success.edit'], array('title' => $item->get_title())));
 		}
 	}
 
@@ -553,7 +553,7 @@ class WikiItemFormController extends DefaultModuleController
 					$breadcrumb->add($category->get_name(), WikiUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
 			}
 			$category = $item->get_category();
-			$breadcrumb->add($item_content->get_title(), WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()));
+			$breadcrumb->add($item->get_title(), WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()));
 			$breadcrumb->add($this->lang['wiki.edit.item'], WikiUrlBuilder::edit($item->get_id()));
 		}
 

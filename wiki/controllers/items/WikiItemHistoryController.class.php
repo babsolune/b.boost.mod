@@ -55,7 +55,7 @@ class WikiItemHistoryController extends DefaultModuleController
 			'C_CONTROLS'        => WikiAuthorizationsService::check_authorizations($this->get_item()->get_category()->get_id())->moderation() || WikiAuthorizationsService::check_authorizations()->manage_archives(),
 			'C_RESTORE' 	    => WikiAuthorizationsService::check_authorizations()->manage_archives(),
 
-			'ITEM_TITLE' => $this->item->get_item_content()->get_title(),
+			'ITEM_TITLE' => $this->item->get_title(),
 
 			'CATEGORIES_PER_ROW' => $this->config->get_categories_per_row(),
 			'ITEMS_PER_ROW'      => $this->config->get_items_per_row(),
@@ -105,12 +105,12 @@ class WikiItemHistoryController extends DefaultModuleController
 
 		$graphical_environment = $response->get_graphical_environment();
 		$graphical_environment->set_page_title($page_title, $this->config->get_module_name());
-		$graphical_environment->get_seo_meta_data()->set_description(StringVars::replace_vars($this->lang['wiki.seo.description.history'], array('item' => $this->item->get_item_content()->get_title())));
+		$graphical_environment->get_seo_meta_data()->set_description(StringVars::replace_vars($this->lang['wiki.seo.description.history'], array('item' => $this->item->get_title())));
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(WikiUrlBuilder::history($this->item->get_id()));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->config->get_module_name(), WikiUrlBuilder::home());
-		$breadcrumb->add($this->item->get_item_content()->get_title(), WikiUrlBuilder::display($this->item->get_category()->get_id(), $this->item->get_category()->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title()));
+		$breadcrumb->add($this->item->get_title(), WikiUrlBuilder::display($this->item->get_category()->get_id(), $this->item->get_category()->get_rewrited_name(), $this->item->get_id(), $this->item->get_rewrited_title()));
 		$breadcrumb->add($page_title, WikiUrlBuilder::history($this->item->get_id()));
 
 		return $response;
