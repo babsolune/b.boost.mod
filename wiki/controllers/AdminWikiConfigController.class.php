@@ -44,9 +44,9 @@ class AdminWikiConfigController extends DefaultAdminModuleController
 
         $fieldset->add_field(new FormFieldSimpleSelectChoice('homepage', $this->lang['wiki.homepage'], $this->config->get_homepage(),
 			array(
-				new FormFieldSelectChoiceOption($this->lang['common.categories'], WikiConfig::CATEGORIES, array('data_option_icon' => 'fa fa-th-large')),
-				new FormFieldSelectChoiceOption($this->lang['wiki.explorer'], WikiConfig::EXPLORER, array('data_option_icon' => 'fa fa-list')),
-				new FormFieldSelectChoiceOption($this->lang['wiki.index'], WikiConfig::INDEX, array('data_option_icon' => 'fa fa-grid')),
+				new FormFieldSelectChoiceOption($this->lang['wiki.config.root'], WikiConfig::CATEGORIES, array('data_option_icon' => 'fa fa-th-large')),
+				new FormFieldSelectChoiceOption($this->lang['wiki.config.explorer'], WikiConfig::EXPLORER, array('data_option_icon' => 'fa fa-list')),
+				new FormFieldSelectChoiceOption($this->lang['wiki.config.overview'], WikiConfig::OVERVIEW, array('data_option_icon' => 'fa fa-grid')),
 			)
         ));
 

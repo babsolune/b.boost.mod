@@ -14,7 +14,7 @@
 $lang['wiki.module.title']   = 'Wiki';
 $lang['wiki.menu.title']     = 'Arborescence du wiki';
 $lang['wiki.explorer']       = 'Explorateur';
-$lang['wiki.index']          = 'Index';
+$lang['wiki.overview']       = 'Sommaire';
 
 // TreeLinks
 $lang['item']               = 'fiche';
@@ -76,6 +76,9 @@ $lang['wiki.homepage']             = 'Choisir le type de page d\'accueil';
 $lang['wiki.display.description']  = 'Afficher la description des sous-catégories';
 $lang['wiki.menu.configuration']   = 'Configuration du mini module';
 $lang['wiki.menu.title.name']      = 'Nom du mini module';
+$lang['wiki.config.root']          = 'Racine du wiki (Catégories et items de la racine)';
+$lang['wiki.config.explorer']      = 'Explorateur (Toutes les catégories et items)';
+$lang['wiki.config.overview']      = 'Sommaire (Toutes les catégories)';
 
 // Authorizations
 $lang['wiki.manage.archives'] = 'Autorisation de gérer les archives';

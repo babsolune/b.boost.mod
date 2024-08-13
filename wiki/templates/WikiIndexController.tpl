@@ -45,7 +45,7 @@
     # ENDIF #
     <div class="sub-section">
         <div class="content-container">
-            <div id="index-nav" class="index-list">
+            <div id="overview-nav" class="overview-list">
                 # START categories #
                     <div
                             class="cell"
@@ -53,13 +53,10 @@
                             data-p-id="{categories.CATEGORY_PARENT_ID}"
                             data-order-id="{categories.CATEGORY_SUB_ORDER}">
                         <span>
-                            <a
-                                    class="offload"
-                                    href="{categories.U_CATEGORY}"
-                                    # IF NOT categories.C_DISPLAY_DESCRIPTION ## IF categories.C_CATEGORY_DESCRIPTION # aria-label="{categories.CATEGORY_DESCRIPTION}"# ENDIF ## ENDIF #>
+                            <a class="offload" href="{categories.U_CATEGORY}">
                                 {categories.CATEGORY_NAME}
                             </a>
-                            # IF categories.C_DISPLAY_DESCRIPTION # | <span class="text-italic small">{categories.CATEGORY_DESCRIPTION}</span># ENDIF #</span>
+                        </span>
                     </div>
                 # END categories #
             </div>

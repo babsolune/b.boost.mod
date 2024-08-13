@@ -22,7 +22,7 @@ class WikiIndexController extends DefaultModuleController
 
 		$this->build_view();
 
-		return $this->generate_response($request);
+		return $this->generate_response();
 	}
 
 	private function build_view()
@@ -35,46 +35,6 @@ class WikiIndexController extends DefaultModuleController
 
 		foreach ($categories as $id => $category)
 		{
-            if ($id == Category::ROOT_CATEGORY)
-			{
-				$root_description = FormatingHelper::second_parse($this->config->get_root_category_description());
-				$this->view->put_all(array(
-					'C_ROOT_CONTROLS'               => WikiAuthorizationsService::check_authorizations($id)->moderation(),
-					'C_ROOT_CATEGORY_DESCRIPTION'   => !empty($root_description),
-					'C_ROOT_ITEMS'                  => $category->get_elements_number() > 0,
-					'C_SEVERAL_ROOT_ITEMS'          => $category->get_elements_number() > 1,
-                    'ITEMS_PER_ROW'                 => $this->config->get_items_per_row(),
-
-					'ROOT_CATEGORY_DESCRIPTION' => $root_description,
-
-					'U_REORDER_ROOT_ITEMS' => WikiUrlBuilder::reorder_items(0, 'root')->rel(),
-				));
-
-				$result = PersistenceContext::get_querier()->select('SELECT i.*, c.*, member.*, com.comments_number, notes.average_notes, notes.notes_number, note.note
-				FROM ' . WikiSetup::$wiki_articles_table . ' i
-				LEFT JOIN ' . WikiSetup::$wiki_contents_table . ' c ON c.item_id = i.id
-				LEFT JOIN ' . DB_TABLE_MEMBER . ' member ON member.user_id = c.author_user_id
-				LEFT JOIN ' . DB_TABLE_COMMENTS_TOPIC . ' com ON com.id_in_module = i.id AND com.module_id = \'wiki\'
-				LEFT JOIN ' . DB_TABLE_AVERAGE_NOTES . ' notes ON notes.id_in_module = i.id AND notes.module_name = \'wiki\'
-				LEFT JOIN ' . DB_TABLE_NOTE . ' note ON note.id_in_module = i.id AND note.module_name = \'wiki\' AND note.user_id = :user_id
-				WHERE i.id_category = :id_category
-				AND c.active_content = 1
-				AND (published = 1 OR (published = 2 AND publishing_start_date < :timestamp_now AND (publishing_end_date > :timestamp_now OR publishing_end_date = 0)))
-                ORDER BY i.i_order', array(
-					'user_id' => AppContext::get_current_user()->get_id(),
-					'timestamp_now' => $now->get_timestamp(),
-					'id_category' => $category->get_id()
-				));
-
-				while ($row = $result->fetch()) {
-					$item = new WikiItem();
-					$item->set_properties($row);
-
-					$this->view->assign_block_vars('root_items', $item->get_template_vars());
-				}
-				$result->dispose();
-			}
-
 			if ($id != Category::ROOT_CATEGORY && in_array($id, $authorized_categories))
 			{
 				$category_elements_number = isset($categories_elements_number[$id]) ? $categories_elements_number[$id] : $category->get_elements_number();
@@ -136,14 +96,14 @@ class WikiIndexController extends DefaultModuleController
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-        $graphical_environment->set_page_title($this->lang['wiki.index'], $this->config->get_module_name());
+        $graphical_environment->set_page_title($this->lang['wiki.overview'], $this->config->get_module_name());
 		$description = StringVars::replace_vars($this->lang['wiki.seo.description.root'], array('site' => GeneralConfig::load()->get_site_name()));
 		$graphical_environment->get_seo_meta_data()->set_description($description);
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(WikiUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name()));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->config->get_module_name(), WikiUrlBuilder::home());
-		$breadcrumb->add($this->lang['wiki.index'], WikiUrlBuilder::explorer());
+		$breadcrumb->add($this->lang['wiki.overview'], WikiUrlBuilder::overview());
 
 		return $response;
 	}

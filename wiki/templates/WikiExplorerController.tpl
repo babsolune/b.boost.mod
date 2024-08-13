@@ -22,7 +22,7 @@
     <div class="sub-section">
         <div class="content-container">
             # IF C_ROOT_ITEMS #
-                <ul class="root-items">
+                <ul class="root-items item-list">
                     # IF C_ROOT_CONTROLS #
                         # IF C_SEVERAL_ROOT_ITEMS #
                             <a class="offload reorder-items" href="{U_REORDER_ROOT_ITEMS}" aria-label="{@items.reorder}"><i class="fa fa-fw fa-exchange-alt"></i></a>
@@ -30,20 +30,20 @@
                     # ENDIF #
                     # START root_items #
                         <li class="flex-between">
-                            <a class="d-block categories-item offload" href="{root_items.U_ITEM}"><i class="fa fa-fw fa-file-alt"></i> {root_items.TITLE}</a>
+                            <a class="d-block list-item offload" href="{root_items.U_ITEM}"><i class="fa fa-fw fa-file-alt"></i> {root_items.TITLE}</a>
                         </li>
                     # END root_items #
                 </ul>
             # ENDIF #
             <nav id="category-nav" class="nav-items-list">
-                <ul>
+                <ul class="item-list">
                     # START categories #
                         <li
                                 data_id="{categories.CATEGORY_ID}"
                                 data_p_id="{categories.CATEGORY_PARENT_ID}"
                                 data_order_id="{categories.CATEGORY_SUB_ORDER}">
                             <div class="flex-between toggle-menu-button-{categories.CATEGORY_ID}">
-                                <div class="categories-item flex-between">
+                                <div class="list-item flex-between">
                                     <span>
                                         <i class="far fa-fw fa-folder" aria-hidden="true"></i> 
                                         {categories.CATEGORY_NAME} 
@@ -61,7 +61,7 @@
                                     # ENDIF #
                                     # START categories.items #
                                         <li class="flex-between">
-                                            <a class="d-block categories-item offload" href="{categories.items.U_ITEM}"><i class="fa fa-fw fa-file-alt"></i> {categories.items.TITLE}</a>
+                                            <a class="d-block list-item offload" href="{categories.items.U_ITEM}"><i class="fa fa-fw fa-file-alt"></i> {categories.items.TITLE}</a>
                                         </li>
                                     # END categories.items #
                                 </ul>

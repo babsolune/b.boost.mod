@@ -23,7 +23,7 @@ function WikiExplorerChild(id) {
 jQuery('#category-nav li').has('ul').addClass('has-children');
 jQuery('#category-nav').find('.toggle-menu-button-0').removeClass('flex-between').css('display', 'none');
 
-jQuery('#category-nav [class*="toggle-menu-button"] .categories-item').each(function () {
+jQuery('#category-nav [class*="toggle-menu-button"] .list-item').each(function () {
     jQuery(this).on('click', function () {
         jQuery(this).toggleClass('is-open-menu');
         jQuery(this).closest('li').children('[class*="items-list"]').toggleClass('show-list');
@@ -31,7 +31,7 @@ jQuery('#category-nav [class*="toggle-menu-button"] .categories-item').each(func
 });
 
 // Index page
-jQuery('#index-nav').append(WikiIndexChild(0)).find('ul:first').remove();
+jQuery('#overview-nav').append(WikiIndexChild(0)).find('ul:first').remove();
 
 function WikiIndexChild(id) {
     var $li = jQuery('div[data-p-id="' + id + '"]').sort(function (a, b) {
@@ -43,11 +43,11 @@ function WikiIndexChild(id) {
             var $this = $li.eq(i);
             $this.append(WikiIndexChild($this.attr('data-id')));
         }
-        return jQuery('<div class="index-list-' + id + '" data-sub="' + id + '">').append($li);
+        return jQuery('<div class="overview-list-' + id + '" data-sub="' + id + '">').append($li);
     }
 }
 
-jQuery('#index-nav .index-list-0').addClass('cell-flex cell-columns-2');
+// jQuery('#overview-nav .overview-list-0').addClass('cell-flex cell-columns-2');
 
 // Summary menu constructor
 var title = jQuery('.content .formatter-title:not(span)');

@@ -156,9 +156,9 @@ class WikiUrlBuilder
 	/**
 	 * @return Url
 	 */
-	public static function index()
+	public static function overview()
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/index/');
+		return DispatchManager::get_url(self::$dispatcher, '/overview/');
 	}
 
 	/**

@@ -20,7 +20,6 @@ class WikiReorderItemsController extends DefaultModuleController
 	{
 		$this->check_authorizations();
 
-Debug::dump($request->get_url_referrer());
 		if ($request->get_value('submit', false))
 		{
 			$this->update_position($request);
