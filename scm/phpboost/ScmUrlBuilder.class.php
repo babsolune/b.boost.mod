@@ -78,6 +78,11 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/club/' . $club_id . '-' . $club_slug);
 	}
 
+	public static function visit_club($club_id)
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/club/visit/' . $club_id);
+	}
+
 ################################ Seasons
 	public static function manage_seasons()
 	{
@@ -189,7 +194,7 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/matchdays/round/' . $round);
 	}
 
-    // Groups 
+    // Groups
     // Edit groups and build group games list
 	public static function edit_groups($event_id, $event_slug)
 	{
@@ -212,6 +217,11 @@ class ScmUrlBuilder
 	public static function edit_brackets_games($event_id, $event_slug, $round = 1)
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/brackets/round/' . $round);
+	}
+    // Edit details games
+	public static function edit_details_game($event_id, $event_slug, $type, $group, $round, $order)
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/details/' . $type . '/' . $group . '/' . $round . '/' . $order);
 	}
 
 ################################ Main Controllers

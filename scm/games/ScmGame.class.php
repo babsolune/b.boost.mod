@@ -19,10 +19,20 @@ class ScmGame
     private $game_home_id;
     private $game_home_score;
     private $game_home_pen;
-    private $game_away_pen;
-    private $game_away_score;
+    private $game_home_goals;
+    private $game_home_yellow;
+    private $game_home_red;
+    private $game_home_empty;
     private $game_away_id;
+    private $game_away_score;
+    private $game_away_pen;
+    private $game_away_goals;
+    private $game_away_yellow;
+    private $game_away_red;
+    private $game_away_empty;
     private $game_date;
+    private $game_video;
+    private $game_summary;
 
     function get_id_game()
     {
@@ -124,6 +134,61 @@ class ScmGame
         $this->game_home_pen = $game_home_pen;
     }
 
+	public function add_game_home_goals($game_home_goals)
+	{
+		$this->game_home_goals[] = $game_home_goals;
+	}
+
+    function get_game_home_goals()
+    {
+        return $this->game_home_goals;
+    }
+
+    function set_game_home_goals($game_home_goals)
+    {
+        $this->game_home_goals = $game_home_goals;
+    }
+
+	public function add_game_home_yellow($game_home_yellow)
+	{
+		$this->game_home_yellow[] = $game_home_yellow;
+	}
+
+    function get_game_home_yellow()
+    {
+        return $this->game_home_yellow;
+    }
+
+    function set_game_home_yellow($game_home_yellow)
+    {
+        $this->game_home_yellow = $game_home_yellow;
+    }
+
+	public function add_game_home_red($game_home_red)
+	{
+		$this->game_home_red[] = $game_home_red;
+	}
+
+    function get_game_home_red()
+    {
+        return $this->game_home_red;
+    }
+
+    function set_game_home_red($game_home_red)
+    {
+        $this->game_home_red = $game_home_red;
+    }
+
+    function get_game_home_empty()
+    {
+        return $this->game_home_empty;
+    }
+
+    function set_game_home_empty($game_home_empty)
+    {
+        $this->game_home_empty = $game_home_empty;
+    }
+
     function get_game_away_id()
     {
         return $this->game_away_id;
@@ -154,6 +219,61 @@ class ScmGame
         $this->game_away_pen = $game_away_pen;
     }
 
+	public function add_game_away_goals($game_away_goals)
+	{
+		$this->game_away_goals[] = $game_away_goals;
+	}
+
+    function get_game_away_goals()
+    {
+        return $this->game_away_goals;
+    }
+
+    function set_game_away_goals($game_away_goals)
+    {
+        $this->game_home_goals = $game_away_goals;
+    }
+
+	public function add_game_away_yellow($game_away_yellow)
+	{
+		$this->game_away_yellow[] = $game_away_yellow;
+	}
+
+    function get_game_away_yellow()
+    {
+        return $this->game_away_yellow;
+    }
+
+    function set_game_away_yellow($game_away_yellow)
+    {
+        $this->game_away_yellow = $game_away_yellow;
+    }
+
+	public function add_game_away_red($game_away_red)
+	{
+		$this->game_away_red[] = $game_away_red;
+	}
+
+    function get_game_away_red()
+    {
+        return $this->game_away_red;
+    }
+
+    function set_game_away_red($game_away_red)
+    {
+        $this->game_away_red = $game_away_red;
+    }
+
+    function get_game_away_empty()
+    {
+        return $this->game_away_empty;
+    }
+
+    function set_game_away_empty($game_away_empty)
+    {
+        $this->game_away_empty = $game_away_empty;
+    }
+
     function get_game_date()
     {
         return $this->game_date;
@@ -164,47 +284,91 @@ class ScmGame
         $this->game_date = $game_date;
     }
 
+    function get_game_video()
+    {
+		if (!$this->game_video instanceof Url)
+			return new Url('');
+
+		return $this->game_video;
+    }
+
+    function set_game_video(Url $game_video)
+    {
+        $this->game_video = $game_video;
+    }
+
+    function get_game_summary()
+    {
+        return $this->game_summary;
+    }
+
+    function set_game_summary($game_summary)
+    {
+        $this->game_summary = $game_summary;
+    }
+
     public function get_properties()
 	{
 		return [
-			'id_game'         => $this->get_id_game(),
-			'game_event_id'   => $this->get_game_event_id(),
-			'game_type'       => $this->get_game_type(),
-			'game_group'      => $this->get_game_group(),
-			'game_round'      => $this->get_game_round(),
-			'game_order'      => $this->get_game_order(),
-			'game_playground' => $this->get_game_playground(),
-			'game_home_id'    => $this->get_game_home_id(),
-			'game_home_score' => $this->get_game_home_score(),
-			'game_home_pen'   => $this->get_game_home_pen(),
-			'game_away_id'    => $this->get_game_away_id(),
-			'game_away_score' => $this->get_game_away_score(),
-			'game_away_pen'   => $this->get_game_away_pen(),
-			'game_date'       => $this->get_game_date() !== null ? $this->get_game_date()->get_timestamp() : 0,
+			'id_game'            => $this->get_id_game(),
+			'game_event_id'      => $this->get_game_event_id(),
+			'game_type'          => $this->get_game_type(),
+			'game_group'         => $this->get_game_group(),
+			'game_round'         => $this->get_game_round(),
+			'game_order'         => $this->get_game_order(),
+			'game_playground'    => $this->get_game_playground(),
+			'game_home_id'       => $this->get_game_home_id(),
+			'game_home_score'    => $this->get_game_home_score(),
+			'game_home_pen'      => $this->get_game_home_pen(),
+			'game_home_goals'    => TextHelper::serialize($this->get_game_home_goals()),
+			'game_home_yellow'   => TextHelper::serialize($this->get_game_home_yellow()),
+			'game_home_red'      => TextHelper::serialize($this->get_game_home_red()),
+			'game_home_empty'    => $this->get_game_home_empty(),
+			'game_away_id'       => $this->get_game_away_id(),
+			'game_away_score'    => $this->get_game_away_score(),
+			'game_away_pen'      => $this->get_game_away_pen(),
+			'game_away_goals'    => TextHelper::serialize($this->get_game_away_goals()),
+			'game_away_yellow'   => TextHelper::serialize($this->get_game_away_yellow()),
+			'game_away_red'      => TextHelper::serialize($this->get_game_away_red()),
+			'game_away_empty'    => $this->get_game_away_empty(),
+			'game_date'          => $this->get_game_date() !== null ? $this->get_game_date()->get_timestamp() : 0,
+			'game_video'         => $this->get_game_video()->relative(),
+			'game_summary'       => $this->get_game_summary(),
         ];
 	}
 
 	public function set_properties(array $properties)
 	{
-		$this->id_game         = $properties['id_game'];
-		$this->game_event_id   = $properties['game_event_id'];
-		$this->game_type       = $properties['game_type'];
-		$this->game_group      = $properties['game_group'];
-		$this->game_round      = $properties['game_round'];
-		$this->game_order      = $properties['game_order'];
-		$this->game_playground = $properties['game_playground'];
-		$this->game_home_id    = $properties['game_home_id'];
-		$this->game_home_score = $properties['game_home_score'];
-		$this->game_home_pen   = $properties['game_home_pen'];
-		$this->game_away_id    = $properties['game_away_id'];
-		$this->game_away_score = $properties['game_away_score'];
-		$this->game_away_pen   = $properties['game_away_pen'];
-		$this->game_date       = !empty($properties['game_date']) ? new Date($properties['game_date'], Timezone::SERVER_TIMEZONE) : null;
+		$this->id_game            = $properties['id_game'];
+		$this->game_event_id      = $properties['game_event_id'];
+		$this->game_type          = $properties['game_type'];
+		$this->game_group         = $properties['game_group'];
+		$this->game_round         = $properties['game_round'];
+		$this->game_order         = $properties['game_order'];
+		$this->game_playground    = $properties['game_playground'];
+		$this->game_home_id       = $properties['game_home_id'];
+		$this->game_home_score    = $properties['game_home_score'];
+		$this->game_home_pen      = $properties['game_home_pen'];
+		$this->game_home_goals    = !empty($properties['game_home_goals']) ? TextHelper::unserialize($properties['game_home_goals']) : [];
+		$this->game_home_yellow   = !empty($properties['game_home_yellow']) ? TextHelper::unserialize($properties['game_home_yellow']) : [];
+		$this->game_home_red      = !empty($properties['game_home_red']) ? TextHelper::unserialize($properties['game_home_red']) : [];
+		$this->game_home_empty    = $properties['game_home_empty'];
+		$this->game_away_id       = $properties['game_away_id'];
+		$this->game_away_score    = $properties['game_away_score'];
+		$this->game_away_pen      = $properties['game_away_pen'];
+		$this->game_away_goals    = !empty($properties['game_away_goals']) ? TextHelper::unserialize($properties['game_away_goals']) : [];
+		$this->game_away_yellow   = !empty($properties['game_away_yellow']) ? TextHelper::unserialize($properties['game_away_yellow']) : [];
+		$this->game_away_red      = !empty($properties['game_away_red']) ? TextHelper::unserialize($properties['game_away_red']) : [];
+		$this->game_away_empty    = $properties['game_away_empty'];
+		$this->game_date          = !empty($properties['game_date']) ? new Date($properties['game_date'], Timezone::SERVER_TIMEZONE) : null;
+		$this->game_video         = new Url($properties['game_video']);
+		$this->game_summary       = $properties['game_summary'];
 	}
 
 	public function init_default_properties()
 	{
-        $this->game_date = new Date();
+        $this->game_date  = new Date();
+		$this->game_video = new Url('');
 	}
 
 	public function get_template_vars()
@@ -214,6 +378,7 @@ class ScmGame
         $c_away_pen   = $this->game_away_pen != '';
         $c_away_score = $this->game_away_score != '';
         $event_slug   = ScmEventService::get_event_slug($this->game_event_id);
+		$summary = FormatingHelper::second_parse($this->game_summary);
 
         return array_merge(
             Date::get_array_tpl_vars($this->game_date, 'game_date'),
@@ -224,8 +389,10 @@ class ScmGame
                 'C_HAS_PEN'       => $c_home_pen && $c_away_pen,
                 'C_HOME_FAV'      => ScmParamsService::check_fav($this->game_event_id, $this->game_home_id) && $this->game_home_id,
                 'C_HOME_WIN'      => $this->game_home_score > $this->game_away_score || $this->game_home_pen > $this->game_away_pen,
+                'C_HOME_EMPTY'    => $this->game_home_id == 0,
                 'C_AWAY_FAV'      => ScmParamsService::check_fav($this->game_event_id, $this->game_away_id) && $this->game_away_id,
                 'C_AWAY_WIN'      => $this->game_home_score < $this->game_away_score || $this->game_home_pen < $this->game_away_pen,
+                'C_AWAY_EMPTY'    => $this->game_away_id == 0,
                 'GAME_ID'         => $this->game_type.$this->game_group.$this->game_round.$this->game_order,
                 'MATCHDAY'        => $this->game_round,
                 'PLAYGROUND'      => $this->game_playground,
@@ -235,12 +402,16 @@ class ScmGame
                 'U_HOME_CALENDAR' => $this->game_home_id ? ScmUrlBuilder::display_team_calendar($this->game_event_id, $event_slug, $this->game_home_id)->rel() : '#',
                 'HOME_SCORE'      => $this->game_home_score,
                 'HOME_PEN'        => $this->game_home_pen,
+                'HOME_EMPTY'      => $this->game_home_empty,
+                'AWAY_EMPTY'      => $this->game_away_empty,
                 'AWAY_PEN'        => $this->game_away_pen,
                 'AWAY_SCORE'      => $this->game_away_score,
                 'U_AWAY_CALENDAR' => $this->game_away_id ? ScmUrlBuilder::display_team_calendar($this->game_event_id, $event_slug, $this->game_away_id)->rel() : '#',
                 'AWAY_TEAM'       => $this->game_away_id ? ScmTeamService::get_team_name($this->game_away_id) : '',
                 'AWAY_LOGO'       => $this->game_away_id ? ScmTeamService::get_team_logo($this->game_away_id) : '',
-                'AWAY_ID'         => $this->game_away_id
+                'AWAY_ID'         => $this->game_away_id,
+                'VIDEO'           => Url::to_rel($this->game_video),
+                'SUMMARY'         => $summary
             ]
         );
     }

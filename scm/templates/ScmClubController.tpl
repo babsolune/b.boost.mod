@@ -24,6 +24,16 @@
                     <div class="cell-flex cell-columns-2 cell-tile">
                         <div class="cell cell-1-3">
                             <div class="cell-content cell-infos">
+                                <span>{@scm.club.website} : </span>
+                                <span>
+                                    # IF C_HAS_EMAIL #
+                                        <a href="{U_CLUB_WEBSITE}" target="_blank" rel="noopener noreferer">{@scm.club.see.website}</a>
+                                    # ELSE #
+                                        {@scm.not.specified}
+                                    # ENDIF #
+                                </span>
+                            </div>
+                            <div class="cell-content cell-infos">
                                 <span>{@scm.club.email} : </span>
                                 <span># IF C_HAS_EMAIL #{EMAIL}# ELSE #{@scm.not.specified}# ENDIF #</span>
                             </div>

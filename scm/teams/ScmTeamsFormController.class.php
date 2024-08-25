@@ -215,13 +215,6 @@ class ScmTeamsFormController extends DefaultModuleController
         $graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.teams.management']);
         $graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_teams($this->event_id(), $event->get_event_slug()));
 
-        $categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($event->get_id_category(), true));
-        foreach ($categories as $id => $category)
-        {
-            if ($category->get_id() != Category::ROOT_CATEGORY)
-                $breadcrumb->add($category->get_name(), RecipeUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
-        }
-        $category = $event->get_category();
         $breadcrumb->add($event->get_event_name(), ScmUrlBuilder::event_home($this->event_id(), $event->get_event_slug()));
         $breadcrumb->add($this->lang['scm.teams.management'], ScmUrlBuilder::edit_teams($this->event_id(), $event->get_event_slug()));
 

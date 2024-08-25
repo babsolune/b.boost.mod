@@ -37,12 +37,14 @@
                                                 <div  class="id-{rounds.games.HOME_ID} game-team game-home# IF rounds.games.C_HOME_FAV # text-strong# ENDIF #"
                                                         # IF rounds.games.C_HOME_WIN # style="background-color: {rounds.games.WIN_COLOR}"# ENDIF #>
                                                     <div class="home-{rounds.games.GAME_ID} home-team">
-                                                        # IF rounds.games.HOME_ID #
-                                                            <div class="flex-team flex-left">
+                                                        <div class="flex-team flex-left">
+                                                            # IF rounds.games.C_HOME_EMPTY #
+                                                                <span>{rounds.games.HOME_EMPTY}</span>
+                                                            # ELSE #
                                                                 <img src="{rounds.games.HOME_LOGO}" alt="{rounds.games.HOME_TEAM}">
                                                                 <span>{rounds.games.HOME_TEAM}</span>
-                                                            </div>
-                                                        # ENDIF #
+                                                            # ENDIF #
+                                                        </div>
                                                     </div>
                                                     <div class="game-team# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-px-100# ENDIF ## ENDIF #">
                                                         <div class="game-score home-score# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-pc-50# ELSE # width-px-50# ENDIF ## ELSE # width-px-50# ENDIF #">{rounds.games.HOME_SCORE}</div>
@@ -56,12 +58,14 @@
                                                 <div class="id-{rounds.games.AWAY_ID} game-team game-away# IF rounds.games.C_AWAY_FAV # text-strong# ENDIF #"
                                                         # IF rounds.games.C_AWAY_WIN # style="background-color: {rounds.games.WIN_COLOR}"# ENDIF #>
                                                     <div class="away-{rounds.games.GAME_ID} away-team">
-                                                        # IF rounds.games.AWAY_ID #
-                                                            <div class="flex-team flex-left">
+                                                        <div class="flex-team flex-left">
+                                                            # IF rounds.games.C_AWAY_EMPTY #
+                                                                <span>{rounds.games.AWAY_EMPTY}</span>
+                                                            # ELSE #
                                                                 <img src="{rounds.games.AWAY_LOGO}" alt="{rounds.games.AWAY_TEAM}">
                                                                 <span>{rounds.games.AWAY_TEAM}</span>
-                                                            </div>
-                                                        # ENDIF #
+                                                            # ENDIF #
+                                                        </div>
                                                     </div>
                                                     <div class="game-team# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-px-100# ENDIF ## ENDIF #">
                                                         <div class="game-score away-score# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-pc-50# ELSE # width-px-50# ENDIF ## ELSE # width-px-50# ENDIF #">{rounds.games.AWAY_SCORE}</div>
@@ -99,24 +103,28 @@
                                                     <div class="id-{brackets.rounds.games.HOME_ID} game-team game-home# IF brackets.rounds.games.C_HOME_FAV # text-strong# ENDIF #"
                                                             # IF brackets.rounds.games.C_HOME_WIN # style="background-color: {brackets.rounds.games.WIN_COLOR}"# ENDIF #>
                                                         <div class="home-{brackets.rounds.games.GAME_ID} home-team">
-                                                            # IF brackets.rounds.games.HOME_ID #
-                                                                <div class="flex-team flex-left">
+                                                            <div class="flex-team flex-left">
+                                                                # IF brackets.rounds.games.C_HOME_EMPTY #
+                                                                    <span>{brackets.rounds.games.HOME_EMPTY}</span>
+                                                                # ELSE #
                                                                     <img src="{brackets.rounds.games.HOME_LOGO}" alt="{brackets.rounds.games.HOME_TEAM}">
                                                                     <span>{brackets.rounds.games.HOME_TEAM}</span>
-                                                                </div>
-                                                            # ENDIF #
+                                                                # ENDIF #
+                                                            </div>
                                                         </div>
                                                         <div class="game-score home-score width-px-50 align-center">{brackets.rounds.games.HOME_SCORE}# IF brackets.rounds.games.C_HAS_PEN # <span class="small">({brackets.rounds.games.HOME_PEN})</span># ENDIF #</div>
                                                     </div>
                                                     <div class="id-{brackets.rounds.games.AWAY_ID} game-team game-away# IF brackets.rounds.games.C_AWAY_FAV # text-strong# ENDIF #"
                                                             # IF brackets.rounds.games.C_AWAY_WIN # style="background-color: {brackets.rounds.games.WIN_COLOR}"# ENDIF #>
                                                         <div class="away-{brackets.rounds.games.GAME_ID} away-team">
-                                                            # IF brackets.rounds.games.AWAY_ID #
-                                                                <div class="flex-team flex-left">
+                                                            <div class="flex-team flex-left">
+                                                                # IF brackets.rounds.games.C_AWAY_EMPTY #
+                                                                    <span>{brackets.rounds.games.AWAY_EMPTY}</span>
+                                                                # ELSE #
                                                                     <img src="{brackets.rounds.games.AWAY_LOGO}" alt="{brackets.rounds.games.AWAY_TEAM}">
                                                                     <span>{brackets.rounds.games.AWAY_TEAM}</span>
-                                                                </div>
-                                                            # ENDIF #
+                                                                # ENDIF #
+                                                            </div>
                                                         </div>
                                                         <div class="game-score away-score width-px-50 align-center">{brackets.rounds.games.AWAY_SCORE}# IF brackets.rounds.games.C_HAS_PEN # <span class="small">({brackets.rounds.games.AWAY_PEN})</span># ENDIF #</div>
                                                     </div>
@@ -161,7 +169,7 @@
                 let mainRound = document.querySelector('#bracket-' + target + '-main-round-' + id + '');
                 let subRound = document.querySelector('#bracket-' + target + '-sub-round-' + id + '');
                 let gameCount = mainRound.querySelectorAll('.game-container').length;
-console.log(id)
+
                 if (gameCount >= 2) {
                     let lastTwoGames = Array.from(mainRound.querySelectorAll('.game-container')).slice(gameCount - (gameCount / 2), gameCount);
                     lastTwoGames.forEach(game => subRound.appendChild(game));

@@ -34,6 +34,7 @@ class ScmGroupService
                     'game_event_id' => $event_id,
                     'game_type'     => 'G',
                     'game_group'    => $day,
+                    'game_round'    => 0,
                     'game_order'    => $game,
                     'game_home_id'  => 0,
                     'game_away_id'  => 0,

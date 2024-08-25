@@ -33,7 +33,21 @@ $lang['scm.edit.event']       = 'Modifier une compétition';
 
 $lang['scm.filter.events']     = 'Filtrer les compétitions';
 $lang['scm.events.management'] = 'Gestion des compétitions';
-$lang['scm.change.event'] = 'Changer de compétition';
+$lang['scm.change.event']      = 'Changer de compétition';
+
+// Details
+$lang['scm.game.details']       = 'Détails du match';
+$lang['scm.event']              = 'Événement';
+$lang['scm.player.name']        = 'Nom du joueur';
+$lang['scm.event.minute']       = 'Minute';
+$lang['scm.event.goals']        = 'Buts';
+$lang['scm.event.yellow.cards'] = 'Cartons jaunes';
+$lang['scm.event.red.cards']    = 'Cartons rouges';
+$lang['scm.event.back']         = 'Retour';
+$lang['scm.event.penalties']    = 'Tirs au but';
+$lang['scm.event.video']        = 'Vidéo du match';
+$lang['scm.event.summary']      = 'Résumé du match';
+$lang['scm.event.empty.field']  = 'Texte de remplacement';
 
 // Front titles
 $lang['scm.infos']  = 'Informations générales';

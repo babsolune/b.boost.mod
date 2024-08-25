@@ -187,35 +187,70 @@ th.bgc-sub a {
 }
 .round-fields .fieldset-description,
 .grouped-fields .fieldset-inset > * {
-    padding: 0.809em 0 0;
+    padding: 0 0 0.809em;
     margin: 0 0 0 0.309em;
 }
 .grouped-fields .fieldset-inset > * > * {
     width: 100%;
 }
-
 .grouped-fields ::placeholder {
     font-size: 0.618em;
 }
-
 .grouped-fields .game-date > *,
 .grouped-fields .game-team > *,
 .grouped-fields select,
 .grouped-fields input {
     margin: 0;
 }
-
 .grouped-fields .label-time::after {
     display: none;
 }
 
-.grouped-fields .game-name        { width: 50px; }
+.game-details .fieldset-inset > .form-element-upload-file {
+    width: 100%;
+}
+
+@media (min-width: 769px) {
+    .game-details .fieldset-inset {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .game-details .fieldset-inset > * {
+        width: calc(100% / 3);
+    }
+    .game-details .form-field {
+        width: 100%;
+    }
+    .game-details .form-element-textarea {
+        width: 100%;
+    }
+    input.game-details {
+        width: 80px;
+    }
+}
+
+.grouped-fields .game-name        { width: 50%; }
 .grouped-fields .game-date        { width: 270px; }
 .grouped-fields .game-playground  { width: 80px; }
 .grouped-fields .game-team        { min-width: 120px; }
 .grouped-fields .game-score       { width: 50px; text-align: center; }
 
-.round-fields .game-name { width: 105px; }
+.grouped-fields .game-name,
+.grouped-fields .form-field-action-link {
+    margin: 0;
+    padding: 0;
+}
+.grouped-fields .form-field-action-link ul {
+    list-style-type: none;
+    margin: 0;
+}
+.grouped-fields .form-field-action-link { width: 48%; }
+.grouped-fields .form-field-action-link a {
+    display: block;
+    text-align: right;
+}
 
 .game-playground input,
 .home-score input,

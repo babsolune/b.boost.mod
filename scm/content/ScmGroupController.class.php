@@ -84,19 +84,19 @@ class ScmGroupController extends DefaultModuleController
         //         $this->view->assign_block_vars('ranks', array_merge(
         //             Date::get_array_tpl_vars(new Date($game['game_date'], Timezone::SERVER_TIMEZONE), 'game_date'),
         //             [
-        //                 'C_FAV' => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
-        //                 'RANK' => $i + 1,
-        //                 'RANK_COLOR' => $rank_color,
-        //                 'TEAM_NAME' => !empty($team_rank['team_id']) ? ScmTeamService::get_team_name($team_rank['team_id']) : '',
-        //                 'TEAM_LOGO' => !empty($team_rank['team_id']) ? ScmTeamService::get_team_logo($team_rank['team_id']) : '',
-        //                 'POINTS' => $team_rank['points'],
-        //                 'PLAYED' => $team_rank['played'],
-        //                 'WIN' => $team_rank['win'],
-        //                 'DRAW' => $team_rank['draw'],
-        //                 'LOSS' => $team_rank['loss'],
-        //                 'GOALS_FOR' => $team_rank['goals_for'],
+        //                 'C_FAV'         => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
+        //                 'RANK'          => $i + 1,
+        //                 'RANK_COLOR'    => $rank_color,
+        //                 'TEAM_NAME'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_name($team_rank['team_id']) : '',
+        //                 'TEAM_LOGO'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_logo($team_rank['team_id']) : '',
+        //                 'POINTS'        => $team_rank['points'],
+        //                 'PLAYED'        => $team_rank['played'],
+        //                 'WIN'           => $team_rank['win'],
+        //                 'DRAW'          => $team_rank['draw'],
+        //                 'LOSS'          => $team_rank['loss'],
+        //                 'GOALS_FOR'     => $team_rank['goals_for'],
         //                 'GOALS_AGAINST' => $team_rank['goals_against'],
-        //                 'GOAL_AVERAGE' => $team_rank['goal_average'],
+        //                 'GOAL_AVERAGE'  => $team_rank['goal_average'],
         //             ]
         //         ));
         //     }
@@ -136,10 +136,10 @@ class ScmGroupController extends DefaultModuleController
             }
 
             // Ranking
-        if($this->get_params()->get_hat_days())
-            $ranks = ScmRankingService::general_ranking($this->event_id());
-        else
-            $ranks = ScmRankingService::general_days_ranking($this->event_id(), $group);
+            if($this->get_params()->get_hat_days())
+                $ranks = ScmRankingService::general_days_ranking($this->event_id(), $group);
+            else
+                $ranks = ScmRankingService::general_groups_ranking($this->event_id(), $group);
 
             $prom = $this->get_params()->get_promotion();
             $playoff = $this->get_params()->get_playoff();
@@ -163,19 +163,19 @@ class ScmGroupController extends DefaultModuleController
                 $this->view->assign_block_vars('ranks', array_merge(
                     Date::get_array_tpl_vars(new Date($game['game_date'], Timezone::SERVER_TIMEZONE), 'game_date'),
                     [
-                        'C_FAV' => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
-                        'RANK' => $i + 1,
-                        'RANK_COLOR' => $rank_color,
-                        'TEAM_NAME' => !empty($team_rank['team_id']) ? ScmTeamService::get_team_name($team_rank['team_id']) : '',
-                        'TEAM_LOGO' => !empty($team_rank['team_id']) ? ScmTeamService::get_team_logo($team_rank['team_id']) : '',
-                        'POINTS' => $team_rank['points'],
-                        'PLAYED' => $team_rank['played'],
-                        'WIN' => $team_rank['win'],
-                        'DRAW' => $team_rank['draw'],
-                        'LOSS' => $team_rank['loss'],
-                        'GOALS_FOR' => $team_rank['goals_for'],
+                        'C_FAV'         => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
+                        'RANK'          => $i + 1,
+                        'RANK_COLOR'    => $rank_color,
+                        'TEAM_NAME'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_name($team_rank['team_id']) : '',
+                        'TEAM_LOGO'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_logo($team_rank['team_id']) : '',
+                        'POINTS'        => $team_rank['points'],
+                        'PLAYED'        => $team_rank['played'],
+                        'WIN'           => $team_rank['win'],
+                        'DRAW'          => $team_rank['draw'],
+                        'LOSS'          => $team_rank['loss'],
+                        'GOALS_FOR'     => $team_rank['goals_for'],
                         'GOALS_AGAINST' => $team_rank['goals_against'],
-                        'GOAL_AVERAGE' => $team_rank['goal_average'],
+                        'GOAL_AVERAGE'  => $team_rank['goal_average'],
                     ]
                 ));
             }

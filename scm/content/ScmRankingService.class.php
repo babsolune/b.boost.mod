@@ -19,94 +19,102 @@ class ScmRankingService
 
 	public static function general_ranking($event_id)
     {
-        $days_teams = self::build_teams($event_id);
-        $ranks = self::build_ranks($event_id, $days_teams);
+        $game_teams = self::build_teams($event_id);
+        $ranks = self::build_ranks($event_id, $game_teams);
         $final_ranks = self::sort_general_ranks($ranks);
         return $final_ranks;
     }
 
 	public static function general_days_ranking($event_id, $day)
     {
-        $days_teams = self::build_days_teams($event_id, $day);
-        $ranks = self::build_ranks($event_id, $days_teams);
+        $game_teams = self::build_game_teams($event_id, $day);
+        $ranks = self::build_ranks($event_id, $game_teams);
+        $final_ranks = self::sort_general_ranks($ranks);
+        return $final_ranks;
+    }
+
+	public static function general_groups_ranking($event_id, $group)
+    {
+        $game_teams = self::build_groups_teams($event_id, $group);
+        $ranks = self::build_ranks($event_id, $game_teams);
         $final_ranks = self::sort_general_ranks($ranks);
         return $final_ranks;
     }
 
 	public static function home_ranking($event_id)
     {
-        $days_teams = self::build_home_teams($event_id);
-        $ranks = self::build_ranks($event_id, $days_teams);
+        $game_teams = self::build_home_teams($event_id);
+        $ranks = self::build_ranks($event_id, $game_teams);
         $final_ranks = self::sort_general_ranks($ranks);
         return $final_ranks;
     }
 
 	public static function away_ranking($event_id)
     {
-        $days_teams = self::build_away_teams($event_id);
-        $ranks = self::build_ranks($event_id, $days_teams);
+        $game_teams = self::build_away_teams($event_id);
+        $ranks = self::build_ranks($event_id, $game_teams);
         $final_ranks = self::sort_general_ranks($ranks);
         return $final_ranks;
     }
 
 	public static function attack_ranking($event_id)
     {
-        $days_teams = self::build_teams($event_id);
-        $ranks = self::build_ranks($event_id, $days_teams);
+        $game_teams = self::build_teams($event_id);
+        $ranks = self::build_ranks($event_id, $game_teams);
         $final_ranks = self::sort_attack_ranks($ranks);
         return $final_ranks;
     }
 
 	public static function defense_ranking($event_id)
     {
-        $days_teams = self::build_teams($event_id);
-        $ranks = self::build_ranks($event_id, $days_teams);
+        $game_teams = self::build_teams($event_id);
+        $ranks = self::build_ranks($event_id, $game_teams);
         $final_ranks = self::sort_defense_ranks($ranks);
         return $final_ranks;
     }
 
-	public static function build_ranks($event_id, $days_teams)
+	public static function build_ranks($event_id, $game_teams)
     {
         // Set rank details for each team in all games
         $teams = [];
-        for($i = 0; $i < count($days_teams); $i++)
+        for($i = 0; $i < count($game_teams); $i++)
         {
             $points = $played = $win = $draw = $loss = 0;
-            if ($days_teams[$i]['goals_for'] > $days_teams[$i]['goals_against'])
+            if ($game_teams[$i]['goals_for'] > $game_teams[$i]['goals_against'])
             {
                 $points = ScmParamsService::get_params($event_id)->get_victory_points();
                 $win = $played = 1;
             }
-            elseif ($days_teams[$i]['goals_for'] != '' && ($days_teams[$i]['goals_for'] === $days_teams[$i]['goals_against']))
+            elseif ($game_teams[$i]['goals_for'] != '' && ($game_teams[$i]['goals_for'] === $game_teams[$i]['goals_against']))
             {
                 $points = ScmParamsService::get_params($event_id)->get_draw_points();
                 $draw = $played = 1;
             }
-            elseif (($days_teams[$i]['goals_for'] < $days_teams[$i]['goals_against']))
+            elseif (($game_teams[$i]['goals_for'] < $game_teams[$i]['goals_against']))
             {
                 $points = ScmParamsService::get_params($event_id)->get_loss_points();
                 $loss = $played = 1;
             }
-            if ($days_teams[$i]['team_id'])
+            if ($game_teams[$i]['team_id'])
                 $teams[] = [
-                    'team_id' => $days_teams[$i]['team_id'],
+                    'team_id' => $game_teams[$i]['team_id'],
                     'points' => $points,
                     'played' => $played,
                     'win' => $win,
                     'draw' => $draw,
                     'loss' => $loss,
-                    'goals_for' => (int)$days_teams[$i]['goals_for'],
-                    'goals_against' => (int)$days_teams[$i]['goals_against'],
-                    'goal_average' => (int)$days_teams[$i]['goals_for'] - (int)$days_teams[$i]['goals_against'],
+                    'goals_for' => (int)$game_teams[$i]['goals_for'],
+                    'goals_against' => (int)$game_teams[$i]['goals_against'],
+                    'goal_average' => (int)$game_teams[$i]['goals_for'] - (int)$game_teams[$i]['goals_against'],
                 ];
         }
 
         // Count points/goals for each team
         $ranks = [];
-        foreach ($teams as $team) 
+        foreach ($teams as $team)
         {
             $team_id = $team['team_id'];
-            $penalties = ScmTeamService::get_team($team['team_id'])->get_team_penalty();
+            $penalties = ScmTeamService::get_team($team_id)->get_team_penalty();
             if (!isset($ranks[$team_id])) {
                 $ranks[$team_id] = $team;
             } else {
@@ -138,18 +146,15 @@ class ScmRankingService
         usort($ranks, function($a, $b)
         {
             if ($a['points'] == $b['points']) {
-                if ($a['win'] == $b['win']) {
-                    if ($a['goal_average'] == $b['goal_average']) {
+                if ($a['goal_average'] == $b['goal_average']) {
+                    if ($a['goals_for'] == $b['goals_for']) {
                         if ($a['goals_for'] == $b['goals_for']) {
-                            if ($a['goals_for'] == $b['goals_for']) {
-                                return 0;
-                            }
+                            return 0;
                         }
-                        return $b['goals_for'] - $a['goals_for'];
                     }
-                    return $b['goal_average'] - $a['goal_average'];
+                    return $b['goals_for'] - $a['goals_for'];
                 }
-                return $b['win'] - $a['win'];
+                return $b['goal_average'] - $a['goal_average'];
             }
             return $b['points'] - $a['points'];
         });
@@ -162,15 +167,12 @@ class ScmRankingService
         {
             if ($a['goals_for'] == $b['goals_for']) {
                 if ($a['points'] == $b['points']) {
-                    if ($a['win'] == $b['win']) {
+                    if ($a['goal_average'] == $b['goal_average']) {
                         if ($a['goal_average'] == $b['goal_average']) {
-                            if ($a['goal_average'] == $b['goal_average']) {
-                                return 0;
-                            }
+                            return 0;
                         }
-                        return $b['goal_average'] - $a['goal_average'];
                     }
-                    return $b['win'] - $a['win'];
+                    return $b['goal_average'] - $a['goal_average'];
                 }
                 return $b['points'] - $a['points'];
             }
@@ -185,15 +187,12 @@ class ScmRankingService
         {
             if ($a['goals_against'] == $b['goals_against']) {
                 if ($a['points'] == $b['points']) {
-                    if ($a['win'] == $b['win']) {
+                    if ($a['goal_average'] == $b['goal_average']) {
                         if ($a['goal_average'] == $b['goal_average']) {
-                            if ($a['goal_average'] == $b['goal_average']) {
-                                return 0;
-                            }
+                            return 0;
                         }
-                        return $b['goal_average'] - $a['goal_average'];
                     }
-                    return $b['win'] - $a['win'];
+                    return $b['goal_average'] - $a['goal_average'];
                 }
                 return $b['points'] - $a['points'];
             }
@@ -205,83 +204,110 @@ class ScmRankingService
 	public static function build_teams($event_id)
     {
         $games = ScmGameService::get_games($event_id);
-        $days_teams = [];
+        $game_teams = [];
         // Get results of all games
         foreach ($games as $game)
         {
-            $days_teams[] = [
+            $game_teams[] = [
                 'team_id' => $game['game_home_id'],
                 'goals_for' => $game['game_home_score'],
                 'goals_against' => $game['game_away_score'],
             ];
-            $days_teams[] = [
+            $game_teams[] = [
                 'team_id' => $game['game_away_id'],
                 'goals_for' => $game['game_away_score'],
                 'goals_against' => $game['game_home_score'],
             ];
         }
-        return $days_teams;
+        return $game_teams;
     }
 
-	public static function build_days_teams($event_id, $day)
+	public static function build_groups_teams($event_id, $group)
+    {
+        $games = $days_games = [];
+        $games[] = ScmGameService::get_games_in_cluster($event_id, $group);
+        foreach ($games as $day_games)
+        {
+            $days_games = array_merge($days_games, $day_games);
+        }
+
+        $game_teams = [];
+        // Get results of all games
+        foreach ($days_games as $game)
+        {
+            $game_teams[] = [
+                'team_id' => $game['game_home_id'],
+                'goals_for' => $game['game_home_score'],
+                'goals_against' => $game['game_away_score'],
+            ];
+            $game_teams[] = [
+                'team_id' => $game['game_away_id'],
+                'goals_for' => $game['game_away_score'],
+                'goals_against' => $game['game_home_score'],
+            ];
+        }
+        return $game_teams;
+    }
+
+	public static function build_game_teams($event_id, $day)
     {
         $games = $days_games = [];
         for ($i = 1; $i <= $day; $i++)
         {
-            $games[] = ScmGameService::get_games_in_day($event_id, $i);
+            $games[] = ScmGameService::get_games_in_cluster($event_id, $i);
         }
         foreach ($games as $day_games)
         {
             $days_games = array_merge($days_games, $day_games);
         }
 
-        $days_teams = [];
+        $game_teams = [];
         // Get results of all games
         foreach ($days_games as $game)
         {
-            $days_teams[] = [
+            $game_teams[] = [
                 'team_id' => $game['game_home_id'],
                 'goals_for' => $game['game_home_score'],
                 'goals_against' => $game['game_away_score'],
             ];
-            $days_teams[] = [
+            $game_teams[] = [
                 'team_id' => $game['game_away_id'],
                 'goals_for' => $game['game_away_score'],
                 'goals_against' => $game['game_home_score'],
             ];
         }
-        return $days_teams;
+        return $game_teams;
     }
 
 	public static function build_home_teams($event_id)
     {
         $games = ScmGameService::get_games($event_id);
-        $days_teams = [];
+        $game_teams = [];
         // Get results of all games
         foreach ($games as $game)
         {
-            $days_teams[] = [
+            $game_teams[] = [
                 'team_id' => $game['game_home_id'],
                 'goals_for' => $game['game_home_score'],
                 'goals_against' => $game['game_away_score'],
             ];
         }
-        return $days_teams;
+        return $game_teams;
     }
 
 	public static function build_away_teams($event_id)
     {
         $games = ScmGameService::get_games($event_id);
-        $days_teams = [];
+        $game_teams = [];
         // Get results of all games
         foreach ($games as $game)
         {
-            $days_teams[] = [
+            $game_teams[] = [
                 'team_id' => $game['game_away_id'],
                 'goals_for' => $game['game_away_score'],
                 'goals_against' => $game['game_home_score'],
             ];
         }
-        return $days_teams;
+        return $game_teams;
     }
 }

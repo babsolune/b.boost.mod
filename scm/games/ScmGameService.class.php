@@ -47,13 +47,13 @@ class ScmGameService
         }
     }
 
-    /** Get all games from a event */
+    /** Get all games from an event */
 	public static function get_games(int $event_id) : array
 	{
-		$results = self::$db_querier->select('SELECT games.*
-            FROM ' . ScmSetup::$scm_game_table . ' games
-            WHERE games.game_event_id = :event_id
-            ORDER BY games.game_group ASC, games.game_order ASC', [
+		$results = self::$db_querier->select('SELECT *
+            FROM ' . ScmSetup::$scm_game_table . '
+            WHERE game_event_id = :event_id
+            ORDER BY game_date, game_group ASC, game_order ASC', [
                 'event_id' => $event_id
             ]
         );
@@ -67,20 +67,23 @@ class ScmGameService
 	}
 
     /** Get all games from a day in event */
-	public static function get_games_in_day(int $event_id, int $day_round) : array
+	public static function get_games_in_cluster(int $event_id, int $cluster) : array
 	{
-		$results = self::$db_querier->select('SELECT games.*
-            FROM ' . ScmSetup::$scm_game_table . ' games
-            WHERE games.game_event_id = :event_id
-            ORDER BY games.game_group ASC, games.game_order ASC', [
-                'event_id' => $event_id
+		$results = self::$db_querier->select('SELECT *
+            FROM ' . ScmSetup::$scm_game_table . '
+            WHERE game_event_id = :event_id
+            AND (game_type = :group OR game_type = :day)
+            ORDER BY game_date, game_group ASC, game_order ASC', [
+                'event_id' => $event_id,
+                'group' => 'G',
+                'day' => 'D'
             ]
         );
 
         $games = [];
         while($row = $results->fetch())
         {
-            if ($row['game_group'] == $day_round)
+            if ($row['game_group'] == $cluster)
             $games[] = $row;
         }
         return $games;
@@ -119,10 +122,10 @@ class ScmGameService
      * @param int $event_id the id of its event
      * @param string $type 'G' = group or 'D' = day | 'B' = bracket
      * @param int $group its group number
-     * @param int $group its round number
+     * @param int $round its round number
      * @param int $order its order number
     */
-	public static function get_game(int $event_id, string $type, int $group, int $round = null, int $order)
+	public static function get_game(int $event_id, string $type, int $group, int $round, int $order)
 	{
         $event_games = [];
         foreach (self::get_games($event_id) as $game)
@@ -131,13 +134,13 @@ class ScmGameService
         }
         if (in_array($type.$group.$round.$order, $event_games))
         {
-            $row = self::$db_querier->select_single_row_query('SELECT games.*
-                FROM ' . ScmSetup::$scm_game_table . ' games
-                WHERE games.game_event_id = :event_id
-                AND games.game_type = :type
-                AND games.game_group = :group
-                AND games.game_round = :round
-                AND games.game_order = :order', [
+            $row = self::$db_querier->select_single_row_query('SELECT *
+                FROM ' . ScmSetup::$scm_game_table . '
+                WHERE game_event_id = :event_id
+                AND game_type = :type
+                AND game_group = :group
+                AND game_round = :round
+                AND game_order = :order', [
                     'event_id' => $event_id,
                     'type'     => $type,
                     'group'    => $group,

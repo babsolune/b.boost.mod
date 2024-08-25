@@ -47,6 +47,8 @@ class ScmClubFormController extends DefaultModuleController
 
         $fieldset->add_field(new FormFieldTextEditor('full_name', $this->lang['scm.club.full.name'], $this->get_club()->get_club_full_name()));
 
+		$fieldset->add_field(new FormFieldUrlEditor('website', $this->lang['scm.club.website'], $this->get_club()->get_club_website()->absolute()));
+
         $fieldset->add_field(new FormFieldMailEditor('email', $this->lang['scm.club.email'], $this->get_club()->get_club_email()));
 
         $fieldset->add_field(new FormFieldTelEditor('phone', $this->lang['scm.club.phone'], $this->get_club()->get_club_phone(),
@@ -97,6 +99,7 @@ class ScmClubFormController extends DefaultModuleController
         $club->set_club_name($this->form->get_value('name'));
 		$club->set_club_slug(Url::encode_rewrite($club->get_club_name()));
         $club->set_club_full_name($this->form->get_value('full_name'));
+        $club->set_club_website(new Url($this->form->get_value('website')));
         $club->set_club_email($this->form->get_value('email'));
         $club->set_club_phone($this->form->get_value('phone'));
         $club->set_club_colors($this->form->get_value('colors'));

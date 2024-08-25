@@ -5,7 +5,7 @@
     </div>
     <div class="flex-between">
         <h1>{HEADER_DIVISION} - {HEADER_SEASON}</h1>
-        # INCLUDE EVENT_LIST #
+        # IF IS_MODERATOR ## INCLUDE EVENT_LIST ## ENDIF #
     </div>
     # IF C_SOURCES #
         <aside class="sources-container">

@@ -88,7 +88,7 @@
                     # ELSE #
                         <div>
                             <table class="table bordered-table">
-                                <caption>&nbsp;</caption>
+                                <caption>{@scm.day} {LAST_DAY}</caption>
                                 <colgroup class="hidden-small-screens">
                                     # IF NOT C_ONE_DAY #<col class="width-pc-9" /># ENDIF #
                                     <col class="width-pc-05" />
@@ -136,7 +136,7 @@
                     # ELSE #
                         <div>
                             <table class="table bordered-table">
-                                <caption>{@scm.next.day} ({NEXT_DAY})</caption>
+                                <caption>{@scm.day} {NEXT_DAY}</caption>
                                 <colgroup class="hidden-small-screens">
                                     # IF NOT C_ONE_DAY #<col class="width-pc-9" /># ENDIF #
                                     <col class="width-pc-05" />

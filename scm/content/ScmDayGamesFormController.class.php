@@ -57,31 +57,33 @@ class ScmDayGamesFormController extends DefaultModuleController
             $game = new ScmGame();
             $game->set_properties($day_game);
             $or = $game->get_game_order();
+            $ro = 0;
             $game_fieldset = new FormFieldsetHTML('game_' . $gr . $or, '');
             $game_fieldset->set_css_class('grouped-fields matchdays-game');
             $form->add_fieldset($game_fieldset);
 
-            $game_fieldset->add_field(new FormFieldFree('day_game_number_' . $gr . $or, '', '<strong>D' . $gr . $or . '</strong>',
+            $game_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>D' . $gr . $or . '</strong>',
                 ['class' => 'game-name small text-italic form-D' . $gr . $or]
             ));
-            $game_fieldset->add_field(new FormFieldDateTime('day_game_date_' . $gr . $or, '', $game->get_game_date(),
+            $game_fieldset->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $gr, $ro, $or), 'small text-italic'));
+            $game_fieldset->add_field(new FormFieldDateTime('game_date_' . $gr . $or, '', $game->get_game_date(),
                 ['class' => 'game-date']
             ));
             if($this->get_params()->get_display_playgrounds())
-                $game_fieldset->add_field(new FormFieldTextEditor('day_game_playground_' . $gr . $or, '', $game->get_game_playground(),
+                $game_fieldset->add_field(new FormFieldTextEditor('game_playground_' . $gr . $or, '', $game->get_game_playground(),
                     ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                 ));
-            $game_fieldset->add_field(new FormFieldSimpleSelectChoice('day_home_team_' . $gr . $or, '', $game->get_game_home_id(),
+            $game_fieldset->add_field(new FormFieldSimpleSelectChoice('home_team_' . $gr . $or, '', $game->get_game_home_id(),
                 $this->get_teams_list(),
                 ['class' => 'home-team game-team']
             ));
-            $game_fieldset->add_field(new FormFieldTextEditor('day_home_score_' . $gr . $or, '', $game->get_game_home_score(),
+            $game_fieldset->add_field(new FormFieldTextEditor('home_score_' . $gr . $or, '', $game->get_game_home_score(),
                 ['class' => 'game-score', 'pattern' => '[0-9]*']
             ));
-            $game_fieldset->add_field(new FormFieldTextEditor('day_away_score_' . $gr . $or, '', $game->get_game_away_score(),
+            $game_fieldset->add_field(new FormFieldTextEditor('away_score_' . $gr . $or, '', $game->get_game_away_score(),
                 ['class' => 'game-score', 'pattern' => '[0-9]*']
             ));
-            $game_fieldset->add_field(new FormFieldSimpleSelectChoice('day_away_team_' . $gr . $or, '', $game->get_game_away_id(),
+            $game_fieldset->add_field(new FormFieldSimpleSelectChoice('away_team_' . $gr . $or, '', $game->get_game_away_id(),
                 $this->get_teams_list(),
                 ['class' => 'away-team game-team']
             ));
@@ -103,13 +105,13 @@ class ScmDayGamesFormController extends DefaultModuleController
             $game->set_properties($day_game);
             $or = $game->get_game_order();
             $game->set_game_event_id($this->event_id());
-            $game->set_game_date($this->form->get_value('day_game_date_' . $gr . $or));
+            $game->set_game_date($this->form->get_value('game_date_' . $gr . $or));
             if($this->get_params()->get_display_playgrounds())
-                $game->set_game_playground($this->form->get_value('day_game_playground_' . $gr . $or));
-            $game->set_game_home_id((int)$this->form->get_value('day_home_team_' . $gr . $or)->get_raw_value());
-            $game->set_game_home_score($this->form->get_value('day_home_score_' . $gr . $or));
-            $game->set_game_away_score($this->form->get_value('day_away_score_' . $gr . $or));
-            $game->set_game_away_id((int)$this->form->get_value('day_away_team_' . $gr . $or)->get_raw_value());
+                $game->set_game_playground($this->form->get_value('game_playground_' . $gr . $or));
+            $game->set_game_home_id((int)$this->form->get_value('home_team_' . $gr . $or)->get_raw_value());
+            $game->set_game_home_score($this->form->get_value('home_score_' . $gr . $or));
+            $game->set_game_away_score($this->form->get_value('away_score_' . $gr . $or));
+            $game->set_game_away_id((int)$this->form->get_value('away_team_' . $gr . $or)->get_raw_value());
 
             ScmGameService::update_game($game, $game->get_id_game());
             if ($game->get_game_home_score())
@@ -122,10 +124,6 @@ class ScmDayGamesFormController extends DefaultModuleController
     private function get_day_games($gr)
     {
         $games = ScmGroupService::games_list_from_group($this->event_id(), 'D', $gr);
-
-        usort($games, function($a, $b) {
-            return $a['game_order'] - $b['game_order'];
-        });
 
         return $games;
     }
@@ -202,7 +200,7 @@ class ScmDayGamesFormController extends DefaultModuleController
 	{
 		$event = $this->get_event();
 
-		// $location_id = $event->get_id() ? 'scm-edit-'. $event->get_id() : '';
+		$location_id = $event->get_id() ? 'scm-edit-'. $event->get_id() : '';
 
 		// $response = new SiteDisplayResponse($view, $location_id);
 		$response = new SiteDisplayResponse($view);
@@ -211,12 +209,12 @@ class ScmDayGamesFormController extends DefaultModuleController
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['scm.module.title'], ScmUrlBuilder::home());
 
-		// if (!AppContext::get_session()->location_id_already_exists($location_id))
-        //     $graphical_environment->set_location_id($location_id);
+		if (!AppContext::get_session()->location_id_already_exists($location_id))
+            $graphical_environment->set_location_id($location_id);
 
         $graphical_environment->set_page_title($this->lang['scm.games.management'], $this->lang['scm.module.title']);
         $graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.games.management']);
-        $graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_brackets_games($event->get_id(), $event->get_event_slug()));
+        $graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug()));
 
         $categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($event->get_id_category(), true));
         foreach ($categories as $id => $category)
@@ -226,7 +224,7 @@ class ScmDayGamesFormController extends DefaultModuleController
         }
         $category = $event->get_category();
         $breadcrumb->add($event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-        $breadcrumb->add($this->lang['scm.games.management'], ScmUrlBuilder::edit_brackets_games($event->get_id(), $event->get_event_slug()));
+        $breadcrumb->add($this->lang['scm.games.management'], ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug()));
 
 		return $response;
 	}

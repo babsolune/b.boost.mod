@@ -70,10 +70,10 @@ class ScmDayService
     /** Get all days from a event */
 	public static function get_days(int $event_id) : array
 	{
-		$results = self::$db_querier->select('SELECT days.*
-            FROM ' . ScmSetup::$scm_day_table . ' days
-            WHERE days.day_event_id = :event_id
-            ORDER BY days.id_day', [
+		$results = self::$db_querier->select('SELECT *
+            FROM ' . ScmSetup::$scm_day_table . '
+            WHERE day_event_id = :event_id
+            ORDER BY id_day', [
                 'event_id' => $event_id
             ]
         );
@@ -103,6 +103,7 @@ class ScmDayService
                     'game_event_id' => $event_id,
                     'game_type' => 'D',
                     'game_group' => $i,
+                    'game_round' => 0,
                     'game_order' => $j,
                     'game_home_id' => 0,
                     'game_away_id' => 0,

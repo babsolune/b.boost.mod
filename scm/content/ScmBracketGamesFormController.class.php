@@ -77,58 +77,43 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 ${'bracket_fieldset'.$br.$or} = new FormFieldsetHTML('bracket' . $br . $or, '');
                 ${'bracket_fieldset'.$br.$or}->set_css_class('grouped-fields round-fields');
                 $form->add_fieldset(${'bracket_fieldset'.$br.$or});
-                $game_number     = '<strong>B' . $gr . $br . $or . '</strong>';
+                $empty_teams = '';
+                if ($this->get_game('B', $gr, $br, $or)->get_game_home_empty())
+                    $empty_teams = ' - ' . $this->get_game('B', $gr, $br, $or)->get_game_home_empty() . '|' . $this->get_game('B', $gr, $br, $or)->get_game_away_empty();
+                $game_number     = '<strong>B' . $gr . $br . $or . '</strong>' . $empty_teams;
                 $game_date       = $this->get_game('B', $gr, $br, $or)->get_game_date();
                 $game_playground = $this->get_game('B', $gr, $br, $or)->get_game_playground();
                 $game_home_id    = $this->get_game('B', $gr, $br, $or)->get_game_home_id();
                 $game_home_score = $this->get_game('B', $gr, $br, $or)->get_game_home_score();
-                $game_home_pen   = $this->get_game('B', $gr, $br, $or)->get_game_home_pen();
-                $game_away_pen   = $this->get_game('B', $gr, $br, $or)->get_game_away_pen();
                 $game_away_score = $this->get_game('B', $gr, $br, $or)->get_game_away_score();
                 $game_away_id    = $this->get_game('B', $gr, $br, $or)->get_game_away_id();
 
                 if ($this->return_games && $or == 1)
                     ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSpacer('first_leg_' . $gr . $br, $this->lang['scm.first.leg']));
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldDateTime('round_game_date_' . $gr . $br . $or, '', $game_date,
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldFree('game_number_' . $gr . $br . $or, '', $game_number,
+                    ['class' => 'game-name small text-italic form-B' . $gr . $br . $or]
+                ));
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $gr, $br, $or), 'small game-details align-right text-italic'));
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldDateTime('game_date_' . $gr . $br . $or, '', $game_date,
                     ['class' => 'game-date']
                 ));
                 if($this->get_params()->get_display_playgrounds())
-                    ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('round_game_playground_' . $gr . $br . $or, '', $game_playground,
+                    ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('game_playground_' . $gr . $br . $or, '', $game_playground,
                         ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                     ));
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSimpleSelectChoice('round_home_team_' . $gr . $br . $or, '', $game_home_id,
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSimpleSelectChoice('home_team_' . $gr . $br . $or, '', $game_home_id,
                     $this->get_teams_list(),
                     ['class' => 'home-team game-team']
                 ));
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('round_home_score_' . $gr . $br . $or, '', $game_home_score,
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('home_score_' . $gr . $br . $or, '', $game_home_score,
                     ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
                 ));
-                if ($this->return_games) {
-                    if (($or > $games_number / 2)) {
-                        ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('round_home_pen_' . $gr . $br . $or, '', $game_home_pen,
-                            ['class' => 'home-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . 1]
-                        ));
-                        ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('round_away_pen_' . $gr . $br . $or, '', $game_away_pen,
-                            ['class' => 'away-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . 2]
-                        ));
-                    }
-                } else {
-                    ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('round_home_pen_' . $gr . $br . $or, '', $game_home_pen,
-                        ['class' => 'home-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . 1]
-                    ));
-                    ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('round_away_pen_' . $gr . $br . $or, '', $game_away_pen,
-                        ['class' => 'away-team game-score', 'pattern' => '[0-9]*', 'placeholder' => $this->lang['scm.th.pen'] . 2]
-                    ));
-                }
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('round_away_score_' . $gr . $br . $or, '', $game_away_score,
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('away_score_' . $gr . $br . $or, '', $game_away_score,
                     ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
                 ));
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSimpleSelectChoice('round_away_team_' . $gr . $br . $or, '', $game_away_id,
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSimpleSelectChoice('away_team_' . $gr . $br . $or, '', $game_away_id,
                     $this->get_teams_list(),
                     ['class' => 'away-team game-team']
-                ));
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldFree('round_game_number_' . $gr . $br . $or, '', $game_number,
-                    ['class' => 'game-name small text-italic form-B' . $gr . $br . $or]
                 ));
                 if ($this->return_games && $or == $games_number / 2)
                     ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSpacer('winner_second_leg_' . $gr, '<hr />' . $this->lang['scm.second.leg']));
@@ -151,15 +136,15 @@ class ScmBracketGamesFormController extends DefaultModuleController
             {
                 $or = $game['game_order'];
                 $item = $this->get_game('B', $gr, $br, $or);
-                $item->set_game_date($this->form->get_value('round_game_date_' . $gr . $br . $or));
+                $item->set_game_date($this->form->get_value('game_date_' . $gr . $br . $or));
                 if($this->get_params()->get_display_playgrounds())
-                    $item->set_game_playground($this->form->get_value('round_game_playground_' . $gr . $br . $or));
-                $item->set_game_home_id((int)$this->form->get_value('round_home_team_' . $gr . $br . $or)->get_raw_value());
-                $item->set_game_home_score($this->form->get_value('round_home_score_' . $gr . $br . $or));
-                $item->set_game_home_pen($this->form->get_value('round_home_pen_' . $gr . $br . $or));
-                $item->set_game_away_pen($this->form->get_value('round_away_pen_' . $gr . $br . $or));
-                $item->set_game_away_score($this->form->get_value('round_away_score_' . $gr . $br . $or));
-                $item->set_game_away_id((int)$this->form->get_value('round_away_team_' . $gr . $br . $or)->get_raw_value());
+                    $item->set_game_playground($this->form->get_value('game_playground_' . $gr . $br . $or));
+                $item->set_game_home_id((int)$this->form->get_value('home_team_' . $gr . $br . $or)->get_raw_value());
+                $item->set_game_home_score($this->form->get_value('home_score_' . $gr . $br . $or));
+                $item->set_game_home_pen($this->form->get_value('home_pen_' . $gr . $br . $or));
+                $item->set_game_away_pen($this->form->get_value('away_pen_' . $gr . $br . $or));
+                $item->set_game_away_score($this->form->get_value('away_score_' . $gr . $br . $or));
+                $item->set_game_away_id((int)$this->form->get_value('away_team_' . $gr . $br . $or)->get_raw_value());
 
                 ScmGameService::update_game($item, $item->get_id_game());
             }

@@ -13,7 +13,7 @@
 ### Games form
 - [ ] rebuild css to fit mobile, columns and set/bonus options
 ## Ranking
-- [ ] set filters for draw ranks (actually right hard in code)
+- [ ] set filters for draw ranks (actually write hard in code) (see draw-rules.md)
 ### Clubs
 - [ ] self division
 - [X] Country flag

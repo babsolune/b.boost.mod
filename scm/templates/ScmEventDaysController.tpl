@@ -4,7 +4,7 @@
     # ELSE #
         <div>
             <table class="table bordered-table">
-                <caption>{@scm.prev.day} ({LAST_DAY})</caption>
+                <caption>{@scm.day} {LAST_DAY}</caption>
                 <colgroup class="hidden-small-screens">
                     <col class="width-pc-6" />
                     <col class="width-pc-39" />
@@ -52,7 +52,7 @@
     # ELSE #
         <div>
             <table class="table bordered-table">
-                <caption>{@scm.next.day} ({NEXT_DAY})</caption>
+                <caption>{@scm.day} {NEXT_DAY}</caption>
                 <colgroup class="hidden-small-screens">
                     <col class="width-pc-6" />
                     <col class="width-pc-39" />

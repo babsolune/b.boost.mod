@@ -54,6 +54,7 @@ $url_controller_mappers = [
 	new UrlControllerMapper('ScmGroupGamesFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/groups/round/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'round']),
 	new UrlControllerMapper('ScmBracketsFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/brackets/builder/?$`', ['event_id', 'event_slug']),
 	new UrlControllerMapper('ScmBracketGamesFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/brackets/round/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'round']),
+	new UrlControllerMapper('ScmDetailsGameFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/details/?([A-Z]+)?/?([0-9]+)?/?([0-9]+)?/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'type', 'group', 'round', 'order']),
 
 	// Clubs
 	new UrlControllerMapper('ScmClubsManagerController', '`^/clubs/manage/?$`'),
@@ -62,6 +63,7 @@ $url_controller_mappers = [
 	new UrlControllerMapper('ScmClubDeleteController', '`^/club/([0-9]+)/delete/?$`', ['club_id']),
 	new UrlControllerMapper('ScmClubsController', '`^/clubs/list/?$`'),
 	new UrlControllerMapper('ScmClubController', '`^/club/([0-9]+)-([a-z0-9-_]+)/?$`', ['club_id', 'club_slug']),
+	new UrlControllerMapper('ScmVisitClubController', '`^/club/visit/([0-9]+)/?$`', ['club_id']),
 
 	// Divisions
 	new UrlControllerMapper('ScmDivisionsManagerController', '`^/division/manage/?$`'),

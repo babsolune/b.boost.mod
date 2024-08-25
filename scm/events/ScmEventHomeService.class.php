@@ -25,7 +25,7 @@ class ScmEventHomeService
         // Display previous and next days games
         $prev_day = ScmDayService::get_last_day($event_id);
         $prev_dates = [];
-        foreach(ScmGameService::get_games_in_day($event_id, $prev_day) as $game)
+        foreach(ScmGameService::get_games_in_cluster($event_id, $prev_day) as $game)
         {
             $prev_dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
         }
@@ -35,7 +35,7 @@ class ScmEventHomeService
             $view->assign_block_vars('prev_dates', [
                 'DATE' => $date
             ]);
-            foreach(ScmGameService::get_games_in_day($event_id, $prev_day) as $game)
+            foreach(ScmGameService::get_games_in_cluster($event_id, $prev_day) as $game)
             {
                 $item = new ScmGame();
                 $item->set_properties($game);
@@ -46,7 +46,7 @@ class ScmEventHomeService
 
         $next_day = ScmDayService::get_next_day($event_id);
         $next_dates = [];
-        foreach(ScmGameService::get_games_in_day($event_id, $next_day) as $game)
+        foreach(ScmGameService::get_games_in_cluster($event_id, $next_day) as $game)
         {
             $next_dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
         }
@@ -56,7 +56,7 @@ class ScmEventHomeService
             $view->assign_block_vars('next_dates', [
                 'DATE' => $date
             ]);
-            foreach(ScmGameService::get_games_in_day($event_id, $next_day) as $game)
+            foreach(ScmGameService::get_games_in_cluster($event_id, $next_day) as $game)
             {
                 $item = new ScmGame();
                 $item->set_properties($game);

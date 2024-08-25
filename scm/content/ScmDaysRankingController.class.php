@@ -118,7 +118,7 @@ class ScmDaysRankingController extends DefaultModuleController
     {
         $day = AppContext::get_request()->get_getint('day', 0);
         $prev_day = ScmDayService::get_last_day($this->event_id());
-        foreach (ScmGameService::get_games_in_day($this->event_id(), $prev_day) as $game)
+        foreach (ScmGameService::get_games_in_cluster($this->event_id(), $prev_day) as $game)
         {
             $item = new ScmGame();
             $item->set_properties($game);
@@ -126,7 +126,7 @@ class ScmDaysRankingController extends DefaultModuleController
         }
 
         $next_day = ScmDayService::get_next_day($this->event_id());
-        foreach (ScmGameService::get_games_in_day($this->event_id(), $next_day) as $game)
+        foreach (ScmGameService::get_games_in_cluster($this->event_id(), $next_day) as $game)
         {
             $item = new ScmGame();
             $item->set_properties($game);
