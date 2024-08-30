@@ -26,7 +26,7 @@
                             <div class="cell-content cell-infos">
                                 <span>{@scm.club.website} : </span>
                                 <span>
-                                    # IF C_HAS_EMAIL #
+                                    # IF C_HAS_WEBSITE #
                                         <a href="{U_CLUB_WEBSITE}" target="_blank" rel="noopener noreferer">{@scm.club.see.website}</a>
                                     # ELSE #
                                         {@scm.not.specified}

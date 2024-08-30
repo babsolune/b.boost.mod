@@ -7,8 +7,8 @@ At least, create a division and and season to be able to create a new event
 ## Administration
 - Choose to hide left and/or right column on the website
 - Set users authorizations  
-    read | write | moderate | Manage clubs | Manage divisions | Manage seasons | Manage event setup  
-    can be refined for each category
+    - read | write | moderate | Manage clubs | Manage divisions | Manage seasons | Manage event setup  
+    - can be refined for each category
 
 ## Categories
 The player categories (U11, U13, U15, ...) or National, International , Friendly, ...
@@ -17,7 +17,7 @@ The player categories (U11, U13, U15, ...) or National, International , Friendly
 Define Clubs that will becomes teams in events (Clubs could be countries)
 
 ## Division
-- The name of the eventtion (Champions League, World Cup, ...)
+- The name of the event (Champions League, World Cup, ...)
 - Event type
     - Championship = all teams vs all teams, day by day
     - Cup = knockout games

@@ -196,7 +196,7 @@ class ScmRankingService
                 }
                 return $b['points'] - $a['points'];
             }
-            return $b['goals_against'] - $a['goals_against'];
+            return $a['goals_against'] - $b['goals_against'];
         });
         return $ranks;
     }
