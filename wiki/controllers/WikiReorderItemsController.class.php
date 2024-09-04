@@ -24,14 +24,8 @@ class WikiReorderItemsController extends DefaultModuleController
 		{
 			$this->update_position($request);
             WikiService::clear_cache();
-            // AppContext::get_response()->redirect(WikiUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name()), $this->lang['warning.success.position.update']);
-			AppContext::get_response()->redirect(
-                (
-                    $request->get_url_referrer() ? $request->get_url_referrer() : WikiUrlBuilder::home()
-                ),
-                $this->lang['warning.success.position.update']
-            );
-	}
+            AppContext::get_response()->redirect(WikiUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name()), $this->lang['warning.success.position.update']);
+		}
 
 		$this->build_view($request);
 

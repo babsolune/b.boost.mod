@@ -252,7 +252,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 			MenuService::generate_cache();
 		}
 
-		$result = $this->querier->select('SELECT i.id, i.title, i.rewrited_title, i.is_cat, i.defined_status, i.auth, c.content, cat.id as cat_id
+		$result = $this->querier->select('SELECT i.*, c.*, cat.id as cat_id
             FROM ' . PREFIX . 'wiki_articles i
             LEFT JOIN ' . PREFIX . 'wiki_cats cat ON cat.article_id = i.id
             LEFT JOIN ' . PREFIX . 'wiki_contents c ON c.item_id = i.id'
