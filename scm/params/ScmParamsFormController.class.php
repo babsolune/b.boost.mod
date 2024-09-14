@@ -173,8 +173,23 @@ class ScmParamsFormController extends DefaultModuleController
 			$ranking_fieldset->add_field(new FormFieldNumberEditor('promotion', $this->lang['scm.promotion'], $this->get_params()->get_promotion(), ['min' => 0]));
 			$ranking_fieldset->add_field(new FormFieldNumberEditor('playoff', $this->lang['scm.playoff'], $this->get_params()->get_playoff(), ['min' => 0]));
 			$ranking_fieldset->add_field(new FormFieldNumberEditor('relegation', $this->lang['scm.relegation'], $this->get_params()->get_relegation(), ['min' => 0]));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('fairplay_yellow', $this->lang['scm.fairplay.yellow'], $this->get_params()->get_fairplay_yellow(), ['min' => 0]));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('fairplay_red', $this->lang['scm.fairplay.red'], $this->get_params()->get_fairplay_red(), ['min' => 0]));
 
-			$ranking_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_type', $this->lang['scm.ranking.type'], $this->get_params()->get_ranking_type(), $this->ranking_mode_list()));
+			$ranking_type_fieldset = new FormFieldsetHTML('ranking', $this->lang['scm.ranking.type']);
+			$ranking_type_fieldset->set_description($this->lang['scm.ranking.type.clue']);
+            $form->add_fieldset($ranking_type_fieldset);
+
+			$ranking_type_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_crit_1', $this->lang['scm.ranking.criterion'] . 1, $this->get_params()->get_ranking_crit_1(), $this->ranking_criterion_list()));
+			$ranking_type_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_crit_2', $this->lang['scm.ranking.criterion'] . 2, $this->get_params()->get_ranking_crit_2(), $this->ranking_criterion_list()));
+			$ranking_type_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_crit_3', $this->lang['scm.ranking.criterion'] . 3, $this->get_params()->get_ranking_crit_3(), $this->ranking_criterion_list()));
+			$ranking_type_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_crit_4', $this->lang['scm.ranking.criterion'] . 4, $this->get_params()->get_ranking_crit_4(), $this->ranking_criterion_list()));
+			$ranking_type_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_crit_5', $this->lang['scm.ranking.criterion'] . 5, $this->get_params()->get_ranking_crit_5(), $this->ranking_criterion_list()));
+			$ranking_type_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_crit_6', $this->lang['scm.ranking.criterion'] . 6, $this->get_params()->get_ranking_crit_6(), $this->ranking_criterion_list()));
+			$ranking_type_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_crit_7', $this->lang['scm.ranking.criterion'] . 7, $this->get_params()->get_ranking_crit_7(), $this->ranking_criterion_list()));
+			$ranking_type_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_crit_8', $this->lang['scm.ranking.criterion'] . 8, $this->get_params()->get_ranking_crit_8(), $this->ranking_criterion_list()));
+			$ranking_type_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_crit_9', $this->lang['scm.ranking.criterion'] . 9, $this->get_params()->get_ranking_crit_9(), $this->ranking_criterion_list()));
+			$ranking_type_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_crit_10', $this->lang['scm.ranking.criterion'] . 10, $this->get_params()->get_ranking_crit_10(), $this->ranking_criterion_list()));
 		}
 
 		if ($this->is_championship)
@@ -249,7 +264,19 @@ class ScmParamsFormController extends DefaultModuleController
             $params->set_promotion($this->form->get_value('promotion'));
             $params->set_playoff($this->form->get_value('playoff'));
             $params->set_relegation($this->form->get_value('relegation'));
-            $params->set_ranking_type($this->form->get_value('ranking_type'));
+            $params->set_fairplay_yellow($this->form->get_value('fairplay_yellow'));
+            $params->set_fairplay_red($this->form->get_value('fairplay_red'));
+
+            $params->set_ranking_crit_1($this->form->get_value('ranking_crit_1')->get_raw_value());
+            $params->set_ranking_crit_2($this->form->get_value('ranking_crit_2')->get_raw_value());
+            $params->set_ranking_crit_3($this->form->get_value('ranking_crit_3')->get_raw_value());
+            $params->set_ranking_crit_4($this->form->get_value('ranking_crit_4')->get_raw_value());
+            $params->set_ranking_crit_5($this->form->get_value('ranking_crit_5')->get_raw_value());
+            $params->set_ranking_crit_6($this->form->get_value('ranking_crit_6')->get_raw_value());
+            $params->set_ranking_crit_7($this->form->get_value('ranking_crit_7')->get_raw_value());
+            $params->set_ranking_crit_8($this->form->get_value('ranking_crit_8')->get_raw_value());
+            $params->set_ranking_crit_9($this->form->get_value('ranking_crit_9')->get_raw_value());
+            $params->set_ranking_crit_10($this->form->get_value('ranking_crit_10')->get_raw_value());
         }
 
         if ($this->is_championship)
@@ -279,18 +306,21 @@ class ScmParamsFormController extends DefaultModuleController
 		ScmEventService::clear_cache();
 	}
 
-	private function ranking_mode_list()
+	private function ranking_criterion_list()
 	{
 		$options = [];
-		// $cache = ScmSeasonCache::load();
-		// $seasons_list = $cache->get_seasons();
 
-		// $i = 1;
-		// foreach($seasons_list as $season)
-		// {
-		// 	$options[] = new FormFieldSelectChoiceOption($season['season_name'], $season['id_season']);
-		// 	$i++;
-		// }
+        $options[] = new FormFieldSelectChoiceOption('', '');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.points'], 'points_gen');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.points'], 'points_prtl');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goal.average'], 'goal_average_gen');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goal.average'], 'goal_average_prtl');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goals.for'], 'goals_for_gen');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goals.for'], 'goals_for_prtl');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goals.against'], 'goals_against_gen');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goals.against'], 'goals_against_prtl');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.fairplay'], 'fairplay_gen');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.fairplay'], 'fairplay_prtl');
 
 		return $options;
 	}

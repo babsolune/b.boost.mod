@@ -25,8 +25,19 @@ class ScmParams
 	private $promotion;
 	private $playoff;
 	private $relegation;
-	private $ranking_type;
-	private $game_duration;
+	private $fairplay_yellow;
+	private $fairplay_red;
+
+	private $ranking_crit_1;
+	private $ranking_crit_2;
+	private $ranking_crit_3;
+	private $ranking_crit_4;
+	private $ranking_crit_5;
+	private $ranking_crit_6;
+	private $ranking_crit_7;
+	private $ranking_crit_8;
+	private $ranking_crit_9;
+	private $ranking_crit_10;
 
 	private $rounds_number;
 	private $draw_games;
@@ -36,6 +47,7 @@ class ScmParams
 	private $golden_goal;
 	private $silver_goal;
 
+	private $game_duration;
 	private $favorite_team_id;
 
 	public function get_id_params()
@@ -198,14 +210,124 @@ class ScmParams
 		$this->relegation = $relegation;
 	}
 
-	public function get_ranking_type()
+	public function get_fairplay_yellow()
 	{
-		return $this->ranking_type;
+		return $this->fairplay_yellow;
 	}
 
-	public function set_ranking_type($ranking_type)
+	public function set_fairplay_yellow($fairplay_yellow)
 	{
-		$this->ranking_type = $ranking_type;
+		$this->fairplay_yellow = $fairplay_yellow;
+	}
+
+	public function get_fairplay_red()
+	{
+		return $this->fairplay_red;
+	}
+
+	public function set_fairplay_red($fairplay_red)
+	{
+		$this->fairplay_red = $fairplay_red;
+	}
+
+	public function get_ranking_crit_1()
+	{
+		return $this->ranking_crit_1;
+	}
+
+	public function set_ranking_crit_1($ranking_crit_1)
+	{
+		$this->ranking_crit_1 = $ranking_crit_1;
+	}
+
+	public function get_ranking_crit_2()
+	{
+		return $this->ranking_crit_2;
+	}
+
+	public function set_ranking_crit_2($ranking_crit_2)
+	{
+		$this->ranking_crit_2 = $ranking_crit_2;
+	}
+
+	public function get_ranking_crit_3()
+	{
+		return $this->ranking_crit_3;
+	}
+
+	public function set_ranking_crit_3($ranking_crit_3)
+	{
+		$this->ranking_crit_3 = $ranking_crit_3;
+	}
+
+	public function get_ranking_crit_4()
+	{
+		return $this->ranking_crit_4;
+	}
+
+	public function set_ranking_crit_4($ranking_crit_4)
+	{
+		$this->ranking_crit_4 = $ranking_crit_4;
+	}
+
+	public function get_ranking_crit_5()
+	{
+		return $this->ranking_crit_5;
+	}
+
+	public function set_ranking_crit_5($ranking_crit_5)
+	{
+		$this->ranking_crit_5 = $ranking_crit_5;
+	}
+
+	public function get_ranking_crit_6()
+	{
+		return $this->ranking_crit_6;
+	}
+
+	public function set_ranking_crit_6($ranking_crit_6)
+	{
+		$this->ranking_crit_6 = $ranking_crit_6;
+	}
+
+	public function get_ranking_crit_7()
+	{
+		return $this->ranking_crit_7;
+	}
+
+	public function set_ranking_crit_7($ranking_crit_7)
+	{
+		$this->ranking_crit_7 = $ranking_crit_7;
+	}
+
+	public function get_ranking_crit_8()
+	{
+		return $this->ranking_crit_8;
+	}
+
+	public function set_ranking_crit_8($ranking_crit_8)
+	{
+		$this->ranking_crit_8 = $ranking_crit_8;
+	}
+
+	public function get_ranking_crit_9()
+	{
+		return $this->ranking_crit_9;
+	}
+
+	public function set_ranking_crit_9($ranking_crit_9)
+	{
+		$this->ranking_crit_9 = $ranking_crit_9;
+	}
+
+	public function get_ranking_crit_10()
+	{
+		return $this->ranking_crit_10;
+	}
+
+	public function set_ranking_crit_10($ranking_crit_10)
+	{
+		$this->ranking_crit_10 = $ranking_crit_10;
 	}
 
 	public function get_game_duration()
@@ -322,7 +444,18 @@ class ScmParams
 			'promotion'           => $this->get_promotion(),
 			'playoff'             => $this->get_playoff(),
 			'relegation'          => $this->get_relegation(),
-			'ranking_type'        => $this->get_ranking_type(),
+			'fairplay_yellow'     => $this->get_fairplay_yellow(),
+			'fairplay_red'        => $this->get_fairplay_red(),
+			'ranking_crit_1'      => $this->get_ranking_crit_1(),
+			'ranking_crit_2'      => $this->get_ranking_crit_2(),
+			'ranking_crit_3'      => $this->get_ranking_crit_3(),
+			'ranking_crit_4'      => $this->get_ranking_crit_4(),
+			'ranking_crit_5'      => $this->get_ranking_crit_5(),
+			'ranking_crit_6'      => $this->get_ranking_crit_6(),
+			'ranking_crit_7'      => $this->get_ranking_crit_7(),
+			'ranking_crit_8'      => $this->get_ranking_crit_8(),
+			'ranking_crit_9'      => $this->get_ranking_crit_9(),
+			'ranking_crit_10'     => $this->get_ranking_crit_10(),
 			'game_duration'       => $this->get_game_duration(),
 			'rounds_number'       => $this->get_rounds_number(),
 			'draw_games'          => $this->get_draw_games(),
@@ -353,7 +486,18 @@ class ScmParams
 		$this->promotion           = $properties['promotion'];
 		$this->playoff             = $properties['playoff'];
 		$this->relegation          = $properties['relegation'];
-		$this->ranking_type        = $properties['ranking_type'];
+		$this->fairplay_yellow     = $properties['fairplay_yellow'];
+		$this->fairplay_red        = $properties['fairplay_red'];
+		$this->ranking_crit_1      = $properties['ranking_crit_1'];
+		$this->ranking_crit_2      = $properties['ranking_crit_2'];
+		$this->ranking_crit_3      = $properties['ranking_crit_3'];
+		$this->ranking_crit_4      = $properties['ranking_crit_4'];
+		$this->ranking_crit_5      = $properties['ranking_crit_5'];
+		$this->ranking_crit_6      = $properties['ranking_crit_6'];
+		$this->ranking_crit_7      = $properties['ranking_crit_7'];
+		$this->ranking_crit_8      = $properties['ranking_crit_8'];
+		$this->ranking_crit_9      = $properties['ranking_crit_9'];
+		$this->ranking_crit_10     = $properties['ranking_crit_10'];
 		$this->game_duration       = $properties['game_duration'];
 		$this->rounds_number       = $properties['rounds_number'];
 		$this->draw_games          = $properties['draw_games'];
@@ -367,6 +511,7 @@ class ScmParams
 
 	public function init_default_properties()
 	{
+        $this->ranking_crit_1  = 'points_gen';
         $this->promotion  = 0;
         $this->playoff    = 0;
         $this->relegation = 0;

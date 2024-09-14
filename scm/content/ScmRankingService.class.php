@@ -10,7 +10,6 @@
 class ScmRankingService
 {
 	private static $db_querier;
-	protected static $module_id = 'scm';
 
 	public static function __static()
 	{
@@ -20,60 +19,60 @@ class ScmRankingService
 	public static function general_ranking($event_id)
     {
         $game_teams = self::build_teams($event_id);
-        $ranks = self::build_ranks($event_id, $game_teams);
-        $final_ranks = self::sort_general_ranks($ranks);
+        $results = self::build_results($event_id, $game_teams);
+        $final_ranks = self::sort_general_ranks($results);
         return $final_ranks;
     }
 
 	public static function general_days_ranking($event_id, $day)
     {
         $game_teams = self::build_game_teams($event_id, $day);
-        $ranks = self::build_ranks($event_id, $game_teams);
-        $final_ranks = self::sort_general_ranks($ranks);
+        $results = self::build_results($event_id, $game_teams);
+        $final_ranks = self::sort_general_ranks($results);
         return $final_ranks;
     }
 
 	public static function general_groups_ranking($event_id, $group)
     {
         $game_teams = self::build_groups_teams($event_id, $group);
-        $ranks = self::build_ranks($event_id, $game_teams);
-        $final_ranks = self::sort_general_ranks($ranks);
+        $results = self::build_results($event_id, $game_teams);
+        $final_ranks = self::sort_general_ranks($results);
         return $final_ranks;
     }
 
 	public static function home_ranking($event_id)
     {
         $game_teams = self::build_home_teams($event_id);
-        $ranks = self::build_ranks($event_id, $game_teams);
-        $final_ranks = self::sort_general_ranks($ranks);
+        $results = self::build_results($event_id, $game_teams);
+        $final_ranks = self::sort_general_ranks($results);
         return $final_ranks;
     }
 
 	public static function away_ranking($event_id)
     {
         $game_teams = self::build_away_teams($event_id);
-        $ranks = self::build_ranks($event_id, $game_teams);
-        $final_ranks = self::sort_general_ranks($ranks);
+        $results = self::build_results($event_id, $game_teams);
+        $final_ranks = self::sort_general_ranks($results);
         return $final_ranks;
     }
 
 	public static function attack_ranking($event_id)
     {
         $game_teams = self::build_teams($event_id);
-        $ranks = self::build_ranks($event_id, $game_teams);
-        $final_ranks = self::sort_attack_ranks($ranks);
+        $results = self::build_results($event_id, $game_teams);
+        $final_ranks = self::sort_attack_ranks($results);
         return $final_ranks;
     }
 
 	public static function defense_ranking($event_id)
     {
         $game_teams = self::build_teams($event_id);
-        $ranks = self::build_ranks($event_id, $game_teams);
-        $final_ranks = self::sort_defense_ranks($ranks);
+        $results = self::build_results($event_id, $game_teams);
+        $final_ranks = self::sort_defense_ranks($results);
         return $final_ranks;
     }
 
-	public static function build_ranks($event_id, $game_teams)
+	public static function build_results($event_id, $game_teams)
     {
         // Set rank details for each team in all games
         $teams = [];
@@ -97,53 +96,53 @@ class ScmRankingService
             }
             if ($game_teams[$i]['team_id'])
                 $teams[] = [
-                    'team_id' => $game_teams[$i]['team_id'],
-                    'points' => $points,
-                    'played' => $played,
-                    'win' => $win,
-                    'draw' => $draw,
-                    'loss' => $loss,
-                    'goals_for' => (int)$game_teams[$i]['goals_for'],
+                    'team_id'       => $game_teams[$i]['team_id'],
+                    'points'        => $points,
+                    'played'        => $played,
+                    'win'           => $win,
+                    'draw'          => $draw,
+                    'loss'          => $loss,
+                    'goals_for'     => (int)$game_teams[$i]['goals_for'],
                     'goals_against' => (int)$game_teams[$i]['goals_against'],
-                    'goal_average' => (int)$game_teams[$i]['goals_for'] - (int)$game_teams[$i]['goals_against'],
+                    'goal_average'  => (int)$game_teams[$i]['goals_for'] - (int)$game_teams[$i]['goals_against']
                 ];
         }
 
         // Count points/goals for each team
-        $ranks = [];
+        $results = [];
         foreach ($teams as $team)
         {
             $team_id = $team['team_id'];
             $penalties = ScmTeamService::get_team($team_id)->get_team_penalty();
-            if (!isset($ranks[$team_id])) {
-                $ranks[$team_id] = $team;
+            if (!isset($results[$team_id])) {
+                $results[$team_id] = $team;
             } else {
-                $ranks[$team_id]['points'] += $team['points'];
-                $ranks[$team_id]['played'] += $team['played'];
-                $ranks[$team_id]['win'] += $team['win'];
-                $ranks[$team_id]['draw'] += $team['draw'];
-                $ranks[$team_id]['loss'] += $team['loss'];
-                $ranks[$team_id]['goals_for'] += $team['goals_for'];
-                $ranks[$team_id]['goals_against'] += $team['goals_against'];
-                $ranks[$team_id]['goal_average'] += $team['goals_for'] - $team['goals_against'];
+                $results[$team_id]['points']        += $team['points'];
+                $results[$team_id]['played']        += $team['played'];
+                $results[$team_id]['win']           += $team['win'];
+                $results[$team_id]['draw']          += $team['draw'];
+                $results[$team_id]['loss']          += $team['loss'];
+                $results[$team_id]['goals_for']     += $team['goals_for'];
+                $results[$team_id]['goals_against'] += $team['goals_against'];
+                $results[$team_id]['goal_average']  += $team['goals_for'] - $team['goals_against'];
             }
         }
 
         // Add team penalties to points
-        $final_ranks = [];
-        $ranks = array_values($ranks);
-        foreach ($ranks as $rank)
+        $final_results = [];
+        $results = array_values($results);
+        foreach ($results as $result)
         {
-            $penalties = ScmTeamService::get_team($rank['team_id'])->get_team_penalty();
-            $rank['points'] = $rank['points'] + $penalties;
-            $final_ranks[] = $rank;
+            $penalties = ScmTeamService::get_team($result['team_id'])->get_team_penalty();
+            $result['points'] = $result['points'] + $penalties;
+            $final_results[] = $result;
         }
-        return $final_ranks;
+        return $final_results;
     }
 
-	public static function sort_general_ranks($ranks)
+	public static function sort_general_ranks($results)
     {
-        usort($ranks, function($a, $b)
+        usort($results, function($a, $b)
         {
             if ($a['points'] == $b['points']) {
                 if ($a['goal_average'] == $b['goal_average']) {
@@ -158,12 +157,12 @@ class ScmRankingService
             }
             return $b['points'] - $a['points'];
         });
-        return $ranks;
+        return $results;
     }
 
-	public static function sort_attack_ranks($ranks)
+	public static function sort_attack_ranks($results)
     {
-        usort($ranks, function($a, $b)
+        usort($results, function($a, $b)
         {
             if ($a['goals_for'] == $b['goals_for']) {
                 if ($a['points'] == $b['points']) {
@@ -178,12 +177,12 @@ class ScmRankingService
             }
             return $b['goals_for'] - $a['goals_for'];
         });
-        return $ranks;
+        return $results;
     }
 
-	public static function sort_defense_ranks($ranks)
+	public static function sort_defense_ranks($results)
     {
-        usort($ranks, function($a, $b)
+        usort($results, function($a, $b)
         {
             if ($a['goals_against'] == $b['goals_against']) {
                 if ($a['points'] == $b['points']) {
@@ -198,7 +197,7 @@ class ScmRankingService
             }
             return $a['goals_against'] - $b['goals_against'];
         });
-        return $ranks;
+        return $results;
     }
 
 	public static function build_teams($event_id)
@@ -212,11 +211,15 @@ class ScmRankingService
                 'team_id' => $game['game_home_id'],
                 'goals_for' => $game['game_home_score'],
                 'goals_against' => $game['game_away_score'],
+                'yellow_card' => $game['game_home_yellow'],
+                'red_card' => $game['game_home_red'],
             ];
             $game_teams[] = [
                 'team_id' => $game['game_away_id'],
                 'goals_for' => $game['game_away_score'],
                 'goals_against' => $game['game_home_score'],
+                'yellow_card' => $game['game_away_yellow'],
+                'red_card' => $game['game_away_red'],
             ];
         }
         return $game_teams;

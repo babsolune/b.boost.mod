@@ -37,7 +37,9 @@
         # IF C_ONE_DAY #<p>{ONE_DAY_DATE}</p># ENDIF #
         <p><h4>{@scm.games.groups.stage}</h4></p>
         # START matchdays #
-            <h5># IF C_ONE_DAY #{@scm.round}# ELSE #{@scm.day}# ENDIF # {matchdays.MATCHDAY}</h5>
+            # IF NOT C_HAT_RANKING #
+                <h5># IF C_ONE_DAY #{@scm.round}# ELSE #{@scm.day}# ENDIF # {matchdays.MATCHDAY}</h5>
+            # ENDIF #
             # START matchdays.dates #
                 # IF NOT C_ONE_DAY #
                     <h6>{matchdays.dates.DATE}</h6>
@@ -54,7 +56,9 @@
                                         {matchdays.dates.groups.GAME_DATE_HOUR_MINUTE}
                                     # ENDIF #
                                 </span>
-                                <a href="{matchdays.dates.groups.U_GROUP}" class="offload">{@scm.group} {matchdays.dates.groups.GROUP_NAME}</a>
+                                # IF NOT C_HAT_RANKING #
+                                    <a href="{matchdays.dates.groups.U_GROUP}" class="offload">{@scm.group} {matchdays.dates.groups.GROUP_NAME}</a>
+                                # ENDIF #
                             </div>
                             <div  class="id-{matchdays.dates.groups.HOME_ID} game-team game-home# IF matchdays.dates.groups.C_HOME_FAV # text-strong# ENDIF #"
                                     # IF matchdays.dates.groups.C_HOME_WIN # style="background-color: {matchdays.dates.groups.WIN_COLOR}"# ENDIF #>

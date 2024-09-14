@@ -1,47 +1,45 @@
 # Draw rules
 ## Foot
 ### National 1 et 2
-1. Plus grand nombre de points dans les confrontations directes.
-2. Plus grande différence de buts dans les confrontations directes.
-3. Plus grande différence de buts générale.
-4. Plus grand nombre de buts marqués.
-5. Meilleur place au fair-play (1 pt par carton jaune, 2 pts par carton rouges)
-6. Tirage au sort
+1. Plus grand nombre de points au général.
+2. Plus grand nombre de points dans les confrontations directes.
+3. Plus grande différence de buts dans les confrontations directes.
+4. Plus grande différence de buts au général.
+5. Plus grand nombre de buts marqués.
+6. Meilleur place au fair-play (1 pt par carton jaune, 2 pts par carton rouges)
+7. Tirage au sort
 
-## Foot
 ### ligue 1/2
-1. Plus grande différence de buts générale ;
-2. Plus grand nombre de points dans les confrontations directes ;
-3. Plus grande différence de buts particulière ;
-4. Plus grand nombre de buts dans les confrontations directes ;
-5. Plus grand nombre de buts à l'extérieur dans les confrontations directes ;
-6. Plus grand nombre de buts marqués ;
-7. Plus grand nombre de buts marqués à l'extérieur ;
-8. Meilleure place au Challenge du Fair-play (un point par joueur averti, trois points par joueur exclu).
+1. Plus grand nombre de points au général.
+2. Plus grande différence de buts générale ;
+3. Plus grand nombre de points dans les confrontations directes ;
+4. Plus grande différence de buts dans les confrontations directes ;
+5. Plus grand nombre de buts dans les confrontations directes ;
+6. Plus grand nombre de buts à l'extérieur dans les confrontations directes ;
+7. Plus grand nombre de buts marqués ;
+8. Plus grand nombre de buts marqués à l'extérieur ;
+9. Meilleure place au Fair-play (1 pt par carton jaune, 3 pts par carton rouges).
 
 ## Rugby
 ### Pro
-1. Nombre de points terrain obtenus sur l'ensemble des rencontres ayant opposé entre elles
-les équipes concernées (y compris le cas échéant points de bonus et points de pénalisation) ;
-2. Goal-average sur l'ensemble des rencontres de la compétition ;
-3. Goal-average sur l'ensemble des rencontres ayant opposé entre elles les équipes restant concernées ;
-4. Plus grande différence entre le nombre d'essais marqués et concédés sur l'ensemble des rencontres ayant opposé entre elles les équipes restant concernées ;
-5. Plus grande différence entre le nombre d'essais marqués et concédés dans toutes les rencontres de la compétition ;
-6. Plus grand nombre de points marqués dans toutes les rencontres de la compétition ;
-7. Plus grand nombre d'essais marqués dans toutes les rencontres de la compétition ;
-8. Nombre de forfaits n'ayant pas entraîné de forfait général de la compétition ;
-9. Place obtenue la saison précédente dans le Championnat de France.
+1. Plus grand nombre de points au général.
+2. Plus grand nombre de points dans les confrontations directes.
+3. Plus grande différence de points (essais + transfo + pen) au général.
+4. Plus grande différence de points (essais + transfo + pen) dans les confrontations directes.
+5. Plus grande différence entre le nombre d'essais marqués et concédés dans les confrontations directes.
+6. Plus grande différence entre le nombre d'essais marqués et concédés dans toutes les rencontres de la compétition ;
+7. Plus grand nombre de points marqués (essais + transfo + pen) au général.
+8. Plus grand nombre d'essais marqués dans toutes les rencontres de la compétition ;
+9. Nombre de forfaits n'ayant pas entraîné de forfait général de la compétition ;
+10. Place obtenue la saison précédente dans le Championnat de France.
 
 ### Amateur
-1. Nombre de points « terrain » (voir art. 341) obtenus sur l'ensemble des rencontres ayant opposé
-entre elles les équipes concernées par le cas d’égalité.
-2. Goal-average sur l’ensemble des rencontres ayant opposé entre elles les équipes concernées par
-le cas d’égalité.
-3. Plus grande différence entre le nombre d'essais marqués et concédés sur l'ensemble des
-rencontres ayant opposé entre elles les équipes restant concernées.
+1. Nombre de points « terrain » (voir art. 341) dans les confrontations directes.
+2. Goal-average dans les confrontations directes.
+3. Plus grande différence entre le nombre d'essais marqués et concédés dans les confrontations directes.
 4. Goal-average sur l’ensemble des rencontres.
 5. Plus grande différence entre le nombre d'essais marqués et concédés dans toutes les rencontres.
-6. Plus grand nombre de points marqués dans toutes les rencontres.
+6. Plus grand nombre de points marqués (essais + transfo + pen) dans toutes les rencontres.
 7. Plus grand nombre d'essais marqués dans toutes les rencontres.
 8. Nombre de forfaits n'ayant pas entraîné de forfait général.
 9. Nombre de semaines de suspension, liées aux sanctions disciplinaires, sur l’ensemble des
@@ -53,18 +51,68 @@ sont exclues de la comptabilisation des semaines de suspension précitées.
 
 ## Basket
 ### Pro
-1. Différence de points sur les rencontres jouées entre elles
-2. Plus grand nombre de points marqués sur les rencontres jouées entre elles
-3. Plus grande différence de points sur l'ensemble des rencontres
-4. Plus grand nombre de points marqués sur l'ensemble des rencontres
-5. Tirage au sort
+1. Plus grand nombre de points au général.
+2. Plus grand nombre de points dans les confrontations directes.
+3. Plus grand nombre de points (paniers) marqués  dans les confrontations directes.
+4. Plus grande différence de points (paniers) au general.
+5. Plus grand nombre de points marqués sur l'ensemble des rencontres.
+6. Tirage au sort.
 
 ## Handball
 ### Pro
-1. Le nombre de points à l'issue de la compétition dans les rencontres ayant opposé les équipes à égalité entre elles ;
-2. La différence entre les buts marqués et les buts encaissés dans les rencontres ayant opposé les équipes à égalité entre elles ;
-3. Le plus grand nombre de buts marqués à l'extérieur dans les rencontres ayant opposé les équipes à égalité entre elles ;
-4. La différence entre les buts marqués et les buts encaissés sur l'ensemble des rencontres de la compétition ;
-5. Le plus grand nombre de buts marqués sur l'ensemble des rencontres de la compétition ;
-6. Le plus grand nombre de buts marqués à l'extérieur sur l'ensemble des rencontres de la compétition ;
-7. tirage au sort effectué par la Commission d'Organisation des Compétitions.
+1. Plus grand nombre de points au général.
+2. Plus grand nombre de points dans les confrontations directes.
+3. Plus grande différence de buts dans les confrontations directes.
+4. Plus grand nombre de buts marqués à l'extérieur dans les confrontations directes.
+5. Plus grande différence de buts au général.
+6. Plus grand nombre de buts marqués au général.
+7. Le plus grand nombre de buts marqués à l'extérieur au général.
+8. Tirage au sort.
+
+# Code
+from maxcoder
+```
+class a {
+	public static $tests;
+
+	public static function set_tests(array $tests) {
+		self::$tests = $tests;
+	}
+	public static function goal_average($a, $b) {
+		if ($a['goal_average'] == $b['goal_average']) {
+			return 0;
+		}
+		return ($a['goal_average'] < $b['goal_average']) ? 1 : -1;
+	}
+
+	public static function goal_for($a, $b) {
+		if ($a['goal_for'] == $b['goal_for']) {
+			return 0;
+		}
+		return ($a['goal_for'] < $b['goal_for']) ? 1 : -1;
+	}
+
+	public static function make_range(&$items)
+	{
+		foreach (array_reverse(self::$tests) as $test) {
+			uasort($items, self::class . '::' . $test);
+		}
+	}
+}
+
+// Tests par ordre de priorité, sortie de la DB du coup
+$tests = ['goal_average', 'goal_for'];
+
+a::set_tests($tests);
+$items = [[
+	'goal_average' => 5,
+	'goal_for' => 5
+],
+[
+	'goal_average' => 5,
+	'goal_for' => 6
+],
+];
+a::make_range($items);
+Debug::dump($items);
+```

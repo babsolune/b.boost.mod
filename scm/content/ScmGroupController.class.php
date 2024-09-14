@@ -32,155 +32,82 @@ class ScmGroupController extends DefaultModuleController
         ]);
         $group = AppContext::get_request()->get_getint('round', 0);
 
-        // if($this->get_params()->get_hat_days())
-        // {
-        //     $this->view->put_all([
-        //         'C_HAT_DAYS' => true,
-        //         'DAY' => $group
-        //     ]);
+        // Games list
+        $group_games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $group);
+        $this->view->put_all([
+            'GROUP' => ScmGroupService::ntl($group),
+            'DAY' => $group
+        ]);
 
-        //     $days_games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $group);
-        //     $dates = [];
-        //     foreach($days_games as $game)
-        //     {
-        //         $dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
-        //     }
+        $matchdays = [];
+        foreach($group_games as $game)
+        {
+            $matchdays[$game['game_round']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
+        }
 
-        //     foreach (array_unique($dates) as $date)
-        //     {
-        //         $this->view->assign_block_vars('dates', [
-        //             'DATE' => $date
-        //         ]);
-        //         foreach($days_games as $game)
-        //         {
-        //             $item = new ScmGame();
-        //             $item->set_properties($game);
-        //             if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
-        //                 $this->view->assign_block_vars('dates.games', $item->get_template_vars());
-        //         }
-        //     }
-
-        //     $ranks = ScmRankingService::general_ranking($this->event_id());
-
-        //     $prom = $this->get_params()->get_promotion();
-        //     $playoff = $this->get_params()->get_playoff();
-        //     $releg = $this->get_params()->get_relegation();
-        //     $prom_color = ScmConfig::load()->get_promotion_color();
-        //     $playoff_color = ScmConfig::load()->get_playoff_color();
-        //     $releg_color = ScmConfig::load()->get_relegation_color();
-        //     $color_count = count($ranks);
-
-        //     foreach ($ranks as $i => $team_rank)
-        //     {
-        //         if ($prom && $i < $prom) {
-        //             $rank_color = $prom_color;
-        //         } elseif ($playoff && $i >= $prom && $i < ($prom + $playoff)) {
-        //             $rank_color = $playoff_color;
-        //         } else if ($releg && $i >= $color_count - $releg) {
-        //             $rank_color = $releg_color;
-        //         } else {
-        //             $rank_color = 'rgba(0,0,0,0)';
-        //         }
-        //         $this->view->assign_block_vars('ranks', array_merge(
-        //             Date::get_array_tpl_vars(new Date($game['game_date'], Timezone::SERVER_TIMEZONE), 'game_date'),
-        //             [
-        //                 'C_FAV'         => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
-        //                 'RANK'          => $i + 1,
-        //                 'RANK_COLOR'    => $rank_color,
-        //                 'TEAM_NAME'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_name($team_rank['team_id']) : '',
-        //                 'TEAM_LOGO'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_logo($team_rank['team_id']) : '',
-        //                 'POINTS'        => $team_rank['points'],
-        //                 'PLAYED'        => $team_rank['played'],
-        //                 'WIN'           => $team_rank['win'],
-        //                 'DRAW'          => $team_rank['draw'],
-        //                 'LOSS'          => $team_rank['loss'],
-        //                 'GOALS_FOR'     => $team_rank['goals_for'],
-        //                 'GOALS_AGAINST' => $team_rank['goals_against'],
-        //                 'GOAL_AVERAGE'  => $team_rank['goal_average'],
-        //             ]
-        //         ));
-        //     }
-        // }
-        // else
-        // {
-            // Games list
-            $group_games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $group);
-            $this->view->put_all([
-                'GROUP' => ScmGroupService::ntl($group),
-                'DAY' => $group
+        foreach ($matchdays as $matchday => $dates)
+        {
+            $this->view->assign_block_vars('matchdays', [
+                'MATCHDAY' => $matchday
             ]);
-
-            $matchdays = [];
-            foreach($group_games as $game)
+            foreach ($dates as $date => $games)
             {
-                $matchdays[$game['game_round']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
-            }
-
-            foreach ($matchdays as $matchday => $dates)
-            {
-                $this->view->assign_block_vars('matchdays', [
-                    'MATCHDAY' => $matchday
+                $this->view->assign_block_vars('matchdays.dates', [
+                    'DATE' => $date
                 ]);
-                foreach ($dates as $date => $games)
+                foreach($games as $game)
                 {
-                    $this->view->assign_block_vars('matchdays.dates', [
-                        'DATE' => $date
-                    ]);
-                    foreach($games as $game)
-                    {
-                        $item = new ScmGame();
-                        $item->set_properties($game);
-                        $this->view->assign_block_vars('matchdays.dates.games', $item->get_template_vars());
-                    }
+                    $item = new ScmGame();
+                    $item->set_properties($game);
+                    $this->view->assign_block_vars('matchdays.dates.games', $item->get_template_vars());
                 }
             }
+        }
 
-            // Ranking
-            if($this->get_params()->get_hat_days())
-                $ranks = ScmRankingService::general_days_ranking($this->event_id(), $group);
-            else
-                $ranks = ScmRankingService::general_groups_ranking($this->event_id(), $group);
+        // Ranking
+        if($this->get_params()->get_hat_days())
+            $ranks = ScmRankingService::general_days_ranking($this->event_id(), $group);
+        else
+            $ranks = ScmRankingService::general_groups_ranking($this->event_id(), $group);
 
-            $prom = $this->get_params()->get_promotion();
-            $playoff = $this->get_params()->get_playoff();
-            $releg = $this->get_params()->get_relegation();
-            $prom_color = ScmConfig::load()->get_promotion_color();
-            $playoff_color = ScmConfig::load()->get_playoff_color();
-            $releg_color = ScmConfig::load()->get_relegation_color();
-            $color_count = count($ranks);
+        $prom          = $this->get_params()->get_promotion();
+        $playoff       = $this->get_params()->get_playoff();
+        $releg         = $this->get_params()->get_relegation();
+        $prom_color    = ScmConfig::load()->get_promotion_color();
+        $playoff_color = ScmConfig::load()->get_playoff_color();
+        $releg_color   = ScmConfig::load()->get_relegation_color();
+        $color_count   = count($ranks);
 
-            foreach ($ranks as $i => $team_rank)
-            {
-                if ($prom && $i < $prom) {
-                    $rank_color = $prom_color;
-                } elseif ($playoff && $i >= $prom && $i < ($prom + $playoff)) {
-                    $rank_color = $playoff_color;
-                } else if ($releg && $i >= $color_count - $releg) {
-                    $rank_color = $releg_color;
-                } else {
-                    $rank_color = 'rgba(0,0,0,0)';
-                }
-                $this->view->assign_block_vars('ranks', array_merge(
-                    Date::get_array_tpl_vars(new Date($game['game_date'], Timezone::SERVER_TIMEZONE), 'game_date'),
-                    [
-                        'C_FAV'         => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
-                        'RANK'          => $i + 1,
-                        'RANK_COLOR'    => $rank_color,
-                        'TEAM_NAME'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_name($team_rank['team_id']) : '',
-                        'TEAM_LOGO'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_logo($team_rank['team_id']) : '',
-                        'POINTS'        => $team_rank['points'],
-                        'PLAYED'        => $team_rank['played'],
-                        'WIN'           => $team_rank['win'],
-                        'DRAW'          => $team_rank['draw'],
-                        'LOSS'          => $team_rank['loss'],
-                        'GOALS_FOR'     => $team_rank['goals_for'],
-                        'GOALS_AGAINST' => $team_rank['goals_against'],
-                        'GOAL_AVERAGE'  => $team_rank['goal_average'],
-                    ]
-                ));
+        foreach ($ranks as $i => $team_rank)
+        {
+            if ($prom && $i < $prom) {
+                $rank_color = $prom_color;
+            } elseif ($playoff && $i >= $prom && $i < ($prom + $playoff)) {
+                $rank_color = $playoff_color;
+            } else if ($releg && $i >= $color_count - $releg) {
+                $rank_color = $releg_color;
+            } else {
+                $rank_color = 'rgba(0,0,0,0)';
             }
-
-        // }
+            $this->view->assign_block_vars('ranks', array_merge(
+                Date::get_array_tpl_vars(new Date($game['game_date'], Timezone::SERVER_TIMEZONE), 'game_date'),
+                [
+                    'C_FAV'         => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
+                    'RANK'          => $i + 1,
+                    'RANK_COLOR'    => $rank_color,
+                    'TEAM_NAME'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_name($team_rank['team_id']) : '',
+                    'TEAM_LOGO'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_logo($team_rank['team_id']) : '',
+                    'POINTS'        => $team_rank['points'],
+                    'PLAYED'        => $team_rank['played'],
+                    'WIN'           => $team_rank['win'],
+                    'DRAW'          => $team_rank['draw'],
+                    'LOSS'          => $team_rank['loss'],
+                    'GOALS_FOR'     => $team_rank['goals_for'],
+                    'GOALS_AGAINST' => $team_rank['goals_against'],
+                    'GOAL_AVERAGE'  => $team_rank['goal_average'],
+                ]
+            ));
+        }
 
         $this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
