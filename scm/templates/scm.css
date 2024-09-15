@@ -79,10 +79,6 @@ th.bgc-sub a {
     flex-wrap: wrap;
 }
 
-.general-days ul {
-    justify-content: space-between;
-}
-
 .roundmenu-title {
     min-width: 30px;
     display: block;
@@ -208,6 +204,11 @@ th.bgc-sub a {
 
 .game-details .fieldset-inset > .form-element-upload-file {
     width: 100%;
+}
+
+.not-played {
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 @media (min-width: 769px) {

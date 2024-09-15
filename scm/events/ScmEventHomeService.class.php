@@ -20,7 +20,8 @@ class ScmEventHomeService
     public static function build_days_calendar(int $event_id)
     {
         $view = new FileTemplate('scm/ScmEventDaysController.tpl');
-        $view->add_lang(LangLoader::get_all_langs('scm'));
+        $lang = LangLoader::get_all_langs('scm');
+        $view->add_lang($lang);
 
         // Display previous and next days games
         $prev_day = ScmDayService::get_last_day($event_id);
@@ -65,8 +66,15 @@ class ScmEventHomeService
             }
         }
 
+        foreach (ScmTeamService::get_teams($event_id) as $team)
+        {
+            $view->assign_block_vars('clubs_list', [
+                'CLUB_SHORT_NAME' => $team['club_name'],
+                'U_CLUB' => ScmUrlBuilder::display_club($team['id_club'], $team['club_slug'])->rel()
+            ]);
+        }
+
         $view->put_all([
-            'C_EVENT_STARTING' => $prev_day == 1,
             'C_EVENT_ENDING' => $prev_day == count(ScmDayService::get_days($event_id)),
             'LAST_DAY' => $prev_day,
             'NEXT_DAY' => $next_day,

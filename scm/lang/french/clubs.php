@@ -14,6 +14,9 @@
 $lang['scm.club']               = 'Club';
 $lang['scm.clubs']              = 'Clubs';
 $lang['scm.filter.clubs']       = 'Rechercher un club';
+$lang['scm.clubs.list']         = 'Liste des clubs';
+$lang['scm.see.club']           = 'Voir les informations du club';
+$lang['scm.see.club.calendar']  = 'Voir le calendrier du club';
 $lang['scm.club.name']          = 'Nom d\'affichage';
 $lang['scm.club.full.name']     = 'Nom complet';
 $lang['scm.club.place']         = 'Emplacement du club';

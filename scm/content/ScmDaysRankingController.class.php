@@ -97,8 +97,9 @@ class ScmDaysRankingController extends DefaultModuleController
         foreach (ScmDayService::get_days($this->event_id()) as $day)
         {
             $this->view->assign_block_vars('days', [
+                'C_DAY_PLAYED' => $day['day_played'] || $day['day_round'] == 1,
+                'DAY'   => $day['day_round'],
                 'U_DAY' => ScmUrlBuilder::display_days_ranking($this->event_id(), $slug, 'day', $day['day_round'])->rel(),
-                'DAY'   => $day['day_round']
             ]);
         }
         $this->view->put_all([
@@ -134,7 +135,6 @@ class ScmDaysRankingController extends DefaultModuleController
         }
 
         $this->view->put_all([
-            'C_EVENT_STARTING' => empty($day) && ScmDayService::get_last_day($this->event_id()) == 1,
             'C_EVENT_ENDING' => empty($day) && ScmDayService::get_last_day($this->event_id()) == count(ScmDayService::get_days($this->event_id())) || $day == count(ScmDayService::get_days($this->event_id())),
             'LAST_DAY' => $prev_day,
             'NEXT_DAY' => $next_day,
