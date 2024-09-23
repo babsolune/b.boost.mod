@@ -265,15 +265,13 @@ class ScmGameService
         return $games[0];
 	}
 
-    public static function get_unique_game($event_id, $team_a, $team_b)
+    public static function get_prtl_game($team_a, $team_b)
     {
         $result = self::$db_querier->select('SELECT *
             FROM ' . ScmSetup::$scm_game_table . '
-            WHERE game_event_id = :event_id
-            AND ((game_home_id = :team_a AND game_away_id = :team_b) OR (game_home_id = :team_b AND game_away_id = :team_a))', [
-                'event_id' => $event_id,
-                'team_a'     => $team_a,
-                'team_b'    => $team_b,
+            WHERE ((game_home_id = :team_a AND game_away_id = :team_b) OR (game_home_id = :team_b AND game_away_id = :team_a))', [
+                'team_a' => $team_a,
+                'team_b' => $team_b,
             ]
         );
         $games = [];

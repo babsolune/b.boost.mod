@@ -20,7 +20,7 @@ class ScmRankingService
     {
         $game_teams = self::build_teams($event_id);
         $results = self::build_results($event_id, $game_teams);
-        $final_ranks = self::sort_general_ranks($results);
+        $final_ranks = self::sort_general_ranks($results, $event_id);
         return $final_ranks;
     }
 
@@ -28,7 +28,7 @@ class ScmRankingService
     {
         $game_teams = self::build_game_teams($event_id, $day);
         $results = self::build_results($event_id, $game_teams);
-        $final_ranks = self::sort_general_ranks($results);
+        $final_ranks = self::sort_general_ranks($results, $event_id);
         return $final_ranks;
     }
 
@@ -36,7 +36,7 @@ class ScmRankingService
     {
         $game_teams = self::build_groups_teams($event_id, $group);
         $results = self::build_results($event_id, $game_teams);
-        $final_ranks = self::sort_general_ranks($results);
+        $final_ranks = self::sort_general_ranks($results, $event_id);
         return $final_ranks;
     }
 
@@ -44,7 +44,7 @@ class ScmRankingService
     {
         $game_teams = self::build_home_teams($event_id);
         $results = self::build_results($event_id, $game_teams);
-        $final_ranks = self::sort_general_ranks($results);
+        $final_ranks = self::sort_general_ranks($results, $event_id);
         return $final_ranks;
     }
 
@@ -52,7 +52,7 @@ class ScmRankingService
     {
         $game_teams = self::build_away_teams($event_id);
         $results = self::build_results($event_id, $game_teams);
-        $final_ranks = self::sort_general_ranks($results);
+        $final_ranks = self::sort_general_ranks($results, $event_id);
         return $final_ranks;
     }
 
@@ -74,7 +74,7 @@ class ScmRankingService
 
 	public static function build_results($event_id, $game_teams)
     {
-        // Set rank details for each team in all games
+        // Set result details for each team in all games
         $teams = [];
         for($i = 0; $i < count($game_teams); $i++)
         {
@@ -140,24 +140,94 @@ class ScmRankingService
         return $final_results;
     }
 
-	public static function sort_general_ranks($results)
+    public static function get_params_crit($event_id)
     {
-        usort($results, function($a, $b)
-        {
-            if ($a['points'] == $b['points']) {
-                if ($a['goal_average'] == $b['goal_average']) {
-                    if ($a['goals_for'] == $b['goals_for']) {
-                        if ($a['goals_for'] == $b['goals_for']) {
-                            return 0;
-                        }
-                    }
-                    return $b['goals_for'] - $a['goals_for'];
-                }
-                return $b['goal_average'] - $a['goal_average'];
-            }
-            return $b['points'] - $a['points'];
-        });
+        return [
+            ScmParamsService::get_params($event_id)->get_ranking_crit_1(),
+            ScmParamsService::get_params($event_id)->get_ranking_crit_2(),
+            ScmParamsService::get_params($event_id)->get_ranking_crit_3(),
+            ScmParamsService::get_params($event_id)->get_ranking_crit_4(),
+            ScmParamsService::get_params($event_id)->get_ranking_crit_5(),
+            ScmParamsService::get_params($event_id)->get_ranking_crit_6(),
+            ScmParamsService::get_params($event_id)->get_ranking_crit_7(),
+            ScmParamsService::get_params($event_id)->get_ranking_crit_8(),
+            ScmParamsService::get_params($event_id)->get_ranking_crit_9(),
+            ScmParamsService::get_params($event_id)->get_ranking_crit_10()
+        ];
+    }
+
+	public static function points($a, $b)
+    {
+		if ($a['points'] == $b['points'])
+			return 0;
+		return ($a['points'] < $b['points']) ? 1 : -1;
+	}
+
+	public static function points_prtl($a, $b) 
+    {
+		if ($a['points'] == $b['points'])
+			return 0;
+		return ($a['points'] < $b['points']) ? 1 : -1;
+	}
+
+	public static function goal_average($a, $b)
+    {
+		if ($a['goal_average'] == $b['goal_average'])
+			return 0;
+		return $a['goal_average'] < $b['goal_average'] ? 1 : -1;
+	}
+
+	public static function goals_for($a, $b)
+    {
+		if ($a['goals_for'] == $b['goals_for'])
+			return 0;
+		return ($a['goals_for'] < $b['goals_for']) ? 1 : -1;
+	}
+
+	public static function goals_against($a, $b)
+    {
+		if ($a['goals_for'] == $b['goals_for'])
+			return 0;
+		return ($b['goals_for'] < $a['goals_for']) ? 1 : -1;
+	}
+
+	public static function red_card($a, $b)
+    {
+		if ($a['red_card'] == $b['red_card'])
+			return 0;
+		return ($b['red_card'] < $a['red_card']) ? 1 : -1;
+	}
+
+	public static function yellow_card($a, $b)
+    {
+		if ($a['yellow_card'] == $b['yellow_card'])
+			return 0;
+		return ($b['yellow_card'] < $a['yellow_card']) ? 1 : -1;
+	}
+
+	public static function sort_general_ranks($results, $event_id)
+    {
+        foreach (array_reverse(self::get_params_crit($event_id)) as $crit) {
+            if ($crit != '')
+                usort($results, self::class . '::' . $crit);
+		}
         return $results;
+        // usort($results, function($a, $b)
+        // {
+        //     if ($a['points'] == $b['points']) {
+        //         if ($a['goal_average'] == $b['goal_average']) {
+        //             if ($a['goals_for'] == $b['goals_for']) {
+        //                 if ($a['goals_for'] == $b['goals_for']) {
+        //                     return 0;
+        //                 }
+        //             }
+        //             return $b['goals_for'] - $a['goals_for'];
+        //         }
+        //         return $b['goal_average'] - $a['goal_average'];
+        //     }
+        //     return $b['points'] - $a['points'];
+        // });
+        // return $results;
     }
 
 	public static function sort_attack_ranks($results)
@@ -242,11 +312,15 @@ class ScmRankingService
                 'team_id' => $game['game_home_id'],
                 'goals_for' => $game['game_home_score'],
                 'goals_against' => $game['game_away_score'],
+                'yellow_card' => $game['game_home_yellow'],
+                'red_card' => $game['game_home_red'],
             ];
             $game_teams[] = [
                 'team_id' => $game['game_away_id'],
                 'goals_for' => $game['game_away_score'],
                 'goals_against' => $game['game_home_score'],
+                'yellow_card' => $game['game_away_yellow'],
+                'red_card' => $game['game_away_red'],
             ];
         }
         return $game_teams;
@@ -272,11 +346,15 @@ class ScmRankingService
                 'team_id' => $game['game_home_id'],
                 'goals_for' => $game['game_home_score'],
                 'goals_against' => $game['game_away_score'],
+                'yellow_card' => $game['game_home_yellow'],
+                'red_card' => $game['game_home_red'],
             ];
             $game_teams[] = [
                 'team_id' => $game['game_away_id'],
                 'goals_for' => $game['game_away_score'],
                 'goals_against' => $game['game_home_score'],
+                'yellow_card' => $game['game_away_yellow'],
+                'red_card' => $game['game_away_red'],
             ];
         }
         return $game_teams;
@@ -293,6 +371,8 @@ class ScmRankingService
                 'team_id' => $game['game_home_id'],
                 'goals_for' => $game['game_home_score'],
                 'goals_against' => $game['game_away_score'],
+                'yellow_card' => $game['game_home_yellow'],
+                'red_card' => $game['game_home_red'],
             ];
         }
         return $game_teams;
@@ -309,6 +389,8 @@ class ScmRankingService
                 'team_id' => $game['game_away_id'],
                 'goals_for' => $game['game_away_score'],
                 'goals_against' => $game['game_home_score'],
+                'yellow_card' => $game['game_away_yellow'],
+                'red_card' => $game['game_away_red'],
             ];
         }
         return $game_teams;

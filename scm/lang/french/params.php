@@ -62,19 +62,19 @@ $lang['scm.ranking.type.clue'] = '
     <span class="d-block small">général = résultats issus des confrontations entre toutes les équipes.</span>
     <span class="d-block small">particulier = résultats issus des confrontations directes entre 2 équipes.</span>
 ';
-$lang['scm.ranking.criterion'] = 'Critère ';
-$lang['scm.ranking.general.points'] = 'Points - général';
-$lang['scm.ranking.particular.points'] = 'Points - particulier';
-$lang['scm.ranking.general.goal.average'] = 'Goal average - général';
-$lang['scm.ranking.particular.goal.average'] = 'Goal average - particulier';
-$lang['scm.ranking.general.goals.for'] = 'Nombre de buts marqués - général';
-$lang['scm.ranking.particular.goals.for'] = 'Nombre de buts marqués - particulier';
-$lang['scm.ranking.general.goals.against'] = 'Nombre de buts encaissés - général';
-$lang['scm.ranking.particular.goals.against'] = 'Nombre de buts encaissés - particulier';
-$lang['scm.ranking.general.tries.average'] = 'Différence d\'essais marqués/encaissés - général';
+$lang['scm.ranking.criterion']                = 'Critère ';
+$lang['scm.ranking.general.points']           = 'Points - général';
+$lang['scm.ranking.particular.points']        = 'Points - particulier';
+$lang['scm.ranking.general.goal.average']     = 'Différence de buts - général';
+$lang['scm.ranking.particular.goal.average']  = 'Différence de buts - particulier';
+$lang['scm.ranking.general.goals.for']        = 'Buts marqués - général';
+$lang['scm.ranking.particular.goals.for']     = 'Buts marqués - particulier';
+$lang['scm.ranking.general.goals.against']    = 'Buts encaissés - général';
+$lang['scm.ranking.particular.goals.against'] = 'Buts encaissés - particulier';
+$lang['scm.ranking.general.tries.average']    = 'Différence d\'essais marqués/encaissés - général';
 $lang['scm.ranking.particular.tries.average'] = 'Différence d\'essais marqués/encaissés - particulier';
-$lang['scm.ranking.general.fairplay'] = 'Meilleur fairplay - général';
-$lang['scm.ranking.particular.fairplay'] = 'Meilleur fairplay - particulier';
+$lang['scm.ranking.general.fairplay']         = 'Fairplay - général';
+$lang['scm.ranking.particular.fairplay']      = 'Fairplay - particulier';
 $lang['scm.ranking.particular.tries.average'] = 'Différence d\'essais marqués/encaissés - particulier';
 
 $lang['scm.warning.params.update'] = 'Les paramètres de la compétition <strong>:event_name</strong> ont été mis à jour.';

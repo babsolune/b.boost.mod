@@ -41,7 +41,7 @@ class ScmParamsService
 	}
 
 	/**
-	 * @desc Return the event with all its properties from its id.
+	 * @desc Return the params of the event with all its properties from its id.
 	 * @param int $event_id Item identifier
 	 */
 	public static function get_params(int $event_id)

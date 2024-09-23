@@ -15,9 +15,9 @@
                     <thead>
                         <tr>
                             <th aria-label="{@scm.th.hourly}"><i class="far fa-clock"></i></th>
-                            <th>{@scm.th.team} 1</th>
+                            <th>{@scm.th.home.team}</th>
                             <th colspan="2">{@scm.th.score}</th>
-                            <th>{@scm.th.team} 2</th>
+                            <th>{@scm.th.away.team}</th>
                         </tr>
                     </thead>
                     <tbody>

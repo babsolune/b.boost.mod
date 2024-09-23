@@ -1,6 +1,6 @@
 # Draw rules
 ## Foot
-### National 1 et 2
+### National 1 à 3
 1. Plus grand nombre de points au général.
 2. Plus grand nombre de points dans les confrontations directes.
 3. Plus grande différence de buts dans les confrontations directes.

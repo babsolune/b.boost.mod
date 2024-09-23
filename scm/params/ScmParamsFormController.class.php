@@ -311,15 +311,15 @@ class ScmParamsFormController extends DefaultModuleController
 		$options = [];
 
         $options[] = new FormFieldSelectChoiceOption('', '');
-        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.points'], 'points_gen');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.points'], 'points');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.points'], 'points_prtl');
-        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goal.average'], 'goal_average_gen');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goal.average'], 'goal_average');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goal.average'], 'goal_average_prtl');
-        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goals.for'], 'goals_for_gen');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goals.for'], 'goals_for');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goals.for'], 'goals_for_prtl');
-        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goals.against'], 'goals_against_gen');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goals.against'], 'goals_against');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goals.against'], 'goals_against_prtl');
-        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.fairplay'], 'fairplay_gen');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.fairplay'], 'fairplay');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.fairplay'], 'fairplay_prtl');
 
 		return $options;

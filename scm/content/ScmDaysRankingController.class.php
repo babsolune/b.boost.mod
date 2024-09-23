@@ -119,19 +119,45 @@ class ScmDaysRankingController extends DefaultModuleController
     {
         $day = AppContext::get_request()->get_getint('day', 0);
         $prev_day = ScmDayService::get_last_day($this->event_id());
-        foreach (ScmGameService::get_games_in_cluster($this->event_id(), $prev_day) as $game)
+        $prev_dates = [];
+        foreach(ScmGameService::get_games_in_cluster($this->event_id(), $prev_day) as $game)
         {
-            $item = new ScmGame();
-            $item->set_properties($game);
-            $this->view->assign_block_vars('prev_days', $item->get_template_vars());
+            $prev_dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
+        }
+
+        foreach (array_unique($prev_dates) as $date)
+        {
+            $this->view->assign_block_vars('prev_dates', [
+                'DATE' => $date
+            ]);
+            foreach(ScmGameService::get_games_in_cluster($this->event_id(), $prev_day) as $game)
+            {
+                $item = new ScmGame();
+                $item->set_properties($game);
+                if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
+                    $this->view->assign_block_vars('prev_dates.prev_days', $item->get_template_vars());
+            }
         }
 
         $next_day = ScmDayService::get_next_day($this->event_id());
-        foreach (ScmGameService::get_games_in_cluster($this->event_id(), $next_day) as $game)
+        $next_dates = [];
+        foreach(ScmGameService::get_games_in_cluster($this->event_id(), $next_day) as $game)
         {
-            $item = new ScmGame();
-            $item->set_properties($game);
-            $this->view->assign_block_vars('next_days', $item->get_template_vars());
+            $next_dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
+        }
+
+        foreach (array_unique($next_dates) as $date)
+        {
+            $this->view->assign_block_vars('next_dates', [
+                'DATE' => $date
+            ]);
+            foreach(ScmGameService::get_games_in_cluster($this->event_id(), $next_day) as $game)
+            {
+                $item = new ScmGame();
+                $item->set_properties($game);
+                if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
+                    $this->view->assign_block_vars('next_dates.next_days', $item->get_template_vars());
+            }
         }
 
         $this->view->put_all([
