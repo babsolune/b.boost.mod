@@ -106,7 +106,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
             $fieldset->add_field(new FormFieldTextEditor('away_empty', '', $this->get_game()->get_game_away_empty()));
         }
 
-        $fieldset->add_field(new FormFieldUploadFile('video', $this->lang['scm.event.video'], $this->get_game()->get_game_video()->relative()));
+        $fieldset->add_field(new FormFieldUrlEditor('video', $this->lang['scm.event.video'], $this->get_game()->get_game_video()->relative()));
 
         $fieldset->add_field(new FormFieldRichTextEditor('summary', $this->lang['scm.event.summary'], $this->get_game()->get_game_summary()));
 
