@@ -202,7 +202,7 @@ th.bgc-sub a {
     display: none;
 }
 
-.game-details .fieldset-inset > .form-element-upload-file {
+.game-details .fieldset-inset > #ScmDetailsGameFormController_video_field {
     width: 100%;
 }
 
