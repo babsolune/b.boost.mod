@@ -123,10 +123,12 @@
     </div>
 # ENDIF #
 <script src="{PATH_TO_ROOT}/scm/templates/js/scm.highlight# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
-<script>
-    const selectElement = document.getElementById('ScmMenuService_event_list');
-    selectElement.addEventListener('change', (event) => {
-        const event_id = event.target.value;
-        window.location.href = '{PATH_TO_ROOT}/scm/' + event_id + '-redirect/informations';
-    });
-</script>
+# IF IS_MODERATOR #
+    <script>
+        const selectElement = document.getElementById('ScmMenuService_event_list');
+        selectElement.addEventListener('change', (event) => {
+            const event_id = event.target.value;
+            window.location.href = '{PATH_TO_ROOT}/scm/' + event_id + '-redirect/informations';
+        });
+    </script>
+# ENDIF #

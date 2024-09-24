@@ -128,22 +128,22 @@ class ScmCategoryController extends DefaultModuleController
 
 	private function check_authorizations()
 	{
-		if (AppContext::get_current_user()->is_guest())
-		{
-			if (!ScmAuthorizationsService::check_authorizations($this->get_category()->get_id())->manage_events())
+		// if (AppContext::get_current_user()->is_guest())
+		// {
+		// 	if (!ScmAuthorizationsService::check_authorizations($this->get_category()->get_id())->manage_events())
+		// 	{
+		// 		$error_controller = PHPBoostErrors::user_not_authorized();
+		// 		DispatchManager::redirect($error_controller);
+		// 	}
+		// }
+		// else
+		// {
+			if (!ScmAuthorizationsService::check_authorizations($this->get_category()->get_id())->read())
 			{
 				$error_controller = PHPBoostErrors::user_not_authorized();
 				DispatchManager::redirect($error_controller);
 			}
-		}
-		else
-		{
-			if (!ScmAuthorizationsService::check_authorizations($this->get_category()->get_id())->read() || !ScmAuthorizationsService::check_authorizations($this->get_category()->get_id())->manage_events())
-			{
-				$error_controller = PHPBoostErrors::user_not_authorized();
-				DispatchManager::redirect($error_controller);
-			}
-		}
+		// }
 	}
 
 	private function generate_response(HTTPRequestCustom $request)
