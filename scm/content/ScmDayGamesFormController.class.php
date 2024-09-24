@@ -99,6 +99,7 @@ class ScmDayGamesFormController extends DefaultModuleController
 	{
         $gr = AppContext::get_request()->get_getint('round', 0);
 
+        $games = [];
         foreach($this->get_day_games($gr) as $day_game)
         {
             $game = new ScmGame();
@@ -114,8 +115,17 @@ class ScmDayGamesFormController extends DefaultModuleController
             $game->set_game_away_id((int)$this->form->get_value('away_team_' . $gr . $or)->get_raw_value());
 
             ScmGameService::update_game($game, $game->get_id_game());
-            if ($game->get_game_home_score())
+            $games[] = $game->get_game_home_score();
+        }
+
+        foreach($this->get_day_games($gr) as $day_game)
+        {
+            $game = new ScmGame();
+            $game->set_properties($day_game);
+            if (ScmDayService::day_has_scores($games))
                 ScmDayService::update_day_played($this->event_id(), $game->get_game_group(), 1);
+            else
+                ScmDayService::update_day_played($this->event_id(), $game->get_game_group(), 0);
         }
 
 		ScmEventService::clear_cache();

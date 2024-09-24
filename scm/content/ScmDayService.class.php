@@ -113,6 +113,13 @@ class ScmDayService
         }
     }
 
+    public static function day_has_scores(array $games):bool
+    {
+        return (bool) array_filter($games, function($score) {
+            return !empty($score);
+        });
+    }
+
     public static function update_day_played($event_id, $day_round, $check)
     {
 		self::$db_querier->update(ScmSetup::$scm_day_table, ['day_played' => $check], 'WHERE day_event_id = :event_id AND day_round = :day_round', ['event_id' => $event_id, 'day_round' => $day_round]);
