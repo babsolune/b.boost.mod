@@ -69,7 +69,6 @@ class ScmFormFieldGameEvents extends AbstractFormField
 	public function retrieve_value()
 	{
 		$request = AppContext::get_request();
-        // Debug::dump($request);
 
         $values = [];
 		for ($i = 0; $i < $this->max_input; $i++)
@@ -85,7 +84,6 @@ class ScmFormFieldGameEvents extends AbstractFormField
 					$values[$field_name] = $field_value;
 			}
 		}
-        // Debug::stop($values);
 		$this->set_value($values);
 	}
 
