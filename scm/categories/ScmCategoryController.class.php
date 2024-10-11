@@ -71,7 +71,7 @@ class ScmCategoryController extends DefaultModuleController
 		$result = PersistenceContext::get_querier()->select('SELECT event.*
             FROM ' . ScmSetup::$scm_event_table . ' event
             ' . $condition . '
-            ORDER BY event.id', 
+            ORDER BY event.id DESC', 
             $params
         );
 

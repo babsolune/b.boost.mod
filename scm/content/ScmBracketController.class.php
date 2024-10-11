@@ -14,6 +14,7 @@ class ScmBracketController extends DefaultModuleController
     private $looser_bracket;
     private $teams_number;
     private $teams_per_group;
+
 	protected function get_template_to_use()
 	{
 		return new FileTemplate('scm/ScmBracketController.tpl');
@@ -22,8 +23,10 @@ class ScmBracketController extends DefaultModuleController
 	public function execute(HTTPRequestCustom $request)
 	{
         $this->init();
-        if ($this->return_games())
+        if ($this->return_games()) 
+        {
             $this->build_round_trip_view();
+        }
         else
         {
             $this->build_bracket_view();
@@ -36,7 +39,6 @@ class ScmBracketController extends DefaultModuleController
             'C_RETURN_GAMES'   => $this->return_games(),
             'C_ONE_DAY'        => ScmGameService::one_day_event($this->event_id()),
             'C_LOOSER_BRACKET' => $this->get_params()->get_looser_bracket(),
-            'JS_DOC'           => ScmBracketService::get_bracket_js_games($this->event_id(), $this->teams_number, $this->teams_per_group),
             'C_HAS_GAMES'      => ScmGameService::has_games($this->event_id())
         ]);
 
@@ -45,7 +47,7 @@ class ScmBracketController extends DefaultModuleController
 
     private function init()
     {
-        $this->looser_bracket = $this->get_params()->get_rounds_number();
+        $this->looser_bracket = $this->get_params()->get_looser_bracket();
         $this->teams_number = ScmTeamService::get_teams_number($this->event_id());
         $this->teams_per_group = $this->get_params()->get_teams_per_group();
     }
@@ -63,7 +65,7 @@ class ScmBracketController extends DefaultModuleController
             $rounds[] = $game['game_group'];
         }
 
-        $rounds_count = array_reverse(array_unique($rounds));
+        $rounds_count = array_unique($rounds);
         $key_rounds_count = array_keys($rounds_count);
         $first_key = reset($key_rounds_count);
         $last_key = end($key_rounds_count);
@@ -73,7 +75,7 @@ class ScmBracketController extends DefaultModuleController
             $this->view->assign_block_vars('rounds', [
                 'C_ALL_PLACES' => $key !== $first_key && $this->looser_bracket,
                 'C_FINAL' => $key == $last_key,
-                'C_HAT_PLAYOFF' => $c_hat_ranking  && $key == $first_key,
+                'C_HAT_PLAYOFF' => $c_hat_ranking && $key == $first_key,
                 'C_DRAW_GAMES' => $c_draw_games,
                 'L_TITLE' => $c_hat_ranking && $key == $first_key ? $this->lang['scm.round.playoff'] : $this->lang['scm.round.of.'.$this->round_title($round).'']
             ]);
@@ -101,6 +103,44 @@ class ScmBracketController extends DefaultModuleController
                                 && $game_b['game_home_id'] != 0
                                 && $game_a['game_home_id'] == $game_b['game_away_id']
                                 && $game_a['game_away_id'] == $game_b['game_home_id']
+                            )
+                            {
+                                $game = new ScmGame();
+                                $game->set_properties($game_a);
+
+                                $total_home = (int)$game_a['game_home_score'] + (int)$game_b['game_away_score'];
+                                $total_away = (int)$game_a['game_away_score'] + (int)$game_b['game_home_score'];
+
+                                $this->view->assign_block_vars('rounds.games', array_merge(
+                                    $game->get_template_vars(),
+                                    Date::get_array_tpl_vars($game_a['game_date'], 'game_date_a'),
+                                    Date::get_array_tpl_vars($game_b['game_date'], 'game_date_b'),
+                                    [
+                                        'C_HOME_WIN' => $total_home > $total_away || $game_b['game_away_pen'] > $game_b['game_home_pen'],
+                                        'C_AWAY_WIN' => $total_away > $total_home || $game_b['game_home_pen'] > $game_b['game_away_pen'],
+                                        'C_HAS_PEN' => $game_b['game_home_pen'] != '' && $game_b['game_away_pen'] != '',
+                                        'GAME_DATE_A_DAY_MONTH' => Date::to_format($game_a['game_date'], Date::FORMAT_DAY_MONTH),
+                                        'GAME_DATE_A_YEAR' => date('Y', $game_a['game_date']),
+                                        'GAME_DATE_B_DAY_MONTH' => Date::to_format($game_b['game_date'], Date::FORMAT_DAY_MONTH),
+                                        'GAME_DATE_B_YEAR' => date('Y', $game_b['game_date']),
+                                        'HOME_SCORE_B' => $game_b['game_away_score'],
+                                        'HOME_PEN' => $game_b['game_away_pen'],
+                                        'AWAY_SCORE_B' => $game_b['game_home_score'],
+                                        'AWAY_PEN' => $game_b['game_home_pen'],
+                                    ]
+                                ));
+                            }
+                        }
+                    }
+                    elseif ($game_a['game_home_empty'] != '' && $game_a['game_away_empty'] != '')
+                    {
+                        foreach ($chunks[1] as $game_b)
+                        {
+                            if(
+                                $game_b['game_away_empty'] != ''
+                                && $game_b['game_home_empty'] != ''
+                                && $game_a['game_home_empty'] == $game_b['game_away_empty']
+                                && $game_a['game_away_empty'] == $game_b['game_home_empty']
                             )
                             {
                                 $game = new ScmGame();
@@ -180,8 +220,8 @@ class ScmBracketController extends DefaultModuleController
             ]);
 
             // Reverse brackets to be looser.n, looser.n-1, looser.1, winner
-            $keys = array_reverse(array_keys($rounds));
-            $values = array_reverse(array_values($rounds));
+            $keys = $this->looser_bracket ? array_reverse(array_keys($rounds)) : array_keys($rounds);
+            $values = $this->looser_bracket ? array_reverse(array_values($rounds)) : array_values($rounds);
             $r_rounds = array_combine($keys, $values);
 
             // Isolate first round

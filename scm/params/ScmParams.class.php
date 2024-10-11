@@ -27,6 +27,7 @@ class ScmParams
 	private $relegation;
 	private $fairplay_yellow;
 	private $fairplay_red;
+	private $bonus;
 
 	private $ranking_crit_1;
 	private $ranking_crit_2;
@@ -228,6 +229,16 @@ class ScmParams
 	public function set_fairplay_red($fairplay_red)
 	{
 		$this->fairplay_red = $fairplay_red;
+	}
+
+	public function get_bonus()
+	{
+		return $this->bonus;
+	}
+
+	public function set_bonus($bonus)
+	{
+		$this->bonus = $bonus;
 	}
 
 	public function get_ranking_crit_1()
@@ -446,6 +457,7 @@ class ScmParams
 			'relegation'          => $this->get_relegation(),
 			'fairplay_yellow'     => $this->get_fairplay_yellow(),
 			'fairplay_red'        => $this->get_fairplay_red(),
+			'bonus'               => $this->get_bonus(),
 			'ranking_crit_1'      => $this->get_ranking_crit_1(),
 			'ranking_crit_2'      => $this->get_ranking_crit_2(),
 			'ranking_crit_3'      => $this->get_ranking_crit_3(),
@@ -488,6 +500,7 @@ class ScmParams
 		$this->relegation          = $properties['relegation'];
 		$this->fairplay_yellow     = $properties['fairplay_yellow'];
 		$this->fairplay_red        = $properties['fairplay_red'];
+		$this->bonus               = $properties['bonus'];
 		$this->ranking_crit_1      = $properties['ranking_crit_1'];
 		$this->ranking_crit_2      = $properties['ranking_crit_2'];
 		$this->ranking_crit_3      = $properties['ranking_crit_3'];

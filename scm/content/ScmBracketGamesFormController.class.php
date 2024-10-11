@@ -34,7 +34,6 @@ class ScmBracketGamesFormController extends DefaultModuleController
 		$this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
             'CONTENT' => $this->form->display(),
-            'JS_DOC' => $this->teams_number ? ScmBracketService::get_bracket_js_games($this->event_id(), $this->teams_number, $this->teams_per_group) : MessageHelper::display('', '')
         ]);
 
 		return $this->generate_response($this->view);
@@ -237,7 +236,6 @@ class ScmBracketGamesFormController extends DefaultModuleController
             # INCLUDE MESSAGE_HELPER #
             # INCLUDE MENU #
             # INCLUDE CONTENT #
-            # INCLUDE JS_DOC #
         ';
 	}
 

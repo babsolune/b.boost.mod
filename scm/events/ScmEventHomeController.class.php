@@ -50,7 +50,6 @@ class ScmEventHomeController extends DefaultModuleController
                 // Rounds
                 'DAYS_CALENDAR'       => $c_championship ? ScmEventHomeService::build_days_calendar($this->event_id()) : '',
                 'ROUNDS_CALENDAR'     => $c_tournament ? ScmEventHomeService::build_rounds_calendar($this->event_id()) : '',
-                'JS_DOC'              => $c_tournament ? ScmBracketService::get_bracket_js_games($this->event_id(), $teams_number, $teams_per_group) : '',
 
                 'NOT_VISIBLE_MESSAGE' => MessageHelper::display($this->lang['warning.element.not.visible'], MessageHelper::WARNING),
             ]

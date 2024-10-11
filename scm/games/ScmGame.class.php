@@ -19,12 +19,16 @@ class ScmGame
     private $game_home_id;
     private $game_home_score;
     private $game_home_pen;
+    private $game_home_off_bonus;
+    private $game_home_def_bonus;
     private $game_home_goals;
     private $game_home_yellow;
     private $game_home_red;
     private $game_home_empty;
     private $game_away_id;
     private $game_away_score;
+    private $game_away_def_bonus;
+    private $game_away_off_bonus;
     private $game_away_pen;
     private $game_away_goals;
     private $game_away_yellow;
@@ -134,6 +138,26 @@ class ScmGame
         $this->game_home_pen = $game_home_pen;
     }
 
+    function get_game_home_off_bonus()
+    {
+        return $this->game_home_off_bonus;
+    }
+
+    function set_game_home_off_bonus($game_home_off_bonus)
+    {
+        $this->game_home_off_bonus = $game_home_off_bonus;
+    }
+
+    function get_game_home_def_bonus()
+    {
+        return $this->game_home_def_bonus;
+    }
+
+    function set_game_home_def_bonus($game_home_def_bonus)
+    {
+        $this->game_home_def_bonus = $game_home_def_bonus;
+    }
+
 	public function add_game_home_goals($game_home_goals)
 	{
 		$this->game_home_goals[] = $game_home_goals;
@@ -217,6 +241,26 @@ class ScmGame
     function set_game_away_pen($game_away_pen)
     {
         $this->game_away_pen = $game_away_pen;
+    }
+
+    function get_game_away_off_bonus()
+    {
+        return $this->game_away_off_bonus;
+    }
+
+    function set_game_away_off_bonus($game_away_off_bonus)
+    {
+        $this->game_away_off_bonus = $game_away_off_bonus;
+    }
+
+    function get_game_away_def_bonus()
+    {
+        return $this->game_away_def_bonus;
+    }
+
+    function set_game_away_def_bonus($game_away_def_bonus)
+    {
+        $this->game_away_def_bonus = $game_away_def_bonus;
     }
 
 	public function add_game_away_goals($game_away_goals)
@@ -310,59 +354,67 @@ class ScmGame
     public function get_properties()
 	{
 		return [
-			'id_game'            => $this->get_id_game(),
-			'game_event_id'      => $this->get_game_event_id(),
-			'game_type'          => $this->get_game_type(),
-			'game_group'         => $this->get_game_group(),
-			'game_round'         => $this->get_game_round(),
-			'game_order'         => $this->get_game_order(),
-			'game_playground'    => $this->get_game_playground(),
-			'game_home_id'       => $this->get_game_home_id(),
-			'game_home_score'    => $this->get_game_home_score(),
-			'game_home_pen'      => $this->get_game_home_pen(),
-			'game_home_goals'    => TextHelper::serialize($this->get_game_home_goals()),
-			'game_home_yellow'   => TextHelper::serialize($this->get_game_home_yellow()),
-			'game_home_red'      => TextHelper::serialize($this->get_game_home_red()),
-			'game_home_empty'    => $this->get_game_home_empty(),
-			'game_away_id'       => $this->get_game_away_id(),
-			'game_away_score'    => $this->get_game_away_score(),
-			'game_away_pen'      => $this->get_game_away_pen(),
-			'game_away_goals'    => TextHelper::serialize($this->get_game_away_goals()),
-			'game_away_yellow'   => TextHelper::serialize($this->get_game_away_yellow()),
-			'game_away_red'      => TextHelper::serialize($this->get_game_away_red()),
-			'game_away_empty'    => $this->get_game_away_empty(),
-			'game_date'          => $this->get_game_date() !== null ? $this->get_game_date()->get_timestamp() : 0,
-			'game_video'         => $this->get_game_video()->relative(),
-			'game_summary'       => $this->get_game_summary(),
+			'id_game'             => $this->get_id_game(),
+			'game_event_id'       => $this->get_game_event_id(),
+			'game_type'           => $this->get_game_type(),
+			'game_group'          => $this->get_game_group(),
+			'game_round'          => $this->get_game_round(),
+			'game_order'          => $this->get_game_order(),
+			'game_playground'     => $this->get_game_playground(),
+			'game_home_id'        => $this->get_game_home_id(),
+			'game_home_score'     => $this->get_game_home_score(),
+			'game_home_pen'       => $this->get_game_home_pen(),
+			'game_home_off_bonus' => $this->get_game_home_off_bonus(),
+			'game_home_def_bonus' => $this->get_game_home_def_bonus(),
+			'game_home_goals'     => TextHelper::serialize($this->get_game_home_goals()),
+			'game_home_yellow'    => TextHelper::serialize($this->get_game_home_yellow()),
+			'game_home_red'       => TextHelper::serialize($this->get_game_home_red()),
+			'game_home_empty'     => $this->get_game_home_empty(),
+			'game_away_id'        => $this->get_game_away_id(),
+			'game_away_score'     => $this->get_game_away_score(),
+			'game_away_pen'       => $this->get_game_away_pen(),
+			'game_away_off_bonus' => $this->get_game_away_off_bonus(),
+			'game_away_def_bonus' => $this->get_game_away_def_bonus(),
+			'game_away_goals'     => TextHelper::serialize($this->get_game_away_goals()),
+			'game_away_yellow'    => TextHelper::serialize($this->get_game_away_yellow()),
+			'game_away_red'       => TextHelper::serialize($this->get_game_away_red()),
+			'game_away_empty'     => $this->get_game_away_empty(),
+			'game_date'           => $this->get_game_date() !== null ? $this->get_game_date()->get_timestamp() : 0,
+			'game_video'          => $this->get_game_video()->relative(),
+			'game_summary'        => $this->get_game_summary(),
         ];
 	}
 
 	public function set_properties(array $properties)
 	{
-		$this->id_game            = $properties['id_game'];
-		$this->game_event_id      = $properties['game_event_id'];
-		$this->game_type          = $properties['game_type'];
-		$this->game_group         = $properties['game_group'];
-		$this->game_round         = $properties['game_round'];
-		$this->game_order         = $properties['game_order'];
-		$this->game_playground    = $properties['game_playground'];
-		$this->game_home_id       = $properties['game_home_id'];
-		$this->game_home_score    = $properties['game_home_score'];
-		$this->game_home_pen      = $properties['game_home_pen'];
-		$this->game_home_goals    = !empty($properties['game_home_goals']) ? TextHelper::unserialize($properties['game_home_goals']) : [];
-		$this->game_home_yellow   = !empty($properties['game_home_yellow']) ? TextHelper::unserialize($properties['game_home_yellow']) : [];
-		$this->game_home_red      = !empty($properties['game_home_red']) ? TextHelper::unserialize($properties['game_home_red']) : [];
-		$this->game_home_empty    = $properties['game_home_empty'];
-		$this->game_away_id       = $properties['game_away_id'];
-		$this->game_away_score    = $properties['game_away_score'];
-		$this->game_away_pen      = $properties['game_away_pen'];
-		$this->game_away_goals    = !empty($properties['game_away_goals']) ? TextHelper::unserialize($properties['game_away_goals']) : [];
-		$this->game_away_yellow   = !empty($properties['game_away_yellow']) ? TextHelper::unserialize($properties['game_away_yellow']) : [];
-		$this->game_away_red      = !empty($properties['game_away_red']) ? TextHelper::unserialize($properties['game_away_red']) : [];
-		$this->game_away_empty    = $properties['game_away_empty'];
-		$this->game_date          = !empty($properties['game_date']) ? new Date($properties['game_date'], Timezone::SERVER_TIMEZONE) : null;
-		$this->game_video         = new Url($properties['game_video']);
-		$this->game_summary       = $properties['game_summary'];
+		$this->id_game             = $properties['id_game'];
+		$this->game_event_id       = $properties['game_event_id'];
+		$this->game_type           = $properties['game_type'];
+		$this->game_group          = $properties['game_group'];
+		$this->game_round          = $properties['game_round'];
+		$this->game_order          = $properties['game_order'];
+		$this->game_playground     = $properties['game_playground'];
+		$this->game_home_id        = $properties['game_home_id'];
+		$this->game_home_score     = $properties['game_home_score'];
+		$this->game_home_pen       = $properties['game_home_pen'];
+		$this->game_home_off_bonus = $properties['game_home_off_bonus'];
+		$this->game_home_def_bonus = $properties['game_home_def_bonus'];
+		$this->game_home_goals     = !empty($properties['game_home_goals']) ? TextHelper::unserialize($properties['game_home_goals']) : [];
+		$this->game_home_yellow    = !empty($properties['game_home_yellow']) ? TextHelper::unserialize($properties['game_home_yellow']) : [];
+		$this->game_home_red       = !empty($properties['game_home_red']) ? TextHelper::unserialize($properties['game_home_red']) : [];
+		$this->game_home_empty     = $properties['game_home_empty'];
+		$this->game_away_id        = $properties['game_away_id'];
+		$this->game_away_score     = $properties['game_away_score'];
+		$this->game_away_pen       = $properties['game_away_pen'];
+		$this->game_away_off_bonus = $properties['game_away_off_bonus'];
+		$this->game_away_def_bonus = $properties['game_away_def_bonus'];
+		$this->game_away_goals     = !empty($properties['game_away_goals']) ? TextHelper::unserialize($properties['game_away_goals']) : [];
+		$this->game_away_yellow    = !empty($properties['game_away_yellow']) ? TextHelper::unserialize($properties['game_away_yellow']) : [];
+		$this->game_away_red       = !empty($properties['game_away_red']) ? TextHelper::unserialize($properties['game_away_red']) : [];
+		$this->game_away_empty     = $properties['game_away_empty'];
+		$this->game_date           = !empty($properties['game_date']) ? new Date($properties['game_date'], Timezone::SERVER_TIMEZONE) : null;
+		$this->game_video          = new Url($properties['game_video']);
+		$this->game_summary        = $properties['game_summary'];
 	}
 
 	public function init_default_properties()
@@ -410,7 +462,8 @@ class ScmGame
                 'AWAY_TEAM'       => $this->game_away_id ? ScmTeamService::get_team_name($this->game_away_id) : '',
                 'AWAY_LOGO'       => $this->game_away_id ? ScmTeamService::get_team_logo($this->game_away_id) : '',
                 'AWAY_ID'         => $this->game_away_id,
-                'VIDEO'           => Url::to_rel($this->game_video),
+                'C_VIDEO'         => !empty($this->game_video->absolute()),
+                'U_VIDEO'         => $this->game_video->absolute(),
                 'SUMMARY'         => $summary
             ]
         );

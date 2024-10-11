@@ -15,7 +15,6 @@
                         # IF C_CUP #<div itemprop="text">cup</div># ENDIF #
                         # IF C_TOURNAMENT #
                             <div itemprop="text"># INCLUDE ROUNDS_CALENDAR #</div>
-                            # IF C_HAS_GAMES #<div itemprop="text"># INCLUDE JS_DOC #</div># ENDIF #
                         # ENDIF #
                     </div>
 

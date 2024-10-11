@@ -63,20 +63,6 @@ class ScmBracketService
         }
     }
 
-    // Doc of games = fill empty games with corresponding game id
-    public static function get_bracket_js_games($event_id, $teams_number, $teams_per_group)
-    {
-        $view = new FileTemplate('scm/js/bracket-games.tpl');
-        $view->add_lang(LangLoader::get_all_langs('scm'));
-
-        $view->put_all([
-            'C_'.$teams_number.'_'.$teams_per_group => true,
-            'C_LOOSER_BRACKET' => ScmParamsService::get_params($event_id)->get_looser_bracket(),
-            'C_THIRD_PLACE'    => ScmParamsService::get_params($event_id)->get_third_place()
-        ]);
-        return $view;
-    }
-
     public static function round_games_number(int $rounds, bool $c_return_games, bool $c_third_place = false)
     {
         $final = $c_third_place ? 2 : 1;

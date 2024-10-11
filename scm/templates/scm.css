@@ -104,15 +104,6 @@ th.bgc-sub a {
 
 .floating-submit { position: relative;}
 
-.floating-submit .fieldset-submit {
-    width: auto;
-    position: fixed;
-    bottom: 0.618em;
-    right: 0.618em;
-    margin: 0;
-    padding: 0;
-}
-
 .floating-submit .fieldset-inset {
     padding: 0;
 }
@@ -460,4 +451,9 @@ th.bgc-sub a {
 @media (max-width: 568px) {
     .flex-team span { order: 2; }
     .flex-team img  { order: 1; }
+}
+
+/* details */
+.cell-details.cell-modal .cell {
+    max-width: 100%;
 }

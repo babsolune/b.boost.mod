@@ -146,7 +146,6 @@
                         </div>
                     # END brackets #
                 # ENDIF #
-                # INCLUDE JS_DOC #
             # ELSE #
                 <div class="message-helper bgc notice">{@scm.message.no.games}</div>
             # ENDIF #

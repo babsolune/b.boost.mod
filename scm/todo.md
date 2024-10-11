@@ -1,4 +1,7 @@
 # TODO scm
+[ ] non fait  
+[X] fait  
+[-] en cours (fait partiellement)  
 ## Evo
 - [X] Rename module from `Competition` to `Scm` (Sport Competition Manager)
 - [X] Check if a team is not twice or more in a group
@@ -13,7 +16,7 @@
 ### Games form
 - [ ] rebuild css to fit mobile, columns and set/bonus options
 ## Ranking
-- [ ] set filters for draw ranks (actually write hard in code) (see draw-rules.md)
+- [-] set filters for draw ranks (actually write hard in code) (see draw-rules.md)
 ### Clubs
 - [ ] self division
 - [X] Country flag

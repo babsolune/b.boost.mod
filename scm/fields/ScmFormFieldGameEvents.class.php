@@ -32,12 +32,12 @@ class ScmFormFieldGameEvents extends AbstractFormField
 		$this->assign_common_template_variables($template);
 
 		$i = 0;
-		foreach ($this->get_value() as $name => $value)
+		foreach ($this->get_value() as $id => $options)
 		{
 			$view->assign_block_vars('fieldelements', [
 				'ID'    => $i,
-				'VALUE' => $value,
-				'NAME'  => $name
+				'PLAYER'  => $options['player'],
+				'TIME'  => $options['time'],
 			]);
 			$i++;
 		}
@@ -46,8 +46,8 @@ class ScmFormFieldGameEvents extends AbstractFormField
 		{
 			$view->assign_block_vars('fieldelements', [
 				'ID'    => $i,
-				'VALUE' => '',
-				'NAME'  => ''
+				'PLAYER'  => '',
+				'TIME'  => '',
 			]);
 		}
 
@@ -73,15 +73,15 @@ class ScmFormFieldGameEvents extends AbstractFormField
         $values = [];
 		for ($i = 0; $i < $this->max_input; $i++)
 		{
-            $field_value_id = 'field_value_' . $this->get_html_id() . '_' . $i;
-			if ($request->has_postparameter($field_value_id))
+            $field_player_id = 'field_player_' . $this->get_html_id() . '_' . $i;
+            $field_time_id = 'field_time_' . $this->get_html_id() . '_' . $i;
+			if ($request->has_postparameter($field_player_id) || $request->has_postparameter($field_time_id))
 			{
-                $field_name_id = 'field_name_' . $this->get_html_id() . '_' . $i;
-				$field_name = $request->get_poststring($field_name_id);
-				$field_value = $request->get_poststring($field_value_id);
+				$field_player = $request->get_poststring($field_player_id);
+				$field_time = $request->get_poststring($field_time_id);
 
-				if (!empty($field_value))
-					$values[$field_name] = $field_value;
+				if (!empty($field_action) || !empty($field_player) || !empty($field_time))
+					$values[] = ['player' => $field_player, 'time' => $field_time];
 			}
 		}
 		$this->set_value($values);

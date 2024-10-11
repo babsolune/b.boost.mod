@@ -6,8 +6,8 @@
 </div>
 
 <div class="cell-flex cell-columns-2">
-    <div>
-        <table class="table bordered-table">
+    <div class="responsive-table">
+        <table class="bordered-table">
             <caption>{@scm.day} {LAST_DAY}</caption>
             <colgroup class="hidden-small-screens">
                 <col class="width-pc-6" />
@@ -19,9 +19,9 @@
             <thead>
                 <tr>
                     <th aria-label="{@scm.th.hourly}"><i class="far fa-clock"></i></th>
-                    <th>{@scm.th.team} 1</th>
+                    <th>{@scm.th.home.team}</th>
                     <th colspan="2">{@scm.th.score}</th>
-                    <th>{@scm.th.team} 2</th>
+                    <th>{@scm.th.away.team}</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,8 +53,8 @@
     # IF C_EVENT_ENDING #
         <div></div>
     # ELSE #
-        <div>
-            <table class="table bordered-table">
+        <div class="responsive-table">
+            <table class="bordered-table">
                 <caption>{@scm.day} {NEXT_DAY}</caption>
                 <colgroup class="hidden-small-screens">
                     <col class="width-pc-6" />
@@ -66,9 +66,9 @@
                 <thead>
                     <tr>
                         <th aria-label="{@scm.th.hourly}"><i class="far fa-clock"></i></th>
-                        <th>{@scm.th.team} 1</th>
+                        <th>{@scm.th.home.team}</th>
                         <th colspan="2">{@scm.th.score}</th>
-                        <th>{@scm.th.team} 2</th>
+                        <th>{@scm.th.away.team}</th>
                     </tr>
                 </thead>
                 <tbody>

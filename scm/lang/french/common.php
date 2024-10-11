@@ -38,8 +38,11 @@ $lang['scm.change.event']      = 'Changer de compétition';
 // Details
 $lang['scm.game.details']       = 'Détails du match';
 $lang['scm.event']              = 'Événement';
-$lang['scm.player.name']        = 'Nom du joueur';
+$lang['scm.event.action']       = 'Action';
+$lang['scm.event.player']       = 'Joueur';
 $lang['scm.event.minute']       = 'Minute';
+$lang['scm.event.off.bonus']    = 'Bonus offensif';
+$lang['scm.event.def.bonus']    = 'Bonus défensif';
 $lang['scm.event.goals']        = 'Buts';
 $lang['scm.event.yellow.cards'] = 'Cartons jaunes';
 $lang['scm.event.red.cards']    = 'Cartons rouges';
@@ -120,6 +123,8 @@ $lang['scm.th.home.team']  = 'Locaux';
 $lang['scm.th.away.team']  = 'Visiteurs';
 $lang['scm.th.score']      = 'Score';
 $lang['scm.th.pen']        = 'Pen';
+$lang['scm.th.details']    = 'Détails du match';
+$lang['scm.watch.video']   = 'Voir la vidéo';
 $lang['scm.is.live']       = 'En Direct';
 
 $lang['scm.th.rank']                = 'Place';
