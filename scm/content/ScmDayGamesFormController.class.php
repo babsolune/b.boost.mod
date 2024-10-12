@@ -61,8 +61,14 @@ class ScmDayGamesFormController extends DefaultModuleController
             $game_fieldset = new FormFieldsetHTML('game_' . $gr . $or, '');
             $game_fieldset->set_css_class('grouped-fields matchdays-game');
             $form->add_fieldset($game_fieldset);
+            $bonus = $this->get_params()->get_bonus() &&
+                ($game->get_game_home_off_bonus() ||
+                $game->get_game_home_def_bonus() ||
+                $game->get_game_away_off_bonus() ||
+                $game->get_game_away_def_bonus()) ? ' ' . $this->lang['scm.bonus.param'] 
+                : '';
 
-            $game_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>D' . $gr . $or . '</strong>',
+            $game_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>D' . $gr . $or . '</strong>' . $bonus,
                 ['class' => 'game-name small text-italic form-D' . $gr . $or]
             ));
             $game_fieldset->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $gr, $ro, $or), 'small text-italic'));

@@ -51,6 +51,9 @@ class ScmParams
 	private $game_duration;
 	private $favorite_team_id;
 
+    const BONUS_SINGLE = "single";
+    const BONUS_DOUBLE = "double";
+
 	public function get_id_params()
 	{
 		return $this->id_params;

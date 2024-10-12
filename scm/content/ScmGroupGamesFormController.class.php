@@ -65,8 +65,14 @@ class ScmGroupGamesFormController extends DefaultModuleController
                 $groups_fieldset = new FormFieldsetHTML('round_' . $gr . $or, '');
                 $groups_fieldset->set_css_class('grouped-fields round-fields');
                 $form->add_fieldset($groups_fieldset);
+                $bonus = $this->get_params()->get_bonus() &&
+                    ($game->get_game_home_off_bonus() ||
+                    $game->get_game_home_def_bonus() ||
+                    $game->get_game_away_off_bonus() ||
+                    $game->get_game_away_def_bonus()) ? ' ' . $this->lang['scm.bonus.param'] 
+                    : '';
 
-                $groups_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong>',
+                $groups_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong>' . $bonus,
                     ['class' => 'game-name small text-italic form-G' . $gr . $or]
                 ));
                 $groups_fieldset->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, 0, $or), 'small text-italic'));

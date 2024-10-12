@@ -94,6 +94,7 @@ class ScmRankingService
                 $points = ScmParamsService::get_params($event_id)->get_loss_points();
                 $loss = $played = 1;
             }
+
             if ($game_teams[$i]['team_id'])
                 $teams[] = [
                     'team_id'       => $game_teams[$i]['team_id'],
@@ -104,7 +105,9 @@ class ScmRankingService
                     'loss'          => $loss,
                     'goals_for'     => (int)$game_teams[$i]['goals_for'],
                     'goals_against' => (int)$game_teams[$i]['goals_against'],
-                    'goal_average'  => (int)$game_teams[$i]['goals_for'] - (int)$game_teams[$i]['goals_against']
+                    'goal_average'  => (int)$game_teams[$i]['goals_for'] - (int)$game_teams[$i]['goals_against'],
+                    'off_bonus'     => (int)$game_teams[$i]['off_bonus'],
+                    'def_bonus'     => (int)$game_teams[$i]['def_bonus']
                 ];
         }
 
@@ -113,7 +116,6 @@ class ScmRankingService
         foreach ($teams as $team)
         {
             $team_id = $team['team_id'];
-            $penalties = ScmTeamService::get_team($team_id)->get_team_penalty();
             if (!isset($results[$team_id])) {
                 $results[$team_id] = $team;
             } else {
@@ -124,17 +126,23 @@ class ScmRankingService
                 $results[$team_id]['loss']          += $team['loss'];
                 $results[$team_id]['goals_for']     += $team['goals_for'];
                 $results[$team_id]['goals_against'] += $team['goals_against'];
-                $results[$team_id]['goal_average']  += $team['goals_for'] - $team['goals_against'];
+                $results[$team_id]['goal_average']  += $team['goal_average'];
+                $results[$team_id]['off_bonus']     += $team['off_bonus'];
+                $results[$team_id]['def_bonus']     += $team['def_bonus'];
             }
         }
 
-        // Add team penalties to points
         $final_results = [];
+        // Add team penalties to points
         $results = array_values($results);
         foreach ($results as $result)
         {
             $penalties = ScmTeamService::get_team($result['team_id'])->get_team_penalty();
             $result['points'] = $result['points'] + $penalties;
+            if (ScmParamsService::get_params($event_id)->get_bonus())
+            {
+                $result['points'] = $result['points'] + ($result['off_bonus'] + $result['def_bonus']);
+            }
             $final_results[] = $result;
         }
         return $final_results;
@@ -212,22 +220,6 @@ class ScmRankingService
                 usort($results, self::class . '::' . $crit);
 		}
         return $results;
-        // usort($results, function($a, $b)
-        // {
-        //     if ($a['points'] == $b['points']) {
-        //         if ($a['goal_average'] == $b['goal_average']) {
-        //             if ($a['goals_for'] == $b['goals_for']) {
-        //                 if ($a['goals_for'] == $b['goals_for']) {
-        //                     return 0;
-        //                 }
-        //             }
-        //             return $b['goals_for'] - $a['goals_for'];
-        //         }
-        //         return $b['goal_average'] - $a['goal_average'];
-        //     }
-        //     return $b['points'] - $a['points'];
-        // });
-        // return $results;
     }
 
 	public static function sort_attack_ranks($results)
@@ -278,18 +270,22 @@ class ScmRankingService
         foreach ($games as $game)
         {
             $game_teams[] = [
-                'team_id' => $game['game_home_id'],
-                'goals_for' => $game['game_home_score'],
+                'team_id'       => $game['game_home_id'],
+                'goals_for'     => $game['game_home_score'],
                 'goals_against' => $game['game_away_score'],
-                'yellow_card' => $game['game_home_yellow'],
-                'red_card' => $game['game_home_red'],
+                'yellow_card'   => $game['game_home_yellow'],
+                'red_card'      => $game['game_home_red'],
+                'off_bonus'     => $game['game_home_off_bonus'],
+                'def_bonus'     => $game['game_home_def_bonus'],
             ];
             $game_teams[] = [
-                'team_id' => $game['game_away_id'],
-                'goals_for' => $game['game_away_score'],
+                'team_id'       => $game['game_away_id'],
+                'goals_for'     => $game['game_away_score'],
                 'goals_against' => $game['game_home_score'],
-                'yellow_card' => $game['game_away_yellow'],
-                'red_card' => $game['game_away_red'],
+                'yellow_card'   => $game['game_away_yellow'],
+                'red_card'      => $game['game_away_red'],
+                'off_bonus'     => $game['game_away_off_bonus'],
+                'def_bonus'     => $game['game_away_def_bonus'],
             ];
         }
         return $game_teams;
@@ -309,18 +305,22 @@ class ScmRankingService
         foreach ($days_games as $game)
         {
             $game_teams[] = [
-                'team_id' => $game['game_home_id'],
-                'goals_for' => $game['game_home_score'],
+                'team_id'       => $game['game_home_id'],
+                'goals_for'     => $game['game_home_score'],
                 'goals_against' => $game['game_away_score'],
-                'yellow_card' => $game['game_home_yellow'],
-                'red_card' => $game['game_home_red'],
+                'yellow_card'   => $game['game_home_yellow'],
+                'red_card'      => $game['game_home_red'],
+                'off_bonus'     => $game['game_home_off_bonus'],
+                'def_bonus'     => $game['game_home_def_bonus'],
             ];
             $game_teams[] = [
-                'team_id' => $game['game_away_id'],
-                'goals_for' => $game['game_away_score'],
+                'team_id'       => $game['game_away_id'],
+                'goals_for'     => $game['game_away_score'],
                 'goals_against' => $game['game_home_score'],
-                'yellow_card' => $game['game_away_yellow'],
-                'red_card' => $game['game_away_red'],
+                'yellow_card'   => $game['game_away_yellow'],
+                'red_card'      => $game['game_away_red'],
+                'off_bonus'     => $game['game_away_off_bonus'],
+                'def_bonus'     => $game['game_away_def_bonus'],
             ];
         }
         return $game_teams;
@@ -343,18 +343,22 @@ class ScmRankingService
         foreach ($days_games as $game)
         {
             $game_teams[] = [
-                'team_id' => $game['game_home_id'],
-                'goals_for' => $game['game_home_score'],
+                'team_id'       => $game['game_home_id'],
+                'goals_for'     => $game['game_home_score'],
                 'goals_against' => $game['game_away_score'],
-                'yellow_card' => $game['game_home_yellow'],
-                'red_card' => $game['game_home_red'],
+                'yellow_card'   => $game['game_home_yellow'],
+                'red_card'      => $game['game_home_red'],
+                'off_bonus'     => $game['game_home_off_bonus'],
+                'def_bonus'     => $game['game_home_def_bonus'],
             ];
             $game_teams[] = [
-                'team_id' => $game['game_away_id'],
-                'goals_for' => $game['game_away_score'],
+                'team_id'       => $game['game_away_id'],
+                'goals_for'     => $game['game_away_score'],
                 'goals_against' => $game['game_home_score'],
-                'yellow_card' => $game['game_away_yellow'],
-                'red_card' => $game['game_away_red'],
+                'yellow_card'   => $game['game_away_yellow'],
+                'red_card'      => $game['game_away_red'],
+                'off_bonus'     => $game['game_home_off_bonus'],
+                'def_bonus'     => $game['game_home_def_bonus'],
             ];
         }
         return $game_teams;
@@ -368,11 +372,13 @@ class ScmRankingService
         foreach ($games as $game)
         {
             $game_teams[] = [
-                'team_id' => $game['game_home_id'],
-                'goals_for' => $game['game_home_score'],
+                'team_id'       => $game['game_home_id'],
+                'goals_for'     => $game['game_home_score'],
                 'goals_against' => $game['game_away_score'],
-                'yellow_card' => $game['game_home_yellow'],
-                'red_card' => $game['game_home_red'],
+                'yellow_card'   => $game['game_home_yellow'],
+                'red_card'      => $game['game_home_red'],
+                'off_bonus'     => $game['game_home_off_bonus'],
+                'def_bonus'     => $game['game_home_def_bonus'],
             ];
         }
         return $game_teams;
@@ -386,11 +392,13 @@ class ScmRankingService
         foreach ($games as $game)
         {
             $game_teams[] = [
-                'team_id' => $game['game_away_id'],
-                'goals_for' => $game['game_away_score'],
+                'team_id'       => $game['game_away_id'],
+                'goals_for'     => $game['game_away_score'],
                 'goals_against' => $game['game_home_score'],
-                'yellow_card' => $game['game_away_yellow'],
-                'red_card' => $game['game_away_red'],
+                'yellow_card'   => $game['game_away_yellow'],
+                'red_card'      => $game['game_away_red'],
+                'off_bonus'     => $game['game_away_off_bonus'],
+                'def_bonus'     => $game['game_away_def_bonus'],
             ];
         }
         return $game_teams;

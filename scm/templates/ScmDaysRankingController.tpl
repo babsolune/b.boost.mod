@@ -45,6 +45,10 @@
                             <col class="width-pc-05" />
                             <col class="width-pc-05" />
                             <col class="width-pc-05" />
+                            # IF C_BONUS #
+                                <col class="width-pc-05" />
+                                <col class="width-pc-05" />
+                            # ENDIF #
                         </colgroup>
                         <thead>
                             <tr>
@@ -58,6 +62,13 @@
                                 <th aria-label="{@scm.th.goals.for}">{@scm.th.goals.for.short}</th>
                                 <th aria-label="{@scm.th.goals.against}">{@scm.th.goals.against.short}</th>
                                 <th aria-label="{@scm.th.goal.average}">{@scm.th.goal.average.short}</th>
+                                # IF C_BONUS_SINGLE #
+                                    <th aria-label="{@scm.th.bonus}">{@scm.th.off.bonus.short}</th>
+                                # ENDIF #
+                                # IF C_BONUS_DOUBLE #
+                                    <th aria-label="{@scm.th.off.bonus}">{@scm.th.off.bonus.short}</th>
+                                    <th aria-label="{@scm.th.def.bonus}">{@scm.th.def.bonus.short}</th>
+                                # ENDIF #
                             </tr>
                         </thead>
                         <tbody>
@@ -78,6 +89,13 @@
                                     <td>{ranks.GOALS_FOR}</td>
                                     <td>{ranks.GOALS_AGAINST}</td>
                                     <td>{ranks.GOAL_AVERAGE}</td>
+                                    # IF C_BONUS_SINGLE #
+                                        <td>{ranks.OFF_BONUS}</td>
+                                    # ENDIF #
+                                    # IF C_BONUS_DOUBLE #
+                                        <td>{ranks.OFF_BONUS}</td>
+                                        <td>{ranks.DEF_BONUS}</td>
+                                    # ENDIF #
                                 </tr>
                             # END ranks #
                         </tbody>

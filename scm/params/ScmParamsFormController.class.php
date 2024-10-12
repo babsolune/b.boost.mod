@@ -215,8 +215,14 @@ class ScmParamsFormController extends DefaultModuleController
 			['description' => $this->lang['scm.game.duration.clue'], 'min' => 0]
 		));
 
-		$option_fieldset->add_field(new FormFieldCheckbox('bonus', $this->lang['scm.bonus.param'], $this->get_params()->get_bonus()));
-		
+		$option_fieldset->add_field(new FormFieldSimpleSelectChoice('bonus', $this->lang['scm.bonus.param'], $this->get_params()->get_bonus(),
+            [
+                new FormFieldSelectChoiceOption($this->lang['common.none'], ''),
+                new FormFieldSelectChoiceOption($this->lang['scm.bonus.single'], ScmParams::BONUS_SINGLE),
+                new FormFieldSelectChoiceOption($this->lang['scm.bonus.double'], ScmParams::BONUS_DOUBLE)
+            ]
+        ));
+
         $option_fieldset->add_field(new FormFieldSimpleSelectChoice('favorite_team_id', $this->lang['scm.favorite.team'], $this->get_params()->get_favorite_team_id(), $this->fav_teams_list()));
 
 		$this->submit_button = new FormButtonDefaultSubmit();
@@ -294,7 +300,7 @@ class ScmParamsFormController extends DefaultModuleController
         }
 
         $params->set_game_duration($this->form->get_value('game_duration'));
-        $params->set_bonus($this->form->get_value('bonus'));
+        $params->set_bonus($this->form->get_value('bonus')->get_raw_value());
         $params->set_favorite_team_id($this->form->get_value('favorite_team_id')->get_raw_value());
 
 		if ($this->is_new_params)

@@ -90,21 +90,23 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
         if($this->get_params()->get_bonus())
         {
-            $fieldset->add_field(new FormFieldSpacer('offensive_bonus', $this->lang['scm.event.off.bonus']));
+            $fieldset->add_field(new FormFieldSpacer('offensive_bonus', $this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE ? $this->lang['scm.event.off.bonus'] : $this->lang['scm.event.bonus']));
             $fieldset->add_field(new FormFieldTextEditor('home_off_bonus', '', $this->get_game()->get_game_home_off_bonus(),
                 ['class' => 'game-details home-details', 'pattern' => '[0-9]*']
             ));
             $fieldset->add_field(new FormFieldTextEditor('away_off_bonus', '', $this->get_game()->get_game_away_off_bonus(),
                 ['class' => 'game-details away-details', 'pattern' => '[0-9]*']
             ));
-
-            $fieldset->add_field(new FormFieldSpacer('defensive_bonus', $this->lang['scm.event.def.bonus']));
-            $fieldset->add_field(new FormFieldTextEditor('home_def_bonus', '', $this->get_game()->get_game_home_def_bonus(),
-                ['class' => 'game-details home-details', 'pattern' => '[0-9]*']
-            ));
-            $fieldset->add_field(new FormFieldTextEditor('away_def_bonus', '', $this->get_game()->get_game_away_def_bonus(),
-                ['class' => 'game-details away-details', 'pattern' => '[0-9]*']
-            ));
+            if($this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE)
+            {
+                $fieldset->add_field(new FormFieldSpacer('defensive_bonus', $this->lang['scm.event.def.bonus']));
+                $fieldset->add_field(new FormFieldTextEditor('home_def_bonus', '', $this->get_game()->get_game_home_def_bonus(),
+                    ['class' => 'game-details home-details', 'pattern' => '[0-9]*']
+                ));
+                $fieldset->add_field(new FormFieldTextEditor('away_def_bonus', '', $this->get_game()->get_game_away_def_bonus(),
+                    ['class' => 'game-details away-details', 'pattern' => '[0-9]*']
+                ));
+            }
         }
 
         $fieldset->add_field(new FormFieldSpacer('game_goals', $this->lang['scm.event.goals']));
@@ -154,6 +156,17 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
         $game->set_game_video(new Url($this->form->get_value('video')));
         $game->set_game_summary($this->form->get_value('summary'));
+
+        if($this->get_params()->get_bonus())
+        {
+            $game->set_game_home_off_bonus($this->form->get_value('home_off_bonus'));
+            $game->set_game_home_def_bonus($this->form->get_value('home_def_bonus'));
+            if($this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE)
+            {
+                $game->set_game_away_off_bonus($this->form->get_value('away_off_bonus'));
+                $game->set_game_away_def_bonus($this->form->get_value('away_def_bonus'));
+            }
+        }
 
         ScmGameService::update_game($game, $game->get_id_game());
 

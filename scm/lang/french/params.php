@@ -57,6 +57,8 @@ $lang['scm.game.duration']      = 'Temps de jeu d\'un match';
 $lang['scm.game.duration.clue'] = 'En minutes<br />Prendre en compte la durée de la mi-temps.';
 $lang['scm.favorite.team']      = 'Équipe favorite';
 $lang['scm.bonus.param']        = 'Points bonus';
+$lang['scm.bonus.double']       = 'Of/défensif';
+$lang['scm.bonus.single']       = 'Simple';
 
 $lang['scm.ranking.type'] = 'Calcul du classement';
 $lang['scm.ranking.type.clue'] = '

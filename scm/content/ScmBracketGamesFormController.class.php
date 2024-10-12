@@ -86,11 +86,17 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 $game_home_score = $this->get_game('B', $gr, $br, $or)->get_game_home_score();
                 $game_away_score = $this->get_game('B', $gr, $br, $or)->get_game_away_score();
                 $game_away_id    = $this->get_game('B', $gr, $br, $or)->get_game_away_id();
+                $bonus = $this->get_params()->get_bonus() &&
+                    ($game->get_game_home_off_bonus() ||
+                    $game->get_game_home_def_bonus() ||
+                    $game->get_game_away_off_bonus() ||
+                    $game->get_game_away_def_bonus()) ? ' ' . $this->lang['scm.bonus.param'] 
+                    : '';
 
                 if ($this->return_games && $or == 1)
                     ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSpacer('first_leg_' . $gr . $br, $this->lang['scm.first.leg']));
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldFree('game_number_' . $gr . $br . $or, '', $game_number,
-                    ['class' => 'game-name small text-italic form-B' . $gr . $br . $or]
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldFree('game_number_' . $gr . $br . $or, '', $game_number . $bonus,
+                    ['class' => 'game-name small text-italic form-B-' . $gr . $br . $or]
                 ));
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $gr, $br, $or), 'small game-details align-right text-italic'));
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldDateTime('game_date_' . $gr . $br . $or, '', $game_date,

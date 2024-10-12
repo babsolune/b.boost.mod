@@ -90,6 +90,8 @@ class ScmDaysRankingController extends DefaultModuleController
                 'GOALS_FOR'       => $team_rank['goals_for'],
                 'GOALS_AGAINST'   => $team_rank['goals_against'],
                 'GOAL_AVERAGE'    => $team_rank['goal_average'],
+                'OFF_BONUS'       => $team_rank['off_bonus'],
+                'DEF_BONUS'       => $team_rank['def_bonus'],
             ]);
         }
 
@@ -102,9 +104,12 @@ class ScmDaysRankingController extends DefaultModuleController
                 'U_DAY' => ScmUrlBuilder::display_days_ranking($this->event_id(), $slug, 'day', $day['day_round'])->rel(),
             ]);
         }
+        $params = ScmParamsService::get_params($this->event_id())->get_bonus();
         $this->view->put_all([
             'MENU'           => ScmMenuService::build_event_menu($this->event_id()),
             'C_HAS_GAMES'    => ScmGameService::has_games($this->event_id()),
+            'C_BONUS_SINGLE' => $params == ScmParams::BONUS_SINGLE,
+            'C_BONUS_DOUBLE' => $params == ScmParams::BONUS_DOUBLE,
             'C_GENERAL_DAYS' => $section == 'day',
             'U_GENERAL'      => ScmUrlBuilder::display_days_ranking($this->event_id(), $slug, '')->rel(),
             'U_GENERAL_DAYS' => ScmUrlBuilder::display_days_ranking($this->event_id(), $slug, 'day', ScmDayService::get_last_day($this->event_id()))->rel(),
