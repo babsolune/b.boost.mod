@@ -14,9 +14,9 @@
 2. Plus grande différence de buts au général
 3. Plus grand nombre de points dans les confrontations directes ;
 4. Plus grande différence de buts dans les confrontations directes ;
-5. Plus grand nombre de buts dans les confrontations directes ;
-6. Plus grand nombre de buts à l'extérieur dans les confrontations directes ;
-7. Plus grand nombre de buts marqués ;
+5. Plus grand nombre de buts marqués dans les confrontations directes ;
+6. Plus grand nombre de buts marqués à l'extérieur dans les confrontations directes ;
+7. Plus grand nombre de buts marqués au général ;
 8. Plus grand nombre de buts marqués à l'extérieur ;
 9. Meilleure place au Fair-play (1 pt par carton jaune, 3 pts par carton rouges).
 

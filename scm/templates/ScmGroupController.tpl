@@ -46,8 +46,12 @@
                                             <img src="{matchdays.dates.games.HOME_LOGO}" alt="{matchdays.dates.games.HOME_TEAM}">
                                         </div>
                                     </td>
-                                    <td>{matchdays.dates.games.HOME_SCORE}</td>
-                                    <td>{matchdays.dates.games.AWAY_SCORE}</td>
+                                    # IF matchdays.dates.games.C_STATUS #
+                                        <td colspan="2">{matchdays.dates.games.STATUS}</td>
+                                    # ELSE #
+                                        <td>{matchdays.dates.games.HOME_SCORE}</td>
+                                        <td>{matchdays.dates.games.AWAY_SCORE}</td>
+                                    # ENDIF #
                                     <td class="align-left# IF matchdays.dates.games.C_AWAY_FAV # text-strong# ENDIF #">
                                         <div class="flex-team flex-left">
                                             <img src="{matchdays.dates.games.AWAY_LOGO}" alt="{matchdays.dates.games.AWAY_TEAM}">

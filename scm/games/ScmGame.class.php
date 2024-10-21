@@ -37,6 +37,10 @@ class ScmGame
     private $game_date;
     private $game_video;
     private $game_summary;
+    private $game_status;
+
+    const DELAYED = 'delayed';
+    const STOPPED = 'stopped';
 
     function get_id_game()
     {
@@ -351,6 +355,16 @@ class ScmGame
         $this->game_summary = $game_summary;
     }
 
+    function get_game_status()
+    {
+        return $this->game_status;
+    }
+
+    function set_game_status($game_status)
+    {
+        $this->game_status = $game_status;
+    }
+
     public function get_properties()
 	{
 		return [
@@ -382,6 +396,7 @@ class ScmGame
 			'game_date'           => $this->get_game_date() !== null ? $this->get_game_date()->get_timestamp() : 0,
 			'game_video'          => $this->get_game_video()->relative(),
 			'game_summary'        => $this->get_game_summary(),
+			'game_status'         => $this->get_game_status(),
         ];
 	}
 
@@ -415,6 +430,7 @@ class ScmGame
 		$this->game_date           = !empty($properties['game_date']) ? new Date($properties['game_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->game_video          = new Url($properties['game_video']);
 		$this->game_summary        = $properties['game_summary'];
+		$this->game_status         = $properties['game_status'];
 	}
 
 	public function init_default_properties()
@@ -425,6 +441,7 @@ class ScmGame
 
 	public function get_template_vars()
 	{
+        $lang = LangLoader::get_module_langs('scm');
         $c_home_score = $this->game_home_score != '';
         $c_home_pen   = $this->game_home_pen != '';
         $c_away_pen   = $this->game_away_pen != '';
@@ -432,10 +449,32 @@ class ScmGame
         $event_slug   = ScmEventService::get_event_slug($this->game_event_id);
 		$summary = FormatingHelper::second_parse($this->game_summary);
 
+        $event = ScmEventService::get_event($this->game_event_id);
+        $division = ScmDivisionService::get_division($event->get_division_id());
+        $season = ScmSeasonService::get_season($event->get_season_id());
+        $category = $event->get_category();
+
+        switch ($this->get_game_status()) {
+            case ScmGame::DELAYED :
+                $status = $lang['scm.event.status.delayed'];
+                break;
+            case ScmGame::STOPPED :
+                $status = $lang['scm.event.status.stopped'];
+                break;
+            case '' :
+                $status = '';
+                break;
+        }
+
         return array_merge(
             Date::get_array_tpl_vars($this->game_date, 'game_date'),
             [
+                'GAME_DIVISION'   => $division->get_division_name(),
+                'GAME_SEASON'     => $season->get_season_name(),
+                'GAME_CATEGORY'   => $category->get_name(),
+
                 'C_IS_LIVE'       => ScmGameService::is_live($this->game_event_id, $this->id_game),
+                'C_STATUS'        => $this->game_status,
                 'C_HAS_SCORE'     => $c_home_score && $c_away_score,
                 'WIN_COLOR'       => ScmConfig::load()->get_promotion_color(),
                 'C_HAS_PEN'       => $c_home_pen && $c_away_pen,
@@ -464,7 +503,8 @@ class ScmGame
                 'AWAY_ID'         => $this->game_away_id,
                 'C_VIDEO'         => !empty($this->game_video->absolute()),
                 'U_VIDEO'         => $this->game_video->absolute(),
-                'SUMMARY'         => $summary
+                'SUMMARY'         => $summary,
+                'STATUS'          => $status
             ]
         );
     }

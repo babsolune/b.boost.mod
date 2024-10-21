@@ -36,8 +36,12 @@
                                     <img src="{prev_dates.prev_days.HOME_LOGO}" alt="{prev_dates.prev_days.HOME_TEAM}">
                                 </div>
                             </td>
-                            <td>{prev_dates.prev_days.HOME_SCORE}</td>
-                            <td>{prev_dates.prev_days.AWAY_SCORE}</td>
+                            # IF prev_dates.prev_days.C_STATUS #
+                                <td colspan="2">{prev_dates.prev_days.STATUS}</td>
+                            # ELSE #
+                                <td>{prev_dates.prev_days.HOME_SCORE}</td>
+                                <td>{prev_dates.prev_days.AWAY_SCORE}</td>
+                            # ENDIF #
                             <td class="align-left away-{prev_dates.prev_days.ID}# IF prev_dates.prev_days.C_AWAY_FAV # text-strong# ENDIF #">
                                 <div class="flex-team flex-left">
                                     <img src="{prev_dates.prev_days.AWAY_LOGO}" alt="{prev_dates.prev_days.AWAY_TEAM}">
@@ -83,8 +87,12 @@
                                         <img src="{next_dates.next_days.HOME_LOGO}" alt="{next_dates.next_days.HOME_TEAM}">
                                     </div>
                                 </td>
-                                <td>{next_dates.next_days.HOME_SCORE}</td>
-                                <td>{next_dates.next_days.AWAY_SCORE}</td>
+                                # IF next_dates.next_days.C_STATUS #
+                                    <td colspan="2">{next_dates.next_days.STATUS}</td>
+                                # ELSE #
+                                    <td>{next_dates.next_days.HOME_SCORE}</td>
+                                    <td>{next_dates.next_days.AWAY_SCORE}</td>
+                                # ENDIF #
                                 <td class="align-left away-{next_dates.next_days.ID}# IF next_dates.next_days.C_AWAY_FAV # text-strong# ENDIF #">
                                     <div class="flex-team flex-LEFT">
                                         <img src="{next_dates.next_days.AWAY_LOGO}" alt="{next_dates.next_days.AWAY_TEAM}">

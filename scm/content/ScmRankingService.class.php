@@ -107,7 +107,14 @@ class ScmRankingService
                     'goals_against' => (int)$game_teams[$i]['goals_against'],
                     'goal_average'  => (int)$game_teams[$i]['goals_for'] - (int)$game_teams[$i]['goals_against'],
                     'off_bonus'     => (int)$game_teams[$i]['off_bonus'],
-                    'def_bonus'     => (int)$game_teams[$i]['def_bonus']
+                    'def_bonus'     => (int)$game_teams[$i]['def_bonus'],
+
+                    'points_prtl'       => '',
+                    'goal_average_prtl' => '',
+                    'goals_for_prlt'    => '',
+                    'goals_for_away'    => '',
+                    'win_away'          => '',
+                    'fairplay'          => '',
                 ];
         }
 
@@ -173,9 +180,9 @@ class ScmRankingService
 
 	public static function points_prtl($a, $b) 
     {
-		if ($a['points'] == $b['points'])
+		if ($a['points_prtl'] == $b['points_prtl'])
 			return 0;
-		return ($a['points'] < $b['points']) ? 1 : -1;
+		return ($a['points_prtl'] < $b['points_prtl']) ? 1 : -1;
 	}
 
 	public static function goal_average($a, $b)
@@ -185,6 +192,13 @@ class ScmRankingService
 		return $a['goal_average'] < $b['goal_average'] ? 1 : -1;
 	}
 
+	public static function goal_average_prtl($a, $b)
+    {
+		if ($a['goal_average_prtl'] == $b['goal_average_prtl'])
+			return 0;
+		return $a['goal_average_prtl'] < $b['goal_average_prtl'] ? 1 : -1;
+	}
+
 	public static function goals_for($a, $b)
     {
 		if ($a['goals_for'] == $b['goals_for'])
@@ -192,11 +206,32 @@ class ScmRankingService
 		return ($a['goals_for'] < $b['goals_for']) ? 1 : -1;
 	}
 
+	public static function goals_for_away($a, $b)
+    {
+		if ($a['goals_for_away'] == $b['goals_for_away'])
+			return 0;
+		return ($a['goals_for_away'] < $b['goals_for_away']) ? 1 : -1;
+	}
+
+	public static function win($a, $b)
+    {
+		if ($a['win'] == $b['win'])
+			return 0;
+		return ($a['win'] < $b['win']) ? 1 : -1;
+	}
+
+	public static function win_away($a, $b)
+    {
+		if ($a['win_away'] == $b['win_away'])
+			return 0;
+		return ($a['win_away'] < $b['win_away']) ? 1 : -1;
+	}
+
 	public static function goals_against($a, $b)
     {
-		if ($a['goals_for'] == $b['goals_for'])
+		if ($a['goals_against'] == $b['goals_against'])
 			return 0;
-		return ($b['goals_for'] < $a['goals_for']) ? 1 : -1;
+		return ($b['goals_against'] < $a['goals_against']) ? -11 : 1;
 	}
 
 	public static function red_card($a, $b)
@@ -217,7 +252,9 @@ class ScmRankingService
     {
         foreach (array_reverse(self::get_params_crit($event_id)) as $crit) {
             if ($crit != '')
+            {
                 usort($results, self::class . '::' . $crit);
+            }
 		}
         return $results;
     }

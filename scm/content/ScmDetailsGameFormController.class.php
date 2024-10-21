@@ -121,6 +121,14 @@ class ScmDetailsGameFormController extends DefaultModuleController
         $fieldset->add_field(new ScmFormFieldGameEvents('home_red', '', $this->get_game()->get_game_home_red()));
         $fieldset->add_field(new ScmFormFieldGameEvents('away_red', '', $this->get_game()->get_game_away_red()));
 
+		$fieldset->add_field(new FormFieldSimpleSelectChoice('status', $this->lang['scm.event.status'], $this->get_game()->get_game_status(),
+            [
+                new FormFieldSelectChoiceOption('', ''),
+                new FormFieldSelectChoiceOption($this->lang['scm.event.status.delayed'], ScmGame::DELAYED),
+                new FormFieldSelectChoiceOption($this->lang['scm.event.status.stopped'], ScmGame::STOPPED)
+            ]
+        ));
+
         if ($this->bracket_games) {
             $fieldset->add_field(new FormFieldSpacer('empty_field', $this->lang['scm.event.empty.field']));
             $fieldset->add_field(new FormFieldTextEditor('home_empty', '', $this->get_game()->get_game_home_empty()));
@@ -156,14 +164,15 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
         $game->set_game_video(new Url($this->form->get_value('video')));
         $game->set_game_summary($this->form->get_value('summary'));
+        $game->set_game_status($this->form->get_value('status')->get_raw_value());
 
         if($this->get_params()->get_bonus())
         {
             $game->set_game_home_off_bonus($this->form->get_value('home_off_bonus'));
-            $game->set_game_home_def_bonus($this->form->get_value('home_def_bonus'));
+            $game->set_game_away_off_bonus($this->form->get_value('away_off_bonus'));
             if($this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE)
             {
-                $game->set_game_away_off_bonus($this->form->get_value('away_off_bonus'));
+                $game->set_game_home_def_bonus($this->form->get_value('home_def_bonus'));
                 $game->set_game_away_def_bonus($this->form->get_value('away_def_bonus'));
             }
         }
@@ -182,7 +191,6 @@ class ScmDetailsGameFormController extends DefaultModuleController
         $or = $request->get_getint('order', 0);
         $game = ScmGameService::get_game($this->event_id(), $ty, $gr, $ro, $or);
 
-        // Debug::stop($ro);
         return $game;
     }
 
@@ -281,8 +289,8 @@ class ScmDetailsGameFormController extends DefaultModuleController
 	private function generate_response(View $view)
 	{
 		$event = $this->get_event();
-
-		// $location_id = $event->get_id() ? 'scm-edit-'. $event->get_id() : '';
+        $request = AppContext::get_request();
+		$location_id = $event->get_id() ? 'scm-edit-details-'. $event->get_id() : '';
 
 		// $response = new SiteDisplayResponse($view, $location_id);
 		$response = new SiteDisplayResponse($view);
@@ -291,8 +299,8 @@ class ScmDetailsGameFormController extends DefaultModuleController
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['scm.module.title'], ScmUrlBuilder::home());
 
-		// if (!AppContext::get_session()->location_id_already_exists($location_id))
-        //     $graphical_environment->set_location_id($location_id);
+		if (!AppContext::get_session()->location_id_already_exists($location_id))
+            $graphical_environment->set_location_id($location_id);
 
         $graphical_environment->set_page_title($this->lang['scm.games.management'], $this->lang['scm.module.title']);
         $graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.games.management']);
@@ -306,7 +314,14 @@ class ScmDetailsGameFormController extends DefaultModuleController
         }
         $category = $event->get_category();
         $breadcrumb->add($event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-        $breadcrumb->add($this->lang['scm.games.management'], ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug()));
+        if ($request->get_value('type') == 'G')
+            $link = ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug(), $request->get_value('group'));
+        elseif ($request->get_value('type') == 'B')
+            $link = ScmUrlBuilder::edit_brackets_games($event->get_id(), $event->get_event_slug(), $request->get_value('group'));
+        elseif ($request->get_value('type') == 'D')
+            $link = ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug(), $request->get_value('group'));
+        $breadcrumb->add($this->lang['scm.games.management'], $link);
+        $breadcrumb->add($this->lang['scm.game.details'], ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), $request->get_value('type'), $request->get_value('group'), $request->get_value('round'), $request->get_value('order')));
 
 		return $response;
 	}

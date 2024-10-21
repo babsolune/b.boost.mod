@@ -65,10 +65,23 @@ class ScmDayGamesFormController extends DefaultModuleController
                 ($game->get_game_home_off_bonus() ||
                 $game->get_game_home_def_bonus() ||
                 $game->get_game_away_off_bonus() ||
-                $game->get_game_away_def_bonus()) ? ' ' . $this->lang['scm.bonus.param'] 
-                : '';
+                $game->get_game_away_def_bonus()) 
+                    ? ' ' . $this->lang['scm.bonus.param']
+                    : '';
 
-            $game_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>D' . $gr . $or . '</strong>' . $bonus,
+            switch ($game->get_game_status()) {
+                case ScmGame::DELAYED :
+                    $status = ' ' . $this->lang['scm.event.status.delayed'];
+                    break;
+                case ScmGame::STOPPED :
+                    $status = ' ' . $this->lang['scm.event.status.stopped'];
+                    break;
+                case '' :
+                    $status = '';
+                    break;
+            }
+
+            $game_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>D' . $gr . $or . '</strong>' . $bonus . $status,
                 ['class' => 'game-name small text-italic form-D' . $gr . $or]
             ));
             $game_fieldset->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $gr, $ro, $or), 'small text-italic'));
@@ -240,7 +253,7 @@ class ScmDayGamesFormController extends DefaultModuleController
         }
         $category = $event->get_category();
         $breadcrumb->add($event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-        $breadcrumb->add($this->lang['scm.games.management'], ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug()));
+        $breadcrumb->add($this->lang['scm.games.management'], ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug(), AppContext::get_request()->get_value('round')));
 
 		return $response;
 	}

@@ -49,33 +49,45 @@ class ScmMiniNextGame extends ModuleMiniMenu
 		$config = ScmConfig::load();
 
 		// Load module cache
-		// $scm_cache = ScmCache::load();
+		$scm_cache = ScmGameCache::load();
 
 		// Load categories cache
 		$categories_cache = CategoriesService::get_categories_manager('scm')->get_categories_cache();
 
-		// $items = $scm_cache->get_items();
+		$items = $scm_cache->get_games();
 
 		$view->put_all([
-			// 'C_ITEMS'                    => !empty($items),
-			// 'C_SORT_BY_DATE'             => $config->is_sort_type_date(),
-			// 'C_SORT_BY_NOTATION'         => $config->is_sort_type_notation(),
-			// 'C_SORT_BY_DOWNLOADS_NUMBER' => $config->is_sort_type_scms_number(),
-			// 'C_SORT_BY_VIEWS_NUMBERS'    => $config->is_sort_type_views_numbers()
+			'C_ITEMS' => !empty($items)
 		]);
 
-		$displayed_position = 1;
-		// foreach ($items as $file)
-		// {
-		// 	$item = new ScmEvent();
-		// 	$item->set_properties($file);
+        $now = new Date();
+        $next_days = $now->get_timestamp() + (7 * 24 * 3600);
+        $full_games = ScmGameCache::load()->get_games();
+        usort($full_games, function($a, $b) {
+            return $a['game_date'] - $b['game_date'];
+        });
+        $games = [];
+        foreach ($full_games as $game)
+        {
+            $params = ScmParamsService::get_params($game['game_event_id']);
+            $favorite_team = $params->get_favorite_team_id();
+            if (
+                ($now->get_timestamp() < $game['game_date'] && $game['game_date'] < $next_days)
+                && ($game['game_home_id'] == $favorite_team || $game['game_away_id'] == $favorite_team)
+            )
+                $games[] = $game;
+        }
 
-		// 	$view->assign_block_vars('items', array_merge($item->get_template_vars(), [
-		// 		'DISPLAYED_POSITION' => $displayed_position
-		// 	]));
+		foreach ($games as $game)
+		{
+			$item = new ScmGame();
+			$item->set_properties($game);
 
-		// 	$displayed_position++;
-		// }
+			$view->assign_block_vars('items', array_merge($item->get_template_vars(), [
+                'U_EVENT' => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
+			]));
+
+		}
 
 		return $view->render();
 	}

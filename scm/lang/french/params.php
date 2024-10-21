@@ -60,6 +60,7 @@ $lang['scm.bonus.param']        = 'Points bonus';
 $lang['scm.bonus.double']       = 'Of/défensif';
 $lang['scm.bonus.single']       = 'Simple';
 
+$lang['scm.ranking'] = 'Classement';
 $lang['scm.ranking.type'] = 'Calcul du classement';
 $lang['scm.ranking.type.clue'] = '
     <span class="d-block small">général = résultats issus des confrontations entre toutes les équipes.</span>

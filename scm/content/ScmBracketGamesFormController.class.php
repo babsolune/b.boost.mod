@@ -93,9 +93,21 @@ class ScmBracketGamesFormController extends DefaultModuleController
                     $game->get_game_away_def_bonus()) ? ' ' . $this->lang['scm.bonus.param'] 
                     : '';
 
+                switch ($game->get_game_status()) {
+                    case ScmGame::DELAYED :
+                        $status = ' ' . $this->lang['scm.event.status.delayed'];
+                        break;
+                    case ScmGame::STOPPED :
+                        $status = ' ' . $this->lang['scm.event.status.stopped'];
+                        break;
+                    case '' :
+                        $status = '';
+                        break;
+                }
+
                 if ($this->return_games && $or == 1)
                     ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSpacer('first_leg_' . $gr . $br, $this->lang['scm.first.leg']));
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldFree('game_number_' . $gr . $br . $or, '', $game_number . $bonus,
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldFree('game_number_' . $gr . $br . $or, '', $game_number . $bonus . $status,
                     ['class' => 'game-name small text-italic form-B-' . $gr . $br . $or]
                 ));
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $gr, $br, $or), 'small game-details align-right text-italic'));

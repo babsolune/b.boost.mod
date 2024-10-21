@@ -208,7 +208,8 @@ class ScmSetup extends DefaultModuleSetup
 			'game_away_id'        => ['type' => 'integer', 'length' => 11],
 			'game_date'           => ['type' => 'integer', 'length' => 11],
 			'game_video'          => ['type' => 'string', 'length' => 255],
-			'game_summary'        => ['type' => 'text', 'length' => 65000]
+			'game_summary'        => ['type' => 'text', 'length' => 65000],
+			'game_status'         => ['type' => 'string', 'length' => 11, 'default' => "''"]
         ];
 		$options = [
 			'primary' => ['id_game'],
@@ -264,7 +265,7 @@ class ScmSetup extends DefaultModuleSetup
 
 			'game_duration'    => ['type' => 'integer', 'length' => 11, 'default' => 0],
 			'favorite_team_id' => ['type' => 'integer', 'length' => 11, 'default' => 0],
-			'bonus'            => ['type' => 'boolean', 'default' => 0]
+			'bonus'            => ['type' => 'string', 'length' => 11, 'default' => "''"]
         ];
 		$options = [
 			'primary' => ['id_params'],

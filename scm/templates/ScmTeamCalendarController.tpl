@@ -37,8 +37,12 @@
                                             <img src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}">
                                         </div>
                                     </td>
-                                    <td>{games.HOME_SCORE}</td>
-                                    <td>{games.AWAY_SCORE}</td>
+                                    # IF games.C_STATUS #
+                                        <td colspan="2">{games.STATUS}</td>
+                                    # ELSE #
+                                        <td>{games.HOME_SCORE}</td>
+                                        <td>{games.AWAY_SCORE}</td>
+                                    # ENDIF #
                                     <td class="# IF games.C_AWAY_WIN # text-strong# ENDIF #">
                                         <div class="flex-team flex-left">
                                             <img src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}">

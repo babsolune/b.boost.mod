@@ -36,8 +36,12 @@
                                             <img src="{dates.games.HOME_LOGO}" alt="{dates.games.HOME_TEAM}">
                                         </div>
                                     </td>
-                                    <td>{dates.games.HOME_SCORE}</td>
-                                    <td>{dates.games.AWAY_SCORE}</td>
+                                    # IF dates.games.C_STATUS #
+                                        <td colspan="2">{dates.games.STATUS}</td>
+                                    # ELSE #
+                                        <td>{dates.games.HOME_SCORE}</td>
+                                        <td>{dates.games.AWAY_SCORE}</td>
+                                    # ENDIF #
                                     <td class="# IF dates.games.C_AWAY_FAV #text-strong# ENDIF #">
                                         <div class="flex-team flex-left">
                                             <img src="{dates.games.AWAY_LOGO}" alt="{dates.games.AWAY_TEAM}">
