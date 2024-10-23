@@ -17,6 +17,7 @@
 - [ ] rebuild css to fit mobile, columns and set/bonus options
 ## Ranking
 - [-] set filters for draw ranks (actually write hard in code) (see draw-rules.md)
+- [ ] reset caches on details validation
 ### Clubs
 - [ ] self division
 - [X] Country flag
@@ -29,8 +30,9 @@
 
 ## bugs
 - [X] For 2 legs games, group stage, if not all games results are filled, a new line is added in ranking (for the team 0, I guess)
-- [ ] Date for bracket on game creation must be start_date
+- [X] Date for bracket on game creation must be start_date
 - [X] Match for third place
+- [ ] save goal list on details
 ## Event home
 - [X] bg color for ongoing games
 - [X] Ongoing games list

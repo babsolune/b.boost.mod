@@ -1,7 +1,7 @@
 # Draw rules
 ## Foot
 ### National 1 à 3
-1. Plus grand nombre de points au général.
+1. Plus grand nombre de points au général
 2. Plus grand nombre de points dans les confrontations directes.
 3. Plus grande différence de buts dans les confrontations directes.
 4. Plus grande différence de buts au général.
@@ -10,18 +10,18 @@
 7. Tirage au sort
 
 ### ligue 1/2
-1. Plus grand nombre de points au général.
+1. Plus grand nombre de points au général
 2. Plus grande différence de buts au général
-3. Plus grand nombre de points dans les confrontations directes ;
-4. Plus grande différence de buts dans les confrontations directes ;
-5. Plus grand nombre de buts marqués dans les confrontations directes ;
-6. Plus grand nombre de buts marqués à l'extérieur dans les confrontations directes ;
-7. Plus grand nombre de buts marqués au général ;
-8. Plus grand nombre de buts marqués à l'extérieur ;
-9. Meilleure place au Fair-play (1 pt par carton jaune, 3 pts par carton rouges).
+3. Plus grand nombre de points dans les confrontations directes
+4. Plus grande différence de buts dans les confrontations directes
+5. Plus grand nombre de buts marqués dans les confrontations directes
+6. Plus grand nombre de buts marqués à l'extérieur dans les confrontations directes
+7. Plus grand nombre de buts marqués au général
+8. Plus grand nombre de buts marqués à l'extérieur
+9. Meilleure place au Fair-play (1 pt par carton jaune, 3 pts par carton rouges)
 
 ### Champions league
-1. Plus grand nombre de points au général.
+1. Plus grand nombre de points au général
 2. Plus grand nombre de buts marqués au général
 3. Plus grand nombre de buts marqués à l'extérieur au général
 4. Plus grand nombre de victoires au général
@@ -29,7 +29,15 @@
 6. Plus grand nombre de points obtenus collectivement par tous les adversaires rencontrés
 7. Meilleure différence de buts collective de tous les adversaires rencontrés dans la phase de ligue
 8. Plus grand nombre de buts marqués collectivement par tous les adversaires rencontrés dans la phase de ligue
-9. Meilleure place au Fair-play (1 pt par carton jaune, 3 pt pour 2 cartons jaunes, 3 pts par carton rouges).
+9. Meilleure place au Fair-play (1 pt par carton jaune, 3 pt pour 2 cartons jaunes, 3 pts par carton rouges)
+
+### J.O. foot masculin
+1. Plus grand nombre de points au général
+2. Plus grand nombre de buts marqués au général
+3. Plus grand nombre de points dans les confrontations directes
+4. Plus grande différence de buts dans les confrontations directes
+5. Plus grand nombre de buts marqués dans les confrontations directes
+6. Meilleure place au Fair-play (1 pt par carton jaune, 3 pt pour 2 cartons jaunes, 3 pts par carton rouges)
 
 ## Rugby
 ### Pro

@@ -109,12 +109,13 @@ class ScmRankingService
                     'off_bonus'     => (int)$game_teams[$i]['off_bonus'],
                     'def_bonus'     => (int)$game_teams[$i]['def_bonus'],
 
-                    'points_prtl'       => '',
-                    'goal_average_prtl' => '',
-                    'goals_for_prlt'    => '',
-                    'goals_for_away'    => '',
-                    'win_away'          => '',
-                    'fairplay'          => '',
+                    'event_id'          => $event_id,
+                    'points_prtl'       => 0,
+                    'goal_average_prtl' => 0,
+                    'goals_for_prlt'    => 0,
+                    'goals_for_away'    => 0,
+                    'win_away'          => 0,
+                    'fairplay'          => 0,
                 ];
         }
 
@@ -178,10 +179,50 @@ class ScmRankingService
 		return ($a['points'] < $b['points']) ? 1 : -1;
 	}
 
-	public static function points_prtl($a, $b) 
+	public static function points_prtl($a, $b)
     {
-		if ($a['points_prtl'] == $b['points_prtl'])
-			return 0;
+        foreach (ScmGameService::get_games($a['event_id']) as $game)
+        {
+            if (($a['team_id'] == $game['game_home_id'] && $b['team_id'] == $game['game_away_id']))
+            {
+                if ($game['game_home_score'] > $game['game_away_score'])
+                {
+                    $a['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_victory_points();
+                    $b['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_loss_points();
+                }
+                elseif ($game['game_home_score'] == $game['game_away_score'])
+                {
+                    $a['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_draw_points();
+                    $b['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_draw_points();
+                }
+                elseif ($game['game_home_score'] < $game['game_away_score'])
+                {
+                    $a['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_loss_points();
+                    $b['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_victory_points();
+                }
+            }
+            if ($b['team_id'] == $game['game_home_id'] && $a['team_id'] == $game['game_away_id'])
+            {
+                if ($game['game_home_score'] > $game['game_away_score'])
+                {
+                    $b['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_victory_points();
+                    $a['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_loss_points();
+                }
+                elseif ($game['game_home_score'] = $game['game_away_score'])
+                {
+                    $b['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_draw_points();
+                    $a['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_draw_points();
+                }
+                elseif ($game['game_home_score'] < $game['game_away_score'])
+                {
+                    $b['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_loss_points();
+                    $a['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_victory_points();
+                }
+            }
+        }
+
+        if ($a['points_prtl'] == $b['points_prtl'])
+            return 0;
 		return ($a['points_prtl'] < $b['points_prtl']) ? 1 : -1;
 	}
 
@@ -206,8 +247,39 @@ class ScmRankingService
 		return ($a['goals_for'] < $b['goals_for']) ? 1 : -1;
 	}
 
+	public static function goals_for_prtl($a, $b)
+    {
+        foreach (ScmGameService::get_games($a['event_id']) as $game)
+        {
+            if (($a['team_id'] == $game['game_home_id'] && $b['team_id'] == $game['game_away_id']))
+            {
+                $a['goals_for'] += $game['game_home_score'];
+                $b['goals_for'] += $game['game_away_score'];
+            }
+            if ($b['team_id'] == $game['game_home_id'] && $a['team_id'] == $game['game_away_id'])
+            {
+                $b['goals_for'] += $game['game_home_score'];
+                $a['goals_for'] += $game['game_away_score'];
+            }
+        }
+		if ($a['goals_for'] == $b['goals_for'])
+			return 0;
+		return ($a['goals_for'] < $b['goals_for']) ? 1 : -1;
+	}
+
 	public static function goals_for_away($a, $b)
     {
+        foreach (ScmGameService::get_games($a['event_id']) as $game)
+        {
+            if (($a['team_id'] == $game['game_away_id']))
+            {
+                $a['goals_for'] += $game['game_home_score'];
+            }
+            if ($b['team_id'] == $game['game_away_id'])
+            {
+                $b['goals_for'] += $game['game_home_score'];
+            }
+        }
 		if ($a['goals_for_away'] == $b['goals_for_away'])
 			return 0;
 		return ($a['goals_for_away'] < $b['goals_for_away']) ? 1 : -1;
@@ -215,6 +287,37 @@ class ScmRankingService
 
 	public static function win($a, $b)
     {
+        foreach (ScmGameService::get_games($a['event_id']) as $game)
+        {
+            if ($a['team_id'] == $game['game_home_id'])
+            {
+                if ($game['game_home_score'] > $game['game_away_score'])
+                {
+                    $a['points_prtl'] += 1;
+                }
+            }
+            if ($a['team_id'] == $game['game_away_id'])
+            {
+                if ($game['game_home_score'] < $game['game_away_score'])
+                {
+                    $a['points_prtl'] += 1;
+                }
+            }
+            if ($b['team_id'] == $game['game_home_id'])
+            {
+                if ($game['game_home_score'] > $game['game_away_score'])
+                {
+                    $b['points_prtl'] += 1;
+                }
+            }
+            if ($b['team_id'] == $game['game_away_id'])
+            {
+                if ($game['game_home_score'] < $game['game_away_score'])
+                {
+                    $b['points_prtl'] += 1;
+                }
+            }
+        }
 		if ($a['win'] == $b['win'])
 			return 0;
 		return ($a['win'] < $b['win']) ? 1 : -1;
@@ -222,6 +325,23 @@ class ScmRankingService
 
 	public static function win_away($a, $b)
     {
+        foreach (ScmGameService::get_games($a['event_id']) as $game)
+        {
+            if ($a['team_id'] == $game['game_away_id'])
+            {
+                if ($game['game_home_score'] < $game['game_away_score'])
+                {
+                    $a['points_prtl'] += 1;
+                }
+            }
+            if ($b['team_id'] == $game['game_away_id'])
+            {
+                if ($game['game_home_score'] < $game['game_away_score'])
+                {
+                    $b['points_prtl'] += 1;
+                }
+            }
+        }
 		if ($a['win_away'] == $b['win_away'])
 			return 0;
 		return ($a['win_away'] < $b['win_away']) ? 1 : -1;
@@ -231,21 +351,14 @@ class ScmRankingService
     {
 		if ($a['goals_against'] == $b['goals_against'])
 			return 0;
-		return ($b['goals_against'] < $a['goals_against']) ? -11 : 1;
+		return ($b['goals_against'] < $a['goals_against']) ? -1 : 1;
 	}
 
-	public static function red_card($a, $b)
+	public static function fairplay($a, $b)
     {
-		if ($a['red_card'] == $b['red_card'])
+		if ($a['fairplay'] == $b['fairplay'])
 			return 0;
-		return ($b['red_card'] < $a['red_card']) ? 1 : -1;
-	}
-
-	public static function yellow_card($a, $b)
-    {
-		if ($a['yellow_card'] == $b['yellow_card'])
-			return 0;
-		return ($b['yellow_card'] < $a['yellow_card']) ? 1 : -1;
+		return ($b['fairplay'] < $a['fairplay']) ? 1 : -1;
 	}
 
 	public static function sort_general_ranks($results, $event_id)
