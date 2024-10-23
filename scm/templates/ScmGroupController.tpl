@@ -28,7 +28,7 @@
                     # START matchdays #
                         # IF NOT C_HAT_RANKING #
                             <tr>
-                                <td colspan="# IF C_DISPLAY_PLAYGROUNDS #6# ELSE #5# ENDIF #"># IF C_ONE_DAY #{@scm.round}# ELSE #{@scm.day}# ENDIF # {matchdays.MATCHDAY}</td>
+                                <td colspan="# IF C_DISPLAY_PLAYGROUNDS #7# ELSE #6# ENDIF #"># IF C_ONE_DAY #{@scm.round}# ELSE #{@scm.day}# ENDIF # {matchdays.MATCHDAY}</td>
                             </tr>
                         # ENDIF #
                         # START matchdays.dates #

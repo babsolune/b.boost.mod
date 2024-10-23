@@ -93,7 +93,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
                     $game->get_game_away_def_bonus()) ? ' ' . $this->lang['scm.bonus.param'] 
                     : '';
 
-                switch ($game->get_game_status()) {
+                switch ($game['game_status']) {
                     case ScmGame::DELAYED :
                         $status = ' ' . $this->lang['scm.event.status.delayed'];
                         break;
