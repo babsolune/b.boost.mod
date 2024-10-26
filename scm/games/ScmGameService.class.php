@@ -264,22 +264,5 @@ class ScmGameService
         }
         return $games[0];
 	}
-
-    public static function get_prtl_game($team_a, $team_b)
-    {
-        $result = self::$db_querier->select('SELECT *
-            FROM ' . ScmSetup::$scm_game_table . '
-            WHERE ((game_home_id = :team_a AND game_away_id = :team_b) OR (game_home_id = :team_b AND game_away_id = :team_a))', [
-                'team_a' => $team_a ? $team_a : 0,
-                'team_b' => $team_b ? $team_b : 0,
-            ]
-        );
-        $games = [];
-        while($row = $result->fetch())
-        {
-            $games[] = $row;
-        }
-        return $games;
-    }
 }
 ?>

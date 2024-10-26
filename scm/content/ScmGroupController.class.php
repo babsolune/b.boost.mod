@@ -60,6 +60,7 @@ class ScmGroupController extends DefaultModuleController
                     $item = new ScmGame();
                     $item->set_properties($game);
                     $this->view->assign_block_vars('matchdays.dates.games', $item->get_template_vars());
+                    $item->get_details_template($this->view, 'matchdays.dates.games');
                 }
             }
         }

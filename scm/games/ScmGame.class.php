@@ -279,7 +279,7 @@ class ScmGame
 
     function set_game_away_goals($game_away_goals)
     {
-        $this->game_home_goals = $game_away_goals;
+        $this->game_away_goals = $game_away_goals;
     }
 
 	public function add_game_away_yellow($game_away_yellow)
@@ -507,6 +507,52 @@ class ScmGame
                 'STATUS'          => $status
             ]
         );
+    }
+
+    public function get_details_template($view, $index)
+    {
+        foreach ($this->get_game_home_goals() as $details)
+		{
+			$view->assign_block_vars($index . '.home_goals', [
+				'PLAYER' => $details['player'],
+				'TIME' => $details['time'],
+			]);
+		}
+        foreach ($this->get_game_away_goals() as $details)
+		{
+			$view->assign_block_vars($index . '.away_goals', [
+				'PLAYER' => $details['player'],
+				'TIME' => $details['time'],
+			]);
+		}
+        foreach ($this->get_game_home_yellow() as $details)
+		{
+			$view->assign_block_vars($index . '.home_yellow', [
+				'PLAYER' => $details['player'],
+				'TIME' => $details['time'],
+			]);
+		}
+        foreach ($this->get_game_away_yellow() as $details)
+		{
+			$view->assign_block_vars($index . '.away_yellow', [
+				'PLAYER' => $details['player'],
+				'TIME' => $details['time'],
+			]);
+		}
+        foreach ($this->get_game_home_red() as $details)
+		{
+			$view->assign_block_vars($index . '.home_red', [
+				'PLAYER' => $details['player'],
+				'TIME' => $details['time'],
+			]);
+		}
+        foreach (self::get_game_away_red() as $details)
+		{
+			$view->assign_block_vars($index . '.away_red', [
+				'PLAYER' => $details['player'],
+				'TIME' => $details['time'],
+			]);
+		}
     }
 
 }

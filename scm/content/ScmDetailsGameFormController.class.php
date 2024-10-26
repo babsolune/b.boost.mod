@@ -45,6 +45,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
 	private function build_form()
 	{
+
         if($this->get_game()->get_game_type() == 'D')
             $url = ScmUrlBuilder::edit_days_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_group())->rel();
         if($this->get_game()->get_game_type() == 'G')
