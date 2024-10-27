@@ -199,11 +199,6 @@ th.bgc-sub a {
     }
 }
 
-/* .game-details .fieldset-inset > #ScmDetailsGameFormController_status_field,
-.game-details .fieldset-inset > #ScmDetailsGameFormController_video_field {
-    width: 100%;
-} */
-
 .not-played {
     opacity: 0.5;
     pointer-events: none;
