@@ -193,9 +193,16 @@ th.bgc-sub a {
     display: none;
 }
 
+@media (min-width: 1025px) {
+    .form-element > label {
+        width: calc(100% / 3);
+    }
+}
+
+/* .game-details .fieldset-inset > #ScmDetailsGameFormController_status_field,
 .game-details .fieldset-inset > #ScmDetailsGameFormController_video_field {
     width: 100%;
-}
+} */
 
 .not-played {
     opacity: 0.5;

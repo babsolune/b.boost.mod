@@ -45,7 +45,6 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
 	private function build_form()
 	{
-
         if($this->get_game()->get_game_type() == 'D')
             $url = ScmUrlBuilder::edit_days_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_group())->rel();
         if($this->get_game()->get_game_type() == 'G')
@@ -72,40 +71,46 @@ class ScmDetailsGameFormController extends DefaultModuleController
             if (($this->get_game()->get_game_order() > count($this->games_number) / 2)) {
                 $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.event.penalties']));
                 $fieldset->add_field(new FormFieldTextEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
-                    ['class' => 'game-details home-details', 'pattern' => '[0-9]*']
+                    ['class' => 'home-details', 'pattern' => '[0-9]*']
                 ));
                 $fieldset->add_field(new FormFieldTextEditor('away_pen', '', $this->get_game()->get_game_away_pen(),
-                    ['class' => 'game-details away-details', 'pattern' => '[0-9]*']
+                    ['class' => 'away-details', 'pattern' => '[0-9]*']
                 ));
             }
         }
         elseif ($this->bracket_games && !$this->return_games) {
             $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.event.penalties']));
             $fieldset->add_field(new FormFieldTextEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
-                ['class' => 'game-details home-details', 'pattern' => '[0-9]*']
+                ['class' => 'home-details', 'pattern' => '[0-9]*']
             ));
             $fieldset->add_field(new FormFieldTextEditor('away_pen', '', $this->get_game()->get_game_away_pen(),
-                ['class' => 'game-details away-details', 'pattern' => '[0-9]*']
+                ['class' => 'away-details', 'pattern' => '[0-9]*']
             ));
+        }
+
+        if ($this->bracket_games) {
+            $fieldset->add_field(new FormFieldSpacer('empty_field', $this->lang['scm.event.empty.field']));
+            $fieldset->add_field(new FormFieldTextEditor('home_empty', '', $this->get_game()->get_game_home_empty()));
+            $fieldset->add_field(new FormFieldTextEditor('away_empty', '', $this->get_game()->get_game_away_empty()));
         }
 
         if($this->get_params()->get_bonus())
         {
             $fieldset->add_field(new FormFieldSpacer('offensive_bonus', $this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE ? $this->lang['scm.event.off.bonus'] : $this->lang['scm.event.bonus']));
             $fieldset->add_field(new FormFieldTextEditor('home_off_bonus', '', $this->get_game()->get_game_home_off_bonus(),
-                ['class' => 'game-details home-details', 'pattern' => '[0-9]*']
+                ['class' => 'home-details', 'pattern' => '[0-9]*']
             ));
             $fieldset->add_field(new FormFieldTextEditor('away_off_bonus', '', $this->get_game()->get_game_away_off_bonus(),
-                ['class' => 'game-details away-details', 'pattern' => '[0-9]*']
+                ['class' => 'away-details', 'pattern' => '[0-9]*']
             ));
             if($this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE)
             {
                 $fieldset->add_field(new FormFieldSpacer('defensive_bonus', $this->lang['scm.event.def.bonus']));
                 $fieldset->add_field(new FormFieldTextEditor('home_def_bonus', '', $this->get_game()->get_game_home_def_bonus(),
-                    ['class' => 'game-details home-details', 'pattern' => '[0-9]*']
+                    ['class' => 'home-details', 'pattern' => '[0-9]*']
                 ));
                 $fieldset->add_field(new FormFieldTextEditor('away_def_bonus', '', $this->get_game()->get_game_away_def_bonus(),
-                    ['class' => 'game-details away-details', 'pattern' => '[0-9]*']
+                    ['class' => 'away-details', 'pattern' => '[0-9]*']
                 ));
             }
         }
@@ -122,7 +127,10 @@ class ScmDetailsGameFormController extends DefaultModuleController
         $fieldset->add_field(new ScmFormFieldGameEvents('home_red', '', $this->get_game()->get_game_home_red()));
         $fieldset->add_field(new ScmFormFieldGameEvents('away_red', '', $this->get_game()->get_game_away_red()));
 
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('status', $this->lang['scm.event.status'], $this->get_game()->get_game_status(),
+        $fieldset_unique = new FormFieldsetHTML('unique_details', '');
+        $form->add_fieldset($fieldset_unique);
+
+		$fieldset_unique->add_field(new FormFieldSimpleSelectChoice('status', $this->lang['scm.event.status'], $this->get_game()->get_game_status(),
             [
                 new FormFieldSelectChoiceOption('', ''),
                 new FormFieldSelectChoiceOption($this->lang['scm.event.status.delayed'], ScmGame::DELAYED),
@@ -130,15 +138,9 @@ class ScmDetailsGameFormController extends DefaultModuleController
             ]
         ));
 
-        if ($this->bracket_games) {
-            $fieldset->add_field(new FormFieldSpacer('empty_field', $this->lang['scm.event.empty.field']));
-            $fieldset->add_field(new FormFieldTextEditor('home_empty', '', $this->get_game()->get_game_home_empty()));
-            $fieldset->add_field(new FormFieldTextEditor('away_empty', '', $this->get_game()->get_game_away_empty()));
-        }
+        $fieldset_unique->add_field(new FormFieldUrlEditor('video', $this->lang['scm.event.video'], $this->get_game()->get_game_video()->relative()));
 
-        $fieldset->add_field(new FormFieldUrlEditor('video', $this->lang['scm.event.video'], $this->get_game()->get_game_video()->relative()));
-
-        $fieldset->add_field(new FormFieldRichTextEditor('summary', $this->lang['scm.event.summary'], $this->get_game()->get_game_summary()));
+        $fieldset_unique->add_field(new FormFieldRichTextEditor('summary', $this->lang['scm.event.summary'], $this->get_game()->get_game_summary()));
 
         $this->submit_button = new FormButtonDefaultSubmit();
 		$form->add_button($this->submit_button);

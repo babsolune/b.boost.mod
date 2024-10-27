@@ -7,7 +7,8 @@
 	};
 	ScmFormFieldGameEvents.prototype = {
 		add_field : function (field_id, id_input) {
-			if (this.integer <= this.max_input) {
+            if (this.integer <= this.max_input)
+            {
 				var id = id_input + '_' + this.integer;
 
 				jQuery('<div/>', {'id' : id, 'class' : 'grouped-inputs'}).appendTo('#' + field_id);
@@ -18,7 +19,7 @@
 				jQuery('<input/> ', {type : 'number', id : 'field_time_' + id, 'class' : 'grouped-element', name : 'field_time_' + id, pattern : '#[A-Fa-f0-9]', placeholder : '{@scm.event.minute}'}).appendTo('#' + id);
 				jQuery('#' + id).append(' ');
 
-				jQuery('<a/> ', {href : 'javascript:ScmFormFieldGameEvents.delete_field('+ this.integer +');', 'class' : 'grouped-element bgc-full error', 'aria-label' : '{@common.delete}'}).html('<i class="far fa-trash-alt" aria-hidden="true"></i>').appendTo('#' + id);
+				jQuery('<a/> ', {href : 'javascript:ScmFormFieldGameEvents.delete_field("'+ id_input +'", '+ this.integer +');', 'class' : 'grouped-element bgc-full error', 'aria-label' : '{@common.delete}'}).html('<i class="far fa-trash-alt" aria-hidden="true"></i>').appendTo('#' + id);
 
 				this.integer++;
 			}
@@ -26,11 +27,11 @@
 				jQuery('#add-' + id_input).hide();
 			}
 		},
-		delete_field : function (id) {
-			var id = id_input + '_' + id;
+		delete_field : function (input,id) {
+			var id = input + '_' + id;
 			jQuery('#' + id).remove();
 			this.integer--;
-			jQuery('#add-' + id_input).show();
+			jQuery('#add-' + input).show();
 		}
 	};
 
