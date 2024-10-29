@@ -23,6 +23,11 @@
     content: none;
 }
 
+.cell-details {
+    padding: 0.309em;
+    font-weight: bold;
+}
+
 @media (min-width: 769px) {
     .cell-inline .cell {
         max-width: 305px;

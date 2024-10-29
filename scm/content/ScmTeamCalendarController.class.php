@@ -45,9 +45,24 @@ class ScmTeamCalendarController extends DefaultModuleController
             $item = new ScmGame();
             $item->set_properties($game);
 
+            $score_status = (int)$item->get_game_home_score() - (int)$item->get_game_away_score();
+            $team_status = '';
+            if ($score_status > 0 && $this->team_id == $item->get_game_home_id())
+                $team_status = "success";
+            elseif ($score_status < 0 && $this->team_id == $item->get_game_home_id())
+                $team_status = "error";
+            elseif ($score_status > 0 && $this->team_id == $item->get_game_away_id())
+                $team_status = "error";
+            elseif ($score_status < 0 && $this->team_id == $item->get_game_away_id())
+                $team_status = "success";
+
             $this->view->assign_block_vars('games', array_merge($item->get_template_vars(),[
+                'C_IS_HOME_TEAM' => $this->team_id == $item->get_game_home_id(),
+                'C_IS_AWAY_TEAM' => $this->team_id == $item->get_game_away_id(),
+                'TEAM_STATUS' => $team_status,
                 'DAY' => $item->get_game_group()
             ]));
+            $item->get_details_template($this->view, 'games');
         }
 
         $this->view->put_all([

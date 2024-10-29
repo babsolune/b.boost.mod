@@ -69,7 +69,7 @@
                                                 # ENDIF #
                                             # ENDIF #
                                         </span>
-                                        <div id="target-panel-{matchdays.dates.games.GAME_ID}" class="cell-details modal modal-animation">
+                                        <div id="target-panel-{matchdays.dates.games.GAME_ID}" class="modal modal-animation">
                                             <div class="close-modal" aria-label="{@common.close}"></div>
                                             <div class="content-panel">
                                                 <div class="align-right"><a href="#" class="error big hide-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></a></div>
@@ -139,6 +139,9 @@
                                                     <a href="{matchdays.dates.games.U_VIDEO}" class="button d-block align-center" target="blank" rel="noopener noreferer">
                                                         <i class="far fa-circle-play"></i> {@scm.watch.video}
                                                     </a>
+                                                # ENDIF #
+                                                # IF matchdays.dates.games.SUMMARY #
+                                                    {matchdays.dates.games.SUMMARY}
                                                 # ENDIF #
                                             </div>
                                         </div>

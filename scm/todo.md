@@ -12,12 +12,13 @@
 - [ ] limit the team list in select to the group stage qualified team list on first round bracket form page
 - [ ] limit the team list in select to previous round qualified team list on other rounds bracket form page
 - [X] modify the looser-bracket to set several brackets instead of only one (bracket 1, bracket 2, bracket 3)
-- [ ] add rounds for games (1st matchday, 2nd matchday, ...)
+- [-] add rounds for games (1st matchday, 2nd matchday, ...)
+    - [ ] hat ranking
 ### Games form
-- [ ] rebuild css to fit mobile, columns and set/bonus options
+- [X] rebuild css to fit mobile, columns and set/bonus options
 ## Ranking
 - [-] set filters for draw ranks (actually write hard in code) (see draw-rules.md)
-- [ ] reset caches on details validation
+- [X] reset caches on details validation
 ### Clubs
 - [ ] self division
 - [X] Country flag
@@ -32,7 +33,7 @@
 - [X] For 2 legs games, group stage, if not all games results are filled, a new line is added in ranking (for the team 0, I guess)
 - [X] Date for bracket on game creation must be start_date
 - [X] Match for third place
-- [ ] save goal list on details
+- [X] save goal list on details
 ## Event home
 - [X] bg color for ongoing games
 - [X] Ongoing games list

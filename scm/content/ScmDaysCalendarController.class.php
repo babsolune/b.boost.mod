@@ -50,7 +50,10 @@ class ScmDaysCalendarController extends DefaultModuleController
                 $item = new ScmGame();
                 $item->set_properties($game);
                 if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
+                {
                     $this->view->assign_block_vars('dates.games', $item->get_template_vars());
+                    $item->get_details_template($this->view, 'dates.games');
+                }
             }
         }
 	}
