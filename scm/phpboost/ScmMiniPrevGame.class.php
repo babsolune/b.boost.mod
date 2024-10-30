@@ -61,7 +61,6 @@ class ScmMiniPrevGame extends ModuleMiniMenu
 		]);
 
         $now = new Date();
-        $prev_days = $now->get_timestamp() - (7 * 24 * 3600);
         $full_games = ScmGameCache::load()->get_games();
         usort($full_games, function($a, $b) {
             return $a['game_date'] - $b['game_date'];
@@ -72,7 +71,8 @@ class ScmMiniPrevGame extends ModuleMiniMenu
             $params = ScmParamsService::get_params($game['game_event_id']);
             $favorite_team = $params->get_favorite_team_id();
             if (
-                ($prev_days < $game['game_date'] && $game['game_date'] < $now->get_timestamp())
+                $game['game_group'] == ScmDayService::get_last_day($game['game_event_id'])
+                && (ScmEventService::get_event($game['game_event_id'])->get_end_date()->get_timestamp() > $now->get_timestamp())
                 && ($game['game_home_id'] == $favorite_team || $game['game_away_id'] == $favorite_team)
             )
                 $games[] = $game;

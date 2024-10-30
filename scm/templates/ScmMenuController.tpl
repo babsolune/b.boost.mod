@@ -21,11 +21,9 @@
         <ul>
             <li><a href="{U_EVENT_HOME}" class="offload cssmenu-title" aria-label="{@scm.menu.infos}"><i class="fa fa-fw fa-house-flag"></i></a></li>
             # IF C_CUP #
-                <!--<li><a href="{U_ROUND_CALENDAR}" class="offload cssmenu-title" aria-label="{@scm.menu.groups.rounds}"><i class="far fa-fw fa-calendar-days" aria-hidden="true"></i></a></li>-->
                 <li><a href="{U_ROUND_BRACKETS}" class="offload cssmenu-title" aria-label="{@scm.menu.bracket}"><i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i></a></li>
             # ENDIF #
             # IF C_TOURNAMENT #
-                <!--# IF C_ONE_DAY #<li><a href="{U_ROUND_CALENDAR}" class="offload cssmenu-title" aria-label="{@scm.menu.groups.rounds}"><i class="far fa-fw fa-calendar-days" aria-hidden="true"></i></a></li># ENDIF #-->
                 <li><a href="{U_ROUND_GROUPS}" class="offload cssmenu-title" aria-label="{@scm.menu.groups.rounds}"><i class="fa fa-fw fa-list" aria-hidden="true"></i></a></li>
                 <li><a href="{U_ROUND_BRACKETS}" class="offload cssmenu-title" aria-label="{@scm.menu.brackets.rounds}"><i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i></a></li>
             # ELSE #
