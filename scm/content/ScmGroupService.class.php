@@ -167,4 +167,106 @@ class ScmGroupService
 
         return $games;
     }
+
+    public static function get_last_matchday_group(int $event_id):int
+    {
+        $now = new Date();
+        $results = self::$db_querier->select('SELECT game.*, params.*
+            FROM ' . ScmSetup::$scm_game_table . ' game
+            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = game.game_event_id
+            WHERE game.game_event_id = :id
+            AND game.game_date < ' . $now->get_timestamp() . '
+            AND params.hat_ranking = 0
+            AND (game_type = "G" OR game_type = "B")
+            ORDER BY game.game_date ASC', [
+                'id' => $event_id
+            ]
+        );
+        $last_rounds = [];
+        foreach ($results as $game)
+        {
+            if ($game['game_home_score'] != '')
+            {
+                $last_rounds[] = $game['game_round'];
+            }
+        }
+
+        return end($last_rounds);
+    }
+
+    public static function get_last_matchday_hat(int $event_id):int
+    {
+        $now = new Date();
+        $results = self::$db_querier->select('SELECT game.*, params.*
+            FROM ' . ScmSetup::$scm_game_table . ' game
+            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = game.game_event_id
+            WHERE game.game_event_id = :id
+            AND game.game_date < ' . $now->get_timestamp() . '
+            AND params.hat_ranking = 1
+            AND (game_type = "G" OR game_type = "B")
+            ORDER BY game.game_date ASC', [
+                'id' => $event_id
+            ]
+        );
+        $last_rounds = [];
+        foreach ($results as $game)
+        {
+            if ($game['game_home_score'] != '')
+            {
+                $last_rounds[] = $game['game_group'];
+            }
+        }
+
+        return end($last_rounds);
+    }
+
+    public static function get_next_matchday_group(int $event_id):string
+    {
+        $now = new Date();
+        $results = self::$db_querier->select('SELECT game.*, params.*
+            FROM ' . ScmSetup::$scm_game_table . ' game
+            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = game.game_event_id
+            WHERE game.game_event_id = :id
+            AND game.game_date > ' . $now->get_timestamp() . '
+            AND params.hat_ranking = 0
+            AND (game_type = "G" OR game_type = "B")
+            ORDER BY game_date DESC', [
+                'id' => $event_id
+            ]
+        );
+        $next_rounds = [];
+        foreach ($results as $game)
+        {
+            if ($game['game_home_score'] == '' && $game['game_home_score'] != 0)
+                $next_rounds[] = $game['game_round'];
+        }
+
+        return $next_rounds ? end($next_rounds) : '';
+    }
+
+    public static function get_next_matchday_hat(int $event_id):string
+    {
+        $now = new Date();
+        $results = self::$db_querier->select('SELECT game.*, params.*
+            FROM ' . ScmSetup::$scm_game_table . ' game
+            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = game.game_event_id
+            WHERE game.game_event_id = :id
+            AND game.game_date > ' . $now->get_timestamp() . '
+            AND params.hat_ranking = 1
+            AND (game_type = "G" OR game_type = "B")
+            ORDER BY game_date DESC', [
+                'id' => $event_id
+            ]
+        );
+        $next_rounds = [];
+        foreach ($results as $game)
+        {
+            if ($game['game_home_score'] == '')
+            {
+                $next_rounds[] = $game['game_group'];
+            }
+        }
+
+        return $next_rounds ? end($next_rounds) : '';
+    }
 }

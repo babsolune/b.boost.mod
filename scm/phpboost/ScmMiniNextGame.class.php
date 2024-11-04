@@ -45,38 +45,54 @@ class ScmMiniNextGame extends ModuleMiniMenu
 		// Assign common menu variables to the tpl
 		MenuService::assign_positions_conditions($view, $this->get_block());
 
-		// Load module config
-		$config = ScmConfig::load();
+		$now = new Date();
+        $games = [];
+        $result_rounds = PersistenceContext::get_querier()->select('SELECT game.*, params.*
+            FROM ' . ScmSetup::$scm_game_table . ' game
+            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = game.game_event_id
+            WHERE game.game_date > ' . $now->get_timestamp() . '
+            AND (game.game_home_id = params.favorite_team_id OR game.game_away_id = params.favorite_team_id)
+            AND (game_type = "G" OR game_type = "B")
+            ORDER BY game.game_date ASC'
+        );
+        foreach ($result_rounds as $game)
+        {
+            if (
+                ($game['hat_ranking'] && $game['game_group'] == ScmGroupService::get_next_matchday_hat($game['game_event_id']))
+                || (!$game['hat_ranking'] && $game['game_round'] == ScmGroupService::get_next_matchday_group($game['game_event_id']))
+                && ScmEventService::get_event($game['game_event_id'])->get_end_date()->get_timestamp() > $now->get_timestamp()
+            )
+            {
+                $games[] = $game;
+            }
+        }
 
-		// Load module cache
-		$scm_cache = ScmGameCache::load();
+        $result_days = PersistenceContext::get_querier()->select('SELECT game.*, params.*
+            FROM ' . ScmSetup::$scm_game_table . ' game
+            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = game.game_event_id
+            WHERE game.game_date > ' . $now->get_timestamp() . '
+            AND (game.game_home_id = params.favorite_team_id OR game.game_away_id = params.favorite_team_id)
+            AND (game_type = "D")
+            ORDER BY game.game_date ASC'
+        );
+        foreach ($result_days as $game)
+        {
+            if (
+                $game['game_group'] == ScmDayService::get_next_day($game['game_event_id']) // Select last match day
+                && ScmEventService::get_event($game['game_event_id'])->get_end_date()->get_timestamp() > $now->get_timestamp() // Remove ended events
+            )
+            {
+                $games[] = $game;
+            }
+        }
 
-		// Load categories cache
-		$categories_cache = CategoriesService::get_categories_manager('scm')->get_categories_cache();
-
-		$items = $scm_cache->get_games();
-
-		$view->put_all([
-			'C_ITEMS' => !empty($items)
+        $view->put_all([
+			'C_ITEMS' => count($games) > 0
 		]);
 
-        $now = new Date();
-        $full_games = ScmGameCache::load()->get_games();
-        usort($full_games, function($a, $b) {
+        usort($games, function($a,$b) {
             return $a['game_date'] - $b['game_date'];
         });
-        $games = [];
-        foreach ($full_games as $game)
-        {
-            $params = ScmParamsService::get_params($game['game_event_id']);
-            $favorite_team = $params->get_favorite_team_id();
-            if (
-                $game['game_group'] == ScmDayService::get_next_day($game['game_event_id'])
-                && (ScmEventService::get_event($game['game_event_id'])->get_end_date()->get_timestamp() > $now->get_timestamp())
-                && ($game['game_home_id'] == $favorite_team || $game['game_away_id'] == $favorite_team)
-            )
-                $games[] = $game;
-        }
 
 		foreach ($games as $game)
 		{

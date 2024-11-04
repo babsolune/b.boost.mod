@@ -5,7 +5,7 @@
 2. Plus grand nombre de points dans les confrontations directes.
 3. Plus grande différence de buts dans les confrontations directes.
 4. Plus grande différence de buts au général.
-5. Plus grand nombre de buts marqués.
+5. Plus grand nombre de buts marqués au général.
 6. Meilleur place au fair-play (1 pt par carton jaune, 2 pts par carton rouges)
 7. Tirage au sort
 
