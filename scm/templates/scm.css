@@ -245,7 +245,10 @@ th.bgc-sub a {
     list-style-type: none;
     margin: 0;
 }
-.grouped-fields .form-field-action-link { width: 48%; }
+.grouped-fields .form-field-action-link {
+    width: 48%;
+    margin-bottom: 0.809em;
+}
 .grouped-fields .form-field-action-link a {
     display: block;
     text-align: right;

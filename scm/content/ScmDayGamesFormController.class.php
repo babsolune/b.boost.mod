@@ -141,6 +141,7 @@ class ScmDayGamesFormController extends DefaultModuleController
         {
             $game = new ScmGame();
             $game->set_properties($day_game);
+
             if (ScmDayService::day_has_scores($games))
                 ScmDayService::update_day_played($this->event_id(), $game->get_game_group(), 1);
             else

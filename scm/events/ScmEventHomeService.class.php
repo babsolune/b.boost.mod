@@ -137,7 +137,6 @@ class ScmEventHomeService
         $matchdays = [];
         foreach($results as $game)
         {
-            // Debug::dump($game['game_round']);
             if($game['game_type'] == 'G')
                 $matchdays[$game['game_round']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
         }
