@@ -28,6 +28,7 @@ class AdminScmConfigController extends DefaultAdminModuleController
 	private function build_form()
 	{
 		$form = new HTMLForm(self::class);
+        $form->set_css_class('config-form');
 
 		$fieldset = new FormFieldsetHTML('configuration', StringVars::replace_vars($this->lang['form.module.title'], ['module_name' => self::get_module()->get_configuration()->get_name()]));
 		$form->add_fieldset($fieldset);
@@ -70,7 +71,8 @@ class AdminScmConfigController extends DefaultAdminModuleController
 
         $fieldset->add_field(new FormFieldSpacer('colors', ''));
         $fieldset->add_field(new FormFieldColorPicker('promotion_color', $this->lang['scm.promotion.color'], $this->config->get_promotion_color()));
-        $fieldset->add_field(new FormFieldColorPicker('playoff_color', $this->lang['scm.playoff.color'], $this->config->get_playoff_color()));
+        $fieldset->add_field(new FormFieldColorPicker('playoff_prom_color', $this->lang['scm.playoff.prom.color'], $this->config->get_playoff_prom_color()));
+        $fieldset->add_field(new FormFieldColorPicker('playoff_releg_color', $this->lang['scm.playoff.releg.color'], $this->config->get_playoff_releg_color()));
         $fieldset->add_field(new FormFieldColorPicker('relegation_color', $this->lang['scm.relegation.color'], $this->config->get_relegation_color()));
 
 		$fieldset_authorizations = new FormFieldsetHTML('authorizations_fieldset', $this->lang['form.authorizations'],
@@ -128,7 +130,8 @@ class AdminScmConfigController extends DefaultAdminModuleController
         $this->config->set_played_color($this->form->get_value('played_color'));
         $this->config->set_win_color($this->form->get_value('win_color'));
         $this->config->set_promotion_color($this->form->get_value('promotion_color'));
-        $this->config->set_playoff_color($this->form->get_value('playoff_color'));
+        $this->config->set_playoff_prom_color($this->form->get_value('playoff_prom_color'));
+        $this->config->set_playoff_releg_color($this->form->get_value('playoff_releg_color'));
         $this->config->set_relegation_color($this->form->get_value('relegation_color'));
 
 		$this->config->set_authorizations($this->form->get_value('authorizations')->build_auth_array());

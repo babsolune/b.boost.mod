@@ -23,7 +23,8 @@ class ScmParams
 	private $draw_points;
 	private $loss_points;
 	private $promotion;
-	private $playoff;
+	private $playoff_prom;
+	private $playoff_releg;
 	private $relegation;
 	private $fairplay_yellow;
 	private $fairplay_red;
@@ -40,6 +41,7 @@ class ScmParams
 	private $ranking_crit_9;
 	private $ranking_crit_10;
 
+	private $finals_type;
 	private $rounds_number;
 	private $draw_games;
 	private $has_overtime;
@@ -51,8 +53,11 @@ class ScmParams
 	private $game_duration;
 	private $favorite_team_id;
 
-    const BONUS_SINGLE = "single";
-    const BONUS_DOUBLE = "double";
+    const FINALS_ROUND   = "finals_round";
+    const FINALS_RANKING = "finals_ranking";
+
+    const BONUS_SINGLE   = "single";
+    const BONUS_DOUBLE   = "double";
 
 	public function get_id_params()
 	{
@@ -194,14 +199,24 @@ class ScmParams
 		$this->promotion = $promotion;
 	}
 
-	public function get_playoff()
+	public function get_playoff_prom()
 	{
-		return $this->playoff;
+		return $this->playoff_prom;
 	}
 
-	public function set_playoff($playoff)
+	public function set_playoff_prom($playoff_prom)
 	{
-		$this->playoff = $playoff;
+		$this->playoff_prom = $playoff_prom;
+	}
+
+	public function get_playoff_releg()
+	{
+		return $this->playoff_releg;
+	}
+
+	public function set_playoff_releg($playoff_releg)
+	{
+		$this->playoff_releg = $playoff_releg;
 	}
 
 	public function get_relegation()
@@ -354,6 +369,16 @@ class ScmParams
 		$this->game_duration = $game_duration;
 	}
 
+	public function get_finals_type()
+	{
+		return $this->finals_type;
+	}
+
+	public function set_finals_type($finals_type)
+	{
+		$this->finals_type = $finals_type;
+	}
+
 	public function get_rounds_number()
 	{
 		return $this->rounds_number;
@@ -456,7 +481,8 @@ class ScmParams
 			'draw_points'         => $this->get_draw_points(),
 			'loss_points'         => $this->get_loss_points(),
 			'promotion'           => $this->get_promotion(),
-			'playoff'             => $this->get_playoff(),
+			'playoff_prom'        => $this->get_playoff_prom(),
+			'playoff_releg'       => $this->get_playoff_releg(),
 			'relegation'          => $this->get_relegation(),
 			'fairplay_yellow'     => $this->get_fairplay_yellow(),
 			'fairplay_red'        => $this->get_fairplay_red(),
@@ -472,6 +498,7 @@ class ScmParams
 			'ranking_crit_9'      => $this->get_ranking_crit_9(),
 			'ranking_crit_10'     => $this->get_ranking_crit_10(),
 			'game_duration'       => $this->get_game_duration(),
+			'finals_type'         => $this->get_finals_type(),
 			'rounds_number'       => $this->get_rounds_number(),
 			'draw_games'          => $this->get_draw_games(),
 			'has_overtime'        => $this->get_has_overtime(),
@@ -499,7 +526,8 @@ class ScmParams
 		$this->draw_points         = $properties['draw_points'];
 		$this->loss_points         = $properties['loss_points'];
 		$this->promotion           = $properties['promotion'];
-		$this->playoff             = $properties['playoff'];
+		$this->playoff_prom        = $properties['playoff_prom'];
+		$this->playoff_releg       = $properties['playoff_releg'];
 		$this->relegation          = $properties['relegation'];
 		$this->fairplay_yellow     = $properties['fairplay_yellow'];
 		$this->fairplay_red        = $properties['fairplay_red'];
@@ -515,6 +543,7 @@ class ScmParams
 		$this->ranking_crit_9      = $properties['ranking_crit_9'];
 		$this->ranking_crit_10     = $properties['ranking_crit_10'];
 		$this->game_duration       = $properties['game_duration'];
+		$this->finals_type         = $properties['finals_type'];
 		$this->rounds_number       = $properties['rounds_number'];
 		$this->draw_games          = $properties['draw_games'];
 		$this->has_overtime        = $properties['has_overtime'];
@@ -528,8 +557,10 @@ class ScmParams
 	public function init_default_properties()
 	{
         $this->ranking_crit_1  = 'points_gen';
+        $this->finals_type  = 'finals_round';
         $this->promotion  = 0;
-        $this->playoff    = 0;
+        $this->playoff_prom    = 0;
+        $this->playoff_releg    = 0;
         $this->relegation = 0;
 	}
 }

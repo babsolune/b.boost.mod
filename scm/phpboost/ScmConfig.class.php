@@ -12,14 +12,15 @@ class ScmConfig extends AbstractConfigData
 	const LEFT_COLUMN_DISABLED  = 'left_column_disabled';
 	const RIGHT_COLUMN_DISABLED = 'right_column_disabled';
 	const PROMOTION_COLOR       = 'promotion_color';
-	const PLAYOFF_COLOR         = 'playoff_color';
+	const PLAYOFF_PROM_COLOR    = 'playoff_prom_color';
+	const PLAYOFF_RELEG_COLOR   = 'playoff_releg_color';
 	const RELEGATION_COLOR      = 'relegation_color';
 	const LIVE_COLOR            = 'live_color';
 	const PLAYED_COLOR          = 'played_color';
 	const WIN_COLOR             = 'win_color';
-	const CURRENT_GAMES       = 'current_games';
-	const NEXT_GAMES          = 'next_games';
-	const NEXT_GAMES_NUMBER   = 'next_games_number';
+	const CURRENT_GAMES         = 'current_games';
+	const NEXT_GAMES            = 'next_games';
+	const NEXT_GAMES_NUMBER     = 'next_games_number';
 	const AUTHORIZATIONS        = 'authorizations';
 
 	const DEFERRED_OPERATIONS = 'deferred_operations';
@@ -64,14 +65,24 @@ class ScmConfig extends AbstractConfigData
 		$this->set_property(self::PROMOTION_COLOR, $promotion_color);
 	}
 
-	public function get_playoff_color()
+	public function get_playoff_prom_color()
 	{
-		return $this->get_property(self::PLAYOFF_COLOR);
+		return $this->get_property(self::PLAYOFF_PROM_COLOR);
 	}
 
-	public function set_playoff_color($playoff_color)
+	public function set_playoff_prom_color($playoff_prom_color)
 	{
-		$this->set_property(self::PLAYOFF_COLOR, $playoff_color);
+		$this->set_property(self::PLAYOFF_PROM_COLOR, $playoff_prom_color);
+	}
+
+	public function get_playoff_releg_color()
+	{
+		return $this->get_property(self::PLAYOFF_RELEG_COLOR);
+	}
+
+	public function set_playoff_releg_color($playoff_releg_color)
+	{
+		$this->set_property(self::PLAYOFF_RELEG_COLOR, $playoff_releg_color);
 	}
 
 	public function get_relegation_color()
@@ -175,7 +186,8 @@ class ScmConfig extends AbstractConfigData
 			self::LEFT_COLUMN_DISABLED  => false,
 			self::RIGHT_COLUMN_DISABLED => false,
 			self::PROMOTION_COLOR       => '#baffb0',
-			self::PLAYOFF_COLOR         => '#b0e1ff',
+			self::PLAYOFF_PROM_COLOR    => '#b0e1ff',
+			self::PLAYOFF_RELEG_COLOR   => '#feebbc',
 			self::RELEGATION_COLOR      => '#deddda',
 			self::LIVE_COLOR            => '#baffb0',
 			self::PLAYED_COLOR          => '#deddda',

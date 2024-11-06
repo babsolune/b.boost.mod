@@ -16,7 +16,7 @@ class ScmMiniNextGame extends ModuleMiniMenu
 
 	public function get_menu_id()
 	{
-		return 'module-mini-scm';
+		return 'module-mini-next-scm';
 	}
 
 	public function get_menu_title()

@@ -25,7 +25,18 @@
             # ENDIF #
             # IF C_TOURNAMENT #
                 <li><a href="{U_ROUND_GROUPS}" class="offload cssmenu-title" aria-label="{@scm.menu.groups.rounds}"><i class="fa fa-fw fa-list" aria-hidden="true"></i></a></li>
-                <li><a href="{U_ROUND_BRACKETS}" class="offload cssmenu-title" aria-label="{@scm.menu.brackets.rounds}"><i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i></a></li>
+                <li>
+                    <a href="{U_ROUND_BRACKETS}" class="offload cssmenu-title" aria-label="{@scm.menu.brackets.rounds}">
+                        # IF C_FINALS_RANKING #
+                            <span class="stacked">
+                                <i class="fa fa-fw fa-list" aria-hidden="true"></i>
+                                <i class="fa fa-trophy notice stack-event stack-top-right" aria-hidden="true"></i>
+                            </span>
+                        # ELSE #
+                            <i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i>
+                        # ENDIF #
+                    </a>
+                </li>
             # ELSE #
                 # IF C_CHAMPIONSHIP #
                     <li><a href="{U_DAYS_CALENDAR}" class="offload cssmenu-title" aria-label="{@scm.menu.calendar}"><i class="far fa-fw fa-calendar-days" aria-hidden="true"></i></a></li>
@@ -61,7 +72,18 @@
                         <li><a href="{U_EDIT_GROUPS}" class="offload cssmenu-title" aria-label="{@scm.menu.groups}"><i class="fa fa-fw fa-users-viewfinder" aria-hidden="true"></i></a></li>
                         # IF C_HAS_GAMES #
                             <li# IF C_EDIT_GROUPS_GAMES # class="current"# ENDIF #><a href="{U_EDIT_GROUPS_GAMES}" class="offload cssmenu-title" aria-label="{@scm.menu.groups.games}"><i class="fa fa-fw fa-list" aria-hidden="true"></i></a></li>
-                            <li# IF C_EDIT_BRACKETS_GAMES # class="current"# ENDIF #><a href="{U_EDIT_BRACKET_GAMES}" class="offload cssmenu-title" aria-label="{@scm.menu.bracket.games}"><i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i></a></li>
+                            <li# IF C_EDIT_BRACKETS_GAMES # class="current"# ENDIF #>
+                                <a href="{U_EDIT_BRACKET_GAMES}" class="offload cssmenu-title" aria-label="{@scm.menu.bracket.games}">
+                                    # IF C_FINALS_RANKING #
+                                        <span class="stacked">
+                                            <i class="fa fa-fw fa-list" aria-hidden="true"></i>
+                                            <i class="fa fa-trophy notice stack-event stack-top-right" aria-hidden="true"></i>
+                                        </span>
+                                    # ELSE #
+                                        <i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i>
+                                    # ENDIF #
+                                </a>
+                            </li>
                         # ENDIF #
                     # ENDIF #
                 # ENDIF #

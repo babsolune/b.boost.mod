@@ -33,7 +33,12 @@ class ScmMenuService
         $c_has_rounds  = ScmParamsService::get_params($event_id)->get_rounds_number();
         $c_has_groups  = ScmParamsService::get_params($event_id)->get_teams_per_group();
         $c_has_games   = ScmGameService::has_games($event_id);
-        $bracket_round = ScmParamsService::get_params($event_id)->get_hat_ranking() ? ScmParamsService::get_params($event_id)->get_rounds_number() + 1 : ScmParamsService::get_params($event_id)->get_rounds_number();
+        $c_finals_ranking = ScmParamsService::get_params($event_id)->get_finals_type() == ScmParams::FINALS_RANKING;
+        $bracket_round = 
+            ScmParamsService::get_params($event_id)->get_hat_ranking()
+            ? ScmParamsService::get_params($event_id)->get_rounds_number() + 1
+            : ($c_finals_ranking ? 1 : ScmParamsService::get_params($event_id)->get_rounds_number())
+        ;
 
         $active_round = AppContext::get_request()->get_getint('round', '0');
         if ($active_round == 0)
@@ -51,6 +56,7 @@ class ScmMenuService
             'C_HAS_GAMES'    => $c_has_games,
             'C_ONE_DAY'      => ScmGameService::one_day_event($event_id),
             'C_SOURCES'      => $event->get_sources(),
+            'C_FINALS_RANKING' => $c_finals_ranking,
 
             'HEADER_CATEGORY' => $category->get_name(),
             'HEADER_TYPE'     => ScmDivisionService::get_event_type_lang($event->get_division_id()),
@@ -182,7 +188,7 @@ class ScmMenuService
                 }
                 elseif ($c_edit_brackets && $c_brackets) {
                     $view->assign_block_vars('bracket', [
-                        'BRACKET_ROUND' => $c_hat_ranking && ($group_details[1] == $rounds_number + 1) ? $lang['scm.round.playoff'] : $lang['scm.round.' . $group_details[1] . ''],
+                        'BRACKET_ROUND' => $c_hat_ranking && ($group_details[1] == $rounds_number + 1) ? $lang['scm.round.playoff'] : ($c_finals_ranking ? $lang['scm.group'] . ' ' . $group_details[1] : $lang['scm.round.' . $group_details[1] . '']),
                         'U_BRACKET'     => ScmUrlBuilder::edit_brackets_games($event_id, $event->get_event_slug(), $group_details[1])->rel()
                     ]);
                 }

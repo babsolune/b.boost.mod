@@ -97,23 +97,22 @@ class ScmGroupsFormController extends DefaultModuleController
             }
         }
 
-        if (!ScmGameService::has_games($this->event_id()) && $count_teams == ScmTeamService::get_teams_number($this->event_id()))
-        {
-            if ($this->get_params()->get_hat_ranking())
-                ScmGroupService::set_hat_days_games($this->event_id(), $this->get_params()->get_hat_days(), ScmTeamService::get_teams_number($this->event_id()));
-            else
-                ScmGroupService::set_groups_games($this->event_id());
-            ScmBracketService::set_bracket_games($this->event_id(), ScmParamsService::get_params($this->event_id())->get_rounds_number());
-        }
-        elseif (ScmGameService::has_games($this->event_id()) && $count_teams == ScmTeamService::get_teams_number($this->event_id()))
-        {
+        if (ScmGameService::has_games($this->event_id()) && $count_teams == ScmTeamService::get_teams_number($this->event_id()))
             ScmGameService::delete_games($this->event_id());
-            if ($this->get_params()->get_hat_ranking())
-                ScmGroupService::set_hat_days_games($this->event_id(), $this->get_params()->get_hat_days(), ScmTeamService::get_teams_number($this->event_id()));
-            else
-                ScmGroupService::set_groups_games($this->event_id());
+        if ($this->get_params()->get_hat_ranking())
+            ScmGroupService::set_hat_days_games($this->event_id(), $this->get_params()->get_hat_days(), ScmTeamService::get_teams_number($this->event_id()));
+        elseif ($this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING)
+        {
+            ScmGroupService::set_groups_games($this->event_id());
+            ScmGroupService::set_groups_finals_games($this->event_id());
+        }
+        elseif ($this->get_params()->get_finals_type() == ScmParams::FINALS_ROUND)
+        {
+            ScmGroupService::set_groups_games($this->event_id());
             ScmBracketService::set_bracket_games($this->event_id(), ScmParamsService::get_params($this->event_id())->get_rounds_number());
         }
+        else
+            ScmBracketService::set_bracket_games($this->event_id(), ScmParamsService::get_params($this->event_id())->get_rounds_number());
 
 		ScmEventService::clear_cache();
 	}

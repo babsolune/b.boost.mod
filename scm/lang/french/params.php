@@ -35,11 +35,15 @@ $lang['scm.victory.points']       = 'Points pour une victoire';
 $lang['scm.draw.points']          = 'Points pour un match nul';
 $lang['scm.loss.points']          = 'Points pour une défaite';
 $lang['scm.promotion']            = 'Nombre d\'équipes promues';
-$lang['scm.playoff']              = 'Nombre d\'équipes en barrage';
+$lang['scm.playoff.prom']         = 'Nombre d\'équipes en barrage de promotion';
+$lang['scm.playoff.releg']        = 'Nombre d\'équipes en barrage de relégation';
 $lang['scm.relegation']           = 'Nombre d\'équipes reléguées';
 $lang['scm.fairplay.yellow']      = 'Points de fairplay par carton jaune';
 $lang['scm.fairplay.red']         = 'Points de fairplay par carton rouge';
 
+$lang['scm.finals.type'] = 'Type de match';
+$lang['scm.finals.round'] = 'À élimination directe';
+$lang['scm.finals.ranking'] = 'Par classement';
 $lang['scm.rounds.number'] = 'Nombre de tours';
 $lang['scm.rounds.number.clue'] = '
     <span aria-label="Par exemple <strong>3</strong> donnera <strong>1/4 de finale, 1/2 finale, finale</strong>.

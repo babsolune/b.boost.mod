@@ -40,6 +40,22 @@ class ScmRankingService
         return $final_ranks;
     }
 
+	public static function general_groups_finals_ranking($event_id, $group)
+    {
+        $game_teams = self::build_groups_finals_teams($event_id, $group);
+        $results = self::build_results($event_id, $game_teams);
+        $final_ranks = self::sort_general_ranks($results, $event_id);
+        return $final_ranks;
+    }
+
+	public static function general_groups_full_ranking($event_id)
+    {
+        $game_teams = self::build_teams($event_id);
+        $results = self::build_results($event_id, $game_teams);
+        $final_ranks = self::sort_general_ranks($results, $event_id);
+        return $final_ranks;
+    }
+
 	public static function home_ranking($event_id)
     {
         $game_teams = self::build_home_teams($event_id);
@@ -445,6 +461,41 @@ class ScmRankingService
     {
         $games = $days_games = [];
         $games[] = ScmGameService::get_games_in_cluster($event_id, $group);
+        foreach ($games as $day_games)
+        {
+            $days_games = array_merge($days_games, $day_games);
+        }
+
+        $game_teams = [];
+        // Get results of all games
+        foreach ($days_games as $game)
+        {
+            $game_teams[] = [
+                'team_id'       => $game['game_home_id'],
+                'goals_for'     => $game['game_home_score'],
+                'goals_against' => $game['game_away_score'],
+                'yellow_card'   => $game['game_home_yellow'],
+                'red_card'      => $game['game_home_red'],
+                'off_bonus'     => $game['game_home_off_bonus'],
+                'def_bonus'     => $game['game_home_def_bonus'],
+            ];
+            $game_teams[] = [
+                'team_id'       => $game['game_away_id'],
+                'goals_for'     => $game['game_away_score'],
+                'goals_against' => $game['game_home_score'],
+                'yellow_card'   => $game['game_away_yellow'],
+                'red_card'      => $game['game_away_red'],
+                'off_bonus'     => $game['game_away_off_bonus'],
+                'def_bonus'     => $game['game_away_def_bonus'],
+            ];
+        }
+        return $game_teams;
+    }
+
+	public static function build_groups_finals_teams($event_id, $group)
+    {
+        $games = $days_games = [];
+        $games[] = ScmGroupService::games_list_from_group($event_id, 'B', $group);
         foreach ($games as $day_games)
         {
             $days_games = array_merge($days_games, $day_games);

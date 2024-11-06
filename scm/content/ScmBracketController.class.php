@@ -27,6 +27,10 @@ class ScmBracketController extends DefaultModuleController
         {
             $this->build_round_trip_view();
         }
+        elseif ($this->get_params($this->event_id())->get_finals_type() == ScmParams::FINALS_RANKING)
+        {
+            $this->build_group_view();
+        }
         else
         {
             $this->build_bracket_view();
@@ -39,7 +43,9 @@ class ScmBracketController extends DefaultModuleController
             'C_RETURN_GAMES'   => $this->return_games(),
             'C_ONE_DAY'        => ScmGameService::one_day_event($this->event_id()),
             'C_LOOSER_BRACKET' => $this->get_params()->get_looser_bracket(),
-            'C_HAS_GAMES'      => ScmGameService::has_games($this->event_id())
+            'C_HAS_GAMES'      => ScmGameService::has_games($this->event_id()),
+            'C_FINALS_RANKING' => $this->get_params($this->event_id())->get_finals_type() == ScmParams::FINALS_RANKING,
+            'C_DISPLAY_PLAYGROUNDS' => $this->get_params($this->event_id())->get_display_playgrounds()
         ]);
 
 		return $this->generate_response();
@@ -52,6 +58,7 @@ class ScmBracketController extends DefaultModuleController
         $this->teams_per_group = $this->get_params()->get_teams_per_group();
     }
 
+	/** Bracket with return matches */
 	private function build_round_trip_view()
 	{
         $games = ScmGroupService::games_list_from_group($this->event_id(), 'B');
@@ -193,6 +200,7 @@ class ScmBracketController extends DefaultModuleController
         }
     }
 
+	/** Bracket with single matches */
 	private function build_bracket_view()
 	{
         $games = ScmGroupService::games_list_from_group($this->event_id(), 'B');
@@ -246,6 +254,58 @@ class ScmBracketController extends DefaultModuleController
             }
         }
 	}
+
+	/** groups if finals with group */
+    private function build_group_view()
+    {
+        $games = ScmGroupService::games_list_from_group($this->event_id(), 'B');
+        $games = call_user_func_array('array_merge', $games);
+        $groups = [];
+        foreach($games as $game)
+        {
+            $groups[$game['game_group']][$game['game_round']][] = $game;
+        }
+        foreach ($groups as $group => $rounds)
+        {
+            $this->view->assign_block_vars('groups', [
+                'GROUP' => $group
+            ]);
+            foreach ($rounds as $round => $games)
+            {
+                $this->view->assign_block_vars('groups.rounds', [
+                    'ROUND' => $round
+                ]);
+                foreach($games as $game)
+                {
+                    $item = new ScmGame();
+                    $item->set_properties($game);
+                    $this->view->assign_block_vars('groups.rounds.games', $item->get_template_vars());
+                    $item->get_details_template($this->view, 'groups.rounds.games');
+                }
+            }
+            $ranks = ScmRankingService::general_groups_finals_ranking($this->event_id(), $group);
+            foreach ($ranks as $i => $team_rank)
+            {
+                $this->view->assign_block_vars('groups.ranks', array_merge(
+                    Date::get_array_tpl_vars(new Date($game['game_date'], Timezone::SERVER_TIMEZONE), 'game_date'),
+                    [
+                        'C_FAV'         => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
+                        'RANK'          => $i + 1,
+                        'TEAM_NAME'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_name($team_rank['team_id']) : '',
+                        'TEAM_LOGO'     => !empty($team_rank['team_id']) ? ScmTeamService::get_team_logo($team_rank['team_id']) : '',
+                        'POINTS'        => $team_rank['points'],
+                        'PLAYED'        => $team_rank['played'],
+                        'WIN'           => $team_rank['win'],
+                        'DRAW'          => $team_rank['draw'],
+                        'LOSS'          => $team_rank['loss'],
+                        'GOALS_FOR'     => $team_rank['goals_for'],
+                        'GOALS_AGAINST' => $team_rank['goals_against'],
+                        'GOAL_AVERAGE'  => $team_rank['goal_average'],
+                    ]
+                ));
+            }
+        }
+    }
 
 	/** Title of round */
 	private function round_title(int $number) : string

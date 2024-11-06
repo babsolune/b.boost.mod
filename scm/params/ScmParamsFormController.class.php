@@ -31,6 +31,7 @@ class ScmParamsFormController extends DefaultModuleController
             if ($this->is_tournament) {
                 $this->form->get_field_by_id('hat_days')->set_hidden(!$this->get_params()->get_hat_ranking());
                 $this->form->get_field_by_id('brackets_number')->set_hidden(!$this->get_params()->get_looser_bracket());
+                $this->form->get_field_by_id('rounds_number')->set_hidden($this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING);
             }
             if (!$this->is_championship) {
                 $this->form->get_field_by_id('third_place')->set_hidden($this->get_params()->get_looser_bracket());
@@ -127,10 +128,27 @@ class ScmParamsFormController extends DefaultModuleController
 			$bracket_fieldset = new FormFieldsetHTML('bracket', $this->lang['scm.params.bracket']);
             $form->add_fieldset($bracket_fieldset);
 
+            $bracket_fieldset->add_field(new FormFieldSimpleSelectChoice('finals_type', $this->lang['scm.finals.type'], $this->get_params()->get_finals_type(),
+                [
+                    new FormFieldSelectChoiceOption($this->lang['scm.finals.round'], ScmParams::FINALS_ROUND),
+                    new FormFieldSelectChoiceOption($this->lang['scm.finals.ranking'], ScmParams::FINALS_RANKING)
+                ],
+                [
+                    'events' => ['click' => '
+                        if (HTMLForms.getField("finals_type").getValue() == "' . ScmParams::FINALS_ROUND . '") {
+                            HTMLForms.getField("rounds_number").enable();
+                        } else {
+                            HTMLForms.getField("rounds_number").disable();
+                        }
+                    ']
+                ]
+            ));
+
             $bracket_fieldset->add_field(new FormFieldNumberEditor('rounds_number', $this->lang['scm.rounds.number'], $this->get_params()->get_rounds_number(),
                 [
                     'description' => $this->lang['scm.rounds.number.clue'],
-                    'min' => 0, 'max' => 7, 'required' => true
+                    'min' => 0, 'max' => 7, 'required' => true,
+                    'hidden' => $this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING
                 ]
             ));
 
@@ -171,7 +189,8 @@ class ScmParamsFormController extends DefaultModuleController
 			$ranking_fieldset->add_field(new FormFieldNumberEditor('loss_points', $this->lang['scm.loss.points'], $this->get_params()->get_loss_points(), ['min' => 0]));
 
 			$ranking_fieldset->add_field(new FormFieldNumberEditor('promotion', $this->lang['scm.promotion'], $this->get_params()->get_promotion(), ['min' => 0]));
-			$ranking_fieldset->add_field(new FormFieldNumberEditor('playoff', $this->lang['scm.playoff'], $this->get_params()->get_playoff(), ['min' => 0]));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('playoff_prom', $this->lang['scm.playoff.prom'], $this->get_params()->get_playoff_prom(), ['min' => 0]));
+			$ranking_fieldset->add_field(new FormFieldNumberEditor('playoff_releg', $this->lang['scm.playoff.releg'], $this->get_params()->get_playoff_releg(), ['min' => 0]));
 			$ranking_fieldset->add_field(new FormFieldNumberEditor('relegation', $this->lang['scm.relegation'], $this->get_params()->get_relegation(), ['min' => 0]));
 			$ranking_fieldset->add_field(new FormFieldNumberEditor('fairplay_yellow', $this->lang['scm.fairplay.yellow'], $this->get_params()->get_fairplay_yellow(), ['min' => 0]));
 			$ranking_fieldset->add_field(new FormFieldNumberEditor('fairplay_red', $this->lang['scm.fairplay.red'], $this->get_params()->get_fairplay_red(), ['min' => 0]));
@@ -258,7 +277,9 @@ class ScmParamsFormController extends DefaultModuleController
                 $params->set_third_place(0);
             else
                 $params->set_third_place($this->form->get_value('third_place'));
-            $params->set_rounds_number($this->form->get_value('rounds_number'));
+            $params->set_finals_type($this->form->get_value('finals_type')->get_raw_value());
+            if ($params->get_finals_type() == ScmParams::FINALS_ROUND)
+                $params->set_rounds_number($this->form->get_value('rounds_number'));
             $params->set_draw_games($this->form->get_value('draw_games'));
             $params->set_has_overtime($this->form->get_value('has_overtime'));
             $params->set_overtime_duration($this->form->get_value('overtime_duration'));
@@ -271,7 +292,8 @@ class ScmParamsFormController extends DefaultModuleController
             $params->set_loss_points($this->form->get_value('loss_points'));
 
             $params->set_promotion($this->form->get_value('promotion'));
-            $params->set_playoff($this->form->get_value('playoff'));
+            $params->set_playoff_prom($this->form->get_value('playoff_prom'));
+            $params->set_playoff_releg($this->form->get_value('playoff_releg'));
             $params->set_relegation($this->form->get_value('relegation'));
             $params->set_fairplay_yellow($this->form->get_value('fairplay_yellow'));
             $params->set_fairplay_red($this->form->get_value('fairplay_red'));

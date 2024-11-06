@@ -202,6 +202,10 @@ th.bgc-sub a {
     .form-element > label {
         width: calc(100% / 3);
     }
+
+    .config-form .form-element > label {
+        width: 100%;
+    }
 }
 
 .not-played {
@@ -466,4 +470,10 @@ th.bgc-sub a {
 /* details */
 .cell-details.cell-modal .cell {
     max-width: 100%;
+}
+
+/* Minis */
+#module-mini-prev-scm td,
+#module-mini-next-scm td {
+    padding: 0.309em;
 }

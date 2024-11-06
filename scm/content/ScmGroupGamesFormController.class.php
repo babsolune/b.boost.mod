@@ -69,8 +69,8 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     ($game->get_game_home_off_bonus() ||
                     $game->get_game_home_def_bonus() ||
                     $game->get_game_away_off_bonus() ||
-                    $game->get_game_away_def_bonus()) ? ' ' . $this->lang['scm.bonus.param'] 
-                    : '';
+                    $game->get_game_away_def_bonus())
+                        ? ' ' . $this->lang['scm.bonus.param'] : '';
 
                 switch ($game->get_game_status()) {
                     case ScmGame::DELAYED :
@@ -84,7 +84,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
                         break;
                 }
 
-                $groups_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong><span class="warning">' . $bonus . $status . '</span>',
+                $groups_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong><span class="warning">' . $bonus . $status . '</span>     ',
                     ['class' => 'game-name small text-italic form-G' . $gr . $or]
                 ));
                 $groups_fieldset->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, 0, $or), 'small text-italic'));

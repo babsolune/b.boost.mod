@@ -56,10 +56,12 @@ class ScmDaysRankingController extends DefaultModuleController
 
         // Display ranks to view
         $prom = ScmParamsService::get_params($this->event_id())->get_promotion();
-        $playoff = ScmParamsService::get_params($this->event_id())->get_playoff();
+        $playoff_prom = ScmParamsService::get_params($this->event_id())->get_playoff_prom();
+        $playoff_releg = ScmParamsService::get_params($this->event_id())->get_playoff_releg();
         $releg = ScmParamsService::get_params($this->event_id())->get_relegation();
         $prom_color = ScmConfig::load()->get_promotion_color();
-        $playoff_color = ScmConfig::load()->get_playoff_color();
+        $playoff_prom_color = ScmConfig::load()->get_playoff_prom_color();
+        $playoff_releg_color = ScmConfig::load()->get_playoff_releg_color();
         $releg_color = ScmConfig::load()->get_relegation_color();
         $color_count = count($final_ranks);
 
@@ -67,9 +69,11 @@ class ScmDaysRankingController extends DefaultModuleController
         {
             if ($prom && $i < $prom) {
                 $rank_color = $prom_color;
-            } elseif ($playoff && $i >= $prom && $i < ($prom + $playoff)) {
-                $rank_color = $playoff_color;
-            } else if ($releg && $i >= $color_count - $releg) {
+            } elseif ($playoff_prom && $i >= $prom && $i < ($prom + $playoff_prom)) {
+                $rank_color = $playoff_prom_color;
+            } elseif ($playoff_releg && $i >= ($color_count - $releg - $playoff_releg) && $i < ($color_count - $releg)) {
+                $rank_color = $playoff_releg_color;
+            } elseif ($releg && $i >= ($color_count - $releg)) {
                 $rank_color = $releg_color;
             } else {
                 $rank_color = 'rgba(0,0,0,0)';

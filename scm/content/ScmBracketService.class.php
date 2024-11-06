@@ -38,9 +38,9 @@ class ScmBracketService
             for ($i = $rounds_number; $i >= 1; $i--)
             {
                 if ($c_hat_ranking && $i == $rounds_number && $c_return_games)
-                    $games_number = ScmParamsService::get_params($event_id)->get_playoff();
+                    $games_number = ScmParamsService::get_params($event_id)->get_playoff_prom();
                 elseif ($c_hat_ranking && $i == $rounds_number && !$c_return_games)
-                    $games_number = ScmParamsService::get_params($event_id)->get_playoff() / 2;
+                    $games_number = ScmParamsService::get_params($event_id)->get_playoff_prom() / 2;
                 elseif ($c_looser_bracket)
                     $games_number = self::round_games_number($rounds_number, $c_return_games);
                 else

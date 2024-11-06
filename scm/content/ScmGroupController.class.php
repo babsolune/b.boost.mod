@@ -19,7 +19,6 @@ class ScmGroupController extends DefaultModuleController
 	{
 		$this->build_view();
 		$this->check_authorizations();
-
 		return $this->generate_response();
 	}
 
@@ -68,23 +67,29 @@ class ScmGroupController extends DefaultModuleController
         // Ranking
         if($this->get_params()->get_hat_days())
             $ranks = ScmRankingService::general_days_ranking($this->event_id(), $group);
+        elseif ($this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING)
+            $ranks = ScmRankingService::general_groups_full_ranking($this->event_id());
         else
             $ranks = ScmRankingService::general_groups_ranking($this->event_id(), $group);
 
-        $prom          = $this->get_params()->get_promotion();
-        $playoff       = $this->get_params()->get_playoff();
-        $releg         = $this->get_params()->get_relegation();
-        $prom_color    = ScmConfig::load()->get_promotion_color();
-        $playoff_color = ScmConfig::load()->get_playoff_color();
-        $releg_color   = ScmConfig::load()->get_relegation_color();
-        $color_count   = count($ranks);
+        $prom                = $this->get_params()->get_promotion();
+        $playoff_prom        = $this->get_params()->get_playoff_prom();
+        $playoff_releg       = $this->get_params()->get_playoff_releg();
+        $releg               = $this->get_params()->get_relegation();
+        $prom_color          = ScmConfig::load()->get_promotion_color();
+        $playoff_prom_color  = ScmConfig::load()->get_playoff_prom_color();
+        $playoff_releg_color = ScmConfig::load()->get_playoff_releg_color();
+        $releg_color         = ScmConfig::load()->get_relegation_color();
+        $color_count         = count($ranks);
 
         foreach ($ranks as $i => $team_rank)
         {
             if ($prom && $i < $prom) {
                 $rank_color = $prom_color;
-            } elseif ($playoff && $i >= $prom && $i < ($prom + $playoff)) {
-                $rank_color = $playoff_color;
+            } elseif ($playoff_prom && $i >= $prom && $i < ($prom + $playoff_prom)) {
+                $rank_color = $playoff_prom_color;
+            } elseif ($playoff_releg && $i >= ($color_count - $releg - $playoff_releg) && $i < ($color_count - $releg)) {
+                $rank_color = $playoff_releg_color;
             } else if ($releg && $i >= $color_count - $releg) {
                 $rank_color = $releg_color;
             } else {

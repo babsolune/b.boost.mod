@@ -102,6 +102,65 @@ class ScmGroupService
         }
     }
 
+    public static function set_groups_finals_games(int $event_id) : void
+    {
+        $c_return_games = ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES;
+        // build groups from event teams list
+        $groups = self::get_group_teams_list($event_id);
+
+        // Build schedule
+        $full_schedule = [];
+        foreach ($groups as $index => $teams) {
+            if (count($teams) % 2 != 0) {
+                $teams[] = ['id_team' => 0];
+            }
+            $schedule = self::build_group_games($teams);
+            $full_schedule[$index] = $schedule;
+        }
+        // Build game list
+        foreach ($full_schedule as $group => $schedule) {
+            $game_order = $game_round = 1;
+            foreach ($schedule as $round => $games) 
+            {
+                foreach ($games as $i => $game) {
+                    self::$db_querier->insert(ScmSetup::$scm_game_table, [
+                        'game_event_id' => $event_id,
+                        'game_type'     => 'B',
+                        'game_group'    => $group,
+                        'game_round'    => $game_round,
+                        'game_order'    => $game_order,
+                        'game_home_id'  => 0,
+                        'game_away_id'  => 0,
+                        'game_date'     => ScmEventService::get_event($event_id)->get_start_date()->get_timestamp()
+                    ]);
+                    $game_order++;
+                }
+                $game_round++;
+            }
+            if ($c_return_games)
+            {
+                $game_order_r = $game_order;
+                $game_round_r = $game_round;
+                foreach ($schedule as $round => $games) {
+                    foreach ($games as $i => $game) {
+                        self::$db_querier->insert(ScmSetup::$scm_game_table, [
+                            'game_event_id' => $event_id,
+                            'game_type' => 'B',
+                            'game_group' => $group,
+                            'game_round' => $game_round_r,
+                            'game_order' => $game_order_r,
+                            'game_home_id' => 0,
+                            'game_away_id' => 0,
+                            'game_date' => ScmEventService::get_event($event_id)->get_start_date()->get_timestamp()
+                        ]);
+                        $game_order_r++;
+                    }
+                    $game_round_r++;
+                }
+            }
+        }
+    }
+
     /** set all games of one group */
     private static function build_group_games(array $group_teams) : array
     {

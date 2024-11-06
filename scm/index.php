@@ -45,7 +45,7 @@ $url_controller_mappers = [
 	new UrlControllerMapper('ScmDaysCalendarController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/matchday/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'round']),
 	new UrlControllerMapper('ScmDaysRankingController', '`^/?([0-9]+)-([a-z0-9-_]+)?/ranking/?([a-z]+)?/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'section', 'day']),
 	new UrlControllerMapper('ScmDaysCheckerController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/checker/?$`', ['event_id', 'event_slug']),
-	new UrlControllerMapper('ScmGroupController', '`^/?([0-9]+)-([a-z0-9-_]+)?/group/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'round']),
+	new UrlControllerMapper('ScmGroupController', '`^/?([0-9]+)-([a-z0-9-_]+)?/group/?([0-9]+)?/?([a-z]+)?/?$`', ['event_id', 'event_slug', 'round', 'type']),
 	new UrlControllerMapper('ScmBracketController', '`^/?([0-9]+)-([a-z0-9-_]+)?/bracket/?$`', ['event_id', 'event_slug']),
     // Content edit
     new UrlControllerMapper('ScmDaysFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/matchdays/builder/?$`', ['event_id', 'event_slug']),

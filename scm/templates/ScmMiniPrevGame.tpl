@@ -9,7 +9,7 @@
                     </tr>
                     <tr class="category-{items.CATEGORY_ID}">
                         <td class="align-right">{items.HOME_TEAM}</td>
-                        <td>
+                        <td class="width-px-70">
                             <span class="d-block">{items.HOME_SCORE} - {items.AWAY_SCORE}</span>
                             <span class="small">{items.GAME_DATE_DAY}/{items.GAME_DATE_MONTH}</span>
                         </td>
@@ -24,3 +24,5 @@
 		<div class="message-helper bgc notice">{@common.no.item.now}</div>
 	</div>
 # ENDIF #
+
+<script src="{PATH_TO_ROOT}/scm/templates/js/scm.width# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
