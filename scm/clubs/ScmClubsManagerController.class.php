@@ -60,20 +60,24 @@ class ScmClubsManagerController extends DefaultModuleController
 			$edit_link = new EditLinkHTMLElement(ScmUrlBuilder::edit_club($club->get_id_club(), $club->get_club_slug()));
 			$delete_link = new DeleteLinkHTMLElement(ScmUrlBuilder::delete_club($club->get_id_club()), '', ['data-confirmation' => $this->lang['scm.warning.delete.club']]);
 
+            $real_id = $club->get_club_affiliate() ? $club->get_club_affiliation() : $club->get_id_club();
+            $real_name = $club->get_club_affiliate() ? ScmClubService::get_club($club->get_club_affiliation())->get_club_full_name() : $club->get_club_full_name();
+            $real_slug = $club->get_club_affiliate() ? ScmClubService::get_club($club->get_club_affiliation())->get_club_slug() : $club->get_club_slug();
+
             $colors = '';
             foreach(TextHelper::deserialize($club->get_club_colors()) as $color)
             {
                 $colors .= '<span class="club-colors" style="background-color:' . $color . '"></span>';
             }
 			$row = [
-				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_club($club->get_id_club(), $club->get_club_slug()), $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name())),
+				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_club($real_id, $real_slug), $real_name)),
 				new HTMLTableRowCell(new SpanHTMLElement($club->get_club_name())),
 				new HTMLTableRowCell(new SpanHTMLElement($colors)),
 				new HTMLTableRowCell(
                     $club->get_club_flag() ?
                     new ImgHTMLElement(
                         TPL_PATH_TO_ROOT . '/images/stats/countries/' . $club->get_club_flag() . '.png',
-                        ['alt' => !empty($club->get_club_flag()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name()]) : ''], 
+                        ['alt' => !empty($club->get_club_flag()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_name()]) : ''], 
                         'logo-small'
                     ) : ''
                 ),
@@ -81,7 +85,7 @@ class ScmClubsManagerController extends DefaultModuleController
                     $club->get_club_logo() ?
                     new ImgHTMLElement(
                         Url::to_rel($club->get_club_logo()),
-                        ['alt' => !empty($club->get_club_logo()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_full_name() ? $club->get_club_full_name() : $club->get_club_name()]) : ''], 
+                        ['alt' => !empty($club->get_club_logo()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_name()]) : ''], 
                         'logo-small'
                     ) : ''
                 ),

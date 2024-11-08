@@ -1,8 +1,10 @@
 <div>
     <h3>{@scm.clubs.list}</h3>
-    # START clubs_list #
-        <a href="{clubs_list.U_CLUB}" class="offload pinned link-color" aria-label="{@scm.see.club}">{clubs_list.CLUB_SHORT_NAME}</a>
-    # END clubs_list #
+    <div class="columns-6">
+        # START clubs_list #
+            <a href="{clubs_list.U_CLUB}" class="offload pinned link-color d-block" aria-label="{@scm.see.club}">{clubs_list.CLUB_SHORT_NAME}</a>
+        # END clubs_list #
+    </div>
 </div>
 
 <div class="cell-flex cell-columns-2">

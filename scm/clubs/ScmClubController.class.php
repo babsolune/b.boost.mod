@@ -57,17 +57,47 @@ class ScmClubController extends DefaultModuleController
 	{
 		$club = $this->get_club();
         $event_cache = ScmEventCache::load();
-        $teams = ScmTeamCache::load()->get_teams();
+        $teams_list = ScmTeamCache::load()->get_teams();
+        $clubs = ScmClubCache::load()->get_clubs();
 
-        foreach ($teams as $team)
+        $clubs_family = [];
+        foreach ($clubs as $club_event)
         {
-            if ($team['team_club_id'] == $club->get_id_club())
+            if($club_event['id_club'] == $club->get_id_club() || ($club_event['club_affiliate'] && $club_event['club_affiliation'] == $club->get_id_club()))
             {
-                if($event_cache->get_event($team['team_event_id']))
+                $clubs_family[] = $club_event['id_club'];
+            }
+        }
+
+        // usort($teams, function($a, $b) {
+        //     return strcmp($a['id_categpry'], $b['id_categpry']);
+        // });
+        $categories = [];
+        foreach ($teams_list as $team)
+        {
+            if (in_array($team['team_club_id'], $clubs_family))
+                $categories[$team['id_category']][] = $team;
+        }
+        ksort($categories);
+
+        foreach ($categories as $category => $teams)
+        {
+            $category_details = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($category);
+
+            $this->view->assign_block_vars('categories', [
+                'CATEGORY_NAME' => $category_details->get_name(),
+				'U_CATEGORY' => ScmUrlBuilder::display_category($category_details->get_id(), $category_details->get_rewrited_name())->rel(),
+            ]);
+            foreach ($teams as $team)
+            {
+                if (in_array($team['team_club_id'], $clubs_family))
                 {
-                    $event = new ScmEvent();
-                    $event->set_properties($event_cache->get_event($team['team_event_id']));
-                    $this->view->assign_block_vars('events', $event->get_template_vars());
+                    if($event_cache->get_event($team['team_event_id']))
+                    {
+                        $event = new ScmEvent();
+                        $event->set_properties($event_cache->get_event($team['team_event_id']));
+                        $this->view->assign_block_vars('categories.events', $event->get_template_vars());
+                    }
                 }
             }
         }

@@ -32,7 +32,8 @@ class ScmClubsController extends DefaultModuleController
             $item = new ScmClub();
             $item->set_properties($club);
 
-            $this->view->assign_block_vars('clubs', $item->get_template_vars());
+            if (!$item->get_club_affiliate())
+                $this->view->assign_block_vars('clubs', $item->get_template_vars());
 		}
 	}
 

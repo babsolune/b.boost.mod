@@ -53,20 +53,6 @@
                                     # ENDIF #
                                 </div>
                             </div>
-                            <div class="cell-header">
-                                <div class="cell-name">{@scm.club.event.list}</div>
-                            </div>
-                            <div class="cell-list">
-                                <ul>
-                                    # START events #
-                                        # IF events.C_VISIBLE #
-                                            <li>
-                                                <a href="{events.U_EVENT}" class="offload">{events.TITLE}</a>
-                                            </li>
-                                        # ENDIF #
-                                    # END events #
-                                </ul>
-                            </div>
                         </div>
                         <div class="cell-2-3">
                             # IF C_LOCATION_MAP #
@@ -76,6 +62,24 @@
                             # ENDIF #
                         </div>
                     </div>
+
+                    <h2>{@scm.club.event.list}</h2>
+                    <div class="cell-list">
+                    <ul>
+                        # START categories #
+                            <li>{categories.CATEGORY_NAME}</li>
+                            <ul>
+                                # START categories.events #
+                                    # IF categories.events.C_VISIBLE #
+                                        <li>
+                                            <a href="{categories.events.U_EVENT}" class="offload">{categories.events.TITLE}</a>
+                                        </li>
+                                    # ENDIF #
+                                # END categories.events #
+                            </ul>
+                        # END categories #
+                    </ul>
+                </div>
                 </div>
             </article>
         </div>

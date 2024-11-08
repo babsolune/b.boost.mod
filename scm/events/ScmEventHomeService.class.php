@@ -68,9 +68,13 @@ class ScmEventHomeService
 
         foreach (ScmTeamService::get_teams($event_id) as $team)
         {
+            $club = ScmClubCache::load()->get_club($team['id_club']);
+            $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+            $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
+
             $view->assign_block_vars('clubs_list', [
                 'CLUB_SHORT_NAME' => $team['club_name'],
-                'U_CLUB' => ScmUrlBuilder::display_club($team['id_club'], $team['club_slug'])->rel()
+                'U_CLUB' => ScmUrlBuilder::display_club($real_id, $real_slug)->rel()
             ]);
         }
 
@@ -103,10 +107,14 @@ class ScmEventHomeService
             ]);
             foreach ($group as $team)
             {
+                $club = ScmClubCache::load()->get_club($team['id_club']);
+                $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+                $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
+
                 $view->assign_block_vars('team_groups.teams', [
                     'TEAM_NAME' => $team['club_name'],
                     'TEAM_LOGO' => $club->get_club_shield($team['team_club_id']),
-                    'U_CLUB' => ScmUrlBuilder::display_club($team['id_club'], $team['club_slug'])->rel()
+                    'U_CLUB' => ScmUrlBuilder::display_club($real_id, $real_slug)->rel()
                 ]);
             }
         }

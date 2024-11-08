@@ -123,6 +123,8 @@ class ScmSetup extends DefaultModuleSetup
 			'id_club'          => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
 			'club_name'        => ['type' => 'string', 'length' => 255, 'notnull' => 0, 'default' => "''"],
 			'club_slug'        => ['type' => 'string', 'length' => 255, 'default' => "''"],
+			'club_affiliate'   => ['type' => 'boolean', 'default' => 0],
+			'club_affiliation' => ['type' => 'integer', 'length' => 11],
 			'club_full_name'   => ['type' => 'string', 'length' => 255, 'notnull' => 0, 'default' => "''"],
 			'club_logo'        => ['type' => 'string', 'length' => 255, 'default' => "''"],
 			'club_flag'        => ['type' => 'string', 'length' => 2, 'default' => "''"],

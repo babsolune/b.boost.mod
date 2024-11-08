@@ -12,6 +12,8 @@ class ScmClub
 	private $id_club;
 	private $club_name;
 	private $club_slug;
+    private $club_affiliate;
+    private $club_affiliation;
 	private $club_full_name;
 	private $club_flag;
 	private $club_logo;
@@ -52,6 +54,26 @@ class ScmClub
 	public function set_club_slug($club_slug)
 	{
 		$this->club_slug = $club_slug;
+	}
+
+	public function get_club_affiliate()
+	{
+		return $this->club_affiliate;
+	}
+
+	public function set_club_affiliate($club_affiliate)
+	{
+		$this->club_affiliate = $club_affiliate;
+	}
+
+	public function get_club_affiliation()
+	{
+		return $this->club_affiliation;
+	}
+
+	public function set_club_affiliation($club_affiliation)
+	{
+		$this->club_affiliation = $club_affiliation;
 	}
 
 	public function get_club_full_name()
@@ -163,6 +185,8 @@ class ScmClub
 			'id_club'          => $this->get_id_club(),
 			'club_name'        => $this->get_club_name(),
 			'club_slug'        => $this->get_club_slug(),
+			'club_affiliate'   => $this->get_club_affiliate(),
+			'club_affiliation' => $this->get_club_affiliation(),
 			'club_full_name'   => $this->get_club_full_name(),
 			'club_flag'        => $this->get_club_flag(),
 			'club_logo'        => $this->get_club_logo(),
@@ -180,6 +204,8 @@ class ScmClub
 		$this->id_club          = $properties['id_club'];
 		$this->club_name        = $properties['club_name'];
 		$this->club_slug        = $properties['club_slug'];
+		$this->club_affiliate   = $properties['club_affiliate'];
+		$this->club_affiliation = $properties['club_affiliation'];
 		$this->club_full_name   = $properties['club_full_name'];
 		$this->club_flag        = $properties['club_flag'];
 		$this->club_logo        = $properties['club_logo'];
