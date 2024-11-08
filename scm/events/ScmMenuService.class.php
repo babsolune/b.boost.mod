@@ -19,29 +19,32 @@ class ScmMenuService
 
 	public static function build_event_menu($event_id, $round = 1)
 	{
-        $lang = LangLoader::get_all_langs('scm');
-        $event = ScmEventService::get_event($event_id);
+        $lang     = LangLoader::get_all_langs('scm');
+        $event    = ScmEventService::get_event($event_id);
         $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($event->get_id_category());
         $division = ScmDivisionCache::load()->get_division($event->get_division_id());
-        $season = ScmSeasonCache::load()->get_season($event->get_season_id());
+        $season   = ScmSeasonCache::load()->get_season($event->get_season_id());
+        $params   = ScmParamsService::get_params($event_id);
 
         $view = new FileTemplate('scm/ScmMenuController.tpl');
         $view->add_lang(LangLoader::get_all_langs('scm'));
 
-        $c_has_teams   = count(ScmTeamService::get_teams($event_id)) > 0;
-        $c_has_days    = ScmParamsService::get_params($event_id)->get_victory_points();
-        $c_has_rounds  = ScmParamsService::get_params($event_id)->get_rounds_number();
-        $c_has_groups  = ScmParamsService::get_params($event_id)->get_teams_per_group();
-        $c_has_games   = ScmGameService::has_games($event_id);
-        $c_finals_ranking = ScmParamsService::get_params($event_id)->get_finals_type() == ScmParams::FINALS_RANKING;
+        $c_has_teams      = count(ScmTeamService::get_teams($event_id)) > 0;
+        $c_has_days       = $params->get_victory_points();
+        $c_has_rounds     = $params->get_rounds_number();
+        $c_has_groups     = $params->get_teams_per_group();
+        $c_has_games      = ScmGameService::has_games($event_id);
+        $c_finals_ranking = $params->get_finals_type() == ScmParams::FINALS_RANKING;
         $bracket_round = 
-            ScmParamsService::get_params($event_id)->get_hat_ranking()
-            ? ScmParamsService::get_params($event_id)->get_rounds_number() + 1
-            : ($c_finals_ranking ? 1 : ScmParamsService::get_params($event_id)->get_rounds_number())
+            $params->get_hat_ranking()
+            ? $params->get_rounds_number() + 1
+            : ($c_finals_ranking ? 1 : $params->get_rounds_number())
         ;
 
         $active_round = AppContext::get_request()->get_getint('round', '0');
-        if ($active_round == 0)
+        if ($params->get_hat_ranking() && $active_round == 0)
+            $active_round = ScmGroupService::get_last_matchday_hat($event_id);
+        elseif ($active_round == 0)
             $active_round = $round;
 
         $view->put_all([
@@ -133,8 +136,8 @@ class ScmMenuService
                 }
             });
 
-            $c_hat_ranking = ScmParamsService::get_params($event_id)->get_hat_ranking();
-            $rounds_number = ScmParamsService::get_params($event_id)->get_rounds_number();
+            $c_hat_ranking = $params->get_hat_ranking();
+            $rounds_number = $params->get_rounds_number();
 
             foreach ($array_groups as $group)
             {
@@ -197,7 +200,7 @@ class ScmMenuService
 
         $event_id = AppContext::get_request()->get_getint('event_id', 0);
         $form = new HTMLForm(self::class);
-        $form->set_css_class('options');
+        $form->set_css_class('options bgc moderator');
 
         $fieldset = new FormFieldsetHorizontal('events');
         $form->add_fieldset($fieldset);
@@ -217,18 +220,19 @@ class ScmMenuService
         usort($events, function ($a, $b) {
             return $a['start_date'] - $b['start_date'];
         });
-        $options = [];
+        $options = $form_events = [];
         $options[] = new FormFieldSelectChoiceOption(LangLoader::get_message('scm.change.event', 'common', 'scm'), 0);
         foreach ($events as $event)
         {
             if (ScmSeasonService::check_season($event['season_id']))
-                $options[] = new FormFieldSelectChoiceOption(
+                $form_events[] = new FormFieldSelectChoiceOption(
                     ScmDivisionService::get_division($event['division_id'])->get_division_name()
                     . ' - ' . ScmSeasonService::get_season($event['season_id'])->get_season_name(), 
                     $event['id']
                 );
         }
-        return $options;
+        asort($form_events);
+        return array_merge($options, $form_events);
     }
 
     private static function compare_url($url)

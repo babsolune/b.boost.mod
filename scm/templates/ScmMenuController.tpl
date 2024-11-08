@@ -3,7 +3,7 @@
         <a href="{U_HOME}" class="offload" aria-label="{@common.home}"><i class="fa fa-fw fa-house"></i></a>
         {HEADER_TYPE} - {HEADER_CATEGORY}
     </div>
-    <div class="flex-between">
+    <div class="flex-between flex-between-large">
         <h1>{HEADER_DIVISION} - {HEADER_SEASON}</h1>
         # IF IS_MODERATOR ## INCLUDE EVENT_LIST ## ENDIF #
     </div>
@@ -46,7 +46,7 @@
         </ul>
     </nav>
     # IF C_CONTROLS #
-        <nav class="cssmenu cssmenu-horizontal">
+        <nav class="bgc moderator cssmenu cssmenu-horizontal">
             <ul>
                 <li><a href="{U_EDIT_TEAMS}" class="offload cssmenu-title" aria-label="{@scm.menu.teams}"><i class="fa fa-fw fa-people-group" aria-hidden="true"></i></a></li>
                 # IF C_HAS_TEAMS #<li><a href="{U_EDIT_PARAMS}" class="offload cssmenu-title" aria-label="{@scm.menu.params}"><i class="fa fa-fw fa-cogs" aria-hidden="true"></i></a></li># ENDIF #
