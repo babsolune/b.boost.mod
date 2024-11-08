@@ -118,7 +118,15 @@ class ScmGroupGamesFormController extends DefaultModuleController
 
             $c_one_day = ScmGameService::one_day_event($this->event_id());
             $round_title = $c_one_day ? $this->lang['scm.round'] : $this->lang['scm.day'];
-            $games_number = count($this->get_group_games($gr));
+            $total_games = [];
+            foreach($this->get_group_games($gr) as $round => $games)
+            {
+                foreach ($games as $group_game)
+                {
+                    $total_games[] = $group_game;
+                }
+            }
+            $games_number = count($total_games);
 
             foreach($this->get_group_games($gr) as $round => $games)
             {
