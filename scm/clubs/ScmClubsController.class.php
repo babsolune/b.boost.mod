@@ -27,7 +27,6 @@ class ScmClubsController extends DefaultModuleController
 	{
 		$cache = ScmClubCache::load();
 
-        // Display categories
 		foreach ($cache->get_clubs() as $club)
 		{
             $item = new ScmClub();
