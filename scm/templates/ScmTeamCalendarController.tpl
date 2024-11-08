@@ -5,7 +5,7 @@
         <div class="content">
             # IF C_HAS_GAMES #
                 <div class="responsive-table">
-                    <table class="bordered-table width-pc-70 m-a">
+                    <table class="alternated-table width-pc-70 m-a">
                         <colgroup class="hidden-small-screens">
                             <col class="width-pc-5" />
                             # IF NOT C_ONE_DAY #<col class="width-pc-10" /># ENDIF #
@@ -39,7 +39,7 @@
                                     <td>{games.GAME_DATE_HOUR_MINUTE}</td>
                                     <td>
                                         <div class="flex-team flex-right">
-                                            <span><a href="{games.U_HOME_CALENDAR}" class="offload# IF games.C_IS_HOME_TEAM # text-strong {games.TEAM_STATUS}# ENDIF #">{games.HOME_TEAM}</a></span>
+                                            <span# IF games.C_IS_HOME_TEAM # class="{games.TEAM_STATUS}"# ENDIF #># IF games.C_IS_HOME_TEAM #{games.HOME_TEAM}# ELSE #<a href="{games.U_HOME_CALENDAR}" class="offload">{games.HOME_TEAM}</a># ENDIF #</span>
                                             <img src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}">
                                         </div>
                                     </td>
@@ -52,7 +52,7 @@
                                     <td>
                                         <div class="flex-team flex-left">
                                             <img src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}">
-                                            <span><a href="{games.U_AWAY_CALENDAR}" class="offload# IF games.C_IS_AWAY_TEAM # text-strong {games.TEAM_STATUS}# ENDIF #">{games.AWAY_TEAM}</a></span>
+                                            <span# IF games.C_IS_AWAY_TEAM # class="{games.TEAM_STATUS}"# ENDIF #># IF games.C_IS_AWAY_TEAM #{games.AWAY_TEAM}# ELSE #<a href="{games.U_AWAY_CALENDAR}" class="offload">{games.AWAY_TEAM}</a># ENDIF #</span>
                                         </div>
                                     </td>
                                     <td>
