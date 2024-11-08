@@ -157,6 +157,11 @@ $lang['scm.th.off.bonus.short']       = 'Bo';
 $lang['scm.th.def.bonus']             = 'Bonus défensif';
 $lang['scm.th.def.bonus.short']       = 'Bd';
 
+$lang['scm.th.group']       = 'Groupe';
+$lang['scm.th.group.short'] = 'G';
+$lang['scm.th.round']       = 'Tour';
+$lang['scm.th.round.short'] = 'T';
+
 // Games
 $lang['scm.event.id']             = 'Id';
 $lang['scm.games.management']     = 'Gestion des matchs';

@@ -8,14 +8,14 @@
                         <td>{items.GAME_CATEGORY}</td>
                     </tr>
                     <tr class="category-{items.CATEGORY_ID}">
-                        <td>{items.HOME_TEAM}</td>
+                        <td><a href="{items.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{items.HOME_TEAM}</a></td>
                         <td>
                             <span class="small">
                                 {items.GAME_DATE_DAY}/{items.GAME_DATE_MONTH}
                                 <br>{items.GAME_DATE_HOUR}:{items.GAME_DATE_MINUTE}
                             </span>
                         </td>
-                        <td>{items.AWAY_TEAM}</td>
+                        <td><a href="{items.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{items.AWAY_TEAM}</a></td>
                     </tr>
                 # END items #
 			</tbody>

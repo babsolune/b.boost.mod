@@ -8,12 +8,12 @@
                         <td>{items.GAME_CATEGORY}</td>
                     </tr>
                     <tr class="category-{items.CATEGORY_ID}">
-                        <td class="align-right">{items.HOME_TEAM}</td>
+                        <td class="align-right"><a href="{items.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{items.HOME_TEAM}</a></td>
                         <td class="width-px-70">
                             <span class="d-block">{items.HOME_SCORE} - {items.AWAY_SCORE}</span>
                             <span class="small">{items.GAME_DATE_DAY}/{items.GAME_DATE_MONTH}</span>
                         </td>
-                        <td class="align-left">{items.AWAY_TEAM}</td>
+                        <td class="align-left"><a href="{items.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{items.AWAY_TEAM}</a></td>
                     </tr>
                 # END items #
             </tbody>

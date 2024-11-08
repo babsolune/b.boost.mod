@@ -60,7 +60,8 @@ class ScmTeamCalendarController extends DefaultModuleController
                 'C_IS_HOME_TEAM' => $this->team_id == $item->get_game_home_id(),
                 'C_IS_AWAY_TEAM' => $this->team_id == $item->get_game_away_id(),
                 'TEAM_STATUS' => $team_status,
-                'DAY' => $item->get_game_group()
+                'DAY' => $item->get_game_group(),
+                'ROUND' => $item->get_game_type() == 'G' ? $item->get_game_round() : 'B' . $item->get_game_group(),
             ]));
             $item->get_details_template($this->view, 'games');
         }
@@ -68,6 +69,7 @@ class ScmTeamCalendarController extends DefaultModuleController
         $this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
             'C_HAS_GAMES' => ScmGameService::has_games($this->event_id()),
+            'C_IS_DAY' => ScmDivisionCache::load()->get_division($this->get_event()->get_division_id())['event_type'] == 'championship',
             'TEAM_NAME' => $this->team_name
         ]);
 	}

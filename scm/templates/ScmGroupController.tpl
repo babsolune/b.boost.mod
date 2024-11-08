@@ -42,7 +42,7 @@
                                     <td>{matchdays.dates.games.GAME_DATE_HOUR_MINUTE}</td>
                                     <td class="align-right# IF matchdays.dates.games.C_HOME_FAV # text-strong# ENDIF #">
                                         <div class="flex-team flex-right">
-                                            <span>{matchdays.dates.games.HOME_TEAM}</span>
+                                            <span><a href="{matchdays.dates.games.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{matchdays.dates.games.HOME_TEAM}</a></span>
                                             <img src="{matchdays.dates.games.HOME_LOGO}" alt="{matchdays.dates.games.HOME_TEAM}">
                                         </div>
                                     </td>
@@ -55,7 +55,7 @@
                                     <td class="align-left# IF matchdays.dates.games.C_AWAY_FAV # text-strong# ENDIF #">
                                         <div class="flex-team flex-left">
                                             <img src="{matchdays.dates.games.AWAY_LOGO}" alt="{matchdays.dates.games.AWAY_TEAM}">
-                                            <span>{matchdays.dates.games.AWAY_TEAM}</span>
+                                            <span><a href="{matchdays.dates.games.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{matchdays.dates.games.AWAY_TEAM}</a></span>
                                         </div>
                                     </td>
                                     # IF C_DISPLAY_PLAYGROUNDS #<td>{matchdays.dates.games.PLAYGROUND}</td># ENDIF #

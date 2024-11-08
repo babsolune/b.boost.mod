@@ -240,7 +240,7 @@
                                                                     <span>{rounds.games.HOME_EMPTY}</span>
                                                                 # ELSE #
                                                                     <img src="{rounds.games.HOME_LOGO}" alt="{rounds.games.HOME_TEAM}">
-                                                                    <span>{rounds.games.HOME_TEAM}</span>
+                                                                    <span><a href="{rounds.games.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{rounds.games.HOME_TEAM}</a></span>
                                                                 # ENDIF #
                                                             </div>
                                                         </div>
@@ -261,7 +261,7 @@
                                                                     <span>{rounds.games.AWAY_EMPTY}</span>
                                                                 # ELSE #
                                                                     <img src="{rounds.games.AWAY_LOGO}" alt="{rounds.games.AWAY_TEAM}">
-                                                                    <span>{rounds.games.AWAY_TEAM}</span>
+                                                                    <span><a href="{rounds.games.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{rounds.games.AWAY_TEAM}</a></span>
                                                                 # ENDIF #
                                                             </div>
                                                         </div>
@@ -306,7 +306,7 @@
                                                                         <span>{brackets.rounds.games.HOME_EMPTY}</span>
                                                                     # ELSE #
                                                                         <img src="{brackets.rounds.games.HOME_LOGO}" alt="{brackets.rounds.games.HOME_TEAM}">
-                                                                        <span>{brackets.rounds.games.HOME_TEAM}</span>
+                                                                        <span><a href="{brackets.rounds.games.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{brackets.rounds.games.HOME_TEAM}</a></span>
                                                                     # ENDIF #
                                                                 </div>
                                                             </div>
@@ -320,7 +320,7 @@
                                                                         <span>{brackets.rounds.games.AWAY_EMPTY}</span>
                                                                     # ELSE #
                                                                         <img src="{brackets.rounds.games.AWAY_LOGO}" alt="{brackets.rounds.games.AWAY_TEAM}">
-                                                                        <span>{brackets.rounds.games.AWAY_TEAM}</span>
+                                                                        <span><a href="{brackets.rounds.games.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{brackets.rounds.games.AWAY_TEAM}</a></span>
                                                                     # ENDIF #
                                                                 </div>
                                                             </div>

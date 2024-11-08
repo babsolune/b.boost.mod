@@ -18,7 +18,11 @@
                         </colgroup>
                         <thead>
                             <tr>
-                                <th aria-label="{@scm.th.day}">{@scm.th.day.short}</th>
+                                # IF C_IS_DAY #
+                                    <th aria-label="{@scm.th.day}">{@scm.th.day.short}</th>
+                                # ELSE #
+                                    <th aria-label="{@scm.th.round}">{@scm.th.round.short}</th>
+                                # ENDIF #
                                 # IF NOT C_ONE_DAY #<th>{@scm.th.date}</th># ENDIF #
                                 <th aria-label="{@scm.th.hourly}"><i class="far fa-clock"></i></th>
                                 <th>{@scm.th.home.team}</th>
@@ -30,7 +34,7 @@
                         <tbody>
                             # START games #
                                 <tr>
-                                    <td>{games.DAY}</td>
+                                    <td># IF C_IS_DAY #{games.DAY}# ELSE #{games.ROUND}# ENDIF #</td>
                                     # IF NOT C_ONE_DAY #<td>{games.GAME_DATE_SHORT}</td># ENDIF #
                                     <td>{games.GAME_DATE_HOUR_MINUTE}</td>
                                     <td>

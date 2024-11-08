@@ -18,7 +18,7 @@
                                     # START team_groups.teams #
                                         <div class="flex-team">
                                             <img src="{team_groups.teams.TEAM_LOGO}" alt="{team_groups.teams.TEAM_NAME}">
-                                            <span>{team_groups.teams.TEAM_NAME}</span>
+                                            <span><a href="{team_groups.teams.U_CLUB}" class="offload" aria-label="{@scm.see.club}">{team_groups.teams.TEAM_NAME}</a></span>
                                         </div>
                                     # END team_groups.teams #
                                 </td>
@@ -66,7 +66,7 @@
                                     # IF matchdays.dates.groups.HOME_ID #
                                         <div class="flex-team flex-left">
                                             <img src="{matchdays.dates.groups.HOME_LOGO}" alt="{matchdays.dates.groups.HOME_TEAM}">
-                                            <span>{matchdays.dates.groups.HOME_TEAM}</span>
+                                            <span><a href="{matchdays.dates.groups.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{matchdays.dates.groups.HOME_TEAM}</a></span>
                                         </div>
                                     # ENDIF #
                                 </div>
@@ -78,7 +78,7 @@
                                     # IF matchdays.dates.groups.AWAY_ID #
                                         <div class="flex-team flex-left">
                                             <img src="{matchdays.dates.groups.AWAY_LOGO}" alt="{matchdays.dates.groups.AWAY_TEAM}">
-                                            <span>{matchdays.dates.groups.AWAY_TEAM}</span>
+                                            <span><a href="{matchdays.dates.groups.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{matchdays.dates.groups.AWAY_TEAM}</a></span>
                                         </div>
                                     # ENDIF #
                                 </div>
