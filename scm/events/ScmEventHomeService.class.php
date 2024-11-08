@@ -140,6 +140,7 @@ class ScmEventHomeService
             if($game['game_type'] == 'G')
                 $matchdays[$game['game_round']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
         }
+
         foreach ($matchdays as $matchday => $dates)
         {
             $view->assign_block_vars('matchdays', [
@@ -150,6 +151,7 @@ class ScmEventHomeService
                 $view->assign_block_vars('matchdays.dates', [
                     'DATE' => $date
                 ]);
+
                 foreach($games as $game)
                 {
                     $item = new ScmGame();
@@ -173,7 +175,10 @@ class ScmEventHomeService
                 $matchrounds[$game['game_group']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
             }
         }
-        krsort($matchrounds);
+        if (ScmParamsService::get_params($event_id)->get_finals_type() == ScmParams::FINALS_RANKING)
+            ksort($matchrounds);
+        else
+            krsort($matchrounds);
 
         array_values($matchdays);
         rsort($matchdays);
@@ -183,7 +188,11 @@ class ScmEventHomeService
         foreach ($matchrounds as $matchround => $dates)
         {
             $view->assign_block_vars('matchrounds', [
-                'MATCHROUND' => $matchround == $c_first_round && $c_hat_ranking ?  LangLoader::get_message('scm.playoff.games', 'common', 'scm') : LangLoader::get_message('scm.round.'.$matchround.'', 'common', 'scm')
+                'L_MATCHROUND' => ($matchround == $c_first_round && $c_hat_ranking)
+                                    ? LangLoader::get_message('scm.playoff.games', 'common', 'scm')
+                                    : (ScmParamsService::get_params($event_id)->get_finals_type() == ScmParams::FINALS_RANKING
+                                        ? LangLoader::get_message('scm.group', 'common', 'scm') . ' ' . $matchround
+                                        : LangLoader::get_message('scm.round.' . $matchround . '', 'common', 'scm'))
             ]);
             foreach ($dates as $date => $games)
             {

@@ -91,7 +91,7 @@
         # END matchdays #
         <p><h4>{@scm.games.brackets.stage}</h4></p>
         # START matchrounds #
-            <h5>{matchrounds.MATCHROUND}</h5>
+            <h5>{matchrounds.L_MATCHROUND}</h5>
             <div class="cell-flex cell-columns-2">
                 # START matchrounds.dates #
                     <div>

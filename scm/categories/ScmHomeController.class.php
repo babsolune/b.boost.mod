@@ -114,8 +114,9 @@ class ScmHomeController extends DefaultModuleController
 				while ($row = $result->fetch()) {
 					$item = new ScmEvent();
 					$item->set_properties($row);
-
-                    if (ScmSeasonService::check_season($item->get_season_id()))
+                    $now = new Date;
+                    $end_date = $item->get_end_date()->get_timestamp();
+                    if (ScmSeasonService::check_season($item->get_season_id()) && $now->get_timestamp() < $end_date)
                         $this->view->assign_block_vars('categories.items', $item->get_template_vars());
 				}
 				$result->dispose();
