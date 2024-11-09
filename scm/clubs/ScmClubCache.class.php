@@ -76,6 +76,15 @@ class ScmClubCache implements CacheData
 		return null;
 	}
 
+	public function get_affiliate_club_shield($id)
+	{
+		if ($this->club_exists($id))
+		{
+			return $this->get_club($id)['club_logo'] ? $this->get_club($id)['club_logo'] : ($this->get_club($id)['club_flag'] ? TPL_PATH_TO_ROOT . '/images/stats/countries/' . $this->get_club($id)['club_flag'] . '.png' : '#');
+		}
+		return null;
+	}
+
 	public function get_clubs_number()
 	{
 		return count($this->clubs);

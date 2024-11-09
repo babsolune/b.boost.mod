@@ -179,6 +179,7 @@ class ScmClubFormController extends DefaultModuleController
             $club->set_club_affiliation($this->form->get_value('affiliation')->get_raw_value());
             $club->set_club_full_name('');
             $club->set_club_slug(Url::encode_rewrite(ScmClubService::get_club($this->form->get_value('affiliation')->get_raw_value())->get_club_full_name()));
+            $club->set_club_logo(ScmClubCache::load()->get_affiliate_club_shield($this->form->get_value('affiliation')->get_raw_value()));
         }
         else
         {
