@@ -82,6 +82,7 @@ class ScmDaysRankingController extends DefaultModuleController
             $this->view->assign_block_vars('ranks', [
                 'C_FAV'           => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
                 'C_FORFEIT'       => $team_rank['status'] == 'forfeit',
+                'C_HAS_TEAM_LOGO' => ScmTeamService::get_team_logo($team_rank['team_id']),
                 'RANK'            => $i + 1,
                 'RANK_COLOR'      => $rank_color,
                 'U_TEAM_CALENDAR' => !empty($team_rank['team_id']) ? ScmUrlBuilder::display_team_calendar($this->event_id(), $event_slug, $team_rank['team_id'])->rel() : '#',

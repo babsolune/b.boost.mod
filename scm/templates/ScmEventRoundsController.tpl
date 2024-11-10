@@ -65,7 +65,7 @@
                                 <div class="home-{matchdays.dates.groups.GAME_ID} home-team">
                                     # IF matchdays.dates.groups.HOME_ID #
                                         <div class="flex-team flex-left">
-                                            <img src="{matchdays.dates.groups.HOME_LOGO}" alt="{matchdays.dates.groups.HOME_TEAM}">
+                                            # IF matchdays.dates.groups.C_HAS_HOME_LOGO #<img src="{matchdays.dates.groups.HOME_LOGO}" alt="{matchdays.dates.groups.HOME_TEAM}"># ENDIF #
                                             <span><a href="{matchdays.dates.groups.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{matchdays.dates.groups.HOME_TEAM}</a></span>
                                         </div>
                                     # ENDIF #
@@ -77,7 +77,7 @@
                                 <div class="away-{matchdays.dates.groups.GAME_ID} away-team">
                                     # IF matchdays.dates.groups.AWAY_ID #
                                         <div class="flex-team flex-left">
-                                            <img src="{matchdays.dates.groups.AWAY_LOGO}" alt="{matchdays.dates.groups.AWAY_TEAM}">
+                                            # IF matchdays.dates.groups.C_HAS_AWAY_LOGO #<img src="{matchdays.dates.groups.AWAY_LOGO}" alt="{matchdays.dates.groups.AWAY_TEAM}"># ENDIF #
                                             <span><a href="{matchdays.dates.groups.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{matchdays.dates.groups.AWAY_TEAM}</a></span>
                                         </div>
                                     # ENDIF #
@@ -117,7 +117,7 @@
                                         <div class="home-{matchrounds.dates.brackets.GAME_ID} home-team">
                                             # IF matchrounds.dates.brackets.HOME_ID #
                                                 <div class="flex-team flex-left">
-                                                    <img src="{matchrounds.dates.brackets.HOME_LOGO}" alt="{matchrounds.dates.brackets.HOME_TEAM}">
+                                                    # IF matchrounds.dates.brackets.C_HAS_HOME_LOGO #<img src="{matchrounds.dates.brackets.HOME_LOGO}" alt="{matchrounds.dates.brackets.HOME_TEAM}"># ENDIF #
                                                     <span>{matchrounds.dates.brackets.HOME_TEAM}</span>
                                                 </div>
                                             # ENDIF #
@@ -129,7 +129,7 @@
                                         <div class="away-{matchrounds.dates.brackets.GAME_ID} away-team">
                                             # IF matchrounds.dates.brackets.AWAY_ID #
                                                 <div class="flex-team flex-left">
-                                                    <img src="{matchrounds.dates.brackets.AWAY_LOGO}" alt="{matchrounds.dates.brackets.AWAY_TEAM}">
+                                                    # IF matchrounds.dates.brackets.C_HAS_AWAY_LOGO #<img src="{matchrounds.dates.brackets.AWAY_LOGO}" alt="{matchrounds.dates.brackets.AWAY_TEAM}"># ENDIF #
                                                     <span>{matchrounds.dates.brackets.AWAY_TEAM}</span>
                                                 </div>
                                             # ENDIF #

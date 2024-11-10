@@ -476,6 +476,8 @@ class ScmGame
                 'C_IS_LIVE'       => ScmGameService::is_live($this->game_event_id, $this->id_game),
                 'C_STATUS'        => $this->game_status,
                 'C_HAS_SCORE'     => $c_home_score && $c_away_score,
+                'C_HAS_HOME_LOGO' => $this->game_home_id && ScmTeamService::get_team_logo($this->game_home_id) !== '#',
+                'C_HAS_AWAY_LOGO' => $this->game_away_id && ScmTeamService::get_team_logo($this->game_away_id) !== '#',
                 'WIN_COLOR'       => ScmConfig::load()->get_promotion_color(),
                 'C_HAS_PEN'       => $c_home_pen && $c_away_pen,
                 'C_HOME_FAV'      => ScmParamsService::check_fav($this->game_event_id, $this->game_home_id) && $this->game_home_id,

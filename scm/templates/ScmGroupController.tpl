@@ -43,7 +43,7 @@
                                     <td class="align-right# IF matchdays.dates.games.C_HOME_FAV # text-strong# ENDIF #">
                                         <div class="flex-team flex-right">
                                             <span><a href="{matchdays.dates.games.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{matchdays.dates.games.HOME_TEAM}</a></span>
-                                            <img src="{matchdays.dates.games.HOME_LOGO}" alt="{matchdays.dates.games.HOME_TEAM}">
+                                            # IF matchdays.dates.games.C_HAS_HOME_LOGO #<img src="{matchdays.dates.games.HOME_LOGO}" alt="{matchdays.dates.games.HOME_TEAM}"># ENDIF #
                                         </div>
                                     </td>
                                     # IF matchdays.dates.games.C_STATUS #
@@ -54,7 +54,7 @@
                                     # ENDIF #
                                     <td class="align-left# IF matchdays.dates.games.C_AWAY_FAV # text-strong# ENDIF #">
                                         <div class="flex-team flex-left">
-                                            <img src="{matchdays.dates.games.AWAY_LOGO}" alt="{matchdays.dates.games.AWAY_TEAM}">
+                                            # IF matchdays.dates.games.C_HAS_AWAY_LOGO #<img src="{matchdays.dates.games.AWAY_LOGO}" alt="{matchdays.dates.games.AWAY_TEAM}"># ENDIF #
                                             <span><a href="{matchdays.dates.games.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{matchdays.dates.games.AWAY_TEAM}</a></span>
                                         </div>
                                     </td>
@@ -77,7 +77,7 @@
                                                     <div class="home-team cell">
                                                         <div class="cell-header">
                                                             <div class="cell-name">{matchdays.dates.games.HOME_TEAM}</div>
-                                                            <img class="smaller width-px-25" src="{matchdays.dates.games.HOME_LOGO}" alt="{matchdays.dates.games.HOME_TEAM}">
+                                                            # IF matchdays.dates.games.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{matchdays.dates.games.HOME_LOGO}" alt="{matchdays.dates.games.HOME_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
                                                             {matchdays.dates.games.HOME_SCORE}
@@ -107,7 +107,7 @@
                                                     <div class="away-team cell">
                                                         <div class="cell-header">
                                                             <div class="cell-name">{matchdays.dates.games.AWAY_TEAM}</div>
-                                                            <img class="smaller width-px-25" src="{matchdays.dates.games.AWAY_LOGO}" alt="{matchdays.dates.games.AWAY_TEAM}">
+                                                            # IF matchdays.dates.games.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{matchdays.dates.games.AWAY_LOGO}" alt="{matchdays.dates.games.AWAY_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
                                                             {matchdays.dates.games.AWAY_SCORE}

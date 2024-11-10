@@ -20,14 +20,17 @@
 - [-] set filters for draw ranks (actually write hard in code) (see draw-rules.md)
 - [X] reset caches on details validation
 ### Clubs
-- [ ] self division
 - [X] Country flag
 ### Params
 - [X] If it's Championship, add a section for team penalties
 - [X] provide half-time in match duration
+- [X] add a select for each teams if its status is running|forfeit|exempt
+## Minis
+- [ ] improve the date of the last and next match of the favorite team
+- [ ] then watch if there's a score or not and display the day number
 
 ## Database
-- [ ] Rename columns to make them shorter
+- [ ] Rename columns to write them shorter
 
 ## bugs
 - [X] For 2 legs games, group stage, if not all games results are filled, a new line is added in ranking (for the team 0, I guess)

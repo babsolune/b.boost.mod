@@ -40,7 +40,7 @@
                                     <td>
                                         <div class="flex-team flex-right">
                                             <span# IF games.C_IS_HOME_TEAM # class="{games.TEAM_STATUS}"# ENDIF #># IF games.C_IS_HOME_TEAM #{games.HOME_TEAM}# ELSE #<a href="{games.U_HOME_CALENDAR}" class="offload">{games.HOME_TEAM}</a># ENDIF #</span>
-                                            <img src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}">
+                                            # IF games.C_HAS_HOME_LOGO #<img src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}"># ENDIF #
                                         </div>
                                     </td>
                                     # IF games.C_STATUS #
@@ -51,7 +51,7 @@
                                     # ENDIF #
                                     <td>
                                         <div class="flex-team flex-left">
-                                            <img src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}">
+                                            # IF games.C_HAS_AWAY_LOGO #<img src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}"># ENDIF #
                                             <span# IF games.C_IS_AWAY_TEAM # class="{games.TEAM_STATUS}"# ENDIF #># IF games.C_IS_AWAY_TEAM #{games.AWAY_TEAM}# ELSE #<a href="{games.U_AWAY_CALENDAR}" class="offload">{games.AWAY_TEAM}</a># ENDIF #</span>
                                         </div>
                                     </td>
@@ -73,7 +73,7 @@
                                                     <div class="home-team cell">
                                                         <div class="cell-header">
                                                             <div class="cell-name">{games.HOME_TEAM}</div>
-                                                            <img class="smaller width-px-25" src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}">
+                                                            # IF games.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
                                                             {games.HOME_SCORE}
@@ -103,7 +103,7 @@
                                                     <div class="away-team cell">
                                                         <div class="cell-header">
                                                             <div class="cell-name">{games.AWAY_TEAM}</div>
-                                                            <img class="smaller width-px-25" src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}">
+                                                            # IF games.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
                                                             {games.AWAY_SCORE}
