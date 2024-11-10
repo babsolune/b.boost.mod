@@ -91,7 +91,7 @@ class AdminScmConfigController extends DefaultAdminModuleController
 
 		$auth_settings = new AuthorizationsSettings(
 			array_merge(
-				RootCategory::get_authorizations_settings(), 
+				RootCategory::get_authorizations_settings(),
                 [
 					new MemberDisabledActionAuthorization($this->lang['scm.manage.clubs.auth'], ScmAuthorizationsService::CLUBS_AUTH),
 					new MemberDisabledActionAuthorization($this->lang['scm.manage.divisions.auth'], ScmAuthorizationsService::DIVISIONS_AUTH),

@@ -89,7 +89,18 @@ class ScmCategoriesFormController extends DefaultCategoriesFormController
 			</script>
         '));
 
-		$auth_settings = new AuthorizationsSettings(RootCategory::get_authorizations_settings());
+        $auth_settings = new AuthorizationsSettings(
+			array_merge(
+				RootCategory::get_authorizations_settings(),
+                [
+					new MemberDisabledActionAuthorization(self::$lang['scm.manage.clubs.auth'], ScmAuthorizationsService::CLUBS_AUTH),
+					new MemberDisabledActionAuthorization(self::$lang['scm.manage.divisions.auth'], ScmAuthorizationsService::DIVISIONS_AUTH),
+					new MemberDisabledActionAuthorization(self::$lang['scm.manage.seasons.auth'], ScmAuthorizationsService::SEASONS_AUTH),
+					new MemberDisabledActionAuthorization(self::$lang['scm.manage.events.auth'], ScmAuthorizationsService::EVENTITIONS_AUTH)
+				]
+			)
+		);
+
 		$auth_settings->build_from_auth_array($this->get_category()->get_authorizations());
 		$fieldset_authorizations->add_field(new FormFieldAuthorizationsSetter('authorizations', $auth_settings, ['hidden' => !$this->get_category()->has_special_authorizations()]));
 
