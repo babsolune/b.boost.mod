@@ -15,6 +15,7 @@ class ScmTeam
 	private $team_order;
 	private $team_club_id;
 	private $team_penalty;
+	private $team_status;
 
 	public function get_id_team()
 	{
@@ -76,6 +77,16 @@ class ScmTeam
 		$this->team_penalty = $team_penalty;
 	}
 
+	public function get_team_status()
+	{
+		return $this->team_status;
+	}
+
+	public function set_team_status($team_status)
+	{
+		$this->team_status = $team_status;
+	}
+
 	public function is_authorized_to_manage_teams()
 	{
 		return ScmAuthorizationsService::check_authorizations()->manage_teams();
@@ -89,7 +100,8 @@ class ScmTeam
 			'team_group'    => $this->get_team_group(),
 			'team_order'    => $this->get_team_order(),
 			'team_club_id'  => $this->get_team_club_id(),
-			'team_penalty'  => $this->get_team_penalty()
+			'team_penalty'  => $this->get_team_penalty(),
+			'team_status'  => $this->get_team_status()
         ];
 	}
 
@@ -101,6 +113,7 @@ class ScmTeam
 		$this->team_order    = $properties['team_order'];
 		$this->team_club_id  = $properties['team_club_id'];
 		$this->team_penalty  = $properties['team_penalty'];
+		$this->team_status  = $properties['team_status'];
 	}
 }
 ?>

@@ -351,6 +351,7 @@ class ScmSetup extends DefaultModuleSetup
 			'team_order'    => ['type' => 'integer', 'length' => 11, 'default' => 0],
 			'team_club_id'  => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
 			'team_penalty'  => ['type' => 'integer', 'length' => 11],
+			'team_status'   => ['type' => 'string', 'length' => 11, 'default' => "''"],
         ];
 		$options = [
 			'primary' => ['id_team'],

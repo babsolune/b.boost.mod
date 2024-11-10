@@ -220,10 +220,17 @@ class ScmParamsFormController extends DefaultModuleController
 
             foreach ($teams as $team)
             {
-                if ($this->is_championship)
-                    $penalties_fieldset->add_field(new FormFieldNumberEditor('penalties_' . $team['id_team'], $team['club_name'], $team['team_penalty'],
-                        ['max' => 0]
-                    ));
+                $penalties_fieldset->add_field(new FormFieldNumberEditor('penalty_' . $team['id_team'], $team['club_name'], $team['team_penalty'],
+                    ['max' => 0]
+                ));
+                $penalties_fieldset->add_field(new FormFieldSimpleSelectChoice('status_' . $team['id_team'], '<span class="small text-italic">' . $this->lang['scm.params.status'] . '</span>', $team['team_status'],
+                    [
+                        new FormFieldSelectChoiceOption($this->lang['scm.params.status.play'], ''),
+                        new FormFieldSelectChoiceOption($this->lang['scm.params.status.forfeit'], ScmParams::FORFEIT),
+                        new FormFieldSelectChoiceOption($this->lang['scm.params.status.exempt'], ScmParams::EXEMPT)
+                    ]
+                ));
+                $penalties_fieldset->add_field(new FormFieldSpacer('team_separator_' . $team['id_team'], '<hr />'));
             }
         }
 
@@ -313,11 +320,10 @@ class ScmParamsFormController extends DefaultModuleController
         if ($this->is_championship)
         {
             $teams = ScmTeamService::get_teams($this->event_id());
-
             foreach ($teams as $team)
             {
-                if ($this->is_championship)
-                    ScmTeamService::update_team_penalty($team['id_team'], $this->form->get_value('penalties_' . $team['id_team']));
+                ScmTeamService::update_team_penalty($team['id_team'], $this->form->get_value('penalty_' . $team['id_team']));
+                ScmTeamService::update_team_status($team['id_team'], $this->form->get_value('status_' . $team['id_team'])->get_raw_value());
             }
         }
 

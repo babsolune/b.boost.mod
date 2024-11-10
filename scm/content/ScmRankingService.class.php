@@ -16,12 +16,22 @@ class ScmRankingService
 		self::$db_querier = PersistenceContext::get_querier();
 	}
 
+    public static function reorder_forfeit($ranks)
+    {
+        $running = array_filter($ranks, function($item) { return $item['status'] !== 'forfeit'; }); 
+        $forfeit = array_filter($ranks, function($item) { return $item['status'] === 'forfeit'; });
+        $running = array_values($running);
+        $forfeit = array_values($forfeit);
+        return $ranks = array_merge($running, $forfeit);
+    }
+
 	public static function general_ranking($event_id)
     {
         $game_teams = self::build_teams($event_id);
         $results = self::build_results($event_id, $game_teams);
         $final_ranks = self::sort_general_ranks($results, $event_id);
-        return $final_ranks;
+
+        return self::reorder_forfeit($final_ranks);
     }
 
 	public static function general_days_ranking($event_id, $day)
@@ -29,7 +39,8 @@ class ScmRankingService
         $game_teams = self::build_game_teams($event_id, $day);
         $results = self::build_results($event_id, $game_teams);
         $final_ranks = self::sort_general_ranks($results, $event_id);
-        return $final_ranks;
+
+        return self::reorder_forfeit($final_ranks);
     }
 
 	public static function general_groups_ranking($event_id, $group)
@@ -37,7 +48,8 @@ class ScmRankingService
         $game_teams = self::build_groups_teams($event_id, $group);
         $results = self::build_results($event_id, $game_teams);
         $final_ranks = self::sort_general_ranks($results, $event_id);
-        return $final_ranks;
+
+        return self::reorder_forfeit($final_ranks);
     }
 
 	public static function general_groups_finals_ranking($event_id, $group)
@@ -45,7 +57,8 @@ class ScmRankingService
         $game_teams = self::build_groups_finals_teams($event_id, $group);
         $results = self::build_results($event_id, $game_teams);
         $final_ranks = self::sort_general_ranks($results, $event_id);
-        return $final_ranks;
+
+        return self::reorder_forfeit($final_ranks);
     }
 
 	public static function general_groups_full_ranking($event_id)
@@ -53,7 +66,8 @@ class ScmRankingService
         $game_teams = self::build_teams($event_id);
         $results = self::build_results($event_id, $game_teams);
         $final_ranks = self::sort_general_ranks($results, $event_id);
-        return $final_ranks;
+
+        return self::reorder_forfeit($final_ranks);
     }
 
 	public static function home_ranking($event_id)
@@ -61,7 +75,8 @@ class ScmRankingService
         $game_teams = self::build_home_teams($event_id);
         $results = self::build_results($event_id, $game_teams);
         $final_ranks = self::sort_general_ranks($results, $event_id);
-        return $final_ranks;
+
+        return self::reorder_forfeit($final_ranks);
     }
 
 	public static function away_ranking($event_id)
@@ -69,7 +84,8 @@ class ScmRankingService
         $game_teams = self::build_away_teams($event_id);
         $results = self::build_results($event_id, $game_teams);
         $final_ranks = self::sort_general_ranks($results, $event_id);
-        return $final_ranks;
+
+        return self::reorder_forfeit($final_ranks);
     }
 
 	public static function attack_ranking($event_id)
@@ -77,7 +93,8 @@ class ScmRankingService
         $game_teams = self::build_teams($event_id);
         $results = self::build_results($event_id, $game_teams);
         $final_ranks = self::sort_attack_ranks($results);
-        return $final_ranks;
+
+        return self::reorder_forfeit($final_ranks);
     }
 
 	public static function defense_ranking($event_id)
@@ -85,7 +102,8 @@ class ScmRankingService
         $game_teams = self::build_teams($event_id);
         $results = self::build_results($event_id, $game_teams);
         $final_ranks = self::sort_defense_ranks($results);
-        return $final_ranks;
+
+        return self::reorder_forfeit($final_ranks);
     }
 
 	public static function build_results($event_id, $game_teams)
@@ -132,6 +150,7 @@ class ScmRankingService
                     'goals_for_away'    => 0,
                     'win_away'          => 0,
                     'fairplay'          => 0,
+                    'status'            => ScmTeamService::get_event_team_status($game_teams[$i]['team_id'])
                 ];
         }
 
@@ -169,6 +188,11 @@ class ScmRankingService
             }
             $final_results[] = $result;
         }
+        $running_results = array_filter($final_results, function($item) {
+            return $item['status'] !== 'exempt';
+        });
+
+        $final_results = array_values($running_results);
         return $final_results;
     }
 

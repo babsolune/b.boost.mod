@@ -18,6 +18,10 @@ $lang['scm.params.bracket']    = 'Phases finales';
 $lang['scm.params.ranking']    = 'Classement';
 $lang['scm.params.options']    = 'Autres options';
 $lang['scm.params.penalties']  = 'Pénalités';
+$lang['scm.params.status']     = 'Statut';
+$lang['scm.params.status.play']    = 'En compétition';
+$lang['scm.params.status.forfeit']    = 'Forfait général';
+$lang['scm.params.status.exempt']    = 'Exempt';
 
 $lang['scm.groups.number']        = 'Nombre de groupes';
 $lang['scm.teams.per.group']      = 'Nombre maximum d\'équipes par groupe';

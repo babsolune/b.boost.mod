@@ -66,6 +66,20 @@ class ScmTeamService
 	}
 
 	/**
+	 * @desc Update a team entry.
+	 * @param ScmTeam $team : ScmTeam to update
+	 */
+	public static function update_team_status($id, $status)
+	{
+        self::$db_querier->update(ScmSetup::$scm_team_table, ['team_status' => $status], 'WHERE id_team = :id', ['id' => $id]);
+	}
+
+    public static function get_event_team_status($id)
+    {
+        return self::get_team($id)->get_team_status();
+    }
+
+	/**
 	 * @desc Delete a team entry.
 	 * @param string $condition : Restriction to apply to the list
 	 * @param string[] $params : Params of the condition

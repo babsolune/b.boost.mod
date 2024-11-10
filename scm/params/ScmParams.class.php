@@ -56,6 +56,9 @@ class ScmParams
     const FINALS_ROUND   = "finals_round";
     const FINALS_RANKING = "finals_ranking";
 
+    const FORFEIT = 'forfeit';
+    const EXEMPT = 'exempt';
+
     const BONUS_SINGLE   = "single";
     const BONUS_DOUBLE   = "double";
 

@@ -78,7 +78,10 @@
                                     <td class="align-left">
                                         <div class="flex-team flex-left">
                                             <img src="{ranks.TEAM_LOGO}" alt="{ranks.TEAM_NAME}">
-                                            <span><a href="{ranks.U_TEAM_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{ranks.TEAM_NAME}</a></span>
+                                            <span>
+                                                <a href="{ranks.U_TEAM_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{ranks.TEAM_NAME}</a>
+                                                # IF ranks.C_FORFEIT #<span class="smaller text-italic warning">({@scm.params.status.forfeit})</span># ENDIF #
+                                            </span>
                                         </div>
                                     </td>
                                     <td>{ranks.POINTS}</td>
