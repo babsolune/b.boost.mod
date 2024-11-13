@@ -32,30 +32,24 @@ class ScmHomeController extends DefaultModuleController
 		$authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, true, self::$module_id);
 
         $this->view->put_all([
-            'C_CURRENT_GAMES' => ScmConfig::load()->get_current_games() && count(ScmGameService::get_current_games()) > 0,
-            'C_NEXT_GAMES' => ScmConfig::load()->get_next_games() && count(ScmGameService::get_next_games()) > 0
+            'C_CURRENT_GAMES_CONFIG' => ScmConfig::load()->get_current_games(),
+            'C_CURRENT_GAMES' => count(ScmGameService::get_current_games()) > 0
         ]);
         // Display current games
         foreach(ScmGameService::get_current_games() as $current_game)
         {
             $game = new ScmGame();
             $game->set_properties($current_game);
-            // if ($game->get_game_home_id() == ScmParamsService::get_params($game->get_game_event_id())->get_favorite_team_id() || $game->get_game_away_id() == ScmParamsService::get_params($game->get_game_event_id())->get_favorite_team_id())
-                $this->view->assign_block_vars('current_games', array_merge($game->get_template_vars(), [
-                    'EVENT_NAME' => ScmEventService::get_event($game->get_game_event_id())->get_event_name(),
-                    'U_EVENT' => ScmUrlBuilder::event_home($game->get_game_event_id(), ScmEventService::get_event_slug($game->get_game_event_id()))->rel()
-                ]));
-        }
-        // Display next games
-        foreach(ScmGameService::get_next_games() as $next_game)
-        {
-            $game = new ScmGame();
-            $game->set_properties($next_game);
-            // if ($game->get_game_home_id() == ScmParamsService::get_params($game->get_game_event_id())->get_favorite_team_id() || $game->get_game_away_id() == ScmParamsService::get_params($game->get_game_event_id())->get_favorite_team_id())
-                $this->view->assign_block_vars('next_games', array_merge($game->get_template_vars(), [
-                    'EVENT_NAME' => ScmEventService::get_event($game->get_game_event_id())->get_event_name(),
-                    'U_EVENT' => ScmUrlBuilder::event_home($game->get_game_event_id(), ScmEventService::get_event_slug($game->get_game_event_id()))->rel()
-                ]));
+            $this->view->assign_block_vars('current_games', array_merge($game->get_template_vars(), [
+                'C_TYPE_GROUP' => $game->get_game_type() == 'G',
+                'C_TYPE_BRACKET' => $game->get_game_type() == 'B',
+                'C_TYPE_DAY' => $game->get_game_type() == 'D',
+                'GROUP' => ScmGroupService::ntl($game->get_game_group()),
+                'BRACKET' => ScmBracketService::ntl($game->get_game_group()),
+                'DAY' => $game->get_game_group(),
+                'EVENT_NAME' => ScmEventService::get_event($game->get_game_event_id())->get_event_name(),
+                'U_EVENT' => ScmUrlBuilder::event_home($game->get_game_event_id(), ScmEventService::get_event_slug($game->get_game_event_id()))->rel()
+            ]));
         }
 
         // Display category
@@ -113,12 +107,19 @@ class ScmHomeController extends DefaultModuleController
                     ]
 				);
 
-				while ($row = $result->fetch()) {
-					$item = new ScmEvent();
+				while ($row = $result->fetch()) 
+                {
+                // $events = ScmEventCache::load()->get_events();
+                // foreach ($events as $event)
+                // {
+                    $item = new ScmEvent();
 					$item->set_properties($row);
-                    $now = new Date;
                     $end_date = $item->get_end_date()->get_timestamp();
-                    if (ScmSeasonService::check_season($item->get_season_id()) && $now->get_timestamp() < $end_date)
+                    if (
+                        ScmSeasonService::check_season($item->get_season_id()) && $now->get_timestamp() < $end_date
+                        // && $item->get_id_category() == $category->get_id()
+                        // && ($item->get_publishing_state() == 1 || ($item->get_publishing_state() == 2 && $item->get_publishing_start_date() < $now->get_timestamp() && ($item->get_publishing_end_date() > $now->get_timestamp() || $item->get_publishing_end_date() == 0)))
+                    )
                         $this->view->assign_block_vars('categories.items', $item->get_template_vars());
 				}
 				$result->dispose();

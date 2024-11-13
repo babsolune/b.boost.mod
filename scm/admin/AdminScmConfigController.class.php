@@ -16,7 +16,6 @@ class AdminScmConfigController extends DefaultAdminModuleController
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
-			$this->form->get_field_by_id('next_games_number')->set_hidden(!$this->config->get_next_games());
 			$this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['warning.success.config'], MessageHelper::SUCCESS, 5));
 		}
 
@@ -41,33 +40,9 @@ class AdminScmConfigController extends DefaultAdminModuleController
             ['class' => 'custom-checkbox']
         ));
 
-        $fieldset->add_field(new FormFieldSpacer('display', ''));
         $fieldset->add_field(new FormFieldCheckbox('current_games', $this->lang['scm.config.current.games'], $this->config->get_current_games(),
             ['class' => 'custom-checkbox']
         ));
-        $fieldset->add_field(new FormFieldCheckbox('next_games', $this->lang['scm.config.next.games'], $this->config->get_next_games(),
-            [
-                'class' => 'custom-checkbox',
-                'events' => ['click' => '
-                if (HTMLForms.getField("next_games").getValue()) {
-                        HTMLForms.getField("next_games_number").enable();
-                    } else {
-                        HTMLForms.getField("next_games_number").disable();
-                    }
-                ']
-            ]
-        ));
-        $fieldset->add_field(new FormFieldNumberEditor('next_games_number', $this->lang['scm.config.next.games.number'], $this->config->get_next_games_number(),
-            [
-                'min' => 0, 'max' => 10, 'required' => true,
-                'hidden' => !$this->config->get_next_games()
-            ]
-        ));
-
-        $fieldset->add_field(new FormFieldSpacer('ranking_colors', ''));
-        $fieldset->add_field(new FormFieldColorPicker('live_color', $this->lang['scm.live.color'], $this->config->get_live_color()));
-        $fieldset->add_field(new FormFieldColorPicker('played_color', $this->lang['scm.played.color'], $this->config->get_played_color()));
-        $fieldset->add_field(new FormFieldColorPicker('win_color', $this->lang['scm.win.color'], $this->config->get_win_color()));
 
         $fieldset->add_field(new FormFieldSpacer('colors', ''));
         $fieldset->add_field(new FormFieldColorPicker('promotion_color', $this->lang['scm.promotion.color'], $this->config->get_promotion_color()));
@@ -123,12 +98,6 @@ class AdminScmConfigController extends DefaultAdminModuleController
 			$this->config->enable_right_column();
 
         $this->config->set_current_games($this->form->get_value('current_games'));
-        $this->config->set_next_games($this->form->get_value('next_games'));
-        if($this->form->get_value('next_games'))
-            $this->config->set_next_games_number($this->form->get_value('next_games_number'));
-        $this->config->set_live_color($this->form->get_value('live_color'));
-        $this->config->set_played_color($this->form->get_value('played_color'));
-        $this->config->set_win_color($this->form->get_value('win_color'));
         $this->config->set_promotion_color($this->form->get_value('promotion_color'));
         $this->config->set_playoff_prom_color($this->form->get_value('playoff_prom_color'));
         $this->config->set_playoff_releg_color($this->form->get_value('playoff_releg_color'));

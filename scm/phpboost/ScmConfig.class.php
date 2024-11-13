@@ -15,12 +15,7 @@ class ScmConfig extends AbstractConfigData
 	const PLAYOFF_PROM_COLOR    = 'playoff_prom_color';
 	const PLAYOFF_RELEG_COLOR   = 'playoff_releg_color';
 	const RELEGATION_COLOR      = 'relegation_color';
-	const LIVE_COLOR            = 'live_color';
-	const PLAYED_COLOR          = 'played_color';
-	const WIN_COLOR             = 'win_color';
 	const CURRENT_GAMES         = 'current_games';
-	const NEXT_GAMES            = 'next_games';
-	const NEXT_GAMES_NUMBER     = 'next_games_number';
 	const AUTHORIZATIONS        = 'authorizations';
 
 	const DEFERRED_OPERATIONS = 'deferred_operations';
@@ -95,36 +90,6 @@ class ScmConfig extends AbstractConfigData
 		$this->set_property(self::RELEGATION_COLOR, $relegation_color);
 	}
 
-	public function get_live_color()
-	{
-		return $this->get_property(self::LIVE_COLOR);
-	}
-
-	public function set_live_color($live_color)
-	{
-		$this->set_property(self::LIVE_COLOR, $live_color);
-	}
-
-	public function get_played_color()
-	{
-		return $this->get_property(self::PLAYED_COLOR);
-	}
-
-	public function set_played_color($played_color)
-	{
-		$this->set_property(self::PLAYED_COLOR, $played_color);
-	}
-
-	public function get_win_color()
-	{
-		return $this->get_property(self::WIN_COLOR);
-	}
-
-	public function set_win_color($win_color)
-	{
-		$this->set_property(self::WIN_COLOR, $win_color);
-	}
-
 	public function get_current_games()
 	{
 		return $this->get_property(self::CURRENT_GAMES);
@@ -133,26 +98,6 @@ class ScmConfig extends AbstractConfigData
 	public function set_current_games($current_games)
 	{
 		$this->set_property(self::CURRENT_GAMES, $current_games);
-	}
-
-	public function get_next_games()
-	{
-		return $this->get_property(self::NEXT_GAMES);
-	}
-
-	public function set_next_games($next_games)
-	{
-		$this->set_property(self::NEXT_GAMES, $next_games);
-	}
-
-	public function get_next_games_number()
-	{
-		return $this->get_property(self::NEXT_GAMES_NUMBER);
-	}
-
-	public function set_next_games_number($next_games_number)
-	{
-		$this->set_property(self::NEXT_GAMES_NUMBER, $next_games_number);
 	}
 
 	public function get_authorizations()
@@ -189,12 +134,7 @@ class ScmConfig extends AbstractConfigData
 			self::PLAYOFF_PROM_COLOR    => '#b0e1ff',
 			self::PLAYOFF_RELEG_COLOR   => '#feebbc',
 			self::RELEGATION_COLOR      => '#deddda',
-			self::LIVE_COLOR            => '#baffb0',
-			self::PLAYED_COLOR          => '#deddda',
-			self::WIN_COLOR             => '#baffb0',
 			self::CURRENT_GAMES       => false,
-			self::NEXT_GAMES          => false,
-			self::NEXT_GAMES_NUMBER   => 4,
 			self::AUTHORIZATIONS        => ['r-1' => 1, 'r0' => 5, 'r1' => 29],
 			self::DEFERRED_OPERATIONS   => []
         ];
