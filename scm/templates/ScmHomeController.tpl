@@ -18,91 +18,57 @@
 			</div>
 		</div>
 	# ELSE #
-        <div class="sub-section">
-            <div class="content-container cell-flex cell-columns-2">
-                # IF C_NEXT_GAMES #
-                    <article class="content">
-                        <header><h2>{@scm.next.games}</h2></header>
-                        <div class="cell-flex cell-columns-2">
-                            # START next_games #
-                                <div id="{next_games.GAME_ID}" class="cell game-container">
-                                    <div class="game-details small text-italic">
-                                        <a href="{next_games.U_EVENT}" class="offload">
-                                            {next_games.EVENT_NAME}
-                                        </a>
-                                        <time>{next_games.GAME_DATE_FULL}</time>
-                                    </div>
-                                    <div  class="id-{next_games.HOME_ID} game-team game-home# IF next_games.C_HOME_FAV # text-strong# ENDIF #"
-                                            # IF next_games.C_HOME_WIN # style="background-color: {next_games.WIN_COLOR}"# ENDIF #>
-                                        <div class="home-{next_games.GAME_ID} home-team">
-                                            # IF next_games.HOME_ID #
-                                                <div class="flex-team flex-left">
-                                                    # IF next_games.C_HAS_HOME_LOGO #<img src="{next_games.HOME_LOGO}" alt="{next_games.HOME_TEAM}"># ENDIF #
-                                                    <span>{next_games.HOME_TEAM}</span>
-                                                </div>
-                                            # ENDIF #
-                                        </div>
-                                        <div class="game-score home-score width-px-50">{next_games.HOME_SCORE}# IF next_games.C_HAS_PEN # <span class="small">({next_games.HOME_PEN})</span># ENDIF #</div>
-                                    </div>
-                                    <div class="id-{next_games.AWAY_ID} game-team game-away# IF next_games.C_AWAY_FAV # text-strong# ENDIF #"
-                                            # IF next_games.C_AWAY_WIN # style="background-color: {next_games.WIN_COLOR}"# ENDIF #>
-                                        <div class="away-{next_games.GAME_ID} away-team">
-                                            # IF next_games.AWAY_ID #
-                                                <div class="flex-team flex-left">
-                                                    # IF next_games.C_HAS_AWAY_LOGO #<img src="{next_games.AWAY_LOGO}" alt="{next_games.AWAY_TEAM}"># ENDIF #
-                                                    <span>{next_games.AWAY_TEAM}</span>
-                                                </div>
-                                            # ENDIF #
-                                        </div>
-                                        <div class="game-score away-score width-px-50">{next_games.AWAY_SCORE}# IF next_games.C_HAS_PEN # <span class="small">({next_games.AWAY_PEN})</span># ENDIF #</div>
-                                    </div>
-                                </div>
-                            # END next_games #
-                        </div>
-                    </article>
-                # ENDIF #
-                # IF C_CURRENT_GAMES #
+        # IF C_CURRENT_GAMES_CONFIG #
+            <div class="sub-section">
+                <div class="content-container">
                     <article class="content">
                         <header><h2>{@scm.current.games}</h2></header>
-                        <div class="cell-flex cell-columns-2">
-                            # START current_games #
-                                <div id="{current_games.GAME_ID}" class="cell game-container">
-                                    <div class="game-details small text-italic">
-                                        <a href="{current_games.U_EVENT}" class="offload">
-                                        {current_games.EVENT_NAME}
-                                        </a>
-                                    </div>
-                                    <div  class="id-{current_games.HOME_ID} game-team game-home# IF current_games.C_HOME_FAV # text-strong# ENDIF #"
-                                            # IF current_games.C_HOME_WIN # style="background-color: {current_games.WIN_COLOR}"# ENDIF #>
-                                        <div class="home-{current_games.GAME_ID} home-team">
-                                            # IF current_games.HOME_ID #
-                                                <div class="flex-team flex-left">
-                                                    # IF current_games.C_HAS_HOME_LOGO #<img src="{current_games.HOME_LOGO}" alt="{current_games.HOME_TEAM}"># ENDIF #
-                                                    <span>{current_games.HOME_TEAM}</span>
-                                                </div>
-                                            # ENDIF #
+                        # IF C_CURRENT_GAMES #
+                            <div class="cell-flex cell-columns-4">
+                                # START current_games #
+                                    <div id="{current_games.GAME_ID}" class="cell game-container">
+                                        <div class="small text-italic">
+                                            <a href="{current_games.U_EVENT}" class="offload">{current_games.EVENT_NAME}</a>
+                                            <span class="d-block">
+                                                # IF current_games.C_TYPE_GROUP #{@scm.group} {current_games.GROUP}# ENDIF #
+                                                # IF current_games.C_TYPE_BRACKET #{current_games.BRACKET}# ENDIF #
+                                                # IF current_games.C_TYPE_DAY #{@scm.day} {current_games.DAY}# ENDIF #
+                                            </span>
                                         </div>
-                                        <div class="game-score home-score width-px-50">{current_games.HOME_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.HOME_PEN})</span># ENDIF #</div>
-                                    </div>
-                                    <div class="id-{current_games.AWAY_ID} game-team game-away# IF current_games.C_AWAY_FAV # text-strong# ENDIF #"
-                                            # IF current_games.C_AWAY_WIN # style="background-color: {current_games.WIN_COLOR}"# ENDIF #>
-                                        <div class="away-{current_games.GAME_ID} away-team">
-                                            # IF current_games.AWAY_ID #
-                                                <div class="flex-team flex-left">
-                                                    # IF current_games.C_HAS_AWAY_LOGO #<img src="{current_games.AWAY_LOGO}" alt="{current_games.AWAY_TEAM}"># ENDIF #
-                                                    <span>{current_games.AWAY_TEAM}</span>
-                                                </div>
-                                            # ENDIF #
+                                        <div  class="id-{current_games.HOME_ID} game-team game-home# IF current_games.C_HOME_FAV # text-strong# ENDIF #"
+                                                # IF current_games.C_HOME_WIN # style="background-color: {current_games.WIN_COLOR}"# ENDIF #>
+                                            <div class="home-{current_games.GAME_ID} home-team">
+                                                # IF current_games.HOME_ID #
+                                                    <div class="flex-team flex-left">
+                                                        # IF current_games.C_HAS_HOME_LOGO #<img src="{current_games.HOME_LOGO}" alt="{current_games.HOME_TEAM}"># ENDIF #
+                                                        <span>{current_games.HOME_TEAM}</span>
+                                                    </div>
+                                                # ENDIF #
+                                            </div>
+                                            <div class="game-score home-score width-px-50">{current_games.HOME_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.HOME_PEN})</span># ENDIF #</div>
                                         </div>
-                                        <div class="game-score away-score width-px-50">{current_games.AWAY_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.AWAY_PEN})</span># ENDIF #</div>
+                                        <div class="id-{current_games.AWAY_ID} game-team game-away# IF current_games.C_AWAY_FAV # text-strong# ENDIF #"
+                                                # IF current_games.C_AWAY_WIN # style="background-color: {current_games.WIN_COLOR}"# ENDIF #>
+                                            <div class="away-{current_games.GAME_ID} away-team">
+                                                # IF current_games.AWAY_ID #
+                                                    <div class="flex-team flex-left">
+                                                        # IF current_games.C_HAS_AWAY_LOGO #<img src="{current_games.AWAY_LOGO}" alt="{current_games.AWAY_TEAM}"># ENDIF #
+                                                        <span>{current_games.AWAY_TEAM}</span>
+                                                    </div>
+                                                # ENDIF #
+                                            </div>
+                                            <div class="game-score away-score width-px-50">{current_games.AWAY_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.AWAY_PEN})</span># ENDIF #</div>
+                                        </div>
                                     </div>
-                                </div>
-                            # END current_games #
-                        </div>
+                                # END current_games #
+                            </div>
+                        # ELSE #
+                            <div class="message-helper bgc notice">{@scm.no.current.games}</div>
+                        # ENDIF #
                     </article>
-                # ENDIF #
+                </div>
             </div>
-        </div>
+        # ENDIF #
 
 		<div class="sub-section">
 			<div class="content-container">

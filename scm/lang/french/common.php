@@ -168,6 +168,7 @@ $lang['scm.games.management']     = 'Gestion des matchs';
 $lang['scm.games.groups.stage']   = 'Phases de groupes';
 $lang['scm.games.brackets.stage'] = 'Phases finales';
 $lang['scm.current.games']        = 'Matchs en cours';
+$lang['scm.no.current.games']     = 'Aucun match en cours';
 $lang['scm.next.games']           = 'Prochains matchs';
 
 $lang['scm.warning.games.update'] = 'Les matchs de la compétition ont été mis à jour.';

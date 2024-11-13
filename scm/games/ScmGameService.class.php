@@ -188,81 +188,24 @@ class ScmGameService
     public static function get_current_games():array
 	{
         $now = new Date();
-        $games = ScmGameCache::load()->get_games();
-        usort($games, function($a, $b) {
-            return strcmp($a["game_date"], $b["game_date"]);
-        });
+        $games = self::$db_querier->select('SELECT games.*, params.*
+            FROM ' . ScmSetup::$scm_game_table . ' games
+            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = games.game_event_id
+            WHERE games.game_date < :now
+            ORDER BY games.game_date', [
+                'now' => $now->get_timestamp()
+            ]
+        );
         $current_games = [];
         foreach ($games as $game)
         {
-            $game_duration = ScmParamsService::get_params($game['game_event_id'])->get_game_duration();
-            $overtime_duration = ScmParamsService::get_params($game['game_event_id'])->get_overtime_duration();
-            $full_duration = $game['game_type'] == 'G' || $game['game_type'] == 'D' ? $game_duration : $game_duration + $overtime_duration;
+            $overtime = $game['has_overtime'] ? $game['overtime_duration'] : 0;
+            $full_duration = $game['game_type'] == 'B' ? $game['game_duration'] + $overtime : $game['game_duration'];
 
-            if ($game['game_date'] < $now->get_timestamp() && $now->get_timestamp() < ($game['game_date'] + ($full_duration * 60)))
+            if ($now->get_timestamp() < ($game['game_date'] + ($full_duration * 60)))
                 $current_games[] = $game;
         }
         return $current_games;
-	}
-
-    // Check current games
-    public static function get_event_current_games(int $event_id):array
-	{
-        $now = new Date();
-        $games = ScmGameCache::load()->get_games();
-        usort($games, function($a, $b) {
-            return strcmp($a["game_date"], $b["game_date"]);
-        });
-        $current_games = [];
-        foreach ($games as $game)
-        {
-            $game_duration = ScmParamsService::get_params($game['game_event_id'])->get_game_duration();
-            $overtime_duration = ScmParamsService::get_params($game['game_event_id'])->get_overtime_duration();
-            $full_duration = $game['game_type'] == 'G' || $game['game_type'] == 'D' ? $game_duration : $game_duration + $overtime_duration;
-
-            if (
-                $game['game_event_id'] == $event_id
-                && $game['game_date'] < $now->get_timestamp()
-                && $now->get_timestamp() < ($game['game_date'] + ($full_duration * 60))
-            )
-                $current_games[] = $game;
-        }
-        return $current_games;
-	}
-
-    // Check current games
-    public static function get_next_games()
-	{
-        $now = new Date();
-        $full_games = ScmGameCache::load()->get_games();
-        usort($full_games, function($a, $b) {
-            return $a['game_date'] - $b['game_date'];
-        });
-        $games = [];
-        foreach ($full_games as $game)
-        {
-            if ($now->get_timestamp() < $game['game_date'])
-                $games[] = $game;
-        }
-        $next_games = array_slice($games, 0, ScmConfig::load()->get_next_games_number());
-        return $next_games;
-	}
-
-    // Check current games
-    public static function get_event_next_game():ScmGame
-	{
-        $now = new Date();
-        $full_games = ScmGameCache::load()->get_games();
-        usort($full_games, function($a, $b) {
-            return $a['game_date'] - $b['game_date'];
-        });
-        $games = [];
-        foreach ($full_games as $game)
-        {
-            if ($now->get_timestamp() < $game['game_date'])
-                $games[] = $game;
-        }
-        return $games[0];
 	}
 }
 ?>
