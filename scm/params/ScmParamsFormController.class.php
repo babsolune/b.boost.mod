@@ -167,7 +167,7 @@ class ScmParamsFormController extends DefaultModuleController
 			));
 			$bracket_fieldset->add_field(new FormFieldNumberEditor('overtime_duration', $this->lang['scm.overtime.duration'], $this->get_params()->get_overtime_duration(),
 				[
-                    'min' => 0,
+                    'min' => 0, 'required' => true,
                     'description' => $this->lang['scm.minutes.clue'],
                     'hidden' => !$this->get_params()->get_has_overtime()
                 ]
@@ -238,8 +238,15 @@ class ScmParamsFormController extends DefaultModuleController
 		$form->add_fieldset($option_fieldset);
 
         $option_fieldset->add_field(new FormFieldNumberEditor('game_duration', $this->lang['scm.game.duration'], $this->get_params()->get_game_duration(),
-			['description' => $this->lang['scm.game.duration.clue'], 'min' => 0]
+			[
+                'required' => true,
+                'description' => $this->lang['scm.game.duration.clue'], 'min' => 0
+            ]
 		));
+
+        $option_fieldset->add_field(new FormFieldSimpleSelectChoice('favorite_team_id', $this->lang['scm.favorite.team'], $this->get_params()->get_favorite_team_id(), $this->fav_teams_list(),
+            ['required' => true]
+        ));
 
 		$option_fieldset->add_field(new FormFieldSimpleSelectChoice('bonus', $this->lang['scm.bonus.param'], $this->get_params()->get_bonus(),
             [
@@ -248,8 +255,6 @@ class ScmParamsFormController extends DefaultModuleController
                 new FormFieldSelectChoiceOption($this->lang['scm.bonus.double'], ScmParams::BONUS_DOUBLE)
             ]
         ));
-
-        $option_fieldset->add_field(new FormFieldSimpleSelectChoice('favorite_team_id', $this->lang['scm.favorite.team'], $this->get_params()->get_favorite_team_id(), $this->fav_teams_list()));
 
 		$this->submit_button = new FormButtonDefaultSubmit();
 		$form->add_button($this->submit_button);
