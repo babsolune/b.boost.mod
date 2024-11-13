@@ -44,62 +44,48 @@ class ScmMiniPrevGame extends ModuleMiniMenu
 
 		// Assign common menu variables to the tpl
 		MenuService::assign_positions_conditions($view, $this->get_block());
-
         $now = new Date();
-        $games = [];
-        $result_rounds = PersistenceContext::get_querier()->select('SELECT game.*, params.*
-            FROM ' . ScmSetup::$scm_game_table . ' game
-            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = game.game_event_id
-            WHERE game.game_date < ' . $now->get_timestamp() . '
-            AND (game.game_home_id = params.favorite_team_id OR game.game_away_id = params.favorite_team_id)
-            AND (game_type = "G" OR game_type = "B")
-            ORDER BY game.game_date ASC'
-        );
-        foreach ($result_rounds as $game)
+
+        $cache = ScmGameCache::load();
+        $prev_events = $prev_matchdays = $event_games = [];
+
+        $prev_matchdays = array_filter($cache->get_games(), function($game) use ($now) {
+            return $game['game_date'] < $now->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($game['game_event_id'])->get_end_date()->get_timestamp();
+        });
+
+        foreach ($prev_matchdays as $game)
         {
-            if (
-                ($game['hat_ranking'] && $game['game_group'] == ScmGroupService::get_last_matchday_hat($game['game_event_id']))
-                || (!$game['hat_ranking'] && $game['game_round'] == ScmGroupService::get_last_matchday_group($game['game_event_id']))
-                && ScmEventService::get_event($game['game_event_id'])->get_end_date()->get_timestamp() > $now->get_timestamp()
-            )
-            {
-                $games[] = $game;
+            $favorite_team = ScmParamsService::get_params($game['game_event_id'])->get_favorite_team_id();
+            $event_id = $game['game_event_id'];
+            if (!isset($event_games[$event_id])) {
+                $event_games[$event_id] = [];
             }
+            if ($game['game_home_id'] == $favorite_team || $game['game_away_id'] == $favorite_team)
+                $event_games[$event_id][] = $game;
         }
 
-        $result_days = PersistenceContext::get_querier()->select('SELECT game.*, params.*
-            FROM ' . ScmSetup::$scm_game_table . ' game
-            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = game.game_event_id
-            WHERE game.game_date < ' . $now->get_timestamp() . '
-            AND (game.game_home_id = params.favorite_team_id OR game.game_away_id = params.favorite_team_id)
-            AND (game_type = "D")
-            ORDER BY game.game_date ASC'
-        );
-        foreach ($result_days as $game)
-        {
-            if (
-                $game['game_group'] == ScmDayService::get_last_day($game['game_event_id']) // Select last match day
-                && ScmEventService::get_event($game['game_event_id'])->get_end_date()->get_timestamp() > $now->get_timestamp() // Remove ended events
-            )
-            {
-                $games[] = $game;
-            }
+        foreach ($event_games as $games) {
+            usort($games, function($a, $b) {
+                return $a['game_date'] - $b['game_date'];
+            });
+            $prev_events[] = end($games);
         }
 
         $view->put_all([
-			'C_ITEMS' => count($games) > 0
+			'C_ITEMS' => count($prev_events) > 0
 		]);
 
-        usort($games, function($a,$b) {
-            return $a['game_date'] - $b['game_date'];
+        usort($prev_events, function($a,$b) {
+            return $b['game_date'] - $a['game_date'];
         });
 
-		foreach ($games as $game)
+		foreach ($prev_events as $game)
 		{
 			$item = new ScmGame();
 			$item->set_properties($game);
 
 			$view->assign_block_vars('items', array_merge($item->get_template_vars(), [
+                'YEAR' => date('y', $item->get_game_date()->get_timestamp()),
                 'U_EVENT' => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
 			]));
 		}
