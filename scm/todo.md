@@ -26,8 +26,7 @@
 - [X] provide half-time in match duration
 - [X] add a select for each teams if its status is running|forfeit|exempt
 ## Minis
-- [ ] improve the date of the last and next match of the favorite team
-- [ ] then watch if there's a score or not and display the day number
+- [X] improve the date of the last and next match of the favorite team
 
 ## Database
 - [ ] Rename columns to write them shorter

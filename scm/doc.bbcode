@@ -6,7 +6,7 @@ Le module Sport Competition Manager permet de gérer des compétitions sportives
 [b]Tournoi[/b]: 
     [list]
         [*][b]Par tour[/b] : Les clubs d'un même groupe se rencontrent, puis suite à un classement par groupe, les qualifiés de chaque groupe s'affrontent en rencontres à élimination directe.
-        [*][b]Par classement[/b] : Les clubs d'un même groupe se rencontrent, puis suite à un classement général, les qualifiés de chaque groupe s'affrontent au sein de groupes.
+        [*][b]Par classement[/b] : Les clubs d'un même groupe se rencontrent, puis suite à un classement général, les x qualifiés s'affrontent au sein de groupes.
         [*][b]Au chapeau[/b] : Les clubs se rencontrent au sein de journées, puis suite à un classement général, les qualifiés s'affrontent en rencontres à élimination directe.
     [/list]
 
@@ -86,13 +86,14 @@ La notion de [code=text,0,1]club[/code] est à différencier de la notion d'[cod
 Un club est défini une seule fois et servira de référent "équipe" dans une compétition.
 Ainsi il n'est pas nécessaire de créer plusieurs fois le même club pour qu'il participe à plusieurs compétitions.
 
-Les clubs sont donc indépendants des compétitions, mais, bien sur, nécessaires à la gestion d'une compétitions.
+Les clubs sont donc indépendants des compétitions mais, bien sur, nécessaires à la gestion d'une compétitions.
 
 [title=2]Créer un club[/title]
 [b]Nom d'affichage[/b] : Club01
 Nom qui sera affiché dans les différents emplacements (matchs, classements) d'une compétition.
+[b]Affiliation à un club[/b] : non coché
 [b]Nom Complet[/b] : FC Club01
-Nom complet du club. Il est utilisé pour le titre de la page du club. S'il n'est pas renseigné, il sera remplacé par le nom d'affichage.
+Nom complet du club. Il est utilisé pour le titre et le lien de la page du club.
 [b]Email[/b] :
 Email de contact du club
 [b]Téléphone[/b] :
@@ -107,9 +108,15 @@ Drapeau du pays du club, affiché dans les différents emplacements d'une compé
 [b]Logo du club[/b]
 Logo du club, affiché dans les différents emplacements d'une compétition.
 
-[b]Les pages club[/b] : 
-[lightbox=Lien][img style="width: 150px;"]Lien[/img][/lightbox]
-[lightbox=Lien][img style="width: 150px;"]Lien[/img][/lightbox]
-[lightbox=Lien][img style="width: 150px;"]Lien[/img][/lightbox]
+[title=3]Créer un club affilié[/title]
+Un club affilié est une équipe secondaire d'un club déjà existant (club maitre).
+Le lien de cette équipe secondaire renvoie sur la page du club maitre.
+Les compétitions de cette équipe secondaire sont répertoriées sur la page du club maitre.
+[b]Nom d'affichage[/b] : Club01 2
+[b]Affiliation à un club[/b] : coché
+Toutes les champs des infos complémentaires sont remplacés par un select du choix du club maitre.
+[b]Club affilié[/b] : choisir le nom du club maitre
+
+
 
 

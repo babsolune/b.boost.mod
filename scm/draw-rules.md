@@ -119,7 +119,7 @@ class a {
 	}
 }
 
-// Tests par ordre de priorité, sortie de la DB du coup
+// Tests par ordre de priorité, sortie de la DB
 $tests = ['goal_average', 'goal_for'];
 
 a::set_tests($tests);
