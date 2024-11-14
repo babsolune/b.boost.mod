@@ -72,7 +72,9 @@
                                                 <div class="cell-flex cell-columns-2 cell-tile">
                                                     <div class="home-team cell">
                                                         <div class="cell-header">
-                                                            <div class="cell-name">{games.HOME_TEAM}</div>
+                                                            <div class="cell-name">
+                                                                <a href="{games.U_HOME_CLUB}" class="offload">{games.HOME_TEAM}</a>
+                                                            </div>
                                                             # IF games.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
@@ -102,7 +104,9 @@
                                                     </div>
                                                     <div class="away-team cell">
                                                         <div class="cell-header">
-                                                            <div class="cell-name">{games.AWAY_TEAM}</div>
+                                                            <div class="cell-name">
+                                                                <a href="{games.U_AWAY_CLUB}" class="offload">{games.AWAY_TEAM}</a>
+                                                            </div>
                                                             # IF games.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">

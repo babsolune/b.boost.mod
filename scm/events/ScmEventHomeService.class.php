@@ -114,7 +114,7 @@ class ScmEventHomeService
 
                 $view->assign_block_vars('team_groups.teams', [
                     'TEAM_NAME' => $team['club_name'],
-                    'TEAM_LOGO' => $club_cache->get_club_shield($team['team_club_id']),
+                    'TEAM_LOGO' => $club_cache->get_club_shield($real_id),
                     'U_CLUB' => ScmUrlBuilder::display_club($real_id, $real_slug)->rel()
                 ]);
             }

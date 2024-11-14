@@ -188,9 +188,23 @@ class ScmTeamService
 
     public static function get_team_logo($team_id)
 	{
-        $club = ScmClubCache::load();
+		$club_cache = ScmClubCache::load();
         $team = self::get_team($team_id);
-		return $club->get_club_shield($team->get_team_club_id());
+        $club = $club_cache->get_club($team->get_team_club_id());
+        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+
+        return $club_cache->get_club_shield($real_id);
+	}
+
+    public static function get_team_link($team_id)
+	{
+		$club_cache = ScmClubCache::load();
+        $team = self::get_team($team_id);
+        $club = $club_cache->get_club($team->get_team_club_id());
+        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+        $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
+
+        return ScmUrlBuilder::display_club($real_id, $real_slug)->rel();
 	}
 }
 ?>

@@ -76,7 +76,9 @@
                                                 <div class="cell-flex cell-columns-2 cell-tile">
                                                     <div class="home-team cell">
                                                         <div class="cell-header">
-                                                            <div class="cell-name">{matchdays.dates.games.HOME_TEAM}</div>
+                                                            <div class="cell-name">
+                                                                <a href="{matchdays.dates.games.U_HOME_CLUB}" class="offload">{matchdays.dates.games.HOME_TEAM}</a>
+                                                            </div>
                                                             # IF matchdays.dates.games.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{matchdays.dates.games.HOME_LOGO}" alt="{matchdays.dates.games.HOME_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
@@ -106,7 +108,7 @@
                                                     </div>
                                                     <div class="away-team cell">
                                                         <div class="cell-header">
-                                                            <div class="cell-name">{matchdays.dates.games.AWAY_TEAM}</div>
+                                                            <div class="cell-name"><a href="{matchdays.dates.games.U_AWAY_CLUB}" class="offload">{matchdays.dates.games.AWAY_TEAM}</a></div>
                                                             # IF matchdays.dates.games.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{matchdays.dates.games.AWAY_LOGO}" alt="{matchdays.dates.games.AWAY_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">

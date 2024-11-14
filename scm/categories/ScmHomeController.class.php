@@ -41,14 +41,15 @@ class ScmHomeController extends DefaultModuleController
             $game = new ScmGame();
             $game->set_properties($current_game);
             $this->view->assign_block_vars('current_games', array_merge($game->get_template_vars(), [
-                'C_TYPE_GROUP' => $game->get_game_type() == 'G',
+                'C_TYPE_GROUP'   => $game->get_game_type() == 'G',
                 'C_TYPE_BRACKET' => $game->get_game_type() == 'B',
-                'C_TYPE_DAY' => $game->get_game_type() == 'D',
-                'GROUP' => ScmGroupService::ntl($game->get_game_group()),
-                'BRACKET' => ScmBracketService::ntl($game->get_game_group()),
-                'DAY' => $game->get_game_group(),
+                'C_TYPE_DAY'     => $game->get_game_type() == 'D',
+
+                'GROUP'      => ScmGroupService::ntl($game->get_game_group()),
+                'BRACKET'    => ScmBracketService::ntl($game->get_game_group()),
+                'DAY'        => $game->get_game_group(),
                 'EVENT_NAME' => ScmEventService::get_event($game->get_game_event_id())->get_event_name(),
-                'U_EVENT' => ScmUrlBuilder::event_home($game->get_game_event_id(), ScmEventService::get_event_slug($game->get_game_event_id()))->rel()
+                'U_EVENT'    => ScmUrlBuilder::event_home($game->get_game_event_id(), ScmEventService::get_event_slug($game->get_game_event_id()))->rel()
             ]));
         }
 

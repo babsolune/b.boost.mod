@@ -175,9 +175,10 @@ class ScmGameService
 	{
         $now = new Date();
         $game = ScmGameCache::load()->get_game($game_id);
-        $game_duration = ScmParamsService::get_params($event_id)->get_game_duration();
-        $overtime_duration = ScmParamsService::get_params($event_id)->get_overtime_duration();
-        $full_duration = $game['game_type'] == 'G' || $game['game_type'] == 'D' ? $game_duration : $game_duration + $overtime_duration;
+        $params = ScmParamsService::get_params($event_id);
+        $game_duration = $params->get_game_duration();
+        $overtime_duration = $params->get_has_overtime() ? $params->get_overtime_duration() : 0;
+        $full_duration = $game['game_type'] == 'B' ? $game_duration + $overtime_duration : $game_duration;
 
         if ($now->get_timestamp() > $game['game_date'] && $now->get_timestamp() < ($game['game_date'] + ($full_duration * 60)))
             return true;
@@ -199,10 +200,7 @@ class ScmGameService
         $current_games = [];
         foreach ($games as $game)
         {
-            $overtime = $game['has_overtime'] ? $game['overtime_duration'] : 0;
-            $full_duration = $game['game_type'] == 'B' ? $game['game_duration'] + $overtime : $game['game_duration'];
-
-            if ($now->get_timestamp() < ($game['game_date'] + ($full_duration * 60)))
+            if (self::is_live($game['game_event_id'], $game['id_game']))
                 $current_games[] = $game;
         }
         return $current_games;

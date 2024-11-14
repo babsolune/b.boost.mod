@@ -490,6 +490,7 @@ class ScmGame
                 'MATCHDAY'        => $this->game_round,
                 'PLAYGROUND'      => $this->game_playground,
                 'HOME_ID'         => $this->game_home_id,
+                'U_HOME_CLUB'     => $this->game_home_id ? ScmTeamService::get_team_link($this->game_home_id) : '#',
                 'HOME_LOGO'       => $this->game_home_id ? ScmTeamService::get_team_logo($this->game_home_id) : '',
                 'HOME_TEAM'       => $this->game_home_id ? ScmTeamService::get_team_name($this->game_home_id) : '',
                 'U_HOME_CALENDAR' => $this->game_home_id ? ScmUrlBuilder::display_team_calendar($this->game_event_id, $event_slug, $this->game_home_id)->rel() : '#',
@@ -502,6 +503,7 @@ class ScmGame
                 'U_AWAY_CALENDAR' => $this->game_away_id ? ScmUrlBuilder::display_team_calendar($this->game_event_id, $event_slug, $this->game_away_id)->rel() : '#',
                 'AWAY_TEAM'       => $this->game_away_id ? ScmTeamService::get_team_name($this->game_away_id) : '',
                 'AWAY_LOGO'       => $this->game_away_id ? ScmTeamService::get_team_logo($this->game_away_id) : '',
+                'U_AWAY_CLUB'     => $this->game_away_id ? ScmTeamService::get_team_link($this->game_away_id) : '#',
                 'AWAY_ID'         => $this->game_away_id,
                 'C_VIDEO'         => !empty($this->game_video->absolute()),
                 'U_VIDEO'         => $this->game_video->absolute(),
@@ -509,6 +511,14 @@ class ScmGame
                 'STATUS'          => $status
             ]
         );
+    }
+
+    private function real_club($id_team)
+    {
+        $club_cache = ScmClubCache::load();
+        $club = $club_cache->get_club($this->get_game_home_id());
+        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+        $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
     }
 
     public function get_details_template($view, $index)

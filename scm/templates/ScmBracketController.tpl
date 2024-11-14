@@ -290,13 +290,113 @@
                                     # START brackets.rounds #
                                         <div# IF brackets.rounds.C_ALL_PLACES # id="bracket-{brackets.BRACKET_ID}-main-round-{brackets.rounds.ROUND_ID}"# ENDIF # class="bracket-round# IF brackets.rounds.C_ALL_PLACES # all-places# ENDIF #">
                                             <h5 class="bracket-round-title">{brackets.rounds.L_TITLE}</h5>
-                                            <div class="bracket-round-games">
+                                            <div class="bracket-round-games modal-container">
                                                 # START brackets.rounds.games #
                                                     <div id="{brackets.rounds.games.GAME_ID}" class="game-container">
                                                         <div class="game-details small text-italic">
                                                             <span>{brackets.rounds.games.PLAYGROUND}</span>
                                                             <span># IF C_ONE_DAY #{brackets.rounds.games.GAME_DATE_HOUR_MINUTE}# ELSE #{brackets.rounds.games.GAME_DATE_FULL}# ENDIF #</span>
-                                                            <span>{brackets.rounds.games.GAME_ID}</span>
+                                                            <div>
+                                                                # IF brackets.rounds.games.C_HAS_SCORE #
+                                                                    <a data-modal="" data-target="target-panel-{brackets.rounds.games.GAME_ID}" aria-label="{@scm.game.details}">
+                                                                        <i class="far fa-file-lines"></i> {brackets.rounds.games.GAME_ID}
+                                                                    </a>
+                                                                    <div id="target-panel-{brackets.rounds.games.GAME_ID}" class="modal modal-animation">
+                                                                        <div class="close-modal" aria-label="{@common.close}"></div>
+                                                                        <div class="content-panel">
+                                                                            <div class="align-right"><a href="#" class="error big hide-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></a></div>
+                                                                            <div class="cell-flex cell-columns-2 cell-tile">
+                                                                                <div class="home-team cell">
+                                                                                    <div class="cell-header">
+                                                                                        <div class="cell-name">
+                                                                                            <a href="{brackets.rounds.games.U_HOME_CLUB}" class="offload">{brackets.rounds.games.HOME_TEAM}</a>
+                                                                                        </div>
+                                                                                        # IF brackets.rounds.games.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{brackets.rounds.games.HOME_LOGO}" alt="{brackets.rounds.games.HOME_TEAM}"># ENDIF #
+                                                                                    </div>
+                                                                                    <div class="cell-score bigger align-center">
+                                                                                        {brackets.rounds.games.HOME_SCORE}
+                                                                                    </div>
+                                                                                    # IF brackets.rounds.games.C_HAS_PEN #
+                                                                                        <div class="cell-infos">
+                                                                                            <span class="text-strong">{@scm.event.penalties}</span>
+                                                                                            <span>{brackets.rounds.games.HOME_PEN}</span>
+                                                                                        </div>
+                                                                                    # ENDIF #
+                                                                                    <div class="cell-details">{@scm.event.goals}</div>
+                                                                                    # START brackets.rounds.games.home_goals #
+                                                                                        <div class="cell-infos">
+                                                                                            <span>{brackets.rounds.games.home_goals.PLAYER}</span>
+                                                                                            <span>{brackets.rounds.games.home_goals.TIME}'</span>
+                                                                                        </div>
+                                                                                    # END brackets.rounds.games.home_goals #
+                                                                                    <div class="cell-details">{@scm.event.yellow.cards}</div>
+                                                                                    # START brackets.rounds.games.home_yellow #
+                                                                                        <div class="cell-infos">
+                                                                                            <span>{brackets.rounds.games.home_yellow.PLAYER}</span>
+                                                                                            <span>{brackets.rounds.games.home_yellow.TIME}'</span>
+                                                                                        </div>
+                                                                                    # END brackets.rounds.games.home_yellow #
+                                                                                    <div class="cell-details">{@scm.event.red.cards}</div>
+                                                                                    # START brackets.rounds.games.home_red #
+                                                                                        <div class="cell-infos">
+                                                                                            <span>{brackets.rounds.games.home_red.PLAYER}</span>
+                                                                                            <span>{brackets.rounds.games.home_red.TIME}'</span>
+                                                                                        </div>
+                                                                                    # END brackets.rounds.games.home_red #
+                                                                                </div>
+                                                                                <div class="away-team cell">
+                                                                                    <div class="cell-header">
+                                                                                        <div class="cell-name">
+                                                                                            <a href="{brackets.rounds.games.U_AWAY_CLUB}" class="offload">{brackets.rounds.games.AWAY_TEAM}</a>
+                                                                                        </div>
+                                                                                        # IF brackets.rounds.games.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{brackets.rounds.games.AWAY_LOGO}" alt="{brackets.rounds.games.AWAY_TEAM}"># ENDIF #
+                                                                                    </div>
+                                                                                    <div class="cell-score bigger align-center">
+                                                                                        {brackets.rounds.games.AWAY_SCORE}
+                                                                                    </div>
+                                                                                    # IF brackets.rounds.games.C_HAS_PEN #
+                                                                                        <div class="cell-infos">
+                                                                                            <span class="text-strong">{@scm.event.penalties}</span>
+                                                                                            <span>{brackets.rounds.games.AWAY_PEN}</span>
+                                                                                        </div>
+                                                                                    # ENDIF #
+                                                                                    <div class="cell-details">{@scm.event.goals}</div>
+                                                                                    # START brackets.rounds.games.away_goals #
+                                                                                        <div class="cell-infos">
+                                                                                            <span>{brackets.rounds.games.away_goals.PLAYER}</span>
+                                                                                            <span>{brackets.rounds.games.away_goals.TIME}'</span>
+                                                                                        </div>
+                                                                                    # END brackets.rounds.games.away_goals #
+                                                                                    <div class="cell-details">{@scm.event.yellow.cards}</div>
+                                                                                    # START brackets.rounds.games.away_yellow #
+                                                                                        <div class="cell-infos">
+                                                                                            <span>{brackets.rounds.games.away_yellow.PLAYER}</span>
+                                                                                            <span>{brackets.rounds.games.away_yellow.TIME}'</span>
+                                                                                        </div>
+                                                                                    # END brackets.rounds.games.away_yellow #
+                                                                                    <div class="cell-details">{@scm.event.red.cards}</div>
+                                                                                    # START brackets.rounds.games.away_red #
+                                                                                        <div class="cell-infos">
+                                                                                            <span>{brackets.rounds.games.away_red.PLAYER}</span>
+                                                                                            <span>{brackets.rounds.games.away_red.TIME}'</span>
+                                                                                        </div>
+                                                                                    # END brackets.rounds.games.away_red #
+                                                                                </div>
+                                                                            </div>
+                                                                            # IF brackets.rounds.games.C_VIDEO #
+                                                                                <a href="{brackets.rounds.games.U_VIDEO}" class="button d-block align-center" target="blank" rel="noopener noreferer">
+                                                                                    <i class="far fa-circle-play"></i> {@scm.watch.video}
+                                                                                </a>
+                                                                            # ENDIF #
+                                                                            # IF brackets.rounds.games.SUMMARY #
+                                                                                {brackets.rounds.games.SUMMARY}
+                                                                            # ENDIF #
+                                                                        </div>
+                                                                    </div>
+                                                                # ELSE #
+                                                                    {brackets.rounds.games.GAME_ID}
+                                                                # ENDIF #
+                                                            </div>
                                                         </div>
                                                         <div class="id-{brackets.rounds.games.HOME_ID} game-team game-home# IF brackets.rounds.games.C_HOME_FAV # text-strong# ENDIF #"
                                                                 # IF brackets.rounds.games.C_HOME_WIN # style="background-color: {brackets.rounds.games.WIN_COLOR}"# ENDIF #>
