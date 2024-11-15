@@ -259,8 +259,8 @@ class ScmRankingService
                     $a['points_prtl'] += ScmParamsService::get_params($a['event_id'])->get_victory_points();
                 }
             }
-        }
 
+        }
         if ($a['points_prtl'] == $b['points_prtl'])
             return 0;
 		return ($a['points_prtl'] < $b['points_prtl']) ? 1 : -1;

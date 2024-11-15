@@ -85,6 +85,7 @@ class ScmDaysRankingController extends DefaultModuleController
                 'C_HAS_TEAM_LOGO' => ScmTeamService::get_team_logo($team_rank['team_id']),
                 'RANK'            => $i + 1,
                 'RANK_COLOR'      => $rank_color,
+                'TEAM_ID'         => !empty($team_rank['team_id']) ? $team_rank['team_id'] : 0,
                 'U_TEAM_CALENDAR' => !empty($team_rank['team_id']) ? ScmUrlBuilder::display_team_calendar($this->event_id(), $event_slug, $team_rank['team_id'])->rel() : '#',
                 'TEAM_NAME'       => !empty($team_rank['team_id']) ? ScmTeamService::get_team_name($team_rank['team_id']) : '',
                 'TEAM_LOGO'       => !empty($team_rank['team_id']) ? ScmTeamService::get_team_logo($team_rank['team_id']) : '',
@@ -129,7 +130,7 @@ class ScmDaysRankingController extends DefaultModuleController
     private function build_days_view()
     {
         $day = AppContext::get_request()->get_getint('day', 0);
-        $prev_day = ScmDayService::get_last_day($this->event_id());
+        $prev_day = $day ? $day : ScmDayService::get_last_day($this->event_id());
         $prev_dates = [];
         foreach(ScmGameService::get_games_in_cluster($this->event_id(), $prev_day) as $game)
         {
@@ -150,7 +151,7 @@ class ScmDaysRankingController extends DefaultModuleController
             }
         }
 
-        $next_day = ScmDayService::get_next_day($this->event_id());
+        $next_day = $day ? $day + 1 : ScmDayService::get_next_day($this->event_id());
         $next_dates = [];
         foreach(ScmGameService::get_games_in_cluster($this->event_id(), $next_day) as $game)
         {
@@ -172,7 +173,8 @@ class ScmDaysRankingController extends DefaultModuleController
         }
 
         $this->view->put_all([
-            'C_EVENT_ENDING' => empty($day) && ScmDayService::get_last_day($this->event_id()) == count(ScmDayService::get_days($this->event_id())) || $day == count(ScmDayService::get_days($this->event_id())),
+            'C_EVENT_STARTING' => ScmDayService::get_last_day($this->event_id()) == 1,
+            'C_EVENT_ENDING' => ($day ? $day : ScmDayService::get_last_day($this->event_id())) == count(ScmDayService::get_days($this->event_id())),
             'LAST_DAY' => $prev_day,
             'NEXT_DAY' => $next_day,
         ]);

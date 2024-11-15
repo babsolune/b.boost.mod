@@ -79,6 +79,7 @@ class ScmEventHomeService
         }
 
         $view->put_all([
+            'C_EVENT_STARTING' => $prev_day == 1,
             'C_EVENT_ENDING' => $prev_day == count(ScmDayService::get_days($event_id)),
             'LAST_DAY' => $prev_day,
             'NEXT_DAY' => $next_day,
@@ -148,7 +149,10 @@ class ScmEventHomeService
         foreach($results as $game)
         {
             if($game['game_type'] == 'G')
-                $matchdays[$game['game_round']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
+                if ($c_hat_ranking)
+                    $matchdays[$game['game_group']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
+                else
+                    $matchdays[$game['game_round']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
         }
 
         foreach ($matchdays as $matchday => $dates)
