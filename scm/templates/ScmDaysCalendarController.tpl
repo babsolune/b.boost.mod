@@ -138,6 +138,9 @@
                                                 # IF dates.games.SUMMARY #
                                                     {dates.games.SUMMARY}
                                                 # ENDIF #
+                                                # IF dates.games.STADIUM #
+                                                    <div class="width-pc-50 m-a">{dates.games.STADIUM}</div>
+                                                # ENDIF #
                                             </div>
                                         </div>
                                     </td>

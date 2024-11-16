@@ -145,6 +145,9 @@
                                                 # IF matchdays.dates.games.SUMMARY #
                                                     {matchdays.dates.games.SUMMARY}
                                                 # ENDIF #
+                                                # IF matchdays.dates.games.STADIUM #
+                                                    <div class="width-pc-50 m-a">{matchdays.dates.games.STADIUM}</div>
+                                                # ENDIF #
                                             </div>
                                         </div>
                                     </td>

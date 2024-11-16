@@ -226,6 +226,9 @@
                                                             # IF prev_dates.prev_days.SUMMARY #
                                                                 {prev_dates.prev_days.SUMMARY}
                                                             # ENDIF #
+                                                            # IF prev_dates.prev_days.STADIUM #
+                                                                <div class="width-pc-50 m-a">{prev_dates.prev_days.STADIUM}</div>
+                                                            # ENDIF #
                                                         </div>
                                                     </div>
                                                 </td>
@@ -372,6 +375,9 @@
                                                             # ENDIF #
                                                             # IF next_dates.next_days.SUMMARY #
                                                                 {next_dates.next_days.SUMMARY}
+                                                            # ENDIF #
+                                                            # IF next_dates.next_days.STADIUM #
+                                                                <div class="width-pc-50 m-a">{next_dates.next_days.STADIUM}</div>
                                                             # ENDIF #
                                                         </div>
                                                     </div>

@@ -211,7 +211,9 @@ class ScmSetup extends DefaultModuleSetup
 			'game_date'           => ['type' => 'integer', 'length' => 11],
 			'game_video'          => ['type' => 'string', 'length' => 255],
 			'game_summary'        => ['type' => 'text', 'length' => 65000],
-			'game_status'         => ['type' => 'string', 'length' => 11, 'default' => "''"]
+			'game_status'         => ['type' => 'string', 'length' => 11, 'default' => "''"],
+			'game_stadium'        => ['type' => 'int', 'length' => 11],
+			'game_stadium_name'   => ['type' => 'string', 'length' => 255]
         ];
 		$options = [
 			'primary' => ['id_game'],

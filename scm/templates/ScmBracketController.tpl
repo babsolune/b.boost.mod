@@ -140,6 +140,9 @@
                                                                 # IF groups.rounds.games.SUMMARY #
                                                                     {groups.rounds.games.SUMMARY}
                                                                 # ENDIF #
+                                                                # IF groups.rounds.games.STADIUM #
+                                                                    <div class="width-pc-50 m-a">{groups.rounds.games.STADIUM}</div>
+                                                                # ENDIF #
                                                             </div>
                                                         </div>
                                                     </td>
@@ -390,6 +393,9 @@
                                                                             # ENDIF #
                                                                             # IF brackets.rounds.games.SUMMARY #
                                                                                 {brackets.rounds.games.SUMMARY}
+                                                                            # ENDIF #
+                                                                            # IF brackets.rounds.games.STADIUM #
+                                                                                <div class="width-pc-50 m-a">{brackets.rounds.games.STADIUM}</div>
                                                                             # ENDIF #
                                                                         </div>
                                                                     </div>

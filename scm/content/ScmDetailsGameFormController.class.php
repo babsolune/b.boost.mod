@@ -138,6 +138,11 @@ class ScmDetailsGameFormController extends DefaultModuleController
             ]
         ));
 
+        if (!$this->get_game()->get_game_playground())
+		$fieldset_unique->add_field(new FormFieldSimpleSelectChoice('stadium', $this->lang['scm.event.stadium'], $this->get_game()->get_game_stadium(),
+            $this->get_stadium($this->get_game()->get_game_home_id())
+        ));
+
         $fieldset_unique->add_field(new FormFieldUrlEditor('video', $this->lang['scm.event.video'], $this->get_game()->get_game_video()->relative()));
 
         $fieldset_unique->add_field(new FormFieldRichTextEditor('summary', $this->lang['scm.event.summary'], $this->get_game()->get_game_summary()));
@@ -169,6 +174,12 @@ class ScmDetailsGameFormController extends DefaultModuleController
         $game->set_game_summary($this->form->get_value('summary'));
         $game->set_game_status($this->form->get_value('status')->get_raw_value());
 
+        if (!$game->get_game_playground())
+        {
+            $game->set_game_stadium($this->form->get_value('stadium')->get_raw_value());
+            $game->set_game_stadium_name($this->form->get_value('stadium')->get_label());
+        }
+
         if($this->get_params()->get_bonus())
         {
             $game->set_game_home_off_bonus($this->form->get_value('home_off_bonus'));
@@ -184,6 +195,26 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
 		ScmEventService::clear_cache();
 	}
+
+    private function get_stadium(int $club_id)
+    {
+        $team = ScmTeamService::get_team($club_id);
+        $club = ScmClubCache::load()->get_club($team->get_team_club_id());
+        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+        $real_club = new ScmClub();
+        $real_club->set_properties(ScmClubCache::load()->get_club($real_id));
+
+        $options = [];
+        $options[] = new FormFieldSelectChoiceOption('', 0);
+		$i = 1;
+		foreach(TextHelper::deserialize($real_club->get_club_locations()) as $club)
+		{
+            $options[] = new FormFieldSelectChoiceOption($club['name'], $i);
+			$i++;
+		}
+
+        return $options;
+    }
 
     private function get_game()
     {

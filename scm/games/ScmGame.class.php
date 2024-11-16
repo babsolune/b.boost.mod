@@ -38,6 +38,8 @@ class ScmGame
     private $game_video;
     private $game_summary;
     private $game_status;
+    private $game_stadium;
+    private $game_stadium_name;
 
     const DELAYED = 'delayed';
     const STOPPED = 'stopped';
@@ -365,6 +367,26 @@ class ScmGame
         $this->game_status = $game_status;
     }
 
+    function get_game_stadium()
+    {
+        return $this->game_stadium;
+    }
+
+    function set_game_stadium($game_stadium)
+    {
+        $this->game_stadium = $game_stadium;
+    }
+
+    function get_game_stadium_name()
+    {
+        return $this->game_stadium_name;
+    }
+
+    function set_game_stadium_name($game_stadium_name)
+    {
+        $this->game_stadium_name = $game_stadium_name;
+    }
+
     public function get_properties()
 	{
 		return [
@@ -397,6 +419,8 @@ class ScmGame
 			'game_video'          => $this->get_game_video()->relative(),
 			'game_summary'        => $this->get_game_summary(),
 			'game_status'         => $this->get_game_status(),
+			'game_stadium'        => $this->get_game_stadium(),
+			'game_stadium_name'   => $this->get_game_stadium_name(),
         ];
 	}
 
@@ -431,6 +455,8 @@ class ScmGame
 		$this->game_video          = new Url($properties['game_video']);
 		$this->game_summary        = $properties['game_summary'];
 		$this->game_status         = $properties['game_status'];
+		$this->game_stadium        = $properties['game_stadium'];
+		$this->game_stadium_name   = $properties['game_stadium_name'];
 	}
 
 	public function init_default_properties()
@@ -465,6 +491,8 @@ class ScmGame
                 $status = '';
                 break;
         }
+
+		$address = ScmConfig::load()->is_googlemaps_available() && $this->game_stadium_name ? $this->stadium_map()->display() : $this->game_stadium_name;
 
         return array_merge(
             Date::get_array_tpl_vars($this->game_date, 'game_date'),
@@ -508,17 +536,10 @@ class ScmGame
                 'C_VIDEO'         => !empty($this->game_video->absolute()),
                 'U_VIDEO'         => $this->game_video->absolute(),
                 'SUMMARY'         => $summary,
-                'STATUS'          => $status
+                'STATUS'          => $status,
+                'STADIUM'         => $address
             ]
         );
-    }
-
-    private function real_club($id_team)
-    {
-        $club_cache = ScmClubCache::load();
-        $club = $club_cache->get_club($this->get_game_home_id());
-        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
-        $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
     }
 
     public function get_details_template($view, $index)
@@ -558,13 +579,31 @@ class ScmGame
 				'TIME' => $details['time'],
 			]);
 		}
-        foreach (self::get_game_away_red() as $details)
+        foreach ($this->get_game_away_red() as $details)
 		{
 			$view->assign_block_vars($index . '.away_red', [
 				'PLAYER' => $details['player'],
 				'TIME' => $details['time'],
 			]);
 		}
+    }
+
+    private function stadium_map()
+    {
+        $team = ScmTeamService::get_team($this->game_home_id);
+        $club = ScmClubCache::load()->get_club($team->get_team_club_id());
+        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+        $real_club = new ScmClub();
+        $real_club->set_properties(ScmClubCache::load()->get_club($real_id));
+
+        $real_stadium = [];
+        foreach (TextHelper::deserialize($real_club->get_club_locations()) as $options)
+        {
+            if ($options['name'] == $this->get_game_stadium_name() && $this->get_game_stadium_name() && $real_club->get_club_map_display())
+                $real_stadium[] = $options;
+        }
+
+        return new GoogleMapsDisplayMap(TextHelper::serialize($real_stadium), 'game_stadium_' . $this->id_game, $this->get_game_stadium_name());
     }
 
 }

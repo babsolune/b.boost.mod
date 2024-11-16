@@ -143,6 +143,9 @@
                                                 # IF games.SUMMARY #
                                                     {games.SUMMARY}
                                                 # ENDIF #
+                                                # IF games.STADIUM #
+                                                    <div class="width-pc-50 m-a">{games.STADIUM}</div>
+                                                # ENDIF #
                                             </div>
                                         </div>
                                     </td>
