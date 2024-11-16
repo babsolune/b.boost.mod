@@ -140,7 +140,7 @@
                                                 </td>
                                                 <td>
                                                     <span data-modal="" data-target="target-panel-{prev_dates.prev_days.GAME_ID}">
-                                                        # IF prev_dates.prev_days.C_HAS_SCORE #
+                                                        # IF prev_dates.prev_days.C_HAS_DETAILS #
                                                             # IF prev_dates.prev_days.C_VIDEO #
                                                                 <i class="far fa-circle-play"></i>
                                                             # ELSE #
@@ -290,7 +290,7 @@
                                                 </td>
                                                 <td>
                                                     <span data-modal="" data-target="target-panel-{next_dates.next_days.GAME_ID}">
-                                                        # IF next_dates.next_days.C_HAS_SCORE #
+                                                        # IF next_dates.next_days.C_HAS_DETAILS #
                                                             # IF next_dates.next_days.C_VIDEO #
                                                                 <i class="far fa-circle-play"></i>
                                                             # ELSE #

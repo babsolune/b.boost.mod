@@ -300,7 +300,7 @@
                                                             <span>{brackets.rounds.games.PLAYGROUND}</span>
                                                             <span># IF C_ONE_DAY #{brackets.rounds.games.GAME_DATE_HOUR_MINUTE}# ELSE #{brackets.rounds.games.GAME_DATE_FULL}# ENDIF #</span>
                                                             <div>
-                                                                # IF brackets.rounds.games.C_HAS_SCORE #
+                                                                # IF brackets.rounds.games.C_HAS_DETAILS #
                                                                     <a data-modal="" data-target="target-panel-{brackets.rounds.games.GAME_ID}" aria-label="{@scm.game.details}">
                                                                         <i class="far fa-file-lines"></i> {brackets.rounds.games.GAME_ID}
                                                                     </a>

@@ -52,7 +52,7 @@
                                     </td>
                                     <td>
                                         <span data-modal="" data-target="target-panel-{dates.games.GAME_ID}">
-                                            # IF dates.games.C_HAS_SCORE #
+                                            # IF dates.games.C_HAS_DETAILS #
                                                 # IF dates.games.C_VIDEO #
                                                     <i class="far fa-circle-play"></i>
                                                 # ELSE #

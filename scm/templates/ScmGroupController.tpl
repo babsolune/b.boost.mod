@@ -61,7 +61,7 @@
                                     # IF C_DISPLAY_PLAYGROUNDS #<td>{matchdays.dates.games.PLAYGROUND}</td># ENDIF #
                                     <td>
                                         <span data-modal="" data-target="target-panel-{matchdays.dates.games.GAME_ID}">
-                                            # IF matchdays.dates.games.C_HAS_SCORE #
+                                            # IF matchdays.dates.games.C_HAS_DETAILS #
                                                 # IF matchdays.dates.games.C_VIDEO #
                                                     <i class="far fa-circle-play"></i>
                                                 # ELSE #
