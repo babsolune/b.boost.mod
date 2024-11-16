@@ -1,6 +1,6 @@
 # IF C_ITEMS #
 	<div class="cell-table">
-		<table id="table-mini-scm" class="table">
+		<table id="table-mini-scm" class="">
 			<tbody>
                 # START items #
                     <tr>
