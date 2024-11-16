@@ -76,18 +76,22 @@ class ScmMiniPrevGame extends ModuleMiniMenu
 		]);
 
         usort($prev_events, function($a,$b) {
-            return $b['game_date'] - $a['game_date'];
+            if(isset($a['game_date']) && isset($b['game_date']))
+                return $a['game_date'] - $b['game_date'];
         });
 
 		foreach ($prev_events as $game)
 		{
-			$item = new ScmGame();
-			$item->set_properties($game);
+            if(isset($game['game_home_id']) && isset($game['game_away_id']))
+            {
+                $item = new ScmGame();
+                $item->set_properties($game);
 
-			$view->assign_block_vars('items', array_merge($item->get_template_vars(), [
-                'YEAR' => date('y', $item->get_game_date()->get_timestamp()),
-                'U_EVENT' => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
-			]));
+                $view->assign_block_vars('items', array_merge($item->get_template_vars(), [
+                    'YEAR' => date('y', $item->get_game_date()->get_timestamp()),
+                    'U_EVENT' => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
+                ]));
+            }
 		}
 
 		return $view->render();

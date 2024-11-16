@@ -5,7 +5,7 @@
                 # START items #
                     <tr>
                         <td class="smaller text-italic">
-                            <span class="d-block">{items.GAME_CATEGORY}</span>
+                            <span class="d-block text-strong">{items.GAME_CATEGORY}</span>
                             <a href="{items.U_EVENT}">{items.GAME_DIVISION}</a>
                         </td>
                         <td>

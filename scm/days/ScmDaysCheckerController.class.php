@@ -29,6 +29,7 @@ class ScmDaysCheckerController extends DefaultModuleController
 
 	private function build_view()
 	{
+        $return_games = ScmDivisionService::get_division($this->get_event()->get_division_id())->get_game_type();
         $teams = ScmTeamService::get_teams($this->event_id());
         $games = ScmGameService::get_games($this->event_id());
         $days = ScmDayService::get_days($this->event_id());
@@ -54,7 +55,7 @@ class ScmDaysCheckerController extends DefaultModuleController
                     $games_away_number[] = $game;
             }
 
-            $c_check_error = count($games_home_number) != $home_days_number || count($games_away_number) != $away_days_number;
+            $c_check_error = count($days) != count($games_number);
 
             $this->view->assign_block_vars('teams', [
                 'TEAM_NAME' => ScmTeamService::get_team_name($team_item->get_id_team()),
@@ -141,11 +142,6 @@ class ScmDaysCheckerController extends DefaultModuleController
     private function event_id()
     {
         return $this->get_event()->get_id();
-    }
-
-    private function get_params()
-    {
-        return ScmParamsService::get_params($this->event_id());
     }
 
 	private function check_authorizations()
