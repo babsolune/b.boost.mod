@@ -12,6 +12,7 @@ R & D of modules for [PHPBoost CMS](https://www.phpboost.com)
 | HomeLanding   | Module        | 6.0       | Display a homepage that retrieves latest items from other modules   |
 | Lastcoms      | Mini          | 6.0       | Display latest comments from across your website                    |
 | recipe        | Module        | 6.0       | Display recipes                                                     |
+| scm           | Module + mini | 6.0       | Sport Competition Manager                                           |
 | smallads      | Module + mini | 6.0       | Display small ads                                                   |
 | spots         | Module        | 6.0       | Display locations                                                   |
 | tagcloud      | Mini          | 6.0       | Display a cloud of tags from across your website                    |
