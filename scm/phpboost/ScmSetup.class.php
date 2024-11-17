@@ -199,6 +199,8 @@ class ScmSetup extends DefaultModuleSetup
 			'game_home_yellow'    => ['type' => 'text', 'length' => 65000],
 			'game_home_red'       => ['type' => 'text', 'length' => 65000],
 			'game_home_empty'     => ['type' => 'string', 'length' => 255],
+			'game_home_forfeit'   => ['type' => 'boolean', 'default' => 0],
+			'game_away_forfeit'   => ['type' => 'boolean', 'default' => 0],
 			'game_away_empty'     => ['type' => 'string', 'length' => 255],
 			'game_away_red'       => ['type' => 'text', 'length' => 65000],
 			'game_away_yellow'    => ['type' => 'text', 'length' => 65000],

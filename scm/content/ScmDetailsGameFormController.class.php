@@ -115,6 +115,10 @@ class ScmDetailsGameFormController extends DefaultModuleController
             }
         }
 
+        $fieldset->add_field(new FormFieldSpacer('game_forfeit', $this->lang['scm.event.forfeit']));
+        $fieldset->add_field(new FormFieldCheckbox('home_forfeit', '', $this->get_game()->get_game_home_forfeit()));
+        $fieldset->add_field(new FormFieldCheckbox('away_forfeit', '', $this->get_game()->get_game_away_forfeit()));
+
         $fieldset->add_field(new FormFieldSpacer('game_goals', $this->lang['scm.event.goals']));
         $fieldset->add_field(new ScmFormFieldGameEvents('home_goals', '', $this->get_game()->get_game_home_goals()));
         $fieldset->add_field(new ScmFormFieldGameEvents('away_goals', '', $this->get_game()->get_game_away_goals()));
@@ -165,10 +169,12 @@ class ScmDetailsGameFormController extends DefaultModuleController
         $game->set_game_home_yellow($this->form->get_value('home_yellow'));
         $game->set_game_home_red($this->form->get_value('home_red'));
         $game->set_game_home_empty($this->form->get_value('home_empty'));
+        $game->set_game_home_forfeit($this->form->get_value('home_forfeit'));
         $game->set_game_away_goals($this->form->get_value('away_goals'));
         $game->set_game_away_yellow($this->form->get_value('away_yellow'));
         $game->set_game_away_red($this->form->get_value('away_red'));
         $game->set_game_away_empty($this->form->get_value('away_empty'));
+        $game->set_game_away_forfeit($this->form->get_value('away_forfeit'));
 
         $game->set_game_video(new Url($this->form->get_value('video')));
         $game->set_game_summary($this->form->get_value('summary'));

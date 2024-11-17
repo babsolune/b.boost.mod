@@ -81,7 +81,12 @@ class ScmDayGamesFormController extends DefaultModuleController
                     break;
             }
 
-            $game_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>D' . $gr . $or . '</strong><span class="warning">' . $bonus . $status . '</span>',
+            $forfeit = $game->get_game_home_forfeit() || $game->get_game_away_forfeit() ?  ' ' . $this->lang['scm.event.forfeit'] : '';
+
+            $game_fieldset->add_field(new FormFieldFree(
+                'game_number_' . $gr . $or,
+                '',
+                '<strong>D' . $gr . $or . '</strong><span class="warning">' . $bonus . $status . $forfeit . '</span>',
                 ['class' => 'game-name small text-italic form-D' . $gr . $or]
             ));
             $game_fieldset->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $gr, $ro, $or), 'small text-italic'));

@@ -25,6 +25,7 @@ class ScmGame
     private $game_home_yellow;
     private $game_home_red;
     private $game_home_empty;
+    private $game_home_forfeit;
     private $game_away_id;
     private $game_away_score;
     private $game_away_def_bonus;
@@ -34,6 +35,7 @@ class ScmGame
     private $game_away_yellow;
     private $game_away_red;
     private $game_away_empty;
+    private $game_away_forfeit;
     private $game_date;
     private $game_video;
     private $game_summary;
@@ -219,6 +221,16 @@ class ScmGame
         $this->game_home_empty = $game_home_empty;
     }
 
+    function get_game_home_forfeit()
+    {
+        return $this->game_home_forfeit;
+    }
+
+    function set_game_home_forfeit($game_home_forfeit)
+    {
+        $this->game_home_forfeit = $game_home_forfeit;
+    }
+
     function get_game_away_id()
     {
         return $this->game_away_id;
@@ -324,6 +336,16 @@ class ScmGame
         $this->game_away_empty = $game_away_empty;
     }
 
+    function get_game_away_forfeit()
+    {
+        return $this->game_away_forfeit;
+    }
+
+    function set_game_away_forfeit($game_away_forfeit)
+    {
+        $this->game_away_forfeit = $game_away_forfeit;
+    }
+
     function get_game_date()
     {
         return $this->game_date;
@@ -406,6 +428,7 @@ class ScmGame
 			'game_home_yellow'    => TextHelper::serialize($this->get_game_home_yellow()),
 			'game_home_red'       => TextHelper::serialize($this->get_game_home_red()),
 			'game_home_empty'     => $this->get_game_home_empty(),
+			'game_home_forfeit'   => $this->get_game_home_forfeit(),
 			'game_away_id'        => $this->get_game_away_id(),
 			'game_away_score'     => $this->get_game_away_score(),
 			'game_away_pen'       => $this->get_game_away_pen(),
@@ -415,6 +438,7 @@ class ScmGame
 			'game_away_yellow'    => TextHelper::serialize($this->get_game_away_yellow()),
 			'game_away_red'       => TextHelper::serialize($this->get_game_away_red()),
 			'game_away_empty'     => $this->get_game_away_empty(),
+			'game_away_forfeit'   => $this->get_game_away_forfeit(),
 			'game_date'           => $this->get_game_date() !== null ? $this->get_game_date()->get_timestamp() : 0,
 			'game_video'          => $this->get_game_video()->relative(),
 			'game_summary'        => $this->get_game_summary(),
@@ -442,6 +466,7 @@ class ScmGame
 		$this->game_home_yellow    = !empty($properties['game_home_yellow']) ? TextHelper::unserialize($properties['game_home_yellow']) : [];
 		$this->game_home_red       = !empty($properties['game_home_red']) ? TextHelper::unserialize($properties['game_home_red']) : [];
 		$this->game_home_empty     = $properties['game_home_empty'];
+		$this->game_home_forfeit   = $properties['game_home_forfeit'];
 		$this->game_away_id        = $properties['game_away_id'];
 		$this->game_away_score     = $properties['game_away_score'];
 		$this->game_away_pen       = $properties['game_away_pen'];
@@ -451,6 +476,7 @@ class ScmGame
 		$this->game_away_yellow    = !empty($properties['game_away_yellow']) ? TextHelper::unserialize($properties['game_away_yellow']) : [];
 		$this->game_away_red       = !empty($properties['game_away_red']) ? TextHelper::unserialize($properties['game_away_red']) : [];
 		$this->game_away_empty     = $properties['game_away_empty'];
+		$this->game_away_forfeit   = $properties['game_away_forfeit'];
 		$this->game_date           = !empty($properties['game_date']) ? new Date($properties['game_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->game_video          = new Url($properties['game_video']);
 		$this->game_summary        = $properties['game_summary'];
@@ -526,6 +552,8 @@ class ScmGame
                 'HOME_SCORE'      => $this->game_home_score,
                 'HOME_PEN'        => $this->game_home_pen,
                 'HOME_EMPTY'      => $this->game_home_empty,
+                'HOME_FORFEIT'    => $this->game_home_forfeit,
+                'AWAY_FORFEIT'    => $this->game_away_forfeit,
                 'AWAY_EMPTY'      => $this->game_away_empty,
                 'AWAY_PEN'        => $this->game_away_pen,
                 'AWAY_SCORE'      => $this->game_away_score,

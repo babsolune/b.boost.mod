@@ -34,7 +34,7 @@
                                     <td>{dates.games.GAME_DATE_HOUR_MINUTE}</td>
                                     <td class="# IF dates.games.C_HOME_FAV #text-strong# ENDIF #">
                                         <div class="flex-team flex-right">
-                                            <span><a href="{dates.games.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{dates.games.HOME_TEAM}</a></span>
+                                            <span><a href="{dates.games.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF dates.games.HOME_FORFEIT # warning# ENDIF #">{dates.games.HOME_TEAM}</a></span>
                                             # IF dates.games.C_HAS_HOME_LOGO #<img src="{dates.games.HOME_LOGO}" alt="{dates.games.HOME_TEAM}"># ENDIF #
                                         </div>
                                     </td>
@@ -47,7 +47,7 @@
                                     <td class="# IF dates.games.C_AWAY_FAV #text-strong# ENDIF #">
                                         <div class="flex-team flex-left">
                                             # IF dates.games.C_HAS_AWAY_LOGO #<img src="{dates.games.AWAY_LOGO}" alt="{dates.games.AWAY_TEAM}"># ENDIF #
-                                            <span><a href="{dates.games.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{dates.games.AWAY_TEAM}</a></span>
+                                            <span><a href="{dates.games.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF dates.games.AWAY_FORFEIT # warning# ENDIF #">{dates.games.AWAY_TEAM}</a></span>
                                         </div>
                                     </td>
                                     <td>

@@ -52,6 +52,7 @@ $lang['scm.event.yellow.cards'] = 'Cartons jaunes';
 $lang['scm.event.red.cards']    = 'Cartons rouges';
 $lang['scm.event.back']         = 'Retour';
 $lang['scm.event.penalties']    = 'Tirs au but';
+$lang['scm.event.forfeit']      = 'Forfait';
 $lang['scm.event.stadium']      = 'Adresse du match';
 $lang['scm.event.video']        = 'Vidéo du match';
 $lang['scm.event.summary']      = 'Résumé du match';
