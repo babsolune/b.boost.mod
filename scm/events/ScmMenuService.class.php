@@ -213,6 +213,7 @@ class ScmMenuService
 
     private static function current_event_list()
     {
+        $now = new Date();
         $event_id = AppContext::get_request()->get_getint('event_id', 0);
         $event = ScmEventService::get_event($event_id);
 
@@ -224,11 +225,14 @@ class ScmMenuService
         $options[] = new FormFieldSelectChoiceOption(LangLoader::get_message('scm.change.event', 'common', 'scm'), 0);
         foreach ($events as $event)
         {
-            if (ScmSeasonService::check_season($event['season_id']))
+            $item = new ScmEvent();
+            $item->set_properties($event);
+            if (ScmSeasonService::check_season($item->get_season_id()) && $item->get_end_date() > $now)
                 $form_events[] = new FormFieldSelectChoiceOption(
-                    ScmDivisionService::get_division($event['division_id'])->get_division_name()
-                    . ' - ' . ScmSeasonService::get_season($event['season_id'])->get_season_name(), 
-                    $event['id']
+                    $item->get_category()->get_name()
+                    . ' - ' . ScmDivisionService::get_division($item->get_division_id())->get_division_name()
+                    . ' - ' . ScmSeasonService::get_season($item->get_season_id())->get_season_name(), 
+                    $item->get_id()
                 );
         }
         asort($form_events);
