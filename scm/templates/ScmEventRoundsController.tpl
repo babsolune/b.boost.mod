@@ -68,7 +68,7 @@
                                     # IF matchdays.dates.groups.HOME_ID #
                                         <div class="flex-team flex-left">
                                             # IF matchdays.dates.groups.C_HAS_HOME_LOGO #<img src="{matchdays.dates.groups.HOME_LOGO}" alt="{matchdays.dates.groups.HOME_TEAM}"># ENDIF #
-                                            <span><a href="{matchdays.dates.groups.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{matchdays.dates.groups.HOME_TEAM}</a></span>
+                                            <span><a href="{matchdays.dates.groups.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF matchdays.dates.groups.HOME_FORFEIT # warning# ENDIF #">{matchdays.dates.groups.HOME_TEAM}</a></span>
                                         </div>
                                     # ENDIF #
                                 </div>
@@ -80,7 +80,7 @@
                                     # IF matchdays.dates.groups.AWAY_ID #
                                         <div class="flex-team flex-left">
                                             # IF matchdays.dates.groups.C_HAS_AWAY_LOGO #<img src="{matchdays.dates.groups.AWAY_LOGO}" alt="{matchdays.dates.groups.AWAY_TEAM}"># ENDIF #
-                                            <span><a href="{matchdays.dates.groups.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{matchdays.dates.groups.AWAY_TEAM}</a></span>
+                                            <span><a href="{matchdays.dates.groups.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF matchdays.dates.groups.AWAY_FORFEIT # warning# ENDIF #">{matchdays.dates.groups.AWAY_TEAM}</a></span>
                                         </div>
                                     # ENDIF #
                                 </div>

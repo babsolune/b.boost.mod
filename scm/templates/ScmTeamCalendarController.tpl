@@ -39,7 +39,7 @@
                                     <td>{games.GAME_DATE_HOUR_MINUTE}</td>
                                     <td>
                                         <div class="flex-team flex-right">
-                                            <span# IF games.C_IS_HOME_TEAM # class="{games.TEAM_STATUS}"# ENDIF #># IF games.C_IS_HOME_TEAM #{games.HOME_TEAM}# ELSE #<a href="{games.U_HOME_CALENDAR}" class="offload">{games.HOME_TEAM}</a># ENDIF #</span>
+                                            <span# IF games.C_IS_HOME_TEAM # class="{games.TEAM_STATUS}"# ENDIF #># IF games.C_IS_HOME_TEAM #{games.HOME_TEAM}# ELSE #<a href="{games.U_HOME_CALENDAR}" class="offload# IF games.HOME_FORFEIT # warning# ENDIF #">{games.HOME_TEAM}</a># ENDIF #</span>
                                             # IF games.C_HAS_HOME_LOGO #<img src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}"># ENDIF #
                                         </div>
                                     </td>
@@ -52,7 +52,7 @@
                                     <td>
                                         <div class="flex-team flex-left">
                                             # IF games.C_HAS_AWAY_LOGO #<img src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}"># ENDIF #
-                                            <span# IF games.C_IS_AWAY_TEAM # class="{games.TEAM_STATUS}"# ENDIF #># IF games.C_IS_AWAY_TEAM #{games.AWAY_TEAM}# ELSE #<a href="{games.U_AWAY_CALENDAR}" class="offload">{games.AWAY_TEAM}</a># ENDIF #</span>
+                                            <span# IF games.C_IS_AWAY_TEAM # class="{games.TEAM_STATUS}"# ENDIF #># IF games.C_IS_AWAY_TEAM #{games.AWAY_TEAM}# ELSE #<a href="{games.U_AWAY_CALENDAR}" class="offload# IF games.AWAY_FORFEIT # warning# ENDIF #">{games.AWAY_TEAM}</a># ENDIF #</span>
                                         </div>
                                     </td>
                                     <td>
