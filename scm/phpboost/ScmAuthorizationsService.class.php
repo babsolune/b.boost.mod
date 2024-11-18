@@ -12,7 +12,7 @@ class ScmAuthorizationsService extends CategoriesAuthorizationsService
 	const CLUBS_AUTH = 32;
 	const DIVISIONS_AUTH = 64;
 	const SEASONS_AUTH = 128;
-	const EVENTITIONS_AUTH = 256;
+	const EVENTS_AUTH = 256;
 
 	public function manage_clubs()
 	{
@@ -31,7 +31,7 @@ class ScmAuthorizationsService extends CategoriesAuthorizationsService
 
 	public function manage_events()
 	{
-		return $this->is_authorized(self::EVENTITIONS_AUTH);
+		return $this->is_authorized(self::EVENTS_AUTH);
 	}
 
 	protected function is_authorized($bit, $mode = Authorizations::AUTH_CHILD_PRIORITY)

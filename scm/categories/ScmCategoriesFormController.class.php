@@ -96,7 +96,7 @@ class ScmCategoriesFormController extends DefaultCategoriesFormController
 					new MemberDisabledActionAuthorization(self::$lang['scm.manage.clubs.auth'], ScmAuthorizationsService::CLUBS_AUTH),
 					new MemberDisabledActionAuthorization(self::$lang['scm.manage.divisions.auth'], ScmAuthorizationsService::DIVISIONS_AUTH),
 					new MemberDisabledActionAuthorization(self::$lang['scm.manage.seasons.auth'], ScmAuthorizationsService::SEASONS_AUTH),
-					new MemberDisabledActionAuthorization(self::$lang['scm.manage.events.auth'], ScmAuthorizationsService::EVENTITIONS_AUTH)
+					new MemberDisabledActionAuthorization(self::$lang['scm.manage.events.auth'], ScmAuthorizationsService::EVENTS_AUTH)
 				]
 			)
 		);

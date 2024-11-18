@@ -1,4 +1,4 @@
-# name|rewrited_name|c_order|special_auth|auth|id_parent|desc|thumb
+# name|slug|c_order|special_auth|auth|id_parent|description|thumbnail
 Test|test|1|0||0||default
 Séniors|seniors|2|0||0||default
 U21|u21|3|0||0||default
