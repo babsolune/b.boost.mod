@@ -60,43 +60,59 @@ class ScmDetailsGameFormController extends DefaultModuleController
         );
 
         $fieldset = new FormFieldsetHTML('game', '');
-        $fieldset->set_css_class('game-details');
+        $fieldset->set_css_class('game-details portable');
         $form->add_fieldset($fieldset);
 
-        $fieldset->add_field(new FormFieldSpacer('empty', ''));
-        $fieldset->add_field(new FormFieldSpacer('team_1', $this->get_game()->get_game_home_id() == 0 ? $this->lang['scm.th.team'] . ' 1' : ScmTeamService::get_team_name($this->get_game()->get_game_home_id())));
-        $fieldset->add_field(new FormFieldSpacer('team_2', $this->get_game()->get_game_away_id() == 0 ? $this->lang['scm.th.team'] . ' 2' : ScmTeamService::get_team_name($this->get_game()->get_game_away_id())));
+        $fieldset->add_field(new FormFieldSpacer('empty', '', ['class' => 'portable-full']));
+        $fieldset->add_field(new FormFieldSpacer('team_1', $this->get_game()->get_game_home_id() == 0 ? $this->lang['scm.th.team'] . ' 1' : ScmTeamService::get_team_name($this->get_game()->get_game_home_id()),
+            ['class' => 'portable-half']
+        ));
+        $fieldset->add_field(new FormFieldSpacer('team_2', $this->get_game()->get_game_away_id() == 0 ? $this->lang['scm.th.team'] . ' 2' : ScmTeamService::get_team_name($this->get_game()->get_game_away_id()),
+            ['class' => 'portable-half']
+        ));
 
         if ($this->bracket_games && $this->return_games) {
             if (($this->get_game()->get_game_order() > count($this->games_number) / 2)) {
-                $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.event.penalties']));
+                $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.event.penalties'],
+                    ['class' => 'portable-full']
+                ));
                 $fieldset->add_field(new FormFieldTextEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
-                    ['class' => 'home-details', 'pattern' => '[0-9]*']
+                    ['class' => 'home-details portable-half', 'pattern' => '[0-9]*']
                 ));
                 $fieldset->add_field(new FormFieldTextEditor('away_pen', '', $this->get_game()->get_game_away_pen(),
-                    ['class' => 'away-details', 'pattern' => '[0-9]*']
+                    ['class' => 'away-details portable-half', 'pattern' => '[0-9]*']
                 ));
             }
         }
         elseif ($this->bracket_games && !$this->return_games) {
-            $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.event.penalties']));
+            $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.event.penalties'],
+                ['class' => 'portable-full']
+            ));
             $fieldset->add_field(new FormFieldTextEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
-                ['class' => 'home-details', 'pattern' => '[0-9]*']
+                ['class' => 'home-details portable-half', 'pattern' => '[0-9]*']
             ));
             $fieldset->add_field(new FormFieldTextEditor('away_pen', '', $this->get_game()->get_game_away_pen(),
-                ['class' => 'away-details', 'pattern' => '[0-9]*']
+                ['class' => 'away-details portable-half', 'pattern' => '[0-9]*']
             ));
         }
 
         if ($this->bracket_games) {
-            $fieldset->add_field(new FormFieldSpacer('empty_field', $this->lang['scm.event.empty.field']));
-            $fieldset->add_field(new FormFieldTextEditor('home_empty', '', $this->get_game()->get_game_home_empty()));
-            $fieldset->add_field(new FormFieldTextEditor('away_empty', '', $this->get_game()->get_game_away_empty()));
+            $fieldset->add_field(new FormFieldSpacer('empty_field', $this->lang['scm.event.empty.field'],
+                ['class' => 'portable-full']
+            ));
+            $fieldset->add_field(new FormFieldTextEditor('home_empty', '', $this->get_game()->get_game_home_empty(),
+                ['class' => 'portable-half']
+            ));
+            $fieldset->add_field(new FormFieldTextEditor('away_empty', '', $this->get_game()->get_game_away_empty(),
+                ['class' => 'portable-half']
+            ));
         }
 
         if($this->get_params()->get_bonus())
         {
-            $fieldset->add_field(new FormFieldSpacer('offensive_bonus', $this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE ? $this->lang['scm.event.off.bonus'] : $this->lang['scm.event.bonus']));
+            $fieldset->add_field(new FormFieldSpacer('offensive_bonus', $this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE ? $this->lang['scm.event.off.bonus'] : $this->lang['scm.event.bonus'],
+                ['class' => 'portable-full']
+            ));
             $fieldset->add_field(new FormFieldTextEditor('home_off_bonus', '', $this->get_game()->get_game_home_off_bonus(),
                 ['class' => 'home-details', 'pattern' => '[0-9]*']
             ));
@@ -105,7 +121,9 @@ class ScmDetailsGameFormController extends DefaultModuleController
             ));
             if($this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE)
             {
-                $fieldset->add_field(new FormFieldSpacer('defensive_bonus', $this->lang['scm.event.def.bonus']));
+                $fieldset->add_field(new FormFieldSpacer('defensive_bonus', $this->lang['scm.event.def.bonus'],
+                    ['class' => 'portable-full']
+                ));
                 $fieldset->add_field(new FormFieldTextEditor('home_def_bonus', '', $this->get_game()->get_game_home_def_bonus(),
                     ['class' => 'home-details', 'pattern' => '[0-9]*']
                 ));
@@ -115,21 +133,45 @@ class ScmDetailsGameFormController extends DefaultModuleController
             }
         }
 
-        $fieldset->add_field(new FormFieldSpacer('game_forfeit', $this->lang['scm.event.forfeit']));
-        $fieldset->add_field(new FormFieldCheckbox('home_forfeit', '', $this->get_game()->get_game_home_forfeit()));
-        $fieldset->add_field(new FormFieldCheckbox('away_forfeit', '', $this->get_game()->get_game_away_forfeit()));
+        $fieldset->add_field(new FormFieldSpacer('game_forfeit', $this->lang['scm.event.forfeit'],
+            ['class' => 'portable-full']
+        ));
+        $fieldset->add_field(new FormFieldCheckbox('home_forfeit', '', $this->get_game()->get_game_home_forfeit(),
+            ['class' => 'portable-half']
+        ));
+        $fieldset->add_field(new FormFieldCheckbox('away_forfeit', '', $this->get_game()->get_game_away_forfeit(),
+            ['class' => 'portable-half']
+        ));
 
-        $fieldset->add_field(new FormFieldSpacer('game_goals', $this->lang['scm.event.goals']));
-        $fieldset->add_field(new ScmFormFieldGameEvents('home_goals', '', $this->get_game()->get_game_home_goals()));
-        $fieldset->add_field(new ScmFormFieldGameEvents('away_goals', '', $this->get_game()->get_game_away_goals()));
+        $fieldset->add_field(new FormFieldSpacer('game_goals', $this->lang['scm.event.goals'],
+            ['class' => 'portable-full']
+        ));
+        $fieldset->add_field(new ScmFormFieldGameEvents('home_goals', '', $this->get_game()->get_game_home_goals(),
+            ['class' => 'portable-half']
+        ));
+        $fieldset->add_field(new ScmFormFieldGameEvents('away_goals', '', $this->get_game()->get_game_away_goals(),
+            ['class' => 'portable-half']
+        ));
 
-        $fieldset->add_field(new FormFieldSpacer('yellow_card', $this->lang['scm.event.yellow.cards']));
-        $fieldset->add_field(new ScmFormFieldGameEvents('home_yellow', '', $this->get_game()->get_game_home_yellow()));
-        $fieldset->add_field(new ScmFormFieldGameEvents('away_yellow', '', $this->get_game()->get_game_away_yellow()));
+        $fieldset->add_field(new FormFieldSpacer('yellow_card', $this->lang['scm.event.yellow.cards'],
+            ['class' => 'portable-full']
+        ));
+        $fieldset->add_field(new ScmFormFieldGameEvents('home_yellow', '', $this->get_game()->get_game_home_yellow(),
+            ['class' => 'portable-half']
+        ));
+        $fieldset->add_field(new ScmFormFieldGameEvents('away_yellow', '', $this->get_game()->get_game_away_yellow(),
+            ['class' => 'portable-half']
+        ));
 
-        $fieldset->add_field(new FormFieldSpacer('red_card', $this->lang['scm.event.red.cards']));
-        $fieldset->add_field(new ScmFormFieldGameEvents('home_red', '', $this->get_game()->get_game_home_red()));
-        $fieldset->add_field(new ScmFormFieldGameEvents('away_red', '', $this->get_game()->get_game_away_red()));
+        $fieldset->add_field(new FormFieldSpacer('red_card', $this->lang['scm.event.red.cards'],
+            ['class' => 'portable-full']
+        ));
+        $fieldset->add_field(new ScmFormFieldGameEvents('home_red', '', $this->get_game()->get_game_home_red(),
+            ['class' => 'portable-half']
+        ));
+        $fieldset->add_field(new ScmFormFieldGameEvents('away_red', '', $this->get_game()->get_game_away_red(),
+            ['class' => 'portable-half']
+        ));
 
         $fieldset_unique = new FormFieldsetHTML('unique_details', '');
         $form->add_fieldset($fieldset_unique);
@@ -139,17 +181,23 @@ class ScmDetailsGameFormController extends DefaultModuleController
                 new FormFieldSelectChoiceOption('', ''),
                 new FormFieldSelectChoiceOption($this->lang['scm.event.status.delayed'], ScmGame::DELAYED),
                 new FormFieldSelectChoiceOption($this->lang['scm.event.status.stopped'], ScmGame::STOPPED)
-            ]
+            ],
+            ['class' => 'portable-full']
         ));
 
         if (!$this->get_game()->get_game_playground())
 		$fieldset_unique->add_field(new FormFieldSimpleSelectChoice('stadium', $this->lang['scm.event.stadium'], $this->get_game()->get_game_stadium(),
-            $this->get_stadium($this->get_game()->get_game_home_id())
+            $this->get_stadium($this->get_game()->get_game_home_id()),
+            ['class' => 'portable-full']
         ));
 
-        $fieldset_unique->add_field(new FormFieldUrlEditor('video', $this->lang['scm.event.video'], $this->get_game()->get_game_video()->relative()));
+        $fieldset_unique->add_field(new FormFieldUrlEditor('video', $this->lang['scm.event.video'], $this->get_game()->get_game_video()->relative(),
+            ['class' => 'portable-full']
+        ));
 
-        $fieldset_unique->add_field(new FormFieldRichTextEditor('summary', $this->lang['scm.event.summary'], $this->get_game()->get_game_summary()));
+        $fieldset_unique->add_field(new FormFieldRichTextEditor('summary', $this->lang['scm.event.summary'], $this->get_game()->get_game_summary(),
+            ['class' => 'portable-full']
+        ));
 
         $this->submit_button = new FormButtonDefaultSubmit();
 		$form->add_button($this->submit_button);

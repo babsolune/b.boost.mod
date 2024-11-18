@@ -156,6 +156,15 @@ th.bgc-sub a {
     margin-right: 0.309em;
 }
 
+.portable .fieldset-inset {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.portable .portable-half { width: 50%; text-align: center; }
+.portable .portable-full { width: 100%; }
+
 /* params */
 .params-form .fieldset-submit,
 .params-form p {
