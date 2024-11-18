@@ -1,5 +1,5 @@
 # name|slug|Nom complet|logo|flag|email|phone|locations|map_display
-Exempt|exempt|Club exempté|/scm/templates/images/badges/club.webp||||||0
+Exempt|exempt|Club exempté|||||||0
 Club 01|club-01|FC Club 01|/scm/templates/images/badges/club.webp||||||0
 Club 02|club-02|FC Club 02|/scm/templates/images/badges/club.webp||||||0
 Club 03|club-03|FC Club 03|/scm/templates/images/badges/club.webp||||||0
@@ -16,84 +16,3 @@ Club 13|club-13|FC Club 13|/scm/templates/images/badges/club.webp||||||0
 Club 14|club-14|FC Club 14|/scm/templates/images/badges/club.webp||||||0
 Club 15|club-15|FC Club 15|/scm/templates/images/badges/club.webp||||||0
 Club 16|club-16|FC Club 16|/scm/templates/images/badges/club.webp||||||0
-PMG A|pmg-a|Pays de Montaigne et Gurçon A|/upload/pmg.jpg|||||a:2:{i:0;a:6:{s:4:"name";s:10:"Club-house";s:7:"address";s:55:"82 Rue du Chêne Tord, Saint-Antoine-de-Breuilh, France";s:8:"latitude";s:17:"44.84751996579598";s:9:"longitude";s:19:"0.15202364999999496";s:4:"zoom";s:2:"16";s:26:"address_displayed_on_label";i:1;}i:1;a:6:{s:4:"name";s:21:"Stade Emannuel Furlan";s:7:"address";s:53:"PMG, Rue du Bondieu, Saint-Antoine-de-Breuilh, France";s:8:"latitude";s:17:"44.84799541579625";s:9:"longitude";s:19:"0.15428265000001495";s:4:"zoom";s:2:"16";s:26:"address_displayed_on_label";i:1;}}|1
-PMG B|pmg-b|Pays de Montaigne et Gurçon B|/upload/pmg.jpg|||||a:2:{i:0;a:6:{s:4:"name";s:10:"Club-house";s:7:"address";s:55:"82 Rue du Chêne Tord, Saint-Antoine-de-Breuilh, France";s:8:"latitude";s:17:"44.84751996579598";s:9:"longitude";s:19:"0.15202364999999496";s:4:"zoom";s:2:"16";s:26:"address_displayed_on_label";i:1;}i:1;a:6:{s:4:"name";s:21:"Stade Emannuel Furlan";s:7:"address";s:53:"PMG, Rue du Bondieu, Saint-Antoine-de-Breuilh, France";s:8:"latitude";s:17:"44.84799541579625";s:9:"longitude";s:19:"0.15428265000001495";s:4:"zoom";s:2:"16";s:26:"address_displayed_on_label";i:1;}}|1
-PMG C|pmg-c|Pays de Montaigne et Gurçon C|/upload/pmg.jpg|||||a:2:{i:0;a:6:{s:4:"name";s:10:"Club-house";s:7:"address";s:55:"82 Rue du Chêne Tord, Saint-Antoine-de-Breuilh, France";s:8:"latitude";s:17:"44.84751996579598";s:9:"longitude";s:19:"0.15202364999999496";s:4:"zoom";s:2:"16";s:26:"address_displayed_on_label";i:1;}i:1;a:6:{s:4:"name";s:21:"Stade Emannuel Furlan";s:7:"address";s:53:"PMG, Rue du Bondieu, Saint-Antoine-de-Breuilh, France";s:8:"latitude";s:17:"44.84799541579625";s:9:"longitude";s:19:"0.15428265000001495";s:4:"zoom";s:2:"16";s:26:"address_displayed_on_label";i:1;}}|1
-Albanie|albanie||/scm/templates/images/badges/club.webp|al|||||0
-Allemagne|allemagne||/scm/templates/images/badges/club.webp|de|||||0
-Angleterre|angleterre||/scm/templates/images/badges/club.webp|fe|||||0
-Autriche|autriche||/scm/templates/images/badges/club.webp|at|||||0
-Belgique|belgique||/scm/templates/images/badges/club.webp|be|||||0
-Croatie|croatie||/scm/templates/images/badges/club.webp|hr|||||0
-Danemark|danemark||/scm/templates/images/badges/club.webp|dk|||||0
-Écosse|écosse||/scm/templates/images/badges/club.webp|fs|||||0
-Espagne|espagne||/scm/templates/images/badges/club.webp|es|||||0
-Finlande|finlande||/scm/templates/images/badges/club.webp|fi|||||0
-France|france||/scm/templates/images/badges/club.webp|fr|||||0
-Géorgie|georgie||/scm/templates/images/badges/club.webp|ge|||||0
-Hongrie|hongrie||/scm/templates/images/badges/club.webp|hu|||||0
-Italie|italie||/scm/templates/images/badges/club.webp|it|||||0
-Pays-Bas|pays-bas||/scm/templates/images/badges/club.webp|nl|||||0
-Pays de Galles|pays-de-galles||/scm/templates/images/badges/club.webp|fw|||||0
-Pologne|pologne||/scm/templates/images/badges/club.webp|pl|||||0
-Portugal|portugal||/scm/templates/images/badges/club.webp|pt|||||0
-Rép. Tchèque|rep-tcheque||/scm/templates/images/badges/club.webp|cz|||||0
-Roumanie|roumanie||/scm/templates/images/badges/club.webp|ro|||||0
-Serbie|serbie||/scm/templates/images/badges/club.webp|rs|||||0
-Slovaquie|slovaquie||/scm/templates/images/badges/club.webp|sk|||||0
-Slovénie|slovenie||/scm/templates/images/badges/club.webp|si|||||0
-Suisse|suisse||/scm/templates/images/badges/club.webp|ch|||||0
-Turquie|turquie||/scm/templates/images/badges/club.webp|tr|||||0
-Ukraine|ukraine||/scm/templates/images/badges/club.webp|uk|||||0
-Man City|man-city|Manchester City|/scm/templates/images/badges/club.webp||||||0
-Seville|seville|FC Seville|/scm/templates/images/badges/club.webp||||||0
-Barcelone|barcelone|FC Barcelone|/scm/templates/images/badges/club.webp||||||0
-Naples|naples|SSC Napoli|/scm/templates/images/badges/club.webp||||||0
-Bayern M|bayern-m|Bayern Munich|/scm/templates/images/badges/club.webp||||||0
-Paris SG|paris-sg|Paris Saint-Germain|/scm/templates/images/badges/club.webp||||||0
-Benfica|benfica|Benfica Lisbonne|/scm/templates/images/badges/club.webp||||||0
-Rotterdam|rotterdam|Feyenoord Rotterdam|/scm/templates/images/badges/club.webp||||||0
-Real Madrid|real-madrid|Real Madrid|/scm/templates/images/badges/club.webp||||||0
-Man U|man-u|Manchester United|/scm/templates/images/badges/club.webp||||||0
-Inter Milan|inter-milan|Inter Milan|/scm/templates/images/badges/club.webp||||||0
-Dortmund|dortmund|Dortmund|/scm/templates/images/badges/club.webp||||||0
-Atletico M|atletico-m|Atletico Madrid|/scm/templates/images/badges/club.webp||||||0
-Leipzig|liepzig|RB Leipzig|/scm/templates/images/badges/club.webp||||||0
-Porto|porto|FC Porto|/scm/templates/images/badges/club.webp||||||0
-Arsenal|arsenal|Arsenal FC|/scm/templates/images/badges/club.webp||||||0
-Donetsk|donetsk|Chakhtar Donetsk|/scm/templates/images/badges/club.webp||||||0
-Salzbourg|Salzbourg|RB Salzbourg|/scm/templates/images/badges/club.webp||||||0
-AC Milan|ac-milan|AC Milan|/scm/templates/images/badges/club.webp||||||0
-Braga|braga|SC Braga|/scm/templates/images/badges/club.webp||||||0
-Eindhoven|eindhoven|PSV Eindhoven|/scm/templates/images/badges/club.webp||||||0
-Lazio|lazio|SS Lazio de Rome|/scm/templates/images/badges/club.webp||||||0
-Belgrade|belgrad|FC Étoile rouge de Belgrade|/scm/templates/images/badges/club.webp||||||0
-Copenhague|copenhague|FC Copenhague|/scm/templates/images/badges/club.webp||||||0
-Young Boys|young-boys|Berne SC Young Boys|/scm/templates/images/badges/club.webp||||||0
-Real Sociedad|real-sociedad|Real Sociedad|/scm/templates/images/badges/club.webp||||||0
-Galatasaray|galatasaray|Galatasaray SK|/scm/templates/images/badges/club.webp||||||0
-Celtics|celtics|Celtic de Glasgow FC|/scm/templates/images/badges/club.webp||||||0
-Newcastle|newcastle|Newcastle United FC|/scm/templates/images/badges/club.webp||||||0
-Berlin|berlin|Union Berlin|/scm/templates/images/badges/club.webp||||||0
-Antwerp|antwerp|Royal Antwerp FC|/scm/templates/images/badges/club.webp||||||0
-Lens|lens|RC Lens|/scm/templates/images/badges/club.webp||||||0
-Amiens|amiens|Amiens SC|/scm/templates/images/badges/club.webp||||||0
-Ajaccio|ajaccio|AC Ajaccio|/scm/templates/images/badges/club.webp||||||0
-Angers|angers|SCO Angers|/scm/templates/images/badges/club.webp||||||0
-Annecy|annecy|FC Annecy|/scm/templates/images/badges/club.webp||||||0
-Auxerre|auxerre|AJ Auxerre|/scm/templates/images/badges/club.webp||||||0
-Bastia|bastia|SC Bastia|/scm/templates/images/badges/club.webp||||||0
-Bordeaux|bordeaux|FC Girondins de Bordeaux|/scm/templates/images/badges/club.webp||||||0
-Caen|caen|SM Caen|/scm/templates/images/badges/club.webp||||||0
-Concarneau|concarneau|US Concarneau|/scm/templates/images/badges/club.webp||||||0
-Dunkerque|dunkerque|USL Dunkerque|/scm/templates/images/badges/club.webp||||||0
-Grenoble|grenoble|Grenoble F38|/scm/templates/images/badges/club.webp||||||0
-Guingamp|guingamp|EA Guingamp|/scm/templates/images/badges/club.webp||||||0
-Laval|caen|Stade Lavalois|/scm/templates/images/badges/club.webp||||||0
-Paris FC|paris-fc|Paris FC|/scm/templates/images/badges/club.webp||||||0
-Pau|pau|Pau FC|/scm/templates/images/badges/club.webp||||||0
-Quevilly|quevilly|Quevilly RM|/scm/templates/images/badges/club.webp||||||0
-Rodez|rodez|Rodez AF|/scm/templates/images/badges/club.webp||||||0
-Saint-Étienne|saint-etienne|AS Saint-Étienne|/scm/templates/images/badges/club.webp||||||0
-Troyes|troyes|ES Troyes AC|/scm/templates/images/badges/club.webp||||||0
-Valenciennes|valenciennes|Valencienne FC|/scm/templates/images/badges/club.webp||||||0

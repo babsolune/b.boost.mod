@@ -32,7 +32,7 @@ class ScmEventsManagerController extends DefaultModuleController
 			new HTMLTableColumn($this->lang['scm.season'], 'season_name'),
 			new HTMLTableColumn($this->lang['category.category'], 'id_category'),
 			new HTMLTableColumn($this->lang['common.status'], 'published'),
-			new HTMLTableColumn($this->lang['common.actions'], '', ['sr-only' => true])
+			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add()->rel() . '" aria-label="' . $this->lang['scm.add.event'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
         ];
 
 		if (!$display_categories)

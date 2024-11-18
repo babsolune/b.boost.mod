@@ -31,7 +31,7 @@ class ScmClubsManagerController extends DefaultModuleController
 			new HTMLTableColumn($this->lang['scm.club.colors'], ''),
 			new HTMLTableColumn($this->lang['scm.club.flag'], ''),
 			new HTMLTableColumn($this->lang['scm.club.logo'], ''),
-			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_club()->rel() . '" aria-label="' . $this->lang['scm.add.club'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>')
+			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_club()->rel() . '" aria-label="' . $this->lang['scm.add.club'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
         ];
 
 		$table_model = new SQLHTMLTableModel(ScmSetup::$scm_club_table, 'clubs-manager', $columns, new HTMLTableSortingRule('club_name', HTMLTableSortingRule::ASC));

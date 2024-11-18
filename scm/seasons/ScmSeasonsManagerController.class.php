@@ -28,7 +28,7 @@ class ScmSeasonsManagerController extends DefaultModuleController
 		$columns = [
 			new HTMLTableColumn('ID', 'id_season'),
 			new HTMLTableColumn($this->lang['common.name'], 'season_name'),
-			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_season()->rel() . '" aria-label="' . $this->lang['scm.add.season'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>')
+			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_season()->rel() . '" aria-label="' . $this->lang['scm.add.season'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
         ];
 
 		$table_model = new SQLHTMLTableModel(ScmSetup::$scm_season_table, 'seasons-manager', $columns, new HTMLTableSortingRule('season_name', HTMLTableSortingRule::DESC));

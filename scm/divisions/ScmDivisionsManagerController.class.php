@@ -31,7 +31,7 @@ class ScmDivisionsManagerController extends DefaultModuleController
 			new HTMLTableColumn($this->lang['common.name'], 'division_name'),
 			new HTMLTableColumn($this->lang['scm.event.type'], 'event_type'),
 			new HTMLTableColumn($this->lang['scm.game.type'], 'game_type'),
-			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_division()->rel() . '" aria-label="' . $this->lang['scm.add.division'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>')
+			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_division()->rel() . '" aria-label="' . $this->lang['scm.add.division'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
         ];
 
 		$table_model = new SQLHTMLTableModel(ScmSetup::$scm_division_table, 'divisions-manager', $columns, new HTMLTableSortingRule('division_name', HTMLTableSortingRule::ASC));
