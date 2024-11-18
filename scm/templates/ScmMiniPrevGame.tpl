@@ -4,11 +4,11 @@
             <tbody>
                 # START items #
                     <tr>
-                        <td class="smaller text-italic">
+                        <td class="smaller text-italic bgc-sub">
                             <span class="d-block text-strong">{items.GAME_CATEGORY}</span>
                             <a href="{items.U_EVENT}">{items.GAME_DIVISION}</a>
                         </td>
-                        <td colspan="2">
+                        <td colspan="2" class="bgc-sub">
                             <span class="small">{items.GAME_DATE_DAY}/{items.GAME_DATE_MONTH}/{items.YEAR}</span>
                             {items.GAME_DATE_HOUR}:{items.GAME_DATE_MINUTE}
                         </td>
