@@ -61,7 +61,7 @@ class ScmEventHomeService
             {
                 $item = new ScmGame();
                 $item->set_properties($game);
-                // if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
+                if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
                     $view->assign_block_vars('next_dates.next_days', $item->get_template_vars());
             }
         }
