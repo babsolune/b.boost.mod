@@ -4,13 +4,12 @@
             <tbody>
                 # START items #
                     <tr>
-                        <td class="smaller text-italic bgc-sub">
-                            <span class="d-block text-strong">{items.GAME_CATEGORY}</span>
-                            <a href="{items.U_EVENT}">{items.GAME_DIVISION}</a>
+                        <td class="text-italic text-strong bgc-sub">
+                            <span>{items.GAME_CATEGORY}</span>
                         </td>
-                        <td colspan="2" class="bgc-sub">
-                            <span class="small">{items.GAME_DATE_DAY}/{items.GAME_DATE_MONTH}/{items.YEAR}</span>
-                            {items.GAME_DATE_HOUR}:{items.GAME_DATE_MINUTE}
+                        <td colspan="2" class="bgc-sub smaller">
+                            <span>{items.GAME_DATE_DAY}/{items.GAME_DATE_MONTH}/{items.YEAR} {items.GAME_DATE_HOUR}:{items.GAME_DATE_MINUTE}</span>
+                            <a class="offload d-block" href="{items.U_EVENT}">{items.GAME_DIVISION}</a>
                         </td>
                     </tr>
                     <tr class="category-{items.CATEGORY_ID}">
