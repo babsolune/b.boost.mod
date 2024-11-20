@@ -108,11 +108,12 @@ class ScmRankingService
 
 	public static function build_results($event_id, $game_teams)
     {
+
         // Set result details for each team in all games
         $teams = [];
         for($i = 0; $i < count($game_teams); $i++)
         {
-            $points = $played = $win = $draw = $loss = 0;
+            $points = $played = $win = $draw = $loss = $fairplay = 0;
             if ($game_teams[$i]['goals_for'] > $game_teams[$i]['goals_against'])
             {
                 $points = ScmParamsService::get_params($event_id)->get_victory_points();
@@ -129,6 +130,16 @@ class ScmRankingService
                 $loss = $played = 1;
             }
 
+            $fairplay_cards = [];
+            foreach(TextHelper::deserialize($game_teams[$i]['yellow_card']) as $yellow)
+            {
+                $fairplay_cards[] = ScmParamsService::get_params($event_id)->get_fairplay_yellow();
+            }
+            foreach(TextHelper::deserialize($game_teams[$i]['red_card']) as $red)
+            {
+                $fairplay_cards[] = ScmParamsService::get_params($event_id)->get_fairplay_red();
+            }
+
             if ($game_teams[$i]['team_id'])
                 $teams[] = [
                     'team_id'       => $game_teams[$i]['team_id'],
@@ -142,6 +153,7 @@ class ScmRankingService
                     'goal_average'  => (int)$game_teams[$i]['goals_for'] - (int)$game_teams[$i]['goals_against'],
                     'off_bonus'     => (int)$game_teams[$i]['off_bonus'],
                     'def_bonus'     => (int)$game_teams[$i]['def_bonus'],
+                    'fairplay'      => array_sum($fairplay_cards),
 
                     'event_id'          => $event_id,
                     'points_prtl'       => 0,
@@ -149,7 +161,7 @@ class ScmRankingService
                     'goals_for_prlt'    => 0,
                     'goals_for_away'    => 0,
                     'win_away'          => 0,
-                    'fairplay'          => 0,
+                    'fairplay_prtl'     => 0,
                     'status'            => ScmTeamService::get_event_team_status($game_teams[$i]['team_id'])
                 ];
         }
@@ -172,6 +184,9 @@ class ScmRankingService
                 $results[$team_id]['goal_average']  += $team['goal_average'];
                 $results[$team_id]['off_bonus']     += $team['off_bonus'];
                 $results[$team_id]['def_bonus']     += $team['def_bonus'];
+                $results[$team_id]['fairplay']      += $team['fairplay'];
+
+                $yellow_card = '';
             }
         }
 
@@ -293,18 +308,18 @@ class ScmRankingService
         {
             if (($a['team_id'] == $game['game_home_id'] && $b['team_id'] == $game['game_away_id']))
             {
-                $a['goals_for'] += $game['game_home_score'];
-                $b['goals_for'] += $game['game_away_score'];
+                $a['goals_for_prtl'] += $game['game_home_score'];
+                $b['goals_for_prtl'] += $game['game_away_score'];
             }
             if ($b['team_id'] == $game['game_home_id'] && $a['team_id'] == $game['game_away_id'])
             {
-                $b['goals_for'] += $game['game_home_score'];
-                $a['goals_for'] += $game['game_away_score'];
+                $b['goals_for_prtl'] += $game['game_home_score'];
+                $a['goals_for_prtl'] += $game['game_away_score'];
             }
         }
-		if ($a['goals_for'] == $b['goals_for'])
+		if ($a['goals_for_prtl'] == $b['goals_for_prtl'])
 			return 0;
-		return ($a['goals_for'] < $b['goals_for']) ? 1 : -1;
+		return ($a['goals_for_prtl'] < $b['goals_for_prtl']) ? 1 : -1;
 	}
 
 	public static function goals_for_away($a, $b)
@@ -327,37 +342,6 @@ class ScmRankingService
 
 	public static function win($a, $b)
     {
-        foreach (ScmGameService::get_games($a['event_id']) as $game)
-        {
-            if ($a['team_id'] == $game['game_home_id'])
-            {
-                if ($game['game_home_score'] > $game['game_away_score'])
-                {
-                    $a['points_prtl'] += 1;
-                }
-            }
-            if ($a['team_id'] == $game['game_away_id'])
-            {
-                if ($game['game_home_score'] < $game['game_away_score'])
-                {
-                    $a['points_prtl'] += 1;
-                }
-            }
-            if ($b['team_id'] == $game['game_home_id'])
-            {
-                if ($game['game_home_score'] > $game['game_away_score'])
-                {
-                    $b['points_prtl'] += 1;
-                }
-            }
-            if ($b['team_id'] == $game['game_away_id'])
-            {
-                if ($game['game_home_score'] < $game['game_away_score'])
-                {
-                    $b['points_prtl'] += 1;
-                }
-            }
-        }
 		if ($a['win'] == $b['win'])
 			return 0;
 		return ($a['win'] < $b['win']) ? 1 : -1;
@@ -371,14 +355,14 @@ class ScmRankingService
             {
                 if ($game['game_home_score'] < $game['game_away_score'])
                 {
-                    $a['points_prtl'] += 1;
+                    $a['win_away'] += 1;
                 }
             }
             if ($b['team_id'] == $game['game_away_id'])
             {
                 if ($game['game_home_score'] < $game['game_away_score'])
                 {
-                    $b['points_prtl'] += 1;
+                    $b['win_away'] += 1;
                 }
             }
         }
@@ -401,7 +385,60 @@ class ScmRankingService
 		return ($b['fairplay'] < $a['fairplay']) ? 1 : -1;
 	}
 
-	public static function sort_general_ranks($results, $event_id)
+	public static function fairplay_prtl($a, $b)
+    {
+        foreach (ScmGameService::get_games($a['event_id']) as $game)
+        {
+            $a_fairplay = $b_fairplay = [];
+            if (($a['team_id'] == $game['game_home_id'] && $b['team_id'] == $game['game_away_id']))
+            {
+                foreach(TextHelper::deserialize($game['game_home_yellow']) as $yellow)
+                {
+                    $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
+                }
+                foreach(TextHelper::deserialize($game['game_home_red']) as $red)
+                {
+                    $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
+                }
+                foreach(TextHelper::deserialize($game['game_away_yellow']) as $yellow)
+                {
+                    $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
+                }
+                foreach(TextHelper::deserialize($game['game_away_red']) as $red)
+                {
+                    $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
+                }
+                $a['fairplay_prtl'] += array_sum($a_fairplay);
+                $b['fairplay_prtl'] += array_sum($b_fairplay);
+            }
+            if ($b['team_id'] == $game['game_home_id'] && $a['team_id'] == $game['game_away_id'])
+            {
+                foreach(TextHelper::deserialize($game['game_home_yellow']) as $yellow)
+                {
+                    $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
+                }
+                foreach(TextHelper::deserialize($game['game_home_red']) as $red)
+                {
+                    $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
+                }
+                foreach(TextHelper::deserialize($game['game_away_yellow']) as $yellow)
+                {
+                    $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
+                }
+                foreach(TextHelper::deserialize($game['game_away_red']) as $red)
+                {
+                    $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
+                }
+                $a['fairplay_prtl'] += array_sum($a_fairplay);
+                $b['fairplay_prtl'] += array_sum($b_fairplay);
+            }
+        }
+		if ($a['fairplay_prtl'] == $b['fairplay_prtl'])
+			return 0;
+		return ($b['fairplay_prtl'] < $a['fairplay_prtl']) ? 1 : -1;
+	}
+
+    public static function sort_general_ranks($results, $event_id)
     {
         foreach (array_reverse(self::get_params_crit($event_id)) as $crit) {
             if ($crit != '')

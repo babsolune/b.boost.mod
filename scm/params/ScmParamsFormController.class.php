@@ -360,8 +360,11 @@ class ScmParamsFormController extends DefaultModuleController
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goal.average'], 'goal_average_prtl');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goals.for'], 'goals_for');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goals.for'], 'goals_for_prtl');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goals.for'], 'goals_for_away');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goals.against'], 'goals_against');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goals.against'], 'goals_against_prtl');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.win'], 'win');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.win.away'], 'win_away');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.fairplay'], 'fairplay');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.fairplay'], 'fairplay_prtl');
 
