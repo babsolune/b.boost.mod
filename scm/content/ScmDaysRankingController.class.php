@@ -173,7 +173,7 @@ class ScmDaysRankingController extends DefaultModuleController
         }
 
         $this->view->put_all([
-            'C_EVENT_STARTING' => ScmDayService::get_last_day($this->event_id()) == 1,
+            'C_EVENT_STARTING' => ScmDayService::get_next_day($this->event_id()) == 1,
             'C_EVENT_ENDING' => ($day ? $day : ScmDayService::get_last_day($this->event_id())) == count(ScmDayService::get_days($this->event_id())),
             'LAST_DAY' => $prev_day,
             'NEXT_DAY' => $next_day,
