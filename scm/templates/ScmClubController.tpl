@@ -55,7 +55,7 @@
                             </div>
                         </div>
                         <div class="cell-2-3">
-                            # IF C_LOCATION_MAP #
+                            # IF C_DISPLAY_MAP #
                                 {LOCATION_MAP}
                             # ELSE #
                                 {LOCATION}

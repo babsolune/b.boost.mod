@@ -260,14 +260,17 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
         $options = [];
         $options[] = new FormFieldSelectChoiceOption('', 0);
+        $stadiums = 0;
 		$i = 1;
 		foreach(TextHelper::deserialize($real_club->get_club_locations()) as $club)
 		{
+            if ($club['name'])
+                $stadiums++;
             $options[] = new FormFieldSelectChoiceOption($club['name'], $i);
 			$i++;
 		}
 
-        return $options;
+        return $stadiums ? $options : [new FormFieldSelectChoiceOption(StringVars::replace_vars($this->lang['scm.club.no.stadium'], ['club' => $real_club->get_club_name()]), 0)];
     }
 
     private function get_game()

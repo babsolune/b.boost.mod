@@ -33,6 +33,7 @@ $lang['scm.club.colors.clue']   = 'Le nom est obligatoire pour valider une coule
 $lang['scm.club.event.list']    = 'Liste des compétitions du club';
 $lang['scm.club.phone.clue']    = 'Sans espaces, ni tirets, ni points';
 $lang['scm.club.stadium']       = 'Stade';
+$lang['scm.club.no.stadium']    = 'Aucun stade déclaré pour :club';
 $lang['scm.club.locations']     = 'Adresses du club';
 $lang['scm.club.display.map']   = 'Afficher la/les maps';
 $lang['scm.club.country']       = 'Pays';

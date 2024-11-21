@@ -239,22 +239,22 @@ class ScmClub
 			$club_locations = $club_locations_value;
 
 		$club_locations_map = '';
-		$has_club_locations_map = false;
+		$c_display_map = false;
 		if (ScmConfig::load()->is_googlemaps_available())
 		{
 			$map = new GoogleMapsDisplayMap($this->get_club_locations(), 'club_locations', $this->get_club_name());
 			$club_locations_map = $map->display();
-			$has_club_locations_map = $this->get_club_map_display();
+			$c_display_map = $this->get_club_map_display();
 		}
 
 		return [
             // Conditions
             'C_CONTROLS'      => $this->is_authorized_to_manage(),
-            'C_LOCATION_MAP'  => $has_club_locations_map,
+            'C_DISPLAY_MAP'   => $c_display_map && $this->has_locations(),
             'C_HAS_SHIELD'    => !empty($this->club_flag) || !empty($this->club_logo),
             'C_HAS_FLAG'      => !empty($this->club_flag),
             'C_HAS_LOGO'      => !empty($this->club_logo),
-            'C_HAS_WEBSITE'   => !empty($this->club_website),
+            'C_HAS_WEBSITE'   => !empty($this->club_website->rel()),
             'C_HAS_EMAIL'     => !empty($this->club_email),
             'C_HAS_PHONE'     => !empty($this->club_phone),
             'C_HAS_NAME'      => !empty($this->club_name),
@@ -277,5 +277,17 @@ class ScmClub
 			'U_DELETE'       => ScmUrlBuilder::delete_club($this->id_club)->rel(),
         ];
 	}
+
+    private function has_locations()
+    {
+        $club_locations_value = TextHelper::deserialize($this->get_club_locations());
+        $locations = [];
+        foreach ($club_locations_value as $options)
+        {
+            if ($options['name'])
+                $locations[] = $options;
+        }
+        return count($locations) > 0;
+    }
 }
 ?>

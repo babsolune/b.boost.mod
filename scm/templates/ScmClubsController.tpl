@@ -28,7 +28,7 @@
                                     # ENDIF #
                                 # ENDIF #
                             # ENDIF #
-                            <span><a href="{clubs.U_CLUB}" class="offload">{clubs.NAME}</a></span>
+                            <span><a href="{clubs.U_CLUB}" aria-label="{clubs.FULL_NAME}" class="offload">{clubs.NAME}</a></span>
                         </article>
                     # END clubs #
                 </div>
