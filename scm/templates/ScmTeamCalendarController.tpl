@@ -1,11 +1,11 @@
 <section id="module-scm" class="single-item modal-container">
     # INCLUDE MENU #
     <article>
-        <header><h2><span class="small">{@scm.team.results} :</span> {TEAM_NAME}</h2></header>
+        <header><h2><span class="small">{@scm.team.results} :</span> {TEAM_NAME}# IF C_GENERAL_FORFEIT # <span class="warning small">{@scm.params.status.forfeit}</span># ENDIF #</h2></header>
         <div class="content">
             # IF C_HAS_GAMES #
                 <div class="responsive-table">
-                    <table class="alternated-table width-pc-70 m-a">
+                    <table class="alternated-table">
                         <colgroup class="hidden-small-screens">
                             <col class="width-pc-5" />
                             # IF NOT C_ONE_DAY #<col class="width-pc-10" /># ENDIF #
@@ -39,7 +39,13 @@
                                     <td>{games.GAME_DATE_HOUR_MINUTE}</td>
                                     <td>
                                         <div class="flex-team flex-right">
-                                            <span# IF games.C_IS_HOME_TEAM # class="{games.TEAM_STATUS}"# ENDIF #># IF games.C_IS_HOME_TEAM #{games.HOME_TEAM}# ELSE #<a href="{games.U_HOME_CALENDAR}" class="offload# IF games.HOME_FORFEIT # warning# ENDIF #">{games.HOME_TEAM}</a># ENDIF #</span>
+                                            <span class="# IF games.C_IS_HOME_TEAM #{games.TEAM_STATUS}# ENDIF ## IF games.HOME_FORFEIT # warning# ENDIF ## IF games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                                # IF games.C_IS_HOME_TEAM #
+                                                    {games.HOME_TEAM}
+                                                # ELSE #
+                                                    <a href="{games.U_HOME_CALENDAR}" class="offload# IF games.HOME_FORFEIT # warning# ENDIF ## IF games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.HOME_TEAM}</a>
+                                                # ENDIF #
+                                            </span>
                                             # IF games.C_HAS_HOME_LOGO #<img src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}"># ENDIF #
                                         </div>
                                     </td>
@@ -52,7 +58,13 @@
                                     <td>
                                         <div class="flex-team flex-left">
                                             # IF games.C_HAS_AWAY_LOGO #<img src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}"># ENDIF #
-                                            <span# IF games.C_IS_AWAY_TEAM # class="{games.TEAM_STATUS}"# ENDIF #># IF games.C_IS_AWAY_TEAM #{games.AWAY_TEAM}# ELSE #<a href="{games.U_AWAY_CALENDAR}" class="offload# IF games.AWAY_FORFEIT # warning# ENDIF #">{games.AWAY_TEAM}</a># ENDIF #</span>
+                                            <span class="# IF games.C_IS_AWAY_TEAM #{games.TEAM_STATUS}# ENDIF ## IF games.AWAY_FORFEIT # warning# ENDIF ## IF games.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                                # IF games.C_IS_AWAY_TEAM #
+                                                    {games.AWAY_TEAM}
+                                                # ELSE #
+                                                    <a href="{games.U_AWAY_CALENDAR}" class="offload# IF games.AWAY_FORFEIT # warning# ENDIF ## IF games.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.AWAY_TEAM}</a>
+                                                # ENDIF #
+                                            </span>
                                         </div>
                                     </td>
                                     <td>

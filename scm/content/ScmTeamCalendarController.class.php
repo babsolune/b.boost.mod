@@ -73,6 +73,7 @@ class ScmTeamCalendarController extends DefaultModuleController
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
             'C_HAS_GAMES' => ScmGameService::has_games($this->event_id()),
             'C_IS_DAY' => ScmDivisionCache::load()->get_division($this->get_event()->get_division_id())['event_type'] == 'championship',
+            'C_GENERAL_FORFEIT' => ScmTeamService::get_team($this->team_id)->get_team_status() == ScmParams::FORFEIT,
             'TEAM_NAME' => $this->team_name
         ]);
 	}

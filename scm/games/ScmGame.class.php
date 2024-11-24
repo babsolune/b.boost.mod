@@ -553,6 +553,8 @@ class ScmGame
                 'HOME_PEN'        => $this->game_home_pen,
                 'HOME_EMPTY'      => $this->game_home_empty,
                 'HOME_FORFEIT'    => $this->game_home_forfeit,
+                'HOME_GENERAL_FORFEIT' => ScmTeamService::get_team($this->game_home_id)->get_team_status() == ScmParams::FORFEIT,
+                'AWAY_GENERAL_FORFEIT' => ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::FORFEIT,
                 'AWAY_FORFEIT'    => $this->game_away_forfeit,
                 'AWAY_EMPTY'      => $this->game_away_empty,
                 'AWAY_PEN'        => $this->game_away_pen,

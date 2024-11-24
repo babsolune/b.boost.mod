@@ -247,7 +247,7 @@ th.bgc-sub a {
 .grouped-fields .game-date        { width: 270px; }
 .grouped-fields .game-playground  { width: 80px; }
 .grouped-fields .game-team        { min-width: 120px; }
-.grouped-fields .game-score       { width: 50px; text-align: center; }
+.grouped-fields .game-score       { width: 70px; text-align: center; }
 
 .grouped-fields .game-name,
 .grouped-fields .form-field-action-link {
