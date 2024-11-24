@@ -37,7 +37,13 @@
                                 <td class="small">{prev_dates.prev_days.GAME_DATE_HOUR_MINUTE}</td>
                                 <td class="align-right home-{prev_dates.prev_days.ID}# IF prev_dates.prev_days.C_HOME_FAV # text-strong# ENDIF #">
                                     <div class="flex-team flex-right">
-                                        <span><a href="{prev_dates.prev_days.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF prev_dates.prev_days.HOME_FORFEIT # warning# ENDIF #">{prev_dates.prev_days.HOME_TEAM}</a></span>
+                                        <span>
+                                            <a
+                                                href="{prev_dates.prev_days.U_HOME_CALENDAR}"
+                                                aria-label="{@scm.see.club.calendar}"
+                                                class="offload# IF prev_dates.prev_days.HOME_FORFEIT # warning# ENDIF ## IF prev_dates.prev_days.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #"
+                                            >{prev_dates.prev_days.HOME_TEAM}</a>
+                                        </span>
                                         # IF prev_dates.prev_days.C_HAS_HOME_LOGO #<img src="{prev_dates.prev_days.HOME_LOGO}" alt="{prev_dates.prev_days.HOME_TEAM}"># ENDIF #
                                     </div>
                                 </td>
@@ -50,7 +56,13 @@
                                 <td class="align-left away-{prev_dates.prev_days.ID}# IF prev_dates.prev_days.C_AWAY_FAV # text-strong# ENDIF #">
                                     <div class="flex-team flex-left">
                                         # IF prev_dates.prev_days.C_HAS_AWAY_LOGO #<img src="{prev_dates.prev_days.AWAY_LOGO}" alt="{prev_dates.prev_days.AWAY_TEAM}"># ENDIF #
-                                        <span><a href="{prev_dates.prev_days.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF prev_dates.prev_days.AWAY_FORFEIT # warning# ENDIF #">{prev_dates.prev_days.AWAY_TEAM}</a></span>
+                                        <span>
+                                            <a
+                                                href="{prev_dates.prev_days.U_AWAY_CALENDAR}"
+                                                aria-label="{@scm.see.club.calendar}"
+                                                class="offload# IF prev_dates.prev_days.AWAY_FORFEIT # warning# ENDIF ## IF prev_dates.prev_days.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #"
+                                            >{prev_dates.prev_days.AWAY_TEAM}</a>
+                                        </span>
                                     </div>
                                 </td>
                             </tr>
@@ -89,7 +101,13 @@
                                 <td class="small">{next_dates.next_days.GAME_DATE_HOUR_MINUTE}</td>
                                 <td class="align-right home-{next_dates.next_days.ID}# IF next_dates.next_days.C_HOME_FAV # text-strong# ENDIF #">
                                     <div class="flex-team flex-right">
-                                        <span><a href="{next_dates.next_days.U_HOME_CALENDAR}" class="offload# IF next_dates.next_days.HOME_FORFEIT # warning# ENDIF #">{next_dates.next_days.HOME_TEAM}</a></span>
+                                        <span>
+                                            <a
+                                                href="{next_dates.next_days.U_HOME_CALENDAR}"
+                                                aria-label="{@scm.see.club.calendar}"
+                                                class="offload# IF next_dates.next_days.HOME_FORFEIT # warning# ENDIF ## IF next_dates.next_days.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #"
+                                            >{next_dates.next_days.HOME_TEAM}</a>
+                                        </span>
                                         # IF next_dates.next_days.C_HAS_HOME_LOGO #<img src="{next_dates.next_days.HOME_LOGO}" alt="{next_dates.next_days.HOME_TEAM}"># ENDIF #
                                     </div>
                                 </td>
@@ -102,7 +120,13 @@
                                 <td class="align-left away-{next_dates.next_days.ID}# IF next_dates.next_days.C_AWAY_FAV # text-strong# ENDIF #">
                                     <div class="flex-team flex-LEFT">
                                         # IF next_dates.next_days.C_HAS_AWAY_LOGO #<img src="{next_dates.next_days.AWAY_LOGO}" alt="{next_dates.next_days.AWAY_TEAM}"># ENDIF #
-                                        <span><a href="{next_dates.next_days.U_AWAY_CALENDAR}" class="offload# IF next_dates.next_days.AWAY_FORFEIT # warning# ENDIF #">{next_dates.next_days.AWAY_TEAM}</a></span>
+                                        <span>
+                                            <a
+                                                href="{next_dates.next_days.U_AWAY_CALENDAR}"
+                                                aria-label="{@scm.see.club.calendar}"
+                                                class="offload# IF next_dates.next_days.AWAY_FORFEIT # warning# ENDIF ## IF next_dates.next_days.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #"
+                                            >{next_dates.next_days.AWAY_TEAM}</a>
+                                        </span>
                                     </div>
                                 </td>
                             </tr>
