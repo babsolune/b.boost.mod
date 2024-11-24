@@ -139,10 +139,10 @@ class ScmBracketGamesFormController extends DefaultModuleController
                     $this->get_teams_list(),
                     ['class' => 'home-team game-team']
                 ));
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('home_score_' . $gr . $br . $or, '', $game_home_score,
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldNumberEditor('home_score_' . $gr . $br . $or, '', $game_home_score,
                     ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
                 ));
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('away_score_' . $gr . $br . $or, '', $game_away_score,
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldNumberEditor('away_score_' . $gr . $br . $or, '', $game_away_score,
                     ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
                 ));
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSimpleSelectChoice('away_team_' . $gr . $br . $or, '', $game_away_id,
@@ -227,10 +227,10 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 $this->get_teams_list(),
                 ['class' => 'home-team game-team']
             ));
-            $fieldset->add_field(new FormFieldTextEditor('home_score_' . $gr . $or, '', $game->get_game_home_score(),
+            $fieldset->add_field(new FormFieldNumberEditor('home_score_' . $gr . $or, '', $game->get_game_home_score(),
                 ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
             ));
-            $fieldset->add_field(new FormFieldTextEditor('away_score_' . $gr . $or, '', $game->get_game_away_score(),
+            $fieldset->add_field(new FormFieldNumberEditor('away_score_' . $gr . $or, '', $game->get_game_away_score(),
                 ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
             ));
             $fieldset->add_field(new FormFieldSimpleSelectChoice('away_team_' . $gr . $or, '', $game->get_game_away_id(),

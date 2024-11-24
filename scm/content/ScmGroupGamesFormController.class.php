@@ -99,10 +99,10 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     $this->get_teams_list(),
                     ['class' => 'home-team game-team']
                 ));
-                $groups_fieldset->add_field(new FormFieldTextEditor('home_score_' . $gr . $or, '', $game->get_game_home_score(),
+                $groups_fieldset->add_field(new FormFieldNumberEditor('home_score_' . $gr . $or, '', $game->get_game_home_score(),
                     ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
                 ));
-                $groups_fieldset->add_field(new FormFieldTextEditor('away_score_' . $gr . $or, '', $game->get_game_away_score(),
+                $groups_fieldset->add_field(new FormFieldNumberEditor('away_score_' . $gr . $or, '', $game->get_game_away_score(),
                     ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
                 ));
                 $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('away_team_' . $gr . $or, '', $game->get_game_away_id(),
@@ -156,10 +156,10 @@ class ScmGroupGamesFormController extends DefaultModuleController
                         $odd_filled && $game->get_game_home_id() == 0 ? [] : $this->get_group_teams_list($gr),
                         ['class' => 'home-team game-team']
                     ));
-                    ${'groups_fieldset' . $or}->add_field(new FormFieldTextEditor('home_score_' . $gr . $or, '', $game->get_game_home_score(),
+                    ${'groups_fieldset' . $or}->add_field(new FormFieldNumberEditor('home_score_' . $gr . $or, '', $game->get_game_home_score(),
                         ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
                     ));
-                    ${'groups_fieldset' . $or}->add_field(new FormFieldTextEditor('away_score_' . $gr . $or, '', $game->get_game_away_score(),
+                    ${'groups_fieldset' . $or}->add_field(new FormFieldNumberEditor('away_score_' . $gr . $or, '', $game->get_game_away_score(),
                         ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
                     ));
                     ${'groups_fieldset' . $or}->add_field(new FormFieldSimpleSelectChoice('away_team_' . $gr . $or, '', $game->get_game_away_id(),

@@ -101,10 +101,10 @@ class ScmDayGamesFormController extends DefaultModuleController
                 $this->get_teams_list(),
                 ['class' => 'home-team game-team']
             ));
-            $game_fieldset->add_field(new FormFieldTextEditor('home_score_' . $gr . $or, '', $game->get_game_home_score(),
+            $game_fieldset->add_field(new FormFieldNumberEditor('home_score_' . $gr . $or, '', $game->get_game_home_score(),
                 ['class' => 'game-score', 'pattern' => '[0-9]*']
             ));
-            $game_fieldset->add_field(new FormFieldTextEditor('away_score_' . $gr . $or, '', $game->get_game_away_score(),
+            $game_fieldset->add_field(new FormFieldNumberEditor('away_score_' . $gr . $or, '', $game->get_game_away_score(),
                 ['class' => 'game-score', 'pattern' => '[0-9]*']
             ));
             $game_fieldset->add_field(new FormFieldSimpleSelectChoice('away_team_' . $gr . $or, '', $game->get_game_away_id(),

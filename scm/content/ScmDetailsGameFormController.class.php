@@ -76,10 +76,10 @@ class ScmDetailsGameFormController extends DefaultModuleController
                 $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.event.penalties'],
                     ['class' => 'portable-full']
                 ));
-                $fieldset->add_field(new FormFieldTextEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
+                $fieldset->add_field(new FormFieldNumberEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
                     ['class' => 'home-details portable-half', 'pattern' => '[0-9]*']
                 ));
-                $fieldset->add_field(new FormFieldTextEditor('away_pen', '', $this->get_game()->get_game_away_pen(),
+                $fieldset->add_field(new FormFieldNumberEditor('away_pen', '', $this->get_game()->get_game_away_pen(),
                     ['class' => 'away-details portable-half', 'pattern' => '[0-9]*']
                 ));
             }
@@ -88,10 +88,10 @@ class ScmDetailsGameFormController extends DefaultModuleController
             $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.event.penalties'],
                 ['class' => 'portable-full']
             ));
-            $fieldset->add_field(new FormFieldTextEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
+            $fieldset->add_field(new FormFieldNumberEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
                 ['class' => 'home-details portable-half', 'pattern' => '[0-9]*']
             ));
-            $fieldset->add_field(new FormFieldTextEditor('away_pen', '', $this->get_game()->get_game_away_pen(),
+            $fieldset->add_field(new FormFieldNumberEditor('away_pen', '', $this->get_game()->get_game_away_pen(),
                 ['class' => 'away-details portable-half', 'pattern' => '[0-9]*']
             ));
         }
@@ -113,10 +113,10 @@ class ScmDetailsGameFormController extends DefaultModuleController
             $fieldset->add_field(new FormFieldSpacer('offensive_bonus', $this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE ? $this->lang['scm.event.off.bonus'] : $this->lang['scm.event.bonus'],
                 ['class' => 'portable-full']
             ));
-            $fieldset->add_field(new FormFieldTextEditor('home_off_bonus', '', $this->get_game()->get_game_home_off_bonus(),
+            $fieldset->add_field(new FormFieldNumberEditor('home_off_bonus', '', $this->get_game()->get_game_home_off_bonus(),
                 ['class' => 'home-details', 'pattern' => '[0-9]*']
             ));
-            $fieldset->add_field(new FormFieldTextEditor('away_off_bonus', '', $this->get_game()->get_game_away_off_bonus(),
+            $fieldset->add_field(new FormFieldNumberEditor('away_off_bonus', '', $this->get_game()->get_game_away_off_bonus(),
                 ['class' => 'away-details', 'pattern' => '[0-9]*']
             ));
             if($this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE)
@@ -124,10 +124,10 @@ class ScmDetailsGameFormController extends DefaultModuleController
                 $fieldset->add_field(new FormFieldSpacer('defensive_bonus', $this->lang['scm.event.def.bonus'],
                     ['class' => 'portable-full']
                 ));
-                $fieldset->add_field(new FormFieldTextEditor('home_def_bonus', '', $this->get_game()->get_game_home_def_bonus(),
+                $fieldset->add_field(new FormFieldNumberEditor('home_def_bonus', '', $this->get_game()->get_game_home_def_bonus(),
                     ['class' => 'home-details', 'pattern' => '[0-9]*']
                 ));
-                $fieldset->add_field(new FormFieldTextEditor('away_def_bonus', '', $this->get_game()->get_game_away_def_bonus(),
+                $fieldset->add_field(new FormFieldNumberEditor('away_def_bonus', '', $this->get_game()->get_game_away_def_bonus(),
                     ['class' => 'away-details', 'pattern' => '[0-9]*']
                 ));
             }
