@@ -131,13 +131,16 @@ class ScmRankingService
             }
 
             $fairplay_cards = [];
-            foreach(TextHelper::deserialize($game_teams[$i]['yellow_card']) as $yellow)
+            if (!empty($game_teams[$i]['yellow_card']) || !empty($game_teams[$i]['red_card']))
             {
-                $fairplay_cards[] = ScmParamsService::get_params($event_id)->get_fairplay_yellow();
-            }
-            foreach(TextHelper::deserialize($game_teams[$i]['red_card']) as $red)
-            {
-                $fairplay_cards[] = ScmParamsService::get_params($event_id)->get_fairplay_red();
+                foreach(TextHelper::deserialize($game_teams[$i]['yellow_card']) as $yellow)
+                {
+                    $fairplay_cards[] = ScmParamsService::get_params($event_id)->get_fairplay_yellow();
+                }
+                foreach(TextHelper::deserialize($game_teams[$i]['red_card']) as $red)
+                {
+                    $fairplay_cards[] = ScmParamsService::get_params($event_id)->get_fairplay_red();
+                }
             }
 
             if ($game_teams[$i]['team_id'])
