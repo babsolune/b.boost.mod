@@ -100,6 +100,7 @@ class ScmSetup extends DefaultModuleSetup
 			'end_date'    => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
 
 			'views_number'          => ['type' => 'integer', 'length' => 11, 'default' => 0],
+			'scoring_type'          => ['type' => 'string', 'length' => 65, 'default' => '""'],
 			'published'             => ['type' => 'integer', 'length' => 1, 'notnull' => 1, 'default' => 0],
 			'publishing_start_date' => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
 			'publishing_end_date'   => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
@@ -182,7 +183,7 @@ class ScmSetup extends DefaultModuleSetup
 	private function create_scm_game_table()
 	{
 		$fields = [
-			'id_game'             => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
+			'id_game'             => ['type' => 'integer', 'length' => 65, 'autoincrement' => true, 'notnull' => 1],
 			'game_event_id'       => ['type' => 'integer', 'length' => 11, 'notnull' => 1],
 			'game_playground'     => ['type' => 'string', 'length' => 65],
 			'game_type'           => ['type' => 'string', 'length' => 11],
@@ -349,7 +350,7 @@ class ScmSetup extends DefaultModuleSetup
 	private function create_scm_team_table()
 	{
 		$fields = [
-			'id_team'       => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
+			'id_team'       => ['type' => 'integer', 'length' => 65, 'autoincrement' => true, 'notnull' => 1],
 			'team_event_id' => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
 			'team_group'    => ['type' => 'integer', 'length' => 11, 'default' => 0],
 			'team_order'    => ['type' => 'integer', 'length' => 11, 'default' => 0],
