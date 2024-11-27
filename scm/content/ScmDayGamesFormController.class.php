@@ -83,6 +83,7 @@ class ScmDayGamesFormController extends DefaultModuleController
 
             $forfeit = $game->get_game_home_forfeit() || $game->get_game_away_forfeit() ?  ' ' . $this->lang['scm.event.forfeit'] : '';
 
+            $game_fieldset->add_field(new FormFieldSpacer('separator_' . $gr . $or, '<hr />'));
             $game_fieldset->add_field(new FormFieldFree(
                 'game_number_' . $gr . $or,
                 '',

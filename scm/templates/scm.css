@@ -191,6 +191,10 @@ th.bgc-sub a {
     padding: 0 0 0.809em;
     margin: 0 0 0 0.309em;
 }
+.grouped-fields .fieldset-inset > .spacer:has(hr) {
+    padding: 0;
+    margin: 0;
+}
 .grouped-fields .fieldset-inset > * > * {
     width: 100%;
 }

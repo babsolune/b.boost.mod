@@ -84,6 +84,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
                         break;
                 }
 
+                $groups_fieldset->add_field(new FormFieldSpacer('separator_' . $gr. $or, '<hr />'));
                 $groups_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong><span class="warning">' . $bonus . $status . '</span>     ',
                     ['class' => 'game-name small text-italic form-G' . $gr . $or]
                 ));
@@ -139,6 +140,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     ${'groups_fieldset' . $or}->set_css_class('grouped-fields round-fields');
                     $form->add_fieldset(${'groups_fieldset' . $or});
 
+                    ${'groups_fieldset' . $or}->add_field(new FormFieldSpacer('separator_' . $gr, '<hr />'));
                     if ($this->return_games && $or == 1)
                         ${'groups_fieldset' . $or}->add_field(new FormFieldSpacer('first_leg_' . $gr, $this->lang['scm.first.leg']));
                     ${'groups_fieldset' . $or}->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong>'. ' - ' . $round_title . ' ' . $round,

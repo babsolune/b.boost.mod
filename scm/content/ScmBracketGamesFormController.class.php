@@ -124,6 +124,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
 
                 if ($this->return_games && $or == 1)
                     ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSpacer('first_leg_' . $gr . $br, $this->lang['scm.first.leg']));
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSpacer('separator_' . $gr . $br, '<hr />'));
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldFree('game_number_' . $gr . $br . $or, '', $game_number . $bonus . $status,
                     ['class' => 'game-name small text-italic form-B-' . $gr . $br . $or]
                 ));
