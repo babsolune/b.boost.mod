@@ -152,11 +152,6 @@
                     <div class="scm-cell width-pc-30" aria-label="{@scm.th.points}">{@scm.th.points.short}</div>
                     <div class="scm-cell width-pc-30" aria-label="{@scm.th.played}">{@scm.th.played.short}</div>
                     <div class="scm-cell width-pc-30" aria-label="{@scm.th.goal.average}">{@scm.th.goal.average.short}</div>
-                    # IF C_BONUS_SINGLE #<div class="scm-cell width-pc-10" aria-label="{@scm.th.off.bonus}">{@scm.th.off.bonus.short}</div># ENDIF #
-                    # IF C_BONUS_DOUBLE #
-                        <div class="scm-cell width-pc-10" aria-label="{@scm.th.off.bonus}">{@scm.th.off.bonus.short}</div>
-                        <div class="scm-cell width-pc-10" aria-label="{@scm.th.def.bonus}">{@scm.th.def.bonus.short}</div>
-                    # ENDIF #
                 </div>
             </div>
             <div class="scm-group">
@@ -176,11 +171,6 @@
                             <div class="scm-cell width-pc-30">{ranks.POINTS}</div>
                             <div class="scm-cell width-pc-30">{ranks.PLAYED}</div>
                             <div class="scm-cell width-pc-30">{ranks.GOAL_AVERAGE}</div>
-                            # IF C_BONUS_SINGLE #<div class="scm-cell width-pc-10">{ranks.OFF_BONUS}</div># ENDIF #
-                            # IF C_BONUS_DOUBLE #
-                                <div class="scm-cell width-pc-10">{ranks.OFF_BONUS}</div>
-                                <div class="scm-cell width-pc-10">{ranks.DEF_BONUS}</div>
-                            # ENDIF #
                         </div>
                     </div>
                 # END ranks #

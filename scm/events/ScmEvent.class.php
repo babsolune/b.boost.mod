@@ -389,13 +389,15 @@ class ScmEvent
 				'C_PARAMETERS'      => $this->is_authorized_to_manage_events(),
 				'C_HAS_UPDATE_DATE' => $this->has_update_date(),
 				'C_DIFFERED'        => $this->published == self::DEFERRED_PUBLICATION,
+                'C_IS_MASTER'       => ScmEventService::is_master($this->id),
+                'C_IS_SUB'          => $this->is_sub,
 
 				// Item
-				'ID'     => $this->id,
-				'TITLE'  => $this->get_event_name(),
-                'SEASON_NAME' => ScmSeasonService::get_season($this->get_season_id())->get_season_name(),
+				'ID'            => $this->id,
+				'TITLE'         => $this->get_event_name(),
+                'SEASON_NAME'   => ScmSeasonService::get_season($this->get_season_id())->get_season_name(),
                 'DIVISION_NAME' => ScmDivisionService::get_division($this->get_division_id())->get_division_name(),
-				'STATUS' => $this->get_publishing_state(),
+				'STATUS'        => $this->get_publishing_state(),
 
 				// Category
 				'C_ROOT_CATEGORY' => $category->get_id() == Category::ROOT_CATEGORY,
@@ -406,10 +408,11 @@ class ScmEvent
 
 				// Links
 
-				'U_SYNDICATION' => SyndicationUrlBuilder::rss('scm', $this->id_category)->rel(),
-				'U_EVENT'       => $this->get_event_url(),
-				'U_EDIT'        => ScmUrlBuilder::edit($this->id, $this->event_slug)->rel(),
-				'U_DELETE'      => ScmUrlBuilder::delete($this->id)->rel(),
+				'U_SYNDICATION'  => SyndicationUrlBuilder::rss('scm', $this->id_category)->rel(),
+				'U_EVENT'        => $this->get_event_url(),
+				'U_MASTER_EVENT' => ScmEventService::get_master_url($this->id),
+				'U_EDIT'         => ScmUrlBuilder::edit($this->id, $this->event_slug)->rel(),
+				'U_DELETE'       => ScmUrlBuilder::delete($this->id)->rel(),
             ]
 		);
 	}

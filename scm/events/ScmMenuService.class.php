@@ -65,7 +65,8 @@ class ScmMenuService
 
             'HEADER_CATEGORY' => $category->get_name(),
             'HEADER_TYPE'     => ScmDivisionService::get_event_type_lang($event->get_division_id()),
-            'HEADER_MASTER'   => ScmEventService::get_master_name($event->get_id()),
+            'HEADER_MASTER_DIVISION'   => ScmEventService::get_master_division($event->get_id()),
+            'HEADER_MASTER_SEASON'   => ScmEventService::get_master_season($event->get_id()),
             'HEADER_DIVISION' => $division['division_name'],
             'HEADER_SEASON'   => $season['season_name'],
 

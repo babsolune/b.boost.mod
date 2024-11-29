@@ -4,8 +4,9 @@
             <tbody>
                 # START items #
                     <tr>
-                        <td class="text-italic text-strong bgc-sub">
-                            <span>{items.GAME_CATEGORY}</span>
+                        <td class="text-italic bgc-sub">
+                            <span class="text-strong">{items.GAME_CATEGORY}</span>
+                            # IF items.C_IS_SUB #<a class="offload d-block smaller" href="{items.U_MASTER_EVENT}">{items.MASTER_EVENT}</a># ENDIF #
                         </td>
                         <td colspan="2" class="bgc-sub smaller">
                             <span>{items.GAME_DATE_DAY}/{items.GAME_DATE_MONTH}/{items.YEAR} {items.GAME_DATE_HOUR}:{items.GAME_DATE_MINUTE}</span>

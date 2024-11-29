@@ -88,8 +88,11 @@ class ScmMiniPrevGame extends ModuleMiniMenu
                 $item->set_properties($game);
 
                 $view->assign_block_vars('items', array_merge($item->get_template_vars(), [
-                    'YEAR' => date('y', $item->get_game_date()->get_timestamp()),
-                    'U_EVENT' => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
+                    'YEAR'           => date('y', $item->get_game_date()->get_timestamp()),
+                    'C_IS_SUB'       => ScmEventService::is_sub_event($item->get_game_event_id()),
+                    'MASTER_EVENT'   => ScmEventService::get_master_division($item->get_game_event_id()),
+                    'U_MASTER_EVENT' => ScmEventService::get_master_url($item->get_game_event_id()),
+                    'U_EVENT'        => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
                 ]));
             }
 		}

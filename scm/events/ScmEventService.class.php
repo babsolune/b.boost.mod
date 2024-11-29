@@ -175,6 +175,32 @@ class ScmEventService
         return $master_event_id ? $division->get_division_name() . ' | ' . $season->get_season_name() : '';
     }
 
+    public static function get_master_division(int $event_id):string
+    {
+        $event = self::get_event($event_id);
+        $master_event_id = $event->get_master_id();
+        if($master_event_id)
+        {
+            $master_event = self::get_event($master_event_id);
+            $division = ScmDivisionService::get_division($master_event->get_division_id());
+        }
+
+        return $master_event_id ? $division->get_division_name() : '';
+    }
+
+    public static function get_master_season(int $event_id):string
+    {
+        $event = self::get_event($event_id);
+        $master_event_id = $event->get_master_id();
+        if($master_event_id)
+        {
+            $master_event = self::get_event($master_event_id);
+            $season = ScmSeasonService::get_season($master_event->get_season_id());
+        }
+
+        return $master_event_id ? $season->get_season_name() : '';
+    }
+
     public static function get_master_url(int $event_id):string
     {
         $event = self::get_event($event_id);
@@ -185,6 +211,13 @@ class ScmEventService
         }
 
         return $master_event_id ? ScmUrlBuilder::event_home($master_event_id, $master_event->get_event_slug())->rel() : '';
+    }
+
+    public static function is_sub_event(int $event_id):bool
+    {
+        $event = self::get_event($event_id);
+
+        return $event->get_is_sub();
     }
 
     public static function get_sub_list(int $event_id):array
