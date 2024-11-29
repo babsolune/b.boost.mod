@@ -307,7 +307,8 @@ class ScmEventFormController extends DefaultModuleController
             $season = ScmSeasonService::get_season($event['season_id'])->get_season_name();
             $division = ScmDivisionService::get_division($event['division_id'])->get_division_name();
 
-            $options[] = new FormFieldSelectChoiceOption($category . ' - ' . $division . ' - ' . $season, $event['id']);
+            if (!$event['is_sub'])
+                $options[] = new FormFieldSelectChoiceOption($category . ' - ' . $division . ' - ' . $season, $event['id']);
 			$i++;
 		}
 
