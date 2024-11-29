@@ -17,7 +17,7 @@ class ScmEventHomeService
 		self::$db_querier = PersistenceContext::get_querier();
 	}
 
-    public static function build_days_calendar(int $event_id)
+    public static function build_days_infos(int $event_id)
     {
         $view = new FileTemplate('scm/ScmEventDaysController.tpl');
         $lang = LangLoader::get_all_langs('scm');
@@ -66,6 +66,7 @@ class ScmEventHomeService
             }
         }
 
+        // Teams list
         foreach (ScmTeamService::get_teams($event_id) as $team)
         {
             $club = ScmClubCache::load()->get_club($team['id_club']);
@@ -85,10 +86,67 @@ class ScmEventHomeService
             'NEXT_DAY' => $next_day,
         ]);
 
+        // Ranking
+        $final_ranks = ScmRankingService::general_ranking($event_id);
+
+        // Display ranks to view
+        $prom = ScmParamsService::get_params($event_id)->get_promotion();
+        $playoff_prom = ScmParamsService::get_params($event_id)->get_playoff_prom();
+        $playoff_releg = ScmParamsService::get_params($event_id)->get_playoff_releg();
+        $releg = ScmParamsService::get_params($event_id)->get_relegation();
+        $prom_color = ScmConfig::load()->get_promotion_color();
+        $playoff_prom_color = ScmConfig::load()->get_playoff_prom_color();
+        $playoff_releg_color = ScmConfig::load()->get_playoff_releg_color();
+        $releg_color = ScmConfig::load()->get_relegation_color();
+        $color_count = count($final_ranks);
+
+        foreach ($final_ranks as $i => $team_rank)
+        {
+            if ($prom && $i < $prom) {
+                $rank_color = $prom_color;
+            } elseif ($playoff_prom && $i >= $prom && $i < ($prom + $playoff_prom)) {
+                $rank_color = $playoff_prom_color;
+            } elseif ($playoff_releg && $i >= ($color_count - $releg - $playoff_releg) && $i < ($color_count - $releg)) {
+                $rank_color = $playoff_releg_color;
+            } elseif ($releg && $i >= ($color_count - $releg)) {
+                $rank_color = $releg_color;
+            } else {
+                $rank_color = 'rgba(0,0,0,0)';
+            }
+            $event_slug = ScmEventService::get_event_slug($event_id);
+            $view->assign_block_vars('ranks', [
+                'C_FAV'           => ScmParamsService::check_fav($event_id, $team_rank['team_id']),
+                'C_FORFEIT'       => $team_rank['status'] == 'forfeit',
+                'C_HAS_TEAM_LOGO' => ScmTeamService::get_team_logo($team_rank['team_id']),
+                'RANK'            => $i + 1,
+                'RANK_COLOR'      => $rank_color,
+                'TEAM_ID'         => !empty($team_rank['team_id']) ? $team_rank['team_id'] : 0,
+                'U_TEAM_CALENDAR' => !empty($team_rank['team_id']) ? ScmUrlBuilder::display_team_calendar($event_id, $event_slug, $team_rank['team_id'])->rel() : '#',
+                'TEAM_NAME'       => !empty($team_rank['team_id']) ? ScmTeamService::get_team_name($team_rank['team_id']) : '',
+                'TEAM_LOGO'       => !empty($team_rank['team_id']) ? ScmTeamService::get_team_logo($team_rank['team_id']) : '',
+                'POINTS'          => $team_rank['points'],
+                'PLAYED'          => $team_rank['played'],
+                'WIN'             => $team_rank['win'],
+                'DRAW'            => $team_rank['draw'],
+                'LOSS'            => $team_rank['loss'],
+                'GOALS_FOR'       => $team_rank['goals_for'],
+                'GOALS_AGAINST'   => $team_rank['goals_against'],
+                'GOAL_AVERAGE'    => $team_rank['goal_average'],
+                'OFF_BONUS'       => $team_rank['off_bonus'],
+                'DEF_BONUS'       => $team_rank['def_bonus'],
+            ]);
+
+            $params = ScmParamsService::get_params($event_id)->get_bonus();
+            $view->put_all([
+                'C_BONUS_SINGLE' => $params == ScmParams::BONUS_SINGLE,
+                'C_BONUS_DOUBLE' => $params == ScmParams::BONUS_DOUBLE,
+            ]);
+        }
+
         return $view;
     }
 
-    public static function build_rounds_calendar(int $event_id)
+    public static function build_rounds_infos(int $event_id)
     {
         $view = new FileTemplate('scm/ScmEventRoundsController.tpl');
         $view->add_lang(LangLoader::get_all_langs('scm'));

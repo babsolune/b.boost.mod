@@ -90,7 +90,10 @@ class ScmDayGamesFormController extends DefaultModuleController
                 '<strong>D' . $gr . $or . '</strong><span class="warning">' . $bonus . $status . $forfeit . '</span>',
                 ['class' => 'game-name small text-italic form-D' . $gr . $or]
             ));
-            $game_fieldset->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $gr, $ro, $or), 'small text-italic'));
+            if ($game->get_game_home_id() && $game->get_game_away_id())
+                $game_fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' .$this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $gr, $ro, $or), 'small text-italic'));
+            else
+                $game_fieldset->add_field(new FormFieldSpacer('details_' . $gr . $or, ''));
             $game_fieldset->add_field(new FormFieldDateTime('game_date_' . $gr . $or, '', $game->get_game_date(),
                 ['class' => 'game-date']
             ));

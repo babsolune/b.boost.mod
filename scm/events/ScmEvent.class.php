@@ -17,6 +17,10 @@ class ScmEvent
 	private $start_date;
 	private $end_date;
 	private $views_number;
+	private $scoring_type;
+	private $is_sub;
+	private $master_id;
+	private $sub_order;
 
 	private $published;
 	private $publishing_start_date;
@@ -33,6 +37,11 @@ class ScmEvent
 	const NOT_PUBLISHED        = 0;
 	const PUBLISHED            = 1;
 	const DEFERRED_PUBLICATION = 2;
+
+    const SCORING_GOALS  = "scoring_goals";
+    const SCORING_TRIES  = "scoring_tries";
+    const SCORING_POINTS = "scoring_points";
+    const SCORING_SETS   = "scoring_sets";
 
 	public function get_id()
 	{
@@ -117,6 +126,46 @@ class ScmEvent
 	public function set_views_number($views_number)
 	{
 		$this->views_number = $views_number;
+	}
+
+	public function get_scoring_type()
+	{
+		return $this->scoring_type;
+	}
+
+	public function set_scoring_type($scoring_type)
+	{
+		$this->scoring_type = $scoring_type;
+	}
+
+	public function get_is_sub()
+	{
+		return $this->is_sub;
+	}
+
+	public function set_is_sub($is_sub)
+	{
+		$this->is_sub = $is_sub;
+	}
+
+	public function get_master_id()
+	{
+		return $this->master_id;
+	}
+
+	public function set_master_id($master_id)
+	{
+		$this->master_id = $master_id;
+	}
+
+	public function get_sub_order()
+	{
+		return $this->sub_order;
+	}
+
+	public function set_sub_order($sub_order)
+	{
+		$this->sub_order = $sub_order;
 	}
 
     public function get_publishing_state()
@@ -254,6 +303,10 @@ class ScmEvent
 			'start_date'            => $this->get_start_date() !== null ? $this->get_start_date()->get_timestamp() : 0,
 			'end_date'              => $this->get_end_date() !== null ? $this->get_end_date()->get_timestamp() : 0,
 			'views_number'          => $this->get_views_number(),
+			'scoring_type'          => $this->get_scoring_type(),
+			'is_sub'                => $this->get_is_sub(),
+			'master_id'             => $this->get_master_id(),
+			'sub_order'             => $this->get_sub_order(),
 			'published'             => $this->get_publishing_state(),
 			'publishing_start_date' => $this->get_publishing_start_date() !== null ? $this->get_publishing_start_date()->get_timestamp() : 0,
 			'publishing_end_date'   => $this->get_publishing_end_date() !== null ? $this->get_publishing_end_date()->get_timestamp() : 0,
@@ -273,6 +326,10 @@ class ScmEvent
 		$this->start_date            = !empty($properties['start_date']) ? new Date($properties['start_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->end_date              = !empty($properties['end_date']) ? new Date($properties['end_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->views_number          = $properties['views_number'];
+		$this->scoring_type          = $properties['scoring_type'];
+		$this->is_sub                = $properties['is_sub'];
+		$this->master_id             = $properties['master_id'];
+		$this->sub_order             = $properties['sub_order'];
 		$this->published             = $properties['published'];
 		$this->publishing_start_date = !empty($properties['publishing_start_date']) ? new Date($properties['publishing_start_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->publishing_end_date   = !empty($properties['publishing_end_date']) ? new Date($properties['publishing_end_date'], Timezone::SERVER_TIMEZONE) : null;
@@ -319,6 +376,8 @@ class ScmEvent
 
 		return array_merge(
 			Date::get_array_tpl_vars($this->creation_date, 'date'),
+			Date::get_array_tpl_vars($this->start_date, 'start_date'),
+			Date::get_array_tpl_vars($this->end_date, 'end_date'),
 			Date::get_array_tpl_vars($this->update_date, 'update_date'),
 			Date::get_array_tpl_vars($this->publishing_start_date, 'differed_publishing_start_date'),
 			[
@@ -334,6 +393,8 @@ class ScmEvent
 				// Item
 				'ID'     => $this->id,
 				'TITLE'  => $this->get_event_name(),
+                'SEASON_NAME' => ScmSeasonService::get_season($this->get_season_id())->get_season_name(),
+                'DIVISION_NAME' => ScmDivisionService::get_division($this->get_division_id())->get_division_name(),
 				'STATUS' => $this->get_publishing_state(),
 
 				// Category
@@ -346,7 +407,7 @@ class ScmEvent
 				// Links
 
 				'U_SYNDICATION' => SyndicationUrlBuilder::rss('scm', $this->id_category)->rel(),
-				'U_EVENT'      => $this->get_event_url(),
+				'U_EVENT'       => $this->get_event_url(),
 				'U_EDIT'        => ScmUrlBuilder::edit($this->id, $this->event_slug)->rel(),
 				'U_DELETE'      => ScmUrlBuilder::delete($this->id)->rel(),
             ]

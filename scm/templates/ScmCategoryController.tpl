@@ -59,17 +59,30 @@
 						</div>
 					# ENDIF #
 				# ENDIF #
-                <div class="cell-flex cell-columns-3 cell-tile">
+                <div class="cell-flex cell-columns-2 cell-tile">
                     # START items #
                         <article id="scm-item-{items.ID}" class="scm-item category-{items.CATEGORY_ID} cell# IF items.C_NEW_CONTENT # new-content# ENDIF #" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
-                            <div class="cell-content flex-between">
-                                <a class="offload" href="{items.U_EVENT}" itemprop="name">{items.TITLE}</a>
-                                # IF items.C_CONTROLS #
-                                    <div class="controls align-right">
-                                        # IF items.C_EDIT #<a class="offload item-edit" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
-                                        # IF items.C_DELETE #<a class="item-delete" href="{items.U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
+                            <div class="cell-content">
+                                <div class="flex-between">
+                                    <a class="offload" href="{items.U_EVENT}" itemprop="name">{items.TITLE}</a>
+                                    # IF items.C_CONTROLS #
+                                        <div class="controls align-right">
+                                            # IF items.C_EDIT #<a class="offload item-edit" href="{items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
+                                            # IF items.C_DELETE #<a class="item-delete" href="{items.U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
+                                        </div>
+                                    # ENDIF #
+                                </div>
+                                # START items.sub_items #
+                                    <div class="flex-between small">
+                                        <a class="offload" href="{items.sub_items.U_EVENT}" itemprop="name">{items.sub_items.DIVISION_NAME}</a>
+                                        # IF items.sub_items.C_CONTROLS #
+                                            <div class="controls align-right">
+                                                # IF items.sub_items.C_EDIT #<a class="offload item-edit" href="{items.sub_items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #
+                                                # IF items.sub_items.C_DELETE #<a class="item-delete" href="{items.sub_items.U_DELETE}" aria-label="{@common.delete}" data-confirmation="delete-element"><i class="far fa-fw fa-trash-alt" aria-hidden="true"></i></a># ENDIF #
+                                            </div>
+                                        # ENDIF #
                                     </div>
-                                # ENDIF #
+                                # END items.sub_items #
                             </div>
                             <meta itemprop="url" content="{items.U_EVENT}">
                             <meta itemprop="description" content="{items.U_EVENT}" />

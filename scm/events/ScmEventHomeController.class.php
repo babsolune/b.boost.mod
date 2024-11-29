@@ -35,21 +35,36 @@ class ScmEventHomeController extends DefaultModuleController
         $c_championship = $c_has_games && ScmEventService::get_event_type($this->event_id()) == ScmDivision::CHAMPIONSHIP;
         $c_cup          = $c_has_games && ScmEventService::get_event_type($this->event_id()) == ScmDivision::CUP;
         $c_tournament   = $c_has_games && ScmEventService::get_event_type($this->event_id()) == ScmDivision::TOURNAMENT;
+        $c_is_master    = ScmEventService::is_master($this->event_id());
 
         $this->view->put_all([
             'C_CHAMPIONSHIP' => $c_championship,
             'C_CUP'          => $c_cup,
             'C_TOURNAMENT'   => $c_tournament,
-            'C_HAS_GAMES'    => $c_has_games 
+            'C_HAS_GAMES'    => $c_has_games,
+            'C_IS_MASTER'    => $c_is_master,
         ]);
+
+        if ($c_is_master)
+        {
+            $now = new Date();
+            foreach (ScmEventService::get_sub_list($this->event_id()) as $sub_event)
+            {
+                $item = new ScmEvent();
+                $item->set_properties($sub_event);
+                $this->view->assign_block_vars('sub_events', array_merge($item->get_template_vars(), [
+                    'C_IS_ENDED' => $item->get_end_date() < $now
+                ]));
+            }
+        }
 
         $this->view->put_all(array_merge(
             $event->get_template_vars(),
             [
                 'MENU'                => ScmMenuService::build_event_menu($this->event_id()),
                 // Rounds
-                'DAYS_CALENDAR'       => $c_championship ? ScmEventHomeService::build_days_calendar($this->event_id()) : '',
-                'ROUNDS_CALENDAR'     => $c_tournament ? ScmEventHomeService::build_rounds_calendar($this->event_id()) : '',
+                'DAYS_INFOS'       => $c_championship ? ScmEventHomeService::build_days_infos($this->event_id()) : '',
+                'ROUNDS_INFOS'     => $c_tournament ? ScmEventHomeService::build_rounds_infos($this->event_id()) : '',
 
                 'NOT_VISIBLE_MESSAGE' => MessageHelper::display($this->lang['warning.element.not.visible'], MessageHelper::WARNING),
             ]

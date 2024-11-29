@@ -17,9 +17,20 @@ $lang['scm.mini.next']    = 'Prochains matchs';
 $lang['scm.mini.live']    = 'Matchs en cours';
 
 $lang['scm.event.start.date']  = 'Date de début';
-$lang['scm.event.end.date']  = 'Date de fin';
-$lang['scm.source.clue']  = 'Liens vers les sites officiels de la compétition';
-$lang['scm.not.specified']  = 'Non renseigné';
+$lang['scm.event.end.date']    = 'Date de fin';
+$lang['scm.event.ended.event'] = 'Compétition terminée';
+$lang['scm.source.clue']       = 'Liens vers les sites officiels de la compétition';
+$lang['scm.not.specified']     = 'Non renseigné';
+
+$lang['scm.event.scoring.type']     = 'Type de score';
+$lang['scm.event.scoring.goals']    = 'Buts';
+$lang['scm.event.scoring.tries']    = 'Essais';
+$lang['scm.event.scoring.points']   = 'Points';
+$lang['scm.event.scoring.sets']     = 'Sets';
+$lang['scm.event.is.master']        = 'Est une compétition maître';
+$lang['scm.event.is.sub']           = 'Est une sous-compétition';
+$lang['scm.event.master.id']        = 'Compétition maître';
+$lang['scm.event.sub.order']        = 'Ordre dans la compétition maître';
 
 // Titles
 $lang['items'] = 'compétitions';

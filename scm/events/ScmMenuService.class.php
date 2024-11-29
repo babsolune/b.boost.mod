@@ -49,6 +49,8 @@ class ScmMenuService
 
         $view->put_all([
             'C_CONTROLS'     => ScmAuthorizationsService::check_authorizations($category->get_id())->manage_events(),
+            'C_IS_MASTER'    => ScmEventService::is_master($event_id),
+            'C_IS_SUB'       => $event->get_is_sub(),
             'C_CHAMPIONSHIP' => $division['event_type'] == ScmDivision::CHAMPIONSHIP,
             'C_CUP'          => $division['event_type'] == ScmDivision::CUP,
             'C_TOURNAMENT'   => $division['event_type'] == ScmDivision::TOURNAMENT,
@@ -63,11 +65,13 @@ class ScmMenuService
 
             'HEADER_CATEGORY' => $category->get_name(),
             'HEADER_TYPE'     => ScmDivisionService::get_event_type_lang($event->get_division_id()),
+            'HEADER_MASTER'   => ScmEventService::get_master_name($event->get_id()),
             'HEADER_DIVISION' => $division['division_name'],
             'HEADER_SEASON'   => $season['season_name'],
 
-            'U_HOME'       => ScmUrlBuilder::home()->rel(),
-            'U_EVENT_HOME' => ScmUrlBuilder::event_home($event_id, $event->get_event_slug())->rel(),
+            'U_HOME'         => ScmUrlBuilder::home()->rel(),
+            'U_EVENT_HOME'   => ScmUrlBuilder::event_home($event_id, $event->get_event_slug())->rel(),
+            'U_EVENT_MASTER' => ScmEventService::get_master_url($event->get_id()),
 
             'U_ROUND_GROUPS'   => ScmUrlBuilder::display_groups_rounds($event_id, $event->get_event_slug(), $active_round)->rel(),
             'U_ROUND_BRACKETS' => ScmUrlBuilder::display_brackets_rounds($event_id, $event->get_event_slug())->rel(),

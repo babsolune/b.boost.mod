@@ -336,15 +336,7 @@ class ScmParamsFormController extends DefaultModuleController
         $params->set_bonus($this->form->get_value('bonus')->get_raw_value());
         $params->set_favorite_team_id($this->form->get_value('favorite_team_id')->get_raw_value());
 
-		if ($this->is_new_params)
-		{
-            $id = ScmParamsService::add_params($params);
-            $params->set_id_params($id);
-        }
-		else
-		{
-			ScmParamsService::update_params($params);
-        }
+		ScmParamsService::update_params($params);
 
 		ScmEventService::clear_cache();
 	}

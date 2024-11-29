@@ -144,6 +144,60 @@ class ScmEventService
         return ScmDivisionService::get_division(self::get_event($event_id)->get_division_id())->get_game_type();
     }
 
+    public static function get_event_scoring_type(int $event_id):string
+    {
+        return self::get_event($event_id)->get_scoring_type();
+    }
+
+    public static function is_master(int $event_id):bool
+    {
+        $master_list = [];
+        foreach (self::get_events() as $event)
+        {
+            $master_list[] = $event['master_id'];
+        }
+        $master_list = array_unique($master_list);
+
+        return in_array($event_id, $master_list);
+    }
+
+    public static function get_master_name(int $event_id):string
+    {
+        $event = self::get_event($event_id);
+        $master_event_id = $event->get_master_id();
+        if($master_event_id)
+        {
+            $master_event = self::get_event($master_event_id);
+            $division = ScmDivisionService::get_division($master_event->get_division_id());
+            $season = ScmSeasonService::get_season($master_event->get_season_id());
+        }
+
+        return $master_event_id ? $division->get_division_name() . ' | ' . $season->get_season_name() : '';
+    }
+
+    public static function get_master_url(int $event_id):string
+    {
+        $event = self::get_event($event_id);
+        $master_event_id = $event->get_master_id();
+        if($master_event_id)
+        {
+            $master_event = self::get_event($master_event_id);
+        }
+
+        return $master_event_id ? ScmUrlBuilder::event_home($master_event_id, $master_event->get_event_slug())->rel() : '';
+    }
+
+    public static function get_sub_list(int $event_id):array
+    {
+        $sub_list = [];
+        foreach (self::get_events() as $event)
+        {
+            if($event['master_id'] == $event_id)
+            $sub_list[] = $event;
+        }
+        return $sub_list;
+    }
+
 	public static function clear_cache()
 	{
 		Feed::clear_cache('scm');

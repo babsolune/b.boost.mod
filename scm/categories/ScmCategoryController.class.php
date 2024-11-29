@@ -98,8 +98,24 @@ class ScmCategoryController extends DefaultModuleController
 		{
 			$item = new ScmEvent();
 			$item->set_properties($row);
+            $c_is_master = ScmEventService::is_master($item->get_id()) || count(ScmEventService::get_sub_list($item->get_id())) == 0;
+            $c_is_not_sub = empty($item->get_master_id());
 
-			$this->view->assign_block_vars('items', $item->get_template_vars());
+            if ($c_is_master && $c_is_not_sub)
+                $this->view->assign_block_vars('items', $item->get_template_vars());
+
+            if ($c_is_master)
+            {
+                $now = new Date();
+                foreach (ScmEventService::get_sub_list($item->get_id()) as $sub_event)
+                {
+                    $sub_item = new ScmEvent();
+                    $sub_item->set_properties($sub_event);
+                    $this->view->assign_block_vars('items.sub_items', array_merge($sub_item->get_template_vars(), [
+                        'C_IS_ENDED' => $sub_item->get_end_date() < $now
+                    ]));
+                }
+            }
 		}
 		$result->dispose();
 	}

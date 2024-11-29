@@ -56,6 +56,46 @@ class ScmEventFormController extends DefaultModuleController
 			['required' => true]
 		));
 
+		$fieldset->add_field(new FormFieldSimpleSelectChoice('scoring_type', $this->lang['scm.event.scoring.type'], $this->event->get_scoring_type(), 
+            [
+                new FormFieldSelectChoiceOption('', ''),
+                new FormFieldSelectChoiceOption($this->lang['scm.event.scoring.goals'], ScmEvent::SCORING_GOALS),
+                new FormFieldSelectChoiceOption($this->lang['scm.event.scoring.tries'], ScmEvent::SCORING_TRIES),
+                new FormFieldSelectChoiceOption($this->lang['scm.event.scoring.points'], ScmEvent::SCORING_POINTS),
+                new FormFieldSelectChoiceOption($this->lang['scm.event.scoring.sets'], ScmEvent::SCORING_SETS)
+            ],
+			['required' => true]
+		));
+
+        $fieldset->add_field(new FormFieldCheckbox('is_sub', $this->lang['scm.event.is.sub'], $this->event->get_is_sub(),
+            [
+                'events' => ['click' => '
+                    if (HTMLForms.getField("is_sub").getValue()) {
+                        HTMLForms.getField("master_id").enable();
+                        HTMLForms.getField("sub_order").enable();
+                    } else {
+                        HTMLForms.getField("master_id").disable();
+                        HTMLForms.getField("sub_order").disable();
+                    }
+                ']
+            ]
+        ));
+
+		$fieldset->add_field(new FormFieldSimpleSelectChoice('master_id', $this->lang['scm.event.master.id'], $this->event->get_master_id(),
+            $this->get_events_list(),
+			[
+                'required' => true,
+                'hidden' => !$this->event->get_is_sub()
+            ]
+		));
+
+        $fieldset->add_field($start_date = new FormFieldNumberEditor('sub_order', $this->lang['scm.event.sub.order'], $this->event->get_sub_order(),
+            [
+                'min' => 0, 'required' => true,
+                'hidden' => !$this->event->get_is_sub()
+            ]
+        ));
+
         $fieldset->add_field($start_date = new FormFieldDateTime('start_date', $this->lang['scm.event.start.date'], $this->get_event()->get_start_date(),
             ['required' => true]
         ));
@@ -148,6 +188,13 @@ class ScmEventFormController extends DefaultModuleController
 
 		$event->set_division_id($this->form->get_value('division')->get_raw_value());
 		$event->set_season_id($this->form->get_value('season')->get_raw_value());
+		$event->set_scoring_type($this->form->get_value('scoring_type')->get_raw_value());
+		$event->set_is_sub($this->form->get_value('is_sub'));
+        if($this->form->get_value('is_sub'))
+        {
+            $event->set_master_id($this->form->get_value('master_id')->get_raw_value());
+            $event->set_sub_order($this->form->get_value('sub_order'));
+        }
 
 		$division_title = $this->form->get_value('division')->get_label();
 		$season_title = $this->form->get_value('season')->get_label();
@@ -242,6 +289,30 @@ class ScmEventFormController extends DefaultModuleController
 
 		ScmEventService::clear_cache();
 	}
+
+    private function get_events_list() : array
+    {
+        $options = [];
+		$cache = ScmEventCache::load();
+		$events_list = $cache->get_events();
+        $options[] = new FormFieldSelectChoiceOption($this->lang['common.none.alt'], 0);
+
+        usort($events_list, function($a, $b) {
+            return strcmp($b['id_category'], $a['id_category']);
+        });
+		$i = 1;
+		foreach($events_list as $event)
+		{
+            $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($event['id_category'])->get_name();
+            $season = ScmSeasonService::get_season($event['season_id'])->get_season_name();
+            $division = ScmDivisionService::get_division($event['division_id'])->get_division_name();
+
+            $options[] = new FormFieldSelectChoiceOption($category . ' - ' . $division . ' - ' . $season, $event['id']);
+			$i++;
+		}
+
+		return $options;
+    }
 
 	private function seasons_list()
 	{

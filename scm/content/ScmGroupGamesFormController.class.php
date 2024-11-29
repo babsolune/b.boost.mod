@@ -84,11 +84,16 @@ class ScmGroupGamesFormController extends DefaultModuleController
                         break;
                 }
 
-                $groups_fieldset->add_field(new FormFieldSpacer('separator_' . $gr. $or, '<hr />'));
+                $groups_fieldset->add_field(new FormFieldSpacer('separator_' . $gr . $or, '<hr />'));
                 $groups_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong><span class="warning">' . $bonus . $status . '</span>     ',
                     ['class' => 'game-name small text-italic form-G' . $gr . $or]
                 ));
-                $groups_fieldset->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, 0, $or), 'small text-italic'));
+
+                if ($game->get_game_home_id() && $game->get_game_away_id())
+                    $groups_fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' .$this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, 0, $or), 'd-inline-block text-italic'));
+                else
+                    $groups_fieldset->add_field(new FormFieldSpacer('details_' . $gr . $or, ''));
+
                 $groups_fieldset->add_field(new FormFieldDateTime('game_date_' . $gr . $or, '', $game->get_game_date(),
                     ['class' => 'game-date date-select']
                 ));
@@ -146,7 +151,10 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     ${'groups_fieldset' . $or}->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong>'. ' - ' . $round_title . ' ' . $round,
                         ['class' => 'game-name small text-italic form-G' . $gr . $or]
                     ));
-                    ${'groups_fieldset' . $or}->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, $round, $or), 'small text-italic'));
+                    if ($game->get_game_home_id() && $game->get_game_away_id())
+                        ${'groups_fieldset' . $or}->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' .$this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, $round, $or), 'small text-italic'));
+                    else
+                        $game_fieldset->add_field(new FormFieldSpacer('details_' . $gr . $or, ''));
                     ${'groups_fieldset' . $or}->add_field(new FormFieldDateTime('game_date_' . $gr . $or, '', $game->get_game_date(),
                         ['class' => 'game-date']
                     ));
@@ -180,6 +188,29 @@ class ScmGroupGamesFormController extends DefaultModuleController
 
 		$this->form = $form;
 	}
+
+    private function get_stadium(int $club_id)
+    {
+        $team = ScmTeamService::get_team($club_id);
+        $club = ScmClubCache::load()->get_club($team->get_team_club_id());
+        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+        $real_club = new ScmClub();
+        $real_club->set_properties(ScmClubCache::load()->get_club($real_id));
+
+        $options = [];
+        $options[] = new FormFieldSelectChoiceOption('', 0);
+        $stadiums = 0;
+		$i = 1;
+		foreach(TextHelper::deserialize($real_club->get_club_locations()) as $club)
+		{
+            if ($club['name'])
+                $stadiums++;
+            $options[] = new FormFieldSelectChoiceOption($club['name'], $i);
+			$i++;
+		}
+
+        return $stadiums ? $options : [new FormFieldSelectChoiceOption(StringVars::replace_vars($this->lang['scm.club.no.stadium'], ['club' => $real_club->get_club_name()]), 0)];
+    }
 
 	private function save()
 	{

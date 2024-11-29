@@ -101,7 +101,11 @@ class ScmSetup extends DefaultModuleSetup
 
 			'views_number'          => ['type' => 'integer', 'length' => 11, 'default' => 0],
 			'scoring_type'          => ['type' => 'string', 'length' => 65, 'default' => '""'],
-			'published'             => ['type' => 'integer', 'length' => 1, 'notnull' => 1, 'default' => 0],
+			'is_sub'                => ['type' => 'boolean', 'default' => 0],
+			'master_id'             => ['type' => 'integer', 'length' => 65, 'default' => '""'],
+			'sub_order'             => ['type' => 'integer', 'length' => 11, 'default' => '""'],
+
+            'published'             => ['type' => 'integer', 'length' => 1, 'notnull' => 1, 'default' => 0],
 			'publishing_start_date' => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
 			'publishing_end_date'   => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
 			'creation_date'         => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],

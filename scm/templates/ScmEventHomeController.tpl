@@ -1,6 +1,6 @@
 <section id="module-scm" class="category-{CATEGORY_ID} single-item">
 	# INCLUDE MENU #
-    <h2>{@scm.infos}</h2>
+    # IF NOT C_IS_MASTER #<h2>{@scm.infos}</h2># ENDIF #
 	<div class="sub-section">
 		<div class="content-container">
 			# IF NOT C_VISIBLE #
@@ -8,30 +8,45 @@
 					# INCLUDE NOT_VISIBLE_MESSAGE #
 				</div>
 			# ENDIF #
-            # IF C_HAS_GAMES #
-                <article itemscope="itemscope" itemtype="https://schema.org/CreativeWork" id="scm-item-{ID}" class="scm-item# IF C_NEW_CONTENT # new-content# ENDIF #">
-                    <div class="content">
-                        # IF C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE DAYS_CALENDAR #</div># ENDIF #
-                        # IF C_CUP #<div itemprop="text">cup</div># ENDIF #
-                        # IF C_TOURNAMENT #
-                            <div itemprop="text"># INCLUDE ROUNDS_CALENDAR #</div>
-                        # ENDIF #
-                    </div>
-
-                    <aside>${ContentSharingActionsMenuService::display()}</aside>
-
-                    # IF C_SOURCES #
-                        <aside class="sources-container">
-                            <span class="text-strong"><i class="fa fa-map-signs" aria-hidden="true"></i> {@common.sources}</span> :
-                            # START sources #
-                                <a itemprop="isBasedOnUrl" href="{sources.URL}" class="pinned link-color offload" rel="nofollow">{sources.NAME}</a># IF sources.C_SEPARATOR ## ENDIF #
-                            # END sources #
-                        </aside>
-                    # ENDIF #
-                </article>
+            # IF C_IS_MASTER #
+                # START sub_events #
+                    <h2>
+                        <a href="{sub_events.U_EVENT}" class="offload pinned bgc link-color">
+                            {sub_events.DIVISION_NAME}
+                            # IF sub_events.C_IS_ENDED #
+                                <span class="smaller warning">{@scm.event.ended.event}</span>
+                            # ELSE #
+                                <span class="smaller">{sub_events.START_DATE} | {sub_events.END_DATE}</span>
+                            # ENDIF #
+                        </a>
+                    </h2>
+                # END sub_events #
             # ELSE #
-                <div class="message-helper bgc notice">{@scm.message.no.games}</div>
-			# ENDIF #
+                # IF C_HAS_GAMES #
+                        <article itemscope="itemscope" itemtype="https://schema.org/CreativeWork" id="scm-item-{ID}" class="scm-item# IF C_NEW_CONTENT # new-content# ENDIF #">
+                            <div class="content">
+                                # IF C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE DAYS_INFOS #</div># ENDIF #
+                                # IF C_CUP #<div itemprop="text">cup</div># ENDIF #
+                                # IF C_TOURNAMENT #
+                                    <div itemprop="text"># INCLUDE ROUNDS_INFOS #</div>
+                                # ENDIF #
+                            </div>
+
+                            <aside>${ContentSharingActionsMenuService::display()}</aside>
+
+                            # IF C_SOURCES #
+                                <aside class="sources-container">
+                                    <span class="text-strong"><i class="fa fa-map-signs" aria-hidden="true"></i> {@common.sources}</span> :
+                                    # START sources #
+                                        <a itemprop="isBasedOnUrl" href="{sources.URL}" class="pinned link-color offload" rel="nofollow">{sources.NAME}</a># IF sources.C_SEPARATOR ## ENDIF #
+                                    # END sources #
+                                </aside>
+                            # ENDIF #
+                        </article>
+                # ELSE #
+                    <div class="message-helper bgc notice">{@scm.message.no.games}</div>
+                # ENDIF #
+            # ENDIF #
 		</div>
 	</div>
 	<footer>

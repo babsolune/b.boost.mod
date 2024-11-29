@@ -264,7 +264,7 @@ th.bgc-sub a {
 }
 .grouped-fields .form-field-action-link {
     width: 48%;
-    margin-bottom: 0.809em;
+    text-align: right;
 }
 .grouped-fields .form-field-action-link a {
     display: block;
@@ -497,6 +497,9 @@ th.bgc-sub a {
 .scm-line-group  {
     display: flex;
     flex-direction: column;
+}
+.scm-table > header {
+    margin-top: 1.209em;
 }
 
 .scm-line-group {

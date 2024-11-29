@@ -128,7 +128,10 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldFree('game_number_' . $gr . $br . $or, '', $game_number . $bonus . $status,
                     ['class' => 'game-name small text-italic form-B-' . $gr . $br . $or]
                 ));
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $gr, $br, $or), 'small game-details align-right text-italic'));
+                if ($game_home_id && $game_away_id)
+                    ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldActionLink('details_' . $gr . $br . $or, '<span aria-label="' .$this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $gr, $br, $or), 'small game-details align-right text-italic'));
+                else
+                    ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSpacer('details_' . $gr . $br . $or, ''));
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldDateTime('game_date_' . $gr . $br . $or, '', $game_date,
                     ['class' => 'game-date']
                 ));
@@ -216,7 +219,10 @@ class ScmBracketGamesFormController extends DefaultModuleController
             $fieldset->add_field(new FormFieldFree('game_number', '', '<strong>B' . $gr . $or . '</strong>'. ' - ' . $this->lang['scm.round'] . ' ' . $round,
                 ['class' => 'game-name small text-italic form-G' . $gr . $or]
             ));
-            $fieldset->add_field(new FormFieldActionLink('details', $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, $round, $or), 'small text-italic'));
+            if ($game->get_game_home_id() && $game->get_game_away_id())
+                $fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, $round, $or), 'small text-italic'));
+            else
+                $fieldset->add_field(new FormFieldSpacer('details_' . $gr . $or, ''));
             $fieldset->add_field(new FormFieldDateTime('game_date_' . $gr . $or, '', $game->get_game_date(),
                 ['class' => 'game-date']
             ));
