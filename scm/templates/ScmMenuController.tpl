@@ -6,11 +6,11 @@
     <div class="flex-between flex-between-large">
         # IF C_IS_SUB #
             <div>
-                <h1>{HEADER_MASTER}</h1>
+                <h1>{HEADER_MASTER_DIVISION} {HEADER_MASTER_SEASON}</h1>
                 <h2>{HEADER_DIVISION}</h2>
             </div>
         # ELSE #
-            <h1>{HEADER_DIVISION} | {HEADER_SEASON}</h1>
+            <h1>{HEADER_DIVISION} {HEADER_SEASON}</h1>
         # ENDIF #
         # IF IS_MODERATOR ## INCLUDE EVENT_LIST ## ENDIF #
     </div>

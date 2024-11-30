@@ -232,7 +232,7 @@ class ScmMenuService
         {
             $item = new ScmEvent();
             $item->set_properties($event);
-            if (ScmSeasonService::check_season($item->get_season_id()) && $item->get_end_date() > $now)
+            if (ScmSeasonService::check_season($item->get_season_id()) && $item->get_end_date() > $now && !$item->get_is_sub())
                 $form_events[] = new FormFieldSelectChoiceOption(
                     $item->get_category()->get_name()
                     . ' - ' . ScmDivisionService::get_division($item->get_division_id())->get_division_name()
