@@ -287,9 +287,9 @@ class ScmEvent
 
 	public function get_event_name()
 	{
-        $season_name = ScmSeasonService::get_season($this->get_season_id())->get_season_name();
         $division_name = ScmDivisionService::get_division($this->get_division_id())->get_division_name();
-		return $division_name . ' - ' . $season_name;
+        $season_name = ScmSeasonService::get_season($this->get_season_id())->get_season_name();
+		return $division_name . ' ' . $season_name;
 	}
 
 	public function get_properties()

@@ -81,7 +81,6 @@ class ScmSeasonFormController extends DefaultModuleController
 			{
 				$this->is_new_season = true;
 				$this->season = new ScmSeason();
-				$this->season->init_default_properties();
 			}
 		}
 		return $this->season;
@@ -120,11 +119,11 @@ class ScmSeasonFormController extends DefaultModuleController
 
         $season->set_first_year($this->form->get_value('year')->get_raw_value());
         $season->set_calendar_year($this->form->get_value('calendar_year'));
-        
+
         if ($this->form->get_value('calendar_year'))
             $season->set_season_name($season->get_first_year());
         else
-        $season->set_season_name($season->get_first_year() . ' - ' . $season->get_first_year() + 1);
+        $season->set_season_name($season->get_first_year() . '-' . $season->get_first_year() + 1);
 
 		if ($this->is_new_season)
 		{
@@ -178,7 +177,7 @@ class ScmSeasonFormController extends DefaultModuleController
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_season($season->get_id_season()));
 
             $breadcrumb->add($this->lang['scm.seasons.manager'], ScmUrlBuilder::manage_seasons());
-			$breadcrumb->add($season->get_name(), '');
+			$breadcrumb->add($season->get_season_name(), '');
 			$breadcrumb->add($this->lang['scm.edit.season'], ScmUrlBuilder::edit_season($season->get_id_season()));
 		}
 

@@ -73,29 +73,8 @@ class ScmSeason
 	{
 		$this->id_season = $properties['id_season'];
 		$this->season_name = $properties['season_name'];
-		$this->first_year = !empty($properties['year']) ? new Date($properties['first_year'], Timezone::SERVER_TIMEZONE) : null;
-		$this->calendar_year = !empty($properties['calendar_year']) ? new Date($properties['calendar_year'], Timezone::SERVER_TIMEZONE) : null;
-	}
-
-	public function init_default_properties()
-	{
-	}
-
-	public function get_template_vars()
-	{
-		return array_merge(
-			[
-				// Conditions
-
-				// Item
-				'ID'   => $this->id_season,
-				'NAME' => $this->season_name,
-
-				// Links
-				'U_EDIT_SEASON'   => ScmUrlBuilder::edit_season($this->id_season)->rel(),
-				'U_DELETE_SEASON' => ScmUrlBuilder::delete_season($this->id_season)->rel(),
-            ]
-		);
+		$this->first_year = $properties['first_year'];
+		$this->calendar_year = $properties['calendar_year'];
 	}
 }
 ?>
