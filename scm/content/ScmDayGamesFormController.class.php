@@ -261,9 +261,10 @@ class ScmDayGamesFormController extends DefaultModuleController
             if ($category->get_id() != Category::ROOT_CATEGORY)
                 $breadcrumb->add($category->get_name(), ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
         }
-        $category = $event->get_category();
-        $breadcrumb->add($event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-        $breadcrumb->add($this->lang['scm.games.management'], ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug(), AppContext::get_request()->get_value('round')));
+        if ($event->get_is_sub())
+            $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
+		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
+		$breadcrumb->add($this->lang['scm.games.management'], ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug(), AppContext::get_request()->get_value('round')));
 
 		return $response;
 	}

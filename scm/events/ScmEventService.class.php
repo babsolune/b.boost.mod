@@ -172,7 +172,7 @@ class ScmEventService
             $season = ScmSeasonService::get_season($master_event->get_season_id());
         }
 
-        return $master_event_id ? $division->get_division_name() . ' | ' . $season->get_season_name() : '';
+        return $master_event_id ? $division->get_division_name() . ' ' . $season->get_season_name() : '';
     }
 
     public static function get_master_division(int $event_id):string

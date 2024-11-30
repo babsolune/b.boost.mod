@@ -212,9 +212,10 @@ class ScmGroupsFormController extends DefaultModuleController
             if ($category->get_id() != Category::ROOT_CATEGORY)
                 $breadcrumb->add($category->get_name(), ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
         }
-        $category = $event->get_category();
-        $breadcrumb->add($event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-        $breadcrumb->add($this->lang['scm.teams.management'], ScmUrlBuilder::edit_groups($event->get_id(), $event->get_event_slug()));
+        if ($event->get_is_sub())
+            $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
+		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
+		$breadcrumb->add($this->lang['scm.teams.management'], ScmUrlBuilder::edit_groups($event->get_id(), $event->get_event_slug()));
 
 		return $response;
 	}

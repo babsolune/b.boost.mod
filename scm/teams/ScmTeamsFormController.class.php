@@ -215,8 +215,16 @@ class ScmTeamsFormController extends DefaultModuleController
         $graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.teams.management']);
         $graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_teams($this->event_id(), $event->get_event_slug()));
 
-        $breadcrumb->add($event->get_event_name(), ScmUrlBuilder::event_home($this->event_id(), $event->get_event_slug()));
-        $breadcrumb->add($this->lang['scm.teams.management'], ScmUrlBuilder::edit_teams($this->event_id(), $event->get_event_slug()));
+		$categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($event->get_id_category(), true));
+		foreach ($categories as $id => $category)
+		{
+			if ($category->get_id() != Category::ROOT_CATEGORY)
+				$breadcrumb->add($category->get_name(), ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
+		}
+        if ($event->get_is_sub())
+            $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
+		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
+		$breadcrumb->add($this->lang['scm.teams.management'], ScmUrlBuilder::edit_teams($this->event_id(), $event->get_event_slug()));
 
 		return $response;
 	}

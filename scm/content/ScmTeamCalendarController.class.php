@@ -162,8 +162,10 @@ class ScmTeamCalendarController extends DefaultModuleController
 			if ($category->get_id() != Category::ROOT_CATEGORY)
 				$breadcrumb->add($category->get_name(), ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()));
 		}
-		$breadcrumb->add($event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-        $breadcrumb->add($this->team_name, ScmUrlBuilder::display_team_calendar($event->get_id(), $event->get_event_slug(), $this->team_id));
+        if ($event->get_is_sub())
+            $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
+		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
+		$breadcrumb->add($this->team_name, ScmUrlBuilder::display_team_calendar($event->get_id(), $event->get_event_slug(), $this->team_id));
 
 		return $response;
 	}
