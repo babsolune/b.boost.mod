@@ -10,7 +10,7 @@
 <div class="cell-flex cell-columns-2">
     <div class="days-calendar">
         # IF C_EVENT_STARTING #
-            <div></div>
+            <div class="message-helper bgc notice m-t">{@scm.event.not.started}</div>
         # ELSE #
             <div class="responsive-table">
                 <table class="bordered-table">
@@ -74,7 +74,7 @@
             </div>
         # ENDIF #
         # IF C_EVENT_ENDING #
-            <div></div>
+            <div class="message-helper bgc notice">{@scm.event.ended.event}</div>
         # ELSE #
             <div class="responsive-table">
                 <table class="bordered-table">
@@ -140,7 +140,7 @@
     </div>
     <div class="days-ranking">
         <div class="scm-table">
-            <header>
+            <header class="m-t">
                 <h3>{@scm.ranking}</h3>
             </header>
             <div class="scm-line scm-head">

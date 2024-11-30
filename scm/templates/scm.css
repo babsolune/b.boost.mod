@@ -23,11 +23,6 @@
     content: none;
 }
 
-.cell-details {
-    padding: 0.309em;
-    font-weight: bold;
-}
-
 @media (min-width: 769px) {
     .cell-inline .cell {
         max-width: 305px;
@@ -481,6 +476,10 @@ th.bgc-sub a {
 }
 
 /* details */
+.cell-details {
+    padding: 0.309em;
+    font-weight: bold;
+}
 .cell-details.cell-modal .cell {
     max-width: 100%;
 }
@@ -498,8 +497,8 @@ th.bgc-sub a {
     display: flex;
     flex-direction: column;
 }
-.scm-table > header {
-    margin-top: 1.209em;
+.m-t {
+    margin-top: 1.456em;
 }
 
 .scm-line-group {
