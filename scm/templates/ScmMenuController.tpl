@@ -27,7 +27,7 @@
     # IF NOT C_IS_MASTER #
         <nav class="cssmenu cssmenu-horizontal">
             <ul>
-                # IF C_IS_SUB #<li><a href="{U_EVENT_MASTER}" class="offload cssmenu-title" aria-label="{HEADER_MASTER}"><i class="fa fa-fw fa-house-flag"></i></a></li># ENDIF #
+                # IF C_IS_SUB #<li><a href="{U_EVENT_MASTER}" class="offload cssmenu-title" aria-label="{HEADER_MASTER_DIVISION}"><i class="fa fa-fw fa-house-flag"></i></a></li># ENDIF #
                 <li><a href="{U_EVENT_HOME}" class="offload cssmenu-title" aria-label="{@scm.menu.infos}"><i class="fa fa-fw fa-info"></i></a></li>
                 # IF C_CUP #
                     <li><a href="{U_ROUND_BRACKETS}" class="offload cssmenu-title" aria-label="{@scm.menu.bracket}"><i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i></a></li>
