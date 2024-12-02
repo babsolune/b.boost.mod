@@ -40,3 +40,19 @@
 - [X] bg color for ongoing games
 - [X] Ongoing games list
 - [X] Next games list
+
+## Days calendar with ajax
+### script
+#### change url with current day
+```
+// change url
+    var pathname = window.location.pathname;
+    // Split the pathname by '/'
+    var pathParts = pathname.split('/');
+    // Replacethe last part with the new variable
+    pathParts[pathParts.length - 1] = day;
+    // Join the path parts back into a string
+    var newPathname = pathParts.join('/');
+    // Update the browser's URL without reloading the page
+    history.pushState(null, '', newPathname);
+```
