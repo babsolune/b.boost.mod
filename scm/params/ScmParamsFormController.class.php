@@ -128,17 +128,24 @@ class ScmParamsFormController extends DefaultModuleController
 			$bracket_fieldset = new FormFieldsetHTML('bracket', $this->lang['scm.params.bracket']);
             $form->add_fieldset($bracket_fieldset);
 
-            $bracket_fieldset->add_field(new FormFieldSimpleSelectChoice('finals_type', $this->lang['scm.finals.type'], $this->get_params()->get_finals_type(),
-                [
+            if ($this->is_tournament) {
+                $final_type_options = [
                     new FormFieldSelectChoiceOption($this->lang['scm.finals.round'], ScmParams::FINALS_ROUND),
                     new FormFieldSelectChoiceOption($this->lang['scm.finals.ranking'], ScmParams::FINALS_RANKING)
-                ],
+                ];
+            }
+            else
+                $final_type_options = [new FormFieldSelectChoiceOption($this->lang['scm.finals.round'], ScmParams::FINALS_ROUND)];
+            $bracket_fieldset->add_field(new FormFieldSimpleSelectChoice('finals_type', $this->lang['scm.finals.type'], $this->get_params()->get_finals_type(),
+                $final_type_options,
                 [
                     'events' => ['click' => '
                         if (HTMLForms.getField("finals_type").getValue() == "' . ScmParams::FINALS_ROUND . '") {
                             HTMLForms.getField("rounds_number").enable();
+                            HTMLForms.getField("draw_games").enable();
                         } else {
                             HTMLForms.getField("rounds_number").disable();
+                            HTMLForms.getField("draw_games").disable();
                         }
                     ']
                 ]
@@ -147,12 +154,14 @@ class ScmParamsFormController extends DefaultModuleController
             $bracket_fieldset->add_field(new FormFieldNumberEditor('rounds_number', $this->lang['scm.rounds.number'], $this->get_params()->get_rounds_number(),
                 [
                     'description' => $this->lang['scm.rounds.number.clue'],
-                    'min' => 0, 'max' => 7, 'required' => true,
+                    'min' => 0, 'required' => true,
                     'hidden' => $this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING
                 ]
             ));
 
-            $bracket_fieldset->add_field(new FormFieldCheckbox('draw_games', $this->lang['scm.draw.games'], $this->get_params()->get_draw_games()));
+            $bracket_fieldset->add_field(new FormFieldCheckbox('draw_games', $this->lang['scm.draw.games'], $this->get_params()->get_draw_games(),
+                ['hidden' => $this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING]
+            ));
 
             $bracket_fieldset->add_field(new FormFieldCheckbox('has_overtime', $this->lang['scm.has.overtime'], $this->get_params()->get_has_overtime(),
 				[

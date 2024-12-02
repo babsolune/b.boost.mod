@@ -33,6 +33,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
             if ($this->finals_submit_button->has_been_submited() && $this->finals_form->validate())
             {
                 $this->finals_save();
+                AppContext::get_response()->redirect(ScmUrlBuilder::edit_brackets_games($this->get_event()->get_id(), $this->get_event()->get_event_slug(), AppContext::get_request()->get_getint('round', 0)));
                 $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.games.update'], MessageHelper::SUCCESS, 4));
             }
         }
@@ -43,6 +44,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
             if ($this->submit_button->has_been_submited() && $this->form->validate())
             {
                 $this->save();
+                AppContext::get_response()->redirect(ScmUrlBuilder::edit_brackets_games($this->get_event()->get_id(), $this->get_event()->get_event_slug(), AppContext::get_request()->get_getint('round', 0)));
                 $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.games.update'], MessageHelper::SUCCESS, 4));
             }
         }
@@ -452,8 +454,8 @@ class ScmBracketGamesFormController extends DefaultModuleController
         }
         if ($event->get_is_sub())
             $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
-		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-		$breadcrumb->add($this->lang['scm.games.management'], ScmUrlBuilder::edit_brackets_games($event->get_id(), $event->get_event_slug()));
+		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug(), AppContext::get_request()->get_getint('round', 0)));
+		$breadcrumb->add($this->lang['scm.games.management'], ScmUrlBuilder::edit_brackets_games($event->get_id(), $event->get_event_slug(), AppContext::get_request()->get_getint('round', 0)));
 
 		return $response;
 	}

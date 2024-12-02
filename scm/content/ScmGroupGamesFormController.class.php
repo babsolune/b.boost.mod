@@ -25,6 +25,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
+            AppContext::get_response()->redirect(ScmUrlBuilder::edit_groups_games($this->get_event()->get_id(), $this->get_event()->get_event_slug(), AppContext::get_request()->get_getint('round', 0)));
             $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.games.update'], MessageHelper::SUCCESS, 4));
 		}
 
@@ -46,7 +47,6 @@ class ScmGroupGamesFormController extends DefaultModuleController
 	private function build_form()
 	{
         $gr = AppContext::get_request()->get_getint('round', 0);
-
         $form = new HTMLForm(__CLASS__);
         $form->set_css_class('floating-submit modal-container');
 		$form->set_layout_title(
@@ -154,7 +154,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     if ($game->get_game_home_id() && $game->get_game_away_id())
                         ${'groups_fieldset' . $or}->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' .$this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, $round, $or), 'small text-italic'));
                     else
-                        $game_fieldset->add_field(new FormFieldSpacer('details_' . $gr . $or, ''));
+                        ${'groups_fieldset' . $or}->add_field(new FormFieldSpacer('details_' . $gr . $or, ''));
                     ${'groups_fieldset' . $or}->add_field(new FormFieldDateTime('game_date_' . $gr . $or, '', $game->get_game_date(),
                         ['class' => 'game-date']
                     ));
@@ -404,7 +404,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
 
         $graphical_environment->set_page_title($this->lang['scm.games.management'], $this->lang['scm.module.title']);
         $graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.games.management']);
-        $graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug()));
+        $graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug(), AppContext::get_request()->get_getint('round', 0)));
 
         $categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($event->get_id_category(), true));
         foreach ($categories as $id => $category)
@@ -414,8 +414,8 @@ class ScmGroupGamesFormController extends DefaultModuleController
         }
         if ($event->get_is_sub())
             $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
-		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-		$breadcrumb->add($this->lang['scm.games.management'], ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug()));
+		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug(), AppContext::get_request()->get_getint('round', 0)));
+		$breadcrumb->add($this->lang['scm.games.management'], ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug(), AppContext::get_request()->get_getint('round', 0)));
 
 		return $response;
 	}
