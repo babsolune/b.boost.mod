@@ -242,27 +242,57 @@ th.bgc-sub a {
     }
 }
 
-.grouped-fields .game-name        { width: 50%; }
-.grouped-fields .game-date        { width: 270px; }
-.grouped-fields .game-playground  { width: 80px; }
-.grouped-fields .game-team        { min-width: 120px; }
-.grouped-fields .game-score       { width: 70px; text-align: center; }
+.grouped-fields .game-playground,
+.grouped-fields .game-score {
+    text-align: center;
+}
+
+.grouped-fields .form-field-select select {
+    width: 100%;
+}
+
+.grouped-fields .game-name               { width: 50%; }
+.grouped-fields .game-date               { width: 100%; }
+.grouped-fields .form-element.game-team  { width: 70%; }
+.grouped-fields .form-element.game-score { width: 25%; }
+.grouped-fields .game-playground         { width: 100%; }
+
+@media (min-width: 769px) {
+    .grouped-fields .game-name               { width: 50%; }
+    .grouped-fields .game-date               { width: 270px; }
+    .grouped-fields .form-element.game-team  { min-width: 120px; width: 1%; }
+    .grouped-fields .form-element.game-score { width: 70px; }
+    .grouped-fields .game-playground         { width: 80px; }
+}
+
+.grouped-fields .game-name              { order: 2; }
+.grouped-fields .form-field-action-link { order: 3; }
+.grouped-fields .game-date              { order: 4; }
+.grouped-fields .game-team.home-team    { order: 5; }
+.grouped-fields .game-score.home-team   { order: 6; }
+.grouped-fields .game-team.away-team    { order: 7; }
+.grouped-fields .game-score.away-team   { order: 8; }
+.grouped-fields .game-playground        { order: 9; }
+
+@media (min-width: 769px) {
+    .grouped-fields .game-team.away-team    { order: 8; }
+    .grouped-fields .game-score.away-team   { order: 7; }
+}
 
 .grouped-fields .game-name,
 .grouped-fields .form-field-action-link {
     margin: 0;
-    padding: 0;
 }
 .grouped-fields .form-field-action-link ul {
     list-style-type: none;
     margin: 0;
 }
 .grouped-fields .form-field-action-link {
-    width: 48%;
+    width: 50%;
     text-align: right;
 }
 .grouped-fields .form-field-action-link a {
-    display: block;
+    display: inline-block;
     text-align: right;
 }
 
