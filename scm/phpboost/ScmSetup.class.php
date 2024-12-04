@@ -278,7 +278,7 @@ class ScmSetup extends DefaultModuleSetup
 
 			'game_duration'    => ['type' => 'integer', 'length' => 11, 'default' => 0],
 			'favorite_team_id' => ['type' => 'integer', 'length' => 11, 'default' => 0],
-			'bonus'            => ['type' => 'string', 'length' => 11, 'default' => "''"]
+			'bonus'            => ['type' => 'integer', 'length' => 11, 'default' => 0]
         ];
 		$options = [
 			'primary' => ['id_params'],
