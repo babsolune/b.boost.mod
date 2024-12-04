@@ -58,7 +58,7 @@ class ScmMiniNextGame extends ModuleMiniMenu
         {
             $event_id = $game['game_event_id'];
             $favorite_team = ScmParamsService::get_params($event_id)->get_favorite_team_id();
-            if ($game['game_home_id'] == $favorite_team || $game['game_away_id'] == $favorite_team)
+            if ($favorite_team && ($game['game_home_id'] == $favorite_team || $game['game_away_id'] == $favorite_team))
                 $event_games[$event_id][] = $game;
         }
 

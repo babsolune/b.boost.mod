@@ -60,7 +60,7 @@ class ScmMiniPrevGame extends ModuleMiniMenu
             if (!isset($event_games[$event_id])) {
                 $event_games[$event_id] = [];
             }
-            if ($game['game_home_id'] == $favorite_team || $game['game_away_id'] == $favorite_team)
+            if ($favorite_team && ($game['game_home_id'] == $favorite_team || $game['game_away_id'] == $favorite_team))
                 $event_games[$event_id][] = $game;
         }
 
