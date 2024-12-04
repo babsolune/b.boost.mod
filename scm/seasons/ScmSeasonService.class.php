@@ -77,14 +77,5 @@ class ScmSeasonService
 		$season->set_properties($row);
 		return $season;
 	}
-
-    public static function check_season(int $season_id)
-    {
-        $now = new Date();
-        $season_name = ScmSeasonService::get_season($season_id)->get_season_name();
-        $season_parts = explode('-', $season_name);
-
-        return in_array($now->get_year(), $season_parts);
-    }
 }
 ?>
