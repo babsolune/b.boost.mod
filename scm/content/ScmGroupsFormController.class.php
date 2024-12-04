@@ -22,7 +22,8 @@ class ScmGroupsFormController extends DefaultModuleController
 		{
 			$this->save();
             $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.group.update'], MessageHelper::SUCCESS, 4));
-		}
+		    // AppContext::get_response()->redirect(ScmUrlBuilder::edit_groups($this->get_event()->get_id(), $this->get_event()->get_event_slug(), AppContext::get_request()->get_getint('round', 0)));
+        }
 
 		$this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
@@ -97,18 +98,19 @@ class ScmGroupsFormController extends DefaultModuleController
             }
         }
 
-        if (ScmGameService::has_games($this->event_id()) && $count_teams == ScmTeamService::get_teams_number($this->event_id()))
+        if (ScmGameService::has_games($this->event_id()))
             ScmGameService::delete_games($this->event_id());
-        if ($this->get_params()->get_hat_ranking())
-            ScmGroupService::set_hat_days_games($this->event_id(), $this->get_params()->get_hat_days(), ScmTeamService::get_teams_number($this->event_id()));
-        elseif ($this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING)
+        if ($this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING)
         {
             ScmGroupService::set_groups_games($this->event_id());
             ScmGroupService::set_groups_finals_games($this->event_id());
         }
         elseif ($this->get_params()->get_finals_type() == ScmParams::FINALS_ROUND)
         {
-            ScmGroupService::set_groups_games($this->event_id());
+            if ($this->get_params()->get_hat_ranking())
+                ScmGroupService::set_hat_days_games($this->event_id(), $this->get_params()->get_hat_days(), ScmTeamService::get_teams_number($this->event_id()));
+            else
+                ScmGroupService::set_groups_games($this->event_id());
             ScmBracketService::set_bracket_games($this->event_id(), ScmParamsService::get_params($this->event_id())->get_rounds_number());
         }
         else
@@ -214,8 +216,8 @@ class ScmGroupsFormController extends DefaultModuleController
         }
         if ($event->get_is_sub())
             $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
-		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-		$breadcrumb->add($this->lang['scm.teams.management'], ScmUrlBuilder::edit_groups($event->get_id(), $event->get_event_slug()));
+		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug(),  AppContext::get_request()->get_getint('round', 0)));
+		$breadcrumb->add($this->lang['scm.teams.management'], ScmUrlBuilder::edit_groups($event->get_id(), $event->get_event_slug(),  AppContext::get_request()->get_getint('round', 0)));
 
 		return $response;
 	}

@@ -25,9 +25,12 @@ class ScmGroupController extends DefaultModuleController
 	private function build_view()
 	{
         $this->view->put_all([
-            'C_ONE_DAY' => ScmGameService::one_day_event($this->event_id()),
+            'C_ONE_DAY'             => ScmGameService::one_day_event($this->event_id()),
             'C_DISPLAY_PLAYGROUNDS' => $this->get_params()->get_display_playgrounds(),
-            'C_HAT_RANKING' => $this->get_params()->get_hat_ranking(),
+            'C_HAT_RANKING'         => $this->get_params()->get_hat_ranking(),
+            'C_HAS_GAMES'           => ScmGameService::has_games($this->event_id()),
+
+            'MENU' => ScmMenuService::build_event_menu($this->event_id())
         ]);
         $group = AppContext::get_request()->get_getint('round', 0);
 
@@ -67,8 +70,6 @@ class ScmGroupController extends DefaultModuleController
         // Ranking
         if($this->get_params()->get_hat_days())
             $ranks = ScmRankingService::general_days_ranking($this->event_id(), $group);
-        elseif ($this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING)
-            $ranks = ScmRankingService::general_groups_full_ranking($this->event_id());
         else
             $ranks = ScmRankingService::general_groups_ranking($this->event_id(), $group);
 
@@ -114,11 +115,6 @@ class ScmGroupController extends DefaultModuleController
                 ]
             ));
         }
-
-        $this->view->put_all([
-            'MENU' => ScmMenuService::build_event_menu($this->event_id()),
-            'C_HAS_GAMES' => ScmGameService::has_games($this->event_id())
-        ]);
 	}
 
 	private function get_event()
