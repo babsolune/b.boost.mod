@@ -24,9 +24,14 @@
     # ENDIF #
 </header>
 <div class="event-menu flex-between controls">
-    # IF NOT C_IS_MASTER #
-        <nav class="cssmenu cssmenu-horizontal">
-            <ul>
+    <nav class="cssmenu cssmenu-horizontal">
+        <ul>
+            # IF C_IS_MASTER #
+                <li><a href="{U_EVENT_HOME}" class="offload cssmenu-title" aria-label="{HEADER_MASTER_DIVISION}"><i class="fa fa-fw fa-house-flag"></i></a></li>
+                # START sub_events #
+                    <li><a class="offload cssmenu-title" href="{sub_events.U_EVENT}">{sub_events.DIVISION_NAME}</a></li>
+                # END sub_events #
+            # ELSE #
                 # IF C_IS_SUB #<li><a href="{U_EVENT_MASTER}" class="offload cssmenu-title" aria-label="{HEADER_MASTER_DIVISION}"><i class="fa fa-fw fa-house-flag"></i></a></li># ENDIF #
                 <li><a href="{U_EVENT_HOME}" class="offload cssmenu-title" aria-label="{@scm.menu.infos}"><i class="fa fa-fw fa-info"></i></a></li>
                 # IF C_CUP #
@@ -46,14 +51,15 @@
                             # ENDIF #
                         </a>
                     </li>
-                # ELSE #
-                    # IF C_CHAMPIONSHIP #
-                        <li><a href="{U_DAYS_CALENDAR}" class="offload cssmenu-title" aria-label="{@scm.menu.calendar}"><i class="far fa-fw fa-calendar-days" aria-hidden="true"></i></a></li>
-                        <li><a href="{U_DAYS_RANKING}" class="offload cssmenu-title" aria-label="{@scm.menu.ranking}"><i class="fa fa-fw fa-ranking-star" aria-hidden="true"></i></a></li>
-                    # ENDIF #
                 # ENDIF #
-            </ul>
-        </nav>
+                # IF C_CHAMPIONSHIP #
+                    <li><a href="{U_DAYS_CALENDAR}" class="offload cssmenu-title" aria-label="{@scm.menu.calendar}"><i class="far fa-fw fa-calendar-days" aria-hidden="true"></i></a></li>
+                    <li><a href="{U_DAYS_RANKING}" class="offload cssmenu-title" aria-label="{@scm.menu.ranking}"><i class="fa fa-fw fa-ranking-star" aria-hidden="true"></i></a></li>
+                # ENDIF #
+            # ENDIF #
+        </ul>
+    </nav>
+    # IF NOT C_IS_MASTER #
         # IF C_CONTROLS #
             <nav class="bgc moderator cssmenu cssmenu-horizontal">
                 <ul>

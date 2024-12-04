@@ -90,6 +90,14 @@ class ScmMenuService
             'U_EDIT_BRACKET_GAMES' => ScmUrlBuilder::edit_brackets_games($event_id, $event->get_event_slug(), $bracket_round)->rel(),
         ]);
 
+        foreach (ScmEventService::get_sub_list($event_id) as $sub_event)
+        {
+            $item = new ScmEvent();
+            $item->set_properties($sub_event);
+
+            $view->assign_block_vars('sub_events', $item->get_template_vars());
+        }
+
         foreach ($event->get_sources() as $name => $url)
 		{
 			$view->assign_block_vars('sources', $event->get_array_tpl_source_vars($name));
@@ -218,21 +226,16 @@ class ScmMenuService
 
     private static function current_event_list()
     {
-        $now = new Date();
         $event_id = AppContext::get_request()->get_getint('event_id', 0);
         $event = ScmEventService::get_event($event_id);
-
         $events = ScmEventCache::load()->get_events();
-        usort($events, function ($a, $b) {
-            return $a['start_date'] - $b['start_date'];
-        });
-        $options = $form_events = [];
+
         $options[] = new FormFieldSelectChoiceOption(LangLoader::get_message('scm.change.event', 'common', 'scm'), 0);
         foreach ($events as $event)
         {
             $item = new ScmEvent();
             $item->set_properties($event);
-            if (ScmSeasonService::check_season($item->get_season_id()) && $item->get_end_date() > $now && !$item->get_is_sub())
+            if (ScmEventService::check_event_display($item->get_id()))
                 $form_events[] = new FormFieldSelectChoiceOption(
                     $item->get_category()->get_name()
                     . ' - ' . ScmDivisionService::get_division($item->get_division_id())->get_division_name()
