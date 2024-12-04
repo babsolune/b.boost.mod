@@ -11,15 +11,20 @@
             # IF C_IS_MASTER #
                 # START sub_events #
                     <h2>
-                        <a href="{sub_events.U_EVENT}" class="offload pinned bgc link-color">
-                            {sub_events.DIVISION_NAME}
-                            # IF sub_events.C_IS_ENDED #
-                                <span class="smaller warning">{@scm.event.ended.event}</span>
-                            # ELSE #
-                                <span class="smaller">{sub_events.START_DATE} | {sub_events.END_DATE}</span>
-                            # ENDIF #
-                        </a>
+                        <a href="{sub_events.U_EVENT}" class="offload">
+                            {sub_events.DIVISION_NAME}</a>
                     </h2>
+                    <div class="more">
+                        <span>{sub_events.START_DATE} | {sub_events.END_DATE}</span>
+                        # IF sub_events.C_IS_ENDED #
+                            <span class="warning">{@scm.event.ended.event}</span>
+                        # ENDIF #
+                    </div>
+                    <div class="content">
+                        # IF sub_events.C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE sub_events.DAYS_INFOS #</div># ENDIF #
+                        # IF sub_events.C_CUP #<div itemprop="text">cup</div># ENDIF #
+                        # IF sub_events.C_TOURNAMENT #<div itemprop="text"># INCLUDE sub_events.ROUNDS_INFOS #</div># ENDIF #
+                    </div>
                 # END sub_events #
             # ELSE #
                 # IF C_HAS_GAMES #
@@ -27,9 +32,7 @@
                             <div class="content">
                                 # IF C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE DAYS_INFOS #</div># ENDIF #
                                 # IF C_CUP #<div itemprop="text">cup</div># ENDIF #
-                                # IF C_TOURNAMENT #
-                                    <div itemprop="text"># INCLUDE ROUNDS_INFOS #</div>
-                                # ENDIF #
+                                # IF C_TOURNAMENT #<div itemprop="text"># INCLUDE ROUNDS_INFOS #</div># ENDIF #
                             </div>
 
                             <aside>${ContentSharingActionsMenuService::display()}</aside>
