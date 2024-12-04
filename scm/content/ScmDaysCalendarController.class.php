@@ -145,7 +145,7 @@ class ScmDaysCalendarController extends DefaultModuleController
         if ($event->get_is_sub())
             $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
 		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-		$breadcrumb->add($this->lang['scm.games.groups.stage'], ScmUrlBuilder::display_groups_rounds($event->get_id(), $event->get_event_slug()));
+		$breadcrumb->add($this->lang['scm.calendar'], ScmUrlBuilder::display_groups_rounds($event->get_id(), $event->get_event_slug()));
 
 		return $response;
 	}

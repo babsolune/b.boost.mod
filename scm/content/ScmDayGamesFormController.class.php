@@ -91,17 +91,11 @@ class ScmDayGamesFormController extends DefaultModuleController
                 '<strong>D' . $gr . $or . '</strong><span class="warning">' . $bonus . $status . $forfeit . '</span>',
                 ['class' => 'game-name small text-italic form-D' . $gr . $or]
             ));
-            if ($game->get_game_home_id() && $game->get_game_away_id())
-                $game_fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' .$this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $gr, $ro, $or), 'small text-italic'));
-            else
-                $game_fieldset->add_field(new FormFieldSpacer('details_' . $gr . $or, ''));
+            $game_fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' . $this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $gr, $ro, $or), 'd-inline-block game-details align-right'));
+
             $game_fieldset->add_field(new FormFieldDateTime('game_date_' . $gr . $or, '', $game->get_game_date(),
                 ['class' => 'game-date']
             ));
-            if($this->get_params()->get_display_playgrounds())
-                $game_fieldset->add_field(new FormFieldTextEditor('game_playground_' . $gr . $or, '', $game->get_game_playground(),
-                    ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
-                ));
             $game_fieldset->add_field(new FormFieldSimpleSelectChoice('home_team_' . $gr . $or, '', $game->get_game_home_id(),
                 $this->get_teams_list(),
                 ['class' => 'home-team game-team']
@@ -116,6 +110,10 @@ class ScmDayGamesFormController extends DefaultModuleController
                 $this->get_teams_list(),
                 ['class' => 'away-team game-team']
             ));
+            if($this->get_params()->get_display_playgrounds())
+                $game_fieldset->add_field(new FormFieldTextEditor('game_playground_' . $gr . $or, '', $game->get_game_playground(),
+                    ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
+                ));
         }
 
         $this->submit_button = new FormButtonDefaultSubmit();

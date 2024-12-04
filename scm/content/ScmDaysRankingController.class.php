@@ -252,9 +252,6 @@ class ScmDaysRankingController extends DefaultModuleController
 		$graphical_environment->get_seo_meta_data()->set_description('');
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
 
-		// if ($event->has_thumbnail())
-		// 	$graphical_environment->get_seo_meta_data()->set_picture_url($event->get_thumbnail());
-
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['scm.module.title'],ScmUrlBuilder::home());
 
@@ -267,7 +264,7 @@ class ScmDaysRankingController extends DefaultModuleController
         if ($event->get_is_sub())
             $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
 		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-		$breadcrumb->add($this->lang['scm.games.groups.stage'], ScmUrlBuilder::display_groups_rounds($event->get_id(), $event->get_event_slug()));
+		$breadcrumb->add($this->lang['scm.days.ranking'], ScmUrlBuilder::display_groups_rounds($event->get_id(), $event->get_event_slug()));
 
 		return $response;
 	}
