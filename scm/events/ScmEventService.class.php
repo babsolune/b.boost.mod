@@ -205,7 +205,7 @@ class ScmEventService
     {
         $event = self::get_event($event_id);
         $master_event_id = $event->get_master_id();
-        if($master_event_id)
+        if ($master_event_id)
         {
             $master_event = self::get_event($master_event_id);
         }
@@ -229,6 +229,24 @@ class ScmEventService
             $sub_list[] = $event;
         }
         return $sub_list;
+    }
+
+    public static function check_event_display(int $event_id):bool
+    {
+        $now = new Date();
+        $events = [];
+        foreach (self::get_events() as $event)
+        {
+            $item = new ScmEvent();
+            $item->set_properties($event);
+
+            $start_date = $item->get_start_date()->get_timestamp();
+            $end_date = $item->get_end_date()->get_timestamp();
+            if ($start_date < $now->get_timestamp() && $end_date > $now->get_timestamp() && !$item->get_is_sub())
+                $events[] = $item->get_id();
+        }
+
+        return in_array($event_id, $events);
     }
 
 	public static function clear_cache()
