@@ -161,7 +161,7 @@ class ScmRankingService
                     'event_id'          => $event_id,
                     'points_prtl'       => 0,
                     'goal_average_prtl' => 0,
-                    'goals_for_prlt'    => 0,
+                    'goals_for_prtl'    => 0,
                     'goals_for_away'    => 0,
                     'win_away'          => 0,
                     'fairplay_prtl'     => 0,
@@ -311,13 +311,13 @@ class ScmRankingService
         {
             if (($a['team_id'] == $game['game_home_id'] && $b['team_id'] == $game['game_away_id']))
             {
-                $a['goals_for_prtl'] += $game['game_home_score'];
-                $b['goals_for_prtl'] += $game['game_away_score'];
+                $a['goals_for_prtl'] += (int)$game['game_home_score'];
+                $b['goals_for_prtl'] += (int)$game['game_away_score'];
             }
             if ($b['team_id'] == $game['game_home_id'] && $a['team_id'] == $game['game_away_id'])
             {
-                $b['goals_for_prtl'] += $game['game_home_score'];
-                $a['goals_for_prtl'] += $game['game_away_score'];
+                $b['goals_for_prtl'] += (int)$game['game_home_score'];
+                $a['goals_for_prtl'] += (int)$game['game_away_score'];
             }
         }
 		if ($a['goals_for_prtl'] == $b['goals_for_prtl'])
@@ -331,11 +331,11 @@ class ScmRankingService
         {
             if (($a['team_id'] == $game['game_away_id']))
             {
-                $a['goals_for'] += $game['game_home_score'];
+                $a['goals_for'] += (int)$game['game_home_score'];
             }
             if ($b['team_id'] == $game['game_away_id'])
             {
-                $b['goals_for'] += $game['game_home_score'];
+                $b['goals_for'] += (int)$game['game_home_score'];
             }
         }
 		if ($a['goals_for_away'] == $b['goals_for_away'])
