@@ -135,7 +135,7 @@ class ScmDayService
                 $ids[] = $day['day_round'];
         }
 
-        return !empty(end($ids)) ? end($ids) : 0;
+        return !empty(end($ids)) ? end($ids) : 1;
     }
 
     public static function get_next_day(int $event_id)

@@ -18,7 +18,7 @@ $lang['scm.mini.live']    = 'Matchs en cours';
 
 $lang['scm.event.start.date']  = 'Date de début';
 $lang['scm.event.end.date']    = 'Date de fin';
-$lang['scm.event.not.started'] = 'La compétition débute bientôt.';
+$lang['scm.event.not.started'] = 'La compétition débute le :date';
 $lang['scm.event.ended.event'] = 'Compétition terminée';
 $lang['scm.source.clue']       = 'Liens vers les sites officiels de la compétition';
 $lang['scm.not.specified']     = 'Non renseigné';

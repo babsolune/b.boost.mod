@@ -10,7 +10,7 @@
 <div class="cell-flex cell-columns-2">
     <div class="days-calendar">
         # IF C_EVENT_STARTING #
-            <div class="message-helper bgc notice m-t">{@scm.event.not.started}</div>
+            <div class="message-helper bgc notice m-t">{L_STARTING_DATE}</div>
         # ELSE #
             <div class="responsive-table">
                 <table class="bordered-table">

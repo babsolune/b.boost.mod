@@ -78,9 +78,9 @@ class ScmEventHomeService
                 'U_CLUB' => ScmUrlBuilder::display_club($real_id, $real_slug)->rel()
             ]);
         }
-
         $view->put_all([
             'C_EVENT_STARTING' => $next_day == 1,
+            'L_STARTING_DATE' => StringVars::replace_vars($lang['scm.event.not.started'], ['date' => Date::to_format(ScmEventService::get_event($event_id)->get_start_date()->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT)]),
             'C_EVENT_ENDING' => $prev_day == count(ScmDayService::get_days($event_id)),
             'LAST_DAY' => $prev_day,
             'NEXT_DAY' => $next_day,
