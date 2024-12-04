@@ -161,11 +161,13 @@ class ScmGameService
     {
         if (self::has_games($event_id))
         {
-            $cache = ScmEventCache::load()->get_event($event_id);
-            $start_day = Date::to_format($cache['start_date'], Date::FORMAT_DAY_MONTH_YEAR);
-            $end_day = Date::to_format($cache['end_date'], Date::FORMAT_DAY_MONTH_YEAR);
+            $dates = [];
+            foreach (self::get_games($event_id) as $game)
+            {
+                $dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH);
+            }
 
-            return $start_day == $end_day;
+            return count(array_unique($dates)) == 1;
         }
         return false;
     }
