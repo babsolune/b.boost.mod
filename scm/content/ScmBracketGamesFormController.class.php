@@ -130,17 +130,11 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldFree('game_number_' . $gr . $br . $or, '', $game_number . $bonus . $status,
                     ['class' => 'game-name small text-italic form-B-' . $gr . $br . $or]
                 ));
-                if ($game_home_id && $game_away_id)
-                    ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldActionLink('details_' . $gr . $br . $or, '<span aria-label="' .$this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $gr, $br, $or), 'small game-details align-right text-italic'));
-                else
-                    ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSpacer('details_' . $gr . $br . $or, ''));
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldActionLink('details_' . $gr . $br . $or, '<span aria-label="' . $this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $gr, $br, $or), 'd-inline-block game-details align-right'));
+
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldDateTime('game_date_' . $gr . $br . $or, '', $game_date,
                     ['class' => 'game-date']
                 ));
-                if($this->get_params()->get_display_playgrounds())
-                    ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('game_playground_' . $gr . $br . $or, '', $game_playground,
-                        ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
-                    ));
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSimpleSelectChoice('home_team_' . $gr . $br . $or, '', $game_home_id,
                     $this->get_teams_list(),
                     ['class' => 'home-team game-team']
@@ -155,6 +149,10 @@ class ScmBracketGamesFormController extends DefaultModuleController
                     $this->get_teams_list(),
                     ['class' => 'away-team game-team']
                 ));
+                if($this->get_params()->get_display_playgrounds())
+                    ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldTextEditor('game_playground_' . $gr . $br . $or, '', $game_playground,
+                        ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
+                    ));
                 if ($this->return_games && $or == $games_number / 2)
                     ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldSpacer('winner_second_leg_' . $gr, '<hr />' . $this->lang['scm.second.leg']));
             }
@@ -218,20 +216,15 @@ class ScmBracketGamesFormController extends DefaultModuleController
 
             if ($this->return_games && $or == 1)
                 $fieldset->add_field(new FormFieldSpacer('first_leg_' . $gr, $this->lang['scm.first.leg']));
+            $fieldset->add_field(new FormFieldSpacer('separator_' . $gr . $or, '<hr />'));
             $fieldset->add_field(new FormFieldFree('game_number', '', '<strong>B' . $gr . $or . '</strong>'. ' - ' . $this->lang['scm.round'] . ' ' . $round,
                 ['class' => 'game-name small text-italic form-G' . $gr . $or]
             ));
-            if ($game->get_game_home_id() && $game->get_game_away_id())
-                $fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, $this->lang['scm.game.details'] , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, $round, $or), 'small text-italic'));
-            else
-                $fieldset->add_field(new FormFieldSpacer('details_' . $gr . $or, ''));
+            $fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' . $this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, $round, $or), 'd-inline-block game-details align-right'));
+
             $fieldset->add_field(new FormFieldDateTime('game_date_' . $gr . $or, '', $game->get_game_date(),
                 ['class' => 'game-date']
             ));
-            if($this->get_params()->get_display_playgrounds())
-                $fieldset->add_field(new FormFieldTextEditor('game_playground_' . $gr . $or, '', $game->get_game_playground(),
-                    ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
-                ));
             $fieldset->add_field(new FormFieldSimpleSelectChoice('home_team_' . $gr . $or, '', $game->get_game_home_id(),
                 $this->get_teams_list(),
                 ['class' => 'home-team game-team']
@@ -246,6 +239,10 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 $this->get_teams_list(),
                 ['class' => 'away-team game-team']
             ));
+            if($this->get_params()->get_display_playgrounds())
+                $fieldset->add_field(new FormFieldTextEditor('game_playground_' . $gr . $or, '', $game->get_game_playground(),
+                    ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
+                ));
 
             if ($this->return_games && $or == $games_number / 2)
                 $fieldset->add_field(new FormFieldSpacer('second_leg_' . $gr, '<hr />' . $this->lang['scm.second.leg']));

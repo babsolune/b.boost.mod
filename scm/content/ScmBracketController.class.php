@@ -11,10 +11,10 @@ class ScmBracketController extends DefaultModuleController
 {
     private $event;
     private $params;
+    private $division;
+    private $is_cup;
+    private $is_tournament;
     private $looser_bracket;
-    private $teams_number;
-    private $teams_per_group;
-
 	protected function get_template_to_use()
 	{
 		return new FileTemplate('scm/ScmBracketController.tpl');
@@ -25,15 +25,17 @@ class ScmBracketController extends DefaultModuleController
         $this->init();
         if ($this->return_games()) 
         {
-            $this->build_round_trip_view();
-        }
-        elseif ($this->get_params($this->event_id())->get_finals_type() == ScmParams::FINALS_RANKING)
-        {
-            $this->build_group_view();
+            if ($this->get_params($this->event_id())->get_finals_type() == ScmParams::FINALS_RANKING)
+                $this->build_group_view();
+            else
+                $this->build_round_trip_view();
         }
         else
         {
-            $this->build_bracket_view();
+            if ($this->get_params($this->event_id())->get_finals_type() == ScmParams::FINALS_RANKING)
+                $this->build_group_view();
+            else
+                $this->build_bracket_view();
         }
         $this->check_authorizations();
 
@@ -53,9 +55,10 @@ class ScmBracketController extends DefaultModuleController
 
     private function init()
     {
+		$this->division = ScmDivisionCache::load()->get_division($this->get_event()->get_division_id());
         $this->looser_bracket = $this->get_params()->get_looser_bracket();
-        $this->teams_number = ScmTeamService::get_teams_number($this->event_id());
-        $this->teams_per_group = $this->get_params()->get_teams_per_group();
+		$this->is_cup = $this->division['event_type'] == ScmDivision::CUP;
+		$this->is_tournament = $this->division['event_type'] == ScmDivision::TOURNAMENT;
     }
 
 	/** Bracket with return matches */
@@ -63,6 +66,7 @@ class ScmBracketController extends DefaultModuleController
 	{
         $games = ScmGroupService::games_list_from_group($this->event_id(), 'B');
         $games = call_user_func_array('array_merge', $games);
+
         $c_hat_ranking = ScmParamsService::get_params($this->event_id())->get_hat_ranking();
         $c_draw_games = ScmParamsService::get_params($this->event_id())->get_draw_games();
 
@@ -72,8 +76,8 @@ class ScmBracketController extends DefaultModuleController
             $rounds[] = $game['game_group'];
         }
 
-        $rounds_count = array_unique($rounds);
-        $key_rounds_count = array_keys($rounds_count);
+        $rounds_count = $c_hat_ranking || $this->is_cup ? array_unique(array_reverse($rounds)) : array_unique($rounds);
+        $key_rounds_count = $c_hat_ranking || $this->is_cup ? array_keys(array_reverse($rounds_count)) : array_keys($rounds_count);
         $first_key = reset($key_rounds_count);
         $last_key = end($key_rounds_count);
 
@@ -90,12 +94,11 @@ class ScmBracketController extends DefaultModuleController
             for ($i = 0; $i < count($games); $i++)
             {
                 if ($games[$i]['game_group'] == $round)
-                {
                     $round_games[] = $games[$i];
-                }
             }
 
-            $c_round = $c_hat_ranking ? ($key !== $last_key && $key !== $first_key) : ($key !== $last_key);
+            // $c_round = $c_hat_ranking ? ($key !== $last_key && $key !== $first_key) : ($key !== $last_key);
+            $c_round = true;
             if ($c_round)
             {
                 $chunks = array_chunk($round_games, ceil(count($round_games) / 2));
@@ -228,8 +231,8 @@ class ScmBracketController extends DefaultModuleController
             ]);
 
             // Reverse brackets to be looser.n, looser.n-1, looser.1, winner
-            $keys = $this->looser_bracket ? array_reverse(array_keys($rounds)) : array_keys($rounds);
-            $values = $this->looser_bracket ? array_reverse(array_values($rounds)) : array_values($rounds);
+            $keys = $this->is_cup ? array_reverse(array_keys($rounds)) : array_keys($rounds);
+            $values = $this->is_cup ? array_reverse(array_values($rounds)) : array_values($rounds);
             $r_rounds = array_combine($keys, $values);
 
             // Isolate first round
