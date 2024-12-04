@@ -65,6 +65,7 @@ class ScmParamsFormController extends DefaultModuleController
 		if ($this->is_tournament)
 		{
             $tournament_fieldset = new FormFieldsetHTML('tournament', $this->lang['scm.params.tournament']);
+            if (ScmGameService::has_games($this->event_id())) $tournament_fieldset->set_css_class('bgc warning');
             $form->add_fieldset($tournament_fieldset);
 
             $tournament_fieldset->add_field(new FormFieldNumberEditor('groups_number', $this->lang['scm.groups.number'], $this->get_params()->get_groups_number(),
@@ -126,6 +127,7 @@ class ScmParamsFormController extends DefaultModuleController
 		if ($this->is_cup || $this->is_tournament)
 		{
 			$bracket_fieldset = new FormFieldsetHTML('bracket', $this->lang['scm.params.bracket']);
+            if (ScmGameService::has_games($this->event_id())) $bracket_fieldset->set_css_class('bgc warning');
             $form->add_fieldset($bracket_fieldset);
 
             if ($this->is_tournament) {
@@ -142,10 +144,10 @@ class ScmParamsFormController extends DefaultModuleController
                     'events' => ['click' => '
                         if (HTMLForms.getField("finals_type").getValue() == "' . ScmParams::FINALS_ROUND . '") {
                             HTMLForms.getField("rounds_number").enable();
-                            HTMLForms.getField("draw_games").enable();
+                            HTMLForms.getField("has_overtime").enable();
                         } else {
                             HTMLForms.getField("rounds_number").disable();
-                            HTMLForms.getField("draw_games").disable();
+                            HTMLForms.getField("has_overtime").disable();
                         }
                     ']
                 ]
@@ -159,12 +161,9 @@ class ScmParamsFormController extends DefaultModuleController
                 ]
             ));
 
-            $bracket_fieldset->add_field(new FormFieldCheckbox('draw_games', $this->lang['scm.draw.games'], $this->get_params()->get_draw_games(),
-                ['hidden' => $this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING]
-            ));
-
             $bracket_fieldset->add_field(new FormFieldCheckbox('has_overtime', $this->lang['scm.has.overtime'], $this->get_params()->get_has_overtime(),
 				[
+                    'hidden' => $this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING,
                     'events' => ['click' => '
                         if (HTMLForms.getField("has_overtime").getValue()) {
                             HTMLForms.getField("overtime_duration").enable();
@@ -181,7 +180,10 @@ class ScmParamsFormController extends DefaultModuleController
                     'hidden' => !$this->get_params()->get_has_overtime()
                 ]
 			));
-			$bracket_fieldset->add_field(new FormFieldCheckbox('third_place', $this->lang['scm.third.place'], $this->get_params()->get_third_place(),
+
+            $bracket_fieldset->add_field(new FormFieldCheckbox('draw_games', $this->lang['scm.draw.games'], $this->get_params()->get_draw_games()));
+
+            $bracket_fieldset->add_field(new FormFieldCheckbox('third_place', $this->lang['scm.third.place'], $this->get_params()->get_third_place(),
                 ['hidden' => $this->is_tournament && $this->get_params()->get_looser_bracket()]
             ));
 			// $bracket_fieldset->add_field(new FormFieldCheckbox('golden_goal', $this->lang['scm.golden.goal'], $this->get_params()->get_golden_goal()));
@@ -254,7 +256,7 @@ class ScmParamsFormController extends DefaultModuleController
 		));
 
         $option_fieldset->add_field(new FormFieldSimpleSelectChoice('favorite_team_id', $this->lang['scm.favorite.team'], $this->get_params()->get_favorite_team_id(), $this->fav_teams_list(),
-            ['required' => true]
+            ['description' => $this->lang['scm.favorite.clue']]
         ));
 
 		$option_fieldset->add_field(new FormFieldSimpleSelectChoice('bonus', $this->lang['scm.bonus.param'], $this->get_params()->get_bonus(),
@@ -361,7 +363,7 @@ class ScmParamsFormController extends DefaultModuleController
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goal.average'], 'goal_average_prtl');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goals.for'], 'goals_for');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goals.for'], 'goals_for_prtl');
-        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goals.for'], 'goals_for_away');
+        $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.away.goals.for'], 'goals_for_away');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.general.goals.against'], 'goals_against');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.particular.goals.against'], 'goals_against_prtl');
         $options[] = new FormFieldSelectChoiceOption($this->lang['scm.ranking.win'], 'win');

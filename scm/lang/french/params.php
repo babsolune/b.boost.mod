@@ -12,15 +12,15 @@
 ####################################################
 
 // Params
-$lang['scm.params.event']     = 'Paramètres de compétition';
-$lang['scm.params.tournament'] = 'Configuration du tournoi';
-$lang['scm.params.bracket']    = 'Phases finales';
-$lang['scm.params.ranking']    = 'Classement';
-$lang['scm.params.options']    = 'Autres options';
-$lang['scm.params.penalties']  = 'Pénalités';
-$lang['scm.params.status']     = 'Statut';
-$lang['scm.params.status.play']    = 'En compétition';
-$lang['scm.params.status.forfeit']    = 'Forfait général';
+$lang['scm.params.event']            = 'Paramètres de compétition';
+$lang['scm.params.tournament']       = 'Configuration du tournoi';
+$lang['scm.params.bracket']          = 'Phases finales';
+$lang['scm.params.ranking']          = 'Classement';
+$lang['scm.params.options']          = 'Autres options';
+$lang['scm.params.penalties']        = 'Pénalités';
+$lang['scm.params.status']           = 'Statut';
+$lang['scm.params.status.play']      = 'En compétition';
+$lang['scm.params.status.forfeit']   = 'Forfait général';
 $lang['scm.params.status.exempt']    = 'Exempt';
 
 $lang['scm.groups.number']        = 'Nombre de groupes';
@@ -50,8 +50,8 @@ $lang['scm.finals.round'] = 'À élimination directe';
 $lang['scm.finals.ranking'] = 'Par classement';
 $lang['scm.rounds.number'] = 'Nombre de tours';
 $lang['scm.rounds.number.clue'] = '
-    <span aria-label="Par exemple <strong>3</strong> donnera <strong>1/4 de finale, 1/2 finale, finale</strong>.
-    <br /> Un tour de barrage est automatiquement ajouté si <strong>Classement au chapeau</strong> est coché."><i class="far fa-circle-question"></i></span>
+    <span aria-label="Par exemple, <strong>3</strong> donnera <strong>1/4 de finale, 1/2 finale, finale</strong>.
+    <br /> Un tour de barrage est automatiquement ajouté si <strong>Classement au chapeau</strong> est coché."><i class="far fa-circle-question" aria-hidden="true"></i></span>
 ';
 $lang['scm.draw.games']        = 'Matchs par tirage au sort';
 $lang['scm.golden.goal']       = 'But en or';
@@ -62,8 +62,12 @@ $lang['scm.third.place']       = 'Match pour la troisième place';
 
 $lang['scm.minutes.clue']       = 'En minutes';
 $lang['scm.game.duration']      = 'Temps de jeu d\'un match';
-$lang['scm.game.duration.clue'] = 'En minutes<br />Prendre en compte la durée de la mi-temps.';
+$lang['scm.game.duration.clue'] = '
+    <span aria-label="En minutes.<br />Prendre en compte la durée de la mi-temps."><i class="far fa-circle-question" aria-hidden="true"></i></span>';
 $lang['scm.favorite.team']      = 'Équipe favorite';
+$lang['scm.favorite.clue']      = '
+    <span aria-label="Pour suivre une équipe dans les menus.
+    <br />Met en surbrillance l\'équipe dans les résultats et classements."><i class="far fa-circle-question" aria-hidden="true"></i></span>';
 $lang['scm.bonus.param']        = 'Points bonus';
 $lang['scm.bonus.double']       = 'Of/défensif';
 $lang['scm.bonus.single']       = 'Simple';
