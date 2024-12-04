@@ -52,8 +52,20 @@ class ScmEventHomeController extends DefaultModuleController
             {
                 $item = new ScmEvent();
                 $item->set_properties($sub_event);
+
+                $c_has_games    = ScmGameService::has_games($item->get_id());
+                $c_championship = $c_has_games && ScmEventService::get_event_type($item->get_id()) == ScmDivision::CHAMPIONSHIP;
+                $c_cup          = $c_has_games && ScmEventService::get_event_type($item->get_id()) == ScmDivision::CUP;
+                $c_tournament   = $c_has_games && ScmEventService::get_event_type($item->get_id()) == ScmDivision::TOURNAMENT;
+
                 $this->view->assign_block_vars('sub_events', array_merge($item->get_template_vars(), [
-                    'C_IS_ENDED' => $item->get_end_date() < $now
+                    'C_CHAMPIONSHIP' => $c_championship,
+                    'C_CUP'          => $c_cup,
+                    'C_TOURNAMENT'   => $c_tournament,
+                    'C_HAS_GAMES'    => $c_has_games,
+                    'C_IS_ENDED'     => $item->get_end_date() < $now,
+                    'DAYS_INFOS'     => $c_championship ? ScmEventHomeService::build_days_infos($item->get_id()) : '',
+                    'ROUNDS_INFOS'   => $c_tournament ? ScmEventHomeService::build_rounds_infos($item->get_id()) : '',
                 ]));
             }
         }
