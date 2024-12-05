@@ -32,9 +32,9 @@ class ScmGameService
 	}
 
 	/** Update a game date */
-	public static function update_game_date(int $event_id, int $game_group, int $day_date)
+	public static function update_game_date(int $event_id, int $game_cluster, int $day_date)
 	{
-		self::$db_querier->update(ScmSetup::$scm_game_table, ['game_date' => $day_date], 'WHERE game_event_id = :event_id AND game_group = :game_group', ['event_id' => $event_id, 'game_group' => $game_group]);
+		self::$db_querier->update(ScmSetup::$scm_game_table, ['game_date' => $day_date], 'WHERE game_event_id = :event_id AND game_cluster = :game_cluster', ['event_id' => $event_id, 'game_cluster' => $game_cluster]);
 	}
 
 	/** Delete all game entries of a event */
@@ -53,7 +53,7 @@ class ScmGameService
 		$results = self::$db_querier->select('SELECT *
             FROM ' . ScmSetup::$scm_game_table . '
             WHERE game_event_id = :event_id
-            ORDER BY game_date, game_group ASC, game_order ASC', [
+            ORDER BY game_date, game_cluster ASC, game_order ASC', [
                 'event_id' => $event_id
             ]
         );
@@ -73,7 +73,7 @@ class ScmGameService
             FROM ' . ScmSetup::$scm_game_table . '
             WHERE game_event_id = :event_id
             AND (game_type = :group OR game_type = :day)
-            ORDER BY game_date, game_group ASC, game_order ASC', [
+            ORDER BY game_date, game_cluster ASC, game_order ASC', [
                 'event_id' => $event_id,
                 'group' => 'G',
                 'day' => 'D'
@@ -83,7 +83,7 @@ class ScmGameService
         $games = [];
         while($row = $results->fetch())
         {
-            if ($row['game_group'] == $cluster)
+            if ($row['game_cluster'] == $cluster)
             $games[] = $row;
         }
         return $games;
@@ -97,7 +97,7 @@ class ScmGameService
             LEFT JOIN ' . ScmSetup::$scm_event_table . ' event ON event.id = games.game_event_id
             WHERE games.game_event_id = :event_id
             AND (games.game_home_id = :team_id OR games.game_away_id = :team_id)
-            ORDER BY games.game_group ASC, games.game_order ASC', [
+            ORDER BY games.game_cluster ASC, games.game_order ASC', [
                 'event_id' => $event_id,
                 'team_id' => $team_id
             ]
@@ -130,7 +130,7 @@ class ScmGameService
         $event_games = [];
         foreach (self::get_games($event_id) as $game)
         {
-            $event_games[] = $game['game_type'].$game['game_group'].$game['game_round'].$game['game_order'];
+            $event_games[] = $game['game_type'].$game['game_cluster'].$game['game_round'].$game['game_order'];
         }
         if (in_array($type.$group.$round.$order, $event_games))
         {
@@ -138,7 +138,7 @@ class ScmGameService
                 FROM ' . ScmSetup::$scm_game_table . '
                 WHERE game_event_id = :event_id
                 AND game_type = :type
-                AND game_group = :group
+                AND game_cluster = :group
                 AND game_round = :round
                 AND game_order = :order', [
                     'event_id' => $event_id,

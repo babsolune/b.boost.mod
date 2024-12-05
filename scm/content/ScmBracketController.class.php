@@ -73,7 +73,7 @@ class ScmBracketController extends DefaultModuleController
         $rounds = [];
         foreach ($games as $game)
         {
-            $rounds[] = $game['game_group'];
+            $rounds[] = $game['game_cluster'];
         }
 
         $rounds_count = $c_hat_ranking || $this->is_cup ? array_unique(array_reverse($rounds)) : array_unique($rounds);
@@ -93,7 +93,7 @@ class ScmBracketController extends DefaultModuleController
             $round_games = [];
             for ($i = 0; $i < count($games); $i++)
             {
-                if ($games[$i]['game_group'] == $round)
+                if ($games[$i]['game_cluster'] == $round)
                     $round_games[] = $games[$i];
             }
 
@@ -184,7 +184,7 @@ class ScmBracketController extends DefaultModuleController
                         $game = new ScmGame();
                         $game->set_properties($game_a);
 
-                        if ($game->get_game_group() == $round)
+                        if ($game->get_game_cluster() == $round)
                         $this->view->assign_block_vars('rounds.games', $game->get_template_vars());
                     }
                 }
@@ -196,7 +196,7 @@ class ScmBracketController extends DefaultModuleController
                     $game = new ScmGame();
                     $game->set_properties($games[$i]);
 
-                    if ($game->get_game_group() == $round)
+                    if ($game->get_game_cluster() == $round)
                     $this->view->assign_block_vars('rounds.games', $game->get_template_vars());
                 }
             }
@@ -220,7 +220,7 @@ class ScmBracketController extends DefaultModuleController
         $brackets = [];
         foreach($games as $game)
         {
-            $brackets[$game['game_round']][$game['game_group']][] = $game;
+            $brackets[$game['game_round']][$game['game_cluster']][] = $game;
         }
 
         foreach($brackets as $bracket => $rounds)
@@ -266,7 +266,7 @@ class ScmBracketController extends DefaultModuleController
         $groups = [];
         foreach($games as $game)
         {
-            $groups[$game['game_group']][$game['game_round']][] = $game;
+            $groups[$game['game_cluster']][$game['game_round']][] = $game;
         }
         foreach ($groups as $group => $rounds)
         {

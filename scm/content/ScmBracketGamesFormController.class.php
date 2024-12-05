@@ -114,10 +114,10 @@ class ScmBracketGamesFormController extends DefaultModuleController
 
                 switch ($game['game_status']) {
                     case ScmGame::DELAYED :
-                        $status = ' ' . $this->lang['scm.event.status.delayed'];
+                        $status = ' ' . $this->lang['scm.game.event.status.delayed'];
                         break;
                     case ScmGame::STOPPED :
-                        $status = ' ' . $this->lang['scm.event.status.stopped'];
+                        $status = ' ' . $this->lang['scm.game.event.status.stopped'];
                         break;
                     case '' :
                         $status = '';
@@ -130,7 +130,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldFree('game_number_' . $gr . $br . $or, '', $game_number . $bonus . $status,
                     ['class' => 'game-name small text-italic form-B-' . $gr . $br . $or]
                 ));
-                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldActionLink('details_' . $gr . $br . $or, '<span aria-label="' . $this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $gr, $br, $or), 'd-inline-block game-details align-right'));
+                ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldActionLink('details_' . $gr . $br . $or, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $gr, $br, $or), 'd-inline-block game-details align-right'));
 
                 ${'bracket_fieldset'.$br.$or}->add_field(new FormFieldDateTime('game_date_' . $gr . $br . $or, '', $game_date,
                     ['class' => 'game-date']
@@ -207,7 +207,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
         {
             $game = new ScmGame();
             $game->set_properties($group_game);
-            $gr = $game->get_game_group();
+            $gr = $game->get_game_cluster();
             $or = $game->get_game_order();
             $round = $game->get_game_round();
             $fieldset = new FormFieldsetHTML('round_' . $or, '');
@@ -220,7 +220,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
             $fieldset->add_field(new FormFieldFree('game_number', '', '<strong>B' . $gr . $or . '</strong>'. ' - ' . $this->lang['scm.round'] . ' ' . $round,
                 ['class' => 'game-name small text-italic form-G' . $gr . $or]
             ));
-            $fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' . $this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, $round, $or), 'd-inline-block game-details align-right'));
+            $fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $gr, $round, $or), 'd-inline-block game-details align-right'));
 
             $fieldset->add_field(new FormFieldDateTime('game_date_' . $gr . $or, '', $game->get_game_date(),
                 ['class' => 'game-date']

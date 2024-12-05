@@ -183,7 +183,7 @@ class ScmEventHomeService
         $results = self::$db_querier->select('SELECT games.*
             FROM ' . ScmSetup::$scm_game_table . ' games
             WHERE games.game_event_id = :id
-            ORDER BY games.game_date ASC, games.game_group ASC, games.game_order ASC', [
+            ORDER BY games.game_date ASC, games.game_cluster ASC, games.game_order ASC', [
                 'id' => $event_id
             ]
         );
@@ -208,7 +208,7 @@ class ScmEventHomeService
         {
             if($game['game_type'] == 'G')
                 if ($c_hat_ranking)
-                    $matchdays[$game['game_group']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
+                    $matchdays[$game['game_cluster']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
                 else
                     $matchdays[$game['game_round']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
         }
@@ -230,9 +230,9 @@ class ScmEventHomeService
                     $item->set_properties($game);
 
                     $view->assign_block_vars('matchdays.dates.groups', array_merge($item->get_template_vars(), [
-                        'GROUP_NAME' => ScmGroupService::ntl($item->get_game_group()),
-                        'DAY_NAME' => $item->get_game_group(),
-                        'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $item->get_game_group())->rel()
+                        'GROUP_NAME' => ScmGroupService::ntl($item->get_game_cluster()),
+                        'DAY_NAME' => $item->get_game_cluster(),
+                        'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $item->get_game_cluster())->rel()
                     ]));
                 }
             }
@@ -243,8 +243,8 @@ class ScmEventHomeService
         {
             if($game['game_type'] != 'G')
             {
-                $matchdays[] = $game['game_group'];
-                $matchrounds[$game['game_group']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
+                $matchdays[] = $game['game_cluster'];
+                $matchrounds[$game['game_cluster']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
             }
         }
         if (ScmParamsService::get_params($event_id)->get_finals_type() == ScmParams::FINALS_RANKING)
@@ -277,9 +277,9 @@ class ScmEventHomeService
                     $item->set_properties($game);
 
                     $view->assign_block_vars('matchrounds.dates.brackets', array_merge($item->get_template_vars(), [
-                        'GROUP_NAME' => ScmGroupService::ntl($item->get_game_group()),
-                        'DAY_NAME' => $item->get_game_group(),
-                        'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $item->get_game_group())->rel()
+                        'GROUP_NAME' => ScmGroupService::ntl($item->get_game_cluster()),
+                        'DAY_NAME' => $item->get_game_cluster(),
+                        'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $item->get_game_cluster())->rel()
                     ]));
                 }
             }

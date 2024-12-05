@@ -13,10 +13,10 @@
 
 				jQuery('<div/>', {'id' : id, 'class' : 'grouped-inputs'}).appendTo('#' + field_id);
 
-				jQuery('<input/> ', {type : 'text', id : 'field_player_' + id, 'class' : 'grouped-element', name : 'field_player_' + id, placeholder : '{@scm.event.player}'}).appendTo('#' + id);
+				jQuery('<input/> ', {type : 'text', id : 'field_player_' + id, 'class' : 'grouped-element', name : 'field_player_' + id, placeholder : '{@scm.game.event.player}'}).appendTo('#' + id);
 				jQuery('#' + id).append(' ');
 
-				jQuery('<input/> ', {type : 'number', id : 'field_time_' + id, 'class' : 'grouped-element', name : 'field_time_' + id, pattern : '#[A-Fa-f0-9]', placeholder : '{@scm.event.minute}'}).appendTo('#' + id);
+				jQuery('<input/> ', {type : 'number', id : 'field_time_' + id, 'class' : 'grouped-element', name : 'field_time_' + id, pattern : '#[A-Fa-f0-9]', placeholder : '{@scm.game.event.minute}'}).appendTo('#' + id);
 				jQuery('#' + id).append(' ');
 
 				jQuery('<a/> ', {href : 'javascript:ScmFormFieldGameEvents.delete_field("'+ id_input +'", '+ this.integer +');', 'class' : 'grouped-element bgc-full error', 'aria-label' : '{@common.delete}'}).html('<i class="far fa-trash-alt" aria-hidden="true"></i>').appendTo('#' + id);
@@ -41,8 +41,8 @@
 <div id="input_fields_${escape(ID)}">
 	# START fieldelements #
 		<div id="${escape(ID)}_{fieldelements.ID}" class="grouped-inputs">
-			<input class="grouped-element" type="text" name="field_player_${escape(ID)}_{fieldelements.ID}" id="field_player_${escape(ID)}_{fieldelements.ID}" value="{fieldelements.PLAYER}" placeholder="{@scm.event.player}">
-			<input class="grouped-element" type="number" name="field_time_${escape(ID)}_{fieldelements.ID}" id="field_time_${escape(ID)}_{fieldelements.ID}" value="{fieldelements.TIME}" placeholder="{@scm.event.minute}">
+			<input class="grouped-element" type="text" name="field_player_${escape(ID)}_{fieldelements.ID}" id="field_player_${escape(ID)}_{fieldelements.ID}" value="{fieldelements.PLAYER}" placeholder="{@scm.game.event.player}">
+			<input class="grouped-element" type="number" name="field_time_${escape(ID)}_{fieldelements.ID}" id="field_time_${escape(ID)}_{fieldelements.ID}" value="{fieldelements.TIME}" placeholder="{@scm.game.event.minute}">
 			<a class="grouped-element bgc-full error" href="javascript:ScmFormFieldGameEvents.delete_field({fieldelements.ID});" data-confirmation="delete-element" aria-label="{@common.delete}"><i class="far fa-trash-alt"></i></a>
 		</div>
 	# END fieldelements #

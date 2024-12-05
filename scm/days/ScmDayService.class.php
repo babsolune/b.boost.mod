@@ -40,7 +40,8 @@ class ScmDayService
             self::$db_querier->delete(ScmSetup::$scm_day_table, 'WHERE day_event_id = :event_id', ['event_id' => $event_id]);
         }
     }
-
+	
+	/** Get data from a day */
 	public static function get_day(int $event_id, int $day_round)
 	{
         $event_days = [];
@@ -67,8 +68,8 @@ class ScmDayService
             return null;
 	}
 
-    /** Get all days from a event */
-	public static function get_days(int $event_id)
+    /** Get all days from an event */
+	public static function get_days(int $event_id):array
 	{
 		$results = self::$db_querier->select('SELECT *
             FROM ' . ScmSetup::$scm_day_table . '
@@ -86,7 +87,8 @@ class ScmDayService
         return $days;
 	}
 
-    public static function set_days_games(int $event_id)
+    /** Set the list of games in the current event */
+    public static function set_days_games(int $event_id):void
     {
         $now = new Date();
         $c_return_games = ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES;
@@ -101,7 +103,7 @@ class ScmDayService
                 self::$db_querier->insert(ScmSetup::$scm_game_table, [
                     'game_event_id' => $event_id,
                     'game_type' => 'D',
-                    'game_group' => $i,
+                    'game_cluster' => $i,
                     'game_round' => 0,
                     'game_order' => $j,
                     'game_home_id' => 0,
@@ -112,6 +114,7 @@ class ScmDayService
         }
     }
 
+    /** Check if at least on game has score */
     public static function day_has_scores(array $games):bool
     {
         return (bool)array_filter($games, function($score) {
@@ -120,12 +123,14 @@ class ScmDayService
         });
     }
 
-    public static function update_day_played(int $event_id, int $day_round, int $check)
+    /** Update the "day played" flag */
+    public static function update_day_played(int $event_id, int $day_round, $check)
     {
 		self::$db_querier->update(ScmSetup::$scm_day_table, ['day_played' => $check], 'WHERE day_event_id = :event_id AND day_round = :day_round', ['event_id' => $event_id, 'day_round' => $day_round]);
     }
 
-    public static function get_last_day(int $event_id)
+    /** Retrieve the last day played */
+    public static function get_last_day(int $event_id):int
     {
         $days = self::get_days($event_id);
         $ids = [];
@@ -138,7 +143,8 @@ class ScmDayService
         return !empty(end($ids)) ? end($ids) : 1;
     }
 
-    public static function get_next_day(int $event_id)
+    /** Retrieve the next day to play */
+    public static function get_next_day(int $event_id):int
     {
         $days = self::get_days($event_id);
         $ids = [];

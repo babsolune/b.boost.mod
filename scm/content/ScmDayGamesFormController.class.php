@@ -72,17 +72,17 @@ class ScmDayGamesFormController extends DefaultModuleController
 
             switch ($game->get_game_status()) {
                 case ScmGame::DELAYED :
-                    $status = ' ' . $this->lang['scm.event.status.delayed'];
+                    $status = ' ' . $this->lang['scm.game.event.status.delayed'];
                     break;
                 case ScmGame::STOPPED :
-                    $status = ' ' . $this->lang['scm.event.status.stopped'];
+                    $status = ' ' . $this->lang['scm.game.event.status.stopped'];
                     break;
                 case '' :
                     $status = '';
                     break;
             }
 
-            $forfeit = $game->get_game_home_forfeit() || $game->get_game_away_forfeit() ?  ' ' . $this->lang['scm.event.forfeit'] : '';
+            $forfeit = $game->get_game_home_forfeit() || $game->get_game_away_forfeit() ?  ' ' . $this->lang['scm.game.event.forfeit'] : '';
 
             $game_fieldset->add_field(new FormFieldSpacer('separator_' . $gr . $or, '<hr />'));
             $game_fieldset->add_field(new FormFieldFree(
@@ -91,7 +91,7 @@ class ScmDayGamesFormController extends DefaultModuleController
                 '<strong>D' . $gr . $or . '</strong><span class="warning">' . $bonus . $status . $forfeit . '</span>',
                 ['class' => 'game-name small text-italic form-D' . $gr . $or]
             ));
-            $game_fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' . $this->lang['scm.game.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $gr, $ro, $or), 'd-inline-block game-details align-right'));
+            $game_fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $gr, $ro, $or), 'd-inline-block game-details align-right'));
 
             $game_fieldset->add_field(new FormFieldDateTime('game_date_' . $gr . $or, '', $game->get_game_date(),
                 ['class' => 'game-date']
@@ -151,9 +151,9 @@ class ScmDayGamesFormController extends DefaultModuleController
             $game->set_properties($day_game);
 
             if (ScmDayService::day_has_scores($games))
-                ScmDayService::update_day_played($this->event_id(), $game->get_game_group(), 1);
+                ScmDayService::update_day_played($this->event_id(), $game->get_game_cluster(), '1');
             else
-                ScmDayService::update_day_played($this->event_id(), $game->get_game_group(), 0);
+                ScmDayService::update_day_played($this->event_id(), $game->get_game_cluster(), '0');
         }
 
 		ScmEventService::clear_cache();

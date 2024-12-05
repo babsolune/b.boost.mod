@@ -51,7 +51,7 @@ class ScmBracketService
                     self::$db_querier->insert(ScmSetup::$scm_game_table, [
                         'game_event_id' => $event_id,
                         'game_type'     => 'B',
-                        'game_group'    => $i,
+                        'game_cluster'    => $i,
                         'game_round'    => $b,
                         'game_order'    => $j,
                         'game_home_id'  => 0,

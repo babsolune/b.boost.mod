@@ -123,7 +123,7 @@ class ScmMenuService
             $groups = [];
             foreach (ScmGameService::get_games($event_id) as $game)
             {
-                $groups[] = $game['game_type'] . '|' . $game['game_group'];
+                $groups[] = $game['game_type'] . '|' . $game['game_cluster'];
             }
             $array_groups = array_unique($groups);
             usort($array_groups, function($a, $b) {

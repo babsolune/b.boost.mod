@@ -30,7 +30,7 @@
                                 </tr>
                             # ENDIF #
                             # START dates.games #
-                                <tr# IF dates.games.C_HAS_SCORE # class="has-score-color"# ENDIF #>
+                                <tr class="# IF dates.games.C_HAS_SCORE #has-score-color# ENDIF ## IF dates.games.C_EXEMPT #bgc notice# ENDIF #">
                                     <td>{dates.games.GAME_DATE_HOUR_MINUTE}</td>
                                     <td class="# IF dates.games.C_HOME_FAV #text-strong# ENDIF #">
                                         <div class="flex-team flex-right">
@@ -87,21 +87,21 @@
                                                         <div class="cell-score bigger align-center">
                                                             {dates.games.HOME_SCORE}
                                                         </div>
-                                                        <div class="cell-details">{@scm.event.goals}</div>
+                                                        <div class="cell-details">{@scm.game.event.goals}</div>
                                                         # START dates.games.home_goals #
                                                             <div class="cell-infos">
                                                                 <span>{dates.games.home_goals.PLAYER}</span>
                                                                 <span>{dates.games.home_goals.TIME}'</span>
                                                             </div>
                                                         # END dates.games.home_goals #
-                                                        <div class="cell-details">{@scm.event.yellow.cards}</div>
+                                                        <div class="cell-details">{@scm.game.event.cards.yellow}</div>
                                                         # START dates.games.home_yellow #
                                                             <div class="cell-infos">
                                                                 <span>{dates.games.home_yellow.PLAYER}</span>
                                                                 <span>{dates.games.home_yellow.TIME}'</span>
                                                             </div>
                                                         # END dates.games.home_yellow #
-                                                        <div class="cell-details">{@scm.event.red.cards}</div>
+                                                        <div class="cell-details">{@scm.game.event.cards.red}</div>
                                                         # START dates.games.home_red #
                                                             <div class="cell-infos">
                                                                 <span>{dates.games.home_red.PLAYER}</span>
@@ -119,21 +119,21 @@
                                                         <div class="cell-score bigger align-center">
                                                             {dates.games.AWAY_SCORE}
                                                         </div>
-                                                        <div class="cell-details">{@scm.event.goals}</div>
+                                                        <div class="cell-details">{@scm.game.event.goals}</div>
                                                         # START dates.games.away_goals #
                                                             <div class="cell-infos">
                                                                 <span>{dates.games.away_goals.PLAYER}</span>
                                                                 <span>{dates.games.away_goals.TIME}'</span>
                                                             </div>
                                                         # END dates.games.away_goals #
-                                                        <div class="cell-details">{@scm.event.yellow.cards}</div>
+                                                        <div class="cell-details">{@scm.game.event.cards.yellow}</div>
                                                         # START dates.games.away_yellow #
                                                             <div class="cell-infos">
                                                                 <span>{dates.games.away_yellow.PLAYER}</span>
                                                                 <span>{dates.games.away_yellow.TIME}'</span>
                                                             </div>
                                                         # END dates.games.away_yellow #
-                                                        <div class="cell-details">{@scm.event.red.cards}</div>
+                                                        <div class="cell-details">{@scm.game.event.cards.red}</div>
                                                         # START dates.games.away_red #
                                                             <div class="cell-infos">
                                                                 <span>{dates.games.away_red.PLAYER}</span>

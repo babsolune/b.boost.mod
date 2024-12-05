@@ -12,7 +12,7 @@ class ScmGame
     private $id_game;
     private $game_event_id;
     private $game_type;
-    private $game_group;
+    private $game_cluster;
     private $game_round;
     private $game_order;
     private $game_playground;
@@ -76,14 +76,14 @@ class ScmGame
         $this->game_type = $game_type;
     }
 
-    function get_game_group()
+    function get_game_cluster()
     {
-        return $this->game_group;
+        return $this->game_cluster;
     }
 
-    function set_game_group($game_group)
+    function set_game_cluster($game_cluster)
     {
-        $this->game_group = $game_group;
+        $this->game_cluster = $game_cluster;
     }
 
     function get_game_round()
@@ -415,7 +415,7 @@ class ScmGame
 			'id_game'             => $this->get_id_game(),
 			'game_event_id'       => $this->get_game_event_id(),
 			'game_type'           => $this->get_game_type(),
-			'game_group'          => $this->get_game_group(),
+			'game_cluster'          => $this->get_game_cluster(),
 			'game_round'          => $this->get_game_round(),
 			'game_order'          => $this->get_game_order(),
 			'game_playground'     => $this->get_game_playground(),
@@ -453,7 +453,7 @@ class ScmGame
 		$this->id_game             = $properties['id_game'];
 		$this->game_event_id       = $properties['game_event_id'];
 		$this->game_type           = $properties['game_type'];
-		$this->game_group          = $properties['game_group'];
+		$this->game_cluster          = $properties['game_cluster'];
 		$this->game_round          = $properties['game_round'];
 		$this->game_order          = $properties['game_order'];
 		$this->game_playground     = $properties['game_playground'];
@@ -508,10 +508,10 @@ class ScmGame
 
         switch ($this->get_game_status()) {
             case ScmGame::DELAYED :
-                $status = $lang['scm.event.status.delayed'];
+                $status = $lang['scm.game.event.status.delayed'];
                 break;
             case ScmGame::STOPPED :
-                $status = $lang['scm.event.status.stopped'];
+                $status = $lang['scm.game.event.status.stopped'];
                 break;
             case '' :
                 $status = '';
@@ -538,10 +538,15 @@ class ScmGame
                 'C_HOME_FAV'      => ScmParamsService::check_fav($this->game_event_id, $this->game_home_id) && $this->game_home_id,
                 'C_HOME_WIN'      => $this->game_home_score > $this->game_away_score || $this->game_home_pen > $this->game_away_pen,
                 'C_HOME_EMPTY'    => $this->game_home_id == 0,
+                'C_HOME_EXEMPT'   => $this->game_home_id && ScmTeamService::get_team($this->game_home_id)->get_team_status() == ScmParams::EXEMPT,
                 'C_AWAY_FAV'      => ScmParamsService::check_fav($this->game_event_id, $this->game_away_id) && $this->game_away_id,
                 'C_AWAY_WIN'      => $this->game_home_score < $this->game_away_score || $this->game_home_pen < $this->game_away_pen,
                 'C_AWAY_EMPTY'    => $this->game_away_id == 0,
-                'GAME_ID'         => $this->game_type.$this->game_group.$this->game_round.$this->game_order,
+                'C_AWAY_EXEMPT'   => $this->game_away_id && ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::EXEMPT,
+                'C_EXEMPT'        => $this->game_home_id && ScmTeamService::get_team($this->game_home_id)->get_team_status() == ScmParams::EXEMPT || $this->game_away_id && ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::EXEMPT,
+
+                'GAME_ID'         => $this->game_type.$this->game_cluster.$this->game_round.$this->game_order,
+                'CLUSTER'         => $this->game_cluster,
                 'MATCHDAY'        => $this->game_round,
                 'PLAYGROUND'      => $this->game_playground,
                 'HOME_ID'         => $this->game_home_id,

@@ -46,17 +46,17 @@ class ScmDetailsGameFormController extends DefaultModuleController
 	private function build_form()
 	{
         if($this->get_game()->get_game_type() == 'D')
-            $url = ScmUrlBuilder::edit_days_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_group())->rel();
+            $url = ScmUrlBuilder::edit_days_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_cluster())->rel();
         if($this->get_game()->get_game_type() == 'G')
-            $url = ScmUrlBuilder::edit_groups_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_group())->rel();
+            $url = ScmUrlBuilder::edit_groups_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_cluster())->rel();
         if($this->get_game()->get_game_type() == 'B')
-            $url = ScmUrlBuilder::edit_brackets_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_group())->rel();
+            $url = ScmUrlBuilder::edit_brackets_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_cluster())->rel();
 
         $form = new HTMLForm(__CLASS__);
         $form->set_css_class('floating-submit');
 		$form->set_layout_title(
-            '<div class="align-center small">' . $this->lang['scm.game.details'] . '</div>'
-            . '<div class="align-center smaller">' . $this->get_game()->get_game_type() . $this->get_game()->get_game_group() . $this->get_game()->get_game_round() . $this->get_game()->get_game_order() . ' - <a href="' . $url . '" class="small offload"><i class="fa fa-share-from-square fa-flip-horizontal"></i> ' . $this->lang['scm.event.back'] . '</a></div>'
+            '<div class="align-center small">' . $this->lang['scm.game.event.details'] . '</div>'
+            . '<div class="align-center smaller">' . $this->get_game()->get_game_type() . $this->get_game()->get_game_cluster() . $this->get_game()->get_game_round() . $this->get_game()->get_game_order() . ' - <a href="' . $url . '" class="small offload"><i class="fa fa-share-from-square fa-flip-horizontal"></i> ' . $this->lang['common.back'] . '</a></div>'
         );
 
         $fieldset = new FormFieldsetHTML('game', '');
@@ -73,7 +73,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
         if ($this->bracket_games && $this->return_games) {
             if (($this->get_game()->get_game_order() > count($this->games_number) / 2)) {
-                $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.event.penalties'],
+                $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.game.event.penalties'],
                     ['class' => 'portable-full']
                 ));
                 $fieldset->add_field(new FormFieldNumberEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
@@ -85,7 +85,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
             }
         }
         elseif ($this->bracket_games && !$this->return_games) {
-            $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.event.penalties'],
+            $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.game.event.penalties'],
                 ['class' => 'portable-full']
             ));
             $fieldset->add_field(new FormFieldNumberEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
@@ -97,7 +97,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
         }
 
         if ($this->bracket_games) {
-            $fieldset->add_field(new FormFieldSpacer('empty_field', $this->lang['scm.event.empty.field'],
+            $fieldset->add_field(new FormFieldSpacer('empty_field', $this->lang['scm.game.event.empty.field'],
                 ['class' => 'portable-full']
             ));
             $fieldset->add_field(new FormFieldTextEditor('home_empty', '', $this->get_game()->get_game_home_empty(),
@@ -110,7 +110,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
         if($this->get_params()->get_bonus())
         {
-            $fieldset->add_field(new FormFieldSpacer('offensive_bonus', $this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE ? $this->lang['scm.event.off.bonus'] : $this->lang['scm.event.bonus'],
+            $fieldset->add_field(new FormFieldSpacer('offensive_bonus', $this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE ? $this->lang['scm.game.event.bonus.off'] : $this->lang['scm.game.event.bonus'],
                 ['class' => 'portable-full']
             ));
             $fieldset->add_field(new FormFieldNumberEditor('home_off_bonus', '', $this->get_game()->get_game_home_off_bonus(),
@@ -121,7 +121,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
             ));
             if($this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE)
             {
-                $fieldset->add_field(new FormFieldSpacer('defensive_bonus', $this->lang['scm.event.def.bonus'],
+                $fieldset->add_field(new FormFieldSpacer('defensive_bonus', $this->lang['scm.game.event.bonus.def'],
                     ['class' => 'portable-full']
                 ));
                 $fieldset->add_field(new FormFieldNumberEditor('home_def_bonus', '', $this->get_game()->get_game_home_def_bonus(),
@@ -133,7 +133,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
             }
         }
 
-        $fieldset->add_field(new FormFieldSpacer('game_forfeit', $this->lang['scm.event.forfeit'],
+        $fieldset->add_field(new FormFieldSpacer('game_forfeit', $this->lang['scm.game.event.forfeit'],
             ['class' => 'portable-full']
         ));
         $fieldset->add_field(new FormFieldCheckbox('home_forfeit', '', $this->get_game()->get_game_home_forfeit(),
@@ -143,7 +143,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
             ['class' => 'portable-half']
         ));
 
-        $fieldset->add_field(new FormFieldSpacer('game_goals', $this->lang['scm.event.goals'],
+        $fieldset->add_field(new FormFieldSpacer('game_goals', $this->lang['scm.game.event.goals'],
             ['class' => 'portable-full']
         ));
         $fieldset->add_field(new ScmFormFieldGameEvents('home_goals', '', $this->get_game()->get_game_home_goals(),
@@ -153,7 +153,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
             ['class' => 'portable-half']
         ));
 
-        $fieldset->add_field(new FormFieldSpacer('yellow_card', $this->lang['scm.event.yellow.cards'],
+        $fieldset->add_field(new FormFieldSpacer('yellow_card', $this->lang['scm.game.event.cards.yellow'],
             ['class' => 'portable-full']
         ));
         $fieldset->add_field(new ScmFormFieldGameEvents('home_yellow', '', $this->get_game()->get_game_home_yellow(),
@@ -163,7 +163,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
             ['class' => 'portable-half']
         ));
 
-        $fieldset->add_field(new FormFieldSpacer('red_card', $this->lang['scm.event.red.cards'],
+        $fieldset->add_field(new FormFieldSpacer('red_card', $this->lang['scm.game.event.cards.red'],
             ['class' => 'portable-full']
         ));
         $fieldset->add_field(new ScmFormFieldGameEvents('home_red', '', $this->get_game()->get_game_home_red(),
@@ -176,26 +176,26 @@ class ScmDetailsGameFormController extends DefaultModuleController
         $fieldset_unique = new FormFieldsetHTML('unique_details', '');
         $form->add_fieldset($fieldset_unique);
 
-		$fieldset_unique->add_field(new FormFieldSimpleSelectChoice('status', $this->lang['scm.event.status'], $this->get_game()->get_game_status(),
+		$fieldset_unique->add_field(new FormFieldSimpleSelectChoice('status', $this->lang['scm.game.event.status'], $this->get_game()->get_game_status(),
             [
                 new FormFieldSelectChoiceOption('', ''),
-                new FormFieldSelectChoiceOption($this->lang['scm.event.status.delayed'], ScmGame::DELAYED),
-                new FormFieldSelectChoiceOption($this->lang['scm.event.status.stopped'], ScmGame::STOPPED)
+                new FormFieldSelectChoiceOption($this->lang['scm.game.event.status.delayed'], ScmGame::DELAYED),
+                new FormFieldSelectChoiceOption($this->lang['scm.game.event.status.stopped'], ScmGame::STOPPED)
             ],
             ['class' => 'portable-full']
         ));
 
         if (!$this->get_game()->get_game_playground())
-		$fieldset_unique->add_field(new FormFieldSimpleSelectChoice('stadium', $this->lang['scm.event.stadium'], $this->get_game()->get_game_stadium(),
+		$fieldset_unique->add_field(new FormFieldSimpleSelectChoice('stadium', $this->lang['scm.game.event.stadium'], $this->get_game()->get_game_stadium(),
             $this->get_stadium($this->get_game()->get_game_home_id()),
             ['class' => 'portable-full']
         ));
 
-        $fieldset_unique->add_field(new FormFieldUrlEditor('video', $this->lang['scm.event.video'], $this->get_game()->get_game_video()->relative(),
+        $fieldset_unique->add_field(new FormFieldUrlEditor('video', $this->lang['scm.game.event.video'], $this->get_game()->get_game_video()->relative(),
             ['class' => 'portable-full']
         ));
 
-        $fieldset_unique->add_field(new FormFieldRichTextEditor('summary', $this->lang['scm.event.summary'], $this->get_game()->get_game_summary(),
+        $fieldset_unique->add_field(new FormFieldRichTextEditor('summary', $this->lang['scm.game.event.summary'], $this->get_game()->get_game_summary(),
             ['class' => 'portable-full']
         ));
 
@@ -413,7 +413,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
         elseif ($request->get_value('type') == 'D')
             $link = ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug(), $request->get_value('group'));
         $breadcrumb->add($this->lang['scm.games.management'], $link);
-        $breadcrumb->add($this->lang['scm.game.details'], ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), $request->get_value('type'), $request->get_value('group'), $request->get_value('round'), $request->get_value('order')));
+        $breadcrumb->add($this->lang['scm.game.event.details'], ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), $request->get_value('type'), $request->get_value('group'), $request->get_value('round'), $request->get_value('order')));
 
 		return $response;
 	}

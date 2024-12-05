@@ -45,9 +45,9 @@ class ScmHomeController extends DefaultModuleController
                 'C_TYPE_BRACKET' => $game->get_game_type() == 'B',
                 'C_TYPE_DAY'     => $game->get_game_type() == 'D',
 
-                'GROUP'      => ScmGroupService::ntl($game->get_game_group()),
-                'BRACKET'    => ScmBracketService::ntl($game->get_game_group()),
-                'DAY'        => $game->get_game_group(),
+                'GROUP'      => ScmGroupService::ntl($game->get_game_cluster()),
+                'BRACKET'    => ScmBracketService::ntl($game->get_game_cluster()),
+                'DAY'        => $game->get_game_cluster(),
                 'EVENT_NAME' => ScmEventService::get_event($game->get_game_event_id())->get_event_name(),
                 'U_EVENT'    => ScmUrlBuilder::event_home($game->get_game_event_id(), ScmEventService::get_event_slug($game->get_game_event_id()))->rel()
             ]));

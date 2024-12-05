@@ -83,6 +83,7 @@ class ScmMiniNextGame extends ModuleMiniMenu
 			$item->set_properties($game);
 
 			$view->assign_block_vars('items', array_merge($item->get_template_vars(), [
+                'C_LATE'         => $item->get_game_cluster() < ScmDayService::get_last_day($item->get_game_event_id()),
                 'YEAR'           => date('y', $item->get_game_date()->get_timestamp()),
                 'C_IS_SUB'       => ScmEventService::is_sub_event($item->get_game_event_id()),
                 'MASTER_EVENT'   => ScmEventService::get_master_division($item->get_game_event_id()),

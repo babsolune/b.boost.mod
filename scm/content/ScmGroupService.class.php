@@ -33,7 +33,7 @@ class ScmGroupService
                 self::$db_querier->insert(ScmSetup::$scm_game_table, [
                     'game_event_id' => $event_id,
                     'game_type'     => 'G',
-                    'game_group'    => $day,
+                    'game_cluster'    => $day,
                     'game_round'    => 0,
                     'game_order'    => $game,
                     'game_home_id'  => 0,
@@ -67,7 +67,7 @@ class ScmGroupService
                     self::$db_querier->insert(ScmSetup::$scm_game_table, [
                         'game_event_id' => $event_id,
                         'game_type'     => 'G',
-                        'game_group'    => $group,
+                        'game_cluster'    => $group,
                         'game_round'    => $game_round,
                         'game_order'    => $game_order,
                         'game_home_id'  => ScmParamsService::get_params($event_id)->get_fill_games() ? $game[0]['id_team'] : 0,
@@ -87,7 +87,7 @@ class ScmGroupService
                         self::$db_querier->insert(ScmSetup::$scm_game_table, [
                             'game_event_id' => $event_id,
                             'game_type' => 'G',
-                            'game_group' => $group,
+                            'game_cluster' => $group,
                             'game_round' => $game_round_r,
                             'game_order' => $game_order_r,
                             'game_home_id' => ScmParamsService::get_params($event_id)->get_fill_games() ? $game[1]['id_team'] : 0,
@@ -126,7 +126,7 @@ class ScmGroupService
                     self::$db_querier->insert(ScmSetup::$scm_game_table, [
                         'game_event_id' => $event_id,
                         'game_type'     => 'B',
-                        'game_group'    => $group,
+                        'game_cluster'    => $group,
                         'game_round'    => $game_round,
                         'game_order'    => $game_order,
                         'game_home_id'  => 0,
@@ -146,7 +146,7 @@ class ScmGroupService
                         self::$db_querier->insert(ScmSetup::$scm_game_table, [
                             'game_event_id' => $event_id,
                             'game_type' => 'B',
-                            'game_group' => $group,
+                            'game_cluster' => $group,
                             'game_round' => $game_round_r,
                             'game_order' => $game_order_r,
                             'game_home_id' => 0,
@@ -204,7 +204,7 @@ class ScmGroupService
         {
             foreach($event_games as $game)
             {
-                if($game['game_type'] == $stage && $game['game_group'] == $group)
+                if($game['game_type'] == $stage && $game['game_cluster'] == $group)
                 {
                     $games[] = $game;
                 }
@@ -216,7 +216,7 @@ class ScmGroupService
             {
                 if($game['game_type'] == $stage)
                 {
-                    $group_nb = $game['game_group'];
+                    $group_nb = $game['game_cluster'];
                     if(!isset($games[$group_nb]))
                         $games[$group_nb] = [];
                     $games[$group_nb][] = $game;
@@ -272,7 +272,7 @@ class ScmGroupService
         {
             if ($game['game_home_score'] != '')
             {
-                $last_rounds[] = $game['game_group'];
+                $last_rounds[] = $game['game_cluster'];
             }
         }
 
@@ -322,7 +322,7 @@ class ScmGroupService
         {
             if ($game['game_home_score'] == '')
             {
-                $next_rounds[] = $game['game_group'];
+                $next_rounds[] = $game['game_cluster'];
             }
         }
 

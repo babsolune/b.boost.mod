@@ -84,21 +84,21 @@
                                                         <div class="cell-score bigger align-center">
                                                             {matchdays.dates.games.HOME_SCORE}
                                                         </div>
-                                                        <div class="cell-details">{@scm.event.goals}</div>
+                                                        <div class="cell-details">{@scm.game.event.goals}</div>
                                                         # START matchdays.dates.games.home_goals #
                                                             <div class="cell-infos">
                                                                 <span>{matchdays.dates.games.home_goals.PLAYER}</span>
                                                                 <span>{matchdays.dates.games.home_goals.TIME}'</span>
                                                             </div>
                                                         # END matchdays.dates.games.home_goals #
-                                                        <div class="cell-details">{@scm.event.yellow.cards}</div>
+                                                        <div class="cell-details">{@scm.game.event.cards.yellow}</div>
                                                         # START matchdays.dates.games.home_yellow #
                                                             <div class="cell-infos">
                                                                 <span>{matchdays.dates.games.home_yellow.PLAYER}</span>
                                                                 <span>{matchdays.dates.games.home_yellow.TIME}'</span>
                                                             </div>
                                                         # END matchdays.dates.games.home_yellow #
-                                                        <div class="cell-details">{@scm.event.red.cards}</div>
+                                                        <div class="cell-details">{@scm.game.event.cards.red}</div>
                                                         # START matchdays.dates.games.home_red #
                                                             <div class="cell-infos">
                                                                 <span>{matchdays.dates.games.home_red.PLAYER}</span>
@@ -114,21 +114,21 @@
                                                         <div class="cell-score bigger align-center">
                                                             {matchdays.dates.games.AWAY_SCORE}
                                                         </div>
-                                                        <div class="cell-details">{@scm.event.goals}</div>
+                                                        <div class="cell-details">{@scm.game.event.goals}</div>
                                                         # START matchdays.dates.games.away_goals #
                                                             <div class="cell-infos">
                                                                 <span>{matchdays.dates.games.away_goals.PLAYER}</span>
                                                                 <span>{matchdays.dates.games.away_goals.TIME}'</span>
                                                             </div>
                                                         # END matchdays.dates.games.away_goals #
-                                                        <div class="cell-details">{@scm.event.yellow.cards}</div>
+                                                        <div class="cell-details">{@scm.game.event.cards.yellow}</div>
                                                         # START matchdays.dates.games.away_yellow #
                                                             <div class="cell-infos">
                                                                 <span>{matchdays.dates.games.away_yellow.PLAYER}</span>
                                                                 <span>{matchdays.dates.games.away_yellow.TIME}'</span>
                                                             </div>
                                                         # END matchdays.dates.games.away_yellow #
-                                                        <div class="cell-details">{@scm.event.red.cards}</div>
+                                                        <div class="cell-details">{@scm.game.event.cards.red}</div>
                                                         # START matchdays.dates.games.away_red #
                                                             <div class="cell-infos">
                                                                 <span>{matchdays.dates.games.away_red.PLAYER}</span>

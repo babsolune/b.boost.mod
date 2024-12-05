@@ -260,7 +260,7 @@ th.bgc-sub a {
 @media (min-width: 769px) {
     .grouped-fields .game-name               { width: 50%; }
     .grouped-fields .game-date               { width: 270px; }
-    .grouped-fields .form-element.game-team  { min-width: 120px; width: 1%; }
+    .grouped-fields .form-element.game-team  { width: auto; }
     .grouped-fields .form-element.game-score { width: 70px; }
     .grouped-fields .game-playground         { width: 80px; }
 }

@@ -29,11 +29,9 @@ class ScmDaysCheckerController extends DefaultModuleController
 
 	private function build_view()
 	{
-        $return_games = ScmDivisionService::get_division($this->get_event()->get_division_id())->get_game_type();
         $teams = ScmTeamService::get_teams($this->event_id());
         $games = ScmGameService::get_games($this->event_id());
         $days = ScmDayService::get_days($this->event_id());
-        $home_days_number = $away_days_number = count($days) / 2;
 
         $matchdays = [];
         foreach($days as $day)
@@ -71,7 +69,7 @@ class ScmDaysCheckerController extends DefaultModuleController
                 foreach ($games as $game)
                 {
                     if($game['game_home_id'] == $team_item->get_id_team() || $game['game_away_id'] == $team_item->get_id_team())
-                        $game_rounds[] = ['day' => $game['game_group']];
+                        $game_rounds[] = ['day' => $game['game_cluster']];
                 }
                 $ids = array_column($game_rounds, 'day');
                 $id_counts = array_count_values($ids);
@@ -83,12 +81,12 @@ class ScmDaysCheckerController extends DefaultModuleController
 
                 foreach ($games as $game)
                 {
-                    if(in_array($game['game_group'],$error_days))
+                    if(in_array($game['game_cluster'],$error_days))
                     {
                         if($game['game_home_id'] == $team_item->get_id_team() || $game['game_away_id'] == $team_item->get_id_team())
                         {
                             $this->view->assign_block_vars('teams.games', [
-                                'GAME_DAY' => $game['game_group'],
+                                'GAME_DAY' => $game['game_cluster'],
                                 'TEAM_HOME_NAME' => ScmTeamService::get_team_name($game['game_home_id']),
                                 'TEAM_AWAY_NAME' => ScmTeamService::get_team_name($game['game_away_id']),
                             ]);
@@ -99,9 +97,9 @@ class ScmDaysCheckerController extends DefaultModuleController
                 $games_list = [];
                 foreach ($games as $game)
                 {
-                    if (in_array($game['game_group'], $missing_days))
+                    if (in_array($game['game_cluster'], $missing_days))
                     {
-                        $games_list[] = $game['game_group'];
+                        $games_list[] = $game['game_cluster'];
                     }
                 }
 
@@ -190,9 +188,6 @@ class ScmDaysCheckerController extends DefaultModuleController
 		$graphical_environment->set_page_title($event->get_event_name(), ($category->get_id() != Category::ROOT_CATEGORY ? $category->get_name() . ' - ' : '') . $this->lang['scm.module.title']);
 		$graphical_environment->get_seo_meta_data()->set_description('');
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-
-		// if ($event->has_thumbnail())
-		// 	$graphical_environment->get_seo_meta_data()->set_picture_url($event->get_thumbnail());
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['scm.module.title'],ScmUrlBuilder::home());

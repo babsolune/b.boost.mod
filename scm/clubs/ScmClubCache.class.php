@@ -11,9 +11,6 @@ class ScmClubCache implements CacheData
 {
 	private $clubs = [];
 
-	/**
-	 * {@inheritdoc}
-	 */
 	public function synchronize()
 	{
 		$this->clubs = [];
