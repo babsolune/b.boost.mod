@@ -582,3 +582,35 @@ th.bgc-sub a {
         flex-direction: row;
     }
 }
+
+.cell-between { justify-content: space-between;}
+
+.cell-game {
+    border: 1px solid var(--bdr-main);
+    margin: 0.309em;
+}
+
+.cell-game > * {
+    padding: 0.618em;
+}
+
+.game-header,
+.game-body {
+    margin: 0;
+}
+
+.cell-game .home-team {
+    text-align: right;
+    display: inline-block;
+    width: 39%;
+}
+.cell-game .game-score {
+    text-align: center;
+    display: inline-block;
+    width: 20%;
+}
+.cell-game .away-team {
+    text-align: left;
+    display: inline-block;
+    width: 39%;
+}

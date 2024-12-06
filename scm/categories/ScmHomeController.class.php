@@ -20,12 +20,12 @@ class ScmHomeController extends DefaultModuleController
 	{
 		$this->check_authorizations();
 
-		$this->build_view();
+		$this->build_view($request);
 
 		return $this->generate_response();
 	}
 
-	private function build_view()
+	private function build_view(HTTPRequestCustom $request)
 	{
 		$now = new Date();
 		$categories = CategoriesService::get_categories_manager(self::$module_id)->get_categories_cache()->get_categories();

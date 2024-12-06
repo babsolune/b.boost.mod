@@ -12,7 +12,7 @@ class ScmTreeLinks implements ModuleTreeLinksExtensionPoint
 	public function get_actions_tree_links()
 	{
 		$module_id = 'scm';
-		$current_user = AppContext::get_current_user()->get_id();
+        $config = ScmConfig::load();
 
 		$lang = LangLoader::get_all_langs($module_id);
 		$tree = new ModuleTreeLinks();
@@ -20,6 +20,9 @@ class ScmTreeLinks implements ModuleTreeLinksExtensionPoint
 		$categories = new ModuleLink($lang['category.categories.management'], CategoriesUrlBuilder::manage($module_id), ScmAuthorizationsService::check_authorizations()->manage_events());
 			$categories->add_sub_link(new ModuleLink($lang['category.add'], CategoriesUrlBuilder::add(AppContext::get_request()->get_getint('id_category', Category::ROOT_CATEGORY), $module_id), ScmAuthorizationsService::check_authorizations()->manage_events()));
         $tree->add_link($categories);
+
+        $tree->add_link(new ModuleLink($lang['scm.current.events'], ScmUrlBuilder::display_event_list(), $config->get_homepage() !== ScmConfig::EVENT_LIST && ScmAuthorizationsService::check_authorizations()->read()));
+        $tree->add_link(new ModuleLink($lang['scm.around.games'], ScmUrlBuilder::display_explorer(), $config->get_homepage() !== ScmConfig::EXPLORER && ScmAuthorizationsService::check_authorizations()->read()));
 
         $tree->add_link(new ModuleLink($lang['scm.clubs'], ScmUrlBuilder::display_clubs(), ScmAuthorizationsService::check_authorizations()->read()));
         $club = new ModuleLink($lang['scm.clubs.manager'], ScmUrlBuilder::manage_clubs(), ScmAuthorizationsService::check_authorizations()->manage_clubs());

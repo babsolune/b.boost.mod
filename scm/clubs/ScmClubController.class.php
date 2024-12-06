@@ -56,6 +56,7 @@ class ScmClubController extends DefaultModuleController
 	private function build_event_view()
 	{
 		$club = $this->get_club();
+        $now = new Date();
         $event_cache = ScmEventCache::load();
         $teams_list = ScmTeamCache::load()->get_teams();
         $clubs = ScmClubCache::load()->get_clubs();
@@ -69,9 +70,6 @@ class ScmClubController extends DefaultModuleController
             }
         }
 
-        // usort($teams, function($a, $b) {
-        //     return strcmp($a['id_categpry'], $b['id_categpry']);
-        // });
         $categories = [];
         foreach ($teams_list as $team)
         {
@@ -88,11 +86,15 @@ class ScmClubController extends DefaultModuleController
                 'CATEGORY_NAME' => $category_details->get_name(),
 				'U_CATEGORY' => ScmUrlBuilder::display_category($category_details->get_id(), $category_details->get_rewrited_name())->rel(),
             ]);
+
             foreach ($teams as $team)
             {
                 if (in_array($team['team_club_id'], $clubs_family))
                 {
-                    if($event_cache->get_event($team['team_event_id']))
+                    $event = $event_cache->get_event($team['team_event_id']);
+                    $real_event_id = $event['is_sub'] ? $event['master_id'] : $event['id'];
+                    $real_event = $event_cache->get_event($real_event_id);
+                    if($real_event['start_date'] < $now->get_timestamp() && $now->get_timestamp() < $real_event['end_date'])
                     {
                         $event = new ScmEvent();
                         $event->set_properties($event_cache->get_event($team['team_event_id']));

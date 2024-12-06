@@ -18,9 +18,9 @@ class ScmDivisionCache implements CacheData
 	{
 		$this->divisions = [];
 
-		$result = PersistenceContext::get_querier()->select('SELECT division.*
-			FROM ' . ScmSetup::$scm_division_table . ' division
-			ORDER BY division.id_division DESC'
+		$result = PersistenceContext::get_querier()->select('SELECT *
+			FROM ' . ScmSetup::$scm_division_table . '
+			ORDER BY id_division DESC'
 		);
 
 		while ($row = $result->fetch())

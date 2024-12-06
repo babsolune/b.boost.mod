@@ -64,22 +64,26 @@
                     </div>
 
                     <h2>{@scm.club.event.list}</h2>
+                    <div class="message-helper bgc notice">{@scm.warning.current.season}</div>
                     <div class="cell-list">
-                    <ul>
-                        # START categories #
-                            <li>{categories.CATEGORY_NAME}</li>
-                            <ul>
-                                # START categories.events #
-                                    # IF categories.events.C_VISIBLE #
-                                        <li>
-                                            <a href="{categories.events.U_EVENT}" class="offload">{categories.events.TITLE}</a>
-                                        </li>
-                                    # ENDIF #
-                                # END categories.events #
-                            </ul>
-                        # END categories #
-                    </ul>
-                </div>
+                        <ul>
+                            # START categories #
+                                <li><h6 class="text-strong">{categories.CATEGORY_NAME}</h6></li>
+                                <ul>
+                                    # START categories.events #
+                                        # IF categories.events.C_VISIBLE #
+                                            <li>
+                                                # IF categories.events.C_IS_SUB #
+                                                    <span><a href="{categories.events.U_MASTER_EVENT}" class="offload">{categories.events.MASTER_DIVISION} {categories.events.MASTER_SEASON}</a> - </span>
+                                                # ENDIF #
+                                                <a href="{categories.events.U_EVENT}" class="offload"># IF categories.events.C_IS_SUB #{categories.events.DIVISION_NAME}# ELSE #{categories.events.TITLE}# ENDIF #</a>
+                                            </li>
+                                        # ENDIF #
+                                    # END categories.events #
+                                </ul>
+                            # END categories #
+                        </ul>
+                    </div>
                 </div>
             </article>
         </div>

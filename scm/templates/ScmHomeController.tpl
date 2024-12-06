@@ -8,6 +8,7 @@
 			{MODULE_NAME}
 		</h1>
 	</header>
+    <div class="message-helper bgc notice">{@scm.warning.current.season}</div>
 
 	# IF C_NO_ITEM #
 		<div class="sub-section">

@@ -77,7 +77,8 @@ $url_controller_mappers = [
 	new UrlControllerMapper('ScmSeasonFormController', '`^/season/([0-9]+)/edit/?$`', ['id']),
 	new UrlControllerMapper('ScmSeasonDeleteController', '`^/season/([0-9]+)/delete/?$`', ['id']),
 
-	new UrlControllerMapper('ScmHomeController', '`^/?$`'),
+	new UrlControllerMapper('ScmHomeController', $config->get_homepage() == ScmConfig::EVENT_LIST ? '`^/?$`' : '`^/event_list/?$`'),
+	new UrlControllerMapper('ScmExplorerController', $config->get_homepage() == ScmConfig::EXPLORER ? '`^/?$`' : '`^/explorer/?$`'),
     new UrlControllerMapper('ScmCategoryController', '`^(?:/([0-9]+)-([a-z0-9-_]+))?/?([a-z_]+)?/?([a-z]+)?/?([0-9]+)?/?([0-9]+)?/?$`', ['id_category', 'rewrited_name', 'field', 'sort', 'page', 'subcategories_page']),
 ];
 DispatchManager::dispatch($url_controller_mappers);

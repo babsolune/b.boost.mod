@@ -34,7 +34,7 @@
                         # START prev_dates #
                             <tr><td colspan="5">{prev_dates.DATE}</td></tr>
                             # START prev_dates.prev_days #
-                                <tr# IF prev_dates.prev_days.C_HAS_SCORE # class="has-score-color"# ENDIF #>
+                                <tr class="# IF prev_dates.prev_days.C_HAS_SCORE #has-score-color# ENDIF ## IF prev_dates.prev_days.C_EXEMPT #bgc notice# ENDIF #">
                                     <td class="small">{prev_dates.prev_days.GAME_DATE_HOUR_MINUTE}</td>
                                     <td class="align-right home-{prev_dates.prev_days.ID}# IF prev_dates.prev_days.C_HOME_FAV # text-strong# ENDIF #">
                                         <div class="flex-team flex-right">
@@ -98,7 +98,7 @@
                         # START next_dates #
                             <tr><td colspan="5">{next_dates.DATE}</td></tr>
                             # START next_dates.next_days #
-                                <tr# IF next_dates.next_days.C_HAS_SCORE # class="has-score-color"# ENDIF #>
+                                <tr class="# IF next_dates.next_days.C_HAS_SCORE #has-score-color# ENDIF ## IF next_dates.next_days.C_EXEMPT #bgc notice# ENDIF #">
                                     <td class="small">{next_dates.next_days.GAME_DATE_HOUR_MINUTE}</td>
                                     <td class="align-right home-{next_dates.next_days.ID}# IF next_dates.next_days.C_HOME_FAV # text-strong# ENDIF #">
                                         <div class="flex-team flex-right">

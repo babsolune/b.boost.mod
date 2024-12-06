@@ -18,7 +18,22 @@ class ScmConfig extends AbstractConfigData
 	const CURRENT_GAMES         = 'current_games';
 	const AUTHORIZATIONS        = 'authorizations';
 
+    const HOMEPAGE   = 'homepage';
+    const EVENT_LIST = 'event_list';
+    const EXPLORER   = 'explorer';
+	const CATEGORIES = 'categories';
+
 	const DEFERRED_OPERATIONS = 'deferred_operations';
+
+	public function get_homepage()
+	{
+		return $this->get_property(self::HOMEPAGE);
+	}
+
+	public function set_homepage($value)
+	{
+		$this->set_property(self::HOMEPAGE, $value);
+	}
 
 	public function disable_left_column()
 	{
@@ -128,13 +143,14 @@ class ScmConfig extends AbstractConfigData
 	public function get_default_values()
 	{
 		return [
+            self::HOMEPAGE              => self::EXPLORER,
 			self::LEFT_COLUMN_DISABLED  => false,
 			self::RIGHT_COLUMN_DISABLED => false,
 			self::PROMOTION_COLOR       => '#baffb0',
 			self::PLAYOFF_PROM_COLOR    => '#b0e1ff',
 			self::PLAYOFF_RELEG_COLOR   => '#feebbc',
 			self::RELEGATION_COLOR      => '#deddda',
-			self::CURRENT_GAMES       => false,
+			self::CURRENT_GAMES         => false,
 			self::AUTHORIZATIONS        => ['r-1' => 1, 'r0' => 5, 'r1' => 29],
 			self::DEFERRED_OPERATIONS   => []
         ];

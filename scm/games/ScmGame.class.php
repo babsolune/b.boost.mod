@@ -415,7 +415,7 @@ class ScmGame
 			'id_game'             => $this->get_id_game(),
 			'game_event_id'       => $this->get_game_event_id(),
 			'game_type'           => $this->get_game_type(),
-			'game_cluster'          => $this->get_game_cluster(),
+			'game_cluster'        => $this->get_game_cluster(),
 			'game_round'          => $this->get_game_round(),
 			'game_order'          => $this->get_game_order(),
 			'game_playground'     => $this->get_game_playground(),

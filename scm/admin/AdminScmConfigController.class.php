@@ -40,6 +40,14 @@ class AdminScmConfigController extends DefaultAdminModuleController
             ['class' => 'custom-checkbox']
         ));
 
+        $fieldset->add_field(new FormFieldSimpleSelectChoice('homepage', $this->lang['scm.config.homepage'], $this->config->get_homepage(),
+			array(
+				new FormFieldSelectChoiceOption($this->lang['scm.config.homepage.list'], SCMConfig::EVENT_LIST, array('data_option_icon' => 'fa fa-th-list')),
+				new FormFieldSelectChoiceOption($this->lang['scm.config.homepage.games'], SCMConfig::EXPLORER, array('data_option_icon' => 'fa fa-layer-group')),
+				new FormFieldSelectChoiceOption($this->lang['scm.config.homepage.cats'], SCMConfig::CATEGORIES, array('data_option_icon' => 'fa fa-table-cells-large')),
+			)
+        ));
+
         $fieldset->add_field(new FormFieldCheckbox('current_games', $this->lang['scm.config.current.games'], $this->config->get_current_games(),
             ['class' => 'custom-checkbox']
         ));
@@ -97,6 +105,7 @@ class AdminScmConfigController extends DefaultAdminModuleController
 		else
 			$this->config->enable_right_column();
 
+		$this->config->set_homepage($this->form->get_value('homepage')->get_raw_value());
         $this->config->set_current_games($this->form->get_value('current_games'));
         $this->config->set_promotion_color($this->form->get_value('promotion_color'));
         $this->config->set_playoff_prom_color($this->form->get_value('playoff_prom_color'));

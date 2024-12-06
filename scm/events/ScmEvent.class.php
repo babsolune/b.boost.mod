@@ -393,11 +393,13 @@ class ScmEvent
                 'C_IS_SUB'          => $this->is_sub,
 
 				// Item
-				'ID'            => $this->id,
-				'TITLE'         => $this->get_event_name(),
-                'SEASON_NAME'   => ScmSeasonService::get_season($this->get_season_id())->get_season_name(),
-                'DIVISION_NAME' => ScmDivisionService::get_division($this->get_division_id())->get_division_name(),
-				'STATUS'        => $this->get_publishing_state(),
+				'ID'              => $this->id,
+				'TITLE'           => $this->get_event_name(),
+                'SEASON_NAME'     => ScmSeasonService::get_season($this->get_season_id())->get_season_name(),
+                'DIVISION_NAME'   => ScmDivisionService::get_division($this->get_division_id())->get_division_name(),
+                'MASTER_DIVISION' => ScmEventService::get_master_division($this->id),
+                'MASTER_SEASON'   => ScmEventService::get_master_season($this->id),
+				'STATUS'          => $this->get_publishing_state(),
 
 				// Category
 				'C_ROOT_CATEGORY' => $category->get_id() == Category::ROOT_CATEGORY,

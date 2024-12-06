@@ -230,6 +230,16 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/dead_link/' . $id);
 	}
 
+	public static function display_event_list()
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/event_list/');
+	}
+
+	public static function display_explorer()
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/explorer/');
+	}
+
 	public static function home()
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/');

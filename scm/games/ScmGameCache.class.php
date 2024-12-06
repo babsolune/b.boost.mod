@@ -17,10 +17,14 @@ class ScmGameCache implements CacheData
 	public function synchronize()
 	{
 		$this->games = [];
-
-		$result = PersistenceContext::get_querier()->select('SELECT game.*
+        $now = new Date();
+		$result = PersistenceContext::get_querier()->select('SELECT game.*, event.*
 			FROM ' . ScmSetup::$scm_game_table . ' game
-			ORDER BY game.id_game'
+            LEFT JOIN ' . ScmSetup::$scm_event_table . ' event ON event.id = game.game_event_id
+            WHERE (event.published = 1 OR (event.published = 2 AND event.publishing_start_date < :timestamp_now AND (event.publishing_end_date > :timestamp_now OR event.publishing_end_date = 0)))
+			ORDER BY game.id_game', [
+                'timestamp_now' => $now->get_timestamp()
+            ]
 		);
 
 		while ($row = $result->fetch())

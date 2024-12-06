@@ -50,7 +50,9 @@ class ScmMiniPrevGame extends ModuleMiniMenu
         $prev_events = $prev_matchdays = $event_games = [];
 
         $prev_matchdays = array_filter($cache->get_games(), function($game) use ($now) {
-            return $game['game_date'] < $now->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($game['game_event_id'])->get_end_date()->get_timestamp();
+            $is_sub = ScmEventService::get_event($game['game_event_id'])->get_is_sub();
+            $real_event_id = $is_sub ? ScmEventService::get_event($game['game_event_id'])->get_master_id() : $game['game_event_id'];
+            return $game['game_date'] < $now->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($real_event_id)->get_end_date()->get_timestamp();
         });
 
         foreach ($prev_matchdays as $game)

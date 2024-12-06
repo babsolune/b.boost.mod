@@ -188,5 +188,14 @@ class ScmCategoryController extends DefaultModuleController
 
 		return $response;
 	}
+
+	public static function get_view()
+	{
+		$object = new self('scm');
+		$object->init();
+		$object->check_authorizations();
+		$object->build_view(AppContext::get_request());
+		return $object->view;
+	}
 }
 ?>

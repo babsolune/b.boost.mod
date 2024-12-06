@@ -5,7 +5,7 @@
         <div class="content">
             # IF C_HAS_GAMES #
                 <div class="responsive-table">
-                    <table class="alternated-table">
+                    <table class="">
                         <colgroup class="hidden-small-screens">
                             <col class="width-pc-5" />
                             # IF NOT C_ONE_DAY #<col class="width-pc-10" /># ENDIF #
@@ -33,7 +33,7 @@
                         </thead>
                         <tbody>
                             # START games #
-                                <tr>
+                                <tr class="# IF games.C_HAS_SCORE #has-score-color# ENDIF ## IF games.C_EXEMPT #bgc notice# ENDIF #">
                                     <td># IF C_IS_DAY #{games.DAY}# ELSE #{games.ROUND}# ENDIF #</td>
                                     # IF NOT C_ONE_DAY #<td>{games.GAME_DATE_SHORT}</td># ENDIF #
                                     <td>{games.GAME_DATE_HOUR_MINUTE}</td>
@@ -43,7 +43,7 @@
                                                 # IF games.C_IS_HOME_TEAM #
                                                     {games.HOME_TEAM}
                                                 # ELSE #
-                                                    <a href="{games.U_HOME_CALENDAR}" class="offload# IF games.HOME_FORFEIT # warning# ENDIF ## IF games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.HOME_TEAM}</a>
+                                                    <a aria-label="{@scm.see.club.calendar}" href="{games.U_HOME_CALENDAR}" class="offload# IF games.HOME_FORFEIT # warning# ENDIF ## IF games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.HOME_TEAM}</a>
                                                 # ENDIF #
                                             </span>
                                             # IF games.C_HAS_HOME_LOGO #<img src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}"># ENDIF #
@@ -62,7 +62,7 @@
                                                 # IF games.C_IS_AWAY_TEAM #
                                                     {games.AWAY_TEAM}
                                                 # ELSE #
-                                                    <a href="{games.U_AWAY_CALENDAR}" class="offload# IF games.AWAY_FORFEIT # warning# ENDIF ## IF games.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.AWAY_TEAM}</a>
+                                                    <a aria-label="{@scm.see.club.calendar}" href="{games.U_AWAY_CALENDAR}" class="offload# IF games.AWAY_FORFEIT # warning# ENDIF ## IF games.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.AWAY_TEAM}</a>
                                                 # ENDIF #
                                             </span>
                                         </div>

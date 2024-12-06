@@ -127,6 +127,7 @@ $lang['scm.bracket.winner']      = 'gagnant';
 $lang['scm.bracket.from.groups'] = 'des groupes';
 $lang['scm.bracket.hour.tag']    = 'H';
 
+$lang['scm.warning.current.season']    = 'Seules les compétitions de la saison en cours sont affichées.';
 $lang['scm.warning.bracket.update'] = 'Les matchs ont été générés.';
 $lang['scm.warning.group.update']   = 'Les groupes de la compétition ont été mis à jour et les matchs ont été générés.';
 $lang['scm.warning.has.games']      = 'Les matchs de cette compétition ont été définis. Pour toute modification, si des résultats ont déjà été renseignés, ils seront supprimés.';
@@ -181,6 +182,8 @@ $lang['scm.games.management']     = 'Gestion des matchs';
 $lang['scm.games.groups.stage']   = 'Phases de groupes';
 $lang['scm.games.brackets.stage'] = 'Phases finales';
 $lang['scm.current.games']        = 'Matchs en cours';
+$lang['scm.current.events']       = 'Compétitions en cours';
+$lang['scm.around.games']         = 'Prochains/précédents matchs';
 $lang['scm.no.current.games']     = 'Aucun match en cours';
 $lang['scm.next.games']           = 'Prochains matchs';
 $lang['scm.game.late']            = 'Match en retard';
@@ -235,7 +238,7 @@ $lang['scm.teams.management']  = 'Gestion des équipes';
 $lang['scm.associate.clubs']   = 'Associer les clubs à cette compétition';
 $lang['scm.selected.teams']    = 'clubs sélectionnés';
 $lang['scm.teams']             = 'Équipes de la compétition';
-$lang['scm.team.results']      = 'Calendrier de l`équipe';
+$lang['scm.team.results']      = 'Calendrier de l\'équipe';
 $lang['scm.clubs.list']        = 'Liste des clubs';
 $lang['scm.field']             = 'Terrain';
 
@@ -251,6 +254,10 @@ $lang['scm.warning.teams.has.games'] = '
 ';
 
 // Configuration
+$lang['scm.config.homepage']          = 'Type de page d\'accueil';
+$lang['scm.config.homepage.list']     = 'Compétitions en cours';
+$lang['scm.config.homepage.games']    = 'Précédents/prochains matchs';
+$lang['scm.config.homepage.cats']     = 'Catégories';
 $lang['scm.config.current.games']     = 'Afficher les matchs en cours sur l\'accueil';
 $lang['scm.config.next.games']        = 'Afficher les prochains matchs sur l\'accueil';
 $lang['scm.config.next.games.number'] = 'Nombre de prochains matchs à afficher';

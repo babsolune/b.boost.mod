@@ -226,9 +226,19 @@ class ScmEventService
         foreach (self::get_events() as $event)
         {
             if($event['master_id'] == $event_id)
-            $sub_list[] = $event;
+                $sub_list[] = $event;
         }
         return $sub_list;
+    }
+
+    public static function is_last_sub($master_id, int $event_id):bool
+    {
+        $sub_list = [];
+        foreach (self::get_sub_list($master_id) as $event)
+        {
+            $sub_list[] = $event['sub_order'];
+        }
+        return self::get_event($event_id)->get_sub_order() == count($sub_list);
     }
 
     public static function check_event_display(int $event_id):bool

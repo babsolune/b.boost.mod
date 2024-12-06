@@ -192,7 +192,7 @@ class ScmSetup extends DefaultModuleSetup
 			'game_playground'     => ['type' => 'string', 'length' => 65],
 			'game_type'           => ['type' => 'string', 'length' => 11],
 			'game_bracket'        => ['type' => 'integer', 'length' => 11],
-			'game_cluster'          => ['type' => 'integer', 'length' => 11],
+			'game_cluster'        => ['type' => 'integer', 'length' => 11],
 			'game_round'          => ['type' => 'integer', 'length' => 11],
 			'game_order'          => ['type' => 'integer', 'length' => 11],
 			'game_home_id'        => ['type' => 'integer', 'length' => 11],

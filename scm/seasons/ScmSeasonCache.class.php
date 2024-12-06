@@ -18,9 +18,9 @@ class ScmSeasonCache implements CacheData
 	{
 		$this->seasons = [];
 
-		$result = PersistenceContext::get_querier()->select('SELECT season.*
-			FROM ' . ScmSetup::$scm_season_table . ' season
-			ORDER BY season.season_name DESC'
+		$result = PersistenceContext::get_querier()->select('SELECT *
+			FROM ' . ScmSetup::$scm_season_table . '
+			ORDER BY season_name DESC'
 		);
 
 		while ($row = $result->fetch())
