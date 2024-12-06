@@ -17,10 +17,9 @@ class WikiTreeLinks extends DefaultTreeLinks
 
 		$tree->add_link(new ModuleLink(LangLoader::get_message('wiki.my.items', 'common', $module_id), WikiUrlBuilder::display_member_items($current_user), WikiAuthorizationsService::check_authorizations()->write() || WikiAuthorizationsService::check_authorizations()->contribution() || WikiAuthorizationsService::check_authorizations()->moderation()));
 		$tree->add_link(new ModuleLink(LangLoader::get_message('wiki.my.tracked', 'common', $module_id), WikiUrlBuilder::tracked_member_items($current_user), WikiAuthorizationsService::check_authorizations()->write() || WikiAuthorizationsService::check_authorizations()->contribution() || WikiAuthorizationsService::check_authorizations()->moderation()));
-		if($config->get_homepage() !== WikiConfig::OVERVIEW)
-            $tree->add_link(new ModuleLink(LangLoader::get_message('wiki.overview', 'common', $module_id), WikiUrlBuilder::overview()));
-		if($config->get_homepage() !== WikiConfig::EXPLORER)
-            $tree->add_link(new ModuleLink(LangLoader::get_message('wiki.explorer', 'common', $module_id), WikiUrlBuilder::explorer()));
+
+        $tree->add_link(new ModuleLink(LangLoader::get_message('wiki.overview', 'common', $module_id), $config->get_homepage() !== WikiConfig::OVERVIEW && WikiUrlBuilder::overview()));
+		$tree->add_link(new ModuleLink(LangLoader::get_message('wiki.explorer', 'common', $module_id), $config->get_homepage() !== WikiConfig::EXPLORER && WikiUrlBuilder::explorer()));
 	}
 }
 ?>
