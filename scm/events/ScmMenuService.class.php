@@ -63,12 +63,13 @@ class ScmMenuService
             'C_SOURCES'      => $event->get_sources(),
             'C_FINALS_RANKING' => $c_finals_ranking,
 
-            'HEADER_CATEGORY' => $category->get_name(),
-            'HEADER_TYPE'     => ScmDivisionService::get_event_type_lang($event->get_division_id()),
+            'HEADER_CATEGORY'          => $category->get_name(),
+            'U_HEADER_CATEGORY'        => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel(),
+            'HEADER_TYPE'              => ScmDivisionService::get_event_type_lang($event->get_division_id()),
             'HEADER_MASTER_DIVISION'   => ScmEventService::get_master_division($event->get_id()),
-            'HEADER_MASTER_SEASON'   => ScmEventService::get_master_season($event->get_id()),
-            'HEADER_DIVISION' => $division['division_name'],
-            'HEADER_SEASON'   => $season['season_name'],
+            'HEADER_MASTER_SEASON'     => ScmEventService::get_master_season($event->get_id()),
+            'HEADER_DIVISION'          => $division['division_name'],
+            'HEADER_SEASON'            => $season['season_name'],
 
             'U_HOME'         => ScmUrlBuilder::home()->rel(),
             'U_EVENT_HOME'   => ScmUrlBuilder::event_home($event_id, $event->get_event_slug())->rel(),

@@ -1,27 +1,26 @@
 <header class="section-header">
     <div class="align-right">
         <a href="{U_HOME}" class="offload" aria-label="{@common.home}"><i class="fa fa-fw fa-house"></i></a>
-        {HEADER_TYPE} - {HEADER_CATEGORY}
+        {HEADER_TYPE} - <a href="{U_HEADER_CATEGORY}" class="offload">{HEADER_CATEGORY}</a>
     </div>
-    <div class="flex-between flex-between-large">
-        # IF C_IS_SUB #
-            <div>
-                <h1>{HEADER_MASTER_DIVISION} {HEADER_MASTER_SEASON}</h1>
-                <h2>{HEADER_DIVISION}</h2>
-            </div>
-        # ELSE #
-            <h1>{HEADER_DIVISION} {HEADER_SEASON}</h1>
+    # IF C_IS_SUB #
+        <h1>{HEADER_MASTER_DIVISION} {HEADER_MASTER_SEASON}</h1>
+        <h2>{HEADER_DIVISION}</h2>
+    # ELSE #
+        <h1>{HEADER_DIVISION} {HEADER_SEASON}</h1>
+    # ENDIF #
+    <div class="flex-between">
+        # IF C_SOURCES #
+            <aside class="sources-container">
+                <span aria-label="{@common.sources}"><i class="fa fa-map-signs" aria-hidden="true"></i> </span> :
+                # START sources #
+                    <a itemprop="isBasedOnUrl" href="{sources.URL}" class="pinned link-color offload" target="_blank" rel="noopener noreferrer nofollow">{sources.NAME}</a># IF sources.C_SEPARATOR # | # ENDIF #
+                # END sources #
+            </aside>
         # ENDIF #
         # IF IS_MODERATOR ## INCLUDE EVENT_LIST ## ENDIF #
     </div>
-    # IF C_SOURCES #
-        <aside class="sources-container">
-            <span aria-label="{@common.sources}"><i class="fa fa-map-signs" aria-hidden="true"></i> </span> :
-            # START sources #
-                <a itemprop="isBasedOnUrl" href="{sources.URL}" class="pinned link-color offload" target="_blank" rel="noopener noreferrer nofollow">{sources.NAME}</a># IF sources.C_SEPARATOR # | # ENDIF #
-            # END sources #
-        </aside>
-    # ENDIF #
+    <div class="spacer"></div>
 </header>
 <div class="event-menu flex-between controls">
     <nav class="cssmenu cssmenu-horizontal bgc-sub">
