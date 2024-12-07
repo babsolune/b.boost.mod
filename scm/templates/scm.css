@@ -273,6 +273,8 @@ th.bgc-sub a {
 .grouped-fields .game-team.away-team    { order: 7; }
 .grouped-fields .game-score.away-team   { order: 8; }
 .grouped-fields .game-playground        { order: 9; }
+.grouped-fields .game-status            { order: 10; }
+.grouped-fields .game-hr                { order: 11; }
 
 @media (min-width: 769px) {
     .grouped-fields .game-team.away-team    { order: 8; }

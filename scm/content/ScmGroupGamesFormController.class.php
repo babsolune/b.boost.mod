@@ -72,20 +72,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     $game->get_game_away_def_bonus())
                         ? ' ' . $this->lang['scm.bonus.param'] : '';
 
-                switch ($game->get_game_status()) {
-                    case ScmGame::DELAYED :
-                        $status = ' ' . $this->lang['scm.game.event.status.delayed'];
-                        break;
-                    case ScmGame::STOPPED :
-                        $status = ' ' . $this->lang['scm.game.event.status.stopped'];
-                        break;
-                    case '' :
-                        $status = '';
-                        break;
-                }
-
-                $groups_fieldset->add_field(new FormFieldSpacer('separator_' . $gr . $or, '<hr />'));
-                $groups_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong><span class="warning">' . $bonus . $status . '</span>     ',
+                $groups_fieldset->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong><span class="warning">' . $bonus . '</span>     ',
                     ['class' => 'game-name small text-italic form-G' . $gr . $or]
                 ));
 
@@ -108,10 +95,21 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     $this->get_teams_list(),
                     ['class' => 'away-team game-team']
                 ));
+                $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('status_' . $gr . $or, '', $game->get_game_status(),
+                    [
+                        new FormFieldSelectChoiceOption('', ''),
+                        new FormFieldSelectChoiceOption($this->lang['scm.game.event.status.delayed'], ScmGame::DELAYED),
+                        new FormFieldSelectChoiceOption($this->lang['scm.game.event.status.stopped'], ScmGame::STOPPED)
+                    ],
+                    ['class' => 'game-status portable-full']
+                ));
                 if($this->get_params()->get_display_playgrounds())
                     $groups_fieldset->add_field(new FormFieldTextEditor('game_playground_' . $gr . $or, '', $game->get_game_playground(),
                         ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                     ));
+                $groups_fieldset->add_field(new FormFieldSpacer('separator_' . $gr . $or, '<hr />',
+                    ['class' => 'game-hr']
+                ));
             }
         }
         else
@@ -142,7 +140,6 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     ${'groups_fieldset' . $or}->set_css_class('grouped-fields round-fields');
                     $form->add_fieldset(${'groups_fieldset' . $or});
 
-                    ${'groups_fieldset' . $or}->add_field(new FormFieldSpacer('separator_' . $gr, '<hr />'));
                     if ($this->return_games && $or == 1)
                         ${'groups_fieldset' . $or}->add_field(new FormFieldSpacer('first_leg_' . $gr, $this->lang['scm.first.leg']));
                     ${'groups_fieldset' . $or}->add_field(new FormFieldFree('game_number_' . $gr . $or, '', '<strong>G' . $gr . $or . '</strong>'. ' - ' . $round_title . ' ' . $round,
@@ -167,10 +164,21 @@ class ScmGroupGamesFormController extends DefaultModuleController
                         $odd_filled && $game->get_game_away_id() == 0 ? [] : $this->get_group_teams_list($gr),
                         ['class' => 'away-team game-team']
                     ));
+                    ${'groups_fieldset' . $or}->add_field(new FormFieldSimpleSelectChoice('status_' . $gr . $or, '', $game->get_game_status(),
+                        [
+                            new FormFieldSelectChoiceOption('', ''),
+                            new FormFieldSelectChoiceOption($this->lang['scm.game.event.status.delayed'], ScmGame::DELAYED),
+                            new FormFieldSelectChoiceOption($this->lang['scm.game.event.status.stopped'], ScmGame::STOPPED)
+                        ],
+                        ['class' => 'game-status portable-full']
+                    ));
                     if($this->get_params()->get_display_playgrounds())
                         ${'groups_fieldset' . $or}->add_field(new FormFieldTextEditor('game_playground_' . $gr . $or, '', $game->get_game_playground(),
                             ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                         ));
+                    ${'groups_fieldset' . $or}->add_field(new FormFieldSpacer('separator_' . $gr, '<hr />',
+                        ['class' => 'game-hr']
+                    ));
 
                     if ($this->return_games && $or == $games_number / 2)
                         ${'groups_fieldset' . $or}->add_field(new FormFieldSpacer('second_leg_' . $gr, '<hr />' . $this->lang['scm.second.leg']));
@@ -227,6 +235,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
                 $game->set_game_home_score($this->form->get_value('home_score_' . $gr . $or));
                 $game->set_game_away_score($this->form->get_value('away_score_' . $gr . $or));
                 $game->set_game_away_id((int)$this->form->get_value('away_team_' . $gr . $or)->get_raw_value());
+                $game->set_game_status($this->form->get_value('status_' . $gr . $or)->get_raw_value());
 
                 ScmGameService::update_game($game, $game->get_id_game());
             }
@@ -248,6 +257,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     $game->set_game_home_score($this->form->get_value('home_score_' . $gr . $or));
                     $game->set_game_away_score($this->form->get_value('away_score_' . $gr . $or));
                     $game->set_game_away_id((int)$this->form->get_value('away_team_' . $gr . $or)->get_raw_value());
+                    $game->set_game_status($this->form->get_value('status_' . $gr . $or)->get_raw_value());
 
                     ScmGameService::update_game($game, $game->get_id_game());
                 }

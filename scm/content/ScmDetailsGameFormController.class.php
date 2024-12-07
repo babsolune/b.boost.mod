@@ -176,15 +176,6 @@ class ScmDetailsGameFormController extends DefaultModuleController
         $fieldset_unique = new FormFieldsetHTML('unique_details', '');
         $form->add_fieldset($fieldset_unique);
 
-		$fieldset_unique->add_field(new FormFieldSimpleSelectChoice('status', $this->lang['scm.game.event.status'], $this->get_game()->get_game_status(),
-            [
-                new FormFieldSelectChoiceOption('', ''),
-                new FormFieldSelectChoiceOption($this->lang['scm.game.event.status.delayed'], ScmGame::DELAYED),
-                new FormFieldSelectChoiceOption($this->lang['scm.game.event.status.stopped'], ScmGame::STOPPED)
-            ],
-            ['class' => 'portable-full']
-        ));
-
         if (!$this->get_game()->get_game_playground())
 		$fieldset_unique->add_field(new FormFieldSimpleSelectChoice('stadium', $this->lang['scm.game.event.stadium'], $this->get_game()->get_game_stadium(),
             $this->get_stadium($this->get_game()->get_game_home_id()),
@@ -226,7 +217,6 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
         $game->set_game_video(new Url($this->form->get_value('video')));
         $game->set_game_summary($this->form->get_value('summary'));
-        $game->set_game_status($this->form->get_value('status')->get_raw_value());
 
         if (!$game->get_game_playground())
         {

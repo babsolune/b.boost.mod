@@ -66,29 +66,16 @@ class ScmDayGamesFormController extends DefaultModuleController
                 ($game->get_game_home_off_bonus() ||
                 $game->get_game_home_def_bonus() ||
                 $game->get_game_away_off_bonus() ||
-                $game->get_game_away_def_bonus()) 
+                $game->get_game_away_def_bonus())
                     ? ' ' . $this->lang['scm.bonus.param']
                     : '';
 
-            switch ($game->get_game_status()) {
-                case ScmGame::DELAYED :
-                    $status = ' ' . $this->lang['scm.game.event.status.delayed'];
-                    break;
-                case ScmGame::STOPPED :
-                    $status = ' ' . $this->lang['scm.game.event.status.stopped'];
-                    break;
-                case '' :
-                    $status = '';
-                    break;
-            }
-
             $forfeit = $game->get_game_home_forfeit() || $game->get_game_away_forfeit() ?  ' ' . $this->lang['scm.game.event.forfeit'] : '';
 
-            $game_fieldset->add_field(new FormFieldSpacer('separator_' . $gr . $or, '<hr />'));
             $game_fieldset->add_field(new FormFieldFree(
                 'game_number_' . $gr . $or,
                 '',
-                '<strong>D' . $gr . $or . '</strong><span class="warning">' . $bonus . $status . $forfeit . '</span>',
+                '<strong>D' . $gr . $or . '</strong><span class="warning">' . $bonus . $forfeit . '</span>',
                 ['class' => 'game-name small text-italic form-D' . $gr . $or]
             ));
             $game_fieldset->add_field(new FormFieldActionLink('details_' . $gr . $or, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $gr, $ro, $or), 'd-inline-block game-details align-right'));
@@ -110,10 +97,21 @@ class ScmDayGamesFormController extends DefaultModuleController
                 $this->get_teams_list(),
                 ['class' => 'away-team game-team']
             ));
+            $game_fieldset->add_field(new FormFieldSimpleSelectChoice('status_' . $gr . $or, '', $game->get_game_status(),
+                [
+                    new FormFieldSelectChoiceOption('', ''),
+                    new FormFieldSelectChoiceOption($this->lang['scm.game.event.status.delayed'], ScmGame::DELAYED),
+                    new FormFieldSelectChoiceOption($this->lang['scm.game.event.status.stopped'], ScmGame::STOPPED)
+                ],
+                ['class' => 'game-status portable-full']
+            ));
             if($this->get_params()->get_display_playgrounds())
                 $game_fieldset->add_field(new FormFieldTextEditor('game_playground_' . $gr . $or, '', $game->get_game_playground(),
                     ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                 ));
+            $game_fieldset->add_field(new FormFieldSpacer('separator_' . $gr . $or, '<hr />',
+                ['class' => 'game-hr']
+            ));
         }
 
         $this->submit_button = new FormButtonDefaultSubmit();
@@ -140,6 +138,7 @@ class ScmDayGamesFormController extends DefaultModuleController
             $game->set_game_home_score($this->form->get_value('home_score_' . $gr . $or));
             $game->set_game_away_score($this->form->get_value('away_score_' . $gr . $or));
             $game->set_game_away_id((int)$this->form->get_value('away_team_' . $gr . $or)->get_raw_value());
+            $game->set_game_status($this->form->get_value('status_' . $gr . $or)->get_raw_value());
 
             ScmGameService::update_game($game, $game->get_id_game());
             $games[] = $game->get_game_home_score();
