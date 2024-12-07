@@ -9,7 +9,7 @@
     # ELSE #
         <h1>{HEADER_DIVISION} {HEADER_SEASON}</h1>
     # ENDIF #
-    <div class="flex-between">
+    <div class="flex-between flex-between-large">
         # IF C_SOURCES #
             <aside class="sources-container">
                 <span aria-label="{@common.sources}"><i class="fa fa-map-signs" aria-hidden="true"></i> </span> :
@@ -23,11 +23,11 @@
     <div class="spacer"></div>
 </header>
 <div class="event-menu flex-between controls">
-    <nav class="cssmenu cssmenu-horizontal bgc-sub">
+    <nav class="cssmenu cssmenu-horizontal bgc-sub align-center">
         <ul>
             # IF C_IS_MASTER #
                 # START sub_events #
-                    <li><a class="offload cssmenu-title align-center" href="{sub_events.U_EVENT}"># IF NOT IS_MOBILE_DEVICE #<i class="fa fa-fw fa-house"></i># ENDIF #<span class="small d-block">{sub_events.DIVISION_NAME}</span></a></li>
+                    <li><a class="offload cssmenu-title" href="{sub_events.U_EVENT}"># IF NOT IS_MOBILE_DEVICE #<i class="fa fa-fw fa-house"></i># ENDIF #<span class="small d-block">{sub_events.DIVISION_NAME}</span></a></li>
                 # END sub_events #
             # ELSE #
                 # IF C_IS_SUB #<li><a href="{U_EVENT_MASTER}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-house-flag"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{HEADER_MASTER_DIVISION}</span></a></li># ENDIF #
@@ -59,7 +59,7 @@
     </nav>
     # IF NOT C_IS_MASTER #
         # IF C_CONTROLS #
-            <nav class="bgc moderator cssmenu cssmenu-horizontal">
+            <nav class="bgc moderator cssmenu cssmenu-horizontal align-center">
                 <ul>
                     <li><a href="{U_EDIT_TEAMS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-people-group" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.teams}</span></a></li>
                     # IF C_HAS_TEAMS #<li><a href="{U_EDIT_PARAMS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-cogs" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.params}</span></a></li># ENDIF #
