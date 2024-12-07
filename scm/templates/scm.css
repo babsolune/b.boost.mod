@@ -604,7 +604,7 @@ th.bgc-sub a {
 .cell-game .home-team {
     text-align: right;
     display: inline-block;
-    width: 39%;
+    width: 38%;
 }
 .cell-game .game-score {
     text-align: center;
@@ -614,5 +614,5 @@ th.bgc-sub a {
 .cell-game .away-team {
     text-align: left;
     display: inline-block;
-    width: 39%;
+    width: 38%;
 }

@@ -15,15 +15,15 @@ $lang['scm.menu.infos']            = 'Informations';
 $lang['scm.menu.calendar']         = 'Calendrier';
 $lang['scm.menu.results']          = 'Résultats';
 $lang['scm.menu.ranking']          = 'Classement';
-$lang['scm.menu.groups.rounds']    = 'Phases de groupes';
-$lang['scm.menu.brackets.rounds']  = 'Phases finales';
-$lang['scm.menu.teams']            = 'Gérer les équipes';
-$lang['scm.menu.params']           = 'Gérer les paramètres';
-$lang['scm.menu.days']             = 'Gérer les journées';
-$lang['scm.menu.groups']           = 'Gérer les groupes';
-$lang['scm.menu.bracket']          = 'Créer l\'arbre des matchs';
-$lang['scm.menu.games']            = 'Gérer les matchs';
-$lang['scm.menu.groups.games']     = 'Gérer les matchs de groupe';
-$lang['scm.menu.bracket.games']    = 'Gérer les matchs de phase finale';
+$lang['scm.menu.rounds.groups']    = 'Phases de groupes';
+$lang['scm.menu.rounds.brackets']  = 'Phases finales';
+$lang['scm.menu.single.bracket']   = 'Arbre des matchs';
+
+$lang['scm.menu.config.teams']         = 'Équipes';
+$lang['scm.menu.config.params']        = 'Paramètres';
+$lang['scm.menu.config.create.games']  = 'Créer les matchs';
+$lang['scm.menu.config.games']         = 'Matchs';
+$lang['scm.menu.config.games.groups']  = 'Groupes';
+$lang['scm.menu.config.games.bracket'] = 'Phase finale';
 
 ?>

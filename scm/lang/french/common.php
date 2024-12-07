@@ -97,8 +97,8 @@ $lang['scm.matchdays.number']  = 'Nombre de matchs';
 $lang['scm.total']  = 'Total';
 
 // Rounds
-$lang['scm.groups.management']   = 'Gestion des groupes';
-$lang['scm.brackets.management'] = 'Créer les matchs';
+$lang['scm.groups.management']   = 'Créer la liste des matchs par groupe';
+$lang['scm.brackets.management'] = 'Créer la liste des matchs';
 $lang['scm.group']               = 'Groupe';
 $lang['scm.group.short']         = 'G';
 $lang['scm.groups']              = 'Groupes';

@@ -24,37 +24,36 @@
     # ENDIF #
 </header>
 <div class="event-menu flex-between controls">
-    <nav class="cssmenu cssmenu-horizontal">
+    <nav class="cssmenu cssmenu-horizontal bgc-sub">
         <ul>
             # IF C_IS_MASTER #
-                <li><a href="{U_EVENT_HOME}" class="offload cssmenu-title" aria-label="{HEADER_MASTER_DIVISION}"><i class="fa fa-fw fa-house-flag"></i></a></li>
                 # START sub_events #
-                    <li><a class="offload cssmenu-title" href="{sub_events.U_EVENT}">{sub_events.DIVISION_NAME}</a></li>
+                    <li><a class="offload cssmenu-title align-center" href="{sub_events.U_EVENT}"># IF NOT IS_MOBILE_DEVICE #<i class="fa fa-fw fa-house"></i># ENDIF #<span class="small d-block">{sub_events.DIVISION_NAME}</span></a></li>
                 # END sub_events #
             # ELSE #
-                # IF C_IS_SUB #<li><a href="{U_EVENT_MASTER}" class="offload cssmenu-title" aria-label="{HEADER_MASTER_DIVISION}"><i class="fa fa-fw fa-house-flag"></i></a></li># ENDIF #
-                <li><a href="{U_EVENT_HOME}" class="offload cssmenu-title" aria-label="{@scm.menu.infos}"><i class="fa fa-fw fa-info"></i></a></li>
+                # IF C_IS_SUB #<li><a href="{U_EVENT_MASTER}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-house-flag"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{HEADER_MASTER_DIVISION}</span></a></li># ENDIF #
+                <li><a href="{U_EVENT_HOME}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-info"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.infos}</span></a></li>
                 # IF C_CUP #
-                    <li><a href="{U_ROUND_BRACKETS}" class="offload cssmenu-title" aria-label="{@scm.menu.bracket}"><i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i></a></li>
+                    <li><a href="{U_ROUND_BRACKETS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.single.bracket}</span></a></li>
                 # ENDIF #
                 # IF C_TOURNAMENT #
-                    <li><a href="{U_ROUND_GROUPS}" class="offload cssmenu-title" aria-label="{@scm.menu.groups.rounds}"><i class="fa fa-fw fa-list" aria-hidden="true"></i></a></li>
+                    <li><a href="{U_ROUND_GROUPS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-list" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.rounds.groups}</span></a></li>
                     <li>
-                        <a href="{U_ROUND_BRACKETS}" class="offload cssmenu-title" aria-label="{@scm.menu.brackets.rounds}">
+                        <a href="{U_ROUND_BRACKETS}" class="offload cssmenu-title align-center">
                             # IF C_FINALS_RANKING #
                                 <span class="stacked">
                                     <i class="fa fa-fw fa-list" aria-hidden="true"></i>
                                     <i class="fa fa-trophy notice stack-event stack-top-right" aria-hidden="true"></i>
-                                </span>
+                                </span><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.rounds.brackets}</span>
                             # ELSE #
-                                <i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i>
+                                <i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.rounds.brackets}</span>
                             # ENDIF #
                         </a>
                     </li>
                 # ENDIF #
                 # IF C_CHAMPIONSHIP #
-                    <li><a href="{U_DAYS_CALENDAR}" class="offload cssmenu-title" aria-label="{@scm.menu.calendar}"><i class="far fa-fw fa-calendar-days" aria-hidden="true"></i></a></li>
-                    <li><a href="{U_DAYS_RANKING}" class="offload cssmenu-title" aria-label="{@scm.menu.ranking}"><i class="fa fa-fw fa-ranking-star" aria-hidden="true"></i></a></li>
+                    <li><a href="{U_DAYS_CALENDAR}" class="offload cssmenu-title align-center"><i class="far fa-fw fa-calendar-days" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.calendar}</span></a></li>
+                    <li><a href="{U_DAYS_RANKING}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-ranking-star" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.ranking}</span></a></li>
                 # ENDIF #
             # ENDIF #
         </ul>
@@ -63,39 +62,39 @@
         # IF C_CONTROLS #
             <nav class="bgc moderator cssmenu cssmenu-horizontal">
                 <ul>
-                    <li><a href="{U_EDIT_TEAMS}" class="offload cssmenu-title" aria-label="{@scm.menu.teams}"><i class="fa fa-fw fa-people-group" aria-hidden="true"></i></a></li>
-                    # IF C_HAS_TEAMS #<li><a href="{U_EDIT_PARAMS}" class="offload cssmenu-title" aria-label="{@scm.menu.params}"><i class="fa fa-fw fa-cogs" aria-hidden="true"></i></a></li># ENDIF #
+                    <li><a href="{U_EDIT_TEAMS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-people-group" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.teams}</span></a></li>
+                    # IF C_HAS_TEAMS #<li><a href="{U_EDIT_PARAMS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-cogs" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.params}</span></a></li># ENDIF #
 
                     # IF C_CHAMPIONSHIP #
                         # IF C_HAS_DAYS #
-                            <li><a href="{U_EDIT_DAYS}" class="offload cssmenu-title" aria-label="{@scm.menu.days}"><i class="fa fa-fw fa-users-viewfinder" aria-hidden="true"></i></a></li>
+                            <li><a href="{U_EDIT_DAYS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-users-viewfinder" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.create.games}</span></a></li>
                             # IF C_HAS_GAMES #
-                                <li# IF C_EDIT_DAYS_GAMES # class="current"# ENDIF #><a href="{U_EDIT_DAYS_GAMES}" class="offload cssmenu-title" aria-label="{@scm.menu.games}"><i class="fa fa-fw fa-list" aria-hidden="true"></i></a></li>
+                                <li# IF C_EDIT_DAYS_GAMES # class="current"# ENDIF #><a href="{U_EDIT_DAYS_GAMES}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-list" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.games}</span></a></li>
                             # ENDIF #
                         # ENDIF #
                     # ENDIF #
                     # IF C_CUP #
                         # IF C_HAS_ROUNDS #
-                            <li><a href="{U_EDIT_BRACKET}" class="offload cssmenu-title" aria-label="{@scm.menu.bracket}"><i class="fa fa-fw fa-users-viewfinder" aria-hidden="true"></i></a></li>
+                            <li><a href="{U_EDIT_BRACKET}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-users-viewfinder" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.create.games}</span></a></li>
                             # IF C_HAS_GAMES #
-                                <li# IF C_EDIT_BRACKETS_GAMES # class="current"# ENDIF #><a href="{U_EDIT_BRACKET_GAMES}" class="offload cssmenu-title" aria-label="{@scm.menu.games}"><i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i></a></li>
+                                <li# IF C_EDIT_BRACKETS_GAMES # class="current"# ENDIF #><a href="{U_EDIT_BRACKET_GAMES}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.games}</span></a></li>
                             # ENDIF #
                         # ENDIF #
                     # ENDIF #
                     # IF C_TOURNAMENT #
                         # IF C_HAS_GROUPS #
-                            <li><a href="{U_EDIT_GROUPS}" class="offload cssmenu-title" aria-label="{@scm.menu.groups}"><i class="fa fa-fw fa-users-viewfinder" aria-hidden="true"></i></a></li>
+                            <li><a href="{U_EDIT_GROUPS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-users-viewfinder" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.create.games}</span></a></li>
                             # IF C_HAS_GAMES #
-                                <li# IF C_EDIT_GROUPS_GAMES # class="current"# ENDIF #><a href="{U_EDIT_GROUPS_GAMES}" class="offload cssmenu-title" aria-label="{@scm.menu.groups.games}"><i class="fa fa-fw fa-list" aria-hidden="true"></i></a></li>
+                                <li# IF C_EDIT_GROUPS_GAMES # class="current"# ENDIF #><a href="{U_EDIT_GROUPS_GAMES}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-list" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.games.groups}</span></a></li>
                                 <li# IF C_EDIT_BRACKETS_GAMES # class="current"# ENDIF #>
-                                    <a href="{U_EDIT_BRACKET_GAMES}" class="offload cssmenu-title" aria-label="{@scm.menu.bracket.games}">
+                                    <a href="{U_EDIT_BRACKET_GAMES}" class="offload cssmenu-title align-center">
                                         # IF C_FINALS_RANKING #
                                             <span class="stacked">
                                                 <i class="fa fa-fw fa-list" aria-hidden="true"></i>
                                                 <i class="fa fa-trophy notice stack-event stack-top-right" aria-hidden="true"></i>
-                                            </span>
+                                            </span><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.games.bracket}</span>
                                         # ELSE #
-                                            <i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i>
+                                            <i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.games.bracket}</span>
                                         # ENDIF #
                                     </a>
                                 </li>
