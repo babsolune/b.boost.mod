@@ -114,10 +114,10 @@ class ScmDetailsGameFormController extends DefaultModuleController
                 ['class' => 'portable-full']
             ));
             $fieldset->add_field(new FormFieldNumberEditor('home_off_bonus', '', $this->get_game()->get_game_home_off_bonus(),
-                ['class' => 'home-details', 'pattern' => '[0-9]*']
+                ['class' => 'portable-half home-details', 'pattern' => '[0-9]*']
             ));
             $fieldset->add_field(new FormFieldNumberEditor('away_off_bonus', '', $this->get_game()->get_game_away_off_bonus(),
-                ['class' => 'away-details', 'pattern' => '[0-9]*']
+                ['class' => 'portable-half away-details', 'pattern' => '[0-9]*']
             ));
             if($this->get_params()->get_bonus() == ScmParams::BONUS_DOUBLE)
             {
@@ -125,10 +125,10 @@ class ScmDetailsGameFormController extends DefaultModuleController
                     ['class' => 'portable-full']
                 ));
                 $fieldset->add_field(new FormFieldNumberEditor('home_def_bonus', '', $this->get_game()->get_game_home_def_bonus(),
-                    ['class' => 'home-details', 'pattern' => '[0-9]*']
+                    ['class' => 'portable-half home-details', 'pattern' => '[0-9]*']
                 ));
                 $fieldset->add_field(new FormFieldNumberEditor('away_def_bonus', '', $this->get_game()->get_game_away_def_bonus(),
-                    ['class' => 'away-details', 'pattern' => '[0-9]*']
+                    ['class' => 'portable-half away-details', 'pattern' => '[0-9]*']
                 ));
             }
         }
@@ -177,10 +177,12 @@ class ScmDetailsGameFormController extends DefaultModuleController
         $form->add_fieldset($fieldset_unique);
 
         if (!$this->get_game()->get_game_playground())
-		$fieldset_unique->add_field(new FormFieldSimpleSelectChoice('stadium', $this->lang['scm.game.event.stadium'], $this->get_game()->get_game_stadium(),
-            $this->get_stadium($this->get_game()->get_game_home_id()),
-            ['class' => 'portable-full']
-        ));
+        {
+            $fieldset_unique->add_field(new FormFieldSimpleSelectChoice('stadium', $this->lang['scm.game.event.stadium'], $this->get_game()->get_game_stadium(),
+                $this->get_stadium($this->get_game()->get_game_home_id()),
+                ['class' => 'portable-full']
+            ));
+        }
 
         $fieldset_unique->add_field(new FormFieldUrlEditor('video', $this->lang['scm.game.event.video'], $this->get_game()->get_game_video()->relative(),
             ['class' => 'portable-full']
@@ -242,25 +244,28 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
     private function get_stadium(int $club_id)
     {
-        $team = ScmTeamService::get_team($club_id);
-        $club = ScmClubCache::load()->get_club($team->get_team_club_id());
-        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
-        $real_club = new ScmClub();
-        $real_club->set_properties(ScmClubCache::load()->get_club($real_id));
+        if ($club_id)
+        {
+            $team = ScmTeamService::get_team($club_id);
+            $club = ScmClubCache::load()->get_club($team->get_team_club_id());
+            $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+            $real_club = new ScmClub();
+            $real_club->set_properties(ScmClubCache::load()->get_club($real_id));
 
-        $options = [];
-        $options[] = new FormFieldSelectChoiceOption('', 0);
-        $stadiums = 0;
-		$i = 1;
-		foreach(TextHelper::deserialize($real_club->get_club_locations()) as $club)
-		{
-            if ($club['name'])
-                $stadiums++;
-            $options[] = new FormFieldSelectChoiceOption($club['name'], $i);
-			$i++;
-		}
-
-        return $stadiums ? $options : [new FormFieldSelectChoiceOption(StringVars::replace_vars($this->lang['scm.club.no.stadium'], ['club' => $real_club->get_club_name()]), 0)];
+            $options = [];
+            $options[] = new FormFieldSelectChoiceOption('', 0);
+            $stadiums = 0;
+            $i = 1;
+            foreach(TextHelper::deserialize($real_club->get_club_locations()) as $club)
+            {
+                if ($club['name'])
+                    $stadiums++;
+                $options[] = new FormFieldSelectChoiceOption($club['name'], $i);
+                $i++;
+            }
+            return $stadiums ? $options : [new FormFieldSelectChoiceOption(StringVars::replace_vars($this->lang['scm.club.no.stadium'], ['club' => $real_club->get_club_name()]), 0)];
+        }
+        return [new FormFieldSelectChoiceOption($this->lang['scm.club.no.club'], 0)];
     }
 
     private function get_game()

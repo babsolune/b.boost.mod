@@ -192,76 +192,32 @@ class ScmGroupGamesFormController extends DefaultModuleController
 		$this->form = $form;
 	}
 
-    private function get_stadium(int $club_id)
-    {
-        $team = ScmTeamService::get_team($club_id);
-        $club = ScmClubCache::load()->get_club($team->get_team_club_id());
-        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
-        $real_club = new ScmClub();
-        $real_club->set_properties(ScmClubCache::load()->get_club($real_id));
-
-        $options = [];
-        $options[] = new FormFieldSelectChoiceOption('', 0);
-        $stadiums = 0;
-		$i = 1;
-		foreach(TextHelper::deserialize($real_club->get_club_locations()) as $club)
-		{
-            if ($club['name'])
-                $stadiums++;
-            $options[] = new FormFieldSelectChoiceOption($club['name'], $i);
-			$i++;
-		}
-
-        return $stadiums ? $options : [new FormFieldSelectChoiceOption(StringVars::replace_vars($this->lang['scm.club.no.stadium'], ['club' => $real_club->get_club_name()]), 0)];
-    }
-
 	private function save()
 	{
         $gr = AppContext::get_request()->get_getint('round', 0);
         if ($this->hat_ranking)
-        {
             $games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $gr);
-
-            foreach($games as $hat_game)
-            {
-                $game = new ScmGame();
-                $game->set_properties($hat_game);
-                $or = $game->get_game_order();
-                $game->set_game_event_id($this->event_id());
-                $game->set_game_date($this->form->get_value('game_date_' . $gr . $or));
-                if($this->get_params()->get_display_playgrounds())
-                    $game->set_game_playground($this->form->get_value('game_playground_' . $gr . $or));
-                $game->set_game_home_id((int)$this->form->get_value('home_team_' . $gr . $or)->get_raw_value());
-                $game->set_game_home_score($this->form->get_value('home_score_' . $gr . $or));
-                $game->set_game_away_score($this->form->get_value('away_score_' . $gr . $or));
-                $game->set_game_away_id((int)$this->form->get_value('away_team_' . $gr . $or)->get_raw_value());
-                $game->set_game_status($this->form->get_value('status_' . $gr . $or)->get_raw_value());
-
-                ScmGameService::update_game($game, $game->get_id_game());
-            }
+        else {
+            $games = $this->get_group_games($gr);
+            $games = call_user_func_array('array_merge', $games);
         }
-        else
-        {
-            foreach($this->get_group_games($gr) as $games)
-            {
-                foreach ($games as $group_game)
-                {
-                    $game = new ScmGame();
-                    $game->set_properties($group_game);
-                    $or = $game->get_game_order();
-                    $game->set_game_event_id($this->event_id());
-                    $game->set_game_date($this->form->get_value('game_date_' . $gr . $or));
-                    if($this->get_params()->get_display_playgrounds())
-                        $game->set_game_playground($this->form->get_value('game_playground_' . $gr . $or));
-                    $game->set_game_home_id((int)$this->form->get_value('home_team_' . $gr . $or)->get_raw_value());
-                    $game->set_game_home_score($this->form->get_value('home_score_' . $gr . $or));
-                    $game->set_game_away_score($this->form->get_value('away_score_' . $gr . $or));
-                    $game->set_game_away_id((int)$this->form->get_value('away_team_' . $gr . $or)->get_raw_value());
-                    $game->set_game_status($this->form->get_value('status_' . $gr . $or)->get_raw_value());
 
-                    ScmGameService::update_game($game, $game->get_id_game());
-                }
-            }
+        foreach($games as $game)
+        {
+            $item = new ScmGame();
+            $item->set_properties($game);
+            $or = $item->get_game_order();
+            $item->set_game_event_id($this->event_id());
+            $item->set_game_date($this->form->get_value('game_date_' . $gr . $or));
+            if($this->get_params()->get_display_playgrounds())
+                $item->set_game_playground($this->form->get_value('game_playground_' . $gr . $or));
+            $item->set_game_home_id((int)$this->form->get_value('home_team_' . $gr . $or)->get_raw_value());
+            $item->set_game_home_score($this->form->get_value('home_score_' . $gr . $or));
+            $item->set_game_away_score($this->form->get_value('away_score_' . $gr . $or));
+            $item->set_game_away_id((int)$this->form->get_value('away_team_' . $gr . $or)->get_raw_value());
+            $item->set_game_status($this->form->get_value('status_' . $gr . $or)->get_raw_value());
+
+            ScmGameService::update_game($item, $item->get_id_game());
         }
 
 		ScmEventService::clear_cache();

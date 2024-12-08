@@ -34,6 +34,7 @@ $lang['scm.club.event.list']    = 'Liste des compétitions du club';
 $lang['scm.club.phone.clue']    = 'Sans espaces, ni tirets, ni points';
 $lang['scm.club.stadium']       = 'Stade';
 $lang['scm.club.no.stadium']    = 'Aucun stade déclaré pour :club';
+$lang['scm.club.no.club']       = 'Aucun club à domicile déclaré';
 $lang['scm.club.locations']     = 'Adresses du club';
 $lang['scm.club.display.map']   = 'Afficher la/les maps';
 $lang['scm.club.country']       = 'Pays';
