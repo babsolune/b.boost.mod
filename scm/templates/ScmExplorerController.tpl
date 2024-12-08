@@ -80,7 +80,7 @@
                                 <header><h2>{@scm.mini.next}</h2></header>
                                 # IF C_NEXT_ITEMS #
                                     # START next_categories #
-                                        <h6 class="text-strong">{next_categories.CATEGORY_NAME}</h6>
+                                        <h6 class="text-strong"><a href="{next_categories.U_CATEGORY}" class="offload">{next_categories.CATEGORY_NAME}</a></h6>
                                         # START next_categories.next_items #
                                             <div class="cell cell-tile cell-game">
                                                 <div class="game-header bgc-sub flex-between">
@@ -107,7 +107,7 @@
                                 <header><h2>{@scm.mini.prev}</h2></header>
                                 # IF C_PREV_ITEMS #
                                     # START prev_categories #
-                                        <h6 class="text-strong">{prev_categories.CATEGORY_NAME}</h6>
+                                        <h6 class="text-strong"><a href="{prev_categories.U_CATEGORY}" class="offload">{prev_categories.CATEGORY_NAME}</a></h6>
                                         # START prev_categories.prev_items #
                                             <div class="cell cell-tile cell-game">
                                                 <div class="game-header bgc-sub flex-between">

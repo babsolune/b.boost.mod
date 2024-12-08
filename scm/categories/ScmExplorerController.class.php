@@ -92,8 +92,10 @@ class ScmExplorerController extends DefaultModuleController
 
 		foreach ($next_categories as $k => $games)
 		{
+            $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k);
             $this->view->assign_block_vars('next_categories', [
-                'CATEGORY_NAME' => CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k)->get_name()
+                'CATEGORY_NAME' => $category->get_name(),
+                'U_CATEGORY' => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
             ]);
 
             foreach ($games as $game)
@@ -120,7 +122,7 @@ class ScmExplorerController extends DefaultModuleController
             $real_event_id = $is_sub ? ScmEventService::get_event($game['game_event_id'])->get_master_id() : $game['game_event_id'];
             $is_last_event_id = $is_sub ? ScmEventService::is_last_sub($real_event_id, $game['game_event_id']) : 0;
             if ($is_sub && $is_last_event_id)
-                return ($now->get_timestamp() < ScmEventService::get_event($real_event_id)->get_end_date()->get_timestamp()) && $game['game_date'];
+                return ( $game['game_date'] < $now->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($real_event_id)->get_end_date()->get_timestamp());
             else
                 return ($now->get_timestamp() < ScmEventService::get_event($game['game_event_id'])->get_end_date()->get_timestamp()) && $game['game_date'] < $now->get_timestamp();
         });
@@ -155,8 +157,10 @@ class ScmExplorerController extends DefaultModuleController
 
 		foreach ($prev_categories as $k => $games)
 		{
+            $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k);
             $this->view->assign_block_vars('prev_categories', [
-                'CATEGORY_NAME' => CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k)->get_name()
+                'CATEGORY_NAME' => $category->get_name(),
+                'U_CATEGORY' => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
             ]);
 
             foreach ($games as $game)
