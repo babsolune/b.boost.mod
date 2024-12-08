@@ -17,6 +17,8 @@
                     <a itemprop="isBasedOnUrl" href="{sources.URL}" class="pinned link-color offload" target="_blank" rel="noopener noreferrer nofollow">{sources.NAME}</a># IF sources.C_SEPARATOR # | # ENDIF #
                 # END sources #
             </aside>
+        # ELSE #
+            <aside></aside>
         # ENDIF #
         # IF IS_MODERATOR ## INCLUDE EVENT_LIST ## ENDIF #
     </div>
@@ -27,7 +29,7 @@
         <ul>
             # IF C_IS_MASTER #
                 # START sub_events #
-                    <li><a class="offload cssmenu-title" href="{sub_events.U_EVENT}"># IF NOT IS_MOBILE_DEVICE #<i class="fa fa-fw fa-house"></i># ENDIF #<span class="small d-block">{sub_events.DIVISION_NAME}</span></a></li>
+                    <li><a class="offload cssmenu-title align-center" href="{sub_events.U_EVENT}"># IF NOT IS_MOBILE_DEVICE #<i class="fa fa-fw fa-house"></i># ENDIF #<span class="small d-block">{sub_events.DIVISION_NAME}</span></a></li>
                 # END sub_events #
             # ELSE #
                 # IF C_IS_SUB #<li><a href="{U_EVENT_MASTER}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-house-flag"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{HEADER_MASTER_DIVISION}</span></a></li># ENDIF #
