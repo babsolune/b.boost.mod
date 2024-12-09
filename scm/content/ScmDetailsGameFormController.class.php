@@ -25,11 +25,11 @@ class ScmDetailsGameFormController extends DefaultModuleController
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
 		{
 			$this->save();
-            $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.games.update'], MessageHelper::SUCCESS, 4));
-		}
+            $this->redirect();
+        }
 
 		$this->view->put_all([
-            'MENU' => ScmMenuService::build_event_menu($this->event_id()),
+            'MENU'    => ScmMenuService::build_event_menu($this->event_id()),
             'CONTENT' => $this->form->display(),
         ]);
 
@@ -297,42 +297,6 @@ class ScmDetailsGameFormController extends DefaultModuleController
         return $this->get_event()->get_id();
     }
 
-    private function get_group_teams_list($group)
-    {
-        $teams_list = [];
-        foreach (ScmTeamService::get_teams($this->event_id()) as $team)
-        {
-            $team_group = $team['team_group'];
-            $team_group = $team_group ? TextHelper::substr($team_group, 0, 1) : '';
-            if ($team_group == $group)
-                $teams_list[] = $team;
-        }
-        $options = [];
-
-        $clubs = ScmClubCache::load();
-        $options[] = new FormFieldSelectChoiceOption('', 0);
-		foreach($teams_list as $team)
-		{
-			$options[] = new FormFieldSelectChoiceOption($clubs->get_club_name($team['team_club_id']), $team['id_team']);
-		}
-
-		return $options;
-    }
-
-    private function get_teams_list()
-    {
-        $options = [];
-
-        $clubs = ScmClubCache::load();
-        $options[] = new FormFieldSelectChoiceOption('', '');
-		foreach(ScmTeamService::get_teams($this->event_id()) as $team)
-		{
-			$options[] = new FormFieldSelectChoiceOption($clubs->get_club_name($team['team_club_id']), $team['id_team']);
-		}
-
-		return $options;
-    }
-
     private function get_params()
 	{
         $id = AppContext::get_request()->get_getint('event_id', 0);
@@ -371,6 +335,15 @@ class ScmDetailsGameFormController extends DefaultModuleController
 			DispatchManager::redirect($controller);
 		}
 	}
+
+    private function redirect()
+    {
+        $type    = $this->get_game()->get_game_type();
+        $cluster = $this->get_game()->get_game_cluster();
+        $round   = $this->get_game()->get_game_round();
+        $order   = $this->get_game()->get_game_order();
+        return AppContext::get_response()->redirect(ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), $type, $cluster, $round, $order), $this->lang['scm.warning.details.update']);
+    }
 
 	private function generate_response(View $view)
 	{

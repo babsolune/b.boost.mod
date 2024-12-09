@@ -73,6 +73,8 @@ $lang['scm.game.event.video']            = 'Vidéo du match';
 $lang['scm.game.event.summary']          = 'Résumé du match';
 $lang['scm.game.event.empty.field']      = 'Texte de remplacement';
 
+$lang['scm.warning.details.update'] = 'Les détails du match ont été mis à jour.';
+
 // Front titles
 $lang['scm.infos']  = 'Informations générales';
 $lang['scm.calendar']  = 'Calendrier';

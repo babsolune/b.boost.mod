@@ -33,8 +33,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
             if ($this->finals_submit_button->has_been_submited() && $this->finals_form->validate())
             {
                 $this->finals_save();
-                AppContext::get_response()->redirect(ScmUrlBuilder::edit_brackets_games($this->get_event()->get_id(), $this->get_event()->get_event_slug(), AppContext::get_request()->get_getint('cluster', 0)));
-                $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.games.update'], MessageHelper::SUCCESS, 4));
+                AppContext::get_response()->redirect(ScmUrlBuilder::edit_brackets_games($this->event_id(), $this->get_event()->get_event_slug(), AppContext::get_request()->get_getint('cluster', 0)), $this->lang['scm.warning.games.update']);
             }
         }
         else
@@ -44,8 +43,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
             if ($this->submit_button->has_been_submited() && $this->form->validate())
             {
                 $this->save();
-                AppContext::get_response()->redirect(ScmUrlBuilder::edit_brackets_games($this->get_event()->get_id(), $this->get_event()->get_event_slug(), AppContext::get_request()->get_getint('cluster', 0)));
-                $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.games.update'], MessageHelper::SUCCESS, 4));
+                AppContext::get_response()->redirect(ScmUrlBuilder::edit_brackets_games($this->event_id(), $this->get_event()->get_event_slug(), AppContext::get_request()->get_getint('cluster', 0)),$this->lang['scm.warning.games.update']);
             }
         }
 
