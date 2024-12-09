@@ -22,7 +22,7 @@ class ScmGroupsFormController extends DefaultModuleController
 		{
 			$this->save();
             $this->view->put('MESSAGE_HELPER', MessageHelper::display($this->lang['scm.warning.group.update'], MessageHelper::SUCCESS, 4));
-		    // AppContext::get_response()->redirect(ScmUrlBuilder::edit_groups($this->get_event()->get_id(), $this->get_event()->get_event_slug(), AppContext::get_request()->get_getint('round', 0)));
+		    // AppContext::get_response()->redirect(ScmUrlBuilder::edit_groups($this->get_event()->get_id(), $this->get_event()->get_event_slug(), AppContext::get_request()->get_getint('cluster', 0)));
         }
 
 		$this->view->put_all([
@@ -216,8 +216,8 @@ class ScmGroupsFormController extends DefaultModuleController
         }
         if ($event->get_is_sub())
             $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
-		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug(),  AppContext::get_request()->get_getint('round', 0)));
-		$breadcrumb->add($this->lang['scm.teams.management'], ScmUrlBuilder::edit_groups($event->get_id(), $event->get_event_slug(),  AppContext::get_request()->get_getint('round', 0)));
+		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug(),  AppContext::get_request()->get_getint('cluster', 0)));
+		$breadcrumb->add($this->lang['scm.teams.management'], ScmUrlBuilder::edit_groups($event->get_id(), $event->get_event_slug(),  AppContext::get_request()->get_getint('cluster', 0)));
 
 		return $response;
 	}

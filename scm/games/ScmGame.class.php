@@ -43,6 +43,7 @@ class ScmGame
     private $game_stadium;
     private $game_stadium_name;
 
+    const COMPLETED = 'completed';
     const DELAYED = 'delayed';
     const STOPPED = 'stopped';
 
@@ -507,6 +508,9 @@ class ScmGame
         $category = $event->get_category();
 
         switch ($this->get_game_status()) {
+            case ScmGame::DELAYED :
+                $status = $lang['scm.game.event.status.delayed'];
+                break;
             case ScmGame::DELAYED :
                 $status = $lang['scm.game.event.status.delayed'];
                 break;

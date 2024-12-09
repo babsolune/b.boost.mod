@@ -25,13 +25,13 @@ class ScmDaysCalendarController extends DefaultModuleController
 
 	private function build_view()
 	{
-        $round = AppContext::get_request()->get_getint('round', 0);
-        $games = ScmGroupService::games_list_from_group($this->event_id(), 'D', $round);
+        $cluster = AppContext::get_request()->get_getint('cluster', 0);
+        $games = ScmGroupService::games_list_from_group($this->event_id(), 'D', $cluster);
         $this->view->put_all([
             'C_ONE_DAY'   => ScmGameService::one_day_event($this->event_id()),
             'MENU'        => ScmMenuService::build_event_menu($this->event_id()),
             'C_HAS_GAMES' => ScmGameService::has_games($this->event_id()),
-            'DAY'         => $round
+            'DAY'         => $cluster
         ]);
 
         $dates = [];

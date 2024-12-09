@@ -108,6 +108,15 @@ th.bgc-sub a {
     padding: 0;
 }
 
+.fieldset-content .modal-nav {
+    float: right;
+    margin-top: 0.809em;
+}
+
+.fieldset-content .modal-nav ul {
+    list-style-type: none;
+}
+
 .form-spacer {
     font-size: 1.309em;
 }
@@ -117,6 +126,26 @@ th.bgc-sub a {
 
 .teams-checkbox .form-field {
     width: 100%;
+}
+
+.label-top > label {
+    position: absolute;
+    bottom: calc(100% - 1px);
+    left: 5px;
+    padding: 0 0.228em;
+    font-size: 0.618em;
+    z-index: 2;
+    background-color: var(--bgc-main);
+    border: 1px solid var(--bdr-sub);
+    width: auto !important;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.label-top:hover label {
+    opacity: 1;
+    visibility: visible;
 }
 
 @media (min-width: 769px) {
@@ -159,6 +188,7 @@ th.bgc-sub a {
 
 .portable .portable-half { width: 50%; text-align: center; }
 .portable .portable-full { width: 100%; }
+.game-details .fieldset-inset .details-full { width: 100%; }
 
 /* params */
 .params-form .fieldset-submit,
@@ -181,7 +211,7 @@ th.bgc-sub a {
     justify-content: start;
     align-items: center;
 }
-.round-fields .fieldset-description,
+.cluster-fields .fieldset-description,
 .grouped-fields .fieldset-inset > * {
     padding: 0 0 0.809em;
     margin: 0 0 0 0.309em;

@@ -32,7 +32,7 @@ class ScmGroupController extends DefaultModuleController
 
             'MENU' => ScmMenuService::build_event_menu($this->event_id())
         ]);
-        $group = AppContext::get_request()->get_getint('round', 0);
+        $group = AppContext::get_request()->get_getint('cluster', 0);
 
         // Games list
         $group_games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $group);

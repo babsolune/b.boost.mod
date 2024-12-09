@@ -41,7 +41,7 @@ class ScmMenuService
             : ($c_finals_ranking ? 1 : $params->get_rounds_number())
         ;
 
-        $active_round = AppContext::get_request()->get_getint('round', '0');
+        $active_round = AppContext::get_request()->get_getint('cluster', '0');
         if ($params->get_hat_ranking() && $active_round == 0)
             $active_round = ScmGroupService::get_last_matchday_hat($event_id);
         elseif ($active_round == 0)

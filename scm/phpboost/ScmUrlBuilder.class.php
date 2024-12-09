@@ -186,38 +186,39 @@ class ScmUrlBuilder
     // Edit days and build days games list
 	public static function edit_days($event_id, $event_slug)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/matchdays/builder/');
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/builder/matchdays/');
 	}
     // Edit days games
 	public static function edit_days_games($event_id, $event_slug, $round = 1)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/matchdays/round/' . $round);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/matchdays/' . $round);
 	}
 
     // Groups
     // Edit groups and build group games list
 	public static function edit_groups($event_id, $event_slug)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/groups/builder/');
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/builder/groups/');
 	}
 
     // Edit groups games
 	public static function edit_groups_games($event_id, $event_slug, $round = 1)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/groups/round/' . $round);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/groups/' . $round);
 	}
 
     // Bracket
     // Edit bracket and build bracket games list
 	public static function edit_brackets($event_id, $event_slug)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/brackets/builder/');
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/builder/brackets/');
 	}
     // Edit bracket games
 	public static function edit_brackets_games($event_id, $event_slug, $round = 1)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/brackets/round/' . $round);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/brackets/' . $round);
 	}
+
     // Edit details games
 	public static function edit_details_game($event_id, $event_slug, $type, $group, $round, $order)
 	{
