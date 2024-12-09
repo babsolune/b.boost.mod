@@ -271,11 +271,11 @@ class ScmDetailsGameFormController extends DefaultModuleController
     private function get_game()
     {
         $request = AppContext::get_request();
-        $ty = $request->get_getstring('type', '');
-        $gr = $request->get_getint('group', 0);
-        $ro = $request->get_getint('round', 0);
-        $or = $request->get_getint('order', 0);
-        $game = ScmGameService::get_game($this->event_id(), $ty, $gr, $ro, $or);
+        $type = $request->get_getstring('type', '');
+        $cluster = $request->get_getint('cluster', 0);
+        $round = $request->get_getint('round', 0);
+        $order = $request->get_getint('order', 0);
+        $game = ScmGameService::get_game($this->event_id(), $type, $cluster, $round, $order);
 
         return $game;
     }
@@ -375,13 +375,13 @@ class ScmDetailsGameFormController extends DefaultModuleController
             $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
 		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
 		if ($request->get_value('type') == 'G')
-            $link = ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug(), $request->get_value('group'));
+            $link = ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug(), $request->get_value('cluster'));
         elseif ($request->get_value('type') == 'B')
-            $link = ScmUrlBuilder::edit_brackets_games($event->get_id(), $event->get_event_slug(), $request->get_value('group'));
+            $link = ScmUrlBuilder::edit_brackets_games($event->get_id(), $event->get_event_slug(), $request->get_value('cluster'));
         elseif ($request->get_value('type') == 'D')
-            $link = ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug(), $request->get_value('group'));
+            $link = ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug(), $request->get_value('cluster'));
         $breadcrumb->add($this->lang['scm.games.management'], $link);
-        $breadcrumb->add($this->lang['scm.game.event.details'], ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), $request->get_value('type'), $request->get_value('group'), $request->get_value('round'), $request->get_value('order')));
+        $breadcrumb->add($this->lang['scm.game.event.details'], ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), $request->get_value('type'), $request->get_value('cluster'), $request->get_value('round'), $request->get_value('order')));
 
 		return $response;
 	}

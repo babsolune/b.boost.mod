@@ -144,17 +144,17 @@ class ScmUrlBuilder
 	}
 
     // Days ranking
-	public static function display_days_ranking($event_id, $event_slug, $section = '', $day = '')
+	public static function display_days_ranking($event_id, $event_slug, $section = '', $cluster = '')
 	{
         $section = !empty($section) ? '/' . $section : '';
         $day = !empty($day) ? '/' . $day : '';
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/ranking/' . $section . $day);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/ranking/' . $section . $cluster);
 	}
 
     // Days calendar
-	public static function display_days_calendar($event_id, $event_slug, $day = '')
+	public static function display_days_calendar($event_id, $event_slug, $cluster = '')
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/matchday/' . $day);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/matchday/' . $cluster);
 	}
 
     // Days calendar
@@ -189,9 +189,9 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/builder/matchdays/');
 	}
     // Edit days games
-	public static function edit_days_games($event_id, $event_slug, $round = 1)
+	public static function edit_days_games($event_id, $event_slug, $cluster = 1)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/matchdays/' . $round);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/matchdays/' . $cluster);
 	}
 
     // Groups
@@ -202,9 +202,9 @@ class ScmUrlBuilder
 	}
 
     // Edit groups games
-	public static function edit_groups_games($event_id, $event_slug, $round = 1)
+	public static function edit_groups_games($event_id, $event_slug, $cluster = 1)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/groups/' . $round);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/groups/' . $cluster);
 	}
 
     // Bracket
@@ -214,15 +214,15 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/builder/brackets/');
 	}
     // Edit bracket games
-	public static function edit_brackets_games($event_id, $event_slug, $round = 1)
+	public static function edit_brackets_games($event_id, $event_slug, $cluster = 1)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/brackets/' . $round);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/brackets/' . $cluster);
 	}
 
     // Edit details games
-	public static function edit_details_game($event_id, $event_slug, $type, $group, $round, $order)
+	public static function edit_details_game($event_id, $event_slug, $type, $cluster, $round, $order)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/details/' . $type . '/' . $group . '/' . $round . '/' . $order);
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/details/' . $type . '/' . $cluster . '/' . $round . '/' . $order);
 	}
 
 ################################ Main Controllers

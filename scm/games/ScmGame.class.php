@@ -454,7 +454,7 @@ class ScmGame
 		$this->id_game             = $properties['id_game'];
 		$this->game_event_id       = $properties['game_event_id'];
 		$this->game_type           = $properties['game_type'];
-		$this->game_cluster          = $properties['game_cluster'];
+		$this->game_cluster        = $properties['game_cluster'];
 		$this->game_round          = $properties['game_round'];
 		$this->game_order          = $properties['game_order'];
 		$this->game_playground     = $properties['game_playground'];

@@ -33,7 +33,7 @@ class ScmGroupService
                 self::$db_querier->insert(ScmSetup::$scm_game_table, [
                     'game_event_id' => $event_id,
                     'game_type'     => 'G',
-                    'game_cluster'    => $day,
+                    'game_cluster'  => $day,
                     'game_round'    => 0,
                     'game_order'    => $game,
                     'game_home_id'  => 0,
