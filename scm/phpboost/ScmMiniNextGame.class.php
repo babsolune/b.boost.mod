@@ -31,7 +31,11 @@ class ScmMiniNextGame extends ModuleMiniMenu
 
 	public function is_displayed()
 	{
-		return ScmAuthorizationsService::check_authorizations()->read();
+        $config = ScmConfig::load();
+        if ($config->get_homepage() == ScmConfig::EXPLORER)
+            return !Url::is_current_url('/scm/') && ScmAuthorizationsService::check_authorizations()->read();
+        else
+            return !Url::is_current_url('/scm/explorer/') && ScmAuthorizationsService::check_authorizations()->read();
 	}
 
 	public function get_menu_content()
