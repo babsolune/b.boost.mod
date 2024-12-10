@@ -176,7 +176,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
         $fieldset_unique = new FormFieldsetHTML('unique_details', '');
         $form->add_fieldset($fieldset_unique);
 
-        if (!$this->get_game()->get_game_playground())
+        if (!$this->get_params()->get_display_playgrounds())
         {
             $fieldset_unique->add_field(new FormFieldSimpleSelectChoice('stadium', $this->lang['scm.game.event.stadium'], $this->get_game()->get_game_stadium(),
                 $this->get_stadium($this->get_game()->get_game_home_id()),
@@ -220,7 +220,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
         $game->set_game_video(new Url($this->form->get_value('video')));
         $game->set_game_summary($this->form->get_value('summary'));
 
-        if (!$game->get_game_playground())
+        if (!$this->get_params()->get_display_playgrounds())
         {
             $game->set_game_stadium($this->form->get_value('stadium')->get_raw_value());
             $game->set_game_stadium_name($this->form->get_value('stadium')->get_label());
