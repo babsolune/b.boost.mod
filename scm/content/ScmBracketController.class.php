@@ -76,8 +76,8 @@ class ScmBracketController extends DefaultModuleController
             $rounds[] = $game['game_cluster'];
         }
 
-        $rounds_count = $c_hat_ranking || $this->is_cup ? array_unique(array_reverse($rounds)) : array_unique($rounds);
-        $key_rounds_count = $c_hat_ranking || $this->is_cup ? array_keys(array_reverse($rounds_count)) : array_keys($rounds_count);
+        $rounds_count = $c_hat_ranking || $this->is_cup || $this->looser_bracket ? array_unique(array_reverse($rounds)) : array_unique($rounds);
+        $key_rounds_count = $c_hat_ranking || $this->is_cup || $this->looser_bracket ? array_keys(array_reverse($rounds_count)) : array_keys($rounds_count);
         $first_key = reset($key_rounds_count);
         $last_key = end($key_rounds_count);
 
@@ -231,8 +231,8 @@ class ScmBracketController extends DefaultModuleController
             ]);
 
             // Reverse brackets to be looser.n, looser.n-1, looser.1, winner
-            $keys = $this->is_cup ? array_reverse(array_keys($rounds)) : array_keys($rounds);
-            $values = $this->is_cup ? array_reverse(array_values($rounds)) : array_values($rounds);
+            $keys = $this->is_cup || $this->looser_bracket ? array_reverse(array_keys($rounds)) : array_keys($rounds);
+            $values = $this->is_cup || $this->looser_bracket ? array_reverse(array_values($rounds)) : array_values($rounds);
             $r_rounds = array_combine($keys, $values);
 
             // Isolate first round
