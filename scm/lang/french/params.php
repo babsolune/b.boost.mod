@@ -97,4 +97,8 @@ $lang['scm.ranking.particular.fairplay']      = 'Fairplay - particulier';
 $lang['scm.ranking.particular.tries.average'] = 'Différence d\'essais marqués/encaissés - particulier';
 
 $lang['scm.warning.params.update'] = 'Les paramètres de la compétition <strong>:event_name</strong> ont été mis à jour.';
+$lang['scm.warning.params.has.games'] = '
+    Attention! Les matchs de cette compétition ont été définis.
+    <br />Toute modification des paramètres en couleur nécessitera une réinitialisation de la liste des matchs.
+';
 ?>

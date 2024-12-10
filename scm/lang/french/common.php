@@ -251,7 +251,7 @@ $lang['scm.warning.add.teams.odd'] = '
 ';
 $lang['scm.warning.teams.has.games'] = '
     Attention! Les matchs de cette compétition ont été définis.
-    <br />Toute modification réinitialise la liste des matchs.
+    <br />Toute modification nécessitera une réinitialisation de la liste des matchs.
 ';
 
 // Configuration
