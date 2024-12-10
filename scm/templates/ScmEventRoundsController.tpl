@@ -2,31 +2,19 @@
     <article class="groups">
         <header class="article-header"><h3>{@scm.groups}</h3></header>
         <div class="content">
-            <div class="responsive-table">
-                <table class="bordered-table width-auto m-a nowrap">
-                    <thead>
-                        <tr>
-                            # START team_groups #
-                                <th class="bgc-sub"><a href="{team_groups.U_GROUP}" class="offload">{@scm.group} {team_groups.GROUP}</a></th>
-                            # END team_groups #
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            # START team_groups #
-                                <td>
-                                    # START team_groups.teams #
-                                        <div class="flex-team">
-                                            <img src="{team_groups.teams.TEAM_LOGO}" alt="{team_groups.teams.TEAM_NAME}">
-                                            <span><a href="{team_groups.teams.U_CLUB}" class="offload" aria-label="{@scm.see.club}">{team_groups.teams.TEAM_NAME}</a></span>
-                                        </div>
-                                    # END team_groups.teams #
-                                </td>
-                            # END team_groups #
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            # START team_groups #
+                <div class="flex-team">
+                    <span class="flex-team-group"><a href="{team_groups.U_GROUP}" class="offload text-strong">{@scm.group} {team_groups.GROUP}</a></span>
+                    <div class="flex-team-container">
+                        # START team_groups.teams #
+                            <span class="pinned link-color">
+                                <img src="{team_groups.teams.TEAM_LOGO}" alt="{team_groups.teams.TEAM_NAME}">
+                                <span><a href="{team_groups.teams.U_CLUB}" class="offload" aria-label="{@scm.see.club}">{team_groups.teams.TEAM_NAME}</a></span>
+                            </span>
+                        # END team_groups.teams #
+                        </div>
+                </div>
+            # END team_groups #
         </div>
     </article>
     <article class="games">

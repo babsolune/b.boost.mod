@@ -518,9 +518,23 @@ th.bgc-sub a {
 }
 
 /* Team layout */
-.flex-team {
-    display: flex;
+.flex-team,
+.flex-team-container {
+    display: inline-flex;
     align-items: center;
+    justify-self: center;
+    padding: 0.309em 0;
+}
+.flex-team-container {
+    flex-wrap: wrap;
+}
+
+.flex-team-group {
+    min-width: 80px;
+}
+
+.flex-team .pinned {
+    margin-right: 0.228em;
 }
 
 .flex-team img {

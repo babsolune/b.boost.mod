@@ -22,16 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (not_played.length > 0)
     {
         button.addEventListener('click', () => { // by clicking on button
-            if (button.hasAttribute('data-date'))
-            {
-                const parent = not_played[0].parentNode; // find parent of first of games
-                const target = parent.previousElementSibling; // find previous main date of games, the real target
-                target.scrollIntoView({behavior: 'smooth'}); // scroll to target
-            }
-            else
-            {
-                not_played[0].scrollIntoView({behavior: 'smooth'}); // scroll to target
-            }
+            const parent = not_played[0].parentNode; // find parent of first of games
+            const target = parent.previousElementSibling; // find previous main date of games, the real target
+            target.scrollIntoView({behavior: 'smooth'}); // scroll to target
         });
     }
     else
