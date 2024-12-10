@@ -12,7 +12,7 @@
 ####################################################
 
 $lang['scm.module.title'] = 'Compétitions';
-$lang['scm.mini.prev']    = 'Derniers matchs';
+$lang['scm.mini.prev']    = 'Matchs précédents';
 $lang['scm.mini.next']    = 'Prochains matchs';
 $lang['scm.mini.live']    = 'Matchs en cours';
 
@@ -23,21 +23,21 @@ $lang['scm.event.ended.event'] = 'Compétition terminée';
 $lang['scm.source.clue']       = 'Liens vers les sites officiels de la compétition';
 $lang['scm.not.specified']     = 'Non renseigné';
 
-$lang['scm.event.scoring.type']     = 'Type de score';
-$lang['scm.event.scoring.goals']    = 'Buts';
-$lang['scm.event.scoring.tries']    = 'Essais';
-$lang['scm.event.scoring.points']   = 'Points';
-$lang['scm.event.scoring.sets']     = 'Sets';
-$lang['scm.event.is.master']        = 'Est une compétition maître';
-$lang['scm.event.is.sub']           = 'Est une sous-compétition';
-$lang['scm.event.master.id']        = 'Compétition maître';
-$lang['scm.event.sub.order']        = 'Ordre dans la compétition maître';
+$lang['scm.event.scoring.type']   = 'Type de score';
+$lang['scm.event.scoring.goals']  = 'Buts';
+$lang['scm.event.scoring.tries']  = 'Essais';
+$lang['scm.event.scoring.points'] = 'Points';
+$lang['scm.event.scoring.sets']   = 'Sets';
+$lang['scm.event.is.master']      = 'Est une compétition maître';
+$lang['scm.event.is.sub']         = 'Est une sous-compétition';
+$lang['scm.event.master.id']      = 'Compétition maître';
+$lang['scm.event.sub.order']      = 'Ordre dans la compétition maître';
 
 // Titles
-$lang['items'] = 'compétitions';
-$lang['item']  = 'compétition';
-$lang['an.item']  = 'une compétition';
-$lang['the.item']  = 'la compétition';
+$lang['items']                = 'compétitions';
+$lang['item']                 = 'compétition';
+$lang['an.item']              = 'une compétition';
+$lang['the.item']             = 'la compétition';
 $lang['scm.category.history'] = 'Voir l\'historique des compétitions de cette catégorie';
 $lang['scm.last.items']       = 'Récentes compétitions';
 $lang['scm.add.event']        = 'Ajouter une compétition';
@@ -47,33 +47,33 @@ $lang['scm.filter.events']     = 'Filtrer les compétitions';
 $lang['scm.events.management'] = 'Gestion des compétitions';
 $lang['scm.change.event']      = 'Changer de compétition';
 
-// Game events
-$lang['scm.game.form.date']           = 'Date/horaire du match';
-$lang['scm.game.form.home.team']           = 'Équipe des locaux';
-$lang['scm.game.form.home.score']           = 'Score des locaux';
-$lang['scm.game.form.away.team']           = 'Équipe des visiteurs';
-$lang['scm.game.form.away.score']           = 'Score des visiteurs';
+// Game form
+$lang['scm.game.form.date']             = 'Date/horaire du match';
+$lang['scm.game.form.home.team']        = 'Équipe des locaux';
+$lang['scm.game.form.home.score']       = 'Score des locaux';
+$lang['scm.game.form.away.team']        = 'Équipe des visiteurs';
+$lang['scm.game.form.away.score']       = 'Score des visiteurs';
 $lang['scm.game.form.status']           = 'Statut du match';
 $lang['scm.game.form.status.completed'] = 'Terminé';
 $lang['scm.game.form.status.delayed']   = 'Reporté';
 $lang['scm.game.form.status.stopped']   = 'Arrêté';
-$lang['scm.game.event.details']          = 'Détails du match';
-$lang['scm.game.event.player']           = 'Joueur';
-$lang['scm.game.event.minute']           = 'Minute';
-$lang['scm.game.event.bonus']            = 'Bonus';
-$lang['scm.game.event.bonus.off']        = 'Bonus offensif';
-$lang['scm.game.event.bonus.def']        = 'Bonus défensif';
-$lang['scm.game.event.goals']            = 'Buts';
-$lang['scm.game.event.cards.yellow']     = 'Cartons jaunes';
-$lang['scm.game.event.cards.red']        = 'Cartons rouges';
-$lang['scm.game.event.penalties']        = 'Tirs au but';
-$lang['scm.game.event.forfeit']          = 'Forfait';
-$lang['scm.game.event.stadium']          = 'Adresse du match';
-$lang['scm.game.event.video']            = 'Vidéo du match';
-$lang['scm.game.event.summary']          = 'Résumé du match';
-$lang['scm.game.event.empty.field']      = 'Texte de remplacement';
-
-$lang['scm.warning.details.update'] = 'Les détails du match ont été mis à jour.';
+// Game details
+$lang['scm.game.event.details']      = 'Détails du match';
+$lang['scm.game.event.player']       = 'Joueur';
+$lang['scm.game.event.minute']       = 'Minute';
+$lang['scm.game.event.bonus']        = 'Bonus';
+$lang['scm.game.event.bonus.off']    = 'Bonus offensif';
+$lang['scm.game.event.bonus.def']    = 'Bonus défensif';
+$lang['scm.game.event.goals']        = 'Buts';
+$lang['scm.game.event.cards.white']  = 'Cartons blancs';
+$lang['scm.game.event.cards.yellow'] = 'Cartons jaunes';
+$lang['scm.game.event.cards.red']    = 'Cartons rouges';
+$lang['scm.game.event.penalties']    = 'Tirs au but';
+$lang['scm.game.event.forfeit']      = 'Forfait';
+$lang['scm.game.event.stadium']      = 'Adresse du match';
+$lang['scm.game.event.video']        = 'Vidéo du match';
+$lang['scm.game.event.summary']      = 'Résumé du match';
+$lang['scm.game.event.empty.field']  = 'Texte de remplacement';
 
 // Front titles
 $lang['scm.infos']  = 'Informations générales';
@@ -135,11 +135,6 @@ $lang['scm.bracket.winner']      = 'gagnant';
 $lang['scm.bracket.from.groups'] = 'des groupes';
 $lang['scm.bracket.hour.tag']    = 'H';
 
-$lang['scm.warning.current.season']    = 'Seules les compétitions de la saison en cours sont affichées.';
-$lang['scm.warning.bracket.update'] = 'Les matchs ont été générés.';
-$lang['scm.warning.group.update']   = 'Les groupes de la compétition ont été mis à jour et les matchs ont été générés.';
-$lang['scm.warning.has.games']      = 'Les matchs de cette compétition ont été définis. Pour toute modification, si des résultats ont déjà été renseignés, ils seront supprimés.';
-
 // Tables
 $lang['scm.th.playground'] = 'Terrain';
 $lang['scm.th.date']       = 'Date';
@@ -153,31 +148,31 @@ $lang['scm.th.details']    = 'Détails du match';
 $lang['scm.watch.video']   = 'Voir la vidéo';
 $lang['scm.is.live']       = 'En Direct';
 
-$lang['scm.th.rank']                  = 'Place';
-$lang['scm.th.rank.short']            = 'Pl';
-$lang['scm.th.points']                = 'Points';
-$lang['scm.th.points.short']          = 'Pts';
-$lang['scm.th.played']                = 'Joués';
-$lang['scm.th.played.short']          = 'J';
-$lang['scm.th.day']                   = 'Journée';
-$lang['scm.th.day.short']             = 'J';
-$lang['scm.th.win']                   = 'Gagnés';
-$lang['scm.th.win.short']             = 'G';
-$lang['scm.th.draw']                  = 'Nuls';
-$lang['scm.th.draw.short']            = 'N';
-$lang['scm.th.loss']                  = 'Perdus';
-$lang['scm.th.loss.short']            = 'P';
-$lang['scm.th.goals.for']             = 'Buts pour';
-$lang['scm.th.goals.for.short']       = 'B+';
-$lang['scm.th.goals.against']         = 'Buts contre';
-$lang['scm.th.goals.against.short']   = 'B-';
-$lang['scm.th.goal.average']          = 'Goal average';
-$lang['scm.th.goal.average.short']    = '+/-';
-$lang['scm.th.bonus']                 = 'Bonus';
-$lang['scm.th.off.bonus']             = 'Bonus offensif';
-$lang['scm.th.off.bonus.short']       = 'Bo';
-$lang['scm.th.def.bonus']             = 'Bonus défensif';
-$lang['scm.th.def.bonus.short']       = 'Bd';
+$lang['scm.th.rank']                = 'Place';
+$lang['scm.th.rank.short']          = 'Pl';
+$lang['scm.th.points']              = 'Points';
+$lang['scm.th.points.short']        = 'Pts';
+$lang['scm.th.played']              = 'Joués';
+$lang['scm.th.played.short']        = 'J';
+$lang['scm.th.day']                 = 'Journée';
+$lang['scm.th.day.short']           = 'J';
+$lang['scm.th.win']                 = 'Gagnés';
+$lang['scm.th.win.short']           = 'G';
+$lang['scm.th.draw']                = 'Nuls';
+$lang['scm.th.draw.short']          = 'N';
+$lang['scm.th.loss']                = 'Perdus';
+$lang['scm.th.loss.short']          = 'P';
+$lang['scm.th.goals.for']           = 'Buts pour';
+$lang['scm.th.goals.for.short']     = 'B+';
+$lang['scm.th.goals.against']       = 'Buts contre';
+$lang['scm.th.goals.against.short'] = 'B-';
+$lang['scm.th.goal.average']        = 'Goal average';
+$lang['scm.th.goal.average.short']  = '+/-';
+$lang['scm.th.bonus']               = 'Bonus';
+$lang['scm.th.off.bonus']           = 'Bonus offensif';
+$lang['scm.th.off.bonus.short']     = 'Bo';
+$lang['scm.th.def.bonus']           = 'Bonus défensif';
+$lang['scm.th.def.bonus.short']     = 'Bd';
 
 $lang['scm.th.group']       = 'Groupe';
 $lang['scm.th.group.short'] = 'G';
@@ -195,8 +190,6 @@ $lang['scm.around.games']         = 'Prochains/précédents matchs';
 $lang['scm.no.current.games']     = 'Aucun match en cours';
 $lang['scm.next.games']           = 'Prochains matchs';
 $lang['scm.game.late']            = 'Match en retard';
-
-$lang['scm.warning.games.update'] = 'Les matchs de la compétition ont été mis à jour.';
 
 // Divisions
 $lang['scm.division']          = 'Division';
@@ -284,7 +277,13 @@ $lang['scm.manage.seasons.auth']   = 'Autorisation de gérer les saisons';
 $lang['scm.manage.events.auth']    = 'Autorisation de gérer les compétitions';
 
 // SEO
-$lang['scm.seo.description.root']    = 'Toutes les compétitions du site :site.';
+$lang['scm.seo.description.root']   = 'Toutes les compétitions de la saison en cours du site :site.';
+$lang['scm.seo.description.categories'] = 'Toutes les catégories des compétitions du site :site.';
+$lang['scm.seo.description.explorer'] = 'Tous les récents matchs du site :site.';
+$lang['scm.seo.description.running.events'] = 'Toutes les récentes compétitions du site :site.';
+$lang['scm.seo.description.clubs'] = 'Tous les clubs du site :site.';
+$lang['scm.seo.description.club'] = 'Toutes les informations du club :club.';
+$lang['scm.seo.description.event.home'] = 'Toutes les informations de la compétition :event.';
 
 // Hooks
 $lang['scm.specific_hook.event_add']    = 'Ajout d\'une compétition';
@@ -295,8 +294,15 @@ $lang['scm.specific_hook.build_groups'] = 'Création des groupes';
 $lang['scm.specific_hook.build_days']   = 'Création des journées';
 $lang['scm.specific_hook.games_edit']   = 'Modification des matchs';
 
-// Messages helper
-$lang['scm.message.no.games']       = 'Aucun matchs pour l\'instant';
+// Message helpers
+$lang['scm.message.no.games']       = 'Aucun match pour l\'instant';
+$lang['scm.warning.current.season'] = 'Seules les compétitions de la saison en cours sont affichées.';
+$lang['scm.warning.bracket.update'] = 'Les matchs ont été générés.';
+$lang['scm.warning.group.update']   = 'Les groupes de la compétition ont été mis à jour et les matchs ont été générés.';
+$lang['scm.warning.has.games']      = 'Les matchs de cette compétition ont été définis. Pour toute modification, si des résultats ont déjà été renseignés, ils seront supprimés.';
+$lang['scm.warning.details.update'] = 'Les détails du match ont été mis à jour.';
+$lang['scm.warning.games.update']   = 'Les matchs de la compétition ont été mis à jour.';
+
 $lang['scm.message.success.add']    = 'La compétition <b>:title</b> a été ajoutée';
 $lang['scm.message.success.edit']   = 'La compétition <b>:title</b> a été modifiée';
 $lang['scm.message.success.delete'] = 'La compétition <b>:title</b> a été supprimée';

@@ -167,8 +167,9 @@ class ScmEventHomeController extends DefaultModuleController
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-		$graphical_environment->set_page_title($event->get_event_name(), ($category->get_id() != Category::ROOT_CATEGORY ? $category->get_name() . ' - ' : '') . $this->lang['scm.module.title']);
-		$graphical_environment->get_seo_meta_data()->set_description('');
+        $graphical_environment->set_page_title($event->get_event_name(), ($category->get_id() != Category::ROOT_CATEGORY ? $category->get_name() . ' - ' : '') . $this->lang['scm.module.title']);
+        $description = StringVars::replace_vars($this->lang['scm.seo.description.event.home'], ['event' => $event->get_event_name()]);
+        $graphical_environment->get_seo_meta_data()->set_description($description);
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();

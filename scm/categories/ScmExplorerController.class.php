@@ -217,8 +217,8 @@ class ScmExplorerController extends DefaultModuleController
 
 		$graphical_environment = $response->get_graphical_environment();
         $graphical_environment->set_page_title($this->lang['scm.module.title']);
-		// $description = StringVars::replace_vars($this->lang['scm.seo.description.root'], ['site' => GeneralConfig::load()->get_site_name()]);
-		// $graphical_environment->get_seo_meta_data()->set_description($description);
+		$description = StringVars::replace_vars($this->lang['scm.seo.description.explorer'], ['site' => GeneralConfig::load()->get_site_name()]);
+		$graphical_environment->get_seo_meta_data()->set_description($description);
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name()));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
