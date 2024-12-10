@@ -272,6 +272,9 @@ th.bgc-sub a {
     }
 }
 
+.grouped-fields {
+    position: relative;
+}
 .grouped-fields .game-playground,
 .grouped-fields .game-score {
     text-align: center;
@@ -324,7 +327,9 @@ th.bgc-sub a {
     text-align: right;
 }
 .grouped-fields .form-field-action-link a {
-    display: inline-block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     text-align: right;
 }
 
