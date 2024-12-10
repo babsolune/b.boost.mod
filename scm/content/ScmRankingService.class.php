@@ -395,43 +395,51 @@ class ScmRankingService
             $a_fairplay = $b_fairplay = [];
             if (($a['team_id'] == $game['game_home_id'] && $b['team_id'] == $game['game_away_id']))
             {
-                foreach(TextHelper::deserialize($game['game_home_yellow']) as $yellow)
-                {
-                    $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
-                }
-                foreach(TextHelper::deserialize($game['game_home_red']) as $red)
-                {
-                    $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
-                }
-                foreach(TextHelper::deserialize($game['game_away_yellow']) as $yellow)
-                {
-                    $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
-                }
-                foreach(TextHelper::deserialize($game['game_away_red']) as $red)
-                {
-                    $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
-                }
+                if(TextHelper::deserialize($game['game_home_yellow']))
+                    foreach(TextHelper::deserialize($game['game_home_yellow']) as $yellow)
+                    {
+                        $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
+                    }
+                if(TextHelper::deserialize($game['game_home_red']))
+                    foreach(TextHelper::deserialize($game['game_home_red']) as $red)
+                    {
+                        $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
+                    }
+                if(TextHelper::deserialize($game['game_away_yellow']))
+                    foreach(TextHelper::deserialize($game['game_away_yellow']) as $yellow)
+                    {
+                        $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
+                    }
+                if(TextHelper::deserialize($game['game_away_red']))
+                    foreach(TextHelper::deserialize($game['game_away_red']) as $red)
+                    {
+                        $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
+                    }
                 $a['fairplay_prtl'] += array_sum($a_fairplay);
                 $b['fairplay_prtl'] += array_sum($b_fairplay);
             }
             if ($b['team_id'] == $game['game_home_id'] && $a['team_id'] == $game['game_away_id'])
             {
-                foreach(TextHelper::deserialize($game['game_home_yellow']) as $yellow)
-                {
-                    $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
-                }
-                foreach(TextHelper::deserialize($game['game_home_red']) as $red)
-                {
-                    $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
-                }
-                foreach(TextHelper::deserialize($game['game_away_yellow']) as $yellow)
-                {
-                    $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
-                }
-                foreach(TextHelper::deserialize($game['game_away_red']) as $red)
-                {
-                    $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
-                }
+                if(TextHelper::deserialize($game['game_home_yellow']))
+                    foreach(TextHelper::deserialize($game['game_home_yellow']) as $yellow)
+                    {
+                        $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
+                    }
+                if(TextHelper::deserialize($game['game_home_red']))
+                    foreach(TextHelper::deserialize($game['game_home_red']) as $red)
+                    {
+                        $b_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
+                    }
+                if(TextHelper::deserialize($game['game_away_yellow']))
+                    foreach(TextHelper::deserialize($game['game_away_yellow']) as $yellow)
+                    {
+                        $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_yellow();
+                    }
+                if(TextHelper::deserialize($game['game_away_red']))
+                    foreach(TextHelper::deserialize($game['game_away_red']) as $red)
+                    {
+                        $a_fairplay[] = ScmParamsService::get_params($game['game_event_id'])->get_fairplay_red();
+                    }
                 $a['fairplay_prtl'] += array_sum($a_fairplay);
                 $b['fairplay_prtl'] += array_sum($b_fairplay);
             }
