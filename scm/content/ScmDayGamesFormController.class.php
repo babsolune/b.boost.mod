@@ -134,16 +134,18 @@ class ScmDayGamesFormController extends DefaultModuleController
         {
             $item = new ScmGame();
             $item->set_properties($game);
+            $round = $item->get_game_round();
             $order = $item->get_game_order();
+            $field = $cluster . $round . $order;
             $item->set_game_event_id($this->event_id());
-            $item->set_game_date($this->form->get_value('game_date_' . $cluster . $order));
+            $item->set_game_date($this->form->get_value('game_date_' . $field));
             if($this->get_params()->get_display_playgrounds())
-                $item->set_game_playground($this->form->get_value('game_playground_' . $cluster . $order));
-            $item->set_game_home_id((int)$this->form->get_value('home_team_' . $cluster . $order)->get_raw_value());
-            $item->set_game_home_score($this->form->get_value('home_score_' . $cluster . $order));
-            $item->set_game_away_score($this->form->get_value('away_score_' . $cluster . $order));
-            $item->set_game_away_id((int)$this->form->get_value('away_team_' . $cluster . $order)->get_raw_value());
-            $item->set_game_status($this->form->get_value('status_' . $cluster . $order)->get_raw_value());
+                $item->set_game_playground($this->form->get_value('game_playground_' . $field));
+            $item->set_game_home_id((int)$this->form->get_value('home_team_' . $field)->get_raw_value());
+            $item->set_game_home_score($this->form->get_value('home_score_' . $field));
+            $item->set_game_away_score($this->form->get_value('away_score_' . $field));
+            $item->set_game_away_id((int)$this->form->get_value('away_team_' . $field)->get_raw_value());
+            $item->set_game_status($this->form->get_value('status_' . $field)->get_raw_value());
 
             ScmGameService::update_game($item, $item->get_id_game());
             $games[] = $item->get_game_home_score();

@@ -508,14 +508,14 @@ class ScmGame
         $category = $event->get_category();
 
         switch ($this->get_game_status()) {
-            case ScmGame::DELAYED :
-                $status = $lang['scm.game.event.status.delayed'];
+            case ScmGame::COMPLETED :
+                $status = $lang['scm.game.form.status.completed'];
                 break;
             case ScmGame::DELAYED :
-                $status = $lang['scm.game.event.status.delayed'];
+                $status = $lang['scm.game.form.status.delayed'];
                 break;
             case ScmGame::STOPPED :
-                $status = $lang['scm.game.event.status.stopped'];
+                $status = $lang['scm.game.form.status.stopped'];
                 break;
             case '' :
                 $status = '';
@@ -532,7 +532,7 @@ class ScmGame
                 'GAME_CATEGORY'   => $category->get_name(),
 
                 'C_IS_LIVE'       => ScmGameService::is_live($this->game_event_id, $this->id_game),
-                'C_STATUS'        => $this->game_status,
+                'C_STATUS'        => $this->game_status && $this->game_status != ScmGame::COMPLETED,
                 'C_HAS_SCORE'     => $c_home_score && $c_away_score,
                 'C_HAS_DETAILS'   => $c_home_score || $c_away_score || $address,
                 'C_HAS_HOME_LOGO' => $this->game_home_id && ScmTeamService::get_team_logo($this->game_home_id) !== '#',

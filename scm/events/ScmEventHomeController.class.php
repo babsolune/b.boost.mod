@@ -27,9 +27,7 @@ class ScmEventHomeController extends DefaultModuleController
 
 	private function build_view()
 	{
-		$event           = $this->get_event();
-        $teams_number    = ScmTeamService::get_teams_number($this->event_id());
-        $teams_per_group = ScmParamsService::get_params($this->event_id())->get_teams_per_group();
+		$event = $this->get_event();
 
         $c_has_games    = ScmGameService::has_games($this->event_id());
         $c_championship = $c_has_games && ScmEventService::get_event_type($this->event_id()) == ScmDivision::CHAMPIONSHIP;

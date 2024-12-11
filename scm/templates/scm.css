@@ -518,11 +518,13 @@ th.bgc-sub a {
 }
 
 /* Team layout */
-.flex-team,
+.flex-team {
+    display: flex;
+    align-items: center;
+}
 .flex-team-container {
     display: inline-flex;
     align-items: center;
-    justify-self: center;
     padding: 0.309em 0;
 }
 .flex-team-container {
