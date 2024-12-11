@@ -73,6 +73,7 @@
                                     # START categories.events #
                                         # IF categories.events.C_VISIBLE #
                                             <li>
+                                                {categories.events.CLUB_NAME} : 
                                                 # IF categories.events.C_IS_SUB #
                                                     <span><a href="{categories.events.U_MASTER_EVENT}" class="offload">{categories.events.MASTER_DIVISION} {categories.events.MASTER_SEASON}</a> - </span>
                                                 # ENDIF #

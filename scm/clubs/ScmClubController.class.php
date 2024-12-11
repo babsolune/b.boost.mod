@@ -98,7 +98,11 @@ class ScmClubController extends DefaultModuleController
                     {
                         $event = new ScmEvent();
                         $event->set_properties($event_cache->get_event($team['team_event_id']));
-                        $this->view->assign_block_vars('categories.events', $event->get_template_vars());
+                        $this->view->assign_block_vars('categories.events', array_merge($event->get_template_vars(),
+                            [
+                                'CLUB_NAME' => ScmClubCache::load()->get_club_name($team['team_club_id'])
+                            ]
+                        ));
                     }
                 }
             }
@@ -143,7 +147,7 @@ class ScmClubController extends DefaultModuleController
 
 		$graphical_environment = $response->get_graphical_environment();
 		$graphical_environment->set_page_title($cache->get_club_full_name($club->get_id_club()), $this->lang['scm.module.title']);
-        $description = StringVars::replace_vars($this->lang['scm.seo.description.club'], ['club' => $cache->get_club_full_name($club->get_id_club()]);
+        $description = StringVars::replace_vars($this->lang['scm.seo.description.club'], ['club' => $cache->get_club_full_name($club->get_id_club())]);
         $graphical_environment->get_seo_meta_data()->set_description($description);
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
