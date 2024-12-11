@@ -51,37 +51,47 @@ class ScmMiniNextGame extends ModuleMiniMenu
 
 		$now = new Date();
 
-        $cache = ScmGameCache::load();
-        $next_events = $next_matchdays = $event_games = [];
+        $next_events_games = $next_events = $next_games = [];
 
-        $next_matchdays = array_filter($cache->get_games(), function($game) use ($now) {
-            return $game['game_date'] > $now->get_timestamp();
-        });
+        $running_events = ScmEventService::get_running_events_id();
+        $events_id = implode(', ', $running_events);
 
-        foreach ($next_matchdays as $game)
+        $results = PersistenceContext::get_querier()->select('SELECT games.*, params.*
+            FROM ' . ScmSetup::$scm_game_table . ' games
+            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = games.game_event_id
+            WHERE games.game_date > :now
+            AND (games.game_home_id = params.favorite_team_id OR games.game_away_id = params.favorite_team_id)
+            AND games.game_event_id IN (' . $events_id . ')
+            ORDER BY games.game_date', [
+                'now' => $now->get_timestamp()
+            ]
+        );
+
+        while ($row = $results->fetch())
         {
-            $event_id = $game['game_event_id'];
-            $favorite_team = ScmParamsService::get_params($event_id)->get_favorite_team_id();
-            if ($favorite_team && ($game['game_home_id'] == $favorite_team || $game['game_away_id'] == $favorite_team))
-                $event_games[$event_id][] = $game;
+            $next_games[] = $row;
+        }
+        foreach ($next_games as $game)
+        {
+            $next_events[$game['game_event_id']][] = $game;
         }
 
-        foreach ($event_games as $games) {
+        foreach ($next_events as $games) {
             usort($games, function($a, $b) {
                 return $a['game_date'] - $b['game_date'];
             });
-            $next_events[] = $games[0];
+            $next_events_games[] = $games[0];
         }
 
         $view->put_all([
-			'C_ITEMS' => count($next_events) > 0
+			'C_ITEMS' => count($next_events_games) > 0
 		]);
 
-        usort($next_events, function($a,$b) {
+        usort($next_events_games, function($a,$b) {
             return $a['game_date'] - $b['game_date'];
         });
 
-		foreach ($next_events as $game)
+		foreach ($next_events_games as $game)
 		{
 			$item = new ScmGame();
 			$item->set_properties($game);

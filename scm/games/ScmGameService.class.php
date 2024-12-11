@@ -190,11 +190,13 @@ class ScmGameService
     // Check current games
     public static function get_current_games():array
 	{
+        $running_events = ScmEventService::get_running_events_id();
+        $events_id = implode(', ', $running_events);
         $now = new Date();
-        $games = self::$db_querier->select('SELECT games.*, params.*
+        $games = self::$db_querier->select('SELECT games.*
             FROM ' . ScmSetup::$scm_game_table . ' games
-            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = games.game_event_id
             WHERE games.game_date < :now
+            AND games.game_event_id IN (' . $events_id . ')
             ORDER BY games.game_date', [
                 'now' => $now->get_timestamp()
             ]

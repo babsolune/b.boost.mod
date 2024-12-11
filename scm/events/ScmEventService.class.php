@@ -97,16 +97,13 @@ class ScmEventService
 		return $event;
 	}
 
-    public static function get_event_slug($event_id) : string 
+    public static function get_event_slug(int $event_id):string 
     {
         $event = self::get_event($event_id);
         return $event->get_event_slug();
     }
-    
-	/**
-	 * Return the event with all its properties from its id.
-	 * @param int $id Item identifier
-	 */
+
+	/** Return all events. */
 	public static function get_events()
 	{
 		$results = self::$db_querier->select('SELECT event.*
@@ -115,23 +112,34 @@ class ScmEventService
 		return $results;
 	}
 
-	/**
-	 * Return the event with all its properties from its id.
-	 * @param int $id Item identifier
-	 */
-	public static function get_params(int $id)
+	/** Return all current events. */
+	public static function get_running_events():array
 	{
-		$row = self::$db_querier->select_single_row_query('SELECT params.*, event.*
-            FROM ' . ScmSetup::$scm_params_table . ' params
-            LEFT JOIN ' . ScmSetup::$scm_event_table . ' event ON event.id = params.params_event_id
-            WHERE params.params_event_id = :id', [
-                'id' => $id
-            ]
-        );
+        $now = new Date();
+        $running_events = [];
+		$results = self::$db_querier->select('SELECT event.*
+            FROM ' . ScmSetup::$scm_event_table . ' event
+            WHERE event.start_date < :now AND event.end_date > :now', [
+            'now' => $now->get_timestamp()
+        ]);
+        while($row = $results->fetch())
+        {
+            $running_events[] = $row;
+        }
 
-		$params = new ScmParams();
-		$params->set_properties($row);
-		return $params;
+		return $running_events;
+	}
+
+	/** Return all current events. */
+	public static function get_running_events_id():array
+	{
+        $running_events_id = [];
+		foreach (self::get_running_events() as $event)
+        {
+            $running_events_id[] = $event['id'];
+        }
+
+		return $running_events_id;
 	}
 
     public static function get_event_type(int $event_id)
