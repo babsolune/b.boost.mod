@@ -40,7 +40,7 @@ class ScmSetup extends DefaultModuleSetup
 	{
 		$this->drop_tables();
 		$this->create_tables();
-		$this->insert_data();
+		// $this->insert_data();
 	}
 
 	public function uninstall()
