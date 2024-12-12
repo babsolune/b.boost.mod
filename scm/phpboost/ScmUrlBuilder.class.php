@@ -158,9 +158,21 @@ class ScmUrlBuilder
 	}
 
     // Days calendar
+	public static function display_days_calendar_full($event_id, $event_slug)
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/full/');
+	}
+
+    // Days calendar
 	public static function days_checker($event_id, $event_slug)
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/checker/');
+	}
+
+    // Days calendar
+	public static function days_delayed($event_id, $event_slug)
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/delayed/');
 	}
 
     // Team calendar

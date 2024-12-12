@@ -70,6 +70,7 @@ $lang['scm.game.event.cards.yellow'] = 'Cartons jaunes';
 $lang['scm.game.event.cards.red']    = 'Cartons rouges';
 $lang['scm.game.event.penalties']    = 'Tirs au but';
 $lang['scm.game.event.forfeit']      = 'Forfait';
+$lang['scm.game.event.general.forfeit'] = 'Forfait général';
 $lang['scm.game.event.stadium']      = 'Adresse du match';
 $lang['scm.game.event.video']        = 'Vidéo du match';
 $lang['scm.game.event.summary']      = 'Résumé du match';
@@ -78,6 +79,7 @@ $lang['scm.game.event.empty.field']  = 'Texte de remplacement';
 // Front titles
 $lang['scm.infos']  = 'Informations générales';
 $lang['scm.calendar']  = 'Calendrier';
+$lang['scm.calendar.full']  = 'Calendrier complet';
 $lang['scm.calendar.rounds']  = 'Calendrier des phases de groupes';
 $lang['scm.calendar.brackets']  = 'Calendrier des phases finales';
 
@@ -98,6 +100,7 @@ $lang['scm.days.date']  = 'Date des journées';
 $lang['scm.prev.day']  = 'Journée précédente';
 $lang['scm.next.day']  = 'Journée suivante';
 $lang['scm.check.days']  = 'Vérifier la cohérence du calendrier';
+$lang['scm.delayed.days']  = 'Matchs reportés';
 $lang['scm.duplicate.matches']  = 'Doublons';
 $lang['scm.matches'] = 'Matchs';
 $lang['scm.matchdays.missing']  = 'Journées manquantes';
