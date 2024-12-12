@@ -15,13 +15,27 @@
                     </tr>
                     # IF items.C_LATE #<tr><td class="bgc-sub smaller text-italic" colspan="3">{@scm.game.late}</td></tr># ENDIF #
                     <tr class="category-{items.CATEGORY_ID}# IF items.C_EXEMPT # bgc notice# ENDIF #">
-                        <td class="align-right# IF items.C_HOME_EXEMPT # small text-italic# ENDIF #"><a href="{items.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF items.C_HOME_FAV # text-strong# ENDIF ## IF items.HOME_FORFEIT # warning# ENDIF #">{items.HOME_TEAM}</a></td>
+                        <td class="align-right# IF items.C_HOME_EXEMPT # small text-italic# ENDIF #">
+                            <a
+                                href="{items.U_HOME_CALENDAR}"
+                                aria-label="{@scm.see.club.calendar}# IF items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                class="offload# IF items.C_HOME_FAV # text-strong# ENDIF ## IF items.HOME_FORFEIT # warning# ENDIF ## IF items.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                {items.HOME_TEAM}
+                            </a>
+                        </td>
                         # IF items.C_STATUS #
                             <td class="width-px-70 small text-italic warning">{items.STATUS}</td>
                         # ELSE #
                             <td class="width-px-70"># IF items.C_HAS_SCORE #{items.HOME_SCORE} - {items.AWAY_SCORE}# ENDIF #</td>
                         # ENDIF #
-                        <td class="align-left# IF items.C_AWAY_EXEMPT # small text-italic# ENDIF #"><a href="{items.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF items.C_AWAY_FAV # text-strong# ENDIF ## IF items.AWAY_FORFEIT # warning# ENDIF #">{items.AWAY_TEAM}</a></td>
+                        <td class="align-left# IF items.C_AWAY_EXEMPT # small text-italic# ENDIF #">
+                            <a
+                                href="{items.U_AWAY_CALENDAR}"
+                                aria-label="{@scm.see.club.calendar}# IF items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                class="offload# IF items.C_AWAY_FAV # text-strong# ENDIF ## IF items.AWAY_FORFEIT # warning# ENDIF ## IF items.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                {items.AWAY_TEAM}
+                            </a>
+                        </td>
                     </tr>
                 # END items #
             </tbody>

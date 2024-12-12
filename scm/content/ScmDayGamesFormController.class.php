@@ -57,6 +57,7 @@ class ScmDayGamesFormController extends DefaultModuleController
             $item = new ScmGame();
             $item->set_properties($game);
 
+            $round = $item->get_game_round();
             $order = $item->get_game_order();
             $bonus = $this->get_params()->get_bonus() &&
                 ($item->get_game_home_off_bonus() ||
@@ -70,7 +71,7 @@ class ScmDayGamesFormController extends DefaultModuleController
             // ScmGameFormService::get_details_field_list($form, self::class, $this->event_id(), $item, 'D', $cluster, 0, $order, $this->lang);
             // ScmGameFormService::get_field_list($form, self::class, $this->event_id(), $item, 'D', $cluster, 0, $order, $this->lang);
 
-            $field = $cluster . '0' . $order;
+            $field = $cluster . $round . $order;
 
             $fieldset = new FormFieldsetHTML('game_' . $field, '');
             $fieldset->set_css_class('grouped-fields matchdays-game');
