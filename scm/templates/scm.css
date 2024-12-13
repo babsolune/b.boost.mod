@@ -130,6 +130,16 @@ th.bgc-sub a {
     width: 100%;
 }
 
+.checkbox-counter {
+    background-color: var(--moderator-tone);
+    color: var(--txt-alt);
+    padding: 0.309em;
+    position: fixed;
+    right: 0.618em;
+    bottom: 0.618em;
+    z-index: 2;
+}
+
 .label-top > label {
     position: absolute;
     bottom: calc(100% - 1px);

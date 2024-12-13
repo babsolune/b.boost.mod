@@ -43,7 +43,7 @@
     </div>
 # ELSE #
 	<div class="cell-alert">
-		<div class="message-helper bgc notice">{@common.no.item.now}</div>
+		<div class="message-helper bgc notice">{@scm.message.no.games}</div>
 	</div>
 # ENDIF #
 
