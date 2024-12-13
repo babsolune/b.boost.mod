@@ -19,7 +19,7 @@ class ScmUrlBuilder
 ################################ Categories
 	public static function display_category($id, $rewrited_name, $page = 1, $subcategories_page = 1)
 	{
-		$category = $id > 0 ? $id . '-' . $rewrited_name . '/' : '';
+        $category = $id . '-' . $rewrited_name . '/';
 		$page = $page !== 1 || $subcategories_page !== 1 ? $page . '/' : '';
 		$subcategories_page = $subcategories_page !== 1 ? $subcategories_page . '/' : '';
 		return DispatchManager::get_url(self::$dispatcher, '/' . $category . $page . $subcategories_page);
@@ -248,9 +248,9 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/event_list/');
 	}
 
-	public static function display_explorer()
+	public static function display_game_list()
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/explorer/');
+		return DispatchManager::get_url(self::$dispatcher, '/game_list/');
 	}
 
 	public static function home()

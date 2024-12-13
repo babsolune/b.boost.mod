@@ -20,7 +20,7 @@ class ScmConfig extends AbstractConfigData
 
     const HOMEPAGE   = 'homepage';
     const EVENT_LIST = 'event_list';
-    const EXPLORER   = 'explorer';
+    const GAME_LIST   = 'game_list';
 	const CATEGORIES = 'categories';
 
 	const DEFERRED_OPERATIONS = 'deferred_operations';
@@ -143,7 +143,7 @@ class ScmConfig extends AbstractConfigData
 	public function get_default_values()
 	{
 		return [
-            self::HOMEPAGE              => self::EXPLORER,
+            self::HOMEPAGE              => self::GAME_LIST,
 			self::LEFT_COLUMN_DISABLED  => false,
 			self::RIGHT_COLUMN_DISABLED => false,
 			self::PROMOTION_COLOR       => '#baffb0',

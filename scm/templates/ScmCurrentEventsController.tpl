@@ -1,20 +1,16 @@
 <section id="module-scm" class="several-items">
-	<header class="section-header">
-		<div class="controls align-right">
-			<a class="offload" href="${relative_url(SyndicationUrlBuilder::rss('scm', CATEGORY_ID))}" aria-label="{@common.syndication}"><i class="fa fa-rss warning" aria-hidden="true"></i></a>
-			# IF C_CATEGORY ## IF IS_ADMIN #<a class="offload" href="{U_EDIT_CATEGORY}" aria-label="{@common.edit}"><i class="far fa-edit" aria-hidden="true"></i></a># ENDIF ## ENDIF #
-		</div>
+	<header class="section-header flex-between flex-between-large">
 		<h1 class="flex-between">
-			{MODULE_NAME}
+			{MODULE_NAME} 
 		</h1>
+        <div class="small message-helper bgc notice">{@scm.warning.current.season}</div>
 	</header>
-    <div class="message-helper bgc notice">{@scm.warning.current.season}</div>
 
 	# IF C_NO_ITEM #
 		<div class="sub-section">
 			<div class="content-container">
 				<div class="content">
-					<div class="message-helper bgc notice">{@common.no.item.now}</div>
+					<div class="message-helper bgc notice">{@scm.message.no.events}</div>
 				</div>
 			</div>
 		</div>

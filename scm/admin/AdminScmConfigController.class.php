@@ -43,7 +43,7 @@ class AdminScmConfigController extends DefaultAdminModuleController
         $fieldset->add_field(new FormFieldSimpleSelectChoice('homepage', $this->lang['scm.config.homepage'], $this->config->get_homepage(),
 			array(
 				new FormFieldSelectChoiceOption($this->lang['scm.config.homepage.list'], SCMConfig::EVENT_LIST, array('data_option_icon' => 'fa fa-th-list')),
-				new FormFieldSelectChoiceOption($this->lang['scm.config.homepage.games'], SCMConfig::EXPLORER, array('data_option_icon' => 'fa fa-layer-group')),
+				new FormFieldSelectChoiceOption($this->lang['scm.config.homepage.games'], SCMConfig::GAME_LIST, array('data_option_icon' => 'fa fa-layer-group')),
 				new FormFieldSelectChoiceOption($this->lang['scm.config.homepage.cats'], SCMConfig::CATEGORIES, array('data_option_icon' => 'fa fa-table-cells-large')),
 			)
         ));

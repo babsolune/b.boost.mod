@@ -32,10 +32,10 @@ class ScmMiniPrevGame extends ModuleMiniMenu
 	public function is_displayed()
 	{
         $config = ScmConfig::load();
-        if ($config->get_homepage() == ScmConfig::EXPLORER)
-            return !Url::is_current_url('/scm/') && ScmAuthorizationsService::check_authorizations()->read();
+        if ($config->get_homepage() == ScmConfig::GAME_LIST)
+            return !Url::is_current_url('/scm/', true) && ScmAuthorizationsService::check_authorizations()->read();
         else
-            return !Url::is_current_url('/scm/explorer/') && ScmAuthorizationsService::check_authorizations()->read();
+            return !Url::is_current_url('/scm/game_list/') && ScmAuthorizationsService::check_authorizations()->read();
 	}
 
 	public function get_menu_content()

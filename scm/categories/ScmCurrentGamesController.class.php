@@ -7,13 +7,13 @@
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
-class ScmExplorerController extends DefaultModuleController
+class ScmCurrentGamesController extends DefaultModuleController
 {
 	private $category;
 
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmExplorerController.tpl');
+		return new FileTemplate('scm/ScmCurrentGamesController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
@@ -228,7 +228,7 @@ class ScmExplorerController extends DefaultModuleController
 
 		$graphical_environment = $response->get_graphical_environment();
         $graphical_environment->set_page_title($this->lang['scm.around.games'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
-		$description = StringVars::replace_vars($this->lang['scm.seo.description.explorer'], ['site' => GeneralConfig::load()->get_site_name()]);
+		$description = StringVars::replace_vars($this->lang['scm.seo.description.game.list'], ['site' => GeneralConfig::load()->get_site_name()]);
 		$graphical_environment->get_seo_meta_data()->set_description($description);
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name()));
 
