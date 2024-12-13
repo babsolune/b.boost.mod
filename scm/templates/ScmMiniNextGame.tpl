@@ -13,7 +13,7 @@
                             <a class="offload d-block" href="{items.U_EVENT}">{items.GAME_DIVISION}</a>
                         </td>
                     </tr>
-                    # IF items.C_LATE #<tr><td class="bgc-sub smaller text-italic" colspan="3">{@scm.game.late}</td></tr># ENDIF #
+                    # IF items.C_LATE #<tr><td class="bgc notice smaller text-italic" colspan="3">{@scm.game.late}</td></tr># ENDIF #
                     <tr class="category-{items.CATEGORY_ID}# IF items.C_EXEMPT # bgc notice# ENDIF #">
                         <td class="align-right"><a href="{items.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF items.C_HOME_FAV # text-strong# ENDIF ## IF items.HOME_FORFEIT # warning# ENDIF #">{items.HOME_TEAM}</a></td>
                         <td>&nbsp;</td>

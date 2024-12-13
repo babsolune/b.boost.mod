@@ -88,13 +88,31 @@
                                                         # IF next_categories.next_items.C_IS_SUB #<a class="offload smaller" href="{next_categories.next_items.U_MASTER_EVENT}">{next_categories.next_items.MASTER_EVENT}</a> - # ELSE #<span></span># ENDIF #
                                                         <a class="offload" href="{next_categories.next_items.U_EVENT}">{next_categories.next_items.GAME_DIVISION}</a>
                                                     </div>
-                                                    # IF next_categories.next_items.C_LATE #<div class="cell-full bgc-sub smaller text-italic" colspan="3">{@scm.game.late}</div># ENDIF #
                                                     <div>{@scm.day.short}{next_categories.next_items.CLUSTER} : {next_categories.next_items.GAME_DATE_DAY}/{next_categories.next_items.GAME_DATE_MONTH}/{next_categories.next_items.YEAR} {next_categories.next_items.GAME_DATE_HOUR}:{next_categories.next_items.GAME_DATE_MINUTE}</div>
                                                 </div>
+                                                # IF next_categories.next_items.C_LATE #<div class="cell-full bgc notice smaller text-italic align-center" colspan="3">{@scm.game.late}</div># ENDIF #
                                                 <div class="game-body category-{next_categories.next_items.CATEGORY_ID}# IF next_categories.next_items.C_EXEMPT # bgc notice# ENDIF #">
-                                                    <span class="home-team"><a href="{next_categories.next_items.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF next_categories.next_items.C_HOME_FAV # text-strong# ENDIF ## IF next_categories.next_items.HOME_FORFEIT # warning# ENDIF #">{next_categories.next_items.HOME_TEAM}</a></span>
-                                                    <span class="game-score">-</span>
-                                                    <span class="away-team"><a href="{next_categories.next_items.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF next_categories.next_items.C_AWAY_FAV # text-strong# ENDIF ## IF next_categories.next_items.AWAY_FORFEIT # warning# ENDIF #">{next_categories.next_items.AWAY_TEAM}</a></span>
+                                                    <span class="home-team">
+                                                        <a
+                                                            href="{next_categories.next_items.U_HOME_CALENDAR}"
+                                                            aria-label="{@scm.see.club.calendar}# IF next_categories.next_items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_categories.next_items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                            # IF next_categories.next_items.HOME_FORFEIT #data-tooltip-class="warning"# ENDIF #
+                                                            # IF next_categories.next_items.HOME_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
+                                                            class="offload# IF next_categories.next_items.C_HOME_FAV # text-strong# ENDIF ## IF next_categories.next_items.HOME_FORFEIT # warning# ENDIF ## IF next_categories.next_items.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                                            {next_categories.next_items.HOME_TEAM}
+                                                        </a>
+                                                    </span>
+                                                    <span class="game-score"></span>
+                                                    <span class="away-team">
+                                                        <a
+                                                            href="{next_categories.next_items.U_AWAY_CALENDAR}"
+                                                            aria-label="{@scm.see.club.calendar}# IF next_categories.next_items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_categories.next_items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                            # IF next_categories.next_items.AWAY_FORFEIT #data-tooltip-class="warning"# ENDIF #
+                                                            # IF next_categories.next_items.AWAY_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
+                                                            class="offload# IF next_categories.next_items.C_AWAY_FAV # text-strong# ENDIF ## IF next_categories.next_items.AWAY_FORFEIT # warning# ENDIF ## IF next_categories.next_items.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                                            {next_categories.next_items.AWAY_TEAM}
+                                                        </a>
+                                                    </span>
                                                 </div>
                                             </div>
                                         # END next_categories.next_items #
@@ -115,13 +133,31 @@
                                                         # IF prev_categories.prev_items.C_IS_SUB #<a class="offload smaller" href="{prev_categories.prev_items.U_MASTER_EVENT}">{prev_categories.prev_items.MASTER_EVENT}</a> - # ELSE #<span></span># ENDIF #
                                                         <a class="offload" href="{prev_categories.prev_items.U_EVENT}">{prev_categories.prev_items.GAME_DIVISION}</a>
                                                     </div>
-                                                    # IF prev_categories.prev_items.C_LATE #<div class="cell-full bgc-sub smaller text-italic" colspan="3">{@scm.game.late}</div># ENDIF #
                                                     <div>{@scm.day.short}{prev_categories.prev_items.CLUSTER} : {prev_categories.prev_items.GAME_DATE_DAY}/{prev_categories.prev_items.GAME_DATE_MONTH}/{prev_categories.prev_items.YEAR} {prev_categories.prev_items.GAME_DATE_HOUR}:{prev_categories.prev_items.GAME_DATE_MINUTE}</div>
                                                 </div>
+                                                # IF prev_categories.prev_items.C_LATE #<div class="cell-full bgc notice smaller text-italic align-center" colspan="3">{@scm.game.late}</div># ENDIF #
                                                 <div class="game-body category-{prev_categories.prev_items.CATEGORY_ID}# IF prev_categories.prev_items.C_EXEMPT # bgc notice# ENDIF #">
-                                                    <span class="d-inline-block align-right md-width-pc-35"><a href="{prev_categories.prev_items.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF prev_categories.prev_items.C_HOME_FAV # text-strong# ENDIF ## IF prev_categories.prev_items.HOME_FORFEIT # warning# ENDIF #">{prev_categories.prev_items.HOME_TEAM}</a></span>
+                                                    <span class="d-inline-block align-right md-width-pc-35">
+                                                        <a
+                                                            href="{prev_categories.prev_items.U_HOME_CALENDAR}"
+                                                            aria-label="{@scm.see.club.calendar}# IF prev_categories.prev_items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_categories.prev_items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                            # IF prev_categories.prev_items.HOME_FORFEIT #data-tooltip-class="warning"# ENDIF #
+                                                            # IF prev_categories.prev_items.HOME_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
+                                                            class="offload# IF prev_categories.prev_items.C_HOME_FAV # text-strong# ENDIF ## IF prev_categories.prev_items.HOME_FORFEIT # warning# ENDIF ## IF prev_categories.prev_items.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                                            {prev_categories.prev_items.HOME_TEAM}
+                                                        </a>
+                                                    </span>
                                                     <span class="d-inline-block align-center md-width-pc-20">{prev_categories.prev_items.HOME_SCORE} - {prev_categories.prev_items.AWAY_SCORE}</span>
-                                                    <span class="d-inline-block align-left md-width-pc-35"><a href="{prev_categories.prev_items.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF prev_categories.prev_items.C_AWAY_FAV # text-strong# ENDIF ## IF prev_categories.prev_items.AWAY_FORFEIT # warning# ENDIF #">{prev_categories.prev_items.AWAY_TEAM}</a></span>
+                                                    <span class="d-inline-block align-left md-width-pc-35">
+                                                        <a
+                                                            href="{prev_categories.prev_items.U_AWAY_CALENDAR}"
+                                                            aria-label="{@scm.see.club.calendar}# IF prev_categories.prev_items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_categories.prev_items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                            # IF prev_categories.prev_items.AWAY_FORFEIT #data-tooltip-class="warning"# ENDIF #
+                                                            # IF prev_categories.prev_items.AWAY_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
+                                                            class="offload# IF prev_categories.prev_items.C_AWAY_FAV # text-strong# ENDIF ## IF prev_categories.prev_items.AWAY_FORFEIT # warning# ENDIF ## IF prev_categories.prev_items.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                                            {prev_categories.prev_items.AWAY_TEAM}
+                                                        </a>
+                                                    </span>
                                                 </div>
                                             </div>
                                         # END prev_categories.prev_items #

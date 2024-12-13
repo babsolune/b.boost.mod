@@ -54,50 +54,59 @@ class ScmExplorerController extends DefaultModuleController
         }
 
 		$now = new Date();
-        $cache = ScmGameCache::load();
+        $running_events = ScmEventService::get_running_events_id();
+        $events_id = implode(', ', $running_events);
 
         // Next games
-        $next_events = $next_matchdays = $next_event_games = [];
+        $next_games = $next_events = $next_events_games = $next_categories = [];
 
-        $next_matchdays = array_filter($cache->get_games(), function($game) use ($now) {
-            return $game['game_date'] > $now->get_timestamp();
-        });
+        $next_results = PersistenceContext::get_querier()->select('SELECT games.*, params.*
+            FROM ' . ScmSetup::$scm_game_table . ' games
+            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = games.game_event_id
+            WHERE games.game_date > :now
+            AND (games.game_home_id = params.favorite_team_id OR games.game_away_id = params.favorite_team_id)
+            AND games.game_event_id IN (' . $events_id . ')
+            ORDER BY games.game_date', [
+                'now' => $now->get_timestamp()
+            ]
+        );
 
-        foreach ($next_matchdays as $game)
+        while ($row = $next_results->fetch())
         {
-            $event_id = $game['game_event_id'];
-            $favorite_team = ScmParamsService::get_params($event_id)->get_favorite_team_id();
-            if ($favorite_team && ($game['game_home_id'] == $favorite_team || $game['game_away_id'] == $favorite_team))
-                $next_event_games[$event_id][] = $game;
+            $next_games[] = $row;
         }
 
-        foreach ($next_event_games as $games) {
+        foreach ($next_games as $game)
+        {
+            $next_events[$game['game_event_id']][] = $game;
+        }
+
+        foreach ($next_events as $games) {
             usort($games, function($a, $b) {
                 return $a['game_date'] - $b['game_date'];
             });
-            $next_events[] = $games[0];
+            $next_events_games[] = $games[0];
         }
 
-        $next_categories = [];
-        foreach($next_events as $game)
+        $this->view->put_all([
+			'C_NEXT_ITEMS' => count($next_events_games) > 0
+		]);
+
+        foreach($next_events_games as $game)
         {
             $category = ScmEventService::get_event($game['game_event_id'])->get_category();
-            $next_categories[$category->get_id()][] = $game;
+            $next_categories[$category->get_id()][$game['game_event_id']] = $game;
         }
-        $this->view->put_all([
-			'C_NEXT_ITEMS' => count($next_events) > 0
-		]);
 
         ksort($next_categories);
 
-		foreach ($next_categories as $k => $games)
-		{
+        foreach ($next_categories as $k => $games)
+        {
             $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k);
             $this->view->assign_block_vars('next_categories', [
                 'CATEGORY_NAME' => $category->get_name(),
                 'U_CATEGORY' => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
             ]);
-
             foreach ($games as $game)
             {
                 $item = new ScmGame();
@@ -112,57 +121,59 @@ class ScmExplorerController extends DefaultModuleController
                     'U_EVENT'        => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
                 ]));
             }
-		}
-
-        // Previous games
-        $prev_events = $prev_matchdays = $prev_event_games = [];
-
-        $prev_matchdays = array_filter($cache->get_games(), function($game) use ($now) {
-            $is_sub = ScmEventService::get_event($game['game_event_id'])->get_is_sub();
-            $real_event_id = $is_sub ? ScmEventService::get_event($game['game_event_id'])->get_master_id() : $game['game_event_id'];
-            $is_last_event_id = $is_sub ? ScmEventService::is_last_sub($real_event_id, $game['game_event_id']) : 0;
-            if ($is_sub && $is_last_event_id)
-                return ( $game['game_date'] < $now->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($real_event_id)->get_end_date()->get_timestamp());
-            else
-                return ($now->get_timestamp() < ScmEventService::get_event($game['game_event_id'])->get_end_date()->get_timestamp()) && $game['game_date'] < $now->get_timestamp();
-        });
-
-        foreach ($prev_matchdays as $game)
-        {
-            $event_id = $game['game_event_id'];
-            $favorite_team = ScmParamsService::get_params($event_id)->get_favorite_team_id();
-            if ($favorite_team && ($game['game_home_id'] == $favorite_team || $game['game_away_id'] == $favorite_team))
-                $prev_event_games[$event_id][] = $game;
         }
 
-        foreach ($prev_event_games as $games) {
+        // Previous games
+        $prev_games = $prev_events = $prev_events_games = $prev_categories = [];
+
+        $prev_results = PersistenceContext::get_querier()->select('SELECT games.*, params.*
+            FROM ' . ScmSetup::$scm_game_table . ' games
+            LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = games.game_event_id
+            WHERE games.game_date < :now
+            AND (games.game_home_id = params.favorite_team_id OR games.game_away_id = params.favorite_team_id)
+            AND games.game_event_id IN (' . $events_id . ')
+            ORDER BY games.game_date', [
+                'now' => $now->get_timestamp()
+            ]
+        );
+
+        while ($row = $prev_results->fetch())
+        {
+            if (!empty($row['game_home_id']) && !empty($row['game_away_id']))
+                $prev_games[] = $row;
+        }
+
+        foreach ($prev_games as $game)
+        {
+            $prev_events[$game['game_event_id']][] = $game;
+        }
+
+        foreach ($prev_events as $games) {
             usort($games, function($a, $b) {
-                return $a['game_date'] - $b['game_date'];
+                return $b['game_date'] - $a['game_date'];
             });
-            $prev_events[] = end($games);
+            $prev_events_games[] = $games[0];
         }
 
         $this->view->put_all([
-			'C_PREV_ITEMS' => count($prev_events) > 0
+			'C_PREV_ITEMS' => count($prev_events_games) > 0
 		]);
 
-        $prev_categories = [];
-        foreach($prev_events as $game)
+        foreach($prev_events_games as $game)
         {
             $category = ScmEventService::get_event($game['game_event_id'])->get_category();
-            $prev_categories[$category->get_id()][] = $game;
+            $prev_categories[$category->get_id()][$game['game_event_id']] = $game;
         }
 
         ksort($prev_categories);
 
-		foreach ($prev_categories as $k => $games)
-		{
+        foreach ($prev_categories as $k => $games)
+        {
             $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k);
             $this->view->assign_block_vars('prev_categories', [
                 'CATEGORY_NAME' => $category->get_name(),
                 'U_CATEGORY' => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
             ]);
-
             foreach ($games as $game)
             {
                 $item = new ScmGame();
@@ -177,7 +188,7 @@ class ScmExplorerController extends DefaultModuleController
                     'U_EVENT'        => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
                 ]));
             }
-		}
+        }
 	}
 
 	private function get_category()

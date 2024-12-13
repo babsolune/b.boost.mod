@@ -51,7 +51,7 @@ class ScmMiniNextGame extends ModuleMiniMenu
 
 		$now = new Date();
 
-        $next_events_games = $next_events = $next_games = [];
+        $next_games = $next_events = $next_events_games = [];
 
         $running_events = ScmEventService::get_running_events_id();
         $events_id = implode(', ', $running_events);

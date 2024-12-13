@@ -13,7 +13,7 @@
                             <a class="offload d-block" href="{items.U_EVENT}">{items.GAME_DIVISION}</a>
                         </td>
                     </tr>
-                    # IF items.C_LATE #<tr><td class="bgc-sub smaller text-italic" colspan="3">{@scm.game.late}</td></tr># ENDIF #
+                    # IF items.C_LATE #<tr><td class="bgc notice smaller text-italic" colspan="3">{@scm.game.late}</td></tr># ENDIF #
                     <tr class="category-{items.CATEGORY_ID}# IF items.C_EXEMPT # bgc notice# ENDIF #">
                         <td class="align-right# IF items.C_HOME_EXEMPT # small text-italic# ENDIF #">
                             <a
