@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const classList = width.classList;
         const classes = width.className.split(' ');
         // Static
-        if (window.innerWidth >= 769 || window.innerWidth < 1366) {
+        if (window.innerWidth >= 769 && window.innerWidth < 1366) {
             classes.forEach((sizeClass) => {
                     if (sizeClass.startsWith('sm-width-')) classList.remove(sizeClass);
                     if (sizeClass.startsWith('lg-width-')) classList.remove(sizeClass);
