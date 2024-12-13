@@ -349,10 +349,10 @@ class ScmDetailsGameFormController extends DefaultModuleController
 	{
 		$event = $this->get_event();
         $request = AppContext::get_request();
-		$location_id = $event->get_id() ? 'scm-edit-details-'. $event->get_id() : '';
 
-		// $response = new SiteDisplayResponse($view, $location_id);
-		$response = new SiteDisplayResponse($view);
+		$location_id = $event->get_id() ? 'scm-details-game'. $event->get_id() : '';
+
+		$response = new SiteDisplayResponse($view, $location_id);
 		$graphical_environment = $response->get_graphical_environment();
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();

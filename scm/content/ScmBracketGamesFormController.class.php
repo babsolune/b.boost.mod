@@ -423,17 +423,16 @@ class ScmBracketGamesFormController extends DefaultModuleController
 	{
 		$event = $this->get_event();
 
-		// $location_id = $event->get_id() ? 'scm-edit-'. $event->get_id() : '';
+		$location_id = $event->get_id() ? 'scm-bracket-games-'. $event->get_id() : '';
 
-		// $response = new SiteDisplayResponse($view, $location_id);
-		$response = new SiteDisplayResponse($view);
+		$response = new SiteDisplayResponse($view, $location_id);
 		$graphical_environment = $response->get_graphical_environment();
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['scm.module.title'], ScmUrlBuilder::home());
 
-		// if (!AppContext::get_session()->location_id_already_exists($location_id))
-        //     $graphical_environment->set_location_id($location_id);
+		if (!AppContext::get_session()->location_id_already_exists($location_id))
+            $graphical_environment->set_location_id($location_id);
 
         $graphical_environment->set_page_title($this->lang['scm.games.management'], $this->lang['scm.module.title']);
         $graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.games.management']);

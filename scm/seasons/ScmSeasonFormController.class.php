@@ -152,7 +152,7 @@ class ScmSeasonFormController extends DefaultModuleController
 	{
 		$season = $this->get_season();
 
-		$location_id = $season->get_id_season() ? 'scm-edit-'. $season->get_id_season() : '';
+		$location_id = $season->get_id_season() ? 'scm-season-'. $season->get_id_season() : '';
 
 		$response = new SiteDisplayResponse($view, $location_id);
 		$graphical_environment = $response->get_graphical_environment();

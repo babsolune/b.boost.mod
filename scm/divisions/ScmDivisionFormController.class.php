@@ -172,7 +172,7 @@ class ScmDivisionFormController extends DefaultModuleController
 	{
 		$division = $this->get_division();
 
-		$location_id = $division->get_id_division() ? 'scm-edit-'. $division->get_id_division() : '';
+		$location_id = $division->get_id_division() ? 'scm-division-'. $division->get_id_division() : '';
 
 		$response = new SiteDisplayResponse($view, $location_id);
 		$graphical_environment = $response->get_graphical_environment();

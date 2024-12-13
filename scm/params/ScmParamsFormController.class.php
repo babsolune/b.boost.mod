@@ -471,7 +471,7 @@ class ScmParamsFormController extends DefaultModuleController
 		$category = $event->get_category();
 		$params = $this->get_params();
 
-		$location_id = $params->get_params_event_id() ? 'param-edit-'. $params->get_params_event_id() : '';
+		$location_id = $params->get_params_event_id() ? 'scm-params-'. $params->get_params_event_id() : '';
 
 		$response = new SiteDisplayResponse($view, $location_id);
 		$graphical_environment = $response->get_graphical_environment();

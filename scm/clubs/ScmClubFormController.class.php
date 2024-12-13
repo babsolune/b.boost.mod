@@ -307,7 +307,7 @@ class ScmClubFormController extends DefaultModuleController
 		$club = $this->get_club();
         $cache = ScmClubCache::load();
 
-		$location_id = $club->get_id_club() ? 'scm-edit-'. $club->get_id_club() : '';
+		$location_id = $club->get_id_club() ? 'scm-club-'. $club->get_id_club() : '';
 
 		$response = new SiteDisplayResponse($view, $location_id);
 		$graphical_environment = $response->get_graphical_environment();

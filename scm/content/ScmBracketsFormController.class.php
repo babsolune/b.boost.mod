@@ -122,7 +122,7 @@ class ScmBracketsFormController extends DefaultModuleController
 	{
 		$event = $this->get_event();
 
-		$location_id = $event->get_id() ? 'scm-edit-'. $event->get_id() : '';
+		$location_id = $event->get_id() ? 'scm-bracket-'. $event->get_id() : '';
 
 		$response = new SiteDisplayResponse($view, $location_id);
 		$graphical_environment = $response->get_graphical_environment();
