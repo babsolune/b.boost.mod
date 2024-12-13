@@ -11,12 +11,12 @@
                             <div class="responsive-table">
                                 <table class="bordered-table">
                                     <colgroup class="hidden-small-screens">
-                                        <col class="width-pc-4" />
-                                        <col class="width-pc-40" />
-                                        <col class="width-pc-8" />
-                                        <col class="width-pc-8" />
-                                        <col class="width-pc-40" />
-                                        <col class="width-pc-5" />
+                                        <col class="md-width-pc-4" />
+                                        <col class="md-width-pc-40" />
+                                        <col class="md-width-pc-8" />
+                                        <col class="md-width-pc-8" />
+                                        <col class="md-width-pc-40" />
+                                        <col class="md-width-pc-5" />
                                     </colgroup>
                                     <thead>
                                         <tr>
@@ -87,7 +87,7 @@
                                                                             <div class="cell-name">
                                                                                 <a href="{days.dates.items.U_HOME_CLUB}" class="offload">{days.dates.items.HOME_TEAM}</a>
                                                                             </div>
-                                                                            # IF days.dates.items.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{days.dates.items.HOME_LOGO}" alt="{days.dates.items.HOME_TEAM}"># ENDIF #
+                                                                            # IF days.dates.items.C_HAS_HOME_LOGO #<img class="smaller md-width-px-25" src="{days.dates.items.HOME_LOGO}" alt="{days.dates.items.HOME_TEAM}"># ENDIF #
                                                                         </div>
                                                                         <div class="cell-score bigger align-center">
                                                                             {days.dates.items.HOME_SCORE}
@@ -119,7 +119,7 @@
                                                                             <div class="cell-name">
                                                                                 <a href="{days.dates.items.U_AWAY_CLUB}" class="offload">{days.dates.items.AWAY_TEAM}</a>
                                                                             </div>
-                                                                            # IF days.dates.items.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{days.dates.items.AWAY_LOGO}" alt="{days.dates.items.AWAY_TEAM}"># ENDIF #
+                                                                            # IF days.dates.items.C_HAS_AWAY_LOGO #<img class="smaller md-width-px-25" src="{days.dates.items.AWAY_LOGO}" alt="{days.dates.items.AWAY_TEAM}"># ENDIF #
                                                                         </div>
                                                                         <div class="cell-score bigger align-center">
                                                                             {days.dates.items.AWAY_SCORE}
@@ -156,7 +156,7 @@
                                                                     {days.dates.items.SUMMARY}
                                                                 # ENDIF #
                                                                 # IF days.dates.items.STADIUM #
-                                                                    <div class="width-pc-50 m-a">{days.dates.items.STADIUM}</div>
+                                                                    <div class="md-width-pc-50 m-a">{days.dates.items.STADIUM}</div>
                                                                 # ENDIF #
                                                             </div>
                                                         </div>

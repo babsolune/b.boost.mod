@@ -16,11 +16,11 @@
                 <table class="bordered-table">
                     <caption>{@scm.day} {LAST_DAY}</caption>
                     <colgroup class="hidden-small-screens">
-                        <col class="width-pc-6" />
-                        <col class="width-pc-39" />
-                        <col class="width-pc-8" />
-                        <col class="width-pc-8" />
-                        <col class="width-pc-39" />
+                        <col class="md-width-pc-6" />
+                        <col class="md-width-pc-39" />
+                        <col class="md-width-pc-8" />
+                        <col class="md-width-pc-8" />
+                        <col class="md-width-pc-39" />
                     </colgroup>
                     <thead>
                         <tr>
@@ -80,11 +80,11 @@
                 <table class="bordered-table">
                     <caption>{@scm.day} {NEXT_DAY}</caption>
                     <colgroup class="hidden-small-screens">
-                        <col class="width-pc-6" />
-                        <col class="width-pc-39" />
-                        <col class="width-pc-08" />
-                        <col class="width-pc-08" />
-                        <col class="width-pc-39" />
+                        <col class="md-width-pc-6" />
+                        <col class="md-width-pc-39" />
+                        <col class="md-width-pc-08" />
+                        <col class="md-width-pc-08" />
+                        <col class="md-width-pc-39" />
                     </colgroup>
                     <thead>
                         <tr>
@@ -144,22 +144,22 @@
                 <h3>{@scm.ranking}</h3>
             </header>
             <div class="scm-line scm-head">
-                <div class="scm-line-group width-pc-70">
-                    <div class="scm-cell width-pc-20" aria-label="{@scm.th.rank}">{@scm.th.rank.short}</div>
-                    <div class="scm-cell cell-left width-pc-80">{@scm.th.team}</div>
+                <div class="scm-line-group md-width-pc-70">
+                    <div class="scm-cell md-width-pc-20" aria-label="{@scm.th.rank}">{@scm.th.rank.short}</div>
+                    <div class="scm-cell cell-left md-width-pc-80">{@scm.th.team}</div>
                 </div>
-                <div class="scm-line-group width-pc-30">
-                    <div class="scm-cell width-pc-30" aria-label="{@scm.th.points}">{@scm.th.points.short}</div>
-                    <div class="scm-cell width-pc-30" aria-label="{@scm.th.played}">{@scm.th.played.short}</div>
-                    <div class="scm-cell width-pc-30" aria-label="{@scm.th.goal.average}">{@scm.th.goal.average.short}</div>
+                <div class="scm-line-group md-width-pc-30">
+                    <div class="scm-cell md-width-pc-30" aria-label="{@scm.th.points}">{@scm.th.points.short}</div>
+                    <div class="scm-cell md-width-pc-30" aria-label="{@scm.th.played}">{@scm.th.played.short}</div>
+                    <div class="scm-cell md-width-pc-30" aria-label="{@scm.th.goal.average}">{@scm.th.goal.average.short}</div>
                 </div>
             </div>
-            <div class="scm-group">
+            <div class="scm-body">
                 # START ranks #
                     <div class="scm-line ranking-color team-{ranks.TEAM_ID}# IF ranks.C_FAV # fav-team# ENDIF #" style="background-color: {ranks.RANK_COLOR}">
-                        <div class="scm-line-group width-pc-70">
-                            <div class="scm-cell width-pc-20">{ranks.RANK}</div>
-                            <div class="scm-cell scm-name cell-left width-pc-80">
+                        <div class="scm-line-group md-width-pc-70">
+                            <div class="scm-cell md-width-pc-20">{ranks.RANK}</div>
+                            <div class="scm-cell scm-name cell-left md-width-pc-80">
                                 # IF ranks.C_HAS_TEAM_LOGO #<img src="{ranks.TEAM_LOGO}" alt="{ranks.TEAM_NAME}"># ENDIF #
                                 <span>
                                     <a href="{ranks.U_TEAM_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{ranks.TEAM_NAME}</a>
@@ -167,10 +167,10 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="scm-line-group width-pc-30">
-                            <div class="scm-cell width-pc-30">{ranks.POINTS}</div>
-                            <div class="scm-cell width-pc-30">{ranks.PLAYED}</div>
-                            <div class="scm-cell width-pc-30">{ranks.GOAL_AVERAGE}</div>
+                        <div class="scm-line-group md-width-pc-30">
+                            <div class="scm-cell md-width-pc-30">{ranks.POINTS}</div>
+                            <div class="scm-cell md-width-pc-30">{ranks.PLAYED}</div>
+                            <div class="scm-cell md-width-pc-30">{ranks.GOAL_AVERAGE}</div>
                         </div>
                     </div>
                 # END ranks #

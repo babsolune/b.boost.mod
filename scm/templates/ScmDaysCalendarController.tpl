@@ -4,14 +4,14 @@
         <header><h2>{@scm.days.results} {@scm.day} {DAY}</h2></header>
         <div class="content">
             # IF C_HAS_GAMES #
-                <table class="width-pc-70 bordered-table m-a">
+                <table class="md-width-pc-70 bordered-table m-a">
                     <colgroup class="hidden-small-screens">
-                        <col class="width-pc-4" />
-                        <col class="width-pc-40" />
-                        <col class="width-pc-8" />
-                        <col class="width-pc-8" />
-                        <col class="width-pc-40" />
-                        <col class="width-pc-5" />
+                        <col class="md-width-pc-4" />
+                        <col class="md-width-pc-40" />
+                        <col class="md-width-pc-8" />
+                        <col class="md-width-pc-8" />
+                        <col class="md-width-pc-40" />
+                        <col class="md-width-pc-5" />
                     </colgroup>
                     <thead>
                         <tr>
@@ -82,7 +82,7 @@
                                                             <div class="cell-name">
                                                                 <a href="{dates.games.U_HOME_CLUB}" class="offload">{dates.games.HOME_TEAM}</a>
                                                             </div>
-                                                            # IF dates.games.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{dates.games.HOME_LOGO}" alt="{dates.games.HOME_TEAM}"># ENDIF #
+                                                            # IF dates.games.C_HAS_HOME_LOGO #<img class="smaller md-width-px-25" src="{dates.games.HOME_LOGO}" alt="{dates.games.HOME_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
                                                             {dates.games.HOME_SCORE}
@@ -114,7 +114,7 @@
                                                             <div class="cell-name">
                                                                 <a href="{dates.games.U_AWAY_CLUB}" class="offload">{dates.games.AWAY_TEAM}</a>
                                                             </div>
-                                                            # IF dates.games.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{dates.games.AWAY_LOGO}" alt="{dates.games.AWAY_TEAM}"># ENDIF #
+                                                            # IF dates.games.C_HAS_AWAY_LOGO #<img class="smaller md-width-px-25" src="{dates.games.AWAY_LOGO}" alt="{dates.games.AWAY_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
                                                             {dates.games.AWAY_SCORE}
@@ -151,7 +151,7 @@
                                                     {dates.games.SUMMARY}
                                                 # ENDIF #
                                                 # IF dates.games.STADIUM #
-                                                    <div class="width-pc-50 m-a">{dates.games.STADIUM}</div>
+                                                    <div class="md-width-pc-50 m-a">{dates.games.STADIUM}</div>
                                                 # ENDIF #
                                             </div>
                                         </div>

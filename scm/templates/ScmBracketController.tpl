@@ -11,13 +11,13 @@
                             <div class="responsive-table">
                                 <table class="bordered-table">
                                     <colgroup class="hidden-small-screens">
-                                        <col class="width-pc-4" />
-                                        <col class="width-pc-40" />
-                                        <col class="width-pc-8" />
-                                        <col class="width-pc-8" />
-                                        <col class="width-pc-40" />
-                                        # IF C_DISPLAY_PLAYGROUNDS #<col class="width-pc-10" /># ENDIF #
-                                        <col class="width-pc-5" />
+                                        <col class="md-width-pc-4" />
+                                        <col class="md-width-pc-40" />
+                                        <col class="md-width-pc-8" />
+                                        <col class="md-width-pc-8" />
+                                        <col class="md-width-pc-40" />
+                                        # IF C_DISPLAY_PLAYGROUNDS #<col class="md-width-pc-10" /># ENDIF #
+                                        <col class="md-width-pc-5" />
                                     </colgroup>
                                     <thead>
                                         <tr>
@@ -74,7 +74,7 @@
                                                                     <div class="home-team cell">
                                                                         <div class="cell-header">
                                                                             <div class="cell-name">{groups.rounds.games.HOME_TEAM}</div>
-                                                                            # IF groups.rounds.games.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{groups.rounds.games.HOME_LOGO}" alt="{groups.rounds.games.HOME_TEAM}"># ENDIF #
+                                                                            # IF groups.rounds.games.C_HAS_HOME_LOGO #<img class="smaller md-width-px-25" src="{groups.rounds.games.HOME_LOGO}" alt="{groups.rounds.games.HOME_TEAM}"># ENDIF #
                                                                         </div>
                                                                         <div class="cell-score bigger align-center">
                                                                             {groups.rounds.games.HOME_SCORE}
@@ -104,7 +104,7 @@
                                                                     <div class="away-team cell">
                                                                         <div class="cell-header">
                                                                             <div class="cell-name">{groups.rounds.games.AWAY_TEAM}</div>
-                                                                            # IF groups.rounds.games.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{groups.rounds.games.AWAY_LOGO}" alt="{groups.rounds.games.AWAY_TEAM}"># ENDIF #
+                                                                            # IF groups.rounds.games.C_HAS_AWAY_LOGO #<img class="smaller md-width-px-25" src="{groups.rounds.games.AWAY_LOGO}" alt="{groups.rounds.games.AWAY_TEAM}"># ENDIF #
                                                                         </div>
                                                                         <div class="cell-score bigger align-center">
                                                                             {groups.rounds.games.AWAY_SCORE}
@@ -141,7 +141,7 @@
                                                                     {groups.rounds.games.SUMMARY}
                                                                 # ENDIF #
                                                                 # IF groups.rounds.games.STADIUM #
-                                                                    <div class="width-pc-50 m-a">{groups.rounds.games.STADIUM}</div>
+                                                                    <div class="md-width-pc-50 m-a">{groups.rounds.games.STADIUM}</div>
                                                                 # ENDIF #
                                                             </div>
                                                         </div>
@@ -155,15 +155,15 @@
                             <div class="responsive-table">
                                 <table class="bordered-table">
                                     <colgroup class="hidden-small-screens">
-                                        <col class="width-pc-05" />
-                                        <col class="width-pc-60" />
-                                        <col class="width-pc-05" />
-                                        <col class="width-pc-05" />
-                                        <col class="width-pc-05" />
-                                        <col class="width-pc-05" />
-                                        <col class="width-pc-05" />
-                                        <col class="width-pc-05" />
-                                        <col class="width-pc-05" />
+                                        <col class="md-width-pc-05" />
+                                        <col class="md-width-pc-60" />
+                                        <col class="md-width-pc-05" />
+                                        <col class="md-width-pc-05" />
+                                        <col class="md-width-pc-05" />
+                                        <col class="md-width-pc-05" />
+                                        <col class="md-width-pc-05" />
+                                        <col class="md-width-pc-05" />
+                                        <col class="md-width-pc-05" />
                                     </colgroup>
                                     <thead>
                                         <tr>
@@ -235,7 +235,7 @@
                                                             # ENDIF #
                                                         </span>
                                                     </div>
-                                                    <div  class="id-{rounds.games.HOME_ID} game-team game-home# IF rounds.games.C_HOME_FAV # text-strong# ENDIF #"
+                                                    <div class="id-{rounds.games.HOME_ID} game-team game-home# IF rounds.games.C_HOME_FAV # text-strong# ENDIF #"
                                                             # IF rounds.games.C_HOME_WIN # style="background-color: {rounds.games.WIN_COLOR}"# ENDIF #>
                                                         <div class="home-{rounds.games.GAME_ID} home-team">
                                                             <div class="flex-team flex-left">
@@ -247,11 +247,11 @@
                                                                 # ENDIF #
                                                             </div>
                                                         </div>
-                                                        <div class="game-team# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-px-100# ENDIF ## ENDIF #">
-                                                            <div class="game-score home-score# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-pc-50# ELSE # width-px-50# ENDIF ## ELSE # width-px-50# ENDIF #">{rounds.games.HOME_SCORE}</div>
+                                                        <div class="game-team# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # md-width-px-100# ENDIF ## ENDIF #">
+                                                            <div class="game-score home-score# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # md-width-pc-50# ELSE # md-width-px-50# ENDIF ## ELSE # md-width-px-50# ENDIF #">{rounds.games.HOME_SCORE}</div>
                                                             # IF NOT rounds.C_HAT_PLAYOFF #
                                                                 # IF NOT rounds.C_FINAL #
-                                                                    <div class="game-score home-score width-pc-50">{rounds.games.HOME_SCORE_B}# IF rounds.games.C_HAS_PEN # <span class="small">({rounds.games.HOME_PEN})</span># ENDIF #</div>
+                                                                    <div class="game-score home-score md-width-pc-50">{rounds.games.HOME_SCORE_B}# IF rounds.games.C_HAS_PEN # <span class="small">({rounds.games.HOME_PEN})</span># ENDIF #</div>
                                                                 # ENDIF #
                                                             # ENDIF #
                                                         </div>
@@ -268,11 +268,11 @@
                                                                 # ENDIF #
                                                             </div>
                                                         </div>
-                                                        <div class="game-team# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-px-100# ENDIF ## ENDIF #">
-                                                            <div class="game-score away-score# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # width-pc-50# ELSE # width-px-50# ENDIF ## ELSE # width-px-50# ENDIF #">{rounds.games.AWAY_SCORE}</div>
+                                                        <div class="game-team# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # md-width-px-100# ENDIF ## ENDIF #">
+                                                            <div class="game-score away-score# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # md-width-pc-50# ELSE # md-width-px-50# ENDIF ## ELSE # md-width-px-50# ENDIF #">{rounds.games.AWAY_SCORE}</div>
                                                             # IF NOT rounds.C_HAT_PLAYOFF #
                                                                 # IF NOT rounds.C_FINAL #
-                                                                    <div class="game-score away-score width-pc-50">{rounds.games.AWAY_SCORE_B}# IF rounds.games.C_HAS_PEN # <span class="small">({rounds.games.AWAY_PEN})</span># ENDIF #</div>
+                                                                    <div class="game-score away-score md-width-pc-50">{rounds.games.AWAY_SCORE_B}# IF rounds.games.C_HAS_PEN # <span class="small">({rounds.games.AWAY_PEN})</span># ENDIF #</div>
                                                                 # ENDIF #
                                                             # ENDIF #
                                                         </div>
@@ -314,7 +314,7 @@
                                                                                         <div class="cell-name">
                                                                                             <a href="{brackets.rounds.games.U_HOME_CLUB}" class="offload">{brackets.rounds.games.HOME_TEAM}</a>
                                                                                         </div>
-                                                                                        # IF brackets.rounds.games.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{brackets.rounds.games.HOME_LOGO}" alt="{brackets.rounds.games.HOME_TEAM}"># ENDIF #
+                                                                                        # IF brackets.rounds.games.C_HAS_HOME_LOGO #<img class="smaller md-width-px-25" src="{brackets.rounds.games.HOME_LOGO}" alt="{brackets.rounds.games.HOME_TEAM}"># ENDIF #
                                                                                     </div>
                                                                                     <div class="cell-score bigger align-center">
                                                                                         {brackets.rounds.games.HOME_SCORE}
@@ -352,7 +352,7 @@
                                                                                         <div class="cell-name">
                                                                                             <a href="{brackets.rounds.games.U_AWAY_CLUB}" class="offload">{brackets.rounds.games.AWAY_TEAM}</a>
                                                                                         </div>
-                                                                                        # IF brackets.rounds.games.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{brackets.rounds.games.AWAY_LOGO}" alt="{brackets.rounds.games.AWAY_TEAM}"># ENDIF #
+                                                                                        # IF brackets.rounds.games.C_HAS_AWAY_LOGO #<img class="smaller md-width-px-25" src="{brackets.rounds.games.AWAY_LOGO}" alt="{brackets.rounds.games.AWAY_TEAM}"># ENDIF #
                                                                                     </div>
                                                                                     <div class="cell-score bigger align-center">
                                                                                         {brackets.rounds.games.AWAY_SCORE}
@@ -395,7 +395,7 @@
                                                                                 {brackets.rounds.games.SUMMARY}
                                                                             # ENDIF #
                                                                             # IF brackets.rounds.games.STADIUM #
-                                                                                <div class="width-pc-50 m-a">{brackets.rounds.games.STADIUM}</div>
+                                                                                <div class="md-width-pc-50 m-a">{brackets.rounds.games.STADIUM}</div>
                                                                             # ENDIF #
                                                                         </div>
                                                                     </div>
@@ -416,7 +416,7 @@
                                                                     # ENDIF #
                                                                 </div>
                                                             </div>
-                                                            <div class="game-score home-score width-px-50 align-center">{brackets.rounds.games.HOME_SCORE}# IF brackets.rounds.games.C_HAS_PEN # <span class="small">({brackets.rounds.games.HOME_PEN})</span># ENDIF #</div>
+                                                            <div class="game-score home-score md-width-px-50 align-center">{brackets.rounds.games.HOME_SCORE}# IF brackets.rounds.games.C_HAS_PEN # <span class="small">({brackets.rounds.games.HOME_PEN})</span># ENDIF #</div>
                                                         </div>
                                                         <div class="id-{brackets.rounds.games.AWAY_ID} game-team game-away# IF brackets.rounds.games.C_AWAY_FAV # text-strong# ENDIF #"
                                                                 # IF brackets.rounds.games.C_AWAY_WIN # style="background-color: {brackets.rounds.games.WIN_COLOR}"# ENDIF #>
@@ -430,7 +430,7 @@
                                                                     # ENDIF #
                                                                 </div>
                                                             </div>
-                                                            <div class="game-score away-score width-px-50 align-center">{brackets.rounds.games.AWAY_SCORE}# IF brackets.rounds.games.C_HAS_PEN # <span class="small">({brackets.rounds.games.AWAY_PEN})</span># ENDIF #</div>
+                                                            <div class="game-score away-score md-width-px-50 align-center">{brackets.rounds.games.AWAY_SCORE}# IF brackets.rounds.games.C_HAS_PEN # <span class="small">({brackets.rounds.games.AWAY_PEN})</span># ENDIF #</div>
                                                         </div>
                                                     </div>
                                                 # END brackets.rounds.games #

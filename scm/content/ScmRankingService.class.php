@@ -676,4 +676,37 @@ class ScmRankingService
         }
         return $game_teams;
     }
+
+    public static function get_team_form($event_id, $team_id, $day):array
+    {
+        if ($day == 0)
+            $day = ScmDayService::get_last_day($event_id);
+        $team_games = ScmGameService::get_last_team_games($event_id, $team_id, $day);
+
+        $team_form = [];
+        foreach ($team_games as $game)
+        {
+            if($game['game_home_id'] == $team_id)
+            {
+                if ($game['game_home_score'] < $game['game_away_score'])
+                    array_push($team_form, ['lost' => 'error']);
+                if ($game['game_home_score'] != '' && $game['game_away_score'] != '' && $game['game_home_score'] === $game['game_away_score'])
+                    array_push($team_form, ['draw' => 'visitor']);
+                if ($game['game_home_score'] > $game['game_away_score'])
+                    array_push($team_form, ['win' => 'success']);
+            }
+            if($game['game_away_id'] == $team_id)
+            {
+                if ($game['game_home_score'] > $game['game_away_score'])
+                    array_push($team_form, ['lost' => 'error']);
+                if ($game['game_home_score'] != '' && $game['game_away_score'] != '' && $game['game_home_score'] === $game['game_away_score'])
+                    array_push($team_form, ['draw' => 'visitor']);
+                if ($game['game_home_score'] < $game['game_away_score'])
+                    array_push($team_form, ['win' => 'success']);
+            }
+            if ($game['game_home_score'] === '' && $game['game_away_score'] === '')
+                array_push($team_form, ['delayed' => 'administrator']);
+        }
+        return $team_form;
+    }
 }

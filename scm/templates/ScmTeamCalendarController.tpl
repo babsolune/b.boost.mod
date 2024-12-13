@@ -7,14 +7,14 @@
                 <div class="responsive-table">
                     <table class="">
                         <colgroup class="hidden-small-screens">
-                            <col class="width-pc-5" />
-                            # IF NOT C_ONE_DAY #<col class="width-pc-10" /># ENDIF #
-                            <col class="width-pc-5" />
-                            <col class="width-pc-# IF C_ONE_DAY #37# ELSE #32# ENDIF #" />
-                            <col class="width-pc-8" />
-                            <col class="width-pc-8" />
-                            <col class="width-pc-# IF C_ONE_DAY #37# ELSE #32# ENDIF #" />
-                            <col class="width-pc-5" />
+                            <col class="md-width-pc-5" />
+                            # IF NOT C_ONE_DAY #<col class="md-width-pc-10" /># ENDIF #
+                            <col class="md-width-pc-5" />
+                            <col class="md-width-pc-# IF C_ONE_DAY #37# ELSE #32# ENDIF #" />
+                            <col class="md-width-pc-8" />
+                            <col class="md-width-pc-8" />
+                            <col class="md-width-pc-# IF C_ONE_DAY #37# ELSE #32# ENDIF #" />
+                            <col class="md-width-pc-5" />
                         </colgroup>
                         <thead>
                             <tr>
@@ -87,7 +87,7 @@
                                                             <div class="cell-name">
                                                                 <a href="{games.U_HOME_CLUB}" class="offload">{games.HOME_TEAM}</a>
                                                             </div>
-                                                            # IF games.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}"># ENDIF #
+                                                            # IF games.C_HAS_HOME_LOGO #<img class="smaller md-width-px-25" src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
                                                             {games.HOME_SCORE}
@@ -119,7 +119,7 @@
                                                             <div class="cell-name">
                                                                 <a href="{games.U_AWAY_CLUB}" class="offload">{games.AWAY_TEAM}</a>
                                                             </div>
-                                                            # IF games.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}"># ENDIF #
+                                                            # IF games.C_HAS_AWAY_LOGO #<img class="smaller md-width-px-25" src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
                                                             {games.AWAY_SCORE}
@@ -156,7 +156,7 @@
                                                     {games.SUMMARY}
                                                 # ENDIF #
                                                 # IF games.STADIUM #
-                                                    <div class="width-pc-50 m-a">{games.STADIUM}</div>
+                                                    <div class="md-width-pc-50 m-a">{games.STADIUM}</div>
                                                 # ENDIF #
                                             </div>
                                         </div>

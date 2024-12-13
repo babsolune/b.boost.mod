@@ -79,6 +79,7 @@ class ScmDaysRankingController extends DefaultModuleController
                 $rank_color = 'rgba(0,0,0,0)';
             }
             $event_slug = ScmEventService::get_event_slug($this->event_id());
+
             $this->view->assign_block_vars('ranks', [
                 'C_FAV'           => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
                 'C_FORFEIT'       => $team_rank['status'] == 'forfeit',
@@ -100,6 +101,18 @@ class ScmDaysRankingController extends DefaultModuleController
                 'OFF_BONUS'       => $team_rank['off_bonus'],
                 'DEF_BONUS'       => $team_rank['def_bonus'],
             ]);
+
+            foreach (ScmRankingService::get_team_form($this->event_id(), $team_rank['team_id'], $day) as $k => $results)
+            {
+                foreach ($results as $result => $class)
+                {
+                    $this->view->assign_block_vars('ranks.form', [
+                        'C_PLAYED' => $result != 'delayed',
+                        'L_PLAYED' => $this->lang['scm.rank.form.' . $result . ''],
+                        'CLASS' => $class,
+                    ]);
+                }
+            }
         }
 
         $slug = ScmEventService::get_event_slug($this->event_id());
@@ -264,7 +277,7 @@ class ScmDaysRankingController extends DefaultModuleController
         if ($event->get_is_sub())
             $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
 		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-		$breadcrumb->add($this->lang['scm.days.ranking'], ScmUrlBuilder::display_groups_rounds($event->get_id(), $event->get_event_slug()));
+		$breadcrumb->add($this->lang['scm.days.ranking'], ScmUrlBuilder::display_days_ranking($event->get_id(), $event->get_event_slug()));
 
 		return $response;
 	}

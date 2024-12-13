@@ -3,16 +3,16 @@
     <h2># IF C_HAT_RANKING #{@scm.day} {DAY}# ELSE #{@scm.group} {GROUP}# ENDIF #</h2>
     # IF C_HAS_GAMES #
         <div class="cell-flex cell-columns-2">
-            <div class="responsive-table">
+            <div class="responsive-table games-list">
                 <table class="bordered-table">
                     <colgroup class="hidden-small-screens">
-                        <col class="width-pc-4" />
-                        <col class="width-pc-40" />
-                        <col class="width-pc-8" />
-                        <col class="width-pc-8" />
-                        <col class="width-pc-40" />
-                        # IF C_DISPLAY_PLAYGROUNDS #<col class="width-pc-10" /># ENDIF #
-                        <col class="width-pc-5" />
+                        <col class="md-width-pc-4" />
+                        <col class="md-width-pc-40" />
+                        <col class="md-width-pc-8" />
+                        <col class="md-width-pc-8" />
+                        <col class="md-width-pc-40" />
+                        # IF C_DISPLAY_PLAYGROUNDS #<col class="md-width-pc-10" /># ENDIF #
+                        <col class="md-width-pc-5" />
                     </colgroup>
                     <thead>
                         <tr>
@@ -79,7 +79,7 @@
                                                             <div class="cell-name">
                                                                 <a href="{matchdays.dates.games.U_HOME_CLUB}" class="offload">{matchdays.dates.games.HOME_TEAM}</a>
                                                             </div>
-                                                            # IF matchdays.dates.games.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{matchdays.dates.games.HOME_LOGO}" alt="{matchdays.dates.games.HOME_TEAM}"># ENDIF #
+                                                            # IF matchdays.dates.games.C_HAS_HOME_LOGO #<img class="smaller md-width-px-25" src="{matchdays.dates.games.HOME_LOGO}" alt="{matchdays.dates.games.HOME_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
                                                             {matchdays.dates.games.HOME_SCORE}
@@ -109,7 +109,7 @@
                                                     <div class="away-team cell">
                                                         <div class="cell-header">
                                                             <div class="cell-name"><a href="{matchdays.dates.games.U_AWAY_CLUB}" class="offload">{matchdays.dates.games.AWAY_TEAM}</a></div>
-                                                            # IF matchdays.dates.games.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{matchdays.dates.games.AWAY_LOGO}" alt="{matchdays.dates.games.AWAY_TEAM}"># ENDIF #
+                                                            # IF matchdays.dates.games.C_HAS_AWAY_LOGO #<img class="smaller md-width-px-25" src="{matchdays.dates.games.AWAY_LOGO}" alt="{matchdays.dates.games.AWAY_TEAM}"># ENDIF #
                                                         </div>
                                                         <div class="cell-score bigger align-center">
                                                             {matchdays.dates.games.AWAY_SCORE}
@@ -146,7 +146,7 @@
                                                     {matchdays.dates.games.SUMMARY}
                                                 # ENDIF #
                                                 # IF matchdays.dates.games.STADIUM #
-                                                    <div class="width-pc-50 m-a">{matchdays.dates.games.STADIUM}</div>
+                                                    <div class="md-width-pc-50 m-a">{matchdays.dates.games.STADIUM}</div>
                                                 # ENDIF #
                                             </div>
                                         </div>
@@ -158,18 +158,18 @@
                     </tbody>
                 </table>
             </div>
-            <div class="responsive-table">
+            <div class="responsive-table ranking-list">
                 <table class="bordered-table">
                     <colgroup class="hidden-small-screens">
-                        <col class="width-pc-05" />
-                        <col class="width-pc-60" />
-                        <col class="width-pc-05" />
-                        <col class="width-pc-05" />
-                        <col class="width-pc-05" />
-                        <col class="width-pc-05" />
-                        <col class="width-pc-05" />
-                        <col class="width-pc-05" />
-                        <col class="width-pc-05" />
+                        <col class="md-width-pc-05" />
+                        <col class="md-width-pc-60" />
+                        <col class="md-width-pc-05" />
+                        <col class="md-width-pc-05" />
+                        <col class="md-width-pc-05" />
+                        <col class="md-width-pc-05" />
+                        <col class="md-width-pc-05" />
+                        <col class="md-width-pc-05" />
+                        <col class="md-width-pc-05" />
                     </colgroup>
                     <thead>
                         <tr>

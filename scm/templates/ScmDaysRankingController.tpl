@@ -35,32 +35,33 @@
             # IF C_HAS_GAMES #
                 <div class="scm-table">
                     <div class="scm-line scm-head">
-                        <div class="scm-line-group width-pc-50">
-                            <div class="scm-cell width-pc-8" aria-label="{@scm.th.rank}">{@scm.th.rank.short}</div>
-                            <div class="scm-cell cell-left width-pc-92">{@scm.th.team}</div>
+                        <div class="scm-line-group sm-width-pc-100 md-width-pc-45">
+                            <div class="scm-cell md-width-px-43" aria-label="{@scm.th.rank}">{@scm.th.rank.short}</div>
+                            <div class="scm-cell cell-left md-width-pc-92">{@scm.th.team}</div>
                         </div>
-                        <div class="scm-line-group width-pc-50">
-                            <div class="scm-cell width-pc-9" aria-label="{@scm.th.points}">{@scm.th.points.short}</div>
-                            <div class="scm-cell width-pc-9" aria-label="{@scm.th.played}">{@scm.th.played.short}</div>
-                            <div class="scm-cell width-pc-9" aria-label="{@scm.th.win}">{@scm.th.win.short}</div>
-                            <div class="scm-cell width-pc-9" aria-label="{@scm.th.draw}">{@scm.th.draw.short}</div>
-                            <div class="scm-cell width-pc-9" aria-label="{@scm.th.loss}">{@scm.th.loss.short}</div>
-                            <div class="scm-cell width-pc-9" aria-label="{@scm.th.goals.for}">{@scm.th.goals.for.short}</div>
-                            <div class="scm-cell width-pc-9" aria-label="{@scm.th.goals.against}">{@scm.th.goals.against.short}</div>
-                            <div class="scm-cell width-pc-9" aria-label="{@scm.th.goal.average}">{@scm.th.goal.average.short}</div>
-                            # IF C_BONUS_SINGLE #<div class="scm-cell width-pc-9" aria-label="{@scm.th.off.bonus}">{@scm.th.off.bonus.short}</div># ENDIF #
+                        <div class="scm-line-group sm-width-pc-100 md-width-pc-55">
+                            <div class="scm-cell md-width-px-43" aria-label="{@scm.th.points}">{@scm.th.points.short}</div>
+                            <div class="scm-cell md-width-px-43" aria-label="{@scm.th.played}">{@scm.th.played.short}</div>
+                            <div class="scm-cell md-width-px-43" aria-label="{@scm.th.win}">{@scm.th.win.short}</div>
+                            <div class="scm-cell md-width-px-43" aria-label="{@scm.th.draw}">{@scm.th.draw.short}</div>
+                            <div class="scm-cell md-width-px-43" aria-label="{@scm.th.loss}">{@scm.th.loss.short}</div>
+                            <div class="scm-cell md-width-px-43" aria-label="{@scm.th.goals.for}">{@scm.th.goals.for.short}</div>
+                            <div class="scm-cell md-width-px-43" aria-label="{@scm.th.goals.against}">{@scm.th.goals.against.short}</div>
+                            <div class="scm-cell md-width-px-43" aria-label="{@scm.th.goal.average}">{@scm.th.goal.average.short}</div>
+                            # IF C_BONUS_SINGLE #<div class="scm-cell md-width-px-43" aria-label="{@scm.th.off.bonus}">{@scm.th.off.bonus.short}</div># ENDIF #
                             # IF C_BONUS_DOUBLE #
-                                <div class="scm-cell width-pc-9" aria-label="{@scm.th.off.bonus}">{@scm.th.off.bonus.short}</div>
-                                <div class="scm-cell width-pc-9" aria-label="{@scm.th.def.bonus}">{@scm.th.def.bonus.short}</div>
+                                <div class="scm-cell md-width-px-43" aria-label="{@scm.th.off.bonus}">{@scm.th.off.bonus.short}</div>
+                                <div class="scm-cell md-width-px-43" aria-label="{@scm.th.def.bonus}">{@scm.th.def.bonus.short}</div>
                             # ENDIF #
+                            <div class="scm-cell md-width-px-100 hidden-small-screens" aria-label="{@scm.rank.form}"><i class="fa fa-chart-pie"></i></div>
                         </div>
                     </div>
-                    <div class="scm-group">
+                    <div class="scm-body">
                         # START ranks #
                             <div class="scm-line ranking-color team-{ranks.TEAM_ID}# IF ranks.C_FAV # fav-team# ENDIF #" style="background-color: {ranks.RANK_COLOR}">
-                                <div class="scm-line-group width-pc-50">
-                                    <div class="scm-cell width-pc-8">{ranks.RANK}</div>
-                                    <div class="scm-cell scm-name cell-left width-pc-92">
+                                <div class="scm-line-group sm-width-pc-100 md-width-pc-45">
+                                    <div class="scm-cell md-width-px-43">{ranks.RANK}</div>
+                                    <div class="scm-cell scm-name cell-left md-width-pc-92">
                                         # IF ranks.C_HAS_TEAM_LOGO #<img src="{ranks.TEAM_LOGO}" alt="{ranks.TEAM_NAME}"># ENDIF #
                                         <span>
                                             <a href="{ranks.U_TEAM_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{ranks.TEAM_NAME}</a>
@@ -68,20 +69,25 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="scm-line-group width-pc-50">
-                                    <div class="scm-cell width-pc-10">{ranks.POINTS}</div>
-                                    <div class="scm-cell width-pc-10">{ranks.PLAYED}</div>
-                                    <div class="scm-cell width-pc-10">{ranks.WIN}</div>
-                                    <div class="scm-cell width-pc-10">{ranks.DRAW}</div>
-                                    <div class="scm-cell width-pc-10">{ranks.LOSS}</div>
-                                    <div class="scm-cell width-pc-10">{ranks.GOALS_FOR}</div>
-                                    <div class="scm-cell width-pc-10">{ranks.GOALS_AGAINST}</div>
-                                    <div class="scm-cell width-pc-10">{ranks.GOAL_AVERAGE}</div>
-                                    # IF C_BONUS_SINGLE #<div class="scm-cell width-pc-10">{ranks.OFF_BONUS}</div># ENDIF #
+                                <div class="scm-line-group sm-width-pc-100 md-width-pc-55">
+                                    <div class="scm-cell md-width-px-43">{ranks.POINTS}</div>
+                                    <div class="scm-cell md-width-px-43">{ranks.PLAYED}</div>
+                                    <div class="scm-cell md-width-px-43">{ranks.WIN}</div>
+                                    <div class="scm-cell md-width-px-43">{ranks.DRAW}</div>
+                                    <div class="scm-cell md-width-px-43">{ranks.LOSS}</div>
+                                    <div class="scm-cell md-width-px-43">{ranks.GOALS_FOR}</div>
+                                    <div class="scm-cell md-width-px-43">{ranks.GOALS_AGAINST}</div>
+                                    <div class="scm-cell md-width-px-43">{ranks.GOAL_AVERAGE}</div>
+                                    # IF C_BONUS_SINGLE #<div class="scm-cell md-width-px-43">{ranks.OFF_BONUS}</div># ENDIF #
                                     # IF C_BONUS_DOUBLE #
-                                        <div class="scm-cell width-pc-10">{ranks.OFF_BONUS}</div>
-                                        <div class="scm-cell width-pc-10">{ranks.DEF_BONUS}</div>
+                                        <div class="scm-cell md-width-px-43">{ranks.OFF_BONUS}</div>
+                                        <div class="scm-cell md-width-px-43">{ranks.DEF_BONUS}</div>
                                     # ENDIF #
+                                    <div class="scm-cell md-width-px-100 hidden-small-screens">
+                                        # START ranks.form #
+                                            <span class="smaller pinned bgc# IF ranks.form.C_PLAYED #-full# ENDIF # {ranks.form.CLASS}" # IF NOT ranks.form.C_PLAYED #aria-label="{@scm.rank.form.delayed}"# ENDIF #># IF ranks.form.C_PLAYED #{ranks.form.L_PLAYED}# ELSE #&nbsp;&nbsp;# ENDIF #</span>
+                                        # END ranks.form #
+                                    </div>
                                 </div>
                             </div>
                         # END ranks #
@@ -96,12 +102,12 @@
                             <table class="">
                                 <caption>{@scm.day} {LAST_DAY}</caption>
                                 <colgroup class="hidden-small-screens">
-                                    <col class="width-pc-05" />
-                                    <col class="width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
-                                    <col class="width-pc-8" />
-                                    <col class="width-pc-8" />
-                                    <col class="width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
-                                    <col class="width-pc-8" />
+                                    <col class="md-width-pc-05" />
+                                    <col class="md-width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
+                                    <col class="md-width-pc-8" />
+                                    <col class="md-width-pc-8" />
+                                    <col class="md-width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
+                                    <col class="md-width-pc-8" />
                                 </colgroup>
                                 <thead>
                                     <tr>
@@ -170,7 +176,7 @@
                                                                         <div class="cell-name">
                                                                             <a href="{prev_dates.prev_days.U_HOME_CLUB}" class="offload">{prev_dates.prev_days.HOME_TEAM}</a>
                                                                         </div>
-                                                                        # IF prev_dates.prev_days.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{prev_dates.prev_days.HOME_LOGO}" alt="{prev_dates.prev_days.HOME_TEAM}"># ENDIF #
+                                                                        # IF prev_dates.prev_days.C_HAS_HOME_LOGO #<img class="smaller md-width-px-25" src="{prev_dates.prev_days.HOME_LOGO}" alt="{prev_dates.prev_days.HOME_TEAM}"># ENDIF #
                                                                     </div>
                                                                     <div class="cell-score bigger align-center">
                                                                         {prev_dates.prev_days.HOME_SCORE}
@@ -202,7 +208,7 @@
                                                                         <div class="cell-name">
                                                                             <a href="{prev_dates.prev_days.U_AWAY_CLUB}" class="offload">{prev_dates.prev_days.AWAY_TEAM}</a>
                                                                         </div>
-                                                                        # IF prev_dates.prev_days.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{prev_dates.prev_days.AWAY_LOGO}" alt="{prev_dates.prev_days.AWAY_TEAM}"># ENDIF #
+                                                                        # IF prev_dates.prev_days.C_HAS_AWAY_LOGO #<img class="smaller md-width-px-25" src="{prev_dates.prev_days.AWAY_LOGO}" alt="{prev_dates.prev_days.AWAY_TEAM}"># ENDIF #
                                                                     </div>
                                                                     <div class="cell-score bigger align-center">
                                                                         {prev_dates.prev_days.AWAY_SCORE}
@@ -239,7 +245,7 @@
                                                                 {prev_dates.prev_days.SUMMARY}
                                                             # ENDIF #
                                                             # IF prev_dates.prev_days.STADIUM #
-                                                                <div class="width-pc-50 m-a">{prev_dates.prev_days.STADIUM}</div>
+                                                                <div class="md-width-pc-50 m-a">{prev_dates.prev_days.STADIUM}</div>
                                                             # ENDIF #
                                                         </div>
                                                     </div>
@@ -258,12 +264,12 @@
                             <table class="">
                                 <caption>{@scm.day} {NEXT_DAY}</caption>
                                 <colgroup class="hidden-small-screens">
-                                    <col class="width-pc-05" />
-                                    <col class="width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
-                                    <col class="width-pc-08" />
-                                    <col class="width-pc-08" />
-                                    <col class="width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
-                                    <col class="width-pc-08" />
+                                    <col class="md-width-pc-05" />
+                                    <col class="md-width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
+                                    <col class="md-width-pc-08" />
+                                    <col class="md-width-pc-08" />
+                                    <col class="md-width-pc-# IF C_ONE_DAY #40# ELSE #35# ENDIF #" />
+                                    <col class="md-width-pc-08" />
                                 </colgroup>
                                 <thead>
                                     <tr>
@@ -332,7 +338,7 @@
                                                                         <div class="cell-name">
                                                                             <a href="{next_dates.next_days.U_HOME_CLUB}" class="offload# IF next_dates.next_days.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">{next_dates.next_days.HOME_TEAM}</a>
                                                                         </div>
-                                                                        # IF next_dates.next_days.C_HAS_HOME_LOGO #<img class="smaller width-px-25" src="{next_dates.next_days.HOME_LOGO}" alt="{next_dates.next_days.HOME_TEAM}"># ENDIF #
+                                                                        # IF next_dates.next_days.C_HAS_HOME_LOGO #<img class="smaller md-width-px-25" src="{next_dates.next_days.HOME_LOGO}" alt="{next_dates.next_days.HOME_TEAM}"># ENDIF #
                                                                     </div>
                                                                     <div class="cell-score bigger align-center">
                                                                         {next_dates.next_days.HOME_SCORE}
@@ -364,7 +370,7 @@
                                                                         <div class="cell-name">
                                                                             <a href="{next_dates.next_days.U_AWAY_CLUB}" class="offload# IF next_dates.next_days.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">{next_dates.next_days.AWAY_TEAM}</a>
                                                                         </div>
-                                                                        # IF next_dates.next_days.C_HAS_AWAY_LOGO #<img class="smaller width-px-25" src="{next_dates.next_days.AWAY_LOGO}" alt="{next_dates.next_days.AWAY_TEAM}"># ENDIF #
+                                                                        # IF next_dates.next_days.C_HAS_AWAY_LOGO #<img class="smaller md-width-px-25" src="{next_dates.next_days.AWAY_LOGO}" alt="{next_dates.next_days.AWAY_TEAM}"># ENDIF #
                                                                     </div>
                                                                     <div class="cell-score bigger align-center">
                                                                         {next_dates.next_days.AWAY_SCORE}
@@ -401,7 +407,7 @@
                                                                 {next_dates.next_days.SUMMARY}
                                                             # ENDIF #
                                                             # IF next_dates.next_days.STADIUM #
-                                                                <div class="width-pc-50 m-a">{next_dates.next_days.STADIUM}</div>
+                                                                <div class="md-width-pc-50 m-a">{next_dates.next_days.STADIUM}</div>
                                                             # ENDIF #
                                                         </div>
                                                     </div>

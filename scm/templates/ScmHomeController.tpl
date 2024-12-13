@@ -46,7 +46,7 @@
                                                     </div>
                                                 # ENDIF #
                                             </div>
-                                            <div class="game-score home-score width-px-50">{current_games.HOME_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.HOME_PEN})</span># ENDIF #</div>
+                                            <div class="game-score home-score md-width-px-50">{current_games.HOME_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.HOME_PEN})</span># ENDIF #</div>
                                         </div>
                                         <div class="id-{current_games.AWAY_ID} game-team game-away# IF current_games.C_AWAY_FAV # text-strong# ENDIF #"
                                                 # IF current_games.C_AWAY_WIN # style="background-color: {current_games.WIN_COLOR}"# ENDIF #>
@@ -58,7 +58,7 @@
                                                     </div>
                                                 # ENDIF #
                                             </div>
-                                            <div class="game-score away-score width-px-50">{current_games.AWAY_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.AWAY_PEN})</span># ENDIF #</div>
+                                            <div class="game-score away-score md-width-px-50">{current_games.AWAY_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.AWAY_PEN})</span># ENDIF #</div>
                                         </div>
                                     </div>
                                 # END current_games #

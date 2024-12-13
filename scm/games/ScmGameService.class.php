@@ -111,6 +111,31 @@ class ScmGameService
         return $games;
 	}
 
+    /** Get all games from a event */
+	public static function get_last_team_games(int $event_id, int $team_id, int $day) : array
+	{
+		$results = self::$db_querier->select('SELECT games.*, event.*
+            FROM ' . ScmSetup::$scm_game_table . ' games
+            LEFT JOIN ' . ScmSetup::$scm_event_table . ' event ON event.id = games.game_event_id
+            WHERE games.game_event_id = :event_id
+            AND games.game_cluster <= :day
+            AND (games.game_home_id = :team_id OR games.game_away_id = :team_id)
+            ORDER BY games.game_cluster DESC
+            LIMIT 5', [
+                'event_id' => $event_id,
+                'team_id' => $team_id,
+                'day' => $day
+            ]
+        );
+
+        $games = [];
+        while($row = $results->fetch())
+        {
+            $games[] = $row;
+        }
+        return $games;
+	}
+
     /** check if a event has declared games */
     public static function has_games(int $event_id) : bool
     {

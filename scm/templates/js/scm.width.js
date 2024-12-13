@@ -9,34 +9,98 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Manage table width and bgcolor
-    const widths = document.querySelectorAll('[class*="width-"]');
-    widths.forEach((width) => {
+    // Manage table width
+    const sm_widths = document.querySelectorAll('[class*="sm-width-"]');
+    const md_widths = document.querySelectorAll('[class*="md-width-"]');
+    const lg_widths = document.querySelectorAll('[class*="lg-width-"]');
+
+    sm_widths.forEach((width) => {
+        const classList = width.classList;
         const classes = width.className.split(' ');
         // Static
-        if (window.innerWidth > 769) {
+        if (window.innerWidth < 769) {
             classes.forEach((sizeClass) => {
-                if (sizeClass.startsWith('width-')) {
+                if (sizeClass.startsWith('md-width-')) classList.remove(sizeClass);
+                if (sizeClass.startsWith('lg-width-')) classList.remove(sizeClass);
+                if (sizeClass.startsWith('sm-width-')) {
                     const size = sizeClass.split('-');
-                    if (size[1] == "pc") size[1] = '%';
-                    width.style.width = size[2] + size[1];
+                    if (size[2] == "pc") size[2] = '%';
+                    width.style.width = size[3] + size[2];
                 }
             });
         }
         // Dynamic
         const resizeHandler = () => {
-            if (window.innerWidth > 769) {
+            if (window.innerWidth < 769) {
                 classes.forEach((sizeClass) => {
-                    if (sizeClass.startsWith('width-')) {
+                    if (sizeClass.startsWith('md-width-')) classList.remove(sizeClass);
+                    if (sizeClass.startsWith('lg-width-')) classList.remove(sizeClass);
+                    if (sizeClass.startsWith('sm-width-')) {
                         const size = sizeClass.split('-');
-                        if (size[1] == "pc") size[1] = '%';
-                        width.style.width = size[2] + size[1];
+                        if (size[2] == "pc") size[2] = '%';
+                        width.style.width = size[3] + size[2];
                     }
                 });
-            } else {
+            }
+        }
+        window.addEventListener('resize', resizeHandler);
+    });
+    md_widths.forEach((width) => {
+        const classList = width.classList;
+        const classes = width.className.split(' ');
+        // Static
+        if (window.innerWidth >= 769 || window.innerWidth < 1366) {
+            classes.forEach((sizeClass) => {
+                    if (sizeClass.startsWith('sm-width-')) classList.remove(sizeClass);
+                    if (sizeClass.startsWith('lg-width-')) classList.remove(sizeClass);
+                if (sizeClass.startsWith('md-width-')) {
+                    const size = sizeClass.split('-');
+                    if (size[2] == "pc") size[2] = '%';
+                    width.style.width = size[3] + size[2];
+                }
+            });
+        }
+        // Dynamic
+        const resizeHandler = () => {
+            if (window.innerWidth >= 769 && window.innerWidth < 1366) {
                 classes.forEach((sizeClass) => {
-                    if (sizeClass.startsWith('width-')) {
-                        width.style.width = 100 + '%';
+                    if (sizeClass.startsWith('sm-width-')) classList.remove(sizeClass);
+                    if (sizeClass.startsWith('lg-width-')) classList.remove(sizeClass);
+                    if (sizeClass.startsWith('md-width-')) {
+                        const size = sizeClass.split('-');
+                        if (size[2] == "pc") size[2] = '%';
+                        width.style.width = size[3] + size[2];
+                    }
+                });
+            }
+        }
+        window.addEventListener('resize', resizeHandler);
+    });
+    lg_widths.forEach((width) => {
+        const classList = width.classList;
+        const classes = width.className.split(' ');
+        // Static
+        if (window.innerWidth >= 1366) {
+            classes.forEach((sizeClass) => {
+                if (sizeClass.startsWith('sm-width-')) classList.remove(sizeClass);
+                if (sizeClass.startsWith('md-width-')) classList.remove(sizeClass);
+                if (sizeClass.startsWith('lg-width-')) {
+                    const size = sizeClass.split('-');
+                    if (size[2] == "pc") size[2] = '%';
+                    width.style.width = size[3] + size[2];
+                }
+            });
+        }
+        // Dynamic
+        const resizeHandler = () => {
+            if (window.innerWidth >= 1366) {
+                classes.forEach((sizeClass) => {
+                    if (sizeClass.startsWith('sm-width-')) classList.remove(sizeClass);
+                    if (sizeClass.startsWith('md-width-')) classList.remove(sizeClass);
+                    if (sizeClass.startsWith('lg-width-')) {
+                        const size = sizeClass.split('-');
+                        if (size[2] == "pc") size[2] = '%';
+                        width.style.width = size[3] + size[2];
                     }
                 });
             }

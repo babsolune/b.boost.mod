@@ -24,9 +24,9 @@
                             </a>
                         </td>
                         # IF items.C_STATUS #
-                            <td class="width-px-70 small text-italic warning">{items.STATUS}</td>
+                            <td class="md-width-px-70 small text-italic warning">{items.STATUS}</td>
                         # ELSE #
-                            <td class="width-px-70"># IF items.C_HAS_SCORE #{items.HOME_SCORE} - {items.AWAY_SCORE}# ENDIF #</td>
+                            <td class="md-width-px-70"># IF items.C_HAS_SCORE #{items.HOME_SCORE} - {items.AWAY_SCORE}# ENDIF #</td>
                         # ENDIF #
                         <td class="align-left# IF items.C_AWAY_EXEMPT # small text-italic# ENDIF #">
                             <a

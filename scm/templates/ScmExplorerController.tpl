@@ -46,7 +46,7 @@
                                                     </div>
                                                 # ENDIF #
                                             </div>
-                                            <div class="game-score home-score width-px-50">{current_games.HOME_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.HOME_PEN})</span># ENDIF #</div>
+                                            <div class="game-score home-score md-width-px-50">{current_games.HOME_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.HOME_PEN})</span># ENDIF #</div>
                                         </div>
                                         <div class="id-{current_games.AWAY_ID} game-team game-away# IF current_games.C_AWAY_FAV # text-strong# ENDIF #"
                                                 # IF current_games.C_AWAY_WIN # style="background-color: {current_games.WIN_COLOR}"# ENDIF #>
@@ -58,7 +58,7 @@
                                                     </div>
                                                 # ENDIF #
                                             </div>
-                                            <div class="game-score away-score width-px-50">{current_games.AWAY_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.AWAY_PEN})</span># ENDIF #</div>
+                                            <div class="game-score away-score md-width-px-50">{current_games.AWAY_SCORE}# IF current_games.C_HAS_PEN # <span class="small">({current_games.AWAY_PEN})</span># ENDIF #</div>
                                         </div>
                                     </div>
                                 # END current_games #
@@ -76,7 +76,7 @@
 				<article class="scm-item">
 					<div class="content">
                         <div class="cell-flex cell-columns-2 cell-between">
-                            <div class="width-pc-45">
+                            <div class="md-width-pc-45">
                                 <header><h2>{@scm.mini.next}</h2></header>
                                 # IF C_NEXT_ITEMS #
                                     # START next_categories #
@@ -103,7 +103,7 @@
                                     <div class="message-helper bgc notice">{@common.no.item.now}</div>
                                 # ENDIF #
                             </div>
-                            <div class="width-pc-45">
+                            <div class="md-width-pc-45">
                                 <header><h2>{@scm.mini.prev}</h2></header>
                                 # IF C_PREV_ITEMS #
                                     # START prev_categories #
@@ -119,9 +119,9 @@
                                                     <div>{@scm.day.short}{prev_categories.prev_items.CLUSTER} : {prev_categories.prev_items.GAME_DATE_DAY}/{prev_categories.prev_items.GAME_DATE_MONTH}/{prev_categories.prev_items.YEAR} {prev_categories.prev_items.GAME_DATE_HOUR}:{prev_categories.prev_items.GAME_DATE_MINUTE}</div>
                                                 </div>
                                                 <div class="game-body category-{prev_categories.prev_items.CATEGORY_ID}# IF prev_categories.prev_items.C_EXEMPT # bgc notice# ENDIF #">
-                                                    <span class="d-inline-block align-right width-pc-35"><a href="{prev_categories.prev_items.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF prev_categories.prev_items.C_HOME_FAV # text-strong# ENDIF ## IF prev_categories.prev_items.HOME_FORFEIT # warning# ENDIF #">{prev_categories.prev_items.HOME_TEAM}</a></span>
-                                                    <span class="d-inline-block align-center width-pc-20">{prev_categories.prev_items.HOME_SCORE} - {prev_categories.prev_items.AWAY_SCORE}</span>
-                                                    <span class="d-inline-block align-left width-pc-35"><a href="{prev_categories.prev_items.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF prev_categories.prev_items.C_AWAY_FAV # text-strong# ENDIF ## IF prev_categories.prev_items.AWAY_FORFEIT # warning# ENDIF #">{prev_categories.prev_items.AWAY_TEAM}</a></span>
+                                                    <span class="d-inline-block align-right md-width-pc-35"><a href="{prev_categories.prev_items.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF prev_categories.prev_items.C_HOME_FAV # text-strong# ENDIF ## IF prev_categories.prev_items.HOME_FORFEIT # warning# ENDIF #">{prev_categories.prev_items.HOME_TEAM}</a></span>
+                                                    <span class="d-inline-block align-center md-width-pc-20">{prev_categories.prev_items.HOME_SCORE} - {prev_categories.prev_items.AWAY_SCORE}</span>
+                                                    <span class="d-inline-block align-left md-width-pc-35"><a href="{prev_categories.prev_items.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF prev_categories.prev_items.C_AWAY_FAV # text-strong# ENDIF ## IF prev_categories.prev_items.AWAY_FORFEIT # warning# ENDIF #">{prev_categories.prev_items.AWAY_TEAM}</a></span>
                                                 </div>
                                             </div>
                                         # END prev_categories.prev_items #

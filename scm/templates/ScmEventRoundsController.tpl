@@ -50,7 +50,7 @@
                                     # ENDIF #
                                 </a>
                             </div>
-                            <div  class="id-{matchdays.dates.groups.HOME_ID} game-team game-home# IF matchdays.dates.groups.C_HOME_FAV # text-strong# ENDIF #"
+                            <div class="id-{matchdays.dates.groups.HOME_ID} game-team game-home# IF matchdays.dates.groups.C_HOME_FAV # text-strong# ENDIF #"
                                     # IF matchdays.dates.groups.C_HOME_WIN # style="background-color: {matchdays.dates.groups.WIN_COLOR}"# ENDIF #>
                                 <div class="home-{matchdays.dates.groups.GAME_ID} home-team">
                                     # IF matchdays.dates.groups.HOME_ID #
@@ -60,7 +60,7 @@
                                         </div>
                                     # ENDIF #
                                 </div>
-                                <div class="game-score home-score width-px-50">{matchdays.dates.groups.HOME_SCORE}# IF matchdays.dates.groups.C_HAS_PEN # <span class="small">({matchdays.dates.groups.HOME_PEN})</span># ENDIF #</div>
+                                <div class="game-score home-score md-width-px-50">{matchdays.dates.groups.HOME_SCORE}# IF matchdays.dates.groups.C_HAS_PEN # <span class="small">({matchdays.dates.groups.HOME_PEN})</span># ENDIF #</div>
                             </div>
                             <div class="id-{matchdays.dates.groups.AWAY_ID} game-team game-away# IF matchdays.dates.groups.C_AWAY_FAV # text-strong# ENDIF #"
                                     # IF matchdays.dates.groups.C_AWAY_WIN # style="background-color: {matchdays.dates.groups.WIN_COLOR}"# ENDIF #>
@@ -72,7 +72,7 @@
                                         </div>
                                     # ENDIF #
                                 </div>
-                                <div class="game-score away-score width-px-50">{matchdays.dates.groups.AWAY_SCORE}# IF matchdays.dates.groups.C_HAS_PEN # <span class="small">({matchdays.dates.groups.AWAY_PEN})</span># ENDIF #</div>
+                                <div class="game-score away-score md-width-px-50">{matchdays.dates.groups.AWAY_SCORE}# IF matchdays.dates.groups.C_HAS_PEN # <span class="small">({matchdays.dates.groups.AWAY_PEN})</span># ENDIF #</div>
                             </div>
                         </div>
                     # END matchdays.dates.groups #
@@ -112,7 +112,7 @@
                                                 </div>
                                             # ENDIF #
                                         </div>
-                                        <div class="game-score home-score width-px-50">{matchrounds.dates.brackets.HOME_SCORE}# IF matchrounds.dates.brackets.C_HAS_PEN # <span class="small">({matchrounds.dates.brackets.HOME_PEN})</span># ENDIF #</div>
+                                        <div class="game-score home-score md-width-px-50">{matchrounds.dates.brackets.HOME_SCORE}# IF matchrounds.dates.brackets.C_HAS_PEN # <span class="small">({matchrounds.dates.brackets.HOME_PEN})</span># ENDIF #</div>
                                     </div>
                                     <div class="id-{matchrounds.dates.brackets.AWAY_ID} game-team game-away# IF matchrounds.dates.brackets.C_AWAY_FAV # text-strong# ENDIF #"
                                             # IF matchrounds.dates.brackets.C_AWAY_WIN # style="background-color: {matchrounds.dates.brackets.WIN_COLOR}"# ENDIF #>
@@ -124,7 +124,7 @@
                                                 </div>
                                             # ENDIF #
                                         </div>
-                                        <div class="game-score away-score width-px-50">{matchrounds.dates.brackets.AWAY_SCORE}# IF matchrounds.dates.brackets.C_HAS_PEN # <span class="small">({matchrounds.dates.brackets.AWAY_PEN})</span># ENDIF #</div>
+                                        <div class="game-score away-score md-width-px-50">{matchrounds.dates.brackets.AWAY_SCORE}# IF matchrounds.dates.brackets.C_HAS_PEN # <span class="small">({matchrounds.dates.brackets.AWAY_PEN})</span># ENDIF #</div>
                                     </div>
                                 </div>
                             # END matchrounds.dates.brackets #
