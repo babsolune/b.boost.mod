@@ -64,26 +64,32 @@
                     </div>
 
                     <h2>{@scm.club.event.list}</h2>
-                    <div class="message-helper bgc notice">{@scm.warning.current.season}</div>
-                    <div class="cell-list">
-                        <ul>
-                            # START categories #
-                                <li><h6 class="text-strong">{categories.CATEGORY_NAME}</h6></li>
+                    <div class="cell-flex cell-columns-2">
+                        # START seasons #
+                            <div class="cell-list club-events">
                                 <ul>
-                                    # START categories.events #
-                                        # IF categories.events.C_VISIBLE #
-                                            <li>
-                                                {categories.events.CLUB_NAME} : 
-                                                # IF categories.events.C_IS_SUB #
-                                                    <span><a href="{categories.events.U_MASTER_EVENT}" class="offload">{categories.events.MASTER_DIVISION} {categories.events.MASTER_SEASON}</a> - </span>
-                                                # ENDIF #
-                                                <a href="{categories.events.U_EVENT}" class="offload"># IF categories.events.C_IS_SUB #{categories.events.DIVISION_NAME}# ELSE #{categories.events.TITLE}# ENDIF #</a>
-                                            </li>
-                                        # ENDIF #
-                                    # END categories.events #
+                                    <li><h5 class="text-strong">{seasons.SEASON_NAME}</h5></li>
+                                    <ul>
+                                        # START seasons.categories #
+                                            <li><h6 class="text-strong">{seasons.categories.CATEGORY_NAME}</h6></li>
+                                            <ul>
+                                                # START seasons.categories.events #
+                                                    # IF seasons.categories.events.C_VISIBLE #
+                                                        <li>
+                                                            {seasons.categories.events.CLUB_NAME} : 
+                                                            # IF seasons.categories.events.C_IS_SUB #
+                                                                <span><a href="{seasons.categories.events.U_MASTER_EVENT}" class="offload">{seasons.categories.events.MASTER_DIVISION} {seasons.categories.events.MASTER_SEASON}</a> - </span>
+                                                            # ENDIF #
+                                                            <a href="{seasons.categories.events.U_EVENT}" class="offload"># IF seasons.categories.events.C_IS_SUB #{seasons.categories.events.DIVISION_NAME}# ELSE #{seasons.categories.events.TITLE}# ENDIF #</a>
+                                                        </li>
+                                                    # ENDIF #
+                                                # END seasons.categories.events #
+                                            </ul>
+                                        # END seasons.categories #
+                                    </ul>
                                 </ul>
-                            # END categories #
-                        </ul>
+                            </div>
+                        # END seasons #
                     </div>
                 </div>
             </article>

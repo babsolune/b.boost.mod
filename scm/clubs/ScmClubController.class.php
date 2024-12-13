@@ -70,35 +70,36 @@ class ScmClubController extends DefaultModuleController
             }
         }
 
-        $categories = [];
+        $seasons = [];
         foreach ($teams_list as $team)
         {
             if (in_array($team['team_club_id'], $clubs_family))
-                $categories[$team['id_category']][] = $team;
+                $seasons[$team['season_id']][$team['id_category']][] = $team;
         }
-        ksort($categories);
+        ksort($seasons);
 
-        foreach ($categories as $category => $teams)
+        foreach ($seasons as $season => $categories)
         {
-            $category_details = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($category);
-
-            $this->view->assign_block_vars('categories', [
-                'CATEGORY_NAME' => $category_details->get_name(),
-				'U_CATEGORY' => ScmUrlBuilder::display_category($category_details->get_id(), $category_details->get_rewrited_name())->rel(),
+            $this->view->assign_block_vars('seasons', [
+                'SEASON_NAME' => ScmSeasonService::get_season($season)->get_season_name()
             ]);
 
-            foreach ($teams as $team)
+            foreach ($categories as $category => $teams)
             {
-                if (in_array($team['team_club_id'], $clubs_family))
+                $category_details = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($category);
+                $this->view->assign_block_vars('seasons.categories', [
+                    'CATEGORY_NAME' => $category_details->get_name(),
+                    'U_CATEGORY' => ScmUrlBuilder::display_category($category_details->get_id(), $category_details->get_rewrited_name())->rel(),
+                ]);
+
+                foreach ($teams as $team)
                 {
-                    $event = $event_cache->get_event($team['team_event_id']);
-                    $real_event_id = $event['is_sub'] ? $event['master_id'] : $event['id'];
-                    $real_event = $event_cache->get_event($real_event_id);
-                    if($real_event['start_date'] < $now->get_timestamp() && $now->get_timestamp() < $real_event['end_date'])
+                    if (in_array($team['team_club_id'], $clubs_family))
                     {
+                        $event = $event_cache->get_event($team['team_event_id']);
                         $event = new ScmEvent();
                         $event->set_properties($event_cache->get_event($team['team_event_id']));
-                        $this->view->assign_block_vars('categories.events', array_merge($event->get_template_vars(),
+                        $this->view->assign_block_vars('seasons.categories.events', array_merge($event->get_template_vars(),
                             [
                                 'CLUB_NAME' => ScmClubCache::load()->get_club_name($team['team_club_id'])
                             ]

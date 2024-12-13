@@ -377,6 +377,11 @@ th.bgc-sub a {
     vertical-align: middle;
 }
 
+.club-events ul li,
+.club-events ul ul {
+    padding-left: 0.618em;
+}
+
 /* Game layout */
 .game-container {
     margin-bottom: var(--cell-gap);
