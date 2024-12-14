@@ -170,9 +170,9 @@ class ScmCategoryController extends DefaultModuleController
 		$graphical_environment = $response->get_graphical_environment();
 
 		if ($this->get_category()->get_id() != Category::ROOT_CATEGORY)
-			$graphical_environment->set_page_title($this->get_category()->get_name(), $this->lang['scm.module.title'], $page);
+			$graphical_environment->set_page_title($this->get_category()->get_name(), $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name(), $page);
 		else
-			$graphical_environment->set_page_title($this->lang['scm.module.title'], '', $page);
+			$graphical_environment->set_page_title($this->lang['category.categories'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name(), $page);
         $description = StringVars::replace_vars($this->lang['scm.seo.description.categories'], ['site' => GeneralConfig::load()->get_site_name()]);
         $graphical_environment->get_seo_meta_data()->set_description($description);
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::display_category($this->get_category()->get_id(), $this->get_category()->get_rewrited_name(), $page));

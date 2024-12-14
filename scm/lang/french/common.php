@@ -95,10 +95,12 @@ $lang['scm.days.ranking.away'] = 'À l\'extérieur';
 $lang['scm.days.ranking.attack'] = 'Attaque';
 $lang['scm.days.ranking.defense'] = 'Défense';
 $lang['scm.rank.form'] = 'Forme';
+    // scm.rank.form + $result
 $lang['scm.rank.form.win'] = 'V';
 $lang['scm.rank.form.draw'] = 'N';
 $lang['scm.rank.form.lost'] = 'D';
 $lang['scm.rank.form.delayed'] = 'Match reporté';
+
 $lang['scm.day']  = 'Journée';
 $lang['scm.day.short']  = 'J';
 $lang['scm.days.date']  = 'Date des journées';
@@ -189,7 +191,7 @@ $lang['scm.th.round.short'] = 'T';
 
 // Games
 $lang['scm.event.id']             = 'Id';
-$lang['scm.games.management']     = 'Gestion des matchs';
+$lang['scm.games.management']     = 'Matchs de la compétition';
 $lang['scm.games.groups.stage']   = 'Phases de groupes';
 $lang['scm.games.brackets.stage'] = 'Phases finales';
 $lang['scm.current.games']        = 'Matchs en cours';
@@ -243,7 +245,7 @@ Toute suppression d\'une saison entraine la suppression des compétitions qui la
 ';
 
 // Teams
-$lang['scm.teams.management']  = 'Gestion des équipes';
+$lang['scm.teams.management']  = 'Équipes de la compétition';
 $lang['scm.associate.clubs']   = 'Associer les clubs à cette compétition';
 $lang['scm.selected.teams']    = 'clubs sélectionnés';
 $lang['scm.teams']             = 'Équipes de la compétition';
@@ -287,11 +289,17 @@ $lang['scm.manage.events.auth']    = 'Autorisation de gérer les compétitions';
 // SEO
 $lang['scm.seo.description.root']   = 'Toutes les compétitions de la saison en cours du site :site.';
 $lang['scm.seo.description.categories'] = 'Toutes les catégories des compétitions du site :site.';
-$lang['scm.seo.description.explorer'] = 'Tous les récents matchs du site :site.';
+$lang['scm.seo.description.game.list'] = 'Tous les récents matchs du site :site.';
 $lang['scm.seo.description.running.events'] = 'Toutes les récentes compétitions du site :site.';
 $lang['scm.seo.description.clubs'] = 'Tous les clubs du site :site.';
 $lang['scm.seo.description.club'] = 'Toutes les informations du club :club.';
 $lang['scm.seo.description.event.home'] = 'Toutes les informations de la compétition :event.';
+$lang['scm.seo.description.event.bracket'] = 'Phases finales de la compétition :event.';
+$lang['scm.seo.description.event.group'] = 'Phases de group de la compétition :event.';
+$lang['scm.seo.description.event.calendar'] = 'Calendrier jour par jour de la compétition :event.';
+$lang['scm.seo.description.event.calendar.full'] = 'Calendrier complet de la compétition :event.';
+$lang['scm.seo.description.event.ranking'] = 'Classement de la compétition :event.';
+$lang['scm.seo.description.event.team'] = 'Résultat de l\'équipe :team dans la compétition :event.';
 
 // Hooks
 $lang['scm.specific_hook.event_add']    = 'Ajout d\'une compétition';
@@ -304,7 +312,8 @@ $lang['scm.specific_hook.games_edit']   = 'Modification des matchs';
 
 // Message helpers
 $lang['scm.message.no.games']       = 'Aucun match pour l\'instant';
-$lang['scm.warning.current.season'] = 'Seules les compétitions de la saison en cours sont affichées.';
+$lang['scm.message.no.events']      = 'Aucune compétition pour l\'instant';
+$lang['scm.warning.current.season'] = 'Seules les compétitions en cours sont affichées.';
 $lang['scm.warning.bracket.update'] = 'Les matchs ont été générés.';
 $lang['scm.warning.group.update']   = 'Les groupes de la compétition ont été mis à jour et les matchs ont été générés.';
 $lang['scm.warning.has.games']      = 'Les matchs de cette compétition ont été définis. Pour toute modification, si des résultats ont déjà été renseignés, ils seront supprimés.';

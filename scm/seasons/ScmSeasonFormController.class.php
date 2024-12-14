@@ -163,7 +163,7 @@ class ScmSeasonFormController extends DefaultModuleController
 		if ($season->get_id_season() === null)
 		{
 			$breadcrumb->add($this->lang['scm.add.season'], ScmUrlBuilder::add_season($season->get_id_season()));
-			$graphical_environment->set_page_title($this->lang['scm.add.season'], $this->lang['scm.module.title']);
+			$graphical_environment->set_page_title($this->lang['scm.add.season'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
 			$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.add.season']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::add_season($season->get_id_season()));
 		}
@@ -172,7 +172,7 @@ class ScmSeasonFormController extends DefaultModuleController
 			if (!AppContext::get_session()->location_id_already_exists($location_id))
 				$graphical_environment->set_location_id($location_id);
 
-			$graphical_environment->set_page_title($this->lang['scm.edit.season'], $this->lang['scm.module.title']);
+			$graphical_environment->set_page_title($this->lang['scm.edit.season'], $season->get_season_name() . ' - ' . $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
 			$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.edit.season']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_season($season->get_id_season()));
 

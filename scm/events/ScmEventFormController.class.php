@@ -432,6 +432,7 @@ class ScmEventFormController extends DefaultModuleController
 	private function generate_response(View $view)
 	{
 		$event = $this->get_event();
+        $category = $event->get_category();
 
 		$location_id = $event->get_id() ? 'scm-event-'. $event->get_id() : '';
 
@@ -444,7 +445,7 @@ class ScmEventFormController extends DefaultModuleController
 		if ($event->get_id() === null)
 		{
 			$breadcrumb->add($this->lang['scm.add.event'], ScmUrlBuilder::add($event->get_id_category()));
-			$graphical_environment->set_page_title($this->lang['scm.add.event'], $this->lang['scm.module.title']);
+			$graphical_environment->set_page_title($this->lang['scm.add.event'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
 			$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.add.event']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::add($event->get_id_category()));
 		}
@@ -453,7 +454,7 @@ class ScmEventFormController extends DefaultModuleController
 			if (!AppContext::get_session()->location_id_already_exists($location_id))
 				$graphical_environment->set_location_id($location_id);
 
-			$graphical_environment->set_page_title($this->lang['scm.edit.event'], $this->lang['scm.module.title']);
+			$graphical_environment->set_page_title($this->lang['scm.edit.event'], $event->get_event_name() . ($category->get_id() != Category::ROOT_CATEGORY ? ' - ' . $category->get_name() : '') . ' - ' . $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
 			$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.edit.event']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit($event->get_id(), $event->get_event_slug()));
 

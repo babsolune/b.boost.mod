@@ -318,7 +318,7 @@ class ScmClubFormController extends DefaultModuleController
 		if ($club->get_id_club() === null)
 		{
 			$breadcrumb->add($this->lang['scm.add.club'], ScmUrlBuilder::add_club($club->get_id_club()));
-			$graphical_environment->set_page_title($this->lang['scm.add.club'], $this->lang['scm.module.title']);
+			$graphical_environment->set_page_title($this->lang['scm.add.club'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
 			$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.add.club']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::add_club());
 		}
@@ -327,7 +327,7 @@ class ScmClubFormController extends DefaultModuleController
 			if (!AppContext::get_session()->location_id_already_exists($location_id))
 				$graphical_environment->set_location_id($location_id);
 
-			$graphical_environment->set_page_title($this->lang['scm.edit.club'], $this->lang['scm.module.title']);
+			$graphical_environment->set_page_title($this->lang['scm.edit.club'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
 			$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.edit.club']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_club($club->get_id_club(), $club->get_club_slug()));
 

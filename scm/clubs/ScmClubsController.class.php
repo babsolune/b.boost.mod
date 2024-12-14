@@ -51,7 +51,7 @@ class ScmClubsController extends DefaultModuleController
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-        $graphical_environment->set_page_title($this->lang['scm.clubs'], $this->lang['scm.module.title']);
+        $graphical_environment->set_page_title($this->lang['scm.clubs'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
         $description = StringVars::replace_vars($this->lang['scm.seo.description.clubs'], ['site' => GeneralConfig::load()->get_site_name()]);
         $graphical_environment->get_seo_meta_data()->set_description($description);
 

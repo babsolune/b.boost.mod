@@ -355,22 +355,21 @@ class ScmGroupGamesFormController extends DefaultModuleController
 	private function generate_response(View $view)
 	{
 		$event = $this->get_event();
-
+        $category = $event->get_category();
 		$location_id = $event->get_id() ? 'scm-group-games-'. $event->get_id() : '';
 
 		$response = new SiteDisplayResponse($view, $location_id);
 		$graphical_environment = $response->get_graphical_environment();
 
-		$breadcrumb = $graphical_environment->get_breadcrumb();
-		$breadcrumb->add($this->lang['scm.module.title'], ScmUrlBuilder::home());
-
 		if (!AppContext::get_session()->location_id_already_exists($location_id))
             $graphical_environment->set_location_id($location_id);
 
-        $graphical_environment->set_page_title($this->lang['scm.games.management'], $this->lang['scm.module.title']);
+        $graphical_environment->set_page_title($this->lang['scm.games.management'], $event->get_event_name() . ($category->get_id() != Category::ROOT_CATEGORY ? ' - ' . $category->get_name() : '') . ' - ' . $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
         $graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.games.management']);
         $graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug(), AppContext::get_request()->get_getint('cluster', 0)));
 
+		$breadcrumb = $graphical_environment->get_breadcrumb();
+		$breadcrumb->add($this->lang['scm.module.title'], ScmUrlBuilder::home());
         $categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($event->get_id_category(), true));
         foreach ($categories as $id => $category)
         {

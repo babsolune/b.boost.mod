@@ -61,7 +61,7 @@ class ScmParamsFormController extends DefaultModuleController
 	{
 		$form = new HTMLForm(__CLASS__);
         $form->set_css_class('params-form cell-flex cell-columns-2');
-		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.params.event'] . '</div>');
+		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.params.management'] . '</div>');
 
 		if ($this->is_tournament)
 		{
@@ -476,17 +476,16 @@ class ScmParamsFormController extends DefaultModuleController
 		$response = new SiteDisplayResponse($view, $location_id);
 		$graphical_environment = $response->get_graphical_environment();
 
-		$breadcrumb = $graphical_environment->get_breadcrumb();
-		$breadcrumb->add($this->lang['scm.module.title'], ScmUrlBuilder::home());
-
 		if (!AppContext::get_session()->location_id_already_exists($location_id))
 			$graphical_environment->set_location_id($location_id);
 
 		$graphical_environment = $response->get_graphical_environment();
-		$graphical_environment->set_page_title($event->get_event_name(), ($category->get_id() != Category::ROOT_CATEGORY ? $category->get_name() . ' - ' : '') . $this->lang['scm.module.title']);
-		// $graphical_environment->get_seo_meta_data()->set_description($event->get_real_summary());
+		$graphical_environment->set_page_title($this->lang['scm.params.management'], $event->get_event_name() . ($category->get_id() != Category::ROOT_CATEGORY ? ' - ' . $category->get_name() : '') . ' - ' . $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
+		$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.params.management']);
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
 
+		$breadcrumb = $graphical_environment->get_breadcrumb();
+		$breadcrumb->add($this->lang['scm.module.title'], ScmUrlBuilder::home());
 		$categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($event->get_id_category(), true));
 		foreach ($categories as $id => $category)
 		{
@@ -496,7 +495,7 @@ class ScmParamsFormController extends DefaultModuleController
         if ($event->get_is_sub())
             $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
 		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-		$breadcrumb->add($this->lang['scm.params.event'], ScmUrlBuilder::edit_params($params->get_params_event_id(), $event->get_event_slug()));
+		$breadcrumb->add($this->lang['scm.params.management'], ScmUrlBuilder::edit_params($params->get_params_event_id(), $event->get_event_slug()));
 
 
 		return $response;

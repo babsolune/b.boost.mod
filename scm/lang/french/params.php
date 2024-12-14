@@ -12,7 +12,7 @@
 ####################################################
 
 // Params
-$lang['scm.params.event']            = 'Paramètres de compétition';
+$lang['scm.params.management']       = 'Paramètres de la compétition';
 $lang['scm.params.tournament']       = 'Configuration du tournoi';
 $lang['scm.params.bracket']          = 'Phases finales';
 $lang['scm.params.ranking']          = 'Classement';

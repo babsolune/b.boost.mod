@@ -190,12 +190,9 @@ class ScmGroupController extends DefaultModuleController
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-		$graphical_environment->set_page_title($event->get_event_name(), ($category->get_id() != Category::ROOT_CATEGORY ? $category->get_name() . ' - ' : '') . $this->lang['scm.module.title']);
-		$graphical_environment->get_seo_meta_data()->set_description('');
+		$graphical_environment->set_page_title($this->lang['scm.games.groups.stage'], $event->get_event_name() . ($category->get_id() != Category::ROOT_CATEGORY ? ' - ' . $category->get_name() : '') . ' - ' . $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
+		$graphical_environment->get_seo_meta_data()->set_description(StringVars::replace_vars($this->lang['scm.seo.description.event.group'], ['event' => $event->get_event_name()]));
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-
-		// if ($event->has_thumbnail())
-		// 	$graphical_environment->get_seo_meta_data()->set_picture_url($event->get_thumbnail());
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['scm.module.title'],ScmUrlBuilder::home());
