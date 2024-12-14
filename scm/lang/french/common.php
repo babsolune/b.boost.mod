@@ -16,6 +16,7 @@ $lang['scm.mini.prev']    = 'Matchs précédents';
 $lang['scm.mini.next']    = 'Prochains matchs';
 $lang['scm.mini.live']    = 'Matchs en cours';
 
+$lang['scm.event.views.number']  = 'Cette page a été vue :number fois.';
 $lang['scm.event.start.date']  = 'Date de début';
 $lang['scm.event.end.date']    = 'Date de fin';
 $lang['scm.event.not.started'] = 'La compétition débute le :date';

@@ -17,9 +17,9 @@ class ScmEventHomeService
 		self::$db_querier = PersistenceContext::get_querier();
 	}
 
-    public static function build_days_infos(int $event_id)
+    public static function build_championship_home(int $event_id)
     {
-        $view = new FileTemplate('scm/ScmEventDaysController.tpl');
+        $view = new FileTemplate('scm/ScmEventChampionshipController.tpl');
         $lang = LangLoader::get_all_langs('scm');
         $view->add_lang($lang);
 
@@ -146,9 +146,9 @@ class ScmEventHomeService
         return $view;
     }
 
-    public static function build_rounds_infos(int $event_id)
+    public static function build_tournament_home(int $event_id)
     {
-        $view = new FileTemplate('scm/ScmEventRoundsController.tpl');
+        $view = new FileTemplate('scm/ScmEventTournamentController.tpl');
         $view->add_lang(LangLoader::get_all_langs('scm'));
 
         // Display group team list
@@ -164,6 +164,144 @@ class ScmEventHomeService
                 'GROUP'   => $k ? ScmGroupService::ntl($k) : '',
                 'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $k)->rel(),
             ]);
+            foreach ($group as $team)
+            {
+                $club_cache = ScmClubCache::load();
+                $club = $club_cache->get_club($team['id_club']);
+                $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+                $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
+
+                $view->assign_block_vars('team_groups.teams', [
+                    'TEAM_NAME' => $team['club_name'],
+                    'TEAM_LOGO' => $club_cache->get_club_shield($real_id),
+                    'U_CLUB' => ScmUrlBuilder::display_club($real_id, $real_slug)->rel()
+                ]);
+            }
+        }
+
+        // Display games of the day
+        $results = self::$db_querier->select('SELECT games.*
+            FROM ' . ScmSetup::$scm_game_table . ' games
+            WHERE games.game_event_id = :id
+            ORDER BY games.game_date ASC, games.game_cluster ASC, games.game_order ASC', [
+                'id' => $event_id
+            ]
+        );
+
+        $now = new Date();
+        $c_return_matches = ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES;
+        $c_hat_ranking    = ScmParamsService::get_params($event_id)->get_hat_ranking();
+        $view->put_all([
+            'C_RETURN_MATCHES' => $c_return_matches,
+            'C_HAT_RANKING'    => $c_hat_ranking,
+            'C_PLAYGROUNDS'    => ScmParamsService::get_params($event_id)->get_display_playgrounds(),
+            'C_HAS_GAMES'      => ScmGameService::has_games($event_id),
+            'C_ONE_DAY'        => ScmGameService::one_day_event($event_id),
+            'ONE_DAY_DATE'     => Date::to_format(ScmEventService::get_event($event_id)->get_start_date()->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT),
+            'TEAMS_NUMBER'     => ScmTeamService::get_teams_number($event_id),
+            'TEAMS_PER_GROUP'  => ScmParamsService::get_params($event_id)->get_teams_per_group(),
+            'TODAY'            => Date::to_format($now->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT),
+        ]);
+
+        $matchdays = [];
+        foreach($results as $game)
+        {
+            if($game['game_type'] == 'G')
+                if ($c_hat_ranking)
+                    $matchdays[$game['game_cluster']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
+                else
+                    $matchdays[$game['game_round']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
+        }
+
+        foreach ($matchdays as $matchday => $dates)
+        {
+            $view->assign_block_vars('matchdays', [
+                'MATCHDAY' => $matchday
+            ]);
+            foreach ($dates as $date => $games)
+            {
+                $view->assign_block_vars('matchdays.dates', [
+                    'DATE' => $date
+                ]);
+
+                foreach($games as $game)
+                {
+                    $item = new ScmGame();
+                    $item->set_properties($game);
+
+                    $view->assign_block_vars('matchdays.dates.groups', array_merge($item->get_template_vars(), [
+                        'GROUP_NAME' => ScmGroupService::ntl($item->get_game_cluster()),
+                        'DAY_NAME' => $item->get_game_cluster(),
+                        'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $item->get_game_cluster())->rel()
+                    ]));
+                }
+            }
+        }
+
+        $matchrounds = $matchdays = [];
+        foreach($results as $game)
+        {
+            if($game['game_type'] != 'G')
+            {
+                $matchdays[] = $game['game_cluster'];
+                $matchrounds[$game['game_cluster']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
+            }
+        }
+        if (ScmParamsService::get_params($event_id)->get_finals_type() == ScmParams::FINALS_RANKING)
+            ksort($matchrounds);
+        else
+            krsort($matchrounds);
+
+        array_values($matchdays);
+        rsort($matchdays);
+        $rounds_unique = array_unique($matchdays);
+        $c_first_round = reset($rounds_unique);
+
+        foreach ($matchrounds as $matchround => $dates)
+        {
+            $view->assign_block_vars('matchrounds', [
+                'L_MATCHROUND' => ($matchround == $c_first_round && $c_hat_ranking)
+                                    ? LangLoader::get_message('scm.playoff.games', 'common', 'scm')
+                                    : (ScmParamsService::get_params($event_id)->get_finals_type() == ScmParams::FINALS_RANKING
+                                        ? LangLoader::get_message('scm.group', 'common', 'scm') . ' ' . $matchround
+                                        : LangLoader::get_message('scm.round.' . $matchround . '', 'common', 'scm'))
+            ]);
+            foreach ($dates as $date => $games)
+            {
+                $view->assign_block_vars('matchrounds.dates', [
+                    'DATE' => $date
+                ]);
+                foreach($games as $game)
+                {
+                    $item = new ScmGame();
+                    $item->set_properties($game);
+
+                    $view->assign_block_vars('matchrounds.dates.brackets', array_merge($item->get_template_vars(), [
+                        'GROUP_NAME' => ScmGroupService::ntl($item->get_game_cluster()),
+                        'DAY_NAME' => $item->get_game_cluster(),
+                        'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $item->get_game_cluster())->rel()
+                    ]));
+                }
+            }
+        }
+        return $view;
+    }
+
+    public static function build_cup_home(int $event_id)
+    {
+        $view = new FileTemplate('scm/ScmEventCupController.tpl');
+        $view->add_lang(LangLoader::get_all_langs('scm'));
+
+        // Display group team list
+        $groups = ScmGroupService::get_group_teams_list($event_id);
+        ksort($groups);
+        $club = ScmClubCache::load();
+
+        $view->put('GROUPS_NUMBER', count($groups));
+
+        foreach ($groups as $k => $group)
+        {
+            $view->assign_block_vars('team_groups', []);
             foreach ($group as $team)
             {
                 $club_cache = ScmClubCache::load();

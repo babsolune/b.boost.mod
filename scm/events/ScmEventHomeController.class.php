@@ -41,6 +41,8 @@ class ScmEventHomeController extends DefaultModuleController
             'C_TOURNAMENT'   => $c_tournament,
             'C_HAS_GAMES'    => $c_has_games,
             'C_IS_MASTER'    => $c_is_master,
+
+            'L_VIEWS_NUMBER' => StringVars::replace_vars($this->lang['scm.event.views.number'], ['number' => $event->get_views_number()])
         ]);
 
         if ($c_is_master)
@@ -62,8 +64,10 @@ class ScmEventHomeController extends DefaultModuleController
                     'C_TOURNAMENT'   => $c_tournament,
                     'C_HAS_GAMES'    => $c_has_games,
                     'C_IS_ENDED'     => $item->get_end_date() < $now,
-                    'DAYS_INFOS'     => $c_championship ? ScmEventHomeService::build_days_infos($item->get_id()) : '',
-                    'ROUNDS_INFOS'   => $c_tournament ? ScmEventHomeService::build_rounds_infos($item->get_id()) : '',
+
+                    'CHAMPIONSHIP_HOME' => $c_championship ? ScmEventHomeService::build_championship_home($item->get_id()) : '',
+                    'TOURNAMENT_HOME'   => $c_tournament ? ScmEventHomeService::build_tournament_home($item->get_id()) : '',
+                    'CUP_HOME'          => $c_cup ? ScmEventHomeService::build_cup_home($item->get_id()) : '',
                 ]));
             }
         }
@@ -73,8 +77,9 @@ class ScmEventHomeController extends DefaultModuleController
             [
                 'MENU'                => ScmMenuService::build_event_menu($this->event_id()),
                 // Rounds
-                'DAYS_INFOS'       => $c_championship ? ScmEventHomeService::build_days_infos($this->event_id()) : '',
-                'ROUNDS_INFOS'     => $c_tournament ? ScmEventHomeService::build_rounds_infos($this->event_id()) : '',
+                'CHAMPIONSHIP_HOME' => $c_championship ? ScmEventHomeService::build_championship_home($this->event_id()) : '',
+                'TOURNAMENT_HOME'   => $c_tournament ? ScmEventHomeService::build_tournament_home($this->event_id()) : '',
+                'CUP_HOME'          => $c_cup ? ScmEventHomeService::build_cup_home($this->event_id()) : '',
 
                 'NOT_VISIBLE_MESSAGE' => MessageHelper::display($this->lang['warning.element.not.visible'], MessageHelper::WARNING),
             ]

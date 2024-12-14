@@ -8,6 +8,9 @@
 					# INCLUDE NOT_VISIBLE_MESSAGE #
 				</div>
 			# ENDIF #
+            # IF IS_MODERATOR #
+                <div class="flex-between"><span></span>  <span class="small message-helper bgc moderator">{L_VIEWS_NUMBER}</span></div>
+            # ENDIF #
             # IF C_IS_MASTER #
                 # START sub_events #
                     <h2>
@@ -21,18 +24,18 @@
                         # ENDIF #
                     </div>
                     <div class="content">
-                        # IF sub_events.C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE sub_events.DAYS_INFOS #</div># ENDIF #
-                        # IF sub_events.C_CUP #<div itemprop="text">cup</div># ENDIF #
-                        # IF sub_events.C_TOURNAMENT #<div itemprop="text"># INCLUDE sub_events.ROUNDS_INFOS #</div># ENDIF #
+                        # IF sub_events.C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE sub_events.CHAMPIONSHIP_HOME #</div># ENDIF #
+                        # IF sub_events.C_CUP #<div itemprop="text"># INCLUDE sub_events.CUP_HOME #</div># ENDIF #
+                        # IF sub_events.C_TOURNAMENT #<div itemprop="text"># INCLUDE sub_events.TOURNAMENT_HOME #</div># ENDIF #
                     </div>
                 # END sub_events #
             # ELSE #
                 # IF C_HAS_GAMES #
                         <article itemscope="itemscope" itemtype="https://schema.org/CreativeWork" id="scm-item-{ID}" class="scm-item# IF C_NEW_CONTENT # new-content# ENDIF #">
                             <div class="content">
-                                # IF C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE DAYS_INFOS #</div># ENDIF #
-                                # IF C_CUP #<div itemprop="text">cup</div># ENDIF #
-                                # IF C_TOURNAMENT #<div itemprop="text"># INCLUDE ROUNDS_INFOS #</div># ENDIF #
+                                # IF C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE CHAMPIONSHIP_HOME #</div># ENDIF #
+                                # IF C_CUP #<div itemprop="text"># INCLUDE CUP_HOME #</div># ENDIF #
+                                # IF C_TOURNAMENT #<div itemprop="text"># INCLUDE TOURNAMENT_HOME #</div># ENDIF #
                             </div>
 
                             <aside>${ContentSharingActionsMenuService::display()}</aside>

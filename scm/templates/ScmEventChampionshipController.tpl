@@ -2,7 +2,7 @@
     <h3>{@scm.clubs.list}</h3>
     <div class="columns-6">
         # START clubs_list #
-            <a href="{clubs_list.U_CLUB}" class="offload align-center pinned link-color d-block" aria-label="{@scm.see.club}">{clubs_list.CLUB_SHORT_NAME}</a>
+            <a href="{clubs_list.U_CLUB}" class="offload align-center pinned link-color d-block" aria-label="{@scm.club.see.infos}">{clubs_list.CLUB_SHORT_NAME}</a>
         # END clubs_list #
     </div>
 </div>
@@ -41,7 +41,7 @@
                                             <span>
                                                 <a
                                                     href="{prev_dates.prev_days.U_HOME_CALENDAR}"
-                                                    aria-label="{@scm.see.club.calendar}# IF prev_dates.prev_days.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_dates.prev_days.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                    aria-label="{@scm.club.see.calendar}# IF prev_dates.prev_days.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_dates.prev_days.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                                     # IF prev_dates.prev_days.HOME_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     # IF prev_dates.prev_days.HOME_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     class="offload# IF prev_dates.prev_days.HOME_FORFEIT # warning# ENDIF ## IF prev_dates.prev_days.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #"
@@ -62,7 +62,7 @@
                                             <span>
                                                 <a
                                                     href="{prev_dates.prev_days.U_AWAY_CALENDAR}"
-                                                    aria-label="{@scm.see.club.calendar}# IF prev_dates.prev_days.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_dates.prev_days.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                    aria-label="{@scm.club.see.calendar}# IF prev_dates.prev_days.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_dates.prev_days.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                                     # IF prev_dates.prev_days.AWAY_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     # IF prev_dates.prev_days.AWAY_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     class="offload# IF prev_dates.prev_days.AWAY_FORFEIT # warning# ENDIF ## IF prev_dates.prev_days.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #"
@@ -109,7 +109,7 @@
                                             <span>
                                                 <a
                                                     href="{next_dates.next_days.U_HOME_CALENDAR}"
-                                                    aria-label="{@scm.see.club.calendar}# IF next_dates.next_days.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_dates.next_days.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                    aria-label="{@scm.club.see.calendar}# IF next_dates.next_days.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_dates.next_days.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                                     # IF next_dates.next_days.HOME_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     # IF next_dates.next_days.HOME_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     class="offload# IF next_dates.next_days.HOME_FORFEIT # warning# ENDIF ## IF next_dates.next_days.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #"
@@ -130,7 +130,7 @@
                                             <span>
                                                 <a
                                                     href="{next_dates.next_days.U_AWAY_CALENDAR}"
-                                                    aria-label="{@scm.see.club.calendar}# IF next_dates.next_days.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_dates.next_days.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                    aria-label="{@scm.club.see.calendar}# IF next_dates.next_days.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_dates.next_days.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                                     # IF next_dates.next_days.AWAY_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     # IF next_dates.next_days.AWAY_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     class="offload# IF next_dates.next_days.AWAY_FORFEIT # warning# ENDIF ## IF next_dates.next_days.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #"
@@ -170,7 +170,7 @@
                             <div class="scm-cell scm-name cell-left md-width-pc-80">
                                 # IF ranks.C_HAS_TEAM_LOGO #<img src="{ranks.TEAM_LOGO}" alt="{ranks.TEAM_NAME}"># ENDIF #
                                 <span>
-                                    <a href="{ranks.U_TEAM_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{ranks.TEAM_NAME}</a>
+                                    <a href="{ranks.U_TEAM_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{ranks.TEAM_NAME}</a>
                                     # IF ranks.C_FORFEIT #<span class="smaller text-italic warning">({@scm.params.status.forfeit})</span># ENDIF #
                                 </span>
                             </div>
