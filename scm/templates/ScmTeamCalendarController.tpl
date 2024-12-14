@@ -43,7 +43,7 @@
                                                 # IF games.C_IS_HOME_TEAM #
                                                     {games.HOME_TEAM}
                                                 # ELSE #
-                                                    <a aria-label="{@scm.see.club.calendar}" href="{games.U_HOME_CALENDAR}" class="offload# IF games.HOME_FORFEIT # warning# ENDIF ## IF games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.HOME_TEAM}</a>
+                                                    <a aria-label="{@scm.club.see.calendar}" href="{games.U_HOME_CALENDAR}" class="offload# IF games.HOME_FORFEIT # warning# ENDIF ## IF games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.HOME_TEAM}</a>
                                                 # ENDIF #
                                             </span>
                                             # IF games.C_HAS_HOME_LOGO #<img src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}"># ENDIF #
@@ -62,7 +62,7 @@
                                                 # IF games.C_IS_AWAY_TEAM #
                                                     {games.AWAY_TEAM}
                                                 # ELSE #
-                                                    <a aria-label="{@scm.see.club.calendar}" href="{games.U_AWAY_CALENDAR}" class="offload# IF games.AWAY_FORFEIT # warning# ENDIF ## IF games.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.AWAY_TEAM}</a>
+                                                    <a aria-label="{@scm.club.see.calendar}" href="{games.U_AWAY_CALENDAR}" class="offload# IF games.AWAY_FORFEIT # warning# ENDIF ## IF games.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.AWAY_TEAM}</a>
                                                 # ENDIF #
                                             </span>
                                         </div>

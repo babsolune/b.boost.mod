@@ -42,7 +42,7 @@
                                                             <span>
                                                                 <a
                                                                     href="{days.dates.items.U_HOME_CALENDAR}"
-                                                                    aria-label="{@scm.see.club.calendar}"
+                                                                    aria-label="{@scm.club.see.calendar}"
                                                                     class="offload# IF days.dates.items.HOME_FORFEIT # warning# ENDIF ## IF days.dates.items.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #"
                                                                 >{days.dates.items.HOME_TEAM}</a>
                                                             </span>
@@ -61,7 +61,7 @@
                                                             <span>
                                                                 <a
                                                                     href="{days.dates.items.U_AWAY_CALENDAR}"
-                                                                    aria-label="{@scm.see.club.calendar}"
+                                                                    aria-label="{@scm.club.see.calendar}"
                                                                     class="offload# IF days.dates.items.AWAY_FORFEIT # warning# ENDIF ## IF days.dates.items.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #"
                                                                 >{days.dates.items.AWAY_TEAM}</a>
                                                             </span>

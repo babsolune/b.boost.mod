@@ -15,9 +15,9 @@
                     </tr>
                     # IF items.C_LATE #<tr><td class="bgc notice smaller text-italic" colspan="3">{@scm.game.late}</td></tr># ENDIF #
                     <tr class="category-{items.CATEGORY_ID}# IF items.C_EXEMPT # bgc notice# ENDIF #">
-                        <td class="align-right"><a href="{items.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF items.C_HOME_FAV # text-strong# ENDIF ## IF items.HOME_FORFEIT # warning# ENDIF #">{items.HOME_TEAM}</a></td>
+                        <td class="align-right"><a href="{items.U_HOME_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload# IF items.C_HOME_FAV # text-strong# ENDIF ## IF items.HOME_FORFEIT # warning# ENDIF #">{items.HOME_TEAM}</a></td>
                         <td>&nbsp;</td>
-                        <td class="align-left"><a href="{items.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF items.C_AWAY_FAV # text-strong# ENDIF ## IF items.AWAY_FORFEIT # warning# ENDIF #">{items.AWAY_TEAM}</a></td>
+                        <td class="align-left"><a href="{items.U_AWAY_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload# IF items.C_AWAY_FAV # text-strong# ENDIF ## IF items.AWAY_FORFEIT # warning# ENDIF #">{items.AWAY_TEAM}</a></td>
                     </tr>
                 # END items #
 			</tbody>

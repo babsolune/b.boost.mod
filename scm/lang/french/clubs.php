@@ -11,12 +11,15 @@
 #                       French                     #
 ####################################################
 
+$lang['scm.clubs']         = 'Clubs';
+$lang['scm.clubs.manager'] = 'Gestion des clubs';
+$lang['scm.clubs.filter']  = 'Rechercher un club';
+$lang['scm.clubs.list']    = 'Liste des clubs';
+
 $lang['scm.club']               = 'Club';
-$lang['scm.clubs']              = 'Clubs';
-$lang['scm.filter.clubs']       = 'Rechercher un club';
-$lang['scm.clubs.list']         = 'Liste des clubs';
-$lang['scm.see.club']           = 'Voir les informations du club';
-$lang['scm.see.club.calendar']  = 'Voir le calendrier du club';
+$lang['scm.club.see.infos']     = 'Voir les informations du club';
+$lang['scm.club.see.calendar']  = 'Voir le calendrier du club';
+
 $lang['scm.club.affiliate']     = 'Affiliation à un club';
 $lang['scm.club.affiliation']   = 'Club affilié';
 $lang['scm.club.name']          = 'Nom d\'affichage';
@@ -34,18 +37,18 @@ $lang['scm.club.event.list']    = 'Liste des compétitions du club';
 $lang['scm.club.phone.clue']    = 'Sans espaces, ni tirets, ni points';
 $lang['scm.club.stadium']       = 'Stade';
 $lang['scm.club.no.stadium']    = 'Aucun stade déclaré pour :club';
-$lang['scm.club.no.club']       = 'Aucun club à domicile déclaré';
+$lang['scm.club.no.home.club']  = 'Aucun club à domicile déclaré';
 $lang['scm.club.locations']     = 'Adresses du club';
 $lang['scm.club.display.map']   = 'Afficher la/les maps';
 $lang['scm.club.country']       = 'Pays';
 $lang['scm.club.league']        = 'Ligue';
 $lang['scm.club.flag']          = 'Drapeau';
 $lang['scm.club.logo']          = 'Logo du club';
-$lang['scm.add.club']           = 'Ajouter un club';
-$lang['scm.edit.club']          = 'Modifier un club';
-$lang['scm.clubs.manager']      = 'Gestion des clubs';
-$lang['scm.clubs.no.logo']      = 'Aucun logo';
-$lang['scm.alt.logo']           = 'Logo du club :name';
+$lang['scm.clubs.logo.none']    = 'Aucun logo';
+$lang['scm.club.logo.alt']      = 'Logo du club :name';
+$lang['scm.club.add']           = 'Ajouter un club';
+$lang['scm.club.edit']          = 'Modifier un club';
+
 $lang['scm.warning.add.club']   = 'Le club :name à été ajouté';
 $lang['scm.warning.delete.club']   = '
 Attention !!!

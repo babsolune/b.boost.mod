@@ -18,7 +18,7 @@
                         <td class="align-right# IF items.C_HOME_EXEMPT # small text-italic# ENDIF #">
                             <a
                                 href="{items.U_HOME_CALENDAR}"
-                                aria-label="{@scm.see.club.calendar}# IF items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                aria-label="{@scm.club.see.calendar}# IF items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                 class="offload# IF items.C_HOME_FAV # text-strong# ENDIF ## IF items.HOME_FORFEIT # warning# ENDIF ## IF items.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
                                 {items.HOME_TEAM}
                             </a>
@@ -31,7 +31,7 @@
                         <td class="align-left# IF items.C_AWAY_EXEMPT # small text-italic# ENDIF #">
                             <a
                                 href="{items.U_AWAY_CALENDAR}"
-                                aria-label="{@scm.see.club.calendar}# IF items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                aria-label="{@scm.club.see.calendar}# IF items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                 class="offload# IF items.C_AWAY_FAV # text-strong# ENDIF ## IF items.AWAY_FORFEIT # warning# ENDIF ## IF items.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
                                 {items.AWAY_TEAM}
                             </a>

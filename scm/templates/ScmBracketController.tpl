@@ -243,7 +243,7 @@
                                                                     <span>{rounds.games.HOME_EMPTY}</span>
                                                                 # ELSE #
                                                                     <img src="{rounds.games.HOME_LOGO}" alt="{rounds.games.HOME_TEAM}">
-                                                                    <span><a href="{rounds.games.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF rounds.games.HOME_FORFEIT # warning# ENDIF #">{rounds.games.HOME_TEAM}</a></span>
+                                                                    <span><a href="{rounds.games.U_HOME_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload# IF rounds.games.HOME_FORFEIT # warning# ENDIF #">{rounds.games.HOME_TEAM}</a></span>
                                                                 # ENDIF #
                                                             </div>
                                                         </div>
@@ -264,7 +264,7 @@
                                                                     <span>{rounds.games.AWAY_EMPTY}</span>
                                                                 # ELSE #
                                                                     <img src="{rounds.games.AWAY_LOGO}" alt="{rounds.games.AWAY_TEAM}">
-                                                                    <span><a href="{rounds.games.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload# IF rounds.games.AWAY_FORFEIT # warning# ENDIF #">{rounds.games.AWAY_TEAM}</a></span>
+                                                                    <span><a href="{rounds.games.U_AWAY_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload# IF rounds.games.AWAY_FORFEIT # warning# ENDIF #">{rounds.games.AWAY_TEAM}</a></span>
                                                                 # ENDIF #
                                                             </div>
                                                         </div>
@@ -412,7 +412,7 @@
                                                                         <span>{brackets.rounds.games.HOME_EMPTY}</span>
                                                                     # ELSE #
                                                                         # IF brackets.rounds.games.C_HAS_HOME_LOGO #<img src="{brackets.rounds.games.HOME_LOGO}" alt="{brackets.rounds.games.HOME_TEAM}"># ENDIF #
-                                                                        <span><a href="{brackets.rounds.games.U_HOME_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{brackets.rounds.games.HOME_TEAM}</a></span>
+                                                                        <span><a href="{brackets.rounds.games.U_HOME_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{brackets.rounds.games.HOME_TEAM}</a></span>
                                                                     # ENDIF #
                                                                 </div>
                                                             </div>
@@ -426,7 +426,7 @@
                                                                         <span>{brackets.rounds.games.AWAY_EMPTY}</span>
                                                                     # ELSE #
                                                                         # IF brackets.rounds.games.C_HAS_AWAY_LOGO #<img src="{brackets.rounds.games.AWAY_LOGO}" alt="{brackets.rounds.games.AWAY_TEAM}"># ENDIF #
-                                                                        <span><a href="{brackets.rounds.games.U_AWAY_CALENDAR}" aria-label="{@scm.see.club.calendar}" class="offload">{brackets.rounds.games.AWAY_TEAM}</a></span>
+                                                                        <span><a href="{brackets.rounds.games.U_AWAY_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{brackets.rounds.games.AWAY_TEAM}</a></span>
                                                                     # ENDIF #
                                                                 </div>
                                                             </div>

@@ -27,7 +27,7 @@ class ScmTreeLinks implements ModuleTreeLinksExtensionPoint
 
         $tree->add_link(new ModuleLink($lang['scm.clubs'], ScmUrlBuilder::display_clubs(), ScmAuthorizationsService::check_authorizations()->read()));
         $club = new ModuleLink($lang['scm.clubs.manager'], ScmUrlBuilder::manage_clubs(), ScmAuthorizationsService::check_authorizations()->manage_clubs());
-            $club->add_sub_link(new ModuleLink($lang['scm.add.club'], ScmUrlBuilder::add_club(), ScmAuthorizationsService::check_authorizations()->manage_clubs()));
+            $club->add_sub_link(new ModuleLink($lang['scm.club.add'], ScmUrlBuilder::add_club(), ScmAuthorizationsService::check_authorizations()->manage_clubs()));
         $tree->add_link($club);
 
 		$event = new ModuleLink($lang['scm.events.management'], ScmUrlBuilder::manage(), ScmAuthorizationsService::check_authorizations()->manage_events());

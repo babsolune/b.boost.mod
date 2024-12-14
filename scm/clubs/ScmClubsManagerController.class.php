@@ -31,14 +31,14 @@ class ScmClubsManagerController extends DefaultModuleController
 			new HTMLTableColumn($this->lang['scm.club.colors'], ''),
 			new HTMLTableColumn($this->lang['scm.club.flag'], ''),
 			new HTMLTableColumn($this->lang['scm.club.logo'], ''),
-			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_club()->rel() . '" aria-label="' . $this->lang['scm.add.club'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
+			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_club()->rel() . '" aria-label="' . $this->lang['scm.club.add'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
         ];
 
 		$table_model = new SQLHTMLTableModel(ScmSetup::$scm_club_table, 'clubs-manager', $columns, new HTMLTableSortingRule('club_name', HTMLTableSortingRule::ASC));
 
 		$table_model->set_layout_title($this->lang['scm.clubs.manager']);
 
-		$table_model->set_filters_menu_title($this->lang['scm.filter.clubs']);
+		$table_model->set_filters_menu_title($this->lang['scm.clubs.filter']);
 		$table_model->add_filter(new HTMLTableContainsTextSQLFilter('club_name', 'filter1', $this->lang['scm.club.name']));
 		$table_model->add_filter(new HTMLTableContainsTextSQLFilter('club_full_name', 'filter2', $this->lang['scm.club.full.name']));
 
@@ -77,7 +77,7 @@ class ScmClubsManagerController extends DefaultModuleController
                     $club->get_club_flag() ?
                     new ImgHTMLElement(
                         TPL_PATH_TO_ROOT . '/images/stats/countries/' . $club->get_club_flag() . '.png',
-                        ['alt' => !empty($club->get_club_flag()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_name()]) : ''], 
+                        ['alt' => !empty($club->get_club_flag()) ? StringVars::replace_vars($this->lang['scm.club.logo.alt'], ['name' => $club->get_club_name()]) : ''], 
                         'logo-small'
                     ) : ''
                 ),
@@ -85,7 +85,7 @@ class ScmClubsManagerController extends DefaultModuleController
                     $club->get_club_logo() ?
                     new ImgHTMLElement(
                         Url::to_rel($club->get_club_logo()),
-                        ['alt' => !empty($club->get_club_logo()) ? StringVars::replace_vars($this->lang['scm.alt.logo'], ['name' => $club->get_club_name()]) : ''], 
+                        ['alt' => !empty($club->get_club_logo()) ? StringVars::replace_vars($this->lang['scm.club.logo.alt'], ['name' => $club->get_club_name()]) : ''], 
                         'logo-small'
                     ) : ''
                 ),

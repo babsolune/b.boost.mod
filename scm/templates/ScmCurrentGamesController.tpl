@@ -91,7 +91,7 @@
                                                     <span class="home-team">
                                                         <a
                                                             href="{next_categories.next_items.U_HOME_CALENDAR}"
-                                                            aria-label="{@scm.see.club.calendar}# IF next_categories.next_items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_categories.next_items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                            aria-label="{@scm.club.see.calendar}# IF next_categories.next_items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_categories.next_items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                                             # IF next_categories.next_items.HOME_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                             # IF next_categories.next_items.HOME_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                             class="offload# IF next_categories.next_items.C_HOME_FAV # text-strong# ENDIF ## IF next_categories.next_items.HOME_FORFEIT # warning# ENDIF ## IF next_categories.next_items.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
@@ -102,7 +102,7 @@
                                                     <span class="away-team">
                                                         <a
                                                             href="{next_categories.next_items.U_AWAY_CALENDAR}"
-                                                            aria-label="{@scm.see.club.calendar}# IF next_categories.next_items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_categories.next_items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                            aria-label="{@scm.club.see.calendar}# IF next_categories.next_items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_categories.next_items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                                             # IF next_categories.next_items.AWAY_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                             # IF next_categories.next_items.AWAY_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                             class="offload# IF next_categories.next_items.C_AWAY_FAV # text-strong# ENDIF ## IF next_categories.next_items.AWAY_FORFEIT # warning# ENDIF ## IF next_categories.next_items.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
@@ -136,7 +136,7 @@
                                                     <span class="d-inline-block align-right md-width-pc-35">
                                                         <a
                                                             href="{prev_categories.prev_items.U_HOME_CALENDAR}"
-                                                            aria-label="{@scm.see.club.calendar}# IF prev_categories.prev_items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_categories.prev_items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                            aria-label="{@scm.club.see.calendar}# IF prev_categories.prev_items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_categories.prev_items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                                             # IF prev_categories.prev_items.HOME_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                             # IF prev_categories.prev_items.HOME_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                             class="offload# IF prev_categories.prev_items.C_HOME_FAV # text-strong# ENDIF ## IF prev_categories.prev_items.HOME_FORFEIT # warning# ENDIF ## IF prev_categories.prev_items.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
@@ -147,7 +147,7 @@
                                                     <span class="d-inline-block align-left md-width-pc-35">
                                                         <a
                                                             href="{prev_categories.prev_items.U_AWAY_CALENDAR}"
-                                                            aria-label="{@scm.see.club.calendar}# IF prev_categories.prev_items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_categories.prev_items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                            aria-label="{@scm.club.see.calendar}# IF prev_categories.prev_items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_categories.prev_items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                                             # IF prev_categories.prev_items.AWAY_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                             # IF prev_categories.prev_items.AWAY_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                             class="offload# IF prev_categories.prev_items.C_AWAY_FAV # text-strong# ENDIF ## IF prev_categories.prev_items.AWAY_FORFEIT # warning# ENDIF ## IF prev_categories.prev_items.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">

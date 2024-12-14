@@ -35,7 +35,7 @@ class ScmClubFormController extends DefaultModuleController
 	private function build_form(HTTPRequestCustom $request)
 	{
 		$form = new HTMLForm(__CLASS__);
-		$form->set_layout_title($this->get_club()->get_id_club() === null ? $this->lang['scm.add.club'] : ($this->lang['scm.edit.club']));
+		$form->set_layout_title($this->get_club()->get_id_club() === null ? $this->lang['scm.club.add'] : ($this->lang['scm.club.edit']));
 
 		$fieldset = new FormFieldsetHTML('scm', $this->lang['form.parameters']);
 		$form->add_fieldset($fieldset);
@@ -317,9 +317,9 @@ class ScmClubFormController extends DefaultModuleController
 
 		if ($club->get_id_club() === null)
 		{
-			$breadcrumb->add($this->lang['scm.add.club'], ScmUrlBuilder::add_club($club->get_id_club()));
-			$graphical_environment->set_page_title($this->lang['scm.add.club'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
-			$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.add.club']);
+			$breadcrumb->add($this->lang['scm.club.add'], ScmUrlBuilder::add_club($club->get_id_club()));
+			$graphical_environment->set_page_title($this->lang['scm.club.add'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
+			$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.club.add']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::add_club());
 		}
 		else
@@ -327,13 +327,13 @@ class ScmClubFormController extends DefaultModuleController
 			if (!AppContext::get_session()->location_id_already_exists($location_id))
 				$graphical_environment->set_location_id($location_id);
 
-			$graphical_environment->set_page_title($this->lang['scm.edit.club'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
-			$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.edit.club']);
+			$graphical_environment->set_page_title($this->lang['scm.club.edit'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
+			$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.club.edit']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_club($club->get_id_club(), $club->get_club_slug()));
 
             $breadcrumb->add($this->lang['scm.clubs.manager'], ScmUrlBuilder::manage_clubs());
 			$breadcrumb->add($cache->get_club_name($club->get_id_club()), ScmUrlBuilder::display_club($club->get_id_club(), $club->get_club_slug()));
-			$breadcrumb->add($this->lang['scm.edit.club'], ScmUrlBuilder::edit_club($club->get_id_club(), $club->get_club_slug()));
+			$breadcrumb->add($this->lang['scm.club.edit'], ScmUrlBuilder::edit_club($club->get_id_club(), $club->get_club_slug()));
 		}
 
 		return $response;

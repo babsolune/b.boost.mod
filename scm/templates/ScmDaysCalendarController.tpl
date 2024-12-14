@@ -37,7 +37,7 @@
                                             <span>
                                                 <a
                                                     href="{dates.games.U_HOME_CALENDAR}"
-                                                    aria-label="{@scm.see.club.calendar}# IF dates.games.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF dates.games.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                    aria-label="{@scm.club.see.calendar}# IF dates.games.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF dates.games.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                                     # IF dates.games.HOME_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     # IF dates.games.HOME_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     class="offload# IF dates.games.HOME_FORFEIT # warning# ENDIF ## IF dates.games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #"
@@ -58,7 +58,7 @@
                                             <span>
                                                 <a
                                                     href="{dates.games.U_AWAY_CALENDAR}"
-                                                    aria-label="{@scm.see.club.calendar}# IF dates.games.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF dates.games.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                    aria-label="{@scm.club.see.calendar}# IF dates.games.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF dates.games.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
                                                     # IF dates.games.AWAY_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     # IF dates.games.AWAY_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
                                                     class="offload# IF dates.games.AWAY_FORFEIT # warning# ENDIF ## IF dates.games.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #"
