@@ -6,82 +6,73 @@
             # IF C_HAS_GAMES #
                 # IF C_RETURN_GAMES #
                     <div class="round-trip-bracket">
-                        <div class="cell-bracket">
-                            # START rounds #
-                                <div# IF rounds.C_ALL_PLACES # id="round-trip-main-round-{rounds.ROUND_ID}"# ENDIF # class="bracket-round# IF rounds.C_ALL_PLACES # all-places# ENDIF #">
-                                    <h5 class="bracket-round-title">{rounds.L_TITLE}</h5>
-                                    <div class="bracket-round-games">
-                                        # IF rounds.C_DRAW_GAMES #<div># ENDIF #
-                                        # START rounds.games #
-                                            <div id="{rounds.games.GAME_ID}" class="game-container">
-                                                <div class="game-details small text-italic">
-                                                    <span>{rounds.games.GAME_ID}</span>
-                                                    <span>{rounds.games.PLAYGROUND}</span>
-                                                    # IF NOT C_ONE_DAY #
-                                                        # IF NOT rounds.C_FINAL #
-                                                            <span>{rounds.games.GAME_DATE_B_YEAR}</span>
-                                                        # ENDIF #
-                                                    # ENDIF #
-                                                    <span>
-                                                        # IF C_ONE_DAY #
-                                                            {rounds.games.GAME_DATE_A_HOUR_MINUTE} - {rounds.games.GAME_DATE_B_HOUR_MINUTE}
-                                                        # ELSE #
-                                                            # IF rounds.C_FINAL #
-                                                                {rounds.games.GAME_DATE_SHORT}
-                                                            # ELSE #
-                                                                {rounds.games.GAME_DATE_A_DAY_MONTH} - {rounds.games.GAME_DATE_B_DAY_MONTH}
-                                                            # ENDIF #
-                                                        # ENDIF #
-                                                    </span>
-                                                </div>
-                                                <div class="id-{rounds.games.HOME_ID} game-team game-home# IF rounds.games.C_HOME_FAV # text-strong# ENDIF #"
-                                                        # IF rounds.games.C_HOME_WIN # style="background-color: {rounds.games.WIN_COLOR}"# ENDIF #>
-                                                    <div class="home-{rounds.games.GAME_ID} home-team">
-                                                        <div class="flex-team flex-left">
-                                                            # IF rounds.games.C_HOME_EMPTY #
-                                                                <span>{rounds.games.HOME_EMPTY}</span>
-                                                            # ELSE #
-                                                                <img src="{rounds.games.HOME_LOGO}" alt="{rounds.games.HOME_TEAM}">
-                                                                <span><a href="{rounds.games.U_HOME_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload# IF rounds.games.HOME_FORFEIT # warning# ENDIF #">{rounds.games.HOME_TEAM}</a></span>
-                                                            # ENDIF #
-                                                        </div>
-                                                    </div>
-                                                    <div class="game-team# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # md-width-px-100# ENDIF ## ENDIF #">
-                                                        <div class="game-score home-score# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # md-width-pc-50# ELSE # md-width-px-50# ENDIF ## ELSE # md-width-px-50# ENDIF #">{rounds.games.HOME_SCORE}</div>
-                                                        # IF NOT rounds.C_HAT_PLAYOFF #
-                                                            # IF NOT rounds.C_FINAL #
-                                                                <div class="game-score home-score md-width-pc-50">{rounds.games.HOME_SCORE_B}# IF rounds.games.C_HAS_PEN # <span class="small">({rounds.games.HOME_PEN})</span># ENDIF #</div>
-                                                            # ENDIF #
-                                                        # ENDIF #
-                                                    </div>
-                                                </div>
-                                                <div class="id-{rounds.games.AWAY_ID} game-team game-away# IF rounds.games.C_AWAY_FAV # text-strong# ENDIF #"
-                                                        # IF rounds.games.C_AWAY_WIN # style="background-color: {rounds.games.WIN_COLOR}"# ENDIF #>
-                                                    <div class="away-{rounds.games.GAME_ID} away-team">
-                                                        <div class="flex-team flex-left">
-                                                            # IF rounds.games.C_AWAY_EMPTY #
-                                                                <span>{rounds.games.AWAY_EMPTY}</span>
-                                                            # ELSE #
-                                                                <img src="{rounds.games.AWAY_LOGO}" alt="{rounds.games.AWAY_TEAM}">
-                                                                <span><a href="{rounds.games.U_AWAY_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload# IF rounds.games.AWAY_FORFEIT # warning# ENDIF #">{rounds.games.AWAY_TEAM}</a></span>
-                                                            # ENDIF #
-                                                        </div>
-                                                    </div>
-                                                    <div class="game-team# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # md-width-px-100# ENDIF ## ENDIF #">
-                                                        <div class="game-score away-score# IF NOT rounds.C_HAT_PLAYOFF ## IF NOT rounds.C_FINAL # md-width-pc-50# ELSE # md-width-px-50# ENDIF ## ELSE # md-width-px-50# ENDIF #">{rounds.games.AWAY_SCORE}</div>
-                                                        # IF NOT rounds.C_HAT_PLAYOFF #
-                                                            # IF NOT rounds.C_FINAL #
-                                                                <div class="game-score away-score md-width-pc-50">{rounds.games.AWAY_SCORE_B}# IF rounds.games.C_HAS_PEN # <span class="small">({rounds.games.AWAY_PEN})</span># ENDIF #</div>
-                                                            # ENDIF #
-                                                        # ENDIF #
-                                                    </div>
-                                                </div>
+                        <div class="cell-flex cell-columns-3">
+                            # START games #
+                                <div id="{games.GAME_ID}" class="game-container">
+                                    <div class="game-details small text-italic">
+                                        <span>{games.GAME_ID}</span>
+                                        <span>{games.PLAYGROUND}</span>
+                                        # IF NOT C_ONE_DAY #
+                                            # IF NOT C_FINAL #
+                                                <span>{games.GAME_DATE_B_YEAR}</span>
+                                            # ENDIF #
+                                        # ENDIF #
+                                        <span>
+                                            # IF C_ONE_DAY #
+                                                {games.GAME_DATE_A_HOUR_MINUTE} - {games.GAME_DATE_B_HOUR_MINUTE}
+                                            # ELSE #
+                                                # IF C_FINAL #
+                                                    {games.GAME_DATE_SHORT}
+                                                # ELSE #
+                                                    {games.GAME_DATE_A_DAY_MONTH} - {games.GAME_DATE_B_DAY_MONTH}
+                                                # ENDIF #
+                                            # ENDIF #
+                                        </span>
+                                    </div>
+                                    <div class="id-{games.HOME_ID} game-team game-home# IF games.C_HOME_FAV # text-strong# ENDIF #"
+                                            # IF games.C_HOME_WIN # style="background-color: {games.WIN_COLOR}"# ENDIF #>
+                                        <div class="home-{games.GAME_ID} home-team">
+                                            <div class="flex-team flex-left">
+                                                # IF games.C_HOME_EMPTY #
+                                                    <span>{games.HOME_EMPTY}</span>
+                                                # ELSE #
+                                                    <img src="{games.HOME_LOGO}" alt="{games.HOME_TEAM}">
+                                                    <span><a href="{games.U_HOME_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload# IF games.HOME_FORFEIT # warning# ENDIF #">{games.HOME_TEAM}</a></span>
+                                                # ENDIF #
                                             </div>
-                                        # END rounds.games #
-                                        # IF rounds.C_DRAW_GAMES #</div># ENDIF #
+                                        </div>
+                                        <div class="game-team# IF NOT C_HAT_PLAYOFF ## IF NOT C_FINAL # md-width-px-100# ENDIF ## ENDIF #">
+                                            <div class="game-score home-score# IF NOT C_HAT_PLAYOFF ## IF NOT C_FINAL # md-width-pc-50# ELSE # md-width-px-50# ENDIF ## ELSE # md-width-px-50# ENDIF #">{games.HOME_SCORE}</div>
+                                            # IF NOT C_HAT_PLAYOFF #
+                                                # IF NOT C_FINAL #
+                                                    <div class="game-score home-score md-width-pc-50">{games.HOME_SCORE_B}# IF games.C_HAS_PEN # <span class="small">({games.HOME_PEN})</span># ENDIF #</div>
+                                                # ENDIF #
+                                            # ENDIF #
+                                        </div>
+                                    </div>
+                                    <div class="id-{games.AWAY_ID} game-team game-away# IF games.C_AWAY_FAV # text-strong# ENDIF #"
+                                            # IF games.C_AWAY_WIN # style="background-color: {games.WIN_COLOR}"# ENDIF #>
+                                        <div class="away-{games.GAME_ID} away-team">
+                                            <div class="flex-team flex-left">
+                                                # IF games.C_AWAY_EMPTY #
+                                                    <span>{games.AWAY_EMPTY}</span>
+                                                # ELSE #
+                                                    <img src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}">
+                                                    <span><a href="{games.U_AWAY_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload# IF games.AWAY_FORFEIT # warning# ENDIF #">{games.AWAY_TEAM}</a></span>
+                                                # ENDIF #
+                                            </div>
+                                        </div>
+                                        <div class="game-team# IF NOT C_HAT_PLAYOFF ## IF NOT C_FINAL # md-width-px-100# ENDIF ## ENDIF #">
+                                            <div class="game-score away-score# IF NOT C_HAT_PLAYOFF ## IF NOT C_FINAL # md-width-pc-50# ELSE # md-width-px-50# ENDIF ## ELSE # md-width-px-50# ENDIF #">{games.AWAY_SCORE}</div>
+                                            # IF NOT C_HAT_PLAYOFF #
+                                                # IF NOT C_FINAL #
+                                                    <div class="game-score away-score md-width-pc-50">{games.AWAY_SCORE_B}# IF games.C_HAS_PEN # <span class="small">({games.AWAY_PEN})</span># ENDIF #</div>
+                                                # ENDIF #
+                                            # ENDIF #
+                                        </div>
                                     </div>
                                 </div>
-                            # END rounds #
+                            # END games #
                         </div>
                     </div>
                 # ELSE #

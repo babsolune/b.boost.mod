@@ -118,42 +118,42 @@ class ScmBracketGamesFormController extends DefaultModuleController
                         ['class' => 'bgc notice align-center']
                     ));
                 ${'bracket_fieldset_'.$field}->add_field(new FormFieldFree('game_number_' . $field, '', $game_number . $bonus,
-                    ['class' => 'game-name small text-italic form-B-' . $field]
+                    ['class' => 'label-top game-name small text-italic form-B-' . $field]
                 ));
                 ${'bracket_fieldset_'.$field}->add_field(new FormFieldActionLink('details_' . $field, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $cluster, $round, $order), 'd-inline-block game-details align-right'));
 
-                ${'bracket_fieldset_'.$field}->add_field(new FormFieldDateTime('game_date_' . $field, '', $game_date,
-                    ['class' => 'game-date']
+                ${'bracket_fieldset_'.$field}->add_field(new FormFieldDateTime('game_date_' . $field, $this->lang['scm.game.form.date'], $game_date,
+                    ['class' => 'label-top game-date']
                 ));
-                ${'bracket_fieldset_'.$field}->add_field(new FormFieldSimpleSelectChoice('home_team_' . $field, '', $game_home_id,
+                ${'bracket_fieldset_'.$field}->add_field(new FormFieldSimpleSelectChoice('home_team_' . $field, $this->lang['scm.game.form.home.team'], $game_home_id,
                     $this->get_teams_list(),
-                    ['class' => 'home-team game-team']
+                    ['class' => 'label-top home-team game-team']
                 ));
-                ${'bracket_fieldset_'.$field}->add_field(new FormFieldNumberEditor('home_score_' . $field, '', $game_home_score,
-                    ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
+                ${'bracket_fieldset_'.$field}->add_field(new FormFieldNumberEditor('home_score_' . $field, $this->lang['scm.game.form.home.score'], $game_home_score,
+                    ['class' => 'label-top home-team game-score', 'pattern' => '[0-9]*']
                 ));
-                ${'bracket_fieldset_'.$field}->add_field(new FormFieldNumberEditor('away_score_' . $field, '', $game_away_score,
-                    ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
+                ${'bracket_fieldset_'.$field}->add_field(new FormFieldNumberEditor('away_score_' . $field, $this->lang['scm.game.form.away.score'], $game_away_score,
+                    ['class' => 'label-top away-team game-score', 'pattern' => '[0-9]*']
                 ));
-                ${'bracket_fieldset_'.$field}->add_field(new FormFieldSimpleSelectChoice('away_team_' . $field, '', $game_away_id,
+                ${'bracket_fieldset_'.$field}->add_field(new FormFieldSimpleSelectChoice('away_team_' . $field, $this->lang['scm.game.form.away.team'], $game_away_id,
                     $this->get_teams_list(),
-                    ['class' => 'away-team game-team']
+                    ['class' => 'label-top away-team game-team']
                 ));
-                ${'bracket_fieldset_'.$field}->add_field(new FormFieldSimpleSelectChoice('status_' . $field, '', $game_status,
+                ${'bracket_fieldset_'.$field}->add_field(new FormFieldSimpleSelectChoice('status_' . $field, $this->lang['scm.game.form.status'], $game_status,
                     [
                         new FormFieldSelectChoiceOption('', ''),
                         new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.completed'], ScmGame::COMPLETED),
                         new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.delayed'], ScmGame::DELAYED),
                         new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.stopped'], ScmGame::STOPPED)
                     ],
-                    ['class' => 'game-status portable-full']
+                    ['class' => 'label-top game-status portable-full']
                 ));
                 if($this->get_params()->get_display_playgrounds())
                     ${'bracket_fieldset_'.$field}->add_field(new FormFieldTextEditor('game_playground_' . $field, '', $game_playground,
                         ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                     ));
                 ${'bracket_fieldset_'.$field}->add_field(new FormFieldSpacer('separator_' . $field, '<hr />',
-                    ['class' => 'game-hr']
+                    ['class' => 'label-top game-hr']
                 ));
                 if ($this->return_games && $order == $games_number / 2 && $round != 1)
                     ${'bracket_fieldset_'.$field}->add_field(new FormFieldSpacer('winner_second_leg_' . $field, $this->lang['scm.second.leg'],
@@ -229,37 +229,36 @@ class ScmBracketGamesFormController extends DefaultModuleController
             ));
             $fieldset->add_field(new FormFieldActionLink('details_' . $field, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $cluster, $round, $order), 'd-inline-block game-details align-right'));
 
-            $fieldset->add_field(new FormFieldDateTime('game_date_' . $field, '', $item->get_game_date(),
-                ['class' => 'game-date']
+            $fieldset->add_field(new FormFieldDateTime('game_date_' . $field, $this->lang['scm.game.form.date'], $item->get_game_date(),
+                ['class' => 'label-top game-date']
             ));
-            $fieldset->add_field(new FormFieldSimpleSelectChoice('home_team_' . $field, '', $item->get_game_home_id(),
+            $fieldset->add_field(new FormFieldSimpleSelectChoice('home_team_' . $field, $this->lang['scm.game.form.home.team'], $item->get_game_home_id(),
                 $this->get_teams_list(),
-                ['class' => 'home-team game-team']
+                ['class' => 'label-top home-team game-team']
             ));
-            $fieldset->add_field(new FormFieldNumberEditor('home_score_' . $field, '', $item->get_game_home_score(),
-                ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
+            $fieldset->add_field(new FormFieldNumberEditor('home_score_' . $field, $this->lang['scm.game.form.home.score'], $item->get_game_home_score(),
+                ['class' => 'label-top home-team game-score', 'pattern' => '[0-9]*']
             ));
-            $fieldset->add_field(new FormFieldNumberEditor('away_score_' . $field, '', $item->get_game_away_score(),
-                ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
+            $fieldset->add_field(new FormFieldNumberEditor('away_score_' . $field, $this->lang['scm.game.form.away.score'], $item->get_game_away_score(),
+                ['class' => 'label-top away-team game-score', 'pattern' => '[0-9]*']
             ));
-            $fieldset->add_field(new FormFieldSimpleSelectChoice('away_team_' . $field, '', $item->get_game_away_id(),
+            $fieldset->add_field(new FormFieldSimpleSelectChoice('away_team_' . $field, $this->lang['scm.game.form.away.team'], $item->get_game_away_id(),
                 $this->get_teams_list(),
-                ['class' => 'away-team game-team']
+                ['class' => 'label-top away-team game-team']
             ));
-            $fieldset->add_field(new FormFieldSimpleSelectChoice('status_' . $field, '', $item->get_game_status(),
+            $fieldset->add_field(new FormFieldSimpleSelectChoice('status_' . $field, $this->lang['scm.game.form.status'], $item->get_game_status(),
                 [
                     new FormFieldSelectChoiceOption('', ''),
                     new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.completed'], ScmGame::COMPLETED),
                     new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.delayed'], ScmGame::DELAYED),
                     new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.stopped'], ScmGame::STOPPED)
                 ],
-                ['class' => 'game-status portable-full']
+                ['class' => 'label-top game-status portable-full']
             ));
             if($this->get_params()->get_display_playgrounds())
                 $fieldset->add_field(new FormFieldTextEditor('game_playground_' . $field, '', $item->get_game_playground(),
                     ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                 ));
-
             if ($this->return_games && $order == $games_number / 2)
                 $fieldset->add_field(new FormFieldSpacer('second_leg_' . $field, '<hr />' . $this->lang['scm.second.leg']));
         }

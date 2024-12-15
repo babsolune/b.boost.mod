@@ -341,7 +341,7 @@ th.bgc-sub a {
 }
 .grouped-fields .form-field-action-link a {
     position: absolute;
-    top: 0.456em;
+    bottom: 1.809em;
     right: 1.618em;
     text-align: right;
 }
