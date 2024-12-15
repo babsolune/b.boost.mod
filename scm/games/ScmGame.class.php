@@ -522,7 +522,7 @@ class ScmGame
                 break;
         }
 
-		$address = ScmConfig::load()->is_googlemaps_available() && $this->game_stadium_name ? $this->stadium_map()->display() : $this->game_stadium_name;
+		$address = ScmTeamService::get_team($this->game_home_id) ? (ScmConfig::load()->is_googlemaps_available() && $this->game_stadium_name ? $this->stadium_map()->display() : $this->game_stadium_name) : '';
 
         return array_merge(
             Date::get_array_tpl_vars($this->game_date, 'game_date'),

@@ -294,6 +294,7 @@
                                         <div# IF brackets.rounds.C_ALL_PLACES # id="bracket-{brackets.BRACKET_ID}-main-round-{brackets.rounds.ROUND_ID}"# ENDIF # class="bracket-round# IF brackets.rounds.C_ALL_PLACES # all-places# ENDIF #">
                                             <h5 class="bracket-round-title">{brackets.rounds.L_TITLE}</h5>
                                             <div class="bracket-round-games modal-container">
+                                                # IF brackets.C_DRAW_GAMES #<div># ENDIF #
                                                 # START brackets.rounds.games #
                                                     <div id="{brackets.rounds.games.GAME_ID}" class="game-container">
                                                         <div class="game-details small text-italic">
@@ -434,6 +435,7 @@
                                                         </div>
                                                     </div>
                                                 # END brackets.rounds.games #
+                                                # IF brackets.C_DRAW_GAMES #</div># ENDIF #
                                             </div>
                                         </div>
                                     # END brackets.rounds #

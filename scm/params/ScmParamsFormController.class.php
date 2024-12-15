@@ -16,7 +16,6 @@ class ScmParamsFormController extends DefaultModuleController
 	private $is_championship;
 	private $is_cup;
 	private $is_tournament;
-	private $event_type;
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -63,12 +62,13 @@ class ScmParamsFormController extends DefaultModuleController
         $form->set_css_class('params-form cell-flex cell-columns-2');
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.params.management'] . '</div>');
 
-		if ($this->is_tournament)
+        $warning_class = ScmGameService::has_games($this->event_id()) ? 'bgc warning' : '';
+
+        if ($this->is_tournament)
 		{
             $tournament_fieldset = new FormFieldsetHTML('tournament', $this->lang['scm.params.tournament']);
             $form->add_fieldset($tournament_fieldset);
 
-            $warning_class = ScmGameService::has_games($this->event_id()) ? 'bgc warning' : '';
 
             $tournament_fieldset->add_field(new FormFieldNumberEditor('groups_number', $this->lang['scm.groups.number'], $this->get_params()->get_groups_number(),
                 ['class' => $warning_class, 'min' => 1, 'required' => true]
@@ -231,29 +231,6 @@ class ScmParamsFormController extends DefaultModuleController
 			$ranking_type_fieldset->add_field(new FormFieldSimpleSelectChoice('ranking_crit_10', $this->lang['scm.ranking.criterion'] . 10, $this->get_params()->get_ranking_crit_10(), $this->ranking_criterion_list()));
 		}
 
-		if ($this->is_championship)
-		{
-			$penalties_fieldset = new FormFieldsetHTML('penalties', $this->lang['scm.params.penalties']);
-            $form->add_fieldset($penalties_fieldset);
-
-            $teams = ScmTeamService::get_teams($this->event_id());
-
-            foreach ($teams as $team)
-            {
-                $penalties_fieldset->add_field(new FormFieldNumberEditor('penalty_' . $team['id_team'], $team['club_name'], $team['team_penalty'],
-                    ['max' => 0]
-                ));
-                $penalties_fieldset->add_field(new FormFieldSimpleSelectChoice('status_' . $team['id_team'], '<span class="small text-italic">' . $this->lang['scm.params.status'] . '</span>', $team['team_status'],
-                    [
-                        new FormFieldSelectChoiceOption($this->lang['scm.params.status.play'], ''),
-                        new FormFieldSelectChoiceOption($this->lang['scm.params.status.forfeit'], ScmParams::FORFEIT),
-                        new FormFieldSelectChoiceOption($this->lang['scm.params.status.exempt'], ScmParams::EXEMPT)
-                    ]
-                ));
-                $penalties_fieldset->add_field(new FormFieldSpacer('team_separator_' . $team['id_team'], '<hr />'));
-            }
-        }
-
 		$option_fieldset = new FormFieldsetHTML('options', $this->lang['scm.params.options']);
 		$form->add_fieldset($option_fieldset);
 
@@ -275,6 +252,26 @@ class ScmParamsFormController extends DefaultModuleController
                 new FormFieldSelectChoiceOption($this->lang['scm.bonus.double'], ScmParams::BONUS_DOUBLE)
             ]
         ));
+
+        $penalties_fieldset = new FormFieldsetHTML('penalties', $this->lang['scm.params.penalties']);
+        $form->add_fieldset($penalties_fieldset);
+
+        $teams = ScmTeamService::get_teams($this->event_id());
+
+        foreach ($teams as $team)
+        {
+            $penalties_fieldset->add_field(new FormFieldNumberEditor('penalty_' . $team['id_team'], $team['club_name'], $team['team_penalty'],
+                ['max' => 0]
+            ));
+            $penalties_fieldset->add_field(new FormFieldSimpleSelectChoice('status_' . $team['id_team'], '<span class="small text-italic">' . $this->lang['scm.params.status'] . '</span>', $team['team_status'],
+                [
+                    new FormFieldSelectChoiceOption($this->lang['scm.params.status.play'], ''),
+                    new FormFieldSelectChoiceOption($this->lang['scm.params.status.forfeit'], ScmParams::FORFEIT),
+                    new FormFieldSelectChoiceOption($this->lang['scm.params.status.exempt'], ScmParams::EXEMPT)
+                ]
+            ));
+            $penalties_fieldset->add_field(new FormFieldSpacer('team_separator_' . $team['id_team'], '<hr />'));
+        }
 
 		$this->submit_button = new FormButtonDefaultSubmit();
 		$form->add_button($this->submit_button);
@@ -342,14 +339,11 @@ class ScmParamsFormController extends DefaultModuleController
             $params->set_ranking_crit_10($this->form->get_value('ranking_crit_10')->get_raw_value());
         }
 
-        if ($this->is_championship)
+        $teams = ScmTeamService::get_teams($this->event_id());
+        foreach ($teams as $team)
         {
-            $teams = ScmTeamService::get_teams($this->event_id());
-            foreach ($teams as $team)
-            {
-                ScmTeamService::update_team_penalty($team['id_team'], $this->form->get_value('penalty_' . $team['id_team']));
-                ScmTeamService::update_team_status($team['id_team'], $this->form->get_value('status_' . $team['id_team'])->get_raw_value());
-            }
+            ScmTeamService::update_team_penalty($team['id_team'], $this->form->get_value('penalty_' . $team['id_team']));
+            ScmTeamService::update_team_status($team['id_team'], $this->form->get_value('status_' . $team['id_team'])->get_raw_value());
         }
 
         $params->set_game_duration($this->form->get_value('game_duration'));

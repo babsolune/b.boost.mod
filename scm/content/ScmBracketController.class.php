@@ -225,9 +225,12 @@ class ScmBracketController extends DefaultModuleController
 
         foreach($brackets as $bracket => $rounds)
         {
+            $c_draw_games = ScmParamsService::get_params($this->event_id())->get_draw_games();
+
             $this->view->assign_block_vars('brackets', [
                 'BRACKET_NAME' => $bracket == 1 ? $this->lang['scm.winner.bracket'] : (count($brackets) == 2 ? $this->lang['scm.looser.bracket'] : $this->lang['scm.looser.bracket'] . ' ' . ScmBracketService::ntl($bracket)),
                 'BRACKET_ID' => $bracket,
+                'C_DRAW_GAMES' => $c_draw_games,
             ]);
 
             // Reverse brackets to be looser.n, looser.n-1, looser.1, winner

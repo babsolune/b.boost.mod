@@ -53,6 +53,7 @@ class ScmParams
 	private $game_duration;
 	private $favorite_team_id;
 
+    const FINALS_DIRECT   = "finals_direct";
     const FINALS_ROUND   = "finals_round";
     const FINALS_RANKING = "finals_ranking";
 

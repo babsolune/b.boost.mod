@@ -48,13 +48,13 @@ class ScmBracketsFormController extends DefaultModuleController
 
 	private function save()
 	{
-        if (!ScmGameService::has_games($this->event_id()))
+        if (ScmGameService::has_games($this->event_id()))
         {
+            ScmGameService::delete_games($this->event_id());
             ScmBracketService::set_bracket_games($this->event_id(), $this->get_params()->get_rounds_number());
         }
         else
         {
-            ScmGameService::delete_games($this->event_id());
             ScmBracketService::set_bracket_games($this->event_id(), $this->get_params()->get_rounds_number());
         }
 
