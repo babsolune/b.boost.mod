@@ -55,7 +55,7 @@ class ScmCurrentGamesController extends DefaultModuleController
 
 		$now = new Date();
         $running_events = ScmEventService::get_running_events_id();
-        $events_id = implode(', ', $running_events);
+        $events_id = $running_events ? implode(', ', $running_events) : 0;
 
         // Next games
         $next_games = $next_events = $next_events_games = $next_categories = [];

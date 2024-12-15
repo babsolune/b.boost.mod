@@ -216,7 +216,7 @@ class ScmGameService
     public static function get_current_games():array
 	{
         $running_events = ScmEventService::get_running_events_id();
-        $events_id = implode(', ', $running_events);
+        $events_id = $running_events ? implode(', ', $running_events) : 0;
         $now = new Date();
         $games = self::$db_querier->select('SELECT games.*
             FROM ' . ScmSetup::$scm_game_table . ' games

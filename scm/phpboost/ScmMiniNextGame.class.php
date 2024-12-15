@@ -54,7 +54,7 @@ class ScmMiniNextGame extends ModuleMiniMenu
         $next_games = $next_events = $next_events_games = [];
 
         $running_events = ScmEventService::get_running_events_id();
-        $events_id = implode(', ', $running_events);
+        $events_id = $running_events ? implode(', ', $running_events) : 0;
 
         $results = PersistenceContext::get_querier()->select('SELECT games.*, params.*
             FROM ' . ScmSetup::$scm_game_table . ' games
