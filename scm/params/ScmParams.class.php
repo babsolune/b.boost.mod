@@ -11,6 +11,7 @@ class ScmParams
 {
 	private $id_params;
 	private $params_event_id;
+	private $games_number;
 	private $groups_number;
 	private $teams_per_group;
 	private $hat_ranking;
@@ -81,6 +82,16 @@ class ScmParams
 	public function set_params_event_id($params_event_id)
 	{
 		$this->params_event_id = $params_event_id;
+	}
+
+	public function get_games_number()
+	{
+		return $this->games_number;
+	}
+
+	public function set_games_number($games_number)
+	{
+		$this->games_number = $games_number;
 	}
 
 	public function get_groups_number()
@@ -473,6 +484,7 @@ class ScmParams
 		return [
 			'id_params'           => $this->get_id_params(),
 			'params_event_id'     => $this->get_params_event_id(),
+			'games_number'        => $this->get_games_number(),
 			'groups_number'       => $this->get_groups_number(),
 			'teams_per_group'     => $this->get_teams_per_group(),
 			'hat_ranking'         => $this->get_hat_ranking(),
@@ -518,6 +530,7 @@ class ScmParams
 	{
 		$this->id_params           = $properties['id_params'];
 		$this->params_event_id     = $properties['params_event_id'];
+		$this->games_number        = $properties['games_number'];
 		$this->groups_number       = $properties['groups_number'];
 		$this->teams_per_group     = $properties['teams_per_group'];
 		$this->hat_ranking         = $properties['hat_ranking'];

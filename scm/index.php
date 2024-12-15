@@ -49,6 +49,7 @@ $url_controller_mappers = [
 	new UrlControllerMapper('ScmDaysDelayedController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/delayed/?$`', ['event_id', 'event_slug']),
 	new UrlControllerMapper('ScmGroupController', '`^/?([0-9]+)-([a-z0-9-_]+)?/group/?([0-9]+)?/?([a-z]+)?/?$`', ['event_id', 'event_slug', 'cluster', 'type']),
 	new UrlControllerMapper('ScmBracketController', '`^/?([0-9]+)-([a-z0-9-_]+)?/bracket/?$`', ['event_id', 'event_slug']),
+	new UrlControllerMapper('ScmPracticeController', '`^/?([0-9]+)-([a-z0-9-_]+)?/practice/?$`', ['event_id', 'event_slug']),
     // Content edit
     new UrlControllerMapper('ScmDaysFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/builder/matchdays/?$`', ['event_id', 'event_slug']),
 	new UrlControllerMapper('ScmDayGamesFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/edit/matchdays/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'cluster']),
@@ -56,6 +57,8 @@ $url_controller_mappers = [
 	new UrlControllerMapper('ScmGroupGamesFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/edit/groups/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'cluster']),
 	new UrlControllerMapper('ScmBracketsFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/builder/brackets/?$`', ['event_id', 'event_slug']),
 	new UrlControllerMapper('ScmBracketGamesFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/edit/brackets/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'cluster']),
+	new UrlControllerMapper('ScmPracticeFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/builder/practice/?$`', ['event_id', 'event_slug']),
+	new UrlControllerMapper('ScmPracticeGamesFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/edit/practice/?([0-9]+)?/?$`', ['event_id', 'event_slug']),
 	new UrlControllerMapper('ScmDetailsGameFormController', '`^/?([0-9]+)-([a-z0-9-_]+)?/details/?([A-Z]+)?/?([0-9]+)?/?([0-9]+)?/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'type', 'cluster', 'round', 'order']),
 
 	// Clubs

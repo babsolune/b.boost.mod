@@ -18,6 +18,7 @@ $lang['scm.menu.ranking']          = 'Classement';
 $lang['scm.menu.rounds.groups']    = 'Phases de groupes';
 $lang['scm.menu.rounds.brackets']  = 'Phases finales';
 $lang['scm.menu.single.bracket']   = 'Arbre des matchs';
+$lang['scm.menu.practice']         = 'Liste des matchs';
 
 $lang['scm.menu.config.teams']         = 'Équipes';
 $lang['scm.menu.config.params']        = 'Paramètres';

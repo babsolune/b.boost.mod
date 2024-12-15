@@ -33,9 +33,12 @@
                 # END sub_events #
             # ELSE #
                 # IF C_IS_SUB #<li><a href="{U_EVENT_MASTER}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-house-flag"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{HEADER_MASTER_DIVISION}</span></a></li># ENDIF #
-                <li><a href="{U_EVENT_HOME}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-info"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.infos}</span></a></li>
+                # IF NOT C_PRACTICE #<li><a href="{U_EVENT_HOME}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-info"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.infos}</span></a></li># ENDIF #
                 # IF C_CUP #
                     <li><a href="{U_ROUND_BRACKETS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.single.bracket}</span></a></li>
+                # ENDIF #
+                # IF C_PRACTICE #
+                    <li><a href="{U_PRACTICE}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-sitemap fa-list" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.practice}</span></a></li>
                 # ENDIF #
                 # IF C_TOURNAMENT #
                     <li><a href="{U_ROUND_GROUPS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-list" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.rounds.groups}</span></a></li>
@@ -79,6 +82,14 @@
                             <li><a href="{U_EDIT_BRACKET}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-users-viewfinder" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.create.games}</span></a></li>
                             # IF C_HAS_GAMES #
                                 <li# IF C_EDIT_BRACKETS_GAMES # class="current"# ENDIF #><a href="{U_EDIT_BRACKET_GAMES}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-sitemap fa-rotate-270" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.games}</span></a></li>
+                            # ENDIF #
+                        # ENDIF #
+                    # ENDIF #
+                    # IF C_PRACTICE #
+                        # IF C_HAS_P_GAMES #
+                            <li><a href="{U_EDIT_PRACTICE}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-users-viewfinder" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.create.games}</span></a></li>
+                            # IF C_HAS_GAMES #
+                                <li# IF C_EDIT_PRACTICE_GAMES # class="current"# ENDIF #><a href="{U_EDIT_PRACTICE_GAMES}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-list" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.games}</span></a></li>
                             # ENDIF #
                         # ENDIF #
                     # ENDIF #

@@ -128,7 +128,8 @@ class ScmUrlBuilder
 ################################ Display
     public static function event_home($event_id, $event_slug)
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/informations/');
+        $event_home = ScmEventService::get_event_type($event_id) == ScmDivision::PRACTICE ? '/practice/' : '/informations/';
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . $event_home);
 	}
 
     // Groups
@@ -141,6 +142,12 @@ class ScmUrlBuilder
 	public static function display_brackets_rounds($event_id, $event_slug)
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/bracket/');
+	}
+
+    // Practice
+	public static function display_practice($event_id, $event_slug)
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/practice/');
 	}
 
     // Days ranking
@@ -229,6 +236,18 @@ class ScmUrlBuilder
 	public static function edit_brackets_games($event_id, $event_slug, $cluster = 1)
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/brackets/' . $cluster);
+	}
+
+    // Bracket
+    // Edit bracket and build bracket games list
+	public static function edit_practice($event_id, $event_slug)
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/builder/practice/');
+	}
+    // Edit bracket games
+	public static function edit_practice_games($event_id, $event_slug)
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/practice/');
 	}
 
     // Edit details games

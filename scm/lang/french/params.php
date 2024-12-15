@@ -14,6 +14,7 @@
 // Params
 $lang['scm.params.management']       = 'Paramètres de la compétition';
 $lang['scm.params.tournament']       = 'Configuration du tournoi';
+$lang['scm.params.practice']         = 'Configuration libre';
 $lang['scm.params.bracket']          = 'Phases finales';
 $lang['scm.params.ranking']          = 'Classement';
 $lang['scm.params.options']          = 'Autres options';
@@ -23,6 +24,7 @@ $lang['scm.params.status.play']      = 'En compétition';
 $lang['scm.params.status.forfeit']   = 'Forfait général';
 $lang['scm.params.status.exempt']    = 'Exempt';
 
+$lang['scm.games.number']         = 'Nombre de matchs';
 $lang['scm.groups.number']        = 'Nombre de groupes';
 $lang['scm.teams.per.group']      = 'Nombre maximum d\'équipes par groupe';
 $lang['scm.hat.ranking']          = 'Classement au chapeau';
@@ -34,7 +36,8 @@ $lang['scm.fill.games.clue']      = '<span aria-label="Tous les matchs de groupe
 $lang['scm.looser.brackets']      = 'Tableaux consolantes';
 $lang['scm.looser.brackets.clue'] = '<span aria-label="Créer tous les matchs nécessaires pour attribuer un classement final pour toutes les équipes."><i class="far fa-circle-question"></i></span>';
 $lang['scm.brackets.number']      = 'Nombre de tableaux consolantes';
-$lang['scm.display.playgrounds']  = 'Afficher les terrains';
+$lang['scm.define.playgrounds']   = 'Définir les terrains';
+$lang['scm.define.playgrounds.clue']   = '<span aria-label="Ajoute un champ dans la liste des match.<br />Utile dans le cas où plusieurs matchs se déroulent le même jour dans un même club."><i class="far fa-circle-question"></i></span>';
 $lang['scm.victory.points']       = 'Points pour une victoire';
 $lang['scm.draw.points']          = 'Points pour un match nul';
 $lang['scm.loss.points']          = 'Points pour une défaite';

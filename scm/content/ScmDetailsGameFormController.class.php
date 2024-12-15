@@ -13,6 +13,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
     private $params;
     private $games_number;
     private $bracket_games;
+    private $practice_games;
     private $return_games;
 
 	public function execute(HTTPRequestCustom $request)
@@ -41,6 +42,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
         $this->games_number = ScmGameService::get_games($this->event_id());
         $this->return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
         $this->bracket_games = $this->get_game()->get_game_type() === 'B';
+        $this->practice_games = $this->get_game()->get_game_type() === 'P';
     }
 
 	private function build_form()
@@ -51,6 +53,8 @@ class ScmDetailsGameFormController extends DefaultModuleController
             $url = ScmUrlBuilder::edit_groups_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_cluster())->rel();
         if($this->get_game()->get_game_type() == 'B')
             $url = ScmUrlBuilder::edit_brackets_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_cluster())->rel();
+        if($this->get_game()->get_game_type() == 'P')
+            $url = ScmUrlBuilder::edit_practice_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_cluster())->rel();
 
         $form = new HTMLForm(__CLASS__);
         $form->set_css_class('floating-submit');
@@ -71,7 +75,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
             ['class' => 'portable-half']
         ));
 
-        if ($this->bracket_games && $this->return_games) {
+        if (($this->bracket_games || $this->practice_games) && $this->return_games) {
             if (($this->get_game()->get_game_order() > count($this->games_number) / 2)) {
                 $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.game.event.penalties'],
                     ['class' => 'portable-full']
@@ -84,7 +88,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
                 ));
             }
         }
-        elseif ($this->bracket_games && !$this->return_games) {
+        elseif (($this->bracket_games || $this->practice_games) && !$this->return_games) {
             $fieldset->add_field(new FormFieldSpacer('penalties', $this->lang['scm.game.event.penalties'],
                 ['class' => 'portable-full']
             ));
@@ -201,7 +205,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
 	private function save()
 	{
         $game = $this->get_game();
-        if ($this->bracket_games)
+        if ($this->bracket_games || $this->practice_games)
         {
             $game->set_game_home_pen($this->form->get_value('home_pen'));
             $game->set_game_away_pen($this->form->get_value('away_pen'));
@@ -381,6 +385,8 @@ class ScmDetailsGameFormController extends DefaultModuleController
             $link = ScmUrlBuilder::edit_brackets_games($event->get_id(), $event->get_event_slug(), $request->get_value('cluster'));
         elseif ($request->get_value('type') == 'D')
             $link = ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug(), $request->get_value('cluster'));
+        elseif ($request->get_value('type') == 'P')
+            $link = ScmUrlBuilder::edit_practice_games($event->get_id(), $event->get_event_slug());
         $breadcrumb->add($this->lang['scm.games.management'], $link);
         $breadcrumb->add($this->lang['scm.game.event.details'], ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), $request->get_value('type'), $request->get_value('cluster'), $request->get_value('round'), $request->get_value('order')));
 

@@ -490,9 +490,7 @@ th.bgc-sub a {
     justify-content: space-around;
 }
 
-.bracket-round:last-child .bracket-round-games {
-    justify-content: center;
-}
+.bracket-round:last-child .bracket-round-games { justify-content: center; }
 
 .row-header{
     display: flex;

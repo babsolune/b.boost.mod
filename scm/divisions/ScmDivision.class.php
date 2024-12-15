@@ -18,8 +18,9 @@ class ScmDivision
 	const RETURN_GAMES = 'return_games';
 
 	const CHAMPIONSHIP = 'championship';
-	const CUP = 'cup';
-	const TOURNAMENT = 'tournament';
+	const CUP          = 'cup';
+	const TOURNAMENT   = 'tournament';
+	const PRACTICE     = 'practice';
 
 	public function get_id_division()
 	{

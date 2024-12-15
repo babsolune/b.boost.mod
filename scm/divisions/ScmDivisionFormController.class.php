@@ -54,7 +54,8 @@ class ScmDivisionFormController extends DefaultModuleController
 			[
 				new FormFieldSelectChoiceOption($this->lang['scm.championship'], ScmDivision::CHAMPIONSHIP),
 				new FormFieldSelectChoiceOption($this->lang['scm.cup'], ScmDivision::CUP),
-				new FormFieldSelectChoiceOption($this->lang['scm.tournament'], ScmDivision::TOURNAMENT)
+				new FormFieldSelectChoiceOption($this->lang['scm.tournament'], ScmDivision::TOURNAMENT),
+				new FormFieldSelectChoiceOption($this->lang['scm.practice'], ScmDivision::PRACTICE)
             ],
             [
                 'description' => $description,
@@ -65,6 +66,8 @@ class ScmDivisionFormController extends DefaultModuleController
                         jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.cup.clue'] . '");
                     } else if  (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::TOURNAMENT .'") {
                         jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.tournament.clue'] . '");
+                    } else if  (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::PRACTICE .'") {
+                        jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.practice.clue'] . '");
                     }
                 ']
             ]

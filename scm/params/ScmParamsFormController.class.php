@@ -16,6 +16,7 @@ class ScmParamsFormController extends DefaultModuleController
 	private $is_championship;
 	private $is_cup;
 	private $is_tournament;
+	private $is_practice;
 
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -32,7 +33,7 @@ class ScmParamsFormController extends DefaultModuleController
                 $this->form->get_field_by_id('brackets_number')->set_hidden(!$this->get_params()->get_looser_bracket());
                 $this->form->get_field_by_id('rounds_number')->set_hidden($this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING);
             }
-            if (!$this->is_championship) {
+            if (!$this->is_championship && !$this->is_practice) {
                 $this->form->get_field_by_id('third_place')->set_hidden($this->get_params()->get_looser_bracket());
             }
             $event_name = $this->get_event()->get_event_name();
@@ -54,6 +55,7 @@ class ScmParamsFormController extends DefaultModuleController
 		$this->is_championship = $this->division['event_type'] == ScmDivision::CHAMPIONSHIP;
 		$this->is_cup = $this->division['event_type'] == ScmDivision::CUP;
 		$this->is_tournament = $this->division['event_type'] == ScmDivision::TOURNAMENT;
+		$this->is_practice = $this->division['event_type'] == ScmDivision::PRACTICE;
 	}
 
 	private function build_form()
@@ -68,7 +70,6 @@ class ScmParamsFormController extends DefaultModuleController
 		{
             $tournament_fieldset = new FormFieldsetHTML('tournament', $this->lang['scm.params.tournament']);
             $form->add_fieldset($tournament_fieldset);
-
 
             $tournament_fieldset->add_field(new FormFieldNumberEditor('groups_number', $this->lang['scm.groups.number'], $this->get_params()->get_groups_number(),
                 ['class' => $warning_class, 'min' => 1, 'required' => true]
@@ -127,7 +128,6 @@ class ScmParamsFormController extends DefaultModuleController
                     'hidden' => !$this->get_params()->get_looser_bracket()
                 ]
             ));
-            $tournament_fieldset->add_field(new FormFieldCheckbox('display_playgrounds', $this->lang['scm.display.playgrounds'], $this->get_params()->get_display_playgrounds()));
         }
 
 		if ($this->is_cup || $this->is_tournament)
@@ -143,7 +143,7 @@ class ScmParamsFormController extends DefaultModuleController
             }
             else
                 $final_type_options = [new FormFieldSelectChoiceOption($this->lang['scm.finals.round'], ScmParams::FINALS_ROUND)];
-            $bracket_fieldset->add_field(new FormFieldSimpleSelectChoice('finals_type', $this->lang['scm.finals.type'], $this->get_params()->get_finals_type(),
+                $bracket_fieldset->add_field(new FormFieldSimpleSelectChoice('finals_type', $this->lang['scm.finals.type'], $this->get_params()->get_finals_type(),
                 $final_type_options,
                 [
                     'class' => $warning_class,
@@ -195,8 +195,6 @@ class ScmParamsFormController extends DefaultModuleController
                     'hidden' => $this->is_tournament && $this->get_params()->get_looser_bracket()
                 ]
             ));
-			// $bracket_fieldset->add_field(new FormFieldCheckbox('golden_goal', $this->lang['scm.golden.goal'], $this->get_params()->get_golden_goal()));
-			// $bracket_fieldset->add_field(new FormFieldCheckbox('silver_goal', $this->lang['scm.silver.goal'], $this->get_params()->get_silver_goal()));
 		}
 
 		if ($this->is_championship || $this->is_tournament)
@@ -233,6 +231,17 @@ class ScmParamsFormController extends DefaultModuleController
 
 		$option_fieldset = new FormFieldsetHTML('options', $this->lang['scm.params.options']);
 		$form->add_fieldset($option_fieldset);
+
+        if ($this->is_practice)
+		{
+            $option_fieldset->add_field(new FormFieldNumberEditor('games_number', $this->lang['scm.games.number'], $this->get_params()->get_games_number(),
+                ['class' => $warning_class, 'min' => 1, 'required' => true]
+            ));
+        }
+
+        $option_fieldset->add_field(new FormFieldCheckbox('display_playgrounds', $this->lang['scm.define.playgrounds'], $this->get_params()->get_display_playgrounds(),
+            ['description' => $this->lang['scm.define.playgrounds.clue']]
+        ));
 
         $option_fieldset->add_field(new FormFieldNumberEditor('game_duration', $this->lang['scm.game.duration'], $this->get_params()->get_game_duration(),
 			[
@@ -285,6 +294,10 @@ class ScmParamsFormController extends DefaultModuleController
 		$params = $this->get_params();
         $params->set_params_event_id($this->event_id());
 
+        if ($this->is_practice)
+        {
+            $params->set_games_number($this->form->get_value('games_number'));
+        }
         if ($this->is_tournament)
         {
             $params->set_groups_number($this->form->get_value('groups_number'));
@@ -297,9 +310,7 @@ class ScmParamsFormController extends DefaultModuleController
                 $params->set_brackets_number($this->form->get_value('brackets_number'));
             else 
                 $params->set_brackets_number(0);
-            $params->set_display_playgrounds($this->form->get_value('display_playgrounds'));
         }
-
         if ($this->is_cup || $this->is_tournament)
         {
             if ($this->form->get_value('looser_bracket'))
@@ -346,6 +357,7 @@ class ScmParamsFormController extends DefaultModuleController
             ScmTeamService::update_team_status($team['id_team'], $this->form->get_value('status_' . $team['id_team'])->get_raw_value());
         }
 
+        $params->set_display_playgrounds($this->form->get_value('display_playgrounds'));
         $params->set_game_duration($this->form->get_value('game_duration'));
         $params->set_bonus($this->form->get_value('bonus')->get_raw_value());
         $params->set_favorite_team_id($this->form->get_value('favorite_team_id')->get_raw_value());

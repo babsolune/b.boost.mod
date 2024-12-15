@@ -237,8 +237,9 @@ class ScmSetup extends DefaultModuleSetup
 			'id_params'       => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
 			'params_event_id' => ['type' => 'integer', 'length' => 11, 'notnull' => 1],
 
-			'teams_per_group'     => ['type' => 'integer', 'length' => 11],
+			'games_number'        => ['type' => 'integer', 'length' => 11],
 			'groups_number'       => ['type' => 'integer', 'length' => 11],
+			'teams_per_group'     => ['type' => 'integer', 'length' => 11],
 			'hat_ranking'         => ['type' => 'boolean', 'default' => 0],
 			'hat_days'            => ['type' => 'integer', 'length' => 11],
 			'fill_games'          => ['type' => 'boolean', 'default' => 0],

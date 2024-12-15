@@ -33,6 +33,7 @@ class ScmMenuService
         $c_has_days       = $params->get_victory_points();
         $c_has_rounds     = $params->get_rounds_number();
         $c_has_groups     = $params->get_teams_per_group();
+        $c_has_p_games    = $params->get_games_number();
         $c_has_games      = ScmGameService::has_games($event_id);
         $c_finals_ranking = $params->get_finals_type() == ScmParams::FINALS_RANKING;
         $bracket_round = 
@@ -54,11 +55,13 @@ class ScmMenuService
             'C_CHAMPIONSHIP' => $division['event_type'] == ScmDivision::CHAMPIONSHIP,
             'C_CUP'          => $division['event_type'] == ScmDivision::CUP,
             'C_TOURNAMENT'   => $division['event_type'] == ScmDivision::TOURNAMENT,
+            'C_PRACTICE'     => $division['event_type'] == ScmDivision::PRACTICE,
             'C_HAS_TEAMS'    => $c_has_teams,
             'C_HAS_DAYS'     => $c_has_days,
             'C_HAS_ROUNDS'   => $c_has_rounds,
             'C_HAS_GROUPS'   => $c_has_groups,
             'C_HAS_GAMES'    => $c_has_games,
+            'C_HAS_P_GAMES'  => $c_has_p_games,
             'C_ONE_DAY'      => ScmGameService::one_day_event($event_id),
             'C_SOURCES'      => $event->get_sources(),
             'C_FINALS_RANKING' => $c_finals_ranking,
@@ -77,6 +80,7 @@ class ScmMenuService
 
             'U_ROUND_GROUPS'   => ScmUrlBuilder::display_groups_rounds($event_id, $event->get_event_slug(), $active_round)->rel(),
             'U_ROUND_BRACKETS' => ScmUrlBuilder::display_brackets_rounds($event_id, $event->get_event_slug())->rel(),
+            'U_PRACTICE'       => ScmUrlBuilder::display_practice($event_id, $event->get_event_slug())->rel(),
             'U_DAYS_CALENDAR'  => ScmUrlBuilder::display_days_calendar($event_id, $event->get_event_slug(), ScmDayService::get_last_day($event_id))->rel(),
             'U_DAYS_RANKING'   => ScmUrlBuilder::display_days_ranking($event_id, $event->get_event_slug())->rel(),
             'U_CHECK_DAYS'     => ScmUrlBuilder::days_checker($event_id, $event->get_event_slug())->rel(),
@@ -91,6 +95,8 @@ class ScmMenuService
             'U_EDIT_GROUPS_GAMES'  => ScmUrlBuilder::edit_groups_games($event_id, $event->get_event_slug(), $active_round)->rel(),
             'U_EDIT_BRACKET'       => ScmUrlBuilder::edit_brackets($event_id, $event->get_event_slug())->rel(),
             'U_EDIT_BRACKET_GAMES' => ScmUrlBuilder::edit_brackets_games($event_id, $event->get_event_slug(), $bracket_round)->rel(),
+            'U_EDIT_PRACTICE'       => ScmUrlBuilder::edit_practice($event_id, $event->get_event_slug())->rel(),
+            'U_EDIT_PRACTICE_GAMES' => ScmUrlBuilder::edit_practice_games($event_id, $event->get_event_slug())->rel(),
         ]);
 
         foreach (ScmEventService::get_sub_list($event_id) as $sub_event)
@@ -114,6 +120,7 @@ class ScmMenuService
             $c_edit_groups    = self::compare_url($current_url) == self::compare_url(ScmUrlBuilder::edit_groups_games($event_id, $event->get_event_slug(), $round)->rel());
             $c_display_groups = self::compare_url($current_url) == self::compare_url(ScmUrlBuilder::display_groups_rounds($event_id, $event->get_event_slug(), $round)->rel());
             $c_edit_brackets  = self::compare_url($current_url) == self::compare_url(ScmUrlBuilder::edit_brackets_games($event_id, $event->get_event_slug(), $round)->rel());
+            $c_edit_practice  = self::compare_url($current_url) == self::compare_url(ScmUrlBuilder::edit_practice_games($event_id, $event->get_event_slug())->rel());
 
             $view->put_all([
                 'C_EDIT_DAYS_GAMES'     => $c_edit_days,
@@ -121,6 +128,7 @@ class ScmMenuService
                 'C_EDIT_GROUPS_GAMES'   => $c_edit_groups,
                 'C_GROUPS_GAMES'        => $c_display_groups,
                 'C_EDIT_BRACKETS_GAMES' => $c_edit_brackets,
+                'C_EDIT_PRACTICE_GAMES' => $c_edit_practice,
             ]);
 
             $groups = [];

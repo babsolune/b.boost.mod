@@ -117,6 +117,7 @@ $lang['scm.total']  = 'Total';
 // Rounds
 $lang['scm.groups.management']   = 'Créer la liste des matchs par groupe';
 $lang['scm.brackets.management'] = 'Créer la liste des matchs';
+$lang['scm.practice.management'] = 'Créer la liste des matchs';
 $lang['scm.group']               = 'Groupe';
 $lang['scm.group.short']         = 'G';
 $lang['scm.groups']              = 'Groupes';
@@ -191,6 +192,7 @@ $lang['scm.th.round.short'] = 'T';
 
 // Games
 $lang['scm.event.id']             = 'Id';
+$lang['scm.games.list']           = 'Liste des matchs';
 $lang['scm.games.management']     = 'Matchs de la compétition';
 $lang['scm.games.groups.stage']   = 'Phases de groupes';
 $lang['scm.games.brackets.stage'] = 'Phases finales';
@@ -214,6 +216,8 @@ $lang['scm.cup']               = 'Coupe';
 $lang['scm.cup.clue']          = 'Compétition à éliminations directes.';
 $lang['scm.tournament']        = 'Tournoi';
 $lang['scm.tournament.clue']   = 'Compétition avec phase de groupe par classement puis phase finale par éliminations directes';
+$lang['scm.practice']          = 'Libre';
+$lang['scm.practice.clue']     = 'Pas de compétition. Nombre de matchs à définir dans les paramètres';
 $lang['scm.game.type']         = 'Type de match';
 $lang['scm.single.games']      = 'Matchs simples';
 $lang['scm.return.games']      = 'Matchs aller-retour';
@@ -315,6 +319,7 @@ $lang['scm.message.no.games']       = 'Aucun match pour l\'instant';
 $lang['scm.message.no.events']      = 'Aucune compétition pour l\'instant';
 $lang['scm.warning.current.season'] = 'Seules les compétitions en cours sont affichées.';
 $lang['scm.warning.bracket.update'] = 'Les matchs ont été générés.';
+$lang['scm.warning.practice.update'] = 'Les matchs ont été générés.';
 $lang['scm.warning.group.update']   = 'Les groupes de la compétition ont été mis à jour et les matchs ont été générés.';
 $lang['scm.warning.has.games']      = 'Les matchs de cette compétition ont été définis. Pour toute modification, si des résultats ont déjà été renseignés, ils seront supprimés.';
 $lang['scm.warning.details.update'] = 'Les détails du match ont été mis à jour.';
