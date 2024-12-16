@@ -65,6 +65,7 @@ class ScmMenuService
             'C_ONE_DAY'      => ScmGameService::one_day_event($event_id),
             'C_SOURCES'      => $event->get_sources(),
             'C_FINALS_RANKING' => $c_finals_ranking,
+            'C_HAS_POOL'     => !empty($event->get_pool()),
 
             'HEADER_CATEGORY'          => $category->get_name(),
             'U_HEADER_CATEGORY'        => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel(),
@@ -73,6 +74,7 @@ class ScmMenuService
             'HEADER_MASTER_SEASON'     => ScmEventService::get_master_season($event->get_id()),
             'HEADER_DIVISION'          => $division['division_name'],
             'HEADER_SEASON'            => $season['season_name'],
+            'POOL'                     => $event->get_pool(),
 
             'U_HOME'         => ScmUrlBuilder::home()->rel(),
             'U_EVENT_HOME'   => ScmUrlBuilder::event_home($event_id, $event->get_event_slug())->rel(),

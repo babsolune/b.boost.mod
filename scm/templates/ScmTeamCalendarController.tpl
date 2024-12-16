@@ -1,5 +1,39 @@
 <section id="module-scm" class="single-item modal-container">
     # INCLUDE MENU #
+    <article class="cell-flex cell-columns-3">
+        <div class="cell-1-3"></div>
+        <div class="cell-1-3">
+            <canvas class="" id="team-chart"></canvas>
+            <script>
+                let ctx = document.getElementById("team-chart").getContext('2d');
+                let data = {
+                    labels: [ ${escapejs(@scm.th.win)}, ${escapejs(@scm.th.draw)}, ${escapejs(@scm.th.loss)} ],
+                    datasets: [{
+                        data: [
+                            # START charts # "{charts.WIN}" # END charts #,
+                            # START charts # "{charts.DRAW}" # END charts #,
+                            # START charts # "{charts.LOSS}" # END charts #
+                        ],
+                        backgroundColor: ['#2ABA66', '#967ADC', '#BF263C'],
+                    }]
+                };
+                let myChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        aspectRatio : 1,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        }
+                    },
+                });
+            </script>
+        </div>
+        <div class="cell-1-3"></div>
+    </article>
     <article>
         <header><h2><span class="small">{@scm.team.results} :</span> {TEAM_NAME}# IF C_GENERAL_FORFEIT # <span class="warning small">{@scm.params.status.forfeit}</span># ENDIF #</h2></header>
         <div class="content">
@@ -33,13 +67,13 @@
                         </thead>
                         <tbody>
                             # START games #
-                                <tr class="# IF games.C_HAS_SCORE #has-score-color# ENDIF ## IF games.C_EXEMPT #bgc notice# ENDIF #">
+                                <tr class="# IF games.C_IS_AWAY_TEAM #bgc {games.TEAM_STATUS}# ENDIF ## IF games.C_IS_HOME_TEAM #bgc {games.TEAM_STATUS}# ENDIF ## IF games.C_EXEMPT #bgc notice# ENDIF #">
                                     <td># IF C_IS_DAY #{games.DAY}# ELSE #{games.ROUND}# ENDIF #</td>
                                     # IF NOT C_ONE_DAY #<td>{games.GAME_DATE_SHORT}</td># ENDIF #
                                     <td>{games.GAME_DATE_HOUR_MINUTE}</td>
-                                    <td>
+                                    <td class="">
                                         <div class="flex-team flex-right">
-                                            <span class="# IF games.C_IS_HOME_TEAM #{games.TEAM_STATUS}# ENDIF ## IF games.HOME_FORFEIT # warning# ENDIF ## IF games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                            <span class="# IF games.HOME_FORFEIT # warning# ENDIF ## IF games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
                                                 # IF games.C_IS_HOME_TEAM #
                                                     {games.HOME_TEAM}
                                                 # ELSE #
@@ -58,7 +92,7 @@
                                     <td>
                                         <div class="flex-team flex-left">
                                             # IF games.C_HAS_AWAY_LOGO #<img src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}"># ENDIF #
-                                            <span class="# IF games.C_IS_AWAY_TEAM #{games.TEAM_STATUS}# ENDIF ## IF games.AWAY_FORFEIT # warning# ENDIF ## IF games.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                            <span class="# IF games.AWAY_FORFEIT # warning# ENDIF ## IF games.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
                                                 # IF games.C_IS_AWAY_TEAM #
                                                     {games.AWAY_TEAM}
                                                 # ELSE #

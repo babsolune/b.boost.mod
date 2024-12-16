@@ -21,6 +21,7 @@ class ScmTeamCalendarController extends DefaultModuleController
 	public function execute(HTTPRequestCustom $request)
 	{
         $this->init($request);
+		$this->build_charts();
 		$this->build_view();
 		$this->check_authorizations();
 
@@ -34,6 +35,35 @@ class ScmTeamCalendarController extends DefaultModuleController
         $this->team_id = $request->get_getint('team_id', 0);
         $team_club_id = ScmTeamService::get_team($this->team_id)->get_team_club_id();
         $this->team_name = ScmClubCache::load()->get_club_full_name($team_club_id);
+    }
+
+    public function build_charts()
+    {
+        $games = ScmGameService::get_team_games($this->event_id(), $this->team_id);
+        $win = $draw = $loss = 0;
+        foreach ($games as $game)
+        {
+            $item = new ScmGame();
+            $item->set_properties($game);
+            $score_status = (int)$item->get_game_home_score() - (int)$item->get_game_away_score();
+
+            if ($score_status > 0 && $this->team_id == $item->get_game_home_id())
+                $win += 1;
+            elseif ($score_status < 0 && $this->team_id == $item->get_game_home_id())
+                $loss += 1;
+            elseif ($score_status > 0 && $this->team_id == $item->get_game_away_id())
+                $loss += 1;
+            elseif ($score_status < 0 && $this->team_id == $item->get_game_away_id())
+                $win += 1;
+            elseif ($item->get_game_home_score() != '' && (int)$item->get_game_away_score() != '' && $score_status === 0)
+                $draw += 1;
+        }
+        Debug::dump($win . '|' . $draw . '|' . $loss);
+        $this->view->assign_block_vars('charts', array_merge($item->get_template_vars(),[
+            'WIN'  => $win,
+            'DRAW' => $draw,
+            'LOSS' => $loss,
+        ]));
     }
 
 	private function build_view()
@@ -58,6 +88,8 @@ class ScmTeamCalendarController extends DefaultModuleController
                 $team_status = "error";
             elseif ($score_status < 0 && $this->team_id == $item->get_game_away_id())
                 $team_status = "success";
+            elseif ($item->get_game_home_score() != '' && (int)$item->get_game_away_score() != '' && $score_status === 0)
+                $team_status = "moderator";
 
             $this->view->assign_block_vars('games', array_merge($item->get_template_vars(),[
                 'C_IS_HOME_TEAM' => $this->team_id == $item->get_game_home_id(),

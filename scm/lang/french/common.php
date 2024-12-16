@@ -15,7 +15,7 @@ $lang['scm.module.title'] = 'Compétitions';
 $lang['scm.mini.prev']    = 'Matchs précédents';
 $lang['scm.mini.next']    = 'Prochains matchs';
 
-$lang['scm.event.views.number']  = 'Cette page a été vue :number fois.';
+$lang['scm.event.pool']        = 'Sous-groupe de la compétition';
 $lang['scm.event.start.date']  = 'Date de début';
 $lang['scm.event.end.date']    = 'Date de fin';
 $lang['scm.event.not.started'] = 'La compétition débute le :date';
@@ -23,6 +23,7 @@ $lang['scm.event.ended.event'] = 'Compétition terminée';
 $lang['scm.source.clue']       = 'Liens vers les sites officiels de la compétition';
 $lang['scm.not.specified']     = 'Non renseigné';
 
+$lang['scm.event.views.number']  = 'Cette page a été vue :number fois.';
 $lang['scm.event.scoring.type']   = 'Type de score';
 $lang['scm.event.scoring.goals']  = 'Buts';
 $lang['scm.event.scoring.tries']  = 'Essais';

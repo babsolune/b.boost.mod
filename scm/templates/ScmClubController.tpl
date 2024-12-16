@@ -80,7 +80,7 @@
                                                             # IF seasons.categories.events.C_IS_SUB #
                                                                 <span><a href="{seasons.categories.events.U_MASTER_EVENT}" class="offload">{seasons.categories.events.MASTER_DIVISION} {seasons.categories.events.MASTER_SEASON}</a> - </span>
                                                             # ENDIF #
-                                                            <a href="{seasons.categories.events.U_EVENT}" class="offload"># IF seasons.categories.events.C_IS_SUB #{seasons.categories.events.DIVISION_NAME}# ELSE #{seasons.categories.events.TITLE}# ENDIF #</a>
+                                                            <a href="{seasons.categories.events.U_EVENT}" class="offload"># IF seasons.categories.events.C_IS_SUB #{seasons.categories.events.DIVISION_NAME}# IF seasons.categories.events.C_HAS_POOL # {seasons.categories.events.POOL}# ENDIF ## ELSE #{seasons.categories.events.TITLE}# ENDIF #</a>
                                                         </li>
                                                     # ENDIF #
                                                 # END seasons.categories.events #

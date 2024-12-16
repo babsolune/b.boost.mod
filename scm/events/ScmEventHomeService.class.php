@@ -424,5 +424,26 @@ class ScmEventHomeService
         }
         return $view;
     }
+
+    public static function build_practice_home(int $event_id)
+    {
+        $view = new FileTemplate('scm/ScmEventPracticeController.tpl');
+        $games = ScmGameService::get_games($event_id);
+
+        $view->put_all([
+            'C_HAS_GAMES'      => ScmGameService::has_games($event_id),
+        ]);
+
+        foreach ($games as $game)
+        {
+            $item = new ScmGame();
+            $item->set_properties($game);
+            $favorite_id = ScmParamsService::get_params($event_id)->get_favorite_team_id();
+
+            if ($favorite_id == $item->get_game_home_id() || $favorite_id == $item->get_game_away_id())
+            $view->assign_block_vars('items', $item->get_template_vars());
+        }
+        return $view;
+    }
 }
 ?>

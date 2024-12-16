@@ -28,6 +28,13 @@ class ScmExtensionPointProvider extends ItemsModuleExtensionPointProvider
         ]);
     }
 
+    public function js_files()
+    {
+        $js_file = new ModuleJsFiles();
+        $js_file->adding_running_module_displayed_file('chart.min.js');
+        return $js_file;
+    }
+
     public function user()
     {
         return false;

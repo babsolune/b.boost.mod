@@ -74,7 +74,7 @@
                                 </div>
                                 # START items.sub_items #
                                     <div class="flex-between small">
-                                        <a class="offload" href="{items.sub_items.U_EVENT}" itemprop="name">{items.sub_items.DIVISION_NAME}</a>
+                                        <a class="offload" href="{items.sub_items.U_EVENT}" itemprop="name">{items.sub_items.DIVISION_NAME}# IF items.sub_items.C_HAS_POOL # {items.sub_items.POOL}# ENDIF #</a>
                                         # IF items.sub_items.C_CONTROLS #
                                             <div class="controls align-right">
                                                 # IF items.sub_items.C_EDIT #<a class="offload item-edit" href="{items.sub_items.U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a># ENDIF #

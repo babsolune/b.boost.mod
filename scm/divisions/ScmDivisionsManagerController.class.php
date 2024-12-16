@@ -66,6 +66,9 @@ class ScmDivisionsManagerController extends DefaultModuleController
                 case ScmDivision::TOURNAMENT :
                     $event_type = $this->lang['scm.tournament'];
                     break;
+                case ScmDivision::PRACTICE :
+                    $event_type = $this->lang['scm.practice'];
+                    break;
             }
 
             switch ($division->get_game_type()) {

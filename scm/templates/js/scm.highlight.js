@@ -41,18 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     rankingColorElements.forEach(function(element) {
         let color = window.getComputedStyle(element, null).getPropertyValue('background-color');
     });
-
-    // Bold fav team rank
-    const favTeam = document.querySelectorAll('.fav-team');
-    favTeam.forEach(element => {
-        const children = element.querySelectorAll('*');
-
-        children.forEach(child => {
-            child.style.fontWeight = 'bold';
-        });
-    });
-
-
 });
 
 // Add current class in event menu

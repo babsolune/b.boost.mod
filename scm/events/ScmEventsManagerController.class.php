@@ -38,7 +38,12 @@ class ScmEventsManagerController extends DefaultModuleController
 		if (!$display_categories)
 			unset($columns[1]);
 
-		$table_model = new SQLHTMLTableModel(ScmSetup::$scm_event_table, 'events-manager', $columns, new HTMLTableSortingRule('start_date', HTMLTableSortingRule::DESC));
+		$table_model = new SQLHTMLTableModel(
+            ScmSetup::$scm_event_table,
+            'events-manager',
+            $columns, new HTMLTableSortingRule('start_date', HTMLTableSortingRule::DESC),
+            20
+        );
 
 		$table_model->set_layout_title($this->lang['scm.events.management']);
 
@@ -66,23 +71,29 @@ class ScmEventsManagerController extends DefaultModuleController
 		);
 		foreach ($result as $row)
 		{
-			$event = new ScmEvent();
-			$event->set_properties($row);
-			$category = $event->get_category();
+			$item = new ScmEvent();
+			$item->set_properties($row);
+			$category = $item->get_category();
 
 			$this->elements_number++;
-			$this->ids[$this->elements_number] = $event->get_id();
+			$this->ids[$this->elements_number] = $item->get_id();
 
-			$edit_link = new EditLinkHTMLElement(ScmUrlBuilder::edit($event->get_id(), $event->get_event_slug()));
-			$delete_link = new DeleteLinkHTMLElement(ScmUrlBuilder::delete($event->get_id()));
+			$edit_link = new EditLinkHTMLElement(ScmUrlBuilder::edit($item->get_id(), $item->get_event_slug()));
+			$delete_link = new DeleteLinkHTMLElement(ScmUrlBuilder::delete($item->get_id()));
 
-            $is_sub = $event->get_is_sub() ? ScmEventService::get_master_division($event->get_id()) . ' - ' : '';
+            $real_event = $item->get_is_sub()
+                ? '<span class="smaller">' . ScmEventService::get_master_division($item->get_id()) . '</span>'
+                    . ' - '
+                    . $row['division_name']
+                    . '<span class="smaller">' . (!empty($item->get_pool()) ? ' - ' . $item->get_pool() : '') . '</span>'
+                : $row['division_name']
+                    . '<span class="smaller">' . (!empty($item->get_pool()) ? ' - ' . $item->get_pool() : '') . '</span>';
 
 			$row = [
 				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()), ($category->get_id() == Category::ROOT_CATEGORY ? $this->lang['common.none.alt'] : $category->get_name()))),
-				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()), $is_sub . $row['division_name']), 'align-left'),
+				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::event_home($item->get_id(), $item->get_event_slug()), $real_event), 'align-left'),
 				new HTMLTableRowCell($row['season_name']),
-				new HTMLTableRowCell($event->get_status()),
+				new HTMLTableRowCell($item->get_status()),
 				new HTMLTableRowCell($edit_link->display() . $delete_link->display(), 'controls')
             ];
 

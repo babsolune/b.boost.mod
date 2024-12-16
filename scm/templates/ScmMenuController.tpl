@@ -5,9 +5,10 @@
     </div>
     # IF C_IS_SUB #
         <h1>{HEADER_MASTER_DIVISION} {HEADER_MASTER_SEASON}</h1>
-        <h2>{HEADER_DIVISION}</h2>
+        <h2>{HEADER_DIVISION}# IF C_HAS_POOL # - {POOL}# ENDIF #</h2>
     # ELSE #
         <h1>{HEADER_DIVISION} {HEADER_SEASON}</h1>
+        # IF C_HAS_POOL #<h2>{POOL}</h2># ENDIF #
     # ENDIF #
     <div class="flex-between flex-between-large">
         # IF C_SOURCES #
@@ -29,7 +30,7 @@
         <ul>
             # IF C_IS_MASTER #
                 # START sub_events #
-                    <li><a class="offload cssmenu-title align-center" href="{sub_events.U_EVENT}"># IF NOT IS_MOBILE_DEVICE #<i class="fa fa-fw fa-house"></i># ENDIF #<span class="small d-block">{sub_events.DIVISION_NAME}</span></a></li>
+                    <li><a class="offload cssmenu-title align-center" href="{sub_events.U_EVENT}"># IF NOT IS_MOBILE_DEVICE #<i class="fa fa-fw fa-house"></i># ENDIF #<span class="small d-block">{sub_events.DIVISION_NAME}# IF sub_events.C_HAS_POOL # {sub_events.POOL}# ENDIF #</span></a></li>
                 # END sub_events #
             # ELSE #
                 # IF C_IS_SUB #<li><a href="{U_EVENT_MASTER}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-house-flag"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{HEADER_MASTER_DIVISION}</span></a></li># ENDIF #

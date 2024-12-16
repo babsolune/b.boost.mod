@@ -15,7 +15,8 @@
                 # START sub_events #
                     <h2>
                         <a href="{sub_events.U_EVENT}" class="offload">
-                            {sub_events.DIVISION_NAME}</a>
+                            {sub_events.DIVISION_NAME}# IF sub_events.C_HAS_POOL # {sub_events.POOL}# ENDIF #
+                        </a>
                     </h2>
                     <div class="more">
                         <span>{sub_events.START_DATE} | {sub_events.END_DATE}</span>
@@ -27,6 +28,7 @@
                         # IF sub_events.C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE sub_events.CHAMPIONSHIP_HOME #</div># ENDIF #
                         # IF sub_events.C_CUP #<div itemprop="text"># INCLUDE sub_events.CUP_HOME #</div># ENDIF #
                         # IF sub_events.C_TOURNAMENT #<div itemprop="text"># INCLUDE sub_events.TOURNAMENT_HOME #</div># ENDIF #
+                        # IF sub_events.C_PRACTICE #<div itemprop="text"># INCLUDE sub_events.PRACTICE_HOME #</div># ENDIF #
                     </div>
                 # END sub_events #
             # ELSE #

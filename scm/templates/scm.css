@@ -16,6 +16,10 @@
     width: auto;
 }
 
+.fav-team > * {
+    font-weight: bold;
+}
+
 .nowrap {
     white-space: nowrap;
 }

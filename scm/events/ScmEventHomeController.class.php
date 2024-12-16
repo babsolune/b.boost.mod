@@ -57,17 +57,20 @@ class ScmEventHomeController extends DefaultModuleController
                 $c_championship = $c_has_games && ScmEventService::get_event_type($item->get_id()) == ScmDivision::CHAMPIONSHIP;
                 $c_cup          = $c_has_games && ScmEventService::get_event_type($item->get_id()) == ScmDivision::CUP;
                 $c_tournament   = $c_has_games && ScmEventService::get_event_type($item->get_id()) == ScmDivision::TOURNAMENT;
+                $c_practice     = $c_has_games && ScmEventService::get_event_type($item->get_id()) == ScmDivision::PRACTICE;
 
                 $this->view->assign_block_vars('sub_events', array_merge($item->get_template_vars(), [
                     'C_CHAMPIONSHIP' => $c_championship,
                     'C_CUP'          => $c_cup,
                     'C_TOURNAMENT'   => $c_tournament,
+                    'C_PRACTICE'     => $c_practice,
                     'C_HAS_GAMES'    => $c_has_games,
                     'C_IS_ENDED'     => $item->get_end_date() < $now,
 
                     'CHAMPIONSHIP_HOME' => $c_championship ? ScmEventHomeService::build_championship_home($item->get_id()) : '',
                     'TOURNAMENT_HOME'   => $c_tournament ? ScmEventHomeService::build_tournament_home($item->get_id()) : '',
                     'CUP_HOME'          => $c_cup ? ScmEventHomeService::build_cup_home($item->get_id()) : '',
+                    'PRACTICE_HOME'     => $c_practice ? ScmEventHomeService::build_practice_home($item->get_id()) : '',
                 ]));
             }
         }

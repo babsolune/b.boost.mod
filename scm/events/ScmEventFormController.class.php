@@ -56,6 +56,8 @@ class ScmEventFormController extends DefaultModuleController
 			['required' => true]
 		));
 
+        $fieldset->add_field(new FormFieldTextEditor('pool', $this->lang['scm.event.pool'], $this->event->get_pool()));
+
 		$fieldset->add_field(new FormFieldSimpleSelectChoice('scoring_type', $this->lang['scm.event.scoring.type'], $this->event->get_scoring_type(), 
             [
                 new FormFieldSelectChoiceOption('', ''),
@@ -188,6 +190,7 @@ class ScmEventFormController extends DefaultModuleController
 
 		$event->set_division_id($this->form->get_value('division')->get_raw_value());
 		$event->set_season_id($this->form->get_value('season')->get_raw_value());
+		$event->set_pool($this->form->get_value('pool'));
 		$event->set_scoring_type($this->form->get_value('scoring_type')->get_raw_value());
 		$event->set_is_sub($this->form->get_value('is_sub'));
         if($this->form->get_value('is_sub'))

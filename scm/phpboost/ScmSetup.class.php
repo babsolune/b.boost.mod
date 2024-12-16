@@ -96,6 +96,7 @@ class ScmSetup extends DefaultModuleSetup
 			'event_slug'  => ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
 			'season_id'   => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
 			'division_id' => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
+			'pool'        => ['type' => 'string', 'length' => 255, 'default' => "''"],
 			'start_date'  => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
 			'end_date'    => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
 

@@ -36,7 +36,7 @@
                             # START prev_dates.prev_days #
                                 <tr class="# IF prev_dates.prev_days.C_HAS_SCORE #has-score-color# ENDIF ## IF prev_dates.prev_days.C_EXEMPT #bgc notice# ENDIF #">
                                     <td class="small">{prev_dates.prev_days.GAME_DATE_HOUR_MINUTE}</td>
-                                    <td class="align-right home-{prev_dates.prev_days.ID}# IF prev_dates.prev_days.C_HOME_FAV # text-strong# ENDIF #">
+                                    <td class="align-right home-{prev_dates.prev_days.ID}# IF prev_dates.prev_days.C_HOME_FAV # fav-team# ENDIF #">
                                         <div class="flex-team flex-right">
                                             <span>
                                                 <a
@@ -56,7 +56,7 @@
                                         <td>{prev_dates.prev_days.HOME_SCORE}</td>
                                         <td>{prev_dates.prev_days.AWAY_SCORE}</td>
                                     # ENDIF #
-                                    <td class="align-left away-{prev_dates.prev_days.ID}# IF prev_dates.prev_days.C_AWAY_FAV # text-strong# ENDIF #">
+                                    <td class="align-left away-{prev_dates.prev_days.ID}# IF prev_dates.prev_days.C_AWAY_FAV # fav-team# ENDIF #">
                                         <div class="flex-team flex-left">
                                             # IF prev_dates.prev_days.C_HAS_AWAY_LOGO #<img src="{prev_dates.prev_days.AWAY_LOGO}" alt="{prev_dates.prev_days.AWAY_TEAM}"># ENDIF #
                                             <span>

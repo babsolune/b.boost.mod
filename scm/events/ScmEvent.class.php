@@ -14,6 +14,7 @@ class ScmEvent
 	private $event_slug;
 	private $season_id;
 	private $division_id;
+	private $pool;
 	private $start_date;
 	private $end_date;
 	private $views_number;
@@ -96,6 +97,16 @@ class ScmEvent
 	public function set_division_id($division_id)
 	{
 		$this->division_id = $division_id;
+	}
+
+	public function get_pool()
+	{
+		return $this->pool;
+	}
+
+	public function set_pool($pool)
+	{
+		$this->pool = $pool;
 	}
 
 	public function get_start_date()
@@ -287,9 +298,9 @@ class ScmEvent
 
 	public function get_event_name()
 	{
-        $division_name = ScmDivisionService::get_division($this->get_division_id())->get_division_name();
-        $season_name = ScmSeasonService::get_season($this->get_season_id())->get_season_name();
-		return $division_name . ' ' . $season_name;
+        $division_name = ScmDivisionService::get_division($this->division_id)->get_division_name();
+        $season_name = ScmSeasonService::get_season($this->season_id)->get_season_name();
+		return $division_name . ' ' . $season_name . ' ' . $this->pool;
 	}
 
 	public function get_properties()
@@ -300,6 +311,7 @@ class ScmEvent
 			'event_slug'            => $this->get_event_slug(),
 			'season_id'             => $this->get_season_id(),
 			'division_id'           => $this->get_division_id(),
+			'pool'                  => $this->get_pool(),
 			'start_date'            => $this->get_start_date() !== null ? $this->get_start_date()->get_timestamp() : 0,
 			'end_date'              => $this->get_end_date() !== null ? $this->get_end_date()->get_timestamp() : 0,
 			'views_number'          => $this->get_views_number(),
@@ -323,6 +335,7 @@ class ScmEvent
 		$this->event_slug            = $properties['event_slug'];
 		$this->season_id             = $properties['season_id'];
 		$this->division_id           = $properties['division_id'];
+		$this->pool                  = $properties['pool'];
 		$this->start_date            = !empty($properties['start_date']) ? new Date($properties['start_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->end_date              = !empty($properties['end_date']) ? new Date($properties['end_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->views_number          = $properties['views_number'];
@@ -391,12 +404,14 @@ class ScmEvent
 				'C_DIFFERED'        => $this->published == self::DEFERRED_PUBLICATION,
                 'C_IS_MASTER'       => ScmEventService::is_master($this->id),
                 'C_IS_SUB'          => $this->is_sub,
+                'C_HAS_POOL'        => !empty($this->pool),
 
 				// Item
 				'ID'              => $this->id,
 				'TITLE'           => $this->get_event_name(),
-                'SEASON_NAME'     => ScmSeasonService::get_season($this->get_season_id())->get_season_name(),
-                'DIVISION_NAME'   => ScmDivisionService::get_division($this->get_division_id())->get_division_name(),
+                'SEASON_NAME'     => ScmSeasonService::get_season($this->season_id)->get_season_name(),
+                'DIVISION_NAME'   => ScmDivisionService::get_division($this->division_id)->get_division_name(),
+                'POOL'            => $this->pool,
                 'MASTER_DIVISION' => ScmEventService::get_master_division($this->id),
                 'MASTER_SEASON'   => ScmEventService::get_master_season($this->id),
 				'STATUS'          => $this->get_publishing_state(),

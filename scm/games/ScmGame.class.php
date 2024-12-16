@@ -550,6 +550,8 @@ class ScmGame
                 'C_EXEMPT'        => $this->game_home_id && ScmTeamService::get_team($this->game_home_id)->get_team_status() == ScmParams::EXEMPT || $this->game_away_id && ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::EXEMPT,
 
                 'GAME_ID'         => $this->game_type.$this->game_cluster.$this->game_round.$this->game_order,
+                'HOME_ID'         => $this->game_home_id,
+                'AWAY_ID'         => $this->game_away_id,
                 'CLUSTER'         => $this->game_cluster,
                 'MATCHDAY'        => $this->game_round,
                 'PLAYGROUND'      => $this->game_playground,
