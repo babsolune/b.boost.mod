@@ -164,6 +164,7 @@ class ScmDayGamesFormController extends DefaultModuleController
         }
 
 		ScmEventService::clear_cache();
+        ScmRankingCache::set_ranking_cache($this->event_id(), $cluster);
 	}
 
     private function get_teams_list()

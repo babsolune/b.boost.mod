@@ -22,6 +22,7 @@ class ScmRankingService
         $forfeit = array_filter($ranks, function($item) { return $item['status'] === 'forfeit'; });
         $running = array_values($running);
         $forfeit = array_values($forfeit);
+
         return $ranks = array_merge($running, $forfeit);
     }
 
@@ -108,7 +109,6 @@ class ScmRankingService
 
 	public static function build_results($event_id, $game_teams)
     {
-
         // Set result details for each team in all games
         $teams = [];
         for($i = 0; $i < count($game_teams); $i++)
@@ -708,5 +708,16 @@ class ScmRankingService
                 array_push($team_form, ['delayed' => 'administrator']);
         }
         return $team_form;
+    }
+
+    public static function get_team_rank($event_id, $team_id, $day)
+    {
+        $rank = 1;
+        foreach (self::general_days_ranking($event_id, $day) as $team)
+        {
+            if ($team_id == $team['team_id'])
+                return $rank;
+            $rank++;
+        }
     }
 }

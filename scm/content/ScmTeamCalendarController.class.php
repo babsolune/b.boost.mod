@@ -22,6 +22,7 @@ class ScmTeamCalendarController extends DefaultModuleController
 	{
         $this->init($request);
 		$this->build_charts();
+		$this->build_ranking();
 		$this->build_view();
 		$this->check_authorizations();
 
@@ -58,7 +59,7 @@ class ScmTeamCalendarController extends DefaultModuleController
             elseif ($item->get_game_home_score() != '' && (int)$item->get_game_away_score() != '' && $score_status === 0)
                 $draw += 1;
         }
-        Debug::dump($win . '|' . $draw . '|' . $loss);
+
         $this->view->assign_block_vars('charts', array_merge($item->get_template_vars(),[
             'WIN'  => $win,
             'DRAW' => $draw,
@@ -109,6 +110,36 @@ class ScmTeamCalendarController extends DefaultModuleController
             'TEAM_NAME' => $this->team_name
         ]);
 	}
+
+    private function build_ranking()
+    {
+        $teams_number = ScmTeamService::get_teams_number($this->event_id());
+        $c_return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $days_number = $c_return_games ? ($teams_number - 1) * 2 : $teams_number - 1;
+        $days = $ranks = [];
+        $rankings = ScmRankingCache::get_ranking($this->event_id());
+        ksort($rankings);
+        foreach ($rankings as $day => $teams)
+        {
+            $days[$day] = $day;
+            foreach ($teams as $team)
+            {
+                if ($this->team_id == $team['team_id'])
+                    $ranks[$day] = $team['rank'];
+            }
+        }
+
+        $this->view->put('TEAMS_NUMBER', $teams_number);
+
+        for ($i = 1; $i <= $days_number; $i++)
+        {
+            $this->view->assign_block_vars('ranks', [
+                'DAY' => $i,
+                'C_HAS_RANK' => isset($days[$i]),
+                'RANK' => isset($days[$i]) ? $ranks[$i] : ''
+            ]);
+        }
+    }
 
 	private function get_event()
 	{
