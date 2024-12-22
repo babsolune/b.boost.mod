@@ -22,8 +22,15 @@ class ScmTreeLinks implements ModuleTreeLinksExtensionPoint
         $tree->add_link($categories);
 
         $tree->add_link(new ModuleLink($lang['category.categories'], ScmUrlBuilder::display_category(0, 'root'), $config->get_homepage() !== ScmConfig::CATEGORIES && ScmAuthorizationsService::check_authorizations()->read()));
-        $tree->add_link(new ModuleLink($lang['scm.current.events'], ScmUrlBuilder::display_event_list(), $config->get_homepage() !== ScmConfig::EVENT_LIST && ScmAuthorizationsService::check_authorizations()->read()));
         $tree->add_link(new ModuleLink($lang['scm.around.games'], ScmUrlBuilder::display_game_list(), $config->get_homepage() !== ScmConfig::GAME_LIST && ScmAuthorizationsService::check_authorizations()->read()));
+        $tree->add_link(new ModuleLink($lang['scm.current.events'], ScmUrlBuilder::display_event_list(), $config->get_homepage() !== ScmConfig::EVENT_LIST && ScmAuthorizationsService::check_authorizations()->read()));
+
+        $change_event = new ModuleLink($lang['scm.change.event'], '#change_event', ScmAuthorizationsService::check_authorizations()->moderation(), 'bgc moderator');
+            foreach ($this->current_event_list($change_event) as $event)
+            {
+                $event['sub_link'];
+            }
+        $tree->add_link($change_event);
 
         $tree->add_link(new ModuleLink($lang['scm.clubs'], ScmUrlBuilder::display_clubs(), ScmAuthorizationsService::check_authorizations()->read()));
         $club = new ModuleLink($lang['scm.clubs.manager'], ScmUrlBuilder::manage_clubs(), ScmAuthorizationsService::check_authorizations()->manage_clubs());
@@ -49,5 +56,34 @@ class ScmTreeLinks implements ModuleTreeLinksExtensionPoint
 
 		return $tree;
 	}
+
+    private static function current_event_list($master_item)
+    {
+        $events = ScmEventService::get_running_events();
+        usort($events, function($a, $b) {
+            return strcmp($a['id_category'], $b['id_category']);
+        });
+
+        $current_events = [];
+        foreach ($events as $event)
+        {
+            $item = new ScmEvent();
+            $item->set_properties($event);
+            if (ScmEventService::check_event_display($item->get_id()))
+                $current_events[] = [
+                    'category' => $item->get_category()->get_name(),
+                    'sub_link' => $master_item->add_sub_link(new ModuleLink(
+                        $item->get_category()->get_name()
+                            . ' - ' . ScmDivisionService::get_division($item->get_division_id())->get_division_name()
+                            . ($item->get_pool() ? ' - ' . $item->get_pool() : '')
+                            . ' - ' . ScmSeasonService::get_season($item->get_season_id())->get_season_name(),
+                        ScmUrlBuilder::event_home($item->get_id(), $item->get_event_slug()),
+                        ScmAuthorizationsService::check_authorizations()->moderation(),
+                        'bgc-full moderator'
+                    ))
+                ];
+        }
+        return $current_events;
+    }
 }
 ?>

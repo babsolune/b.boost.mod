@@ -21,7 +21,6 @@
         # ELSE #
             <aside></aside>
         # ENDIF #
-        # IF IS_MODERATOR ## INCLUDE EVENT_LIST ## ENDIF #
     </div>
     <div class="spacer"></div>
 </header>
@@ -173,12 +172,3 @@
     </div>
 # ENDIF #
 <script src="{PATH_TO_ROOT}/scm/templates/js/scm.highlight# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
-# IF IS_MODERATOR #
-    <script>
-        const selectElement = document.getElementById('ScmMenuService_event_list');
-        selectElement.addEventListener('change', (event) => {
-            const event_id = event.target.value;
-            window.location.href = '{PATH_TO_ROOT}/scm/' + event_id + '-redirect/informations';
-        });
-    </script>
-# ENDIF #

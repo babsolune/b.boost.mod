@@ -253,19 +253,11 @@ class ScmEventService
     public static function check_event_display(int $event_id):bool
     {
         $now = new Date();
-        $events = [];
-        foreach (self::get_events() as $event)
-        {
-            $item = new ScmEvent();
-            $item->set_properties($event);
 
-            $start_date = $item->get_start_date()->get_timestamp();
-            $end_date = $item->get_end_date()->get_timestamp();
-            if ($start_date < $now->get_timestamp() && $end_date > $now->get_timestamp() && !$item->get_is_sub())
-                $events[] = $item->get_id();
-        }
-
-        return in_array($event_id, $events);
+        $event = self::get_event($event_id);
+        $start_date = $event->get_start_date()->get_timestamp();
+        $end_date = $event->get_end_date()->get_timestamp();
+        return $start_date < $now->get_timestamp() && $end_date > $now->get_timestamp() && !$event->get_is_sub();
     }
 
 	public static function clear_cache()

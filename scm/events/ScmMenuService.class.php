@@ -226,41 +226,7 @@ class ScmMenuService
             }
         }
 
-        $event_id = AppContext::get_request()->get_getint('event_id', 0);
-        $form = new HTMLForm(self::class);
-        $form->set_css_class('options bgc moderator');
-
-        $fieldset = new FormFieldsetHorizontal('events');
-        $form->add_fieldset($fieldset);
-        $fieldset->add_field(new FormFieldSimpleSelectChoice('event_list', '', '', self::current_event_list()));
-
-        $view->put('EVENT_LIST', $form->display());
-
 		return $view;
-    }
-
-    private static function current_event_list()
-    {
-        $event_id = AppContext::get_request()->get_getint('event_id', 0);
-        $event = ScmEventService::get_event($event_id);
-        $events = ScmEventCache::load()->get_events();
-
-        $options[] = new FormFieldSelectChoiceOption(LangLoader::get_message('scm.change.event', 'common', 'scm'), 0);
-        foreach ($events as $event)
-        {
-            $item = new ScmEvent();
-            $item->set_properties($event);
-            if (ScmEventService::check_event_display($item->get_id()))
-                $form_events[] = new FormFieldSelectChoiceOption(
-                    $item->get_category()->get_name()
-                    . ' - ' . ScmDivisionService::get_division($item->get_division_id())->get_division_name()
-                    . ($item->get_pool() ? ' - ' . $item->get_pool() : '')
-                    . ' - ' . ScmSeasonService::get_season($item->get_season_id())->get_season_name(),
-                    $item->get_id()
-                );
-        }
-        asort($form_events);
-        return array_merge($options, $form_events);
     }
 
     private static function compare_url($url)
