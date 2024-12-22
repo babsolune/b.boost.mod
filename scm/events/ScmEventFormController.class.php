@@ -48,11 +48,11 @@ class ScmEventFormController extends DefaultModuleController
 			$fieldset->add_field(CategoriesService::get_categories_manager()->get_select_categories_form_field('id_category', $this->lang['category.category'], $this->get_event()->get_id_category(), $search_category_children_options));
 		}
 
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('division', $this->lang['scm.division'], $this->event->get_division_id(), $this->divisions_list(),
+		$fieldset->add_field(new FormFieldSimpleSelectChoice('division', $this->lang['scm.division'], $this->event->get_division_id(), $this->get_divisions_list(),
 			['required' => true]
 		));
 
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('season', $this->lang['scm.season'], $this->event->get_season_id(), $this->seasons_list(),
+		$fieldset->add_field(new FormFieldSimpleSelectChoice('season', $this->lang['scm.season'], $this->event->get_season_id(), $this->get_seasons_list(),
 			['required' => true]
 		));
 
@@ -65,8 +65,7 @@ class ScmEventFormController extends DefaultModuleController
                 new FormFieldSelectChoiceOption($this->lang['scm.event.scoring.tries'], ScmEvent::SCORING_TRIES),
                 new FormFieldSelectChoiceOption($this->lang['scm.event.scoring.points'], ScmEvent::SCORING_POINTS),
                 new FormFieldSelectChoiceOption($this->lang['scm.event.scoring.sets'], ScmEvent::SCORING_SETS)
-            ],
-			['required' => true]
+            ]
 		));
 
         $fieldset->add_field(new FormFieldCheckbox('is_sub', $this->lang['scm.event.is.sub'], $this->event->get_is_sub(),
@@ -83,7 +82,7 @@ class ScmEventFormController extends DefaultModuleController
             ]
         ));
 
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('master_id', $this->lang['scm.event.master.id'], $this->event->get_master_id(),
+		$fieldset->add_field(new FormFieldSimpleSelectChoice('master_id', $this->lang['scm.event.master'], $this->event->get_master_id(),
             $this->get_events_list(),
 			[
                 'required' => true,
@@ -199,9 +198,10 @@ class ScmEventFormController extends DefaultModuleController
             $event->set_sub_order($this->form->get_value('sub_order'));
         }
 
-		$division_title = $this->form->get_value('division')->get_label();
-		$season_title = $this->form->get_value('season')->get_label();
-		$event->set_event_slug(Url::encode_rewrite($division_title . '-' . $season_title));
+		$division_title = Url::encode_rewrite(ScmDivisionService::get_division($this->form->get_value('division')->get_raw_value())->get_division_name());
+        $pool = ($this->form->get_value('pool') ? '-' . Url::encode_rewrite($this->form->get_value('pool')) : '');
+		$season_title = Url::encode_rewrite($this->form->get_value('season')->get_label());
+		$event->set_event_slug(Url::encode_rewrite($division_title . $pool . '-' . $season_title));
 
 		$event->set_start_date($this->form->get_value('start_date'));
 		$event->set_end_date($this->form->get_value('end_date'));
@@ -318,7 +318,7 @@ class ScmEventFormController extends DefaultModuleController
 		return $options;
     }
 
-	private function seasons_list()
+	private function get_seasons_list()
 	{
 		$options = [];
 		$cache = ScmSeasonCache::load();
@@ -337,19 +337,50 @@ class ScmEventFormController extends DefaultModuleController
 		return $options;
 	}
 
-	private function divisions_list()
+	private function get_divisions_list()
 	{
 		$options = [];
-		$cache = ScmDivisionCache::load();
-		$divisions_list = $cache->get_divisions();
+		$divisions_list = ScmDivisionCache::load()->get_divisions();
+        // Debug::stop($divisions_list);
+        uasort($divisions_list, function($a, $b) {
+            return strcmp($a['division_name'], $b['division_name']);
+        });
 
 		// laisser un vide en début de liste
 		$options[] = new FormFieldSelectChoiceOption('', '');
-
 		$i = 1;
 		foreach($divisions_list as $division)
 		{
-			$options[] = new FormFieldSelectChoiceOption($division['division_name'], $division['id_division']);
+            switch ($division['event_type']) {
+                case 'practice' :
+                    $event_type = ' - ' . $this->lang['scm.practice'];
+                    break;
+                case 'championship' :
+                    $event_type = ' - ' . $this->lang['scm.championship'];
+                    break;
+                case 'tournament' :
+                    $event_type = ' - ' . $this->lang['scm.tournament'];
+                    break;
+                case 'cup' :
+                    $event_type = ' - ' . $this->lang['scm.cup'];
+                    break;
+                default :
+                    $event_type = '';
+                    break;
+            }
+
+            switch ($division['game_type']) {
+                case 'single_games' :
+                    $game_type = ' - ' . $this->lang['scm.single.games'];
+                    break;
+                case 'return_games' :
+                    $game_type = ' - ' . $this->lang['scm.return.games'];
+                    break;
+                default :
+                    $game_type = '';
+                    break;
+            }
+			$options[] = new FormFieldSelectChoiceOption($division['division_name'] . $event_type . $game_type, $division['id_division']);
 			$i++;
 		}
 

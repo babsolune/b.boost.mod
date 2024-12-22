@@ -54,90 +54,93 @@ class ScmPracticeController extends DefaultModuleController
 	{
         $games = ScmGameService::get_games($this->event_id());
 
-        $chunks = array_chunk($games, ceil(count($games) / 2));
-        foreach ($chunks[0] as $game_a)
+        if($games)
         {
-            if ($game_a['game_home_id'] != 0 && $game_a['game_away_id'] != 0)
+            $chunks = array_chunk($games, ceil(count($games) / 2));
+            foreach ($chunks[0] as $game_a)
             {
-                foreach ($chunks[1] as $game_b)
+                if ($game_a['game_home_id'] != 0 && $game_a['game_away_id'] != 0)
                 {
-                    if(
-                        $game_b['game_away_id'] != 0
-                        && $game_b['game_home_id'] != 0
-                        && $game_a['game_home_id'] == $game_b['game_away_id']
-                        && $game_a['game_away_id'] == $game_b['game_home_id']
-                    )
+                    foreach ($chunks[1] as $game_b)
                     {
-                        $game = new ScmGame();
-                        $game->set_properties($game_a);
+                        if(
+                            $game_b['game_away_id'] != 0
+                            && $game_b['game_home_id'] != 0
+                            && $game_a['game_home_id'] == $game_b['game_away_id']
+                            && $game_a['game_away_id'] == $game_b['game_home_id']
+                        )
+                        {
+                            $game = new ScmGame();
+                            $game->set_properties($game_a);
 
-                        $total_home = (int)$game_a['game_home_score'] + (int)$game_b['game_away_score'];
-                        $total_away = (int)$game_a['game_away_score'] + (int)$game_b['game_home_score'];
+                            $total_home = (int)$game_a['game_home_score'] + (int)$game_b['game_away_score'];
+                            $total_away = (int)$game_a['game_away_score'] + (int)$game_b['game_home_score'];
 
-                        $this->view->assign_block_vars('games', array_merge(
-                            $game->get_template_vars(),
-                            Date::get_array_tpl_vars($game_a['game_date'], 'game_date_a'),
-                            Date::get_array_tpl_vars($game_b['game_date'], 'game_date_b'),
-                            [
-                                'C_HOME_WIN' => $total_home > $total_away || $game_b['game_away_pen'] > $game_b['game_home_pen'],
-                                'C_AWAY_WIN' => $total_away > $total_home || $game_b['game_home_pen'] > $game_b['game_away_pen'],
-                                'C_HAS_PEN' => $game_b['game_home_pen'] != '' && $game_b['game_away_pen'] != '',
-                                'GAME_DATE_A_DAY_MONTH' => Date::to_format($game_a['game_date'], Date::FORMAT_DAY_MONTH),
-                                'GAME_DATE_A_YEAR' => date('Y', $game_a['game_date']),
-                                'GAME_DATE_B_DAY_MONTH' => Date::to_format($game_b['game_date'], Date::FORMAT_DAY_MONTH),
-                                'GAME_DATE_B_YEAR' => date('Y', $game_b['game_date']),
-                                'HOME_SCORE_B' => $game_b['game_away_score'],
-                                'HOME_PEN' => $game_b['game_away_pen'],
-                                'AWAY_SCORE_B' => $game_b['game_home_score'],
-                                'AWAY_PEN' => $game_b['game_home_pen'],
-                            ]
-                        ));
+                            $this->view->assign_block_vars('games', array_merge(
+                                $game->get_template_vars(),
+                                Date::get_array_tpl_vars($game_a['game_date'], 'game_date_a'),
+                                Date::get_array_tpl_vars($game_b['game_date'], 'game_date_b'),
+                                [
+                                    'C_HOME_WIN' => $total_home > $total_away || $game_b['game_away_pen'] > $game_b['game_home_pen'],
+                                    'C_AWAY_WIN' => $total_away > $total_home || $game_b['game_home_pen'] > $game_b['game_away_pen'],
+                                    'C_HAS_PEN' => $game_b['game_home_pen'] != '' && $game_b['game_away_pen'] != '',
+                                    'GAME_DATE_A_DAY_MONTH' => Date::to_format($game_a['game_date'], Date::FORMAT_DAY_MONTH),
+                                    'GAME_DATE_A_YEAR' => date('Y', $game_a['game_date']),
+                                    'GAME_DATE_B_DAY_MONTH' => Date::to_format($game_b['game_date'], Date::FORMAT_DAY_MONTH),
+                                    'GAME_DATE_B_YEAR' => date('Y', $game_b['game_date']),
+                                    'HOME_SCORE_B' => $game_b['game_away_score'],
+                                    'HOME_PEN' => $game_b['game_away_pen'],
+                                    'AWAY_SCORE_B' => $game_b['game_home_score'],
+                                    'AWAY_PEN' => $game_b['game_home_pen'],
+                                ]
+                            ));
+                        }
                     }
                 }
-            }
-            elseif ($game_a['game_home_empty'] != '' && $game_a['game_away_empty'] != '')
-            {
-                foreach ($chunks[1] as $game_b)
+                elseif ($game_a['game_home_empty'] != '' && $game_a['game_away_empty'] != '')
                 {
-                    if(
-                        $game_b['game_away_empty'] != ''
-                        && $game_b['game_home_empty'] != ''
-                        && $game_a['game_home_empty'] == $game_b['game_away_empty']
-                        && $game_a['game_away_empty'] == $game_b['game_home_empty']
-                    )
+                    foreach ($chunks[1] as $game_b)
                     {
-                        $game = new ScmGame();
-                        $game->set_properties($game_a);
-
-                        $total_home = (int)$game_a['game_home_score'] + (int)$game_b['game_away_score'];
-                        $total_away = (int)$game_a['game_away_score'] + (int)$game_b['game_home_score'];
-
-                        $this->view->assign_block_vars('games', array_merge(
-                            $game->get_template_vars(),
-                            Date::get_array_tpl_vars($game_a['game_date'], 'game_date_a'),
-                            Date::get_array_tpl_vars($game_b['game_date'], 'game_date_b'),
-                            [
-                                'C_HOME_WIN' => $total_home > $total_away || $game_b['game_away_pen'] > $game_b['game_home_pen'],
-                                'C_AWAY_WIN' => $total_away > $total_home || $game_b['game_home_pen'] > $game_b['game_away_pen'],
-                                'C_HAS_PEN' => $game_b['game_home_pen'] != '' && $game_b['game_away_pen'] != '',
-                                'GAME_DATE_A_DAY_MONTH' => Date::to_format($game_a['game_date'], Date::FORMAT_DAY_MONTH),
-                                'GAME_DATE_A_YEAR' => date('Y', $game_a['game_date']),
-                                'GAME_DATE_B_DAY_MONTH' => Date::to_format($game_b['game_date'], Date::FORMAT_DAY_MONTH),
-                                'GAME_DATE_B_YEAR' => date('Y', $game_b['game_date']),
-                                'HOME_SCORE_B' => $game_b['game_away_score'],
-                                'HOME_PEN' => $game_b['game_away_pen'],
-                                'AWAY_SCORE_B' => $game_b['game_home_score'],
-                                'AWAY_PEN' => $game_b['game_home_pen'],
-                            ]
-                        ));
+                        if(
+                            $game_b['game_away_empty'] != ''
+                            && $game_b['game_home_empty'] != ''
+                            && $game_a['game_home_empty'] == $game_b['game_away_empty']
+                            && $game_a['game_away_empty'] == $game_b['game_home_empty']
+                        )
+                        {
+                            $game = new ScmGame();
+                            $game->set_properties($game_a);
+    
+                            $total_home = (int)$game_a['game_home_score'] + (int)$game_b['game_away_score'];
+                            $total_away = (int)$game_a['game_away_score'] + (int)$game_b['game_home_score'];
+    
+                            $this->view->assign_block_vars('games', array_merge(
+                                $game->get_template_vars(),
+                                Date::get_array_tpl_vars($game_a['game_date'], 'game_date_a'),
+                                Date::get_array_tpl_vars($game_b['game_date'], 'game_date_b'),
+                                [
+                                    'C_HOME_WIN' => $total_home > $total_away || $game_b['game_away_pen'] > $game_b['game_home_pen'],
+                                    'C_AWAY_WIN' => $total_away > $total_home || $game_b['game_home_pen'] > $game_b['game_away_pen'],
+                                    'C_HAS_PEN' => $game_b['game_home_pen'] != '' && $game_b['game_away_pen'] != '',
+                                    'GAME_DATE_A_DAY_MONTH' => Date::to_format($game_a['game_date'], Date::FORMAT_DAY_MONTH),
+                                    'GAME_DATE_A_YEAR' => date('Y', $game_a['game_date']),
+                                    'GAME_DATE_B_DAY_MONTH' => Date::to_format($game_b['game_date'], Date::FORMAT_DAY_MONTH),
+                                    'GAME_DATE_B_YEAR' => date('Y', $game_b['game_date']),
+                                    'HOME_SCORE_B' => $game_b['game_away_score'],
+                                    'HOME_PEN' => $game_b['game_away_pen'],
+                                    'AWAY_SCORE_B' => $game_b['game_home_score'],
+                                    'AWAY_PEN' => $game_b['game_home_pen'],
+                                ]
+                            ));
+                        }
                     }
                 }
-            }
-            else {
-                $game = new ScmGame();
-                $game->set_properties($game_a);
+                else {
+                    $game = new ScmGame();
+                    $game->set_properties($game_a);
 
-                $this->view->assign_block_vars('games', $game->get_template_vars());
+                    $this->view->assign_block_vars('games', $game->get_template_vars());
+                }
             }
         }
     }

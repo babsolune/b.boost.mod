@@ -148,8 +148,11 @@
     </div>
     <div class="days-ranking">
         <div class="scm-table">
-            <header class="m-t">
+            <header class="m-t flex-between">
                 <h3>{@scm.ranking}</h3>
+                # IF C_CACHE_FILE #
+                    <a href="{U_CACHE_FILE}" class="offload small text-italic"><i class="fa fa-code"></i>. json</a>
+                # ENDIF #
             </header>
             <div class="scm-line scm-head">
                 <div class="scm-line-group md-width-pc-70">

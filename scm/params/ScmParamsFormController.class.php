@@ -61,8 +61,11 @@ class ScmParamsFormController extends DefaultModuleController
 	private function build_form()
 	{
 		$form = new HTMLForm(__CLASS__);
-        $form->set_css_class('params-form cell-flex cell-columns-2');
+        $form->set_css_class('params-form cell-flex cell-columns-2 floating-submit');
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.params.management'] . '</div>');
+
+		$this->submit_button = new FormButtonDefaultSubmit();
+		$form->add_button($this->submit_button);
 
         $warning_class = ScmGameService::has_games($this->event_id()) ? 'bgc warning' : '';
 
@@ -282,10 +285,6 @@ class ScmParamsFormController extends DefaultModuleController
             $penalties_fieldset->add_field(new FormFieldSpacer('team_separator_' . $team['id_team'], '<hr />'));
         }
 
-		$this->submit_button = new FormButtonDefaultSubmit();
-		$form->add_button($this->submit_button);
-		$form->add_button(new FormButtonReset());
-
 		$this->form = $form;
 	}
 
@@ -364,6 +363,9 @@ class ScmParamsFormController extends DefaultModuleController
 
 		ScmParamsService::update_params($params);
 
+        if ($this->is_championship || $this->is_tournament)
+            ScmRankingService::init_rankings($this->event_id());
+
 		ScmEventService::clear_cache();
 	}
 
@@ -404,40 +406,28 @@ class ScmParamsFormController extends DefaultModuleController
 
 	private function get_params()
 	{
-		if ($this->params === null)
-		{
-			$id = AppContext::get_request()->get_getint('event_id', 0);
-			if (!empty($id))
-			{
-				try {
-					$this->params = ScmParamsService::get_params($id);
-				} catch (RowNotFoundException $e) {
-					$error_controller = PHPBoostErrors::unexisting_page();
-					DispatchManager::redirect($error_controller);
-				}
-			}
-			else
-			{
-				$this->is_new_params = true;
-				$this->params = new ScmParams();
-				$this->params->init_default_properties();
-			}
-		}
+        $id = AppContext::get_request()->get_getint('event_id', 0);
+        if (!empty($id))
+        {
+            try {
+                $this->params = ScmParamsService::get_params($id);
+            } catch (RowNotFoundException $e) {
+                $error_controller = PHPBoostErrors::unexisting_page();
+                DispatchManager::redirect($error_controller);
+            }
+        }
 		return $this->params;
 	}
 
 	private function get_event()
 	{
-		if ($this->event === null)
-		{
-			$id = AppContext::get_request()->get_getint('event_id', 0);
-            try {
-                $this->event = ScmEventService::get_event($id);
-            } catch (RowNotFoundException $e) {
-                $error_controller = PHPBoostErrors::unexisting_page();
-                DispatchManager::redirect($error_controller);
-            }
-		}
+        $id = AppContext::get_request()->get_getint('event_id', 0);
+        try {
+            $this->event = ScmEventService::get_event($id);
+        } catch (RowNotFoundException $e) {
+            $error_controller = PHPBoostErrors::unexisting_page();
+            DispatchManager::redirect($error_controller);
+        }
 		return $this->event;
 	}
 

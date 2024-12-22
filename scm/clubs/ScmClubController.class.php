@@ -108,7 +108,7 @@ class ScmClubController extends DefaultModuleController
                 }
             }
         }
-		$this->view->put_all($club->get_template_vars());
+		// $this->view->put_all($club->get_template_vars());
 	}
 
 	private function get_club()

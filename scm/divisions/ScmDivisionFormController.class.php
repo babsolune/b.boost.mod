@@ -52,6 +52,7 @@ class ScmDivisionFormController extends DefaultModuleController
             $description = $this->lang['scm.tournament.clue'];
 		$fieldset->add_field(new FormFieldSimpleSelectChoice('event_type', $this->lang['scm.event.type'], $this->get_division()->get_event_type(),
 			[
+				new FormFieldSelectChoiceOption('', ''),
 				new FormFieldSelectChoiceOption($this->lang['scm.championship'], ScmDivision::CHAMPIONSHIP),
 				new FormFieldSelectChoiceOption($this->lang['scm.cup'], ScmDivision::CUP),
 				new FormFieldSelectChoiceOption($this->lang['scm.tournament'], ScmDivision::TOURNAMENT),
@@ -75,6 +76,7 @@ class ScmDivisionFormController extends DefaultModuleController
 
 		$fieldset->add_field(new FormFieldSimpleSelectChoice('game_type', $this->lang['scm.game.type'], $this->get_division()->get_game_type(),
 			[
+				new FormFieldSelectChoiceOption('', ''),
 				new FormFieldSelectChoiceOption($this->lang['scm.single.games'], ScmDivision::SINGLE_GAMES),
 				new FormFieldSelectChoiceOption($this->lang['scm.return.games'], ScmDivision::RETURN_GAMES)
             ]

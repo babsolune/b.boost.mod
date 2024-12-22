@@ -45,9 +45,12 @@ class ScmTeamsFormController extends DefaultModuleController
 
 	private function build_form()
 	{
-		$form = new HTMLForm(__CLASS__);
+		$form = new HTMLForm(self::class);
         $form->set_css_class('teams-checkbox floating-submit');
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.associate.clubs'] . '</div>');
+
+		$this->submit_button = new FormButtonDefaultSubmit();
+		$form->add_button($this->submit_button);
 
 		$fieldset = new FormFieldsetHTML('event', '');
 		$form->add_fieldset($fieldset);
@@ -83,9 +86,6 @@ class ScmTeamsFormController extends DefaultModuleController
                     count_checked_checkboxes();
 			</script>
         '));
-
-		$this->submit_button = new FormButtonDefaultSubmit();
-		$form->add_button($this->submit_button);
 
 		$this->form = $form;
 	}

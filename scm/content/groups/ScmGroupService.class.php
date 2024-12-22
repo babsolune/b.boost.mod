@@ -262,7 +262,7 @@ class ScmGroupService
             WHERE game.game_event_id = :id
             AND game.game_date < ' . $now->get_timestamp() . '
             AND params.hat_ranking = 1
-            AND (game_type = "G" OR game_type = "B")
+            AND game_type = "G"
             ORDER BY game.game_date ASC', [
                 'id' => $event_id
             ]

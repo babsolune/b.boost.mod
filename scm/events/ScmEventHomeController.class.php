@@ -78,8 +78,7 @@ class ScmEventHomeController extends DefaultModuleController
         $this->view->put_all(array_merge(
             $event->get_template_vars(),
             [
-                'MENU'                => ScmMenuService::build_event_menu($this->event_id()),
-                // Rounds
+                'MENU'              => ScmMenuService::build_event_menu($this->event_id()),
                 'CHAMPIONSHIP_HOME' => $c_championship ? ScmEventHomeService::build_championship_home($this->event_id()) : '',
                 'TOURNAMENT_HOME'   => $c_tournament ? ScmEventHomeService::build_tournament_home($this->event_id()) : '',
                 'CUP_HOME'          => $c_cup ? ScmEventHomeService::build_cup_home($this->event_id()) : '',

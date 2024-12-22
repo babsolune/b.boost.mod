@@ -71,8 +71,9 @@ class ScmEventService
 		self::$db_querier->delete(ScmSetup::$scm_event_table, 'WHERE id = :id', ['id' => $id]);
 
 		ScmTeamService::delete_teams($id);
-		ScmParamsService::delete_params($id);
 		ScmDayService::delete_days($id);
+		ScmParamsService::delete_params($id);
+		ScmRankingService::delete_ranking($id);
 		ScmGameService::delete_games($id);
 
 		self::$db_querier->delete(DB_TABLE_EVENTS, 'WHERE module=:module AND id_in_module=:id', ['module' => 'scm', 'id' => $id]);

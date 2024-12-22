@@ -69,6 +69,9 @@ class ScmDivisionsManagerController extends DefaultModuleController
                 case ScmDivision::PRACTICE :
                     $event_type = $this->lang['scm.practice'];
                     break;
+                default :
+                    $event_type = '';
+                    break;
             }
 
             switch ($division->get_game_type()) {
@@ -77,6 +80,9 @@ class ScmDivisionsManagerController extends DefaultModuleController
                     break;
                 case ScmDivision::RETURN_GAMES :
                     $game_type = $this->lang['scm.return.games'];
+                    break;
+                default :
+                    $game_type = '';
                     break;
             }
 

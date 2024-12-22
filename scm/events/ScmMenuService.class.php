@@ -42,9 +42,11 @@ class ScmMenuService
             : ($c_finals_ranking ? 1 : $params->get_rounds_number())
         ;
 
-        $active_round = AppContext::get_request()->get_getint('cluster', '0');
+        $active_round = AppContext::get_request()->get_getint('cluster', 0);
         if ($params->get_hat_ranking() && $active_round == 0)
             $active_round = ScmGroupService::get_last_matchday_hat($event_id);
+        elseif ($division['event_type'] == ScmDivision::CHAMPIONSHIP && $active_round == 0)
+            $active_round = ScmDayService::get_last_day($event_id);
         elseif ($active_round == 0)
             $active_round = $round;
 
@@ -83,7 +85,7 @@ class ScmMenuService
             'U_ROUND_GROUPS'   => ScmUrlBuilder::display_groups_rounds($event_id, $event->get_event_slug(), $active_round)->rel(),
             'U_ROUND_BRACKETS' => ScmUrlBuilder::display_brackets_rounds($event_id, $event->get_event_slug())->rel(),
             'U_PRACTICE'       => ScmUrlBuilder::display_practice($event_id, $event->get_event_slug())->rel(),
-            'U_DAYS_CALENDAR'  => ScmUrlBuilder::display_days_calendar($event_id, $event->get_event_slug(), ScmDayService::get_last_day($event_id))->rel(),
+            'U_DAYS_CALENDAR'  => ScmUrlBuilder::display_days_calendar($event_id, $event->get_event_slug(), $active_round)->rel(),
             'U_DAYS_RANKING'   => ScmUrlBuilder::display_days_ranking($event_id, $event->get_event_slug())->rel(),
             'U_CHECK_DAYS'     => ScmUrlBuilder::days_checker($event_id, $event->get_event_slug())->rel(),
             'U_DELAYED_DAYS'   => ScmUrlBuilder::days_delayed($event_id, $event->get_event_slug())->rel(),
@@ -92,7 +94,7 @@ class ScmMenuService
             'U_EDIT_TEAMS'         => ScmUrlBuilder::edit_teams($event_id, $event->get_event_slug())->rel(),
             'U_EDIT_PARAMS'        => ScmUrlBuilder::edit_params($event_id, $event->get_event_slug())->rel(),
             'U_EDIT_DAYS'          => ScmUrlBuilder::edit_days($event_id, $event->get_event_slug())->rel(),
-            'U_EDIT_DAYS_GAMES'    => ScmUrlBuilder::edit_days_games($event_id, $event->get_event_slug(), ScmDayService::get_last_day($event_id))->rel(),
+            'U_EDIT_DAYS_GAMES'    => ScmUrlBuilder::edit_days_games($event_id, $event->get_event_slug(), $active_round)->rel(),
             'U_EDIT_GROUPS'        => ScmUrlBuilder::edit_groups($event_id, $event->get_event_slug())->rel(),
             'U_EDIT_GROUPS_GAMES'  => ScmUrlBuilder::edit_groups_games($event_id, $event->get_event_slug(), $active_round)->rel(),
             'U_EDIT_BRACKET'       => ScmUrlBuilder::edit_brackets($event_id, $event->get_event_slug())->rel(),
@@ -252,7 +254,8 @@ class ScmMenuService
                 $form_events[] = new FormFieldSelectChoiceOption(
                     $item->get_category()->get_name()
                     . ' - ' . ScmDivisionService::get_division($item->get_division_id())->get_division_name()
-                    . ' - ' . ScmSeasonService::get_season($item->get_season_id())->get_season_name(), 
+                    . ($item->get_pool() ? ' - ' . $item->get_pool() : '')
+                    . ' - ' . ScmSeasonService::get_season($item->get_season_id())->get_season_name(),
                     $item->get_id()
                 );
         }

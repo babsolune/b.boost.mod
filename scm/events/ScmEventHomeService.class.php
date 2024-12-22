@@ -87,6 +87,10 @@ class ScmEventHomeService
         ]);
 
         // Ranking
+        // $view->put_all([
+        //     'C_CACHE_FILE' => ScmRankingCache::cache_file_link($event_id),
+        //     'U_CACHE_FILE' => ScmRankingCache::cache_file_link($event_id)
+        // ]);
         $final_ranks = ScmRankingService::general_ranking($event_id);
 
         // Display ranks to view
