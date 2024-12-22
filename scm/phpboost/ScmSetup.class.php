@@ -16,8 +16,7 @@ class ScmSetup extends DefaultModuleSetup
 	public static $scm_division_table;
 	public static $scm_game_table;
 	public static $scm_params_table;
-	// public static $scm_ranking_table;
-	// public static $scm_result_table;
+	public static $scm_ranking_table;
 	public static $scm_season_table;
 	public static $scm_team_table;
 
@@ -30,8 +29,7 @@ class ScmSetup extends DefaultModuleSetup
 		self::$scm_division_table = PREFIX . 'scm_division';
 		self::$scm_params_table = PREFIX . 'scm_params';
 		self::$scm_game_table = PREFIX . 'scm_game';
-		// self::$scm_ranking_table = PREFIX . 'scm_ranking';
-		// self::$scm_result_table = PREFIX . 'scm_result';
+		self::$scm_ranking_table = PREFIX . 'scm_ranking';
 		self::$scm_season_table = PREFIX . 'scm_season';
 		self::$scm_team_table = PREFIX . 'scm_team';
 	}
@@ -61,8 +59,7 @@ class ScmSetup extends DefaultModuleSetup
 			self::$scm_division_table,
 			self::$scm_game_table,
 			self::$scm_params_table,
-			// self::$scm_ranking_table,
-			// self::$scm_result_table,
+			self::$scm_ranking_table,
 			self::$scm_season_table,
 			self::$scm_team_table
 		]);
@@ -77,8 +74,7 @@ class ScmSetup extends DefaultModuleSetup
 		$this->create_scm_division_table();
 		$this->create_scm_game_table();
 		$this->create_scm_params_table();
-		// $this->create_scm_ranking_table();
-		// $this->create_scm_result_table();
+		$this->create_scm_ranking_table();
 		$this->create_scm_season_table();
 		$this->create_scm_team_table();
 	}
@@ -173,8 +169,8 @@ class ScmSetup extends DefaultModuleSetup
 		$fields = [
 			'id_division'   => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
 			'division_name' => ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
-			'event_type'    => ['type' => 'string', 'length' => 255, 'notnull' => 1],
-			'game_type'     => ['type' => 'string', 'length' => 255, 'notnull' => 1],
+			'event_type'    => ['type' => 'string', 'length' => 255, 'default' => "''"],
+			'game_type'     => ['type' => 'string', 'length' => 255, 'default' => "''"],
         ];
 		$options = [
 			'primary' => ['id_division'],
@@ -291,50 +287,21 @@ class ScmSetup extends DefaultModuleSetup
 		PersistenceContext::get_dbms_utils()->create_table(self::$scm_params_table, $fields, $options);
 	}
 
-	// private function create_scm_ranking_table()
-	// {
-	// 	$fields = [
-	// 		'id_ranking'            => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
-	// 		'ranking_event_id'      => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'ranking_group_id'      => ['type' => 'string', 'length' => 11, 'default' => 0],
-	// 		'ranking_rank'          => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'ranking_team_id'       => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'ranking_points'        => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'ranking_played'        => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'ranking_win'           => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'ranking_draw'          => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'ranking_loss'          => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'ranking_goals_for'     => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'ranking_goals_against' => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 	];
-	// 	$options = [
-	// 		'primary' => ['id_ranking'],
-	// 		'indexes' => [
-	// 			'ranking_event_id' => ['type' => 'key', 'fields' => 'ranking_event_id'],
-	// 		]
-	// 	];
-	// 	PersistenceContext::get_dbms_utils()->create_table(self::$scm_ranking_table, $fields, $options);
-	// }
-
-	// private function create_scm_result_table()
-	// {
-	// 	$fields = [
-	// 		'id_result'            => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
-	// 		'result_event_id'      => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'result_game_id'       => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'result_group_id'      => ['type' => 'string', 'length' => 11, 'default' => 0],
-	// 		'result_team_id'       => ['type' => 'integer', 'length' => 11, 'default' => 0],
-	// 		'result_goals_for'     => ['type' => 'string', 'length' => 3, 'default' => 0],
-	// 		'result_goals_against' => ['type' => 'string', 'length' => 3, 'default' => 0],
-	// 	];
-	// 	$options = [
-	// 		'primary' => ['id_result'],
-	// 		'indexes' => [
-	// 			'result_event_id' => ['type' => 'key', 'fields' => 'result_event_id'],
-	// 		]
-	// 	];
-	// 	PersistenceContext::get_dbms_utils()->create_table(self::$scm_result_table, $fields, $options);
-	// }
+	private function create_scm_ranking_table()
+	{
+		$fields = [
+			'id_ranking'       => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
+			'ranking_event_id' => ['type' => 'integer', 'length' => 11, 'default' => 0],
+			'content'          => ['type' => 'string', 'length' => 65000000, 'default' => '""'],
+		];
+		$options = [
+			'primary' => ['id_ranking'],
+			'indexes' => [
+				'ranking_event_id' => ['type' => 'key', 'fields' => 'ranking_event_id'],
+			]
+		];
+		PersistenceContext::get_dbms_utils()->create_table(self::$scm_ranking_table, $fields, $options);
+	}
 
 	private function create_scm_season_table()
 	{

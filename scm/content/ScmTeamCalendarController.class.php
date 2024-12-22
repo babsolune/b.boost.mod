@@ -12,6 +12,8 @@ class ScmTeamCalendarController extends DefaultModuleController
     private $event;
     private $team_id;
     private $team_name;
+    private $division;
+    private $params;
 
 	protected function get_template_to_use()
 	{
@@ -21,9 +23,12 @@ class ScmTeamCalendarController extends DefaultModuleController
 	public function execute(HTTPRequestCustom $request)
 	{
         $this->init($request);
-		$this->build_charts();
-		$this->build_ranking();
 		$this->build_view();
+        if ($this->division->get_event_type() == ScmDivision::CHAMPIONSHIP || ($this->division->get_event_type() == ScmDivision::TOURNAMENT && $this->params->get_hat_ranking()))
+        {
+            $this->build_donut();
+            $this->build_ranking();
+        }
 		$this->check_authorizations();
 
         $this->view->put('C_ONE_DAY', ScmGameService::one_day_event($this->event_id()));
@@ -36,35 +41,8 @@ class ScmTeamCalendarController extends DefaultModuleController
         $this->team_id = $request->get_getint('team_id', 0);
         $team_club_id = ScmTeamService::get_team($this->team_id)->get_team_club_id();
         $this->team_name = ScmClubCache::load()->get_club_full_name($team_club_id);
-    }
-
-    public function build_charts()
-    {
-        $games = ScmGameService::get_team_games($this->event_id(), $this->team_id);
-        $win = $draw = $loss = 0;
-        foreach ($games as $game)
-        {
-            $item = new ScmGame();
-            $item->set_properties($game);
-            $score_status = (int)$item->get_game_home_score() - (int)$item->get_game_away_score();
-
-            if ($score_status > 0 && $this->team_id == $item->get_game_home_id())
-                $win += 1;
-            elseif ($score_status < 0 && $this->team_id == $item->get_game_home_id())
-                $loss += 1;
-            elseif ($score_status > 0 && $this->team_id == $item->get_game_away_id())
-                $loss += 1;
-            elseif ($score_status < 0 && $this->team_id == $item->get_game_away_id())
-                $win += 1;
-            elseif ($item->get_game_home_score() != '' && (int)$item->get_game_away_score() != '' && $score_status === 0)
-                $draw += 1;
-        }
-
-        $this->view->assign_block_vars('charts', array_merge($item->get_template_vars(),[
-            'WIN'  => $win,
-            'DRAW' => $draw,
-            'LOSS' => $loss,
-        ]));
+        $this->division = ScmDivisionService::get_division($this->get_event()->get_division_id());
+        $this->params = ScmParamsService::get_params($this->event_id());
     }
 
 	private function build_view()
@@ -79,7 +57,7 @@ class ScmTeamCalendarController extends DefaultModuleController
             $item = new ScmGame();
             $item->set_properties($game);
 
-            $score_status = (int)$item->get_game_home_score() - (int)$item->get_game_away_score();
+            $score_status = $item->get_game_home_pen() ? (int)$item->get_game_home_pen() - (int)$item->get_game_away_pen() : (int)$item->get_game_home_score() - (int)$item->get_game_away_score();
             $team_status = '';
             if ($score_status > 0 && $this->team_id == $item->get_game_home_id())
                 $team_status = "success";
@@ -104,6 +82,7 @@ class ScmTeamCalendarController extends DefaultModuleController
 
         $this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
+            'C_CHARTS' => $this->division->get_event_type() == ScmDivision::CHAMPIONSHIP || ($this->division->get_event_type() == ScmDivision::TOURNAMENT && $this->params->get_hat_ranking()),
             'C_HAS_GAMES' => ScmGameService::has_games($this->event_id()),
             'C_IS_DAY' => ScmDivisionCache::load()->get_division($this->get_event()->get_division_id())['event_type'] == 'championship',
             'C_GENERAL_FORFEIT' => ScmTeamService::get_team($this->team_id)->get_team_status() == ScmParams::FORFEIT,
@@ -111,21 +90,57 @@ class ScmTeamCalendarController extends DefaultModuleController
         ]);
 	}
 
+    public function build_donut()
+    {
+        $games = ScmGameService::get_team_games($this->event_id(), $this->team_id);
+        $win = $draw = $loss = 0;
+        foreach ($games as $game)
+        {
+            $item = new ScmGame();
+            $item->set_properties($game);
+
+            $score_status = (int)$item->get_game_home_score() - (int)$item->get_game_away_score();
+
+            if ($score_status > 0 && $this->team_id == $item->get_game_home_id())
+                $win += 1;
+            elseif ($score_status < 0 && $this->team_id == $item->get_game_home_id())
+                $loss += 1;
+            elseif ($score_status > 0 && $this->team_id == $item->get_game_away_id())
+                $loss += 1;
+            elseif ($score_status < 0 && $this->team_id == $item->get_game_away_id())
+                $win += 1;
+            elseif ($item->get_game_home_score() != '' && (int)$item->get_game_away_score() != '' && $score_status === 0)
+                $draw += 1;
+        }
+
+        $this->view->assign_block_vars('charts', array_merge($item->get_template_vars(),[
+            'WIN'  => $win,
+            'DRAW' => $draw,
+            'LOSS' => $loss,
+        ]));
+    }
+
     private function build_ranking()
     {
+        // x coord
         $teams_number = ScmTeamService::get_teams_number($this->event_id());
+        // y coord
         $c_return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
-        $days_number = $c_return_games ? ($teams_number - 1) * 2 : $teams_number - 1;
+        $params = ScmParamsService::get_params($this->event_id());
+        $c_hat_ranking = $params->get_hat_ranking();
+        $days_number = $c_hat_ranking ? $params->get_hat_days() : ($c_return_games ? ($teams_number - 1) * 2 : $teams_number - 1);
+
         $days = $ranks = [];
-        $rankings = ScmRankingCache::get_ranking($this->event_id());
+        $rankings = ScmRankingContentService::get_ranking_content($this->event_id());
         ksort($rankings);
-        foreach ($rankings as $day => $teams)
+
+        foreach ($rankings as $cluster => $teams)
         {
-            $days[$day] = $day;
+            $days[$cluster] = $cluster;
             foreach ($teams as $team)
             {
                 if ($this->team_id == $team['team_id'])
-                    $ranks[$day] = $team['rank'];
+                    $ranks[$cluster] = $team['rank'];
             }
         }
 

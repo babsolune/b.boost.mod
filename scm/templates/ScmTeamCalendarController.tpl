@@ -1,91 +1,93 @@
 <section id="module-scm" class="single-item modal-container">
     # INCLUDE MENU #
-    <article class="cell-flex cell-columns-3">
-        <div class="cell-1-3">
-            <canvas class="" id="games-chart"></canvas>
-            <script>
-                let ctx_games = document.getElementById("games-chart").getContext('2d');
-                let data_games = {
-                    labels: [ ${escapejs(@scm.th.win)}, ${escapejs(@scm.th.draw)}, ${escapejs(@scm.th.loss)} ],
-                    datasets: [{
-                        data: [
-                            # START charts # "{charts.WIN}" # END charts #,
-                            # START charts # "{charts.DRAW}" # END charts #,
-                            # START charts # "{charts.LOSS}" # END charts #
-                        ],
-                        backgroundColor: ['#2dcc70', '#9a57b4', '#e94c3d'],
-                    }]
-                };
-                let gameChart = new Chart(ctx_games, {
-                    type: 'doughnut',
-                    data: data_games,
-                    options: {
-                        responsive: true,
-                        aspectRatio : 1,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            }
-                        }
-                    },
-                });
-            </script>
-        </div>
-        <div class="cell-2-3">
-            <canvas class="" id="ranks-chart"></canvas>
-            <script>
-                let ctx_ranks = document.getElementById("ranks-chart").getContext('2d');
-                let data_ranks = {
-                    labels: [ # START ranks #"{ranks.DAY}",# END ranks # ],
-                    datasets: [{
-                        label : ${escapejs(@scm.ranking)},
-                        labels: [ # START ranks # "{@scm.day} {ranks.DAY}",# END ranks # ],
-                        data: [ # START ranks # # IF ranks.C_HAS_RANK #"{ranks.RANK}",# ENDIF # # END ranks # ],
-                    }]
-                };
-                const tooltip_rank = {
-                    yAlign: 'bottom',
-                    xAlign: 'center',
-                    callbacks: {
-                        title: function(context) {
-                            return ''
-                        },
-                        label: function(context) {
-                            return context.dataset.labels[context.dataIndex] + ' : ' + context.dataset.data[context.dataIndex]
-                        }
-                    }
-                };
-                let rankChart = new Chart(ctx_ranks, {
-                    type: 'line',
-                    data: data_ranks,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            tooltip: tooltip_rank,
-                        },
-                        scales: {
-                            x: {
-                                ticks: {
-                                    stepSize: 5
-                                }
-                            },
-                            y: {
-                                min: 1,
-                                max: {TEAMS_NUMBER},
-                                reverse: true,
-                                ticks: {
-                                    stepSize: 1
+    # IF C_CHARTS #
+        <article class="cell-flex cell-columns-3">
+            <div class="cell-1-3">
+                <canvas class="" id="games-chart"></canvas>
+                <script>
+                    let ctx_games = document.getElementById("games-chart").getContext('2d');
+                    let data_games = {
+                        labels: [ ${escapejs(@scm.th.win)}, ${escapejs(@scm.th.draw)}, ${escapejs(@scm.th.loss)} ],
+                        datasets: [{
+                            data: [
+                                # START charts # "{charts.WIN}" # END charts #,
+                                # START charts # "{charts.DRAW}" # END charts #,
+                                # START charts # "{charts.LOSS}" # END charts #
+                            ],
+                            backgroundColor: ['#2dcc70', '#9a57b4', '#e94c3d'],
+                        }]
+                    };
+                    let gameChart = new Chart(ctx_games, {
+                        type: 'doughnut',
+                        data: data_games,
+                        options: {
+                            responsive: true,
+                            aspectRatio : 1,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
                                 }
                             }
+                        },
+                    });
+                </script>
+            </div>
+            <div class="cell-2-3">
+                <canvas class="" id="ranks-chart"></canvas>
+                <script>
+                    let ctx_ranks = document.getElementById("ranks-chart").getContext('2d');
+                    let data_ranks = {
+                        labels: [ # START ranks #"{ranks.DAY}",# END ranks # ],
+                        datasets: [{
+                            label : ${escapejs(@scm.ranking)},
+                            labels: [ # START ranks # "{@scm.day} {ranks.DAY}",# END ranks # ],
+                            data: [ # START ranks # # IF ranks.C_HAS_RANK #"{ranks.RANK}",# ENDIF # # END ranks # ],
+                        }]
+                    };
+                    const tooltip_rank = {
+                        yAlign: 'bottom',
+                        xAlign: 'center',
+                        callbacks: {
+                            title: function(context) {
+                                return ''
+                            },
+                            label: function(context) {
+                                return context.dataset.labels[context.dataIndex] + ' : ' + context.dataset.data[context.dataIndex]
+                            }
                         }
-                    },
-                });
-            </script>
-        </div>
-    </article>
+                    };
+                    const rankChart = new Chart(ctx_ranks, {
+                        type: 'line',
+                        data: data_ranks,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                tooltip: tooltip_rank,
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        stepSize: 5
+                                    }
+                                },
+                                y: {
+                                    min: 1,
+                                    max: {TEAMS_NUMBER},
+                                    reverse: true,
+                                    ticks: {
+                                        stepSize: 4
+                                    },
+                                }
+                            }
+                        },
+                    });
+                </script>
+            </div>
+        </article>
+    # ENDIF #
     <article>
         <header><h2><span class="small">{@scm.team.results} :</span> {TEAM_NAME}# IF C_GENERAL_FORFEIT # <span class="warning small">{@scm.params.status.forfeit}</span># ENDIF #</h2></header>
         <div class="content">
