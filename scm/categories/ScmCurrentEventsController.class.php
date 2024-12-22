@@ -33,25 +33,8 @@ class ScmCurrentEventsController extends DefaultModuleController
 
         $this->view->put_all([
             'C_CURRENT_GAMES_CONFIG' => ScmConfig::load()->get_current_games(),
-            'C_CURRENT_GAMES' => count(ScmGameService::get_current_games()) > 0
+            'CURRENT_GAMES' => ScmCurrentGamesService::display_current_games()
         ]);
-        // Display current games
-        foreach(ScmGameService::get_current_games() as $current_game)
-        {
-            $game = new ScmGame();
-            $game->set_properties($current_game);
-            $this->view->assign_block_vars('current_games', array_merge($game->get_template_vars(), [
-                'C_TYPE_GROUP'   => $game->get_game_type() == 'G',
-                'C_TYPE_BRACKET' => $game->get_game_type() == 'B',
-                'C_TYPE_DAY'     => $game->get_game_type() == 'D',
-
-                'GROUP'      => ScmGroupService::ntl($game->get_game_cluster()),
-                'BRACKET'    => ScmBracketService::ntl($game->get_game_cluster()),
-                'DAY'        => $game->get_game_cluster(),
-                'EVENT_NAME' => ScmEventService::get_event($game->get_game_event_id())->get_event_name(),
-                'U_EVENT'    => ScmUrlBuilder::event_home($game->get_game_event_id(), ScmEventService::get_event_slug($game->get_game_event_id()))->rel()
-            ]));
-        }
 
         // Display category
 		foreach ($categories as $id => $category)

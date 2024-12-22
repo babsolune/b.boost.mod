@@ -523,17 +523,24 @@ class ScmGame
         }
 
 		$address = ScmTeamService::get_team($this->game_home_id) ? (ScmConfig::load()->is_googlemaps_available() && $this->game_stadium_name ? $this->stadium_map()->display() : $this->game_stadium_name) : '';
+        $event = ScmEventService::get_event($this->game_event_id);
 
         return array_merge(
             Date::get_array_tpl_vars($this->game_date, 'game_date'),
             [
+                'C_IS_SUB'        => ScmEventService::is_sub_event($this->game_event_id),
+                'MASTER_EVENT'    => ScmEventService::get_master_division($this->game_event_id),
+                'U_MASTER_EVENT'  => ScmEventService::get_master_url($this->game_event_id),
                 'GAME_DIVISION'   => $division->get_division_name(),
                 'GAME_SEASON'     => $season->get_season_name(),
                 'GAME_CATEGORY'   => $category->get_name(),
 
+                'C_LATE'          => $this->game_cluster < ScmDayService::get_last_day($this->game_event_id),
                 'C_IS_LIVE'       => ScmGameService::is_live($this->game_event_id, $this->id_game),
                 'C_STATUS'        => $this->game_status && $this->game_status != ScmGame::COMPLETED,
                 'C_HAS_SCORE'     => $c_home_score && $c_away_score,
+                'C_HOME_SCORE'    => $c_home_score,
+                'C_AWAY_SCORE'    => $c_away_score,
                 'C_HAS_DETAILS'   => $c_home_score || $c_away_score || $address,
                 'C_HAS_HOME_LOGO' => $this->game_home_id && ScmTeamService::get_team_logo($this->game_home_id) !== '#',
                 'C_HAS_AWAY_LOGO' => $this->game_away_id && ScmTeamService::get_team_logo($this->game_away_id) !== '#',
@@ -548,7 +555,19 @@ class ScmGame
                 'C_AWAY_EMPTY'    => $this->game_away_id == 0,
                 'C_AWAY_EXEMPT'   => $this->game_away_id && ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::EXEMPT,
                 'C_EXEMPT'        => $this->game_home_id && ScmTeamService::get_team($this->game_home_id)->get_team_status() == ScmParams::EXEMPT || $this->game_away_id && ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::EXEMPT,
+                'C_TYPE_GROUP'   => $this->game_type == 'G',
+                'C_TYPE_BRACKET' => $this->game_type == 'B',
+                'C_TYPE_DAY'     => $this->game_type == 'D',
 
+                'GROUP'          => ScmGroupService::ntl($this->game_cluster),
+                'BRACKET'        => ScmBracketService::ntl($this->game_round),
+                'DAY'            => $this->game_cluster,
+                'U_GROUP'        => ScmUrlBuilder::display_groups_rounds($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
+                'U_BRACKET'      => ScmUrlBuilder::display_brackets_rounds($event->get_id(), $event->get_event_slug())->rel(),
+                'U_DAY'          => ScmUrlBuilder::display_days_calendar($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
+
+                'EVENT_NAME'      => ScmEventService::get_event($this->game_event_id)->get_event_name(),
+                'U_EVENT'         => ScmUrlBuilder::event_home($this->game_event_id, ScmEventService::get_event_slug($this->game_event_id))->rel(),
                 'GAME_ID'         => $this->game_type.$this->game_cluster.$this->game_round.$this->game_order,
                 'HOME_ID'         => $this->game_home_id,
                 'AWAY_ID'         => $this->game_away_id,

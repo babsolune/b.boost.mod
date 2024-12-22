@@ -15,6 +15,7 @@ $lang['scm.module.title'] = 'Compétitions';
 $lang['scm.mini.prev']    = 'Matchs précédents';
 $lang['scm.mini.next']    = 'Prochains matchs';
 
+$lang['scm.pool']              = 'Sous-groupe';
 $lang['scm.event.pool']        = 'Sous-groupe de la compétition';
 $lang['scm.event.start.date']  = 'Date de début';
 $lang['scm.event.end.date']    = 'Date de fin';
@@ -23,7 +24,7 @@ $lang['scm.event.ended.event'] = 'Compétition terminée';
 $lang['scm.source.clue']       = 'Liens vers les sites officiels de la compétition';
 $lang['scm.not.specified']     = 'Non renseigné';
 
-$lang['scm.event.views.number']  = 'Cette page a été vue :number fois.';
+$lang['scm.event.views.number']   = 'Cette page a été vue :number fois.';
 $lang['scm.event.scoring.type']   = 'Type de score';
 $lang['scm.event.scoring.goals']  = 'Buts';
 $lang['scm.event.scoring.tries']  = 'Essais';
@@ -31,8 +32,9 @@ $lang['scm.event.scoring.points'] = 'Points';
 $lang['scm.event.scoring.sets']   = 'Sets';
 $lang['scm.event.is.master']      = 'Est une compétition maître';
 $lang['scm.event.is.sub']         = 'Est une sous-compétition';
-$lang['scm.event.master.id']      = 'Compétition maître';
+$lang['scm.event.master']         = 'Compétition maître';
 $lang['scm.event.sub.order']      = 'Ordre dans la compétition maître';
+$lang['scm.event.has.games']      = 'Matchs';
 
 // Titles
 $lang['items']                = 'compétitions';
@@ -49,6 +51,9 @@ $lang['scm.events.management'] = 'Gestion des compétitions';
 $lang['scm.change.event']      = 'Changer de compétition';
 
 // Game form
+$lang['scm.waiting.ranking']            = 'Calcul du classement.';
+$lang['scm.waiting.ranking.next']       = 'Des matchs sur une date ulterieure ont déjà été joués';
+$lang['scm.waiting.please']             = 'Veuillez patienter ...';
 $lang['scm.game.form.date']             = 'Date/horaire du match';
 $lang['scm.game.form.home.team']        = 'Équipe des locaux';
 $lang['scm.game.form.home.score']       = 'Score des locaux';
@@ -198,6 +203,8 @@ $lang['scm.games.management']     = 'Matchs de la compétition';
 $lang['scm.games.groups.stage']   = 'Phases de groupes';
 $lang['scm.games.brackets.stage'] = 'Phases finales';
 $lang['scm.current.games']        = 'Matchs en cours';
+$lang['scm.today.games']          = 'Matchs du jour';
+$lang['scm.yesterday.games']      = 'Matchs de la veille';
 $lang['scm.current.events']       = 'Compétitions en cours';
 $lang['scm.around.games']         = 'Prochains/précédents matchs';
 $lang['scm.no.current.games']     = 'Aucun match en cours';
@@ -274,7 +281,7 @@ $lang['scm.config.homepage']          = 'Type de page d\'accueil';
 $lang['scm.config.homepage.list']     = 'Compétitions en cours';
 $lang['scm.config.homepage.games']    = 'Précédents/prochains matchs';
 $lang['scm.config.homepage.cats']     = 'Catégories';
-$lang['scm.config.current.games']     = 'Afficher les matchs en cours sur l\'accueil';
+$lang['scm.config.current.games']     = 'Afficher les matchs du jour sur l\'accueil';
 $lang['scm.config.next.games']        = 'Afficher les prochains matchs sur l\'accueil';
 $lang['scm.config.next.games.number'] = 'Nombre de prochains matchs à afficher';
 $lang['scm.promotion.color']          = 'Couleur des équipes promues';
@@ -316,15 +323,15 @@ $lang['scm.specific_hook.build_days']   = 'Création des journées';
 $lang['scm.specific_hook.games_edit']   = 'Modification des matchs';
 
 // Message helpers
-$lang['scm.message.no.games']       = 'Aucun match pour l\'instant';
-$lang['scm.message.no.events']      = 'Aucune compétition pour l\'instant';
-$lang['scm.warning.current.season'] = 'Seules les compétitions en cours sont affichées.';
-$lang['scm.warning.bracket.update'] = 'Les matchs ont été générés.';
+$lang['scm.message.no.games']        = 'Aucun match pour l\'instant';
+$lang['scm.message.no.events']       = 'Aucune compétition pour l\'instant';
+$lang['scm.warning.current.season']  = 'Seules les compétitions en cours sont affichées.';
+$lang['scm.warning.bracket.update']  = 'Les matchs ont été générés.';
 $lang['scm.warning.practice.update'] = 'Les matchs ont été générés.';
-$lang['scm.warning.group.update']   = 'Les groupes de la compétition ont été mis à jour et les matchs ont été générés.';
-$lang['scm.warning.has.games']      = 'Les matchs de cette compétition ont été définis. Pour toute modification, si des résultats ont déjà été renseignés, ils seront supprimés.';
-$lang['scm.warning.details.update'] = 'Les détails du match ont été mis à jour.';
-$lang['scm.warning.games.update']   = 'Les matchs de la compétition ont été mis à jour.';
+$lang['scm.warning.group.update']    = 'Les groupes de la compétition ont été mis à jour et les matchs ont été générés.';
+$lang['scm.warning.has.games']       = 'Les matchs de cette compétition ont été définis. Pour toute modification, si des résultats ont déjà été renseignés, ils seront supprimés.';
+$lang['scm.warning.details.update']  = 'Les détails du match ont été mis à jour.';
+$lang['scm.warning.games.update']    = 'Les matchs de la compétition ont été mis à jour.';
 
 $lang['scm.message.success.add']    = 'La compétition <b>:title</b> a été ajoutée';
 $lang['scm.message.success.edit']   = 'La compétition <b>:title</b> a été modifiée';

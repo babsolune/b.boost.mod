@@ -18,6 +18,10 @@
 		</h1>
 	</header>
 
+    # IF C_CURRENT_GAMES_CONFIG #
+        # INCLUDE CURRENT_GAMES #
+    # ENDIF #
+
 	# IF C_SUB_CATEGORIES #
 		<div class="sub-section">
 			<div class="content-container">

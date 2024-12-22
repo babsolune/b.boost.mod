@@ -38,6 +38,14 @@ class ScmCategoryController extends DefaultModuleController
 
 	private function build_view(HTTPRequestCustom $request)
 	{
+        if ($this->get_category()->get_id() == Category::ROOT_CATEGORY)
+        {
+            $this->view->put_all([
+                'C_CURRENT_GAMES_CONFIG' => ScmConfig::load()->get_current_games(),
+                'CURRENT_GAMES' => ScmCurrentGamesService::display_current_games()
+            ]);
+        }
+
 		$now = new Date();
 		$page = $request->get_getint('page', 1);
 		$subcategories_page = $request->get_getint('subcategories_page', 1);
@@ -107,7 +115,11 @@ class ScmCategoryController extends DefaultModuleController
             if ($c_is_master)
             {
                 $now = new Date();
-                foreach (ScmEventService::get_sub_list($item->get_id()) as $sub_event)
+                $sub_list = ScmEventService::get_sub_list($item->get_id());
+                usort($sub_list, function($a, $b) {
+                    return $a['sub_order'] - $b['sub_order'];
+                });
+                foreach ($sub_list as $sub_event)
                 {
                     $sub_item = new ScmEvent();
                     $sub_item->set_properties($sub_event);

@@ -220,8 +220,30 @@ class ScmGameService
         $now = new Date();
         $games = self::$db_querier->select('SELECT games.*
             FROM ' . ScmSetup::$scm_game_table . ' games
-            WHERE games.game_date < :now
-            AND games.game_event_id IN (' . $events_id . ')
+            WHERE games.game_event_id IN (' . $events_id . ')
+            ORDER BY games.game_date'
+        );
+        $current_games = [];
+        foreach ($games as $game)
+        {
+            $today = Date::to_format($now->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR);
+            $game_date = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR);
+            if ($today == $game_date)
+                $current_games[] = $game;
+        }
+        return $current_games;
+	}
+
+    // Check current games
+    public static function get_before_current_games():array
+	{
+        $running_events = ScmEventService::get_running_events_id();
+        $events_id = $running_events ? implode(', ', $running_events) : 0;
+        $now = new Date();
+        $yesterday = $now->get_timestamp() - 86400;
+        $games = self::$db_querier->select('SELECT games.*
+            FROM ' . ScmSetup::$scm_game_table . ' games
+            WHERE games.game_event_id IN (' . $events_id . ')
             ORDER BY games.game_date', [
                 'now' => $now->get_timestamp()
             ]
@@ -229,7 +251,9 @@ class ScmGameService
         $current_games = [];
         foreach ($games as $game)
         {
-            if (self::is_live($game['game_event_id'], $game['id_game']))
+            $day = Date::to_format($yesterday, Date::FORMAT_DAY_MONTH_YEAR);
+            $game_date = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR);
+            if ($day == $game_date)
                 $current_games[] = $game;
         }
         return $current_games;
