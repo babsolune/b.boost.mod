@@ -46,12 +46,25 @@ class ScmGroupGamesFormController extends DefaultModuleController
 	private function build_form()
 	{
         $cluster = AppContext::get_request()->get_getint('cluster', 0);
+        $until_last_day = $this->hat_ranking ? ScmGroupService::get_last_matchday_hat($this->event_id()) > $cluster : 0;
+
         $form = new HTMLForm(__CLASS__);
-        $form->set_css_class('floating-submit modal-container');
+        $form->set_css_class('floating-submit modal-container form-loader');
 		$form->set_layout_title(
             '<div class="align-center small">' . $this->lang['scm.games.management'] . '</div>'
             . '<div class="align-center smaller">' . $this->lang['scm.games.groups.stage'] . ' - ' . ($this->hat_ranking ? $this->lang['scm.day'] . ' ' . $cluster : $this->lang['scm.group'] . ' ' . ScmGroupService::ntl($cluster)) . '</div>'
         );
+
+        $fieldset = new FormFieldsetHTML('days', '');
+		$form->add_fieldset($fieldset);
+
+        $fieldset->add_field(new FormFieldFree( 'waiting_cover', '', $this->lang['scm.waiting.ranking'] . ($until_last_day ? '<br />' . $this->lang['scm.waiting.ranking.next'] : '') . '<br />' . $this->lang['scm.waiting.please'],
+            ['class' => 'waiting-cover']
+        ));
+
+        $fieldset->add_field(new FormFieldFree( 'waiting_loader', '', '',
+            ['class' => 'waiting-loader']
+        ));
 
         if ($this->hat_ranking)
         {
@@ -119,7 +132,6 @@ class ScmGroupGamesFormController extends DefaultModuleController
             $odd_filled = $this->teams_number % 2 != 0 && $this->get_params()->get_fill_games();
 
             $c_one_day = ScmGameService::one_day_event($this->event_id());
-            $cluster_title = $c_one_day ? $this->lang['scm.round'] : $this->lang['scm.day'];
             $total_games = [];
             foreach($this->get_group_games($cluster) as $round => $games)
             {
@@ -144,7 +156,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
 
                     if ($this->return_games && $order == 1)
                         ${'fieldset_' . $field}->add_field(new FormFieldSpacer('first_leg_' . $field, $this->lang['scm.first.leg']));
-                    ${'fieldset_' . $field}->add_field(new FormFieldFree('game_number_' . $field, '', '<strong>G' . $field . '</strong>'. ' - ' . $cluster_title . ' ' . $round,
+                    ${'fieldset_' . $field}->add_field(new FormFieldFree('game_number_' . $field, '', '<strong>G' . $field . '</strong>'. ' - ' . $this->lang['scm.round'] . ' ' . $round,
                         ['class' => 'game-name small text-italic form-G' . $field]
                     ));
                     ${'fieldset_' . $field}->add_field(new FormFieldActionLink('details_' . $field, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'G', $cluster, $round, $order), 'd-inline-block game-details align-right'));
@@ -157,10 +169,16 @@ class ScmGroupGamesFormController extends DefaultModuleController
                         ['class' => 'home-team game-team']
                     ));
                     ${'fieldset_' . $field}->add_field(new FormFieldNumberEditor('home_score_' . $field, '', $item->get_game_home_score(),
-                        ['class' => 'home-team game-score', 'pattern' => '[0-9]*']
+                        [
+                            'min' => 0,
+                            'class' => 'home-team game-score'
+                        ]
                     ));
                     ${'fieldset_' . $field}->add_field(new FormFieldNumberEditor('away_score_' . $field, '', $item->get_game_away_score(),
-                        ['class' => 'away-team game-score', 'pattern' => '[0-9]*']
+                        [
+                            'min' => 0,
+                            'class' => 'away-team game-score'
+                        ]
                     ));
                     ${'fieldset_' . $field}->add_field(new FormFieldSimpleSelectChoice('away_team_' . $field, '', $item->get_game_away_id(),
                         $odd_filled && $item->get_game_away_id() == 0 ? [] : $this->get_group_teams_list($cluster),
@@ -226,6 +244,8 @@ class ScmGroupGamesFormController extends DefaultModuleController
         }
 
 		ScmEventService::clear_cache();
+        ScmRankingCache::set_cache_file_ranking($this->event_id(), $cluster);
+        ScmRankingContentService::set_ranking_content($this->event_id(), $cluster);
 	}
 
     private function get_hat_games($cluster)
@@ -334,6 +354,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
             # INCLUDE MESSAGE_HELPER #
             # INCLUDE MENU #
             # INCLUDE CONTENT #
+            <script src="{PATH_TO_ROOT}/scm/templates/js/scm.loader# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
         ';
 	}
 

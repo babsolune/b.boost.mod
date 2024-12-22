@@ -130,10 +130,16 @@ class ScmBracketGamesFormController extends DefaultModuleController
                     ['class' => 'label-top home-team game-team']
                 ));
                 ${'bracket_fieldset_'.$field}->add_field(new FormFieldNumberEditor('home_score_' . $field, $this->lang['scm.game.form.home.score'], $game_home_score,
-                    ['class' => 'label-top home-team game-score', 'pattern' => '[0-9]*']
+                    [
+                        'min' => 0,
+                        'class' => 'label-top home-team game-score'
+                    ]
                 ));
                 ${'bracket_fieldset_'.$field}->add_field(new FormFieldNumberEditor('away_score_' . $field, $this->lang['scm.game.form.away.score'], $game_away_score,
-                    ['class' => 'label-top away-team game-score', 'pattern' => '[0-9]*']
+                    [
+                        'min' => 0,
+                        'class' => 'label-top away-team game-score'
+                    ]
                 ));
                 ${'bracket_fieldset_'.$field}->add_field(new FormFieldSimpleSelectChoice('away_team_' . $field, $this->lang['scm.game.form.away.team'], $game_away_id,
                     $this->get_teams_list(),
@@ -237,10 +243,16 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 ['class' => 'label-top home-team game-team']
             ));
             $fieldset->add_field(new FormFieldNumberEditor('home_score_' . $field, $this->lang['scm.game.form.home.score'], $item->get_game_home_score(),
-                ['class' => 'label-top home-team game-score', 'pattern' => '[0-9]*']
+                [
+                    'min' => 0,
+                    'class' => 'label-top home-team game-score'
+                ]
             ));
             $fieldset->add_field(new FormFieldNumberEditor('away_score_' . $field, $this->lang['scm.game.form.away.score'], $item->get_game_away_score(),
-                ['class' => 'label-top away-team game-score', 'pattern' => '[0-9]*']
+                [
+                    'min' => 0,
+                    'class' => 'label-top away-team game-score'
+                ]
             ));
             $fieldset->add_field(new FormFieldSimpleSelectChoice('away_team_' . $field, $this->lang['scm.game.form.away.team'], $item->get_game_away_id(),
                 $this->get_teams_list(),
