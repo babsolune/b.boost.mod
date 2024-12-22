@@ -114,6 +114,62 @@ th.bgc-sub a {
     padding: 0;
 }
 
+.floating-submit .fieldset-submit {
+    position: fixed;
+    top: 70%;
+    transform: translateY(-50%);
+    right: 0.618em;
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.waiting-cover {
+    visibility: hidden;
+    background-color: rgba(var(--darken), 0.5);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 20;
+    margin: 0;
+    padding: 0;
+}
+
+.waiting-cover .form-field-free-large {
+    padding: 0.618em;
+    background-color: var(--bgc-main);
+    border: 0.228em solid var(--bdr-main);
+    position: absolute;
+    top: 0.618em;
+    left: 0.618em;
+    text-align: center;
+    width: auto;
+}
+
+.waiting-loader {
+    display: none;
+    border: 0.228em solid var(--bdr-sub);
+    border-top: 0.228em solid var(--bdr-alt);
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 1s linear infinite;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 30;
+    margin: 0;
+    padding: 0;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 .fieldset-content .modal-nav {
     float: right;
     margin-top: 0.809em;
@@ -207,7 +263,6 @@ th.bgc-sub a {
 .game-details .fieldset-inset .details-full { width: 100%; }
 
 /* params */
-.params-form .fieldset-submit,
 .params-form p {
     width: 100%;
 }
@@ -359,8 +414,8 @@ th.bgc-sub a {
 /* groups */
 .form-element.groups-select .form-field,
 .form-element.groups-select select,
-#FootballGroupsFormController_captcha_fieldset,
-#FootballGroupsFormController_fbuttons {
+#ScmGroupsFormController_captcha_fieldset,
+#ScmGroupsFormController_fbuttons {
     width: 100%;
 }
 .form-element.groups-select {
@@ -574,10 +629,16 @@ th.bgc-sub a {
     justify-content: flex-start;
 }
 
-@media (max-width: 568px) {
+@media (max-width: 768px) {
     .flex-team span { order: 2; }
     .flex-team img  { order: 1; }
+    .flex-right {
+        justify-content: flex-start;
+    }
+    .invert-team .game-team  { order: 1; }
+    .invert-team .game-score { order: 2; }
 }
+
 
 /* details */
 .cell-details {
@@ -634,16 +695,14 @@ th.bgc-sub a {
 .scm-cell.cell-left  { text-align: left; }
 .scm-cell.cell-right { text-align: right; }
 
-/* .scm-body .scm-line:first-child { border-radius: 0.809em 0.809em 0 0;}
-.scm-body .scm-line:last-child  { border-radius: 0 0 0.809em 0.809em;} */
-
 .scm-cell img {
     max-height: 19px;
     max-width: 19px;
     margin: 0 0.228em;
 }
 
-.cell-truncate {display: block !important;
+.cell-truncate {
+    display: block !important;
     min-width: 0;
     max-width: 100%;
     white-space: nowrap;
@@ -657,34 +716,37 @@ th.bgc-sub a {
     }
 }
 
-.cell-between { justify-content: space-between;}
-
 .cell-game {
     border: 1px solid var(--bdr-main);
-    margin: 0.309em;
 }
 
-.cell-game > * {
-    padding: 0.618em;
+.cell-pad {
+    padding: 0.309em;
+}
+
+.cell-game .flex-between.flex-between-large > * {
+    margin-bottom: 0;
+}
+
+.cell-game .game-score {
+    text-align: center;
+}
+
+.cell-game .game-separator {
+    display: none;
+}
+
+@media (min-width: 769px) {
+    .cell-game .game-separator { display: inline-flex; }
+    .cell-game .home-score { text-align: right; }
+    .cell-game .away-score { text-align: left; }
+}
+
+.cell-around .cell-game {
+    margin-bottom: 0.618em;
 }
 
 .game-header,
 .game-body {
     margin: 0;
-}
-
-.cell-game .home-team {
-    text-align: right;
-    display: inline-block;
-    width: 38%;
-}
-.cell-game .game-score {
-    text-align: center;
-    display: inline-block;
-    width: 20%;
-}
-.cell-game .away-team {
-    text-align: left;
-    display: inline-block;
-    width: 38%;
 }
