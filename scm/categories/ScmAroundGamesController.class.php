@@ -7,13 +7,13 @@
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
-class ScmCurrentGamesController extends DefaultModuleController
+class ScmAroundGamesController extends DefaultModuleController
 {
 	private $category;
 
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmCurrentGamesController.tpl');
+		return new FileTemplate('scm/ScmAroundGamesController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
@@ -28,30 +28,11 @@ class ScmCurrentGamesController extends DefaultModuleController
 	private function build_view(HTTPRequestCustom $request)
 	{
 		$now = new Date();
-		$categories = CategoriesService::get_categories_manager(self::$module_id)->get_categories_cache()->get_categories();
-		$authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, true, self::$module_id);
 
         $this->view->put_all([
             'C_CURRENT_GAMES_CONFIG' => ScmConfig::load()->get_current_games(),
-            'C_CURRENT_GAMES' => count(ScmGameService::get_current_games()) > 0
+            'CURRENT_GAMES' => ScmCurrentGamesService::display_current_games()
         ]);
-        // Display current games
-        foreach(ScmGameService::get_current_games() as $current_game)
-        {
-            $game = new ScmGame();
-            $game->set_properties($current_game);
-            $this->view->assign_block_vars('current_games', array_merge($game->get_template_vars(), [
-                'C_TYPE_GROUP'   => $game->get_game_type() == 'G',
-                'C_TYPE_BRACKET' => $game->get_game_type() == 'B',
-                'C_TYPE_DAY'     => $game->get_game_type() == 'D',
-
-                'GROUP'      => ScmGroupService::ntl($game->get_game_cluster()),
-                'BRACKET'    => ScmBracketService::ntl($game->get_game_cluster()),
-                'DAY'        => $game->get_game_cluster(),
-                'EVENT_NAME' => ScmEventService::get_event($game->get_game_event_id())->get_event_name(),
-                'U_EVENT'    => ScmUrlBuilder::event_home($game->get_game_event_id(), ScmEventService::get_event_slug($game->get_game_event_id()))->rel()
-            ]));
-        }
 
 		$now = new Date();
         $running_events = ScmEventService::get_running_events_id();
@@ -89,39 +70,33 @@ class ScmCurrentGamesController extends DefaultModuleController
         }
 
         $this->view->put_all([
-			'C_NEXT_ITEMS' => count($next_events_games) > 0
+			'C_NEXT_ITEMS' => count($next_events_games) > 0,
+            'NEXT_ITEMS' => ScmSingleGamesService::display_games($next_events_games)
 		]);
 
-        foreach($next_events_games as $game)
-        {
-            $category = ScmEventService::get_event($game['game_event_id'])->get_category();
-            $next_categories[$category->get_id()][$game['game_event_id']] = $game;
-        }
+        // foreach($next_events_games as $game)
+        // {
+        //     $category = ScmEventService::get_event($game['game_event_id'])->get_category();
+        //     $next_categories[$category->get_id()][$game['game_event_id']] = $game;
+        // }
 
-        ksort($next_categories);
+        // ksort($next_categories);
 
-        foreach ($next_categories as $k => $games)
-        {
-            $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k);
-            $this->view->assign_block_vars('next_categories', [
-                'CATEGORY_NAME' => $category->get_name(),
-                'U_CATEGORY' => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
-            ]);
-            foreach ($games as $game)
-            {
-                $item = new ScmGame();
-                $item->set_properties($game);
+        // foreach ($next_categories as $k => $games)
+        // {
+        //     $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k);
+        //     $this->view->assign_block_vars('next_categories', [
+        //         'CATEGORY_NAME' => $category->get_name(),
+        //         'U_CATEGORY' => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
+        //     ]);
+        //     foreach ($games as $game)
+        //     {
+        //         $item = new ScmGame();
+        //         $item->set_properties($game);
 
-                $this->view->assign_block_vars('next_categories.next_items', array_merge($item->get_template_vars(), [
-                    'C_LATE'         => $item->get_game_cluster() < ScmDayService::get_last_day($item->get_game_event_id()),
-                    'YEAR'           => date('y', $item->get_game_date()->get_timestamp()),
-                    'C_IS_SUB'       => ScmEventService::is_sub_event($item->get_game_event_id()),
-                    'MASTER_EVENT'   => ScmEventService::get_master_division($item->get_game_event_id()),
-                    'U_MASTER_EVENT' => ScmEventService::get_master_url($item->get_game_event_id()),
-                    'U_EVENT'        => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
-                ]));
-            }
-        }
+        //         $this->view->assign_block_vars('next_categories.next_items', $item->get_template_vars());
+        //     }
+        // }
 
         // Previous games
         $prev_games = $prev_events = $prev_events_games = $prev_categories = [];
@@ -156,39 +131,33 @@ class ScmCurrentGamesController extends DefaultModuleController
         }
 
         $this->view->put_all([
-			'C_PREV_ITEMS' => count($prev_events_games) > 0
+			'C_PREV_ITEMS' => count($prev_events_games) > 0,
+            'PREV_ITEMS' => ScmSingleGamesService::display_games($next_events_games)
 		]);
 
-        foreach($prev_events_games as $game)
-        {
-            $category = ScmEventService::get_event($game['game_event_id'])->get_category();
-            $prev_categories[$category->get_id()][$game['game_event_id']] = $game;
-        }
+        // foreach($prev_events_games as $game)
+        // {
+        //     $category = ScmEventService::get_event($game['game_event_id'])->get_category();
+        //     $prev_categories[$category->get_id()][$game['game_event_id']] = $game;
+        // }
 
-        ksort($prev_categories);
+        // ksort($prev_categories);
 
-        foreach ($prev_categories as $k => $games)
-        {
-            $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k);
-            $this->view->assign_block_vars('prev_categories', [
-                'CATEGORY_NAME' => $category->get_name(),
-                'U_CATEGORY' => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
-            ]);
-            foreach ($games as $game)
-            {
-                $item = new ScmGame();
-                $item->set_properties($game);
+        // foreach ($prev_categories as $k => $games)
+        // {
+        //     $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k);
+        //     $this->view->assign_block_vars('prev_categories', [
+        //         'CATEGORY_NAME' => $category->get_name(),
+        //         'U_CATEGORY' => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
+        //     ]);
+        //     foreach ($games as $game)
+        //     {
+        //         $item = new ScmGame();
+        //         $item->set_properties($game);
 
-                $this->view->assign_block_vars('prev_categories.prev_items', array_merge($item->get_template_vars(), [
-                    'C_LATE'         => $item->get_game_cluster() < ScmDayService::get_last_day($item->get_game_event_id()),
-                    'YEAR'           => date('y', $item->get_game_date()->get_timestamp()),
-                    'C_IS_SUB'       => ScmEventService::is_sub_event($item->get_game_event_id()),
-                    'MASTER_EVENT'   => ScmEventService::get_master_division($item->get_game_event_id()),
-                    'U_MASTER_EVENT' => ScmEventService::get_master_url($item->get_game_event_id()),
-                    'U_EVENT'        => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
-                ]));
-            }
-        }
+        //         $this->view->assign_block_vars('prev_categories.prev_items', $item->get_template_vars());
+        //     }
+        // }
 	}
 
 	private function get_category()

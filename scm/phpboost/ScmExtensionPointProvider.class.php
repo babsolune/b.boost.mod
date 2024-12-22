@@ -15,7 +15,7 @@ class ScmExtensionPointProvider extends ItemsModuleExtensionPointProvider
         if ($config->get_homepage() == ScmConfig::EVENT_LIST)
             return new DefaultHomePageDisplay($this->get_id(), ScmCurrentEventsController::get_view($this->get_id()));
         elseif ($config->get_homepage() == ScmConfig::GAME_LIST)
-            return new DefaultHomePageDisplay($this->get_id(), ScmCurrentGamesController::get_view($this->get_id()));
+            return new DefaultHomePageDisplay($this->get_id(), ScmAroundGamesController::get_view($this->get_id()));
         elseif ($config->get_homepage() == ScmConfig::CATEGORIES)
             return new DefaultHomePageDisplay($this->get_id(), ScmCategoryController::get_view($this->get_id()));
 	}
@@ -32,6 +32,7 @@ class ScmExtensionPointProvider extends ItemsModuleExtensionPointProvider
     {
         $js_file = new ModuleJsFiles();
         $js_file->adding_running_module_displayed_file('chart.min.js');
+        // $js_file->adding_running_module_displayed_file('loader.js');
         return $js_file;
     }
 

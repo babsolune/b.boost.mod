@@ -83,7 +83,7 @@ $url_controller_mappers = [
 	new UrlControllerMapper('ScmSeasonDeleteController', '`^/season/([0-9]+)/delete/?$`', ['id']),
 
 	new UrlControllerMapper('ScmCurrentEventsController', $config->get_homepage() == ScmConfig::EVENT_LIST ? '`^/?$`' : '`^/event_list/?$`'),
-	new UrlControllerMapper('ScmCurrentGamesController', $config->get_homepage() == ScmConfig::GAME_LIST ? '`^/?$`' : '`^/game_list/?$`'),
+	new UrlControllerMapper('ScmAroundGamesController', $config->get_homepage() == ScmConfig::GAME_LIST ? '`^/?$`' : '`^/game_list/?$`'),
     new UrlControllerMapper('ScmCategoryController', '`^(?:/([0-9]+)-([a-z0-9-_]+))?/?([a-z_]+)?/?([a-z]+)?/?([0-9]+)?/?([0-9]+)?/?$`', ['id_category', 'rewrited_name', 'field', 'sort', 'page', 'subcategories_page']),
 ];
 DispatchManager::dispatch($url_controller_mappers);
