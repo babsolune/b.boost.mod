@@ -17,8 +17,8 @@ class ScmDaysRankingController extends DefaultModuleController
 
 	public function execute(HTTPRequestCustom $request)
 	{
-		$this->build_view();
-		$this->build_days_view();
+		$this->build_view($request);
+		$this->build_days_view($request);
 		$this->check_authorizations();
 
         $this->view->put('C_ONE_DAY', ScmGameService::one_day_event($this->event_id()));
@@ -26,47 +26,69 @@ class ScmDaysRankingController extends DefaultModuleController
 		return $this->generate_response();
 	}
 
-	private function build_view()
+	private function build_view(HTTPRequestCustom $request)
 	{
-        $section = AppContext::get_request()->get_getstring('section', '');
-        $day = AppContext::get_request()->get_getint('day', 0);
+        $section = $request->get_getstring('section', '');
+        $day = $request->get_getint('day', 0) != 0 ? $request->get_getint('day', 0) : ScmDayService::get_last_day($this->event_id());
+        $event_slug = ScmEventService::get_event_slug($this->event_id());
+        $params = ScmParamsService::get_params($this->event_id());
+        $config = ScmConfig::load();
+
         switch($section) {
             case ('') :
+                $c_chart = true;
                 $final_ranks = ScmRankingService::general_ranking($this->event_id());
                 break;
             case ('home') :
+                $c_chart = false;
                 $final_ranks = ScmRankingService::home_ranking($this->event_id());
                 break;
             case ('away') :
+                $c_chart = false;
                 $final_ranks = ScmRankingService::away_ranking($this->event_id());
                 break;
             case ('attack') :
+                $c_chart = false;
                 $final_ranks = ScmRankingService::attack_ranking($this->event_id());
                 break;
             case ('defense') :
+                $c_chart = false;
                 $final_ranks = ScmRankingService::defense_ranking($this->event_id());
                 break;
             case ('day') :
+                $c_chart = true;
                 $final_ranks = ScmRankingService::general_days_ranking($this->event_id(), $day);
                 break;
             default :
+                $c_chart = true;
                 $final_ranks = ScmRankingService::general_ranking($this->event_id());
                 break;
         }
 
-        // Display ranks to view
-        $prom = ScmParamsService::get_params($this->event_id())->get_promotion();
-        $playoff_prom = ScmParamsService::get_params($this->event_id())->get_playoff_prom();
-        $playoff_releg = ScmParamsService::get_params($this->event_id())->get_playoff_releg();
-        $releg = ScmParamsService::get_params($this->event_id())->get_relegation();
-        $prom_color = ScmConfig::load()->get_promotion_color();
-        $playoff_prom_color = ScmConfig::load()->get_playoff_prom_color();
-        $playoff_releg_color = ScmConfig::load()->get_playoff_releg_color();
-        $releg_color = ScmConfig::load()->get_relegation_color();
+        // Charts params
+        // x coord
+        $teams_number = ScmTeamService::get_teams_number($this->event_id());
+        // y coord
+        $c_return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $c_hat_ranking = $params->get_hat_ranking();
+        $days_number = $c_hat_ranking ? $params->get_hat_days() : ($c_return_games ? ($teams_number - 1) * 2 : $teams_number - 1);
+        $full_rankings = ScmRankingContentService::get_ranking_content($this->event_id());
+
+        // Params to display background colors
+        $prom = $params->get_promotion();
+        $playoff_prom = $params->get_playoff_prom();
+        $playoff_releg = $params->get_playoff_releg();
+        $releg = $params->get_relegation();
+        $prom_color = $config->get_promotion_color();
+        $playoff_prom_color = $config->get_playoff_prom_color();
+        $playoff_releg_color = $config->get_playoff_releg_color();
+        $releg_color = $config->get_relegation_color();
         $color_count = count($final_ranks);
 
+        // Display ranks to view
         foreach ($final_ranks as $i => $team_rank)
         {
+            // Display background colors
             if ($prom && $i < $prom) {
                 $rank_color = $prom_color;
             } elseif ($playoff_prom && $i >= $prom && $i < ($prom + $playoff_prom)) {
@@ -78,8 +100,8 @@ class ScmDaysRankingController extends DefaultModuleController
             } else {
                 $rank_color = 'rgba(0,0,0,0)';
             }
-            $event_slug = ScmEventService::get_event_slug($this->event_id());
 
+            // Display table rank
             $this->view->assign_block_vars('ranks', [
                 'C_FAV'           => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
                 'C_FORFEIT'       => $team_rank['status'] == 'forfeit',
@@ -102,19 +124,50 @@ class ScmDaysRankingController extends DefaultModuleController
                 'DEF_BONUS'       => $team_rank['def_bonus'],
             ]);
 
-            foreach (ScmRankingService::get_team_form($this->event_id(), $team_rank['team_id'], $day) as $k => $results)
+            // Display 5 last days results of a team
+            foreach (ScmRankingService::get_health_shape($this->event_id(), $team_rank['team_id'], $day, 5) as $results)
             {
-                foreach ($results as $result => $class)
+                $this->view->assign_block_vars('ranks.form', [
+                    'C_PLAYED' => $results['result'] != 'delayed',
+                    'L_PLAYED' => $this->lang['scm.rank.health.' . $results['result'] . ''],
+                    'CLASS' => $results['class'],
+                    'SCORE' => $results['score']
+                ]);
+            }
+
+            // display team charts
+            $days = $team_array = [];
+            $full_rankings = ScmRankingContentService::get_ranking_content($this->event_id());
+            ksort($full_rankings);
+            for ($i = 1; $i <= $days_number; $i++)
+            {
+                $this->view->assign_block_vars('ranks.matchdays', [
+                    'MATCHDAY' => $i
+                ]);
+            }
+
+            foreach ($full_rankings as $cluster => $teams)
+            {
+                foreach ($teams as $team)
                 {
-                    $this->view->assign_block_vars('ranks.form', [
-                        'C_PLAYED' => $result != 'delayed',
-                        'L_PLAYED' => $this->lang['scm.rank.form.' . $result . ''],
-                        'CLASS' => $class,
-                    ]);
+                    if (!empty($team_rank['team_id']) && $team['team_id'] == $team_rank['team_id'])
+                        $team_array[$team['team_name']][$cluster][] = $team['rank'];
+                }
+            }
+            foreach ($team_array as $team => $days)
+            {
+                foreach ($days as $matchday => $rank)
+                {
+                    if ($matchday <= $day)
+                        $this->view->assign_block_vars('ranks.days', [
+                            'DAY' => $matchday,
+                            'RANK' => $rank[0],
+                        ]);
                 }
             }
         }
 
+        // Display all day played buttons in 'day' page
         $slug = ScmEventService::get_event_slug($this->event_id());
         foreach (ScmDayService::get_days($this->event_id()) as $day)
         {
@@ -124,12 +177,31 @@ class ScmDaysRankingController extends DefaultModuleController
                 'U_DAY' => ScmUrlBuilder::display_days_ranking($this->event_id(), $slug, 'day', $day['day_round'])->rel(),
             ]);
         }
-        $params = ScmParamsService::get_params($this->event_id())->get_bonus();
+
+        $prom_line_color = $this->hex_to_rgb($prom_color);
+        $po_prom_line_color = $this->hex_to_rgb($playoff_prom_color);
+        $po_releg_line_color = $this->hex_to_rgb($playoff_releg_color);
+        $releg_line_color = $this->hex_to_rgb($releg_color);
+
+        // Main templates vars
         $this->view->put_all([
-            'MENU'           => ScmMenuService::build_event_menu($this->event_id()),
+            'MENU' => ScmMenuService::build_event_menu($this->event_id()),
+
+            'C_CHARTS' => $c_chart,
+            'TEAMS_NUMBER' => $teams_number,
+            'DAYS_NUMBER' => $days_number,
+            'PROM_LINE' => $prom,
+            'PROM_LINE_COLOR' => 'rgb(' . implode(', ', $prom_line_color) . ')',
+            'PO_PROM_LINE' => $prom + $playoff_prom,
+            'PO_PROM_LINE_COLOR' => 'rgb(' . implode(', ', $po_prom_line_color) . ')',
+            'PO_RELEG_LINE' => $teams_number - ($releg + $playoff_releg),
+            'PO_RELEG_LINE_COLOR' => 'rgb(' . implode(', ', $po_releg_line_color) . ')',
+            'RELEG_LINE' => $teams_number - $releg,
+            'RELEG_LINE_COLOR' => 'rgb(' . implode(', ', $releg_line_color) . ')',
+
             'C_HAS_GAMES'    => ScmGameService::has_games($this->event_id()),
-            'C_BONUS_SINGLE' => $params == ScmParams::BONUS_SINGLE,
-            'C_BONUS_DOUBLE' => $params == ScmParams::BONUS_DOUBLE,
+            'C_BONUS_SINGLE' => $params->get_bonus() == ScmParams::BONUS_SINGLE,
+            'C_BONUS_DOUBLE' => $params->get_bonus() == ScmParams::BONUS_DOUBLE,
             'C_GENERAL_DAYS' => $section == 'day',
             'U_GENERAL'      => ScmUrlBuilder::display_days_ranking($this->event_id(), $slug, '')->rel(),
             'U_GENERAL_DAYS' => ScmUrlBuilder::display_days_ranking($this->event_id(), $slug, 'day', ScmDayService::get_last_day($this->event_id()))->rel(),
@@ -140,56 +212,30 @@ class ScmDaysRankingController extends DefaultModuleController
         ]);
 	}
 
-    private function build_days_view()
+    private function hex_to_rgb($color)
     {
-        $day = AppContext::get_request()->get_getint('day', 0);
-        $prev_day = $day ? $day : ScmDayService::get_last_day($this->event_id());
-        $prev_dates = [];
-        foreach(ScmGameService::get_games_in_cluster($this->event_id(), $prev_day) as $game)
-        {
-            $prev_dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
-        }
+        $hex = ltrim($color, '#');
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
 
-        foreach (array_unique($prev_dates) as $date)
-        {
-            $this->view->assign_block_vars('prev_dates', [
-                'DATE' => $date
-            ]);
-            foreach(ScmGameService::get_games_in_cluster($this->event_id(), $prev_day) as $game)
-            {
-                $item = new ScmGame();
-                $item->set_properties($game);
-                if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
-                    $this->view->assign_block_vars('prev_dates.prev_days', $item->get_template_vars());
-            }
-        }
+        return [$r, $g, $b];
+    }
+
+    private function build_days_view(HTTPRequestCustom $request)
+    {
+        $day = $request->get_getint('day', 0);
+        $prev_day = $day ? $day : ScmDayService::get_last_day($this->event_id());
 
         $next_day = $day ? $day + 1 : ScmDayService::get_next_day($this->event_id());
-        $next_dates = [];
-        foreach(ScmGameService::get_games_in_cluster($this->event_id(), $next_day) as $game)
-        {
-            $next_dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
-        }
-
-        foreach (array_unique($next_dates) as $date)
-        {
-            $this->view->assign_block_vars('next_dates', [
-                'DATE' => $date
-            ]);
-            foreach(ScmGameService::get_games_in_cluster($this->event_id(), $next_day) as $game)
-            {
-                $item = new ScmGame();
-                $item->set_properties($game);
-                if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
-                    $this->view->assign_block_vars('next_dates.next_days', $item->get_template_vars());
-            }
-        }
 
         $this->view->put_all([
             'C_EVENT_STARTING' => ScmDayService::get_next_day($this->event_id()) == 1,
             'C_EVENT_ENDING' => ($day ? $day : ScmDayService::get_last_day($this->event_id())) == count(ScmDayService::get_days($this->event_id())),
-            'LAST_DAY' => $prev_day,
+            'PREV_DAY' => $prev_day,
             'NEXT_DAY' => $next_day,
+            'PREV_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $prev_day), false),
+            'NEXT_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $next_day), false),
         ]);
     }
 

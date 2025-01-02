@@ -727,35 +727,40 @@ class ScmRankingService
         return $game_teams;
     }
 
-    public static function get_team_form($event_id, $team_id, $day):array
+    public static function get_health_shape(int $event_id, int $team_id, int $day, int $limit):array
     {
         if ($day == 0)
             $day = ScmDayService::get_last_day($event_id);
-        $team_games = ScmGameService::get_last_team_games($event_id, $team_id, $day);
+        $team_games = ScmGameService::get_last_team_games($event_id, $team_id, $day, $limit);
+        usort($team_games, function($a, $b) {
+            return $a['game_date'] - $b['game_date'];
+        });
 
         $team_form = [];
         foreach ($team_games as $game)
         {
             if($game['game_home_id'] == $team_id)
             {
+                $score = $game['game_home_score'] . '-' . $game['game_away_score'];
                 if ($game['game_home_score'] < $game['game_away_score'])
-                    array_push($team_form, ['lost' => 'error']);
+                    $team_form[] = ['result' => 'lost', 'class' => 'error', 'score' => $score];
                 if ($game['game_home_score'] != '' && $game['game_away_score'] != '' && $game['game_home_score'] === $game['game_away_score'])
-                    array_push($team_form, ['draw' => 'visitor']);
+                    $team_form[] = ['result' => 'draw', 'class' => 'visitor', 'score' => $score];
                 if ($game['game_home_score'] > $game['game_away_score'])
-                    array_push($team_form, ['win' => 'success']);
+                    $team_form[] = ['result' => 'win', 'class' => 'success', 'score' => $score];
             }
             if($game['game_away_id'] == $team_id)
             {
+                $score = $game['game_away_score'] . '-' . $game['game_home_score'];
                 if ($game['game_home_score'] > $game['game_away_score'])
-                    array_push($team_form, ['lost' => 'error']);
+                    $team_form[] = ['result' => 'lost', 'class' => 'error', 'score' => $score];
                 if ($game['game_home_score'] != '' && $game['game_away_score'] != '' && $game['game_home_score'] === $game['game_away_score'])
-                    array_push($team_form, ['draw' => 'visitor']);
+                    $team_form[] = ['result' => 'draw', 'class' => 'visitor', 'score' => $score];
                 if ($game['game_home_score'] < $game['game_away_score'])
-                    array_push($team_form, ['win' => 'success']);
+                    $team_form[] = ['result' => 'win', 'class' => 'success', 'score' => $score];
             }
             if ($game['game_home_score'] === '' && $game['game_away_score'] === '')
-                array_push($team_form, ['delayed' => 'administrator']);
+                $team_form[] = ['result' => 'delayed', 'class' => 'administrator', 'score' => ''];
         }
         return $team_form;
     }
