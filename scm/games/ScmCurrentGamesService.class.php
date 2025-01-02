@@ -18,8 +18,8 @@ class ScmCurrentGamesService
         $view->put_all([
             'C_CURRENT_GAMES' => count(ScmGameService::get_current_games()) > 0,
             'C_BEFORE_GAMES' => count(ScmGameService::get_before_current_games()) > 0,
-            'GAMES_LIST' => ScmSingleGamesService::display_games(ScmGameService::get_current_games(), 'cell-flex cell-columns-2'),
-            'BEFORE_GAMES_LIST' => ScmSingleGamesService::display_games(ScmGameService::get_before_current_games(), 'cell-flex cell-columns-2'),
+            'GAMES_LIST' => ScmGameFormat::format_categories(ScmGameService::get_current_games()),
+            'BEFORE_GAMES_LIST' => ScmGameFormat::format_categories(ScmGameService::get_before_current_games()),
         ]);
         return $view;
     }

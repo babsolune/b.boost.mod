@@ -522,7 +522,7 @@ class ScmGame
                 break;
         }
 
-		$address = ScmTeamService::get_team($this->game_home_id) ? (ScmConfig::load()->is_googlemaps_available() && $this->game_stadium_name ? $this->stadium_map()->display() : $this->game_stadium_name) : '';
+		$address = ScmTeamService::get_team($this->game_home_id) ? (ScmConfig::load()->is_googlemaps_available() && $this->game_stadium ? $this->stadium_map()->display() : $this->game_stadium_name) : '';
         $event = ScmEventService::get_event($this->game_event_id);
 
         return array_merge(
@@ -535,7 +535,6 @@ class ScmGame
                 'GAME_SEASON'     => $season->get_season_name(),
                 'GAME_CATEGORY'   => $category->get_name(),
 
-                'C_LATE'          => $this->game_cluster < ScmDayService::get_last_day($this->game_event_id),
                 'C_IS_LIVE'       => ScmGameService::is_live($this->game_event_id, $this->id_game),
                 'C_STATUS'        => $this->game_status && $this->game_status != ScmGame::COMPLETED,
                 'C_HAS_SCORE'     => $c_home_score && $c_away_score,
@@ -563,8 +562,11 @@ class ScmGame
                 'BRACKET'        => ScmBracketService::ntl($this->game_round),
                 'DAY'            => $this->game_cluster,
                 'U_GROUP'        => ScmUrlBuilder::display_groups_rounds($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
+                'U_EDIT_GROUP'   => ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
                 'U_BRACKET'      => ScmUrlBuilder::display_brackets_rounds($event->get_id(), $event->get_event_slug())->rel(),
+                'U_EDIT_BRACKET' => ScmUrlBuilder::edit_brackets_games($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
                 'U_DAY'          => ScmUrlBuilder::display_days_calendar($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
+                'U_EDIT_DAY'     => ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
 
                 'EVENT_NAME'      => ScmEventService::get_event($this->game_event_id)->get_event_name(),
                 'U_EVENT'         => ScmUrlBuilder::event_home($this->game_event_id, ScmEventService::get_event_slug($this->game_event_id))->rel(),

@@ -26,36 +26,13 @@ class ScmDaysCalendarController extends DefaultModuleController
 	private function build_view()
 	{
         $cluster = AppContext::get_request()->get_getint('cluster', 0);
-        $games = ScmGroupService::games_list_from_group($this->event_id(), 'D', $cluster);
         $this->view->put_all([
             'C_ONE_DAY'   => ScmGameService::one_day_event($this->event_id()),
             'MENU'        => ScmMenuService::build_event_menu($this->event_id()),
             'C_HAS_GAMES' => ScmGameService::has_games($this->event_id()),
-            'DAY'         => $cluster
+            'DAY'         => $cluster,
+            'DAY_GAMES'   => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $cluster), false),
         ]);
-
-        $dates = [];
-        foreach($games as $game)
-        {
-            $dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT);
-        }
-
-        foreach (array_unique($dates) as $date)
-        {
-            $this->view->assign_block_vars('dates', [
-                'DATE' => $date
-            ]);
-            foreach($games as $game)
-            {
-                $item = new ScmGame();
-                $item->set_properties($game);
-                if ($date == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
-                {
-                    $this->view->assign_block_vars('dates.games', $item->get_template_vars());
-                    $item->get_details_template($this->view, 'dates.games');
-                }
-            }
-        }
 	}
 
 	private function get_event()

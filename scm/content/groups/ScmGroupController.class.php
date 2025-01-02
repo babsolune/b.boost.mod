@@ -24,10 +24,11 @@ class ScmGroupController extends DefaultModuleController
 
 	private function build_view()
 	{
+        $c_hat_ranking = (bool)$this->get_params()->get_hat_ranking();
         $this->view->put_all([
             'C_ONE_DAY'             => ScmGameService::one_day_event($this->event_id()),
             'C_DISPLAY_PLAYGROUNDS' => $this->get_params()->get_display_playgrounds(),
-            'C_HAT_RANKING'         => $this->get_params()->get_hat_ranking(),
+            'C_HAT_RANKING'         => $c_hat_ranking,
             'C_HAS_GAMES'           => ScmGameService::has_games($this->event_id()),
 
             'MENU' => ScmMenuService::build_event_menu($this->event_id())
@@ -35,40 +36,15 @@ class ScmGroupController extends DefaultModuleController
         $group = AppContext::get_request()->get_getint('cluster', 0);
 
         // Games list
-        $group_games = ScmGroupService::games_list_from_group($this->event_id(), 'G', $group);
         $this->view->put_all([
             'GROUP' => ScmGroupService::ntl($group),
-            'DAY' => $group
+            'DAY' => $group,
+            'MATCHDAY_GAMES' => ScmGameFormat::format_cluster(ScmGroupService::games_list_from_group($this->event_id(), 'G', $group), false),
+            'ROUND_GAMES'    => ScmGameFormat::format_cluster(ScmGroupService::games_list_from_group($this->event_id(), 'G', $group), true,),
         ]);
 
-        $matchdays = [];
-        foreach($group_games as $game)
-        {
-            $matchdays[$game['game_round']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
-        }
-
-        foreach ($matchdays as $matchday => $dates)
-        {
-            $this->view->assign_block_vars('matchdays', [
-                'MATCHDAY' => $matchday
-            ]);
-            foreach ($dates as $date => $games)
-            {
-                $this->view->assign_block_vars('matchdays.dates', [
-                    'DATE' => $date
-                ]);
-                foreach($games as $game)
-                {
-                    $item = new ScmGame();
-                    $item->set_properties($game);
-                    $this->view->assign_block_vars('matchdays.dates.games', $item->get_template_vars());
-                    $item->get_details_template($this->view, 'matchdays.dates.games');
-                }
-            }
-        }
-
         // Ranking
-        if($this->get_params()->get_hat_days())
+        if($c_hat_ranking)
             $ranks = ScmRankingService::general_days_ranking($this->event_id(), $group);
         else
             $ranks = ScmRankingService::general_groups_ranking($this->event_id(), $group);
@@ -96,9 +72,7 @@ class ScmGroupController extends DefaultModuleController
             } else {
                 $rank_color = 'rgba(0,0,0,0)';
             }
-            $this->view->assign_block_vars('ranks', array_merge(
-                Date::get_array_tpl_vars(new Date($game['game_date'], Timezone::SERVER_TIMEZONE), 'game_date'),
-                [
+            $this->view->assign_block_vars('ranks', [
                     'C_FAV'         => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
                     'RANK'          => $i + 1,
                     'RANK_COLOR'    => $rank_color,
@@ -113,7 +87,7 @@ class ScmGroupController extends DefaultModuleController
                     'GOALS_AGAINST' => $team_rank['goals_against'],
                     'GOAL_AVERAGE'  => $team_rank['goal_average'],
                 ]
-            ));
+            );
         }
 	}
 

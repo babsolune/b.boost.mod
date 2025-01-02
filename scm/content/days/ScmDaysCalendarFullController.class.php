@@ -43,20 +43,8 @@ class ScmDaysCalendarFullController extends DefaultModuleController
         {
             $this->view->assign_block_vars('days', [
                 'DAY' => $matchday,
+                'DAYS_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $matchday), false),
             ]);
-            foreach ($dates as $date => $games)
-            {
-                $this->view->assign_block_vars('days.dates', [
-                    'DATE' => $date,
-                ]);
-                foreach ($games as $game)
-                {
-                    $item = new ScmGame();
-                    $item->set_properties($game);
-                    $this->view->assign_block_vars('days.dates.items', array_merge($item->get_template_vars(), [
-                    ]));
-                }
-            }
         }
 	}
 

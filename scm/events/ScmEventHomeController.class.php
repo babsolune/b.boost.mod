@@ -67,6 +67,7 @@ class ScmEventHomeController extends DefaultModuleController
                     'C_HAS_GAMES'    => $c_has_games,
                     'C_IS_ENDED'     => $item->get_end_date() < $now,
 
+                    'ORDER'             => $item->get_sub_order(),
                     'CHAMPIONSHIP_HOME' => $c_championship ? ScmEventHomeService::build_championship_home($item->get_id()) : '',
                     'TOURNAMENT_HOME'   => $c_tournament ? ScmEventHomeService::build_tournament_home($item->get_id()) : '',
                     'CUP_HOME'          => $c_cup ? ScmEventHomeService::build_cup_home($item->get_id()) : '',
