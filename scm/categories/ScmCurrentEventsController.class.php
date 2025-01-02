@@ -137,6 +137,7 @@ class ScmCurrentEventsController extends DefaultModuleController
 	private function generate_response()
 	{
 		$response = new SiteDisplayResponse($this->view);
+        $config = ScmConfig::load();
 
 		$graphical_environment = $response->get_graphical_environment();
         $graphical_environment->set_page_title($this->lang['scm.current.events'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
@@ -146,6 +147,8 @@ class ScmCurrentEventsController extends DefaultModuleController
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['scm.module.title'], ScmUrlBuilder::home());
+        if ($config->get_homepage() != ScmConfig::EVENT_LIST)
+		$breadcrumb->add($this->lang['scm.current.events'], ScmUrlBuilder::display_event_list());
 
 		return $response;
 	}

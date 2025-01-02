@@ -178,6 +178,7 @@ class ScmCategoryController extends DefaultModuleController
 	{
 		$page = $request->get_getint('page', 1);
 		$response = new SiteDisplayResponse($this->view);
+        $config = ScmConfig::load();
 
 		$graphical_environment = $response->get_graphical_environment();
 
@@ -191,6 +192,8 @@ class ScmCategoryController extends DefaultModuleController
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['scm.module.title'], ScmUrlBuilder::home());
+        if ($config->get_homepage() != ScmConfig::CATEGORIES)
+		$breadcrumb->add($this->lang['category.categories'], ScmUrlBuilder::display_category(0, 'root'));
 
 		$categories = array_reverse(CategoriesService::get_categories_manager('scm')->get_parents($this->get_category()->get_id(), true));
 		foreach ($categories as $id => $category)

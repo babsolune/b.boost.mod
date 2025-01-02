@@ -71,32 +71,8 @@ class ScmAroundGamesController extends DefaultModuleController
 
         $this->view->put_all([
 			'C_NEXT_ITEMS' => count($next_events_games) > 0,
-            'NEXT_ITEMS' => ScmSingleGamesService::display_games($next_events_games)
+            'NEXT_ITEMS' => ScmGameFormat::format_categories($next_events_games)
 		]);
-
-        // foreach($next_events_games as $game)
-        // {
-        //     $category = ScmEventService::get_event($game['game_event_id'])->get_category();
-        //     $next_categories[$category->get_id()][$game['game_event_id']] = $game;
-        // }
-
-        // ksort($next_categories);
-
-        // foreach ($next_categories as $k => $games)
-        // {
-        //     $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k);
-        //     $this->view->assign_block_vars('next_categories', [
-        //         'CATEGORY_NAME' => $category->get_name(),
-        //         'U_CATEGORY' => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
-        //     ]);
-        //     foreach ($games as $game)
-        //     {
-        //         $item = new ScmGame();
-        //         $item->set_properties($game);
-
-        //         $this->view->assign_block_vars('next_categories.next_items', $item->get_template_vars());
-        //     }
-        // }
 
         // Previous games
         $prev_games = $prev_events = $prev_events_games = $prev_categories = [];
@@ -132,32 +108,8 @@ class ScmAroundGamesController extends DefaultModuleController
 
         $this->view->put_all([
 			'C_PREV_ITEMS' => count($prev_events_games) > 0,
-            'PREV_ITEMS' => ScmSingleGamesService::display_games($next_events_games)
+            'PREV_ITEMS' => ScmGameFormat::format_categories($prev_events_games)
 		]);
-
-        // foreach($prev_events_games as $game)
-        // {
-        //     $category = ScmEventService::get_event($game['game_event_id'])->get_category();
-        //     $prev_categories[$category->get_id()][$game['game_event_id']] = $game;
-        // }
-
-        // ksort($prev_categories);
-
-        // foreach ($prev_categories as $k => $games)
-        // {
-        //     $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($k);
-        //     $this->view->assign_block_vars('prev_categories', [
-        //         'CATEGORY_NAME' => $category->get_name(),
-        //         'U_CATEGORY' => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
-        //     ]);
-        //     foreach ($games as $game)
-        //     {
-        //         $item = new ScmGame();
-        //         $item->set_properties($game);
-
-        //         $this->view->assign_block_vars('prev_categories.prev_items', $item->get_template_vars());
-        //     }
-        // }
 	}
 
 	private function get_category()
@@ -194,6 +146,7 @@ class ScmAroundGamesController extends DefaultModuleController
 	private function generate_response()
 	{
 		$response = new SiteDisplayResponse($this->view);
+        $config = ScmConfig::load();
 
 		$graphical_environment = $response->get_graphical_environment();
         $graphical_environment->set_page_title($this->lang['scm.around.games'], $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
@@ -203,6 +156,8 @@ class ScmAroundGamesController extends DefaultModuleController
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['scm.module.title'], ScmUrlBuilder::home());
+        if ($config->get_homepage() != ScmConfig::GAME_LIST)
+		$breadcrumb->add($this->lang['scm.around.games'], ScmUrlBuilder::display_game_list());
 
 		return $response;
 	}
