@@ -1,8 +1,8 @@
 <section id="module-scm" class="category-{CATEGORY_ID} single-item">
 	# INCLUDE MENU #
     # IF NOT C_IS_MASTER #<h2>{@scm.infos}</h2># ENDIF #
-	<div class="sub-section">
-		<div class="content-container">
+	<div class="sub-section modal-container">
+		<div class="content-container cell-flex">
 			# IF NOT C_VISIBLE #
 				<div class="content">
 					# INCLUDE NOT_VISIBLE_MESSAGE #
@@ -13,22 +13,24 @@
             # ENDIF #
             # IF C_IS_MASTER #
                 # START sub_events #
-                    <h2>
-                        <a href="{sub_events.U_EVENT}" class="offload">
-                            {sub_events.DIVISION_NAME}# IF sub_events.C_HAS_POOL # {sub_events.POOL}# ENDIF #
-                        </a>
-                    </h2>
-                    <div class="more">
-                        <span>{sub_events.START_DATE} | {sub_events.END_DATE}</span>
-                        # IF sub_events.C_IS_ENDED #
-                            <span class="warning">{@scm.event.ended.event}</span>
-                        # ENDIF #
-                    </div>
-                    <div class="content">
-                        # IF sub_events.C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE sub_events.CHAMPIONSHIP_HOME #</div># ENDIF #
-                        # IF sub_events.C_CUP #<div itemprop="text"># INCLUDE sub_events.CUP_HOME #</div># ENDIF #
-                        # IF sub_events.C_TOURNAMENT #<div itemprop="text"># INCLUDE sub_events.TOURNAMENT_HOME #</div># ENDIF #
-                        # IF sub_events.C_PRACTICE #<div itemprop="text"># INCLUDE sub_events.PRACTICE_HOME #</div># ENDIF #
+                    <div style="order: {sub_events.ORDER}">
+                        <h2>
+                            <a href="{sub_events.U_EVENT}" class="offload">
+                                {sub_events.DIVISION_NAME}# IF sub_events.C_HAS_POOL # {sub_events.POOL}# ENDIF #
+                            </a>
+                        </h2>
+                        <div class="more">
+                            <span>{sub_events.START_DATE} | {sub_events.END_DATE}</span>
+                            # IF sub_events.C_IS_ENDED #
+                                <span class="warning">{@scm.event.ended.event}</span>
+                            # ENDIF #
+                        </div>
+                        <div class="content">
+                            # IF sub_events.C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE sub_events.CHAMPIONSHIP_HOME #</div># ENDIF #
+                            # IF sub_events.C_CUP #<div itemprop="text"># INCLUDE sub_events.CUP_HOME #</div># ENDIF #
+                            # IF sub_events.C_TOURNAMENT #<div itemprop="text"># INCLUDE sub_events.TOURNAMENT_HOME #</div># ENDIF #
+                            # IF sub_events.C_PRACTICE #<div itemprop="text"># INCLUDE sub_events.PRACTICE_HOME #</div># ENDIF #
+                        </div>
                     </div>
                 # END sub_events #
             # ELSE #

@@ -8,148 +8,58 @@
 </div>
 
 <div class="cell-flex cell-columns-2">
-    <div class="days-calendar">
-        # IF C_EVENT_STARTING #
-            <div class="message-helper bgc notice m-t">{L_STARTING_DATE}</div>
-        # ELSE #
-            <div class="responsive-table">
-                <table class="bordered-table">
-                    <caption>{@scm.day} {LAST_DAY}</caption>
-                    <colgroup class="hidden-small-screens">
-                        <col class="md-width-pc-6" />
-                        <col class="md-width-pc-39" />
-                        <col class="md-width-pc-8" />
-                        <col class="md-width-pc-8" />
-                        <col class="md-width-pc-39" />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th aria-label="{@scm.th.hourly}"><i class="far fa-clock"></i></th>
-                            <th>{@scm.th.home.team}</th>
-                            <th colspan="2">{@scm.th.score}</th>
-                            <th>{@scm.th.away.team}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        # START prev_dates #
-                            <tr><td colspan="5">{prev_dates.DATE}</td></tr>
-                            # START prev_dates.prev_days #
-                                <tr class="# IF prev_dates.prev_days.C_HAS_SCORE #has-score-color# ENDIF ## IF prev_dates.prev_days.C_EXEMPT #bgc notice# ENDIF #">
-                                    <td class="small">{prev_dates.prev_days.GAME_DATE_HOUR_MINUTE}</td>
-                                    <td class="align-right home-{prev_dates.prev_days.ID}# IF prev_dates.prev_days.C_HOME_FAV # fav-team# ENDIF #">
-                                        <div class="flex-team flex-right">
-                                            <span>
-                                                <a
-                                                    href="{prev_dates.prev_days.U_HOME_CALENDAR}"
-                                                    aria-label="{@scm.club.see.calendar}# IF prev_dates.prev_days.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_dates.prev_days.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
-                                                    # IF prev_dates.prev_days.HOME_FORFEIT #data-tooltip-class="warning"# ENDIF #
-                                                    # IF prev_dates.prev_days.HOME_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
-                                                    class="offload# IF prev_dates.prev_days.HOME_FORFEIT # warning# ENDIF ## IF prev_dates.prev_days.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #"
-                                                >{prev_dates.prev_days.HOME_TEAM}</a>
-                                            </span>
-                                            # IF prev_dates.prev_days.C_HAS_HOME_LOGO #<img src="{prev_dates.prev_days.HOME_LOGO}" alt="{prev_dates.prev_days.HOME_TEAM}"># ENDIF #
-                                        </div>
-                                    </td>
-                                    # IF prev_dates.prev_days.C_STATUS #
-                                        <td colspan="2">{prev_dates.prev_days.STATUS}</td>
-                                    # ELSE #
-                                        <td>{prev_dates.prev_days.HOME_SCORE}</td>
-                                        <td>{prev_dates.prev_days.AWAY_SCORE}</td>
-                                    # ENDIF #
-                                    <td class="align-left away-{prev_dates.prev_days.ID}# IF prev_dates.prev_days.C_AWAY_FAV # fav-team# ENDIF #">
-                                        <div class="flex-team flex-left">
-                                            # IF prev_dates.prev_days.C_HAS_AWAY_LOGO #<img src="{prev_dates.prev_days.AWAY_LOGO}" alt="{prev_dates.prev_days.AWAY_TEAM}"># ENDIF #
-                                            <span>
-                                                <a
-                                                    href="{prev_dates.prev_days.U_AWAY_CALENDAR}"
-                                                    aria-label="{@scm.club.see.calendar}# IF prev_dates.prev_days.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF prev_dates.prev_days.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
-                                                    # IF prev_dates.prev_days.AWAY_FORFEIT #data-tooltip-class="warning"# ENDIF #
-                                                    # IF prev_dates.prev_days.AWAY_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
-                                                    class="offload# IF prev_dates.prev_days.AWAY_FORFEIT # warning# ENDIF ## IF prev_dates.prev_days.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #"
-                                                >{prev_dates.prev_days.AWAY_TEAM}</a>
-                                            </span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            # END prev_dates.prev_days #
-                        # END prev_dates #
-                    </tbody>
-                </table>
+    <div class="cell days-calendar">
+        <div class="tabs-container">
+            <nav id="matchdays" class="tabs-nav">
+                <ul class="cell-header">
+                    <li>
+                        # IF C_EVENT_STARTING #
+                            <a href="#" data-tabs="" data-target="prev-panel-{EVENT_ID}" class="bgc notice active-tab">{L_STARTING_DATE}</a>
+                        # ELSE #
+                            <a href="#" data-tabs="" data-target="prev-panel-{EVENT_ID}" class="active-tab"> {@scm.day} {PREV_DAY}</a>
+                        # ENDIF #
+                    </li>
+                    # IF NOT C_EVENT_STARTING #
+                        <li>
+                            # IF C_EVENT_ENDING #
+                                <a class="bgc notice" href="#" data-tabs="" data-target="next-panel-{EVENT_ID}">{@scm.event.ended.event}</a>
+                            # ELSE #
+                                <a href="#" data-tabs="" data-target="next-panel-{EVENT_ID}">{@scm.day} {NEXT_DAY}</a>
+                            # ENDIF #
+                        </li>
+                    # ENDIF #
+                </ul>
+            </nav>
+            <div id="prev-panel-{EVENT_ID}" class="first-tab tabs tabs-animation">
+                <div class="content-panel">
+                    # IF C_EVENT_STARTING #
+                        <div class="message-helper bgc notice m-t">{L_STARTING_DATE}</div>
+                    # ELSE #
+                        <div class="cell">
+                            <header class="cell-header"><h3 class="cell-name">{@scm.day} {PREV_DAY}</h3></header>
+                            # INCLUDE PREV_GAMES #
+                        </div>
+                    # ENDIF #
+                </div>
             </div>
-        # ENDIF #
-        # IF C_EVENT_ENDING #
-            <div class="message-helper bgc notice">{@scm.event.ended.event}</div>
-        # ELSE #
-            <div class="responsive-table">
-                <table class="bordered-table">
-                    <caption>{@scm.day} {NEXT_DAY}</caption>
-                    <colgroup class="hidden-small-screens">
-                        <col class="md-width-pc-6" />
-                        <col class="md-width-pc-39" />
-                        <col class="md-width-pc-08" />
-                        <col class="md-width-pc-08" />
-                        <col class="md-width-pc-39" />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th aria-label="{@scm.th.hourly}"><i class="far fa-clock"></i></th>
-                            <th>{@scm.th.home.team}</th>
-                            <th colspan="2">{@scm.th.score}</th>
-                            <th>{@scm.th.away.team}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        # START next_dates #
-                            <tr><td colspan="5">{next_dates.DATE}</td></tr>
-                            # START next_dates.next_days #
-                                <tr class="# IF next_dates.next_days.C_HAS_SCORE #has-score-color# ENDIF ## IF next_dates.next_days.C_EXEMPT #bgc notice# ENDIF #">
-                                    <td class="small">{next_dates.next_days.GAME_DATE_HOUR_MINUTE}</td>
-                                    <td class="align-right home-{next_dates.next_days.ID}# IF next_dates.next_days.C_HOME_FAV # text-strong# ENDIF #">
-                                        <div class="flex-team flex-right">
-                                            <span>
-                                                <a
-                                                    href="{next_dates.next_days.U_HOME_CALENDAR}"
-                                                    aria-label="{@scm.club.see.calendar}# IF next_dates.next_days.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_dates.next_days.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
-                                                    # IF next_dates.next_days.HOME_FORFEIT #data-tooltip-class="warning"# ENDIF #
-                                                    # IF next_dates.next_days.HOME_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
-                                                    class="offload# IF next_dates.next_days.HOME_FORFEIT # warning# ENDIF ## IF next_dates.next_days.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #"
-                                                >{next_dates.next_days.HOME_TEAM}</a>
-                                            </span>
-                                            # IF next_dates.next_days.C_HAS_HOME_LOGO #<img src="{next_dates.next_days.HOME_LOGO}" alt="{next_dates.next_days.HOME_TEAM}"># ENDIF #
-                                        </div>
-                                    </td>
-                                    # IF next_dates.next_days.C_STATUS #
-                                        <td colspan="2">{next_dates.next_days.STATUS}</td>
-                                    # ELSE #
-                                        <td>{next_dates.next_days.HOME_SCORE}</td>
-                                        <td>{next_dates.next_days.AWAY_SCORE}</td>
-                                    # ENDIF #
-                                    <td class="align-left away-{next_dates.next_days.ID}# IF next_dates.next_days.C_AWAY_FAV # text-strong# ENDIF #">
-                                        <div class="flex-team flex-LEFT">
-                                            # IF next_dates.next_days.C_HAS_AWAY_LOGO #<img src="{next_dates.next_days.AWAY_LOGO}" alt="{next_dates.next_days.AWAY_TEAM}"># ENDIF #
-                                            <span>
-                                                <a
-                                                    href="{next_dates.next_days.U_AWAY_CALENDAR}"
-                                                    aria-label="{@scm.club.see.calendar}# IF next_dates.next_days.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF next_dates.next_days.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
-                                                    # IF next_dates.next_days.AWAY_FORFEIT #data-tooltip-class="warning"# ENDIF #
-                                                    # IF next_dates.next_days.AWAY_GENERAL_FORFEIT #data-tooltip-class="warning"# ENDIF #
-                                                    class="offload# IF next_dates.next_days.AWAY_FORFEIT # warning# ENDIF ## IF next_dates.next_days.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #"
-                                                >{next_dates.next_days.AWAY_TEAM}</a>
-                                            </span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            # END next_dates.next_days #
-                        # END next_dates #
-                    </tbody>
-                </table>
+            <div id="next-panel-{EVENT_ID}" class="tabs tabs-animation">
+                <div class="content-panel">
+                    # IF C_EVENT_ENDING #
+                        <div class="message-helper bgc notice">{@scm.event.ended.event}</div>
+                    # ELSE #
+                        <div class="cell">
+                            <header class="cell-header"><h3 class="cell-name">{@scm.day} {NEXT_DAY}</h3></header>
+                            # INCLUDE NEXT_GAMES #
+                        </div>
+                    # ENDIF #
+                </div>
             </div>
-        # ENDIF #
+        </div>
     </div>
-    <div class="days-ranking">
+    <div class="cell days-ranking">
         <div class="scm-table">
-            <header class="m-t flex-between">
-                <h3>{@scm.ranking}</h3>
+            <header class="cell-header flex-between">
+                <h3 class="cell-name">{@scm.ranking}</h3>
                 # IF C_CACHE_FILE #
                     <a href="{U_CACHE_FILE}" class="offload small text-italic"><i class="fa fa-code"></i>. json</a>
                 # ENDIF #

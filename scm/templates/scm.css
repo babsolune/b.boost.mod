@@ -29,6 +29,11 @@
     content: none;
 }
 
+nav#matchdays {
+    margin: 0;
+    padding: 0.309em;
+}
+
 @media (min-width: 769px) {
     .cell-inline .cell {
         max-width: 305px;
@@ -401,8 +406,9 @@ th.bgc-sub a {
 .grouped-fields .form-field-action-link a {
     position: absolute;
     bottom: 1.809em;
-    right: 1.618em;
+    right: 0.618em;
     text-align: right;
+    z-index: 2;
 }
 
 .game-playground input,
@@ -623,6 +629,7 @@ th.bgc-sub a {
 
 .flex-right {
     justify-content: flex-end;
+    text-align: right;
 }
 
 .flex-left {
@@ -634,6 +641,7 @@ th.bgc-sub a {
     .flex-team img  { order: 1; }
     .flex-right {
         justify-content: flex-start;
+        text-align: left;
     }
     .invert-team .game-team  { order: 1; }
     .invert-team .game-score { order: 2; }
@@ -661,9 +669,6 @@ th.bgc-sub a {
 .scm-line-group  {
     display: flex;
     flex-direction: column;
-}
-.m-t {
-    margin-top: 1.456em;
 }
 
 .scm-line-group {
@@ -734,6 +739,10 @@ th.bgc-sub a {
 
 .cell-game .game-separator {
     display: none;
+}
+
+.cell-vertical .cell-game {
+    margin-top: 0.309em;
 }
 
 @media (min-width: 769px) {
