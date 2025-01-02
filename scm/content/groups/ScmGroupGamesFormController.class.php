@@ -187,7 +187,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     ${'fieldset_' . $field}->add_field(new FormFieldSimpleSelectChoice('status_' . $field, '', $item->get_game_status(),
                         [
                             new FormFieldSelectChoiceOption('', ''),
-                            new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.completed'], ScmGame::COMPLETED),
+                            // new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.completed'], ScmGame::COMPLETED),
                             new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.delayed'], ScmGame::DELAYED),
                             new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.stopped'], ScmGame::STOPPED)
                         ],
