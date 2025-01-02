@@ -187,10 +187,12 @@ class ScmDivisionFormController extends DefaultModuleController
 
 		if ($division->get_id_division() === null)
 		{
-			$breadcrumb->add($this->lang['scm.add.division'], ScmUrlBuilder::add_division($division->get_id_division()));
 			$graphical_environment->set_page_title($this->lang['scm.add.division'], $this->lang['scm.module.title']);
 			$graphical_environment->get_seo_meta_data()->set_description($this->lang['scm.add.division']);
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::add_division($division->get_id_division()));
+
+            $breadcrumb->add($this->lang['scm.divisions.manager'], ScmUrlBuilder::manage_divisions());
+			$breadcrumb->add($this->lang['scm.add.division'], ScmUrlBuilder::add_division($division->get_id_division()));
 		}
 		else
 		{
@@ -202,6 +204,7 @@ class ScmDivisionFormController extends DefaultModuleController
 			$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::edit_division($division->get_id_division()));
 
 			$breadcrumb->add($division->get_division_name(), '');
+            $breadcrumb->add($this->lang['scm.divisions.manager'], ScmUrlBuilder::manage_divisions());
 			$breadcrumb->add($this->lang['scm.edit.division'], ScmUrlBuilder::edit_division($division->get_id_division()));
 		}
 

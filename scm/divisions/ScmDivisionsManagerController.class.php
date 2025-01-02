@@ -143,7 +143,6 @@ class ScmDivisionsManagerController extends DefaultModuleController
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['scm.module.title'], ScmUrlBuilder::home());
-
 		$breadcrumb->add($this->lang['scm.divisions.manager'], ScmUrlBuilder::manage_divisions());
 
 		return $response;

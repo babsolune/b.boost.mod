@@ -164,13 +164,13 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/matchday/' . $cluster);
 	}
 
-    // Days calendar
+    // Days calendar full
 	public static function display_days_calendar_full($event_id, $event_slug)
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/full/');
 	}
 
-    // Days calendar
+    // Days checker
 	public static function days_checker($event_id, $event_slug)
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/checker/');

@@ -34,7 +34,10 @@ class ScmEventFormController extends DefaultModuleController
 
 	private function build_form(HTTPRequestCustom $request)
 	{
-		$form = new HTMLForm(self::class);
+        $now = new Date();
+        $tomorow = new Date($now->get_timestamp() + 86400, Timezone::USER_TIMEZONE);
+
+        $form = new HTMLForm(self::class);
 		$form->set_layout_title($this->event_id() === null ? $this->lang['scm.add.event'] : ($this->lang['scm.edit.event']));
 
 		$fieldset = new FormFieldsetHTML('scm', $this->lang['form.parameters']);
@@ -97,11 +100,11 @@ class ScmEventFormController extends DefaultModuleController
             ]
         ));
 
-        $fieldset->add_field($start_date = new FormFieldDateTime('start_date', $this->lang['scm.event.start.date'], $this->get_event()->get_start_date(),
+        $fieldset->add_field($start_date = new FormFieldDateTime('start_date', $this->lang['scm.event.start.date'], ($this->is_new_event ? $now : $this->get_event()->get_start_date()),
             ['required' => true]
         ));
 
-        $fieldset->add_field($end_date = new FormFieldDateTime('end_date', $this->lang['scm.event.end.date'], $this->get_event()->get_end_date(),
+        $fieldset->add_field($end_date = new FormFieldDateTime('end_date', $this->lang['scm.event.end.date'], ($this->is_new_event ? $tomorow : $this->get_event()->get_end_date()),
             ['required' => true]
         ));
 
@@ -150,7 +153,7 @@ class ScmEventFormController extends DefaultModuleController
                 ]
 			));
 
-			$publication_fieldset->add_field($publishing_start_date = new FormFieldDateTime('publishing_start_date', $this->lang['form.start.date'], ($this->get_event()->get_publishing_start_date() === null ? new Date() : $this->get_event()->get_publishing_start_date()),
+			$publication_fieldset->add_field($publishing_start_date = new FormFieldDateTime('publishing_start_date', $this->lang['form.start.date'], ($this->get_event()->get_publishing_start_date() === null ? $now : $this->get_event()->get_publishing_start_date()),
 				['hidden' => ($request->is_post_method() ? ($request->get_postint(self::class . '_publication_state', 0) != ScmEvent::DEFERRED_PUBLICATION) : ($this->get_event()->get_publishing_state() != ScmEvent::DEFERRED_PUBLICATION))]
 			));
 
@@ -167,7 +170,7 @@ class ScmEventFormController extends DefaultModuleController
                 ]
 			));
 
-			$publication_fieldset->add_field($publishing_end_date = new FormFieldDateTime('publishing_end_date', $this->lang['form.end.date'], ($this->get_event()->get_publishing_end_date() === null ? new Date() : $this->get_event()->get_publishing_end_date()),
+			$publication_fieldset->add_field($publishing_end_date = new FormFieldDateTime('publishing_end_date', $this->lang['form.end.date'], ($this->get_event()->get_publishing_end_date() === null ? $now : $this->get_event()->get_publishing_end_date()),
 				['hidden' => ($request->is_post_method() ? !$request->get_postbool(self::class . '_end_date_enabled', false) : !$this->get_event()->is_end_date_enabled())]
 			));
 
