@@ -153,8 +153,8 @@ class ScmUrlBuilder
     // Days ranking
 	public static function display_days_ranking($event_id, $event_slug, $section = '', $cluster = '')
 	{
-        $section = !empty($section) ? '/' . $section : '';
-        $day = !empty($day) ? '/' . $day : '';
+        $section = !empty($section) ? '/' . $section . '/' : '';
+        $cluster = !empty($cluster) ? '/' . $cluster : '';
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/ranking/' . $section . $cluster);
 	}
 
@@ -176,10 +176,16 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/checker/');
 	}
 
-    // Days calendar
+    // Delayed games in an event
 	public static function days_delayed($event_id, $event_slug)
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/delayed/');
+	}
+
+    // All delayed games
+	public static function late_games()
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/delayed/');
 	}
 
     // Team calendar

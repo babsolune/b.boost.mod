@@ -25,7 +25,7 @@ class ScmTreeLinks implements ModuleTreeLinksExtensionPoint
         $tree->add_link(new ModuleLink($lang['scm.around.games'], ScmUrlBuilder::display_game_list(), $config->get_homepage() !== ScmConfig::GAME_LIST && ScmAuthorizationsService::check_authorizations()->read()));
         $tree->add_link(new ModuleLink($lang['scm.current.events'], ScmUrlBuilder::display_event_list(), $config->get_homepage() !== ScmConfig::EVENT_LIST && ScmAuthorizationsService::check_authorizations()->read()));
 
-        $change_event = new ModuleLink($lang['scm.change.event'], '#change_event', ScmAuthorizationsService::check_authorizations()->moderation(), 'bgc moderator');
+        $change_event = new ModuleLink($lang['scm.choose.event'], '#change_event', ScmAuthorizationsService::check_authorizations()->moderation(), 'bgc moderator');
             foreach ($this->current_event_list($change_event) as $event)
             {
                 $event['sub_link'];
@@ -50,6 +50,7 @@ class ScmTreeLinks implements ModuleTreeLinksExtensionPoint
         $tree->add_link($season);
 
 		$tree->add_link(new AdminModuleLink($lang['form.configuration'], ScmUrlBuilder::configuration()));
+		$tree->add_link(new ModuleLink($lang['scm.games.late.list'], ScmUrlBuilder::late_games(), ScmAuthorizationsService::check_authorizations()->moderation(), 'bgc warning'));
 
 		if (ModulesManager::get_module($module_id)->get_configuration()->get_documentation())
 			$tree->add_link(new ModuleLink($lang['form.documentation'], ModulesManager::get_module('scm')->get_configuration()->get_documentation(), ScmAuthorizationsService::check_authorizations()->moderation()));
