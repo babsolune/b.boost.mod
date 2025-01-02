@@ -20,8 +20,9 @@ if ($config->is_right_column_disabled())
     $columns_disabled->set_disable_right_columns(true);
 
 $url_controller_mappers = [
-	// Configuration
+	// Administration
 	new UrlControllerMapper('AdminScmConfigController', '`^/admin(?:/config)?/?$`'),
+	new UrlControllerMapper('ScmDelayedGamesController', '`^/delayed/?$`'),
 
 	//Categories
 	new UrlControllerMapper('DefaultCategoriesManagementController', '`^/categories/?$`'),
@@ -46,7 +47,6 @@ $url_controller_mappers = [
 	new UrlControllerMapper('ScmDaysCalendarFullController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/full/?([0-9]+)?/?$`', ['event_id', 'event_slug']),
 	new UrlControllerMapper('ScmDaysRankingController', '`^/?([0-9]+)-([a-z0-9-_]+)?/ranking/?([a-z]+)?/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'section', 'day']),
 	new UrlControllerMapper('ScmDaysCheckerController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/checker/?$`', ['event_id', 'event_slug']),
-	new UrlControllerMapper('ScmDaysDelayedController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/delayed/?$`', ['event_id', 'event_slug']),
 	new UrlControllerMapper('ScmGroupController', '`^/?([0-9]+)-([a-z0-9-_]+)?/group/?([0-9]+)?/?([a-z]+)?/?$`', ['event_id', 'event_slug', 'cluster', 'type']),
 	new UrlControllerMapper('ScmBracketController', '`^/?([0-9]+)-([a-z0-9-_]+)?/bracket/?$`', ['event_id', 'event_slug']),
 	new UrlControllerMapper('ScmPracticeController', '`^/?([0-9]+)-([a-z0-9-_]+)?/practice/?$`', ['event_id', 'event_slug']),
