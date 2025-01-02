@@ -17,6 +17,7 @@ $lang['scm.mini.next']    = 'Prochains matchs';
 
 $lang['scm.pool']              = 'Sous-groupe';
 $lang['scm.event.pool']        = 'Sous-groupe de la compétition';
+$lang['scm.group.results']     = 'Résultats du groupe';
 $lang['scm.event.start.date']  = 'Date de début';
 $lang['scm.event.end.date']    = 'Date de fin';
 $lang['scm.event.not.started'] = 'La compétition débute le :date';
@@ -48,11 +49,11 @@ $lang['scm.edit.event']       = 'Modifier une compétition';
 
 $lang['scm.filter.events']     = 'Filtrer les compétitions';
 $lang['scm.events.management'] = 'Gestion des compétitions';
-$lang['scm.change.event']      = 'Changer de compétition';
+$lang['scm.choose.event']      = 'Choisir une compétition';
 
 // Game form
-$lang['scm.waiting.ranking']            = 'Calcul du classement.';
-$lang['scm.waiting.ranking.next']       = 'Des matchs sur une date ulterieure ont déjà été joués';
+$lang['scm.waiting.ranking']            = 'Enregistrement des données.';
+$lang['scm.waiting.ranking.next']       = 'Des matchs ont déjà été joués sur une date ulterieure';
 $lang['scm.waiting.please']             = 'Veuillez patienter ...';
 $lang['scm.game.form.date']             = 'Date/horaire du match';
 $lang['scm.game.form.home.team']        = 'Équipe des locaux';
@@ -83,10 +84,10 @@ $lang['scm.game.event.summary']      = 'Résumé du match';
 $lang['scm.game.event.empty.field']  = 'Texte de remplacement';
 
 // Front titles
-$lang['scm.infos']  = 'Informations générales';
-$lang['scm.calendar']  = 'Calendrier';
-$lang['scm.calendar.full']  = 'Calendrier complet';
-$lang['scm.calendar.rounds']  = 'Calendrier des phases de groupes';
+$lang['scm.infos']              = 'Informations générales';
+$lang['scm.calendar']           = 'Calendrier';
+$lang['scm.calendar.full']      = 'Calendrier complet';
+$lang['scm.calendar.rounds']    = 'Calendrier des phases de groupes';
 $lang['scm.calendar.brackets']  = 'Calendrier des phases finales';
 
 // Days
@@ -101,11 +102,12 @@ $lang['scm.days.ranking.away'] = 'À l\'extérieur';
 $lang['scm.days.ranking.attack'] = 'Attaque';
 $lang['scm.days.ranking.defense'] = 'Défense';
 $lang['scm.rank.form'] = 'Forme';
-    // scm.rank.form + $result
-$lang['scm.rank.form.win'] = 'V';
-$lang['scm.rank.form.draw'] = 'N';
-$lang['scm.rank.form.lost'] = 'D';
-$lang['scm.rank.form.delayed'] = 'Match reporté';
+    // scm.rank.health + $result
+$lang['scm.rank.health.win'] = 'V';
+$lang['scm.rank.health.draw'] = 'N';
+$lang['scm.rank.health.lost'] = 'D';
+$lang['scm.rank.health.delayed'] = 'Match reporté';
+$lang['scm.rank.chart'] = 'Progression de l\'équipe';
 
 $lang['scm.day']  = 'Journée';
 $lang['scm.day.short']  = 'J';
@@ -198,6 +200,7 @@ $lang['scm.th.round.short'] = 'T';
 
 // Games
 $lang['scm.event.id']             = 'Id';
+$lang['scm.games.late.list']      = 'Liste des matchs en retard';
 $lang['scm.games.list']           = 'Liste des matchs';
 $lang['scm.games.management']     = 'Matchs de la compétition';
 $lang['scm.games.groups.stage']   = 'Phases de groupes';
