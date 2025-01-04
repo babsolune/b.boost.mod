@@ -1,6 +1,9 @@
 <section id="module-scm" class="category-{CATEGORY_ID} single-item">
 	# INCLUDE MENU #
-    # IF NOT C_IS_MASTER #<h2>{@scm.infos}</h2># ENDIF #
+    <div class="flex-between flex-between-large">
+        # IF C_IS_MASTER #<span></span># ELSE #<h2>{@scm.infos}</h2># ENDIF #
+        # IF IS_MODERATOR #<span class="small message-helper bgc moderator">{L_VIEWS_NUMBER}</span># ENDIF #
+    </div>
 	<div class="sub-section modal-container">
 		<div class="content-container cell-flex">
 			# IF NOT C_VISIBLE #
@@ -8,9 +11,6 @@
 					# INCLUDE NOT_VISIBLE_MESSAGE #
 				</div>
 			# ENDIF #
-            # IF IS_MODERATOR #
-                <div class="flex-between"><span></span>  <span class="small message-helper bgc moderator">{L_VIEWS_NUMBER}</span></div>
-            # ENDIF #
             # IF C_IS_MASTER #
                 # START sub_events #
                     <div style="order: {sub_events.ORDER}">
@@ -35,24 +35,24 @@
                 # END sub_events #
             # ELSE #
                 # IF C_HAS_GAMES #
-                        <article itemscope="itemscope" itemtype="https://schema.org/CreativeWork" id="scm-item-{ID}" class="scm-item# IF C_NEW_CONTENT # new-content# ENDIF #">
-                            <div class="content">
-                                # IF C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE CHAMPIONSHIP_HOME #</div># ENDIF #
-                                # IF C_CUP #<div itemprop="text"># INCLUDE CUP_HOME #</div># ENDIF #
-                                # IF C_TOURNAMENT #<div itemprop="text"># INCLUDE TOURNAMENT_HOME #</div># ENDIF #
-                            </div>
+                    <article itemscope="itemscope" itemtype="https://schema.org/CreativeWork" id="scm-item-{ID}" class="scm-item# IF C_NEW_CONTENT # new-content# ENDIF #">
+                        <div class="content">
+                            # IF C_CHAMPIONSHIP #<div itemprop="text"># INCLUDE CHAMPIONSHIP_HOME #</div># ENDIF #
+                            # IF C_CUP #<div itemprop="text"># INCLUDE CUP_HOME #</div># ENDIF #
+                            # IF C_TOURNAMENT #<div itemprop="text"># INCLUDE TOURNAMENT_HOME #</div># ENDIF #
+                        </div>
 
-                            <aside>${ContentSharingActionsMenuService::display()}</aside>
+                        <aside>${ContentSharingActionsMenuService::display()}</aside>
 
-                            # IF C_SOURCES #
-                                <aside class="sources-container">
-                                    <span class="text-strong"><i class="fa fa-map-signs" aria-hidden="true"></i> {@common.sources}</span> :
-                                    # START sources #
-                                        <a itemprop="isBasedOnUrl" href="{sources.URL}" class="pinned link-color offload" rel="nofollow">{sources.NAME}</a># IF sources.C_SEPARATOR ## ENDIF #
-                                    # END sources #
-                                </aside>
-                            # ENDIF #
-                        </article>
+                        # IF C_SOURCES #
+                            <aside class="sources-container">
+                                <span class="text-strong"><i class="fa fa-map-signs" aria-hidden="true"></i> {@common.sources}</span> :
+                                # START sources #
+                                    <a itemprop="isBasedOnUrl" href="{sources.URL}" class="pinned link-color offload" rel="nofollow">{sources.NAME}</a># IF sources.C_SEPARATOR ## ENDIF #
+                                # END sources #
+                            </aside>
+                        # ENDIF #
+                    </article>
                 # ELSE #
                     <div class="message-helper bgc notice">{@scm.message.no.games}</div>
                 # ENDIF #

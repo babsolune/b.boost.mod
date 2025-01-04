@@ -729,6 +729,10 @@ th.bgc-sub a {
     padding: 0.309em;
 }
 
+.cell-gap {
+    padding: 0 0.309em;
+}
+
 .cell-game .flex-between.flex-between-large > * {
     margin-bottom: 0;
 }

@@ -8,12 +8,12 @@
                     <div class="close-modal" aria-label="{@common.close}"></div>
                     <div class="content-panel">
                         <h4>{@scm.yesterday.games}</h4>
-                        # INCLUDE BEFORE_GAMES_LIST #
+                        <div class="cell-flex cell-columns-2"># INCLUDE BEFORE_GAMES_LIST #</div>
                     </div>
                 </div>
             </header>
             # IF C_CURRENT_GAMES #
-                # INCLUDE GAMES_LIST #
+                <div class="cell-flex cell-columns-2"># INCLUDE GAMES_LIST #</div>
             # ELSE #
                 <div class="message-helper bgc notice">{@scm.no.current.games}</div>
             # ENDIF #

@@ -1,12 +1,3 @@
-<div>
-    <h3>{@scm.clubs.list}</h3>
-    <div class="columns-6">
-        # START clubs_list #
-            <a href="{clubs_list.U_CLUB}" class="offload align-center pinned link-color d-block" aria-label="{@scm.club.see.infos}">{clubs_list.CLUB_SHORT_NAME}</a>
-        # END clubs_list #
-    </div>
-</div>
-
 <div class="cell-flex cell-columns-2">
     <div class="cell days-calendar">
         <div class="tabs-container">
@@ -14,7 +5,7 @@
                 <ul class="cell-header">
                     <li>
                         # IF C_EVENT_STARTING #
-                            <a href="#" data-tabs="" data-target="prev-panel-{EVENT_ID}" class="bgc notice active-tab">{L_STARTING_DATE}</a>
+                            <a href="#" data-tabs="" data-target="prev-panel-{EVENT_ID}" class="bgc notice">{L_STARTING_DATE}</a>
                         # ELSE #
                             <a href="#" data-tabs="" data-target="prev-panel-{EVENT_ID}" class="active-tab"> {@scm.day} {PREV_DAY}</a>
                         # ENDIF #
@@ -24,34 +15,47 @@
                             # IF C_EVENT_ENDING #
                                 <a class="bgc notice" href="#" data-tabs="" data-target="next-panel-{EVENT_ID}">{@scm.event.ended.event}</a>
                             # ELSE #
-                                <a href="#" data-tabs="" data-target="next-panel-{EVENT_ID}">{@scm.day} {NEXT_DAY}</a>
+                                <a href="#" data-tabs="" data-target="next-panel-{EVENT_ID}">{@scm.next.day}<!--{@scm.day} {NEXT_DAY}--></a>
                             # ENDIF #
                         </li>
                     # ENDIF #
+                    <li><a href="#" data-tabs="" data-target="clubs-panel-{EVENT_ID}">{@scm.clubs.list}</a></li>
                 </ul>
             </nav>
             <div id="prev-panel-{EVENT_ID}" class="first-tab tabs tabs-animation">
-                <div class="content-panel">
+                <div class="content-panel cell">
                     # IF C_EVENT_STARTING #
-                        <div class="message-helper bgc notice m-t">{L_STARTING_DATE}</div>
+                        <span class="message-helper bgc notice m-t">{L_STARTING_DATE}</span>
                     # ELSE #
-                        <div class="cell">
-                            <header class="cell-header"><h3 class="cell-name">{@scm.day} {PREV_DAY}</h3></header>
-                            # INCLUDE PREV_GAMES #
-                        </div>
+                        # INCLUDE PREV_GAMES #
                     # ENDIF #
                 </div>
             </div>
             <div id="next-panel-{EVENT_ID}" class="tabs tabs-animation">
-                <div class="content-panel">
+                <div class="content-panel cell">
                     # IF C_EVENT_ENDING #
-                        <div class="message-helper bgc notice">{@scm.event.ended.event}</div>
+                        <span class="message-helper bgc notice">{@scm.event.ended.event}</span>
                     # ELSE #
-                        <div class="cell">
-                            <header class="cell-header"><h3 class="cell-name">{@scm.day} {NEXT_DAY}</h3></header>
-                            # INCLUDE NEXT_GAMES #
-                        </div>
+                        # INCLUDE NEXT_GAMES #
                     # ENDIF #
+                </div>
+            </div>
+            <div id="clubs-panel-{EVENT_ID}" class="tabs tabs-animation ">
+                <div class="content-panel cell">
+                    <div class="cell-list">
+                        <ul>
+                            # START clubs_list #
+                                <li class="flex-team">
+                                    <img src="{clubs_list.CLUB_LOGO}" alt="{clubs_list.CLUB_SHORT_NAME}">
+                                    <span>
+                                        <a href="{clubs_list.U_CLUB}" class="offload d-block" aria-label="{@scm.club.see.infos}">
+                                            {clubs_list.CLUB_SHORT_NAME}
+                                        </a>
+                                    </span>
+                                </li>
+                            # END clubs_list #
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

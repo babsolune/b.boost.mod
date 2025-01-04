@@ -224,7 +224,6 @@ class ScmMenuService
                 }
             }
         }
-
 		return $view;
     }
 

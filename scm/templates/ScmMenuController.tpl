@@ -26,10 +26,10 @@
 </header>
 <div class="event-menu flex-between controls">
     <nav class="cssmenu cssmenu-horizontal bgc-sub align-center">
-        <ul>
+        <ul# IF C_IS_MASTER # class="flex-between"# ENDIF #>
             # IF C_IS_MASTER #
                 # START sub_events #
-                    <li><a class="offload cssmenu-title align-center" href="{sub_events.U_EVENT}"># IF NOT IS_MOBILE_DEVICE #<i class="fa fa-fw fa-house"></i># ENDIF #<span class="small d-block">{sub_events.DIVISION_NAME}# IF sub_events.C_HAS_POOL # {sub_events.POOL}# ENDIF #</span></a></li>
+                    <li style="order: {sub_events.ORDER}"><a class="offload cssmenu-title align-center" href="{sub_events.U_EVENT}"># IF NOT IS_MOBILE_DEVICE #<i class="fa fa-fw fa-house"></i># ENDIF #<span class="small d-block">{sub_events.DIVISION_NAME}# IF sub_events.C_HAS_POOL # {sub_events.POOL}# ENDIF #</span></a></li>
                 # END sub_events #
             # ELSE #
                 # IF C_IS_SUB #<li><a href="{U_EVENT_MASTER}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-house-flag"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{HEADER_MASTER_DIVISION}</span></a></li># ENDIF #

@@ -31,6 +31,7 @@ class ScmEventHomeService
             $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
 
             $view->assign_block_vars('clubs_list', [
+                'CLUB_LOGO' => Url::to_rel($team['club_logo']),
                 'CLUB_SHORT_NAME' => $team['club_name'],
                 'U_CLUB' => ScmUrlBuilder::display_club($real_id, $real_slug)->rel()
             ]);

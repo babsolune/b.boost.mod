@@ -415,6 +415,7 @@ class ScmEvent
                 'MASTER_DIVISION' => ScmEventService::get_master_division($this->id),
                 'MASTER_SEASON'   => ScmEventService::get_master_season($this->id),
 				'STATUS'          => $this->get_publishing_state(),
+                'ORDER'           => $this->sub_order,
 
 				// Category
 				'C_ROOT_CATEGORY' => $category->get_id() == Category::ROOT_CATEGORY,
