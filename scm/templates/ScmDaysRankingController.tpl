@@ -64,12 +64,18 @@
                             <div class="scm-line ranking-color team-{ranks.TEAM_ID}# IF ranks.C_FAV # fav-team# ENDIF #" style="background-color: {ranks.RANK_COLOR}">
                                 <div class="scm-line-group sm-width-pc-100 md-width-pc-45">
                                     <div class="scm-cell md-width-px-43">{ranks.RANK}</div>
-                                    <div class="scm-cell scm-name cell-left md-width-pc-92">
-                                        # IF ranks.C_HAS_TEAM_LOGO #<img src="{ranks.TEAM_LOGO}" alt="{ranks.TEAM_NAME}"># ENDIF #
-                                        <span>
-                                            <a href="{ranks.U_TEAM_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{ranks.TEAM_NAME}</a>
-                                            # IF ranks.C_FORFEIT #<span class="smaller text-italic warning">({@scm.params.status.forfeit})</span># ENDIF #
-                                        </span>
+                                    <div class="scm-cell scm-name cell-left md-width-pc-92 flex-between">
+                                        <div>
+                                            # IF ranks.C_HAS_TEAM_LOGO #<img src="{ranks.TEAM_LOGO}" alt="{ranks.TEAM_NAME}"># ENDIF #
+                                            <span>
+                                                <a href="{ranks.U_TEAM_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{ranks.TEAM_NAME}</a>
+                                                # IF ranks.C_FORFEIT #<span class="smaller text-italic warning">({@scm.params.status.forfeit})</span># ENDIF #
+                                            </span>
+                                        </div>
+                                        # IF ranks.C_HAS_DIFF_RANK #
+                                            # IF ranks.C_IS_POSITIVE #<span class="success"><i class="fa fa-arrow-up-long" aria-hidden="true"></i> {ranks.DIFF_RANK}</span># ENDIF #
+                                            # IF ranks.C_IS_NEGATIVE #<span class="error"><i class="fa fa-arrow-down-long" aria-hidden="true"></i> {ranks.DIFF_RANK}</span># ENDIF #
+                                        # ENDIF #
                                     </div>
                                 </div>
                                 <div class="scm-line-group sm-width-pc-100 md-width-pc-55">

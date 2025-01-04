@@ -70,20 +70,19 @@ class ScmDaysRankingController extends DefaultModuleController
         $teams_number = ScmTeamService::get_teams_number($this->event_id());
         // y coord
         $c_return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
-        $c_hat_ranking = $params->get_hat_ranking();
-        $days_number = $c_hat_ranking ? $params->get_hat_days() : ($c_return_games ? ($teams_number - 1) * 2 : $teams_number - 1);
-        $full_rankings = ScmRankingContentService::get_ranking_content($this->event_id());
+        $c_hat_ranking  = $params->get_hat_ranking();
+        $days_number    = $c_hat_ranking ? $params->get_hat_days() : ($c_return_games ? ($teams_number - 1) * 2 : $teams_number - 1);
 
         // Params to display background colors
-        $prom = $params->get_promotion();
-        $playoff_prom = $params->get_playoff_prom();
-        $playoff_releg = $params->get_playoff_releg();
-        $releg = $params->get_relegation();
-        $prom_color = $config->get_promotion_color();
-        $playoff_prom_color = $config->get_playoff_prom_color();
+        $prom                = $params->get_promotion();
+        $playoff_prom        = $params->get_playoff_prom();
+        $playoff_releg       = $params->get_playoff_releg();
+        $releg               = $params->get_relegation();
+        $prom_color          = $config->get_promotion_color();
+        $playoff_prom_color  = $config->get_playoff_prom_color();
         $playoff_releg_color = $config->get_playoff_releg_color();
-        $releg_color = $config->get_relegation_color();
-        $color_count = count($final_ranks);
+        $releg_color         = $config->get_relegation_color();
+        $color_count         = count($final_ranks);
 
         // Display ranks to view
         foreach ($final_ranks as $i => $team_rank)
@@ -101,11 +100,23 @@ class ScmDaysRankingController extends DefaultModuleController
                 $rank_color = 'rgba(0,0,0,0)';
             }
 
+            $prev_rank = $this->prev_rank($this->event_id(), $day, $team_rank['team_id']);
+            $diff_rank = $prev_rank ? $prev_rank - ($i + 1) : 0;
+            $c_has_diff_rank = $c_is_negative = $c_is_positive = false;
+            if ($diff_rank > 0) {
+                $c_has_diff_rank = $c_is_positive = true;
+            } elseif ($diff_rank < 0) {
+                $c_has_diff_rank = $c_is_negative = true;
+            }
             // Display table rank
             $this->view->assign_block_vars('ranks', [
                 'C_FAV'           => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
                 'C_FORFEIT'       => $team_rank['status'] == 'forfeit',
                 'C_HAS_TEAM_LOGO' => ScmTeamService::get_team_logo($team_rank['team_id']),
+                'C_HAS_DIFF_RANK' => $c_has_diff_rank,
+                'C_IS_POSITIVE'   => $c_is_positive,
+                'C_IS_NEGATIVE'   => $c_is_negative,
+                'DIFF_RANK'       => abs($diff_rank),
                 'RANK'            => $i + 1,
                 'RANK_COLOR'      => $rank_color,
                 'TEAM_ID'         => !empty($team_rank['team_id']) ? $team_rank['team_id'] : 0,
@@ -211,6 +222,20 @@ class ScmDaysRankingController extends DefaultModuleController
             'U_DEFENSE'      => ScmUrlBuilder::display_days_ranking($this->event_id(), $slug, 'defense')->rel(),
         ]);
 	}
+
+    private function prev_rank($event_id, $cluster, $team_id)
+    {
+        $full_rankings = ScmRankingContentService::get_ranking_content($event_id);
+        foreach ($full_rankings as $rank_cluster => $ranks)
+        {
+            if (($rank_cluster + 1) && ($rank_cluster + 1) == $cluster)
+            foreach ($ranks as $rank)
+            {
+                if ($rank['team_id'] == $team_id)
+                    return $rank['rank'];
+            }
+        }
+    }
 
     private function hex_to_rgb($color)
     {
