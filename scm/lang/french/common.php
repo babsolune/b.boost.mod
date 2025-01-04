@@ -106,6 +106,8 @@ $lang['scm.rank.form'] = 'Forme';
 $lang['scm.rank.health.win'] = 'V';
 $lang['scm.rank.health.draw'] = 'N';
 $lang['scm.rank.health.lost'] = 'D';
+$lang['scm.rank.health.exempt'] = '#';
+$lang['scm.label.health.exempt'] = 'Exempté';
 $lang['scm.rank.health.delayed'] = 'Match reporté';
 $lang['scm.rank.chart'] = 'Progression de l\'équipe';
 

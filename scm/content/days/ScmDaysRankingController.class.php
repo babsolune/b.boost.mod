@@ -140,6 +140,7 @@ class ScmDaysRankingController extends DefaultModuleController
             {
                 $this->view->assign_block_vars('ranks.form', [
                     'C_PLAYED' => $results['result'] != 'delayed',
+                    'C_EXEMPT' => $results['result'] == 'exempt',
                     'L_PLAYED' => $this->lang['scm.rank.health.' . $results['result'] . ''],
                     'CLASS' => $results['class'],
                     'SCORE' => $results['score']

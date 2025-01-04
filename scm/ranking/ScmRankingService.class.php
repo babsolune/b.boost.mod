@@ -759,8 +759,10 @@ class ScmRankingService
                 if ($game['game_home_score'] < $game['game_away_score'])
                     $team_form[] = ['result' => 'win', 'class' => 'success', 'score' => $score];
             }
-            if ($game['game_home_score'] === '' && $game['game_away_score'] === '')
+            if ($game['game_status'] == ScmGame::DELAYED || $game['game_status'] == ScmGame::STOPPED)
                 $team_form[] = ['result' => 'delayed', 'class' => 'administrator', 'score' => ''];
+            if (ScmTeamService::get_team($game['game_home_id'])->get_team_status() == ScmParams::EXEMPT || ScmTeamService::get_team($game['game_away_id'])->get_team_status() == ScmParams::EXEMPT)
+                $team_form[] = ['result' => 'exempt', 'class' => 'notice', 'score' => ''];
         }
         return $team_form;
     }

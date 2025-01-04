@@ -73,8 +73,8 @@
                                             </span>
                                         </div>
                                         # IF ranks.C_HAS_DIFF_RANK #
-                                            # IF ranks.C_IS_POSITIVE #<span class="success"><i class="fa fa-arrow-up-long" aria-hidden="true"></i> {ranks.DIFF_RANK}</span># ENDIF #
-                                            # IF ranks.C_IS_NEGATIVE #<span class="error"><i class="fa fa-arrow-down-long" aria-hidden="true"></i> {ranks.DIFF_RANK}</span># ENDIF #
+                                            # IF ranks.C_IS_POSITIVE #<span class="small success"><i class="fa fa-arrow-up-long" aria-hidden="true"></i> {ranks.DIFF_RANK}</span># ENDIF #
+                                            # IF ranks.C_IS_NEGATIVE #<span class="small error"><i class="fa fa-arrow-down-long" aria-hidden="true"></i> {ranks.DIFF_RANK}</span># ENDIF #
                                         # ENDIF #
                                     </div>
                                 </div>
@@ -96,7 +96,7 @@
                                         # START ranks.form #
                                             <span
                                                 class="smaller pinned bgc# IF ranks.form.C_PLAYED #-full# ENDIF # {ranks.form.CLASS}"
-                                                aria-label="# IF NOT ranks.form.C_PLAYED #{@scm.rank.health.delayed}# ELSE #{ranks.form.SCORE}# ENDIF #">
+                                                aria-label="# IF NOT ranks.form.C_PLAYED #{@scm.rank.health.delayed}# ELSE ## IF ranks.form.C_EXEMPT #{@scm.label.health.exempt}# ELSE #{ranks.form.SCORE}# ENDIF ## ENDIF #">
                                                 # IF ranks.form.C_PLAYED #{ranks.form.L_PLAYED}# ELSE #&nbsp;&nbsp;# ENDIF #
                                             </span>
                                         # END ranks.form #
