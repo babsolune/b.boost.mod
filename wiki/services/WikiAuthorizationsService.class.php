@@ -9,7 +9,7 @@
 
 class WikiAuthorizationsService extends CategoriesAuthorizationsService
 {
-	const MANAGE_ARCHIVES_AUTHORIZATIONS = 32;
+	const MANAGE_ARCHIVES_AUTHORIZATIONS = 64;
 
 	public function manage_archives()
 	{

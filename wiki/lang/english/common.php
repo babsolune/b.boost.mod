@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 10 11
+ * @version     PHPBoost 6.0 - last update: 2025 01 14
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -29,8 +29,9 @@ $lang['wiki.sticky.contents.table']   = 'Display the table of contents in a fixe
 
 // Titles
 $lang['wiki.root']              = 'No categories';
-$lang['wiki.add.item']          = 'Add new sheet';
-$lang['wiki.edit.item']         = 'Edit sheet';
+$lang['wiki.add.item']          = 'Add a sheet';
+$lang['wiki.edit.item']         = 'Edit a sheet';
+$lang['wiki.duplicate.item']    = 'Duplicate a sheet';
 $lang['wiki.my.items']          = 'My sheets';
 $lang['wiki.my.tracked']        = 'My favorites';
 $lang['wiki.member.items']      = 'Sheets published by';

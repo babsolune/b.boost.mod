@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2022 11 18
+ * @version     PHPBoost 6.0 - last update: 2025 01 14
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -57,7 +57,7 @@ class WikiUrlBuilder
 	/**
 	 * @return Url
 	 */
-	public static function display_member_items($user_id, $page = 1)
+	public static function display_member_items($user_id = null, $page = 1)
 	{
 		$page = $page !== 1 ? $page . '/' : '';
 		return DispatchManager::get_url(self::$dispatcher, '/member/' . $user_id . '/' . $page);
@@ -94,6 +94,14 @@ class WikiUrlBuilder
 	public static function edit($id)
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $id . '/edit/');
+	}
+
+	/**
+	 * @return Url
+	 */
+	public static function duplicate($id)
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/' . $id . '/duplicate/');
 	}
 
 	/**

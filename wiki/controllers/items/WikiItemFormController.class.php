@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 06 21
+ * @version     PHPBoost 6.0 - last update: 2025 01 14
  * @since       PHPBoost 6.0 - 2022 11 18
  * @contributor Myster <MP : https://www.phpboost.com/user/pm-3023>
  */
@@ -34,14 +34,16 @@ class WikiItemFormController extends DefaultModuleController
 		$item_content = $this->get_item()->get_item_content();
 
 		$form = new HTMLForm(__CLASS__);
-		$form->set_layout_title($this->get_item()->get_id() === null ? $this->lang['wiki.add.item'] : ($this->lang['wiki.edit.item']));
+		$form->set_layout_title($this->is_new_item ? $this->lang['wiki.add.item'] : ($this->is_duplication ? $this->lang['wiki.duplicate.item'] : $this->lang['wiki.edit.item']));
 
 		$fieldset = new FormFieldsetHTML('wiki', $this->lang['form.parameters']);
 		$form->add_fieldset($fieldset);
-		if ($this->get_item()->get_id() !== null)
+		if (!$this->is_new_item && !$this->is_duplication)
 			$fieldset->set_description($this->lang['wiki.message.draft']);
 
-		$fieldset->add_field(new FormFieldTextEditor('title', $this->lang['form.title'], $this->get_item()->get_title(), array('required' => true)));
+		$fieldset->add_field(new FormFieldTextEditor('title', $this->lang['form.title'], $this->get_item()->get_title(), 
+            ['required' => true]
+        ));
 
 		if (CategoriesService::get_categories_manager()->get_categories_cache()->has_categories())
 		{
@@ -52,42 +54,42 @@ class WikiItemFormController extends DefaultModuleController
 		}
 
 		$fieldset->add_field(new FormFieldRichTextEditor('content', $this->lang['form.description'], $item_content->get_content(),
-			array('rows' => 15, 'required' => true)
+			['rows' => 15, 'required' => true]
 		));
 
 		$fieldset->add_field(new FormFieldCheckbox('summary_enabled', $this->lang['form.enable.summary'], $item_content->is_summary_enabled(),
-			array(
-				'description' => StringVars::replace_vars($this->lang['form.summary.clue'], array('number' => WikiConfig::load()->get_auto_cut_characters_number())),
-				'events' => array('click' => '
+			[
+				'description' => StringVars::replace_vars($this->lang['form.summary.clue'], ['number' => WikiConfig::load()->get_auto_cut_characters_number()]),
+				'events' => ['click' => '
 					if (HTMLForms.getField("summary_enabled").getValue()) {
 						HTMLForms.getField("summary").enable();
 					} else {
 						HTMLForms.getField("summary").disable();
 					}'
-				)
-			)
+                ]
+            ]
 		));
 
 		$fieldset->add_field(new FormFieldRichTextEditor('summary', $this->lang['form.summary'], $item_content->get_summary(),
-			array('hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_summary_enabled', false) : !$item_content->is_summary_enabled()))
+			['hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_summary_enabled', false) : !$item_content->is_summary_enabled())]
 		));
 
 		if ($this->config->is_author_displayed())
 		{
 			$fieldset->add_field(new FormFieldCheckbox('author_custom_name_enabled', $this->lang['form.enable.author.custom.name'], $item_content->is_author_custom_name_enabled(),
-				array(
-					'events' => array('click' => '
+				[
+					'events' => ['click' => '
 						if (HTMLForms.getField("author_custom_name_enabled").getValue()) {
 							HTMLForms.getField("author_custom_name").enable();
 						} else {
 							HTMLForms.getField("author_custom_name").disable();
 						}'
-					)
-				)
+                    ]
+                ]
 			));
 
 			$fieldset->add_field(new FormFieldTextEditor('author_custom_name', $this->lang['form.author.custom.name'], $item_content->get_author_custom_name(),
-				array('hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_author_custom_name_enabled', false) : !$item_content->is_author_custom_name_enabled()))
+				['hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_author_custom_name_enabled', false) : !$item_content->is_author_custom_name_enabled())]
 			));
 		}
 
@@ -95,7 +97,7 @@ class WikiItemFormController extends DefaultModuleController
 		$form->add_fieldset($options_fieldset);
 
 		$options_fieldset->add_field(new FormFieldSimpleSelectChoice('content_level', $this->lang['wiki.level'], $item_content->get_content_level(),
-			array(
+			[
 				new FormFieldSelectChoiceOption('', WikiItemContent::NO_LEVEL),
 				new FormFieldSelectChoiceOption($this->lang['wiki.level.wip'], WikiItemContent::WIP_LEVEL),
 				new FormFieldSelectChoiceOption($this->lang['wiki.level.sketch'], WikiItemContent::SKETCH_LEVEL),
@@ -103,34 +105,34 @@ class WikiItemFormController extends DefaultModuleController
 				new FormFieldSelectChoiceOption($this->lang['wiki.level.claim'], WikiItemContent::CLAIM_LEVEL),
 				new FormFieldSelectChoiceOption($this->lang['wiki.level.trust'], WikiItemContent::TRUST_LEVEL),
 				new FormFieldSelectChoiceOption($this->lang['wiki.level.custom'], WikiItemContent::CUSTOM_LEVEL),
-			),
-			array(
-				'events' => array('change' => '
+            ],
+			[
+				'events' => ['change' => '
 					if (HTMLForms.getField("content_level").getValue() == \'' . WikiItemContent::CUSTOM_LEVEL . '\') {
 						HTMLForms.getField("custom_level").enable();
 					} else {
 						HTMLForms.getField("custom_level").disable();
 					}'
-				)
-			)
+                ]
+            ]
 		));
 
 		$options_fieldset->add_field(new FormFieldRichTextEditor('custom_level', $this->lang['wiki.level.custom.content'], $item_content->get_custom_level(),
-			array('hidden' => $item_content->get_content_level() != WikiItemContent::CUSTOM_LEVEL)
+			['hidden' => $item_content->get_content_level() != WikiItemContent::CUSTOM_LEVEL]
 		));
 
 		$options_fieldset->add_field(new FormFieldThumbnail('thumbnail', $this->lang['form.thumbnail'], $item_content->get_thumbnail()->relative(), WikiItem::THUMBNAIL_URL));
 
 		$options_fieldset->add_field(KeywordsService::get_keywords_manager()->get_form_field($this->get_item()->get_id(), 'keywords', $this->lang['form.keywords'],
-			array('description' => $this->lang['form.keywords.clue'])
+			['description' => $this->lang['form.keywords.clue']]
 		));
 
 		$options_fieldset->add_field(new FormFieldSelectSources('sources', $this->lang['form.sources'], $item_content->get_sources()));
 
-		if(!$this->is_new_item)
+		if(!$this->is_new_item && !$this->is_duplication)
 		{
 			$options_fieldset->add_field(new FormFieldMultiLineTextEditor('change_reason', $this->lang['wiki.change.reason'], '',
-				array('rows' => 5)
+				['rows' => 5]
 			));
 		}
 
@@ -140,25 +142,25 @@ class WikiItemFormController extends DefaultModuleController
 			$form->add_fieldset($publication_fieldset);
 
 			$publication_fieldset->add_field(new FormFieldDateTime('creation_date', $this->lang['form.creation.date'], $this->get_item()->get_creation_date(),
-				array('required' => true)
+				['required' => true]
 			));
 
 			if (!$this->get_item()->is_published())
 			{
 				$publication_fieldset->add_field(new FormFieldCheckbox('update_creation_date', $this->lang['form.update.creation.date'], false,
-					array('hidden' => $this->get_item()->get_publishing_state() != WikiItem::NOT_PUBLISHED)
+					['hidden' => $this->get_item()->get_publishing_state() != WikiItem::NOT_PUBLISHED]
 				));
 			}
 
-			$publication_fieldset->add_field(new FormFieldSimpleSelectChoice('published', $this->lang['form.publication'], $this->get_item()->get_id() === null ? $this->get_item()->get_publishing_state() : WikiItem::NOT_PUBLISHED,
-				array(
+			$publication_fieldset->add_field(new FormFieldSimpleSelectChoice('published', $this->lang['form.publication'], $this->is_new_item || $this->is_duplication ? $this->get_item()->get_publishing_state() : WikiItem::NOT_PUBLISHED,
+				[
 					new FormFieldSelectChoiceOption($this->lang['form.publication.draft'], WikiItem::NOT_PUBLISHED),
 					new FormFieldSelectChoiceOption($this->lang['form.publication.now'], WikiItem::PUBLISHED),
 					new FormFieldSelectChoiceOption($this->lang['form.publication.deffered'], WikiItem::DEFERRED_PUBLICATION),
-				),
-				array(
-                    'class' => $this->get_item()->get_id() !== null ? 'bgc warning' : '',
-					'events' => array('change' => '
+                ],
+				[
+                    'class' => !$this->is_new_item && !$this->is_duplication ? 'bgc warning' : '',
+					'events' => ['change' => '
 						if (HTMLForms.getField("published").getValue() == 2) {
 							jQuery("#' . __CLASS__ . '_publishing_start_date_field").show();
 							HTMLForms.getField("end_date_enabled").enable();
@@ -184,29 +186,29 @@ class WikiItemFormController extends DefaultModuleController
                                 });
                             }
                         }'
-					)
-				)
+                    ]
+                ]
 			));
 
 			$publication_fieldset->add_field($publishing_start_date = new FormFieldDateTime('publishing_start_date', $this->lang['form.start.date'], ($this->get_item()->get_publishing_start_date() === null ? new Date() : $this->get_item()->get_publishing_start_date()),
-				array('hidden' => ($request->is_post_method() ? ($request->get_postint(__CLASS__ . '_publication_state', 0) != WikiItem::DEFERRED_PUBLICATION) : ($this->get_item()->get_publishing_state() != WikiItem::DEFERRED_PUBLICATION)))
+				['hidden' => ($request->is_post_method() ? ($request->get_postint(__CLASS__ . '_publication_state', 0) != WikiItem::DEFERRED_PUBLICATION) : ($this->get_item()->get_publishing_state() != WikiItem::DEFERRED_PUBLICATION))]
 			));
 
 			$publication_fieldset->add_field(new FormFieldCheckbox('end_date_enabled', $this->lang['form.enable.end.date'], $this->get_item()->is_end_date_enabled(),
-				array(
+				[
 					'hidden' => ($request->is_post_method() ? ($request->get_postint(__CLASS__ . '_publication_state', 0) != WikiItem::DEFERRED_PUBLICATION) : ($this->get_item()->get_publishing_state() != WikiItem::DEFERRED_PUBLICATION)),
-					'events' => array('click' => '
+					'events' => ['click' => '
 						if (HTMLForms.getField("end_date_enabled").getValue()) {
 							HTMLForms.getField("publishing_end_date").enable();
 						} else {
 							HTMLForms.getField("publishing_end_date").disable();
 						}'
-					)
-				)
+                    ]
+                ]
 			));
 
 			$publication_fieldset->add_field($publishing_end_date = new FormFieldDateTime('publishing_end_date', $this->lang['form.end.date'], ($this->get_item()->get_publishing_end_date() === null ? new Date() : $this->get_item()->get_publishing_end_date()),
-				array('hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_end_date_enabled', false) : !$this->get_item()->is_end_date_enabled()))
+				['hidden' => ($request->is_post_method() ? !$request->get_postbool(__CLASS__ . '_end_date_enabled', false) : !$this->get_item()->is_end_date_enabled())]
 			));
 
 			$publishing_end_date->add_form_constraint(new FormConstraintFieldsDifferenceSuperior($publishing_start_date, $publishing_end_date));
@@ -223,16 +225,23 @@ class WikiItemFormController extends DefaultModuleController
 		$this->form = $form;
 	}
 
+    private function get_duplication_source()
+    {
+        $url = GeneralConfig::load()->get_site_url() . WikiService::get_item($this->request->get_value('id'))->get_item_url();
+        $title = WikiService::get_item($this->request->get_value('id'))->get_title();
+        return StringVars::replace_vars($this->lang['common.duplication.source'], ['url' => $url, 'title' => $title]);
+    }
+
 	private function build_contribution_fieldset($form)
 	{
-		if ($this->get_item()->get_id() === null && $this->is_contributor_member())
+		if (($this->is_new_item || $this->is_duplication) && $this->is_contributor_member())
 		{
 			$fieldset = new FormFieldsetHTML('contribution', $this->lang['contribution.contribution']);
 			$fieldset->set_description(MessageHelper::display($this->lang['contribution.extended.warning'], MessageHelper::WARNING)->render());
 			$form->add_fieldset($fieldset);
 
 			$fieldset->add_field(new FormFieldRichTextEditor('contribution_description', $this->lang['contribution.description'], '',
-				array('description' => $this->lang['contribution.description.clue'])
+				['description' => $this->lang['contribution.description.clue']]
 			));
 		}
 		elseif ($this->get_item()->is_published() && $this->get_item()->is_authorized_to_edit() && $this->is_contributor_member())
@@ -242,7 +251,7 @@ class WikiItemFormController extends DefaultModuleController
 			$form->add_fieldset($fieldset);
 
 			$fieldset->add_field(new FormFieldRichTextEditor('edition_description', $this->lang['contribution.edition.description'], '',
-				array('description' => $this->lang['contribution.edition.description.clue'])
+				['description' => $this->lang['contribution.edition.description.clue']]
 			));
 		}
 	}
@@ -286,21 +295,18 @@ class WikiItemFormController extends DefaultModuleController
 
 		if ($item->get_id() === null)
 		{
-			if (!$item->is_authorized_to_add())
+			if (
+                ($this->is_new_item && !$item->is_authorized_to_add())
+                || ($this->is_duplication && !$item->is_authorized_to_duplicate())
+                || (!$this->is_duplication && !$item->is_authorized_to_edit())
+            )
 			{
 				$error_controller = PHPBoostErrors::user_not_authorized();
 				DispatchManager::redirect($error_controller);
 			}
 		}
-		else
-		{
-			if (!$item->is_authorized_to_edit())
-			{
-				$error_controller = PHPBoostErrors::user_not_authorized();
-				DispatchManager::redirect($error_controller);
-			}
-		}
-		if (AppContext::get_current_user()->is_readonly())
+
+        if (AppContext::get_current_user()->is_readonly())
 		{
 			$controller = PHPBoostErrors::user_in_read_only();
 			DispatchManager::redirect($controller);
@@ -313,7 +319,7 @@ class WikiItemFormController extends DefaultModuleController
 		$item_content = $item->get_item_content();
 
 		if ($item->get_i_order() === null) {
-			$items_number_in_category = WikiService::count('WHERE id_category = :id_category', array('id_category' => $this->get_item()->get_id_category()));
+			$items_number_in_category = WikiService::count('WHERE id_category = :id_category', ['id_category' => $this->get_item()->get_id_category()]);
 			$item->set_i_order($items_number_in_category + 1);
 		}
 
@@ -323,7 +329,10 @@ class WikiItemFormController extends DefaultModuleController
 		if (CategoriesService::get_categories_manager()->get_categories_cache()->has_categories())
 			$item->set_id_category($this->form->get_value('id_category')->get_raw_value());
 
-		$item_content->set_content($this->form->get_value('content'));
+        if ($this->is_duplication)
+            $item_content->set_content($this->form->get_value('content') . $this->get_duplication_source());
+        else
+            $item_content->set_content($this->form->get_value('content'));
 		$item_content->set_summary(($this->form->get_value('summary_enabled') ? $this->form->get_value('summary') : ''));
 		$item_content->set_thumbnail($this->form->get_value('thumbnail'));
 
@@ -395,7 +404,7 @@ class WikiItemFormController extends DefaultModuleController
 
 		if ($this->is_new_item)
         {
-			$items_number_in_category = WikiService::count('WHERE id_category = :id_category', array('id_category' => $item->get_id_category()));
+			$items_number_in_category = WikiService::count('WHERE id_category = :id_category', ['id_category' => $item->get_id_category()]);
 			$item->set_i_order($items_number_in_category + 1);
 
 			$last_content_id = WikiService::get_last_content_id();
@@ -412,7 +421,33 @@ class WikiItemFormController extends DefaultModuleController
 			$item->set_item_content($item_content);
 
 			if (!$this->is_contributor_member())
-				HooksService::execute_hook_action('add', self::$module_id, array_merge($item_content->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
+				HooksService::execute_hook_action('add', self::$module_id, array_merge($item_content->get_properties(), $item->get_properties(), ['item_url' => $item->get_item_url()]));
+		}
+		elseif ($this->is_duplication)
+        {
+			$item_content->set_content_id(0);
+			$item_content->set_author_user(AppContext::get_current_user());
+            $items_number_in_category = WikiService::count('WHERE id_category = :id_category', ['id_category' => $item->get_id_category()]);
+			$item->set_i_order($items_number_in_category + 1);
+
+			$last_content_id = WikiService::get_last_content_id();
+			foreach ($last_content_id as $content_id) {
+				$item_content->set_content_id($content_id + 1);
+			}
+			$item_content->set_active_content('1');
+
+			$item->set_id(0);
+			$item->set_views_number(0);
+			$item->set_creation_date($this->is_contributor_member() ? new Date() : $this->form->get_value('creation_date'));
+            $id = WikiService::add($item);
+			$item->set_id($id);
+
+			$item_content->set_item_id($id);
+			$content_id = WikiService::add_content($item_content);
+			$item->set_item_content($item_content);
+
+			if (!$this->is_contributor_member())
+				HooksService::execute_hook_action('add', self::$module_id, array_merge($item_content->get_properties(), $item->get_properties(), ['item_url' => $item->get_item_url()]));
 		}
         else
         {
@@ -425,7 +460,7 @@ class WikiItemFormController extends DefaultModuleController
                 foreach ($last_content_id as $content_id) {
                     $item_content->set_content_id($content_id + 1);
                 }
-                PersistenceContext::get_querier()->update(PREFIX . "wiki_contents", array('active_content' => 0), 'WHERE item_id = :item_id', array('item_id' => $this->get_item()->get_id()));
+                PersistenceContext::get_querier()->update(PREFIX . "wiki_contents", ['active_content' => 0], 'WHERE item_id = :item_id', ['item_id' => $this->get_item()->get_id()]);
 
                 $item_content->set_active_content('1');
                 $content_id = WikiService::add_content($item_content);
@@ -441,7 +476,7 @@ class WikiItemFormController extends DefaultModuleController
             WikiService::update($item);
 
             if (!$this->is_contributor_member())
-                HooksService::execute_hook_action('edit', self::$module_id, array_merge($item_content->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
+                HooksService::execute_hook_action('edit', self::$module_id, array_merge($item_content->get_properties(), $item->get_properties(), ['item_url' => $item->get_item_url()]));
         }
 
 		$this->contribution_actions($item);
@@ -458,7 +493,7 @@ class WikiItemFormController extends DefaultModuleController
 		{
 			$contribution = new Contribution();
 			$contribution->set_id_in_module($item->get_id());
-			if ($this->is_new_item)
+			if ($this->is_new_item || $this->is_duplication)
 				$contribution->set_description(stripslashes($this->form->get_value('contribution_description')));
 			else
 				$contribution->set_description(stripslashes($this->form->get_value('edition_description')));
@@ -474,7 +509,7 @@ class WikiItemFormController extends DefaultModuleController
 				)
 			);
 			ContributionService::save_contribution($contribution);
-			HooksService::execute_hook_action($this->is_new_item ? 'add_contribution' : 'edit_contribution', self::$module_id, array_merge($contribution->get_properties(), $item->get_item_content()->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
+			HooksService::execute_hook_action($this->is_new_item || $this->is_duplication ? 'add_contribution' : 'edit_contribution', self::$module_id, array_merge($contribution->get_properties(), $item->get_item_content()->get_properties(), $item->get_properties(), ['item_url' => $item->get_item_url()]));
 		}
 		else
 		{
@@ -486,7 +521,7 @@ class WikiItemFormController extends DefaultModuleController
 					$contribution->set_status(Event::EVENT_STATUS_PROCESSED);
 					ContributionService::save_contribution($contribution);
 				}
-				HooksService::execute_hook_action('process_contribution', self::$module_id, array_merge($contribution->get_properties(),$item->get_item_content()->get_properties(), $item->get_properties(), array('item_url' => $item->get_item_url())));
+				HooksService::execute_hook_action('process_contribution', self::$module_id, array_merge($contribution->get_properties(),$item->get_item_content()->get_properties(), $item->get_properties(), ['item_url' => $item->get_item_url()]));
 			}
 		}
 	}
@@ -497,23 +532,23 @@ class WikiItemFormController extends DefaultModuleController
 		$item_content = $this->get_item()->get_item_content();
 		$category = $item->get_category();
 
-		if ($this->is_new_item && $this->is_contributor_member() && !$item->is_published())
+		if ($this->is_contributor_member())
 		{
 			DispatchManager::redirect(new UserContributionSuccessController());
 		}
 		elseif ($item->is_published())
 		{
-			if ($this->is_new_item)
-				AppContext::get_response()->redirect(WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()), StringVars::replace_vars($this->lang['wiki.message.success.add'], array('title' => $item->get_title())));
+			if ($this->is_new_item || $this->is_duplication)
+				AppContext::get_response()->redirect(WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()), StringVars::replace_vars($this->lang['wiki.message.success.add'], ['title' => $item->get_title()]));
 			else
-				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title())), StringVars::replace_vars($this->lang['wiki.message.success.edit'], array('title' => $item->get_title())));
+				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title())), StringVars::replace_vars($this->lang['wiki.message.success.edit'], ['title' => $item->get_title()]));
 		}
 		else
 		{
-			if ($this->is_new_item)
-				AppContext::get_response()->redirect(WikiUrlBuilder::display_pending(), StringVars::replace_vars($this->lang['wiki.message.success.add'], array('title' => $item->get_title())));
+			if ($this->is_new_item || $this->is_duplication)
+				AppContext::get_response()->redirect(WikiUrlBuilder::display_pending(), StringVars::replace_vars($this->lang['wiki.message.success.add'], ['title' => $item->get_title()]));
 			else
-				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : WikiUrlBuilder::display_pending()), StringVars::replace_vars($this->lang['wiki.message.success.edit'], array('title' => $item->get_title())));
+				AppContext::get_response()->redirect(($this->form->get_value('referrer') ? $this->form->get_value('referrer') : WikiUrlBuilder::display_pending()), StringVars::replace_vars($this->lang['wiki.message.success.edit'], ['title' => $item->get_title()]));
 		}
 	}
 
@@ -522,7 +557,8 @@ class WikiItemFormController extends DefaultModuleController
 		$item = $this->get_item();
 		$item_content = $this->get_item()->get_item_content();
 
-		$location_id = $item->get_id() ? 'wiki-edit-'. $item->get_id() : '';
+        $location_name = $this->is_duplication ? 'wiki-duplicate-' : 'wiki-edit-';
+		$location_id = $item->get_id() ? $location_name . $item->get_id() : '';
 
 		$response = new SiteDisplayResponse($view, $location_id);
 		$graphical_environment = $response->get_graphical_environment();
@@ -539,12 +575,14 @@ class WikiItemFormController extends DefaultModuleController
 		}
 		else
 		{
+			$page_title = $this->is_duplication ? $this->lang['wiki.duplicate.item'] : $this->lang['wiki.edit.item'];
+            $page_url = $this->is_duplication ? WikiUrlBuilder::duplicate($item->get_id()) : WikiUrlBuilder::edit($item->get_id());
 			if (!AppContext::get_session()->location_id_already_exists($location_id))
 				$graphical_environment->set_location_id($location_id);
 
-			$graphical_environment->set_page_title($this->lang['wiki.edit.item'], $this->config->get_module_name());
-			$graphical_environment->get_seo_meta_data()->set_description($this->lang['wiki.edit.item']);
-			$graphical_environment->get_seo_meta_data()->set_canonical_url(WikiUrlBuilder::edit($item->get_id()));
+			$graphical_environment->set_page_title($page_title . ': ' . $item->get_title(), $this->config->get_module_name());
+			$graphical_environment->get_seo_meta_data()->set_description($page_title);
+			$graphical_environment->get_seo_meta_data()->set_canonical_url($page_url);
 
 			$categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($item->get_id_category(), true));
 			foreach ($categories as $id => $category)
@@ -554,7 +592,7 @@ class WikiItemFormController extends DefaultModuleController
 			}
 			$category = $item->get_category();
 			$breadcrumb->add($item->get_title(), WikiUrlBuilder::display($category->get_id(), $category->get_rewrited_name(), $item->get_id(), $item->get_rewrited_title()));
-			$breadcrumb->add($this->lang['wiki.edit.item'], WikiUrlBuilder::edit($item->get_id()));
+			$breadcrumb->add($page_title, $page_url);
 		}
 
 		return $response;

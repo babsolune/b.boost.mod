@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 03 27
+ * @version     PHPBoost 6.0 - last update: 2025 01 14
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -223,6 +223,11 @@ class WikiItem
         ;
 	}
 
+	public function is_authorized_to_duplicate()
+	{
+		return ModulesManager::get_module('wiki')->get_configuration()->has_duplication() && (WikiAuthorizationsService::check_authorizations($this->id_category)->write() || (WikiAuthorizationsService::check_authorizations($this->id_category)->contribution() && WikiAuthorizationsService::check_authorizations($this->id_category)->duplication()));
+	}
+
 	public function is_authorized_to_delete()
 	{
 		return
@@ -247,7 +252,7 @@ class WikiItem
 
 	public function get_properties()
 	{
-		return array(
+		return [
 			'id'                    => $this->get_id(),
 			'id_category'           => $this->get_id_category(),
 			'title'                 => $this->get_title(),
@@ -258,7 +263,7 @@ class WikiItem
 			'publishing_end_date'   => $this->get_publishing_end_date() !== null ? $this->get_publishing_end_date()->get_timestamp() : 0,
 			'creation_date'         => $this->get_creation_date()->get_timestamp(),
 			'views_number'          => $this->get_views_number(),
-		);
+        ];
 	}
 
 	public function set_properties(array $properties)
@@ -266,18 +271,18 @@ class WikiItem
 		$item_content = new WikiItemContent();
 		$item_content->set_properties($properties);
 
-		$this->id                      = $properties['id'];
-		$this->id_category             = $properties['id_category'];
-		$this->title                   = $properties['title'];
-		$this->rewrited_title          = $properties['rewrited_title'];
-		$this->i_order                 = $properties['i_order'];
-		$this->item_content            = $item_content;
-		$this->views_number            = $properties['views_number'];
-		$this->published               = $properties['published'];
-		$this->publishing_start_date   = !empty($properties['publishing_start_date']) ? new Date($properties['publishing_start_date'], Timezone::SERVER_TIMEZONE) : null;
-		$this->publishing_end_date     = !empty($properties['publishing_end_date']) ? new Date($properties['publishing_end_date'], Timezone::SERVER_TIMEZONE) : null;
-		$this->end_date_enabled        = !empty($properties['publishing_end_date']);
-		$this->creation_date           = new Date($properties['creation_date'], Timezone::SERVER_TIMEZONE);
+		$this->id                    = $properties['id'];
+		$this->id_category           = $properties['id_category'];
+		$this->title                 = $properties['title'];
+		$this->rewrited_title        = $properties['rewrited_title'];
+		$this->i_order               = $properties['i_order'];
+		$this->item_content          = $item_content;
+		$this->views_number          = $properties['views_number'];
+		$this->published             = $properties['published'];
+		$this->publishing_start_date = !empty($properties['publishing_start_date']) ? new Date($properties['publishing_start_date'], Timezone::SERVER_TIMEZONE) : null;
+		$this->publishing_end_date   = !empty($properties['publishing_end_date']) ? new Date($properties['publishing_end_date'], Timezone::SERVER_TIMEZONE) : null;
+		$this->end_date_enabled      = !empty($properties['publishing_end_date']);
+		$this->creation_date         = new Date($properties['creation_date'], Timezone::SERVER_TIMEZONE);
 
 		$notation = new Notation();
 		$notation->set_module_name('wiki');
@@ -338,12 +343,13 @@ class WikiItem
 			Date::get_array_tpl_vars($this->creation_date, 'date'),
 			Date::get_array_tpl_vars($this->item_content->get_update_date(), 'update_date'),
 			Date::get_array_tpl_vars($this->publishing_start_date, 'differed_publishing_start_date'),
-			array(
+			[
 				// Conditions
                 'C_STICKY_SUMMARY'          => $config->get_sticky_summary(),
 				'C_VISIBLE'                 => $this->is_published(),
-				'C_CONTROLS'			    => $this->is_authorized_to_edit() || $this->is_authorized_to_delete() || $this->is_authorized_to_restore(),
+				'C_CONTROLS'			    => $this->is_authorized_to_edit() || $this->is_authorized_to_delete() || $this->is_authorized_to_restore() || $this->is_authorized_to_duplicate(),
 				'C_EDIT'                    => $this->is_authorized_to_edit(),
+				'C_DUPLICATE'               => $this->is_authorized_to_duplicate(),
 				'C_DELETE'                  => $this->is_authorized_to_delete(),
 				'C_RESTORE'		            => $this->is_authorized_to_restore(),
 				'C_READ_MORE'               => !$this->item_content->is_summary_enabled() && TextHelper::strlen($content) > $config->get_auto_cut_characters_number() && $real_summary != @strip_tags($content, '<br><br/>'),
@@ -402,25 +408,26 @@ class WikiItem
 				'U_UNTRACK'             => WikiUrlBuilder::untrack_item($this->id, AppContext::get_current_user()->get_id())->rel(),
 				'U_HISTORY'             => WikiUrlBuilder::history($this->id)->rel(),
 				'U_EDIT'                => WikiUrlBuilder::edit($this->id)->rel(),
+				'U_DUPLICATE'           => WikiUrlBuilder::duplicate($this->id)->rel(),
 				'U_DELETE'              => WikiUrlBuilder::delete($this->id, 0)->rel(),
 				'U_THUMBNAIL'           => $this->item_content->get_thumbnail()->rel(),
 				'U_COMMENTS'            => WikiUrlBuilder::display_comments($category->get_id(), $category->get_rewrited_name(), $this->id, $this->rewrited_title)->rel()
-			)
+            ]
 		);
 	}
 
 	public function get_array_tpl_source_vars($source_name)
 	{
-		$vars = array();
+		$vars = [];
 		$sources = $this->item_content->get_sources();
 
 		if (isset($sources[$source_name]))
 		{
-			$vars = array(
+			$vars = [
 				'C_SEPARATOR' => array_search($source_name, array_keys($sources)) < count($sources) - 1,
 				'NAME' => $source_name,
 				'URL'  => $sources[$source_name]
-			);
+            ];
 		}
 
 		return $vars;

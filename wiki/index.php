@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 10 11
+ * @version     PHPBoost 6.0 - last update: 2025 01 14
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -27,6 +27,7 @@ $url_controller_mappers = [
 	new UrlControllerMapper('WikiItemsManagerController', '`^/manage/?$`'),
 	new UrlControllerMapper('WikiItemFormController', '`^/add/?([0-9]+)?/?$`', ['id_category']),
 	new UrlControllerMapper('WikiItemFormController', '`^/([0-9]+)/edit/?$`', ['id']),
+	new UrlControllerMapper('WikiItemFormController', '`^/([0-9]+)/duplicate/?$`', ['id']),
 	new UrlControllerMapper('WikiItemHistoryController', '`^/([0-9]+)/history/?$`', ['id']),
 	new UrlControllerMapper('WikiItemArchiveController', '`^/([0-9]+)/archive/([0-9]+)/?$`', ['id', 'content_id']),
 	new UrlControllerMapper('WikiRestoreContentController', '`^/([0-9]+)/restore/([0-9]+)/?$`', ['id', 'content_id']),

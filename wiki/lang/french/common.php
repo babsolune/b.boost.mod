@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2023 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 10 11
+ * @version     PHPBoost 6.0 - last update: 2025 01 14
  * @since       PHPBoost 6.0 - 2022 11 18
  */
 
@@ -33,6 +33,7 @@ $lang['wiki.sticky.contents.table']   = 'Afficher la table des matières en posi
 $lang['wiki.root']               = 'Sans catégorie';
 $lang['wiki.add.item']           = 'Ajouter une fiche';
 $lang['wiki.edit.item']          = 'Modifier une fiche';
+$lang['wiki.duplicate.item']     = 'Dupliquer une fiche';
 $lang['wiki.my.items']           = 'Mes fiches';
 $lang['wiki.my.tracked']         = 'Mes favoris';
 $lang['wiki.member.items']       = 'Fiches publiées par';
