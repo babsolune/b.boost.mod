@@ -79,6 +79,8 @@ class ScmPracticeGamesFormController extends DefaultModuleController
                 $game->get_game_away_off_bonus() ||
                 $game->get_game_away_def_bonus()) ? ' ' . $this->lang['scm.bonus.param'] 
                 : '';
+            $c_has_details = ScmGameService::has_details($this->event_id(), 'P', $cluster, $round, $order);
+            $details_class = $c_has_details ? ' success' : '';
 
             if ($this->return_games && $order == 1 && $round != 1)
                 $fieldset->add_field(new FormFieldSpacer('first_leg_' . $field, $this->lang['scm.first.leg'],
@@ -87,7 +89,7 @@ class ScmPracticeGamesFormController extends DefaultModuleController
             $fieldset->add_field(new FormFieldFree('game_number_' . $field, '', $game_number . $bonus,
                 ['class' => 'label-top game-name small text-italic form-P-' . $field]
             ));
-            $fieldset->add_field(new FormFieldActionLink('details_' . $field, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'P', $cluster, $round, $order), 'd-inline-block game-details align-right'));
+            $fieldset->add_field(new FormFieldActionLink('details_' . $field, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'P', $cluster, $round, $order), 'd-inline-block game-details align-right' . $details_class));
 
             $fieldset->add_field(new FormFieldDateTime('game_date_' . $field, $this->lang['scm.game.form.date'], $game_date,
                 ['class' => 'label-top game-date']

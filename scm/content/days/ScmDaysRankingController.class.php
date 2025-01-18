@@ -139,8 +139,9 @@ class ScmDaysRankingController extends DefaultModuleController
             foreach (ScmRankingService::get_health_shape($this->event_id(), $team_rank['team_id'], $day, 5) as $results)
             {
                 $this->view->assign_block_vars('ranks.form', [
-                    'C_PLAYED' => $results['result'] != 'delayed',
-                    'C_EXEMPT' => $results['result'] == 'exempt',
+                    'C_DELAYED'   => $results['result'] == 'delayed',
+                    'C_EXEMPT'   => $results['result'] == 'exempt',
+                    'C_UNPLAYED' => $results['result'] == 'unplayed' || $results['result'] == 'exempt' || $results['result'] == 'delayed',
                     'L_PLAYED' => $this->lang['scm.rank.health.' . $results['result'] . ''],
                     'CLASS' => $results['class'],
                     'SCORE' => $results['score']

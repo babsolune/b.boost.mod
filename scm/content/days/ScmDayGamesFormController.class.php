@@ -82,6 +82,8 @@ class ScmDayGamesFormController extends DefaultModuleController
             // ScmGameFormService::get_field_list($form, self::class, $this->event_id(), $item, 'D', $cluster, 0, $order, $this->lang);
 
             $field = $cluster . $round . $order;
+            $c_has_details = ScmGameService::has_details($this->event_id(), 'D', $cluster, $round, $order);
+            $details_class = $c_has_details ? ' success' : '';
 
             $fieldset = new FormFieldsetHTML('game_' . $field, '');
             $fieldset->set_css_class('grouped-fields matchdays-game');
@@ -93,7 +95,7 @@ class ScmDayGamesFormController extends DefaultModuleController
                 '<strong>D' . $field . '</strong><span class="warning">' . $bonus . $forfeit . '</span>',
                 ['class' => 'game-name small text-italic form-D' . $field]
             ));
-            $fieldset->add_field(new FormFieldActionLink('details_' . $field, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $cluster, 0, $order), 'd-inline-block game-details align-right'));
+            $fieldset->add_field(new FormFieldActionLink('details_' . $field, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'D', $cluster, 0, $order), 'd-inline-block game-details align-right' . $details_class));
 
             $fieldset->add_field(new FormFieldDateTime('game_date_' . $field, $this->lang['scm.game.form.date'], $item->get_game_date(),
                 ['class' => 'game-date label-top']

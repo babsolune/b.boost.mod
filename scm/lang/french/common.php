@@ -109,6 +109,7 @@ $lang['scm.rank.health.lost'] = 'D';
 $lang['scm.rank.health.exempt'] = '#';
 $lang['scm.label.health.exempt'] = 'Exempté';
 $lang['scm.rank.health.delayed'] = 'Match reporté';
+$lang['scm.rank.health.unplayed'] = 'À jouer';
 $lang['scm.rank.chart'] = 'Progression de l\'équipe';
 
 $lang['scm.day']  = 'Journée';

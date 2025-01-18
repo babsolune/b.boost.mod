@@ -95,9 +95,9 @@
                                     <div class="scm-cell md-width-px-100 hidden-small-screens">
                                         # START ranks.form #
                                             <span
-                                                class="smaller pinned bgc# IF ranks.form.C_PLAYED #-full# ENDIF # {ranks.form.CLASS}"
-                                                aria-label="# IF NOT ranks.form.C_PLAYED #{@scm.rank.health.delayed}# ELSE ## IF ranks.form.C_EXEMPT #{@scm.label.health.exempt}# ELSE #{ranks.form.SCORE}# ENDIF ## ENDIF #">
-                                                # IF ranks.form.C_PLAYED #{ranks.form.L_PLAYED}# ELSE #&nbsp;&nbsp;# ENDIF #
+                                                class="smaller pinned bgc# IF NOT ranks.form.C_UNPLAYED #-full# ENDIF # {ranks.form.CLASS}"
+                                                aria-label="# IF ranks.form.C_UNPLAYED ## IF ranks.form.C_DELAYED #{@scm.rank.health.delayed}# ELSE ## IF ranks.form.C_EXEMPT #{@scm.label.health.exempt}# ELSE #{@scm.rank.health.unplayed}# ENDIF ## ENDIF ## ELSE #{ranks.form.SCORE}# ENDIF #">
+                                                # IF ranks.form.C_UNPLAYED #&nbsp;&nbsp;# ELSE #{ranks.form.L_PLAYED}# ENDIF #
                                             </span>
                                         # END ranks.form #
                                     </div>

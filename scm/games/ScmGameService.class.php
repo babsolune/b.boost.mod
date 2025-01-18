@@ -144,32 +144,32 @@ class ScmGameService
     }
 
     /** 
-     * get a game based on game group ids
+     * get a game based on game cluster ids
      * @param int $event_id the id of its event
-     * @param string $type 'G' = group or 'D' = day | 'B' = bracket
-     * @param int $group its group number
+     * @param string $type 'G' = cluster or 'D' = day | 'B' = bracket | 'P' = practice
+     * @param int $cluster its cluster number
      * @param int $round its round number
      * @param int $order its order number
     */
-	public static function get_game(int $event_id, string $type, int $group, int $round, int $order)
+	public static function get_game(int $event_id, string $type, int $cluster, int $round, int $order)
 	{
         $event_games = [];
         foreach (self::get_games($event_id) as $game)
         {
             $event_games[] = $game['game_type'].$game['game_cluster'].$game['game_round'].$game['game_order'];
         }
-        if (in_array($type.$group.$round.$order, $event_games))
+        if (in_array($type.$cluster.$round.$order, $event_games))
         {
             $row = self::$db_querier->select_single_row_query('SELECT *
                 FROM ' . ScmSetup::$scm_game_table . '
                 WHERE game_event_id = :event_id
                 AND game_type = :type
-                AND game_cluster = :group
+                AND game_cluster = :cluster
                 AND game_round = :round
                 AND game_order = :order', [
                     'event_id' => $event_id,
                     'type'     => $type,
-                    'group'    => $group,
+                    'cluster'  => $cluster,
                     'round'    => $round,
                     'order'    => $order,
                 ]
@@ -258,5 +258,21 @@ class ScmGameService
         }
         return $current_games;
 	}
+
+    public static function has_details($event_id, $type, $cluster, $round, $order)
+    {
+        $game = self::get_game($event_id, $type, $cluster, $round, $order);
+        $has_details = false;
+        if(
+            $game->get_game_home_pen() || $game->get_game_away_pen()
+            || $game->get_game_home_goals() || $game->get_game_away_goals()
+            || $game->get_game_home_yellow() || $game->get_game_away_yellow()
+            || $game->get_game_home_red() || $game->get_game_away_red()
+            || $game->get_game_video()->rel()
+        )
+            $has_details = true;
+
+        return $has_details;
+    }
 }
 ?>

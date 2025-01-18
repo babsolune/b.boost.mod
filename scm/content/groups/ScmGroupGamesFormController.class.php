@@ -84,6 +84,8 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     $item->get_game_away_off_bonus() ||
                     $item->get_game_away_def_bonus())
                         ? ' ' . $this->lang['scm.bonus.param'] : '';
+                $c_has_details = ScmGameService::has_details($this->event_id(), 'G', $cluster, 0, $order);
+                $details_class = $c_has_details ? ' success' : '';
 
                 $groups_fieldset->add_field(new FormFieldFree('game_number_' . $field, '', '<strong>G' . $field . '</strong><span class="warning">' . $bonus . '</span>     ',
                     ['class' => 'game-name small text-italic form-G' . $field]
@@ -153,6 +155,8 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     ${'fieldset_' . $field} = new FormFieldsetHTML('cluster_' . $field, '');
                     ${'fieldset_' . $field}->set_css_class('grouped-fields cluster-fields');
                     $form->add_fieldset(${'fieldset_' . $field});
+                    $c_has_details = ScmGameService::has_details($this->event_id(), 'G', $cluster, $round, $order);
+                    $details_class = $c_has_details ? ' success' : '';
 
                     if ($this->return_games && $order == 1)
                         ${'fieldset_' . $field}->add_field(new FormFieldSpacer('first_leg_' . $field, $this->lang['scm.first.leg']));
