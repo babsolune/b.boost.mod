@@ -261,8 +261,8 @@ class ScmDaysRankingController extends DefaultModuleController
             'C_EVENT_ENDING' => ($day ? $day : ScmDayService::get_last_day($this->event_id())) == count(ScmDayService::get_days($this->event_id())),
             'PREV_DAY' => $prev_day,
             'NEXT_DAY' => $next_day,
-            'PREV_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $prev_day), false),
-            'NEXT_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $next_day), false),
+            'PREV_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $prev_day)),
+            'NEXT_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $next_day)),
         ]);
     }
 

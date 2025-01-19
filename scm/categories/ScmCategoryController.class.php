@@ -41,7 +41,7 @@ class ScmCategoryController extends DefaultModuleController
         if ($this->get_category()->get_id() == Category::ROOT_CATEGORY)
         {
             $this->view->put_all([
-                'C_CURRENT_GAMES_CONFIG' => ScmConfig::load()->get_current_games(),
+                'C_CURRENT_GAMES_CONFIG' => ScmConfig::load()->get_current_games() && ScmConfig::load()->get_homepage() == ScmConfig::CATEGORIES,
                 'CURRENT_GAMES' => ScmCurrentGamesService::display_current_games()
             ]);
         }

@@ -39,7 +39,7 @@ class ScmGroupController extends DefaultModuleController
         $this->view->put_all([
             'GROUP' => ScmGroupService::ntl($group),
             'DAY' => $group,
-            'MATCHDAY_GAMES' => ScmGameFormat::format_cluster(ScmGroupService::games_list_from_group($this->event_id(), 'G', $group), false),
+            'MATCHDAY_GAMES' => ScmGameFormat::format_cluster(ScmGroupService::games_list_from_group($this->event_id(), 'G', $group)),
             'ROUND_GAMES'    => ScmGameFormat::format_cluster(ScmGroupService::games_list_from_group($this->event_id(), 'G', $group), true,),
         ]);
 

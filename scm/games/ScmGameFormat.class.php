@@ -9,11 +9,13 @@
 
 class ScmGameFormat
 {
-    public static function format_categories($foreach)
+    public static function format_categories($foreach, $c_class = false)
     {
         $view = new FileTemplate('scm/format/ScmFormatCategory.tpl');
         $lang = LangLoader::get_all_langs('scm');
         $view->add_lang($lang);
+
+        $view->put('C_CLASS', $c_class);
 
         $categories = [];
         foreach($foreach as $game)
@@ -41,7 +43,7 @@ class ScmGameFormat
         return $view;
     }
 
-    public static function format_cluster($foreach, $round = false)
+    public static function format_cluster($foreach, $c_class = false, $round = false)
     {
         $view = new FileTemplate('scm/format/ScmFormatCluster.tpl');
         $lang = LangLoader::get_all_langs('scm');
@@ -49,6 +51,8 @@ class ScmGameFormat
         usort($foreach, function($a, $b) {
             return strcmp($a['game_date'], $b['game_date']);
         });
+
+        $view->put('C_CLASS', $c_class);
 
         $blocks = $event_id = [];
         foreach($foreach as $game)
@@ -89,11 +93,13 @@ class ScmGameFormat
         return $view;
     }
 
-    public static function format_event($event_id, $foreach, $round = false, $bracket = true)
+    public static function format_event($event_id, $foreach, $c_class = false, $round = false, $bracket = true)
     {
         $view = new FileTemplate('scm/format/ScmFormatEvent.tpl');
         $lang = LangLoader::get_all_langs('scm');
         $view->add_lang($lang);
+
+        $view->put('C_CLASS', $c_class);
 
         foreach ($foreach as $block => $games)
         {

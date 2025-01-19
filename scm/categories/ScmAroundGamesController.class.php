@@ -30,7 +30,7 @@ class ScmAroundGamesController extends DefaultModuleController
 		$now = new Date();
 
         $this->view->put_all([
-            'C_CURRENT_GAMES_CONFIG' => ScmConfig::load()->get_current_games(),
+            'C_CURRENT_GAMES_CONFIG' => ScmConfig::load()->get_current_games() && ScmConfig::load()->get_homepage() == ScmConfig::GAME_LIST,
             'CURRENT_GAMES' => ScmCurrentGamesService::display_current_games()
         ]);
 

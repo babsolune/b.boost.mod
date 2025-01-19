@@ -33,7 +33,6 @@ jQuery(document).ready(function(){
 
     // Auto open li if filled
     const li = jQuery('.has-children');
-        console.log(li);
     li.each(function(item) {
         const child = jQuery(this).children('.categories-item');
         const ul = jQuery(this).children('[class*="items-list-"]');

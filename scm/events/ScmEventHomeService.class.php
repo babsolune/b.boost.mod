@@ -45,8 +45,8 @@ class ScmEventHomeService
             'C_EVENT_STARTING' => $next_day == 1,
             'L_STARTING_DATE' => StringVars::replace_vars($lang['scm.event.not.started'], ['date' => Date::to_format(ScmEventService::get_event($event_id)->get_start_date()->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT)]),
             'C_EVENT_ENDING' => $prev_day == count(ScmDayService::get_days($event_id)),
-            'PREV_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($event_id, $prev_day), false),
-            'NEXT_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($event_id, $next_day), false),
+            'PREV_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($event_id, $prev_day)),
+            'NEXT_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($event_id, $next_day)),
             'PREV_DAY' => $prev_day,
             'NEXT_DAY' => $next_day,
         ]);
@@ -187,8 +187,8 @@ class ScmEventHomeService
             $view->assign_block_vars('matchdays', [
                 'MATCHDAY' => $matchday,
                 'U_MATCHDAY' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $matchday)->rel(),
-                'MATCHDAYS_LIST'     => ScmGameFormat::format_event($event_id, $dates, false, false),
-                'ROUNDS_LIST'        => ScmGameFormat::format_event($event_id, $dates, true, false),
+                'MATCHDAYS_LIST'     => ScmGameFormat::format_event($event_id, $dates),
+                'ROUNDS_LIST'        => ScmGameFormat::format_event($event_id, $dates, false, true),
             ]);
         }
 
@@ -214,9 +214,9 @@ class ScmEventHomeService
         foreach ($matchrounds as $matchround => $dates)
         {
             $view->assign_block_vars('matchrounds', [
-                'MATCHDAYS_LIST'     => ScmGameFormat::format_event($event_id, $dates, false, true),
-                'ROUNDS_LIST'        => ScmGameFormat::format_event($event_id, $dates, false, true),
-                'ROUND_RANKING_LIST' => ScmGameFormat::format_event($event_id, $dates, false, false),
+                'MATCHDAYS_LIST'     => ScmGameFormat::format_event($event_id, $dates, false, false, true),
+                'ROUNDS_LIST'        => ScmGameFormat::format_event($event_id, $dates, false, false, true),
+                'ROUND_RANKING_LIST' => ScmGameFormat::format_event($event_id, $dates),
                 'L_MATCHROUND' => ($matchround == $c_first_round && $c_hat_ranking)
                                     ? LangLoader::get_message('scm.playoff.games', 'common', 'scm')
                                     : (ScmParamsService::get_params($event_id)->get_finals_type() == ScmParams::FINALS_RANKING
@@ -335,7 +335,7 @@ class ScmEventHomeService
         foreach ($matchrounds as $matchround => $dates)
         {
             $view->assign_block_vars('matchrounds', [
-                'ROUNDS_LIST' => ScmGameFormat::format_event($event_id, $dates, false, true),
+                'ROUNDS_LIST' => ScmGameFormat::format_event($event_id, $dates, false, false, true),
                 'L_MATCHROUND' => ($matchround == $c_first_round && $c_hat_ranking)
                                     ? LangLoader::get_message('scm.playoff.games', 'common', 'scm')
                                     : (ScmParamsService::get_params($event_id)->get_finals_type() == ScmParams::FINALS_RANKING
@@ -353,7 +353,7 @@ class ScmEventHomeService
 
         $view->put_all([
             'C_HAS_GAMES' => ScmGameService::has_games($event_id),
-            'GAMES_LIST' => ScmGameFormat::format_cluster($games, false),
+            'GAMES_LIST' => ScmGameFormat::format_cluster($games),
         ]);
         return $view;
     }

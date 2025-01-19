@@ -32,7 +32,7 @@ class ScmCurrentEventsController extends DefaultModuleController
 		$authorized_categories = CategoriesService::get_authorized_categories(Category::ROOT_CATEGORY, true, self::$module_id);
 
         $this->view->put_all([
-            'C_CURRENT_GAMES_CONFIG' => ScmConfig::load()->get_current_games(),
+            'C_CURRENT_GAMES_CONFIG' => ScmConfig::load()->get_current_games() && ScmConfig::load()->get_homepage() == ScmConfig::EVENT_LIST,
             'CURRENT_GAMES' => ScmCurrentGamesService::display_current_games()
         ]);
 
