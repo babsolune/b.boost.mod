@@ -181,32 +181,34 @@ class ScmClub
 
 	public function get_properties()
 	{
+        $real_club = ScmClubCache::load()->get_club($this->club_affiliation);
 		return [
-			'id_club'          => $this->get_id_club(),
-			'club_name'        => $this->get_club_name(),
-			'club_slug'        => $this->get_club_slug(),
-			'club_affiliate'   => $this->get_club_affiliate(),
-			'club_affiliation' => $this->get_club_affiliation(),
-			'club_full_name'   => $this->get_club_full_name(),
-			'club_flag'        => $this->get_club_flag(),
-			'club_logo'        => $this->get_club_logo(),
-			'club_website'     => $this->get_club_website()->absolute(),
-			'club_email'       => $this->get_club_email(),
-			'club_phone'       => $this->get_club_phone(),
-			'club_locations'   => $this->get_club_locations(),
-			'club_map_display' => $this->get_club_map_display(),
-			'club_colors'      => TextHelper::serialize($this->get_club_colors())
+			'id_club'          => $this->id_club,
+			'club_name'        => $this->club_name,
+			'club_slug'        => $real_club ? $real_club['club_slug'] : $this->club_slug,
+			'club_affiliate'   => $this->club_affiliate,
+			'club_affiliation' => $this->club_affiliation,
+			'club_full_name'   => $real_club ? $real_club['club_full_name'] : $this->club_full_name,
+			'club_flag'        => $this->club_flag,
+			'club_logo'        => $this->club_logo,
+			'club_website'     => $this->club_website->absolute(),
+			'club_email'       => $this->club_email,
+			'club_phone'       => $this->club_phone,
+			'club_locations'   => $this->club_locations,
+			'club_map_display' => $this->club_map_display,
+			'club_colors'      => TextHelper::serialize($this->club_colors)
         ];
 	}
 
 	public function set_properties(array $properties)
 	{
+        $real_club = ScmClubCache::load()->get_club($properties['club_affiliation']);
 		$this->id_club          = $properties['id_club'];
 		$this->club_name        = $properties['club_name'];
-		$this->club_slug        = $properties['club_slug'];
+		$this->club_slug        = $this->club_affiliate ? $real_club['club_slug'] : $properties['club_slug'];
 		$this->club_affiliate   = $properties['club_affiliate'];
 		$this->club_affiliation = $properties['club_affiliation'];
-		$this->club_full_name   = $properties['club_full_name'];
+		$this->club_full_name   = $this->club_affiliate ? $real_club['club_full_name'] : $properties['club_full_name'];
 		$this->club_flag        = $properties['club_flag'];
 		$this->club_logo        = $properties['club_logo'];
 		$this->club_website     = new Url($properties['club_website']);
@@ -269,7 +271,7 @@ class ScmClub
 			'LOCATION_MAP' => $club_locations_map,
 
 			// Links
-			'U_LOGO'         => Url::to_rel($this->club_logo),
+			'U_LOGO'         => Url::to_rel(ScmClubCache::load()->get_affiliate_club_shield($this->id_club)),
 			'U_FLAG'         => TPL_PATH_TO_ROOT . '/images/stats/countries/' . $this->club_flag . '.png',
 			'U_CLUB_WEBSITE' => ScmUrlBuilder::visit_club($this->id_club)->rel(),
 			'U_CLUB'         => $this->get_club_url(),

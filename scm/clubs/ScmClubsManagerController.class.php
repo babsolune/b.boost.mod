@@ -28,7 +28,6 @@ class ScmClubsManagerController extends DefaultModuleController
 		$columns = [
 			new HTMLTableColumn($this->lang['scm.club.full.name'], 'club_full_name'),
 			new HTMLTableColumn($this->lang['scm.club.name'], 'club_name'),
-			new HTMLTableColumn($this->lang['scm.club.colors'], ''),
 			new HTMLTableColumn($this->lang['scm.club.flag'], ''),
 			new HTMLTableColumn($this->lang['scm.club.logo'], ''),
 			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_club()->rel() . '" aria-label="' . $this->lang['scm.club.add'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
@@ -61,18 +60,10 @@ class ScmClubsManagerController extends DefaultModuleController
 			$delete_link = new DeleteLinkHTMLElement(ScmUrlBuilder::delete_club($club->get_id_club()), '', ['data-confirmation' => $this->lang['scm.warning.delete.club']]);
 
             $real_id = $club->get_club_affiliate() ? $club->get_club_affiliation() : $club->get_id_club();
-            $real_name = $club->get_club_affiliate() ? ScmClubService::get_club($club->get_club_affiliation())->get_club_full_name() : $club->get_club_full_name();
-            $real_slug = $club->get_club_affiliate() ? ScmClubService::get_club($club->get_club_affiliation())->get_club_slug() : $club->get_club_slug();
 
-            $colors = '';
-            foreach(TextHelper::deserialize($club->get_club_colors()) as $color)
-            {
-                $colors .= '<span class="club-colors" style="background-color:' . $color . '"></span>';
-            }
 			$row = [
-				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_club($real_id, $real_slug), $real_name)),
+				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_club($real_id, $club->get_club_slug()), $club->get_club_full_name())),
 				new HTMLTableRowCell(new SpanHTMLElement($club->get_club_name())),
-				new HTMLTableRowCell(new SpanHTMLElement($colors)),
 				new HTMLTableRowCell(
                     $club->get_club_flag() ?
                     new ImgHTMLElement(

@@ -58,8 +58,6 @@ class ScmClubFormController extends DefaultModuleController
                         HTMLForms.getField("locations").disable();
                         HTMLForms.getField("map_display").disable();
                         HTMLForms.getField("flag").disable();
-                        HTMLForms.getField("logo").disable();
-                        jQuery("#' . __CLASS__ . '_logo_preview").hide();
                     } else {
                         HTMLForms.getField("affiliation").disable();
                         HTMLForms.getField("full_name").enable();
@@ -70,8 +68,6 @@ class ScmClubFormController extends DefaultModuleController
                         HTMLForms.getField("locations").enable();
                         HTMLForms.getField("map_display").enable();
                         HTMLForms.getField("flag").enable();
-                        HTMLForms.getField("logo").enable();
-                        jQuery("#' . __CLASS__ . '_logo_preview").show();
                     }
                 ']
             ]
@@ -140,9 +136,7 @@ class ScmClubFormController extends DefaultModuleController
             ['hidden' => $this->get_club()->get_club_affiliate()]
         ));
 
-        $fieldset->add_field(new FormFieldUploadFile('logo', $this->lang['scm.club.logo'], $this->is_new_club ? ScmClub::CLUB_LOGO : $this->get_club()->get_club_logo(),
-            ['hidden' => $this->get_club()->get_club_affiliate()]
-        ));
+        $fieldset->add_field(new FormFieldUploadFile('logo', $this->lang['scm.club.logo'], $this->is_new_club ? ScmClub::CLUB_LOGO : $this->get_club()->get_club_logo()));
 
 		$fieldset->add_field(new FormFieldHidden('referrer', $request->get_url_referrer()));
 
