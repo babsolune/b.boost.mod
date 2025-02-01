@@ -657,7 +657,7 @@ class ScmGame
         $club = ScmClubCache::load()->get_club($team->get_team_club_id());
         $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
         $real_club = new ScmClub();
-        $real_club->set_properties(ScmClubCache::load()->get_club($real_id));
+        $real_club->set_properties((array)ScmClubCache::load()->get_club($real_id));
 
         $real_stadium = [];
         foreach (TextHelper::deserialize($real_club->get_club_locations()) as $options)
