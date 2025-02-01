@@ -14,10 +14,12 @@ class ScmCurrentGamesService
         $view = new FileTemplate('scm/ScmCurrentGamesController.tpl');
         $lang = LangLoader::get_all_langs('scm');
         $view->add_lang($lang);
+        // Debug::dump(ScmGameService::get_week_games());
 
         $view->put_all([
-            'C_CURRENT_GAMES' => count(ScmGameService::get_current_games()) > 0,
-            'C_BEFORE_GAMES' => count(ScmGameService::get_before_current_games()) > 0,
+            'C_CURRENT_GAMES'   => count(ScmGameService::get_current_games()) > 0,
+            'C_BEFORE_GAMES'    => count(ScmGameService::get_before_current_games()) > 0,
+            'WEEK_GAMES_LIST'   => ScmGameFormat::format_categories(ScmGameService::get_week_games(), true),
             'GAMES_LIST'        => ScmGameFormat::format_categories(ScmGameService::get_current_games(), true),
             'BEFORE_GAMES_LIST' => ScmGameFormat::format_categories(ScmGameService::get_before_current_games(), true),
         ]);

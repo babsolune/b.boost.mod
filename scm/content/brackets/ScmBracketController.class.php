@@ -84,11 +84,11 @@ class ScmBracketController extends DefaultModuleController
         foreach ($rounds_count as $key => $round)
         {
             $this->view->assign_block_vars('rounds', [
-                'C_ALL_PLACES' => $key !== $first_key && $this->looser_bracket,
-                'C_FINAL' => $key == $last_key,
+                'C_ALL_PLACES'  => $key !== $first_key && $this->looser_bracket,
+                'C_FINAL'       => $key == $last_key,
                 'C_HAT_PLAYOFF' => $c_hat_ranking && $key == $first_key,
-                'C_DRAW_GAMES' => $c_draw_games,
-                'L_TITLE' => $c_hat_ranking && $key == $first_key ? $this->lang['scm.round.playoff'] : $this->lang['scm.round.of.'.$this->round_title($round).'']
+                'C_DRAW_GAMES'  => $c_draw_games,
+                'L_TITLE'       => $c_hat_ranking && $key == $first_key ? $this->lang['scm.round.playoff'] : $this->lang['scm.round.of.'.$this->round_title($round).'']
             ]);
             $round_games = [];
             for ($i = 0; $i < count($games); $i++)
@@ -97,7 +97,6 @@ class ScmBracketController extends DefaultModuleController
                     $round_games[] = $games[$i];
             }
 
-            // $c_round = $c_hat_ranking ? ($key !== $last_key && $key !== $first_key) : ($key !== $last_key);
             $c_round = true;
             if ($c_round)
             {

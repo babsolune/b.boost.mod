@@ -120,7 +120,7 @@ class ScmEventService
         $running_events = [];
 		$results = self::$db_querier->select('SELECT event.*
             FROM ' . ScmSetup::$scm_event_table . ' event
-            WHERE event.start_date < :now AND event.end_date > :now', [
+            WHERE event.end_date > :now', [
             'now' => $now->get_timestamp()
         ]);
         while($row = $results->fetch())

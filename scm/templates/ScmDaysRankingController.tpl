@@ -65,7 +65,7 @@
                                 <div class="scm-line-group sm-width-pc-100 md-width-pc-45">
                                     <div class="scm-cell md-width-px-43">{ranks.RANK}</div>
                                     <div class="scm-cell scm-name cell-left md-width-pc-92 flex-between">
-                                        <div>
+                                        <div class="flex-between">
                                             # IF ranks.C_HAS_TEAM_LOGO #<img src="{ranks.TEAM_LOGO}" alt="{ranks.TEAM_NAME}"># ENDIF #
                                             <span>
                                                 <a href="{ranks.U_TEAM_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{ranks.TEAM_NAME}</a>

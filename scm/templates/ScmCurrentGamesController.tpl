@@ -3,12 +3,22 @@
         <article class="content">
             <header class="flex-between modal-container">
                 <h2>{@scm.today.games}</h2>
-                <a data-modal data-target="before-games" aria-label="{@scm.yesterday.games}"><i class="fa fa-fw fa-clock-rotate-left" aria-hidden="true"></i></a>
-                <div id="before-games" class="modal modal-animation">
-                    <div class="close-modal" aria-label="{@common.close}"></div>
-                    <div class="content-panel">
-                        <h4>{@scm.yesterday.games}</h4>
-                        # INCLUDE BEFORE_GAMES_LIST #
+                <div class="controls">
+                    <a data-modal data-target="before-games" aria-label="{@scm.yesterday.games}"><i class="fa fa-fw fa-clock-rotate-left" aria-hidden="true"></i></a>
+                    <div id="before-games" class="modal modal-animation">
+                        <div class="close-modal" aria-label="{@common.close}"></div>
+                        <div class="content-panel">
+                            <h4>{@scm.yesterday.games}</h4>
+                            # INCLUDE BEFORE_GAMES_LIST #
+                        </div>
+                    </div>
+                    <a data-modal data-target="before-games" aria-label="{@scm.week.games}"><i class="fa fa-fw fa-calendar-alt" aria-hidden="true"></i></a>
+                    <div id="before-games" class="modal modal-animation">
+                        <div class="close-modal" aria-label="{@common.close}"></div>
+                        <div class="content-panel">
+                            <h4>{@scm.week.games}</h4>
+                            # INCLUDE WEEK_GAMES_LIST #
+                        </div>
                     </div>
                 </div>
             </header>

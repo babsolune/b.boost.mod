@@ -204,7 +204,7 @@ class ScmTeamService
         $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
         $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
 
-        return ScmUrlBuilder::display_club($real_id, $real_slug)->rel();
+        return ScmUrlBuilder::display_club((int)$real_id, (string)$real_slug)->rel();
 	}
 }
 ?>

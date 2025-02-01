@@ -235,6 +235,40 @@ class ScmGameService
 	}
 
     // Check current games
+    public static function get_week_games():array
+	{
+        $running_events = ScmEventService::get_running_events_id();
+        $events_id = $running_events ? implode(', ', $running_events) : 0;
+        $now = new Date();
+        // week
+        // $serverTimezone = date_default_timezone_get();
+        // $timezone = new DateTimeZone($serverTimezone);
+        $today = new DateTime();
+        // $today->setTimezone($timezone);
+        $start = clone $today;
+        $start->modify('monday this week');
+        $start->setTime(00, 00, 00);
+        $end = clone $today;
+        $end->modify('sunday this week');
+        $end->setTime(23, 59, 59);
+        $start_day = $start->getTimestamp();
+        $end_day = $end->getTimestamp();
+        // /week
+        $games = self::$db_querier->select('SELECT games.*
+            FROM ' . ScmSetup::$scm_game_table . ' games
+            WHERE games.game_event_id IN (' . $events_id . ')
+            ORDER BY games.game_date'
+        );
+        $current_games = [];
+        foreach ($games as $game)
+        {
+            if ($start_day <= $game['game_date'] && $game['game_date'] <= $end_day)
+                $current_games[] = $game;
+        }
+        return $current_games;
+	}
+
+    // Check current games
     public static function get_before_current_games():array
 	{
         $running_events = ScmEventService::get_running_events_id();

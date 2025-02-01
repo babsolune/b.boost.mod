@@ -5,7 +5,7 @@
                 <ul class="cell-header">
                     <li>
                         # IF C_EVENT_STARTING #
-                            <a href="#" data-tabs="" data-target="prev-panel-{EVENT_ID}" class="bgc notice">{L_STARTING_DATE}</a>
+                            <a href="#" data-tabs="" data-target="prev-panel-{EVENT_ID}" class="bgc notice">{@scm.event.pending}</a>
                         # ELSE #
                             <a href="#" data-tabs="" data-target="prev-panel-{EVENT_ID}" class="active-tab"> {@scm.day} {PREV_DAY}</a>
                         # ENDIF #
@@ -84,12 +84,12 @@
                     <div class="scm-line ranking-color team-{ranks.TEAM_ID}# IF ranks.C_FAV # fav-team# ENDIF #" style="background-color: {ranks.RANK_COLOR}">
                         <div class="scm-line-group md-width-pc-70">
                             <div class="scm-cell md-width-pc-20">{ranks.RANK}</div>
-                            <div class="scm-cell scm-name cell-left md-width-pc-80">
-                                # IF ranks.C_HAS_TEAM_LOGO #<img src="{ranks.TEAM_LOGO}" alt="{ranks.TEAM_NAME}"># ENDIF #
-                                <span>
-                                    <a href="{ranks.U_TEAM_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{ranks.TEAM_NAME}</a>
-                                    # IF ranks.C_FORFEIT #<span class="smaller text-italic warning">({@scm.params.status.forfeit})</span># ENDIF #
-                                </span>
+                            <div class="scm-cell scm-name cell-left md-width-pc-80 flex-between">
+                                <div class="flex-between">
+                                    # IF ranks.C_HAS_TEAM_LOGO #<img src="{ranks.TEAM_LOGO}" alt="{ranks.TEAM_NAME}"># ENDIF #
+                                    <span><a href="{ranks.U_TEAM_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{ranks.TEAM_NAME}</a></span>
+                                </div>
+                                # IF ranks.C_FORFEIT #<span class="smaller text-italic warning">({@scm.params.status.forfeit})</span># ENDIF #
                             </div>
                         </div>
                         <div class="scm-line-group md-width-pc-30">

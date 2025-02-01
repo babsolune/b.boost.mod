@@ -21,11 +21,11 @@ class ScmGameFormat
         foreach($foreach as $game)
         {
             $category = ScmEventService::get_event($game['game_event_id'])->get_category();
-            $categories[$category->get_id()][] = $game;
+            $categories[$category->get_id()][$game['game_event_id']][] = $game;
         }
         ksort($categories);
 
-        foreach ($categories as $cat => $games)
+        foreach ($categories as $cat => $event)
         {
             $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($cat);
             $view->assign_block_vars('categories', [
@@ -33,11 +33,25 @@ class ScmGameFormat
                 'U_CATEGORY'    => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel()
             ]);
 
-            foreach($games as $game)
+            foreach ($event as $event_id => $games)
             {
-                $item = new ScmGame();
-                $item->set_properties($game);
-                $view->assign_block_vars('categories.items', $item->get_template_vars());
+                $division_id = ScmEventService::get_event($event_id)->get_division_id();
+                $view->assign_block_vars('categories.events', [
+                    'C_IS_SUB'       => ScmEventService::is_sub_event($event_id),
+                    'MASTER_EVENT'   => ScmEventService::get_master_division($event_id),
+                    'U_MASTER_EVENT' => ScmEventService::get_master_url($event_id),
+                    'EVENT'          => ScmDivisionService::get_division($division_id)->get_division_name(),
+                    'U_EVENT'        => ScmUrlBuilder::event_home($event_id, ScmEventService::get_event_slug($event_id))->rel(),
+                ]);
+                foreach($games as $game)
+                {
+                    $item = new ScmGame();
+                    $item->set_properties($game);
+                    $view->assign_block_vars('categories.events.items', array_merge($item->get_template_vars(), [
+                        'C_LATE'         => $item->get_game_cluster() < ScmDayService::get_last_day($item->get_game_event_id()),
+                        'C_HAT_RANKING' => ScmParamsService::get_params($item->get_game_event_id())->get_hat_ranking()
+                    ]));
+                }
             }
         }
         return $view;
@@ -120,6 +134,9 @@ class ScmGameFormat
                     $c_link = true;
                     $link_name = $lang['scm.group'] . ' ' . ScmGroupService::ntl($item->get_game_cluster());
                 } elseif(!$round && $bracket) {
+                    $c_link = false;
+                    $link_name = '';
+                } else {
                     $c_link = false;
                     $link_name = '';
                 }

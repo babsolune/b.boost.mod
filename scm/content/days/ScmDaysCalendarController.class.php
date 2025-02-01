@@ -31,7 +31,7 @@ class ScmDaysCalendarController extends DefaultModuleController
             'MENU'        => ScmMenuService::build_event_menu($this->event_id()),
             'C_HAS_GAMES' => ScmGameService::has_games($this->event_id()),
             'DAY'         => $cluster,
-            'DAY_GAMES'   => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $cluster)),
+            'DAY_GAMES'   => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $cluster))
         ]);
 	}
 

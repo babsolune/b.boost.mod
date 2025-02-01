@@ -5,7 +5,10 @@
             <div id="game-{blocks.items.GAME_ID}" class="cell cell-game">
                 <div class="flex-between flex-between-large">
                     <div class="flex-between sm-width-pc-100 md-width-pc-33 small">
-                        <time class="sm-width-pc-70 small cell-gap align-center">{blocks.items.GAME_DATE_HOUR_MINUTE}</time>
+                        <time class="sm-width-pc-# IF blocks.items.C_STATUS #50# ELSE #70# ENDIF # small cell-gap align-center">{blocks.items.GAME_DATE_HOUR_MINUTE}</time>
+                        # IF blocks.items.C_STATUS #
+                            <div class="sm-width-pc-20 smaller text-italic align-center bgc notice">{blocks.items.STATUS}</div>
+                        # ENDIF #
                         <div class="sm-width-pc-30 cell-gap align-center game-details modal-container" aria-label="{@scm.game.event.details}">
                             <a data-modal="" data-target="target-panel-{blocks.items.GAME_ID}">
                                 # IF blocks.items.C_HAS_DETAILS #
@@ -130,6 +133,7 @@
                         </div>
                         <div class="game-score home-score cell-pad sm-width-pc-20">{blocks.items.HOME_SCORE}# IF blocks.items.C_HAS_PEN # <span class="small">({blocks.items.HOME_PEN})</span># ENDIF #</div>
                     </div>
+                    <div class="hidden-small-screens">-</div>
                     <div class="team-{blocks.items.AWAY_ID} flex-between sm-width-pc-100 md-width-pc-50 invert-team">
                         <div class="game-score away-score cell-pad sm-width-pc-20">{blocks.items.AWAY_SCORE}# IF blocks.items.C_HAS_PEN # <span class="small">({blocks.items.AWAY_PEN})</span># ENDIF #</div>
                         <div class="game-team away-team cell-pad flex-team flex-left sm-width-pc-80# IF blocks.items.C_AWAY_FAV # text-strong# ENDIF #">
