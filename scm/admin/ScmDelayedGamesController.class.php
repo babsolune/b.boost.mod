@@ -94,7 +94,7 @@ class ScmDelayedGamesController extends DefaultModuleController
         $matchdays = [];
         foreach($games as $game)
         {
-            if($game['game_status'] == ScmGame::DELAYED)
+            if($game['game_status'] == ScmGame::DELAYED || $game['game_status'] == ScmGame::STOPPED)
                 $matchdays[Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
         }
         $now = new Date();
