@@ -12,7 +12,7 @@ class ScmGroupController extends DefaultModuleController
     private $event;
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmGroupController.tpl');
+		return new FileTemplate('scm/content/ScmGroupController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
@@ -26,7 +26,7 @@ class ScmGroupController extends DefaultModuleController
 	{
         $c_hat_ranking = (bool)$this->get_params()->get_hat_ranking();
         $this->view->put_all([
-            'C_ONE_DAY'             => ScmGameService::one_day_event($this->event_id()),
+            'C_ONE_DAY'             => $this->get_event()->get_oneday(),
             'C_DISPLAY_PLAYGROUNDS' => $this->get_params()->get_display_playgrounds(),
             'C_HAT_RANKING'         => $c_hat_ranking,
             'C_HAS_GAMES'           => ScmGameService::has_games($this->event_id()),
@@ -72,7 +72,8 @@ class ScmGroupController extends DefaultModuleController
             } else {
                 $rank_color = 'rgba(0,0,0,0)';
             }
-            $this->view->assign_block_vars('ranks', [
+            $this->view->assign_block_vars('ranks',
+                [
                     'C_FAV'         => ScmParamsService::check_fav($this->event_id(), $team_rank['team_id']),
                     'RANK'          => $i + 1,
                     'RANK_COLOR'    => $rank_color,

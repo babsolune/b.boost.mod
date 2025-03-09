@@ -40,7 +40,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
     {
         $this->hat_ranking     = $this->get_params()->get_hat_ranking();
         $this->teams_number    = ScmTeamService::get_teams_number($this->event_id());
-        $this->return_games    = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $this->return_games    = $this->get_event()->get_event_game_type() == ScmEvent::RETURN_GAMES;
     }
 
 	private function build_form()
@@ -113,8 +113,8 @@ class ScmGroupGamesFormController extends DefaultModuleController
                 $groups_fieldset->add_field(new FormFieldSimpleSelectChoice('status_' . $field, '', $item->get_game_status(),
                     [
                         new FormFieldSelectChoiceOption('', ''),
-                        new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.completed'], ScmGame::COMPLETED),
                         new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.delayed'], ScmGame::DELAYED),
+                        new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.reserve'], ScmGame::RESERVE),
                         new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.stopped'], ScmGame::STOPPED)
                     ],
                     ['class' => 'game-status portable-full']
@@ -133,7 +133,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
             // Empty list of teams if odd number
             $odd_filled = $this->teams_number % 2 != 0 && $this->get_params()->get_fill_games();
 
-            $c_one_day = ScmGameService::one_day_event($this->event_id());
+            $c_one_day = $this->get_event()->get_oneday();
             $total_games = [];
             foreach($this->get_group_games($cluster) as $round => $games)
             {
@@ -191,8 +191,8 @@ class ScmGroupGamesFormController extends DefaultModuleController
                     ${'fieldset_' . $field}->add_field(new FormFieldSimpleSelectChoice('status_' . $field, '', $item->get_game_status(),
                         [
                             new FormFieldSelectChoiceOption('', ''),
-                            // new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.completed'], ScmGame::COMPLETED),
                             new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.delayed'], ScmGame::DELAYED),
+                            new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.reserve'], ScmGame::RESERVE),
                             new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.stopped'], ScmGame::STOPPED)
                         ],
                         ['class' => 'game-status portable-full']
@@ -358,7 +358,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
             # INCLUDE MESSAGE_HELPER #
             # INCLUDE MENU #
             # INCLUDE CONTENT #
-            <script src="{PATH_TO_ROOT}/scm/templates/js/scm.loader# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
+            <script src="{PATH_TO_ROOT}/scm/templates/js/scm.loader.js"></script>
         ';
 	}
 

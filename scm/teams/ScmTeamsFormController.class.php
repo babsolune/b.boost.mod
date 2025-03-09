@@ -22,8 +22,7 @@ class ScmTeamsFormController extends DefaultModuleController
 			$this->save();
             $event_name = $this->get_event()->get_event_name();
             $teams_number = ScmTeamService::get_teams_number($this->event_id());
-            $event_type = ScmEventService::get_event_type($this->event_id());
-            if ($event_type == ScmDivision::TOURNAMENT || $event_type == ScmDivision::CUP)
+            if ($this->event->get_event_type() == ScmEvent::TOURNAMENT || $this->event->get_event_type() == ScmEvent::CUP)
             {
                 if (is_numeric($teams_number) && $teams_number % 2 == 0)
                     $this->view->put('MESSAGE_HELPER', MessageHelper::display(StringVars::replace_vars($this->lang['scm.warning.add.teams'], ['teams_number' => $teams_number, 'event_name' => $event_name]), MessageHelper::SUCCESS, 4));

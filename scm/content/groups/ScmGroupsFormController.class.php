@@ -40,6 +40,10 @@ class ScmGroupsFormController extends DefaultModuleController
         $form->set_css_class('cell-flex cell-columns-4');
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.groups.management'] . '</div>');
 
+        $date_fieldset = new FormFieldsetHTML('event_date', '');
+        $date_fieldset->set_css_class('cell-100 form-columns-2');
+        $form->add_fieldset($date_fieldset);
+
         $groups_number = $this->get_params()->get_groups_number();
         $teams = ScmTeamService::get_teams($this->event_id());
         $groups = array_fill(0, $groups_number, []);
@@ -61,6 +65,15 @@ class ScmGroupsFormController extends DefaultModuleController
                     ['class' => 'groups-select']
                 ));
             }
+        }
+
+        if (ScmGameService::has_games($this->event_id())) {
+            $delete_fieldset = new FormFieldsetHTML('delete', '');
+            $delete_fieldset->set_css_class('cell-100');
+            $form->add_fieldset($delete_fieldset);
+            $delete_fieldset->add_field(new FormFieldCheckbox('remove_games', 'Recréer la liste des matchs', ScmGameService::has_games($this->event_id()),
+                ['class' => 'cell-100']
+            ));
         }
 
 		$this->submit_button = new FormButtonDefaultSubmit();
@@ -98,23 +111,24 @@ class ScmGroupsFormController extends DefaultModuleController
             }
         }
 
-        if (ScmGameService::has_games($this->event_id()))
+        if (ScmGameService::has_games($this->event_id()) && $this->form->get_value('remove_games'))
             ScmGameService::delete_games($this->event_id());
-        if ($this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING)
-        {
-            ScmGroupService::set_groups_games($this->event_id());
-            ScmGroupService::set_groups_finals_games($this->event_id());
-        }
-        elseif ($this->get_params()->get_finals_type() == ScmParams::FINALS_ROUND)
-        {
-            if ($this->get_params()->get_hat_ranking())
-                ScmGroupService::set_hat_days_games($this->event_id(), $this->get_params()->get_hat_days(), ScmTeamService::get_teams_number($this->event_id()));
-            else
+
+        if (!ScmGameService::has_games($this->event_id()) || (ScmGameService::has_games($this->event_id()) && $this->form->get_value('remove_games'))) {
+            if ($this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING) {
                 ScmGroupService::set_groups_games($this->event_id());
-            ScmBracketService::set_bracket_games($this->event_id(), ScmParamsService::get_params($this->event_id())->get_rounds_number());
+                ScmGroupService::set_groups_finals_games($this->event_id());
+            } elseif ($this->get_params()->get_finals_type() == ScmParams::FINALS_ROUND) {
+                if ($this->get_params()->get_hat_ranking()) {
+                    ScmGroupService::set_hat_days_games($this->event_id(), $this->get_params()->get_hat_days(), ScmTeamService::get_teams_number($this->event_id()));
+                } else {
+                    ScmGroupService::set_groups_games($this->event_id());
+                }
+                ScmBracketService::set_bracket_games($this->event_id(), ScmParamsService::get_params($this->event_id())->get_rounds_number());
+            } else {
+                ScmBracketService::set_bracket_games($this->event_id(), ScmParamsService::get_params($this->event_id())->get_rounds_number());
+            }
         }
-        else
-            ScmBracketService::set_bracket_games($this->event_id(), ScmParamsService::get_params($this->event_id())->get_rounds_number());
 
 		ScmEventService::clear_cache();
 	}

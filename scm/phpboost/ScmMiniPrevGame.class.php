@@ -41,7 +41,7 @@ class ScmMiniPrevGame extends ModuleMiniMenu
 	public function get_menu_content()
 	{
 		// Create file template
-		$view = new FileTemplate('scm/ScmMiniPrevGame.tpl');
+		$view = new FileTemplate('scm/menus/ScmMiniPrevGame.tpl');
 
 		// Assign the lang file to the tpl
 		$view->add_lang(LangLoader::get_all_langs('scm'));

@@ -16,7 +16,7 @@ class ScmCategoryController extends DefaultModuleController
 
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmCategoryController.tpl');
+		return new FileTemplate('scm/main/ScmCategoryController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)

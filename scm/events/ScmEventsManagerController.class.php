@@ -33,6 +33,8 @@ class ScmEventsManagerController extends DefaultModuleController
 			new HTMLTableColumn($this->lang['item'], 'division_name'),
 			new HTMLTableColumn($this->lang['scm.event.master'], 'master_id'),
 			new HTMLTableColumn($this->lang['scm.pool'], 'pool'),
+			new HTMLTableColumn($this->lang['scm.event.type'], 'event_type'),
+			new HTMLTableColumn($this->lang['scm.game.type'], 'game_type'),
 			new HTMLTableColumn($this->lang['common.status'], 'published'),
 			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add()->rel() . '" aria-label="' . $this->lang['scm.add.event'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
         ];
@@ -86,12 +88,38 @@ class ScmEventsManagerController extends DefaultModuleController
 
             $games_status = ScmGameService::has_games($item->get_id()) ? '<i class="far fa-square-check"></i>' : '<i class="far fa-square"></i>';
 
+            switch ($item->get_event_type()) {
+                case ScmEvent::CUP :
+                    $event_type = $this->lang['scm.cup'];
+                break;
+                case ScmEvent::CHAMPIONSHIP :
+                    $event_type = $this->lang['scm.championship'];
+                break;
+                case ScmEvent::TOURNAMENT :
+                    $event_type = $this->lang['scm.tournament'];
+                break;
+                case ScmEvent::PRACTICE :
+                    $event_type = $this->lang['scm.practice'];
+                break;
+            }
+
+            switch ($item->get_event_game_type()) {
+                case ScmEvent::SINGLE_GAMES :
+                    $game_type = $this->lang['scm.single.games'];
+                break;
+                case ScmEvent::RETURN_GAMES :
+                    $game_type = $this->lang['scm.return.games'];
+                break;
+            }
+
 			$row = [
 				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name()), ($category->get_id() == Category::ROOT_CATEGORY ? $this->lang['common.none.alt'] : $category->get_name()))),
 				new HTMLTableRowCell($row['season_name']),
 				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::event_home($item->get_id(), $item->get_event_slug()), $games_status . ' ' . $row['division_name']), 'align-left'),
 				new HTMLTableRowCell(ScmEventService::get_master_division($item->get_id()), 'align-left'),
 				new HTMLTableRowCell($item->get_pool(), 'align-left'),
+				new HTMLTableRowCell($event_type),
+				new HTMLTableRowCell($game_type),
 				new HTMLTableRowCell($item->get_status()),
 				new HTMLTableRowCell($edit_link->display() . $delete_link->display(), 'controls')
             ];

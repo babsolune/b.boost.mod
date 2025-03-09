@@ -43,8 +43,8 @@ $url_controller_mappers = [
 
     // Content display
 	new UrlControllerMapper('ScmTeamCalendarController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/team/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'team_id']),
-	new UrlControllerMapper('ScmDaysCalendarController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/matchday/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'cluster']),
-	new UrlControllerMapper('ScmDaysCalendarFullController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/full/?([0-9]+)?/?$`', ['event_id', 'event_slug']),
+	new UrlControllerMapper('ScmDayCalendarController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/matchday/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'cluster']),
+	new UrlControllerMapper('ScmDaysCalendarController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/full/?([0-9]+)?/?$`', ['event_id', 'event_slug']),
 	new UrlControllerMapper('ScmDaysRankingController', '`^/?([0-9]+)-([a-z0-9-_]+)?/ranking/?([a-z]+)?/?([0-9]+)?/?$`', ['event_id', 'event_slug', 'section', 'day']),
 	new UrlControllerMapper('ScmDaysCheckerController', '`^/?([0-9]+)-([a-z0-9-_]+)?/calendar/checker/?$`', ['event_id', 'event_slug']),
 	new UrlControllerMapper('ScmGroupController', '`^/?([0-9]+)-([a-z0-9-_]+)?/group/?([0-9]+)?/?([a-z]+)?/?$`', ['event_id', 'event_slug', 'cluster', 'type']),

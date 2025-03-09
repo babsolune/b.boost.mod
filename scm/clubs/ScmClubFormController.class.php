@@ -56,7 +56,6 @@ class ScmClubFormController extends DefaultModuleController
                         HTMLForms.getField("phone").disable();
                         HTMLForms.getField("colors").disable();
                         HTMLForms.getField("locations").disable();
-                        HTMLForms.getField("map_display").disable();
                         HTMLForms.getField("flag").disable();
                     } else {
                         HTMLForms.getField("affiliation").disable();
@@ -66,7 +65,6 @@ class ScmClubFormController extends DefaultModuleController
                         HTMLForms.getField("phone").enable();
                         HTMLForms.getField("colors").enable();
                         HTMLForms.getField("locations").enable();
-                        HTMLForms.getField("map_display").enable();
                         HTMLForms.getField("flag").enable();
                     }
                 ']
@@ -107,26 +105,11 @@ class ScmClubFormController extends DefaultModuleController
             ]
 		));
 
-		if ($this->config->is_googlemaps_available())
-		{
+		if ($this->config->is_googlemaps_available()) {
 			$fieldset->add_field(new GoogleMapsFormFieldMultipleMarkers('locations', $this->lang['scm.club.locations'], $this->get_club()->get_club_locations(),
-				[
-                    'hidden' => $this->get_club()->get_club_affiliate(),
-					'events' => ['blur' => '
-						if (HTMLForms.getField("locations").getValue()) {
-							HTMLForms.getField("map_displayed").enable();
-						} else {
-							HTMLForms.getField("map_displayed").disable();
-						}'
-                    ]
-				]
+				['hidden' => $this->get_club()->get_club_affiliate()]
 			));
-
-			$fieldset->add_field(new FormFieldCheckbox('map_display', $this->lang['scm.club.display.map'], $this->get_club()->get_club_map_display(),
-                ['hidden' => $this->get_club()->get_club_affiliate()]
-            ));
-		}
-		else {
+		} else {
             $fieldset->add_field(new FormFieldShortMultiLineTextEditor('locations', $this->lang['scm.club.locations'], $this->get_club()->get_club_locations(),
                 ['hidden' => $this->get_club()->get_club_affiliate()]
             ));
@@ -172,7 +155,6 @@ class ScmClubFormController extends DefaultModuleController
             $club->set_club_flag($this->form->get_value('flag')->get_raw_value());
             $club->set_club_logo($this->form->get_value('logo'));
             $club->set_club_locations($this->form->get_value('locations'));
-            $club->set_club_map_display($this->form->get_value('map_display'));
         }
 
 		if ($this->is_new_club)

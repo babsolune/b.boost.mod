@@ -109,15 +109,13 @@ class ScmRankingContentService
     public static function is_championship(int $event_id):bool
     {
         $event = ScmEventService::get_event($event_id);
-        $division = ScmDivisionService::get_division($event->get_division_id());
-        return $division->get_event_type() == ScmDivision::CHAMPIONSHIP;
+        return $event->get_event_type() == ScmEvent::CHAMPIONSHIP;
     }
 
     /** Check if event is tournament */
     public static function is_tournament(int $event_id):bool
     {
         $event = ScmEventService::get_event($event_id);
-        $division = ScmDivisionService::get_division($event->get_division_id());
-        return $division->get_event_type() == ScmDivision::TOURNAMENT;
+        return $event->get_event_type() == ScmEvent::TOURNAMENT;
     }
 }

@@ -22,7 +22,6 @@ class ScmClub
 	private $club_phone;
 	private $club_colors;
 	private $club_locations;
-	private $club_map_display;
 
 	const CLUB_LOGO = '/scm/templates/images/badges/club.webp';
 
@@ -164,16 +163,6 @@ class ScmClub
 		$this->club_locations = $club_locations;
 	}
 
-	public function get_club_map_display()
-	{
-		return $this->club_map_display;
-	}
-
-	public function set_club_map_display($club_map_display)
-	{
-		$this->club_map_display = $club_map_display;
-	}
-
 	public function is_authorized_to_manage()
 	{
 		return ScmAuthorizationsService::check_authorizations()->manage_clubs();
@@ -195,7 +184,6 @@ class ScmClub
 			'club_email'       => $this->club_email,
 			'club_phone'       => $this->club_phone,
 			'club_locations'   => $this->club_locations,
-			'club_map_display' => $this->club_map_display,
 			'club_colors'      => TextHelper::serialize($this->club_colors)
         ];
 	}
@@ -215,23 +203,21 @@ class ScmClub
 		$this->club_email       = $properties['club_email'];
 		$this->club_phone       = $properties['club_phone'];
 		$this->club_locations   = $properties['club_locations'];
-		$this->club_map_display = $properties['club_map_display'];
         $this->club_colors      = !empty($properties['club_colors']) ? TextHelper::unserialize($properties['club_colors']) : [];
     }
 
 	public function init_default_properties()
 	{
-		$this->club_map_display = true;
 		$this->club_colors      = [];
 		$this->club_website     = new Url('');
 	}
 
-	public function get_club_url()
+	public function get_club_url() : string
 	{
 		return ScmUrlBuilder::display_club($this->id_club, $this->club_slug)->rel();
 	}
 
-	public function get_template_vars()
+	public function get_template_vars() : array
 	{
         $club_locations_value = TextHelper::deserialize($this->get_club_locations());
         $club_locations = '';
@@ -241,18 +227,16 @@ class ScmClub
 			$club_locations = $club_locations_value;
 
 		$club_locations_map = '';
-		$c_display_map = false;
 		if (ScmConfig::load()->is_googlemaps_available())
 		{
 			$map = new GoogleMapsDisplayMap($this->get_club_locations(), 'club_locations', $this->get_club_name());
 			$club_locations_map = $map->display();
-			$c_display_map = $this->get_club_map_display();
 		}
 
 		return [
             // Conditions
             'C_CONTROLS'      => $this->is_authorized_to_manage(),
-            'C_DISPLAY_MAP'   => $c_display_map && $this->has_locations(),
+            'C_DISPLAY_MAP'   => $this->has_locations(),
             'C_HAS_SHIELD'    => !empty($this->club_flag) || !empty($this->club_logo),
             'C_HAS_FLAG'      => !empty($this->club_flag),
             'C_HAS_LOGO'      => !empty($this->club_logo),
@@ -269,7 +253,6 @@ class ScmClub
 			'PHONE'        => $this->club_phone,
 			'LOCATION'     => $club_locations,
 			'LOCATION_MAP' => $club_locations_map,
-
 			// Links
 			'U_LOGO'         => Url::to_rel(ScmClubCache::load()->get_affiliate_club_shield($this->id_club)),
 			'U_FLAG'         => TPL_PATH_TO_ROOT . '/images/stats/countries/' . $this->club_flag . '.png',

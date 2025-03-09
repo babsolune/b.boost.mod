@@ -1,9 +1,11 @@
 # START blocks #
     <div class="cell-vertical">
-        <h5>
-            # IF blocks.C_ROUND #{@scm.round}# ENDIF #
-            {blocks.TITLE}
-        </h5>
+        # IF NOT C_ONE_DAY #
+            <h5>
+                # IF blocks.C_ROUND #{@scm.round}# ENDIF #
+                {blocks.TITLE}
+            </h5>
+        # ENDIF #
         # START blocks.sub_blocks #
             # IF blocks.sub_blocks.C_SUB_ROUND ## IF blocks.sub_blocks.C_SEVERAL_DATES #<h6>{blocks.sub_blocks.SUB_TITLE}</h6># ENDIF ## ENDIF #
             # START blocks.sub_blocks.items #
@@ -152,3 +154,4 @@
         # END blocks.sub_blocks #
     </div>
 # END blocks #
+<script src="{PATH_TO_ROOT}/scm/templates/js/scm.width.js"></script>

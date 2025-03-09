@@ -8,14 +8,12 @@
 */
 
 document.addEventListener('DOMContentLoaded', () => {
-
     // Manage width
     const sm_widths = document.querySelectorAll('[class*="sm-width-"]');
     const md_widths = document.querySelectorAll('[class*="md-width-"]');
     const lg_widths = document.querySelectorAll('[class*="lg-width-"]');
 
     sm_widths.forEach((width) => {
-        const classList = width.classList;
         const classes = width.className.split(' ');
         // Static
             classes.forEach(sizeClass => {
@@ -40,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('resize', resizeHandler);
     });
     md_widths.forEach((width) => {
-        const classList = width.classList;
         const classes = width.className.split(' ');
         // Static
         if (window.innerWidth >= 769) {
@@ -67,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('resize', resizeHandler);
     });
     lg_widths.forEach((width) => {
-        const classList = width.classList;
         const classes = width.className.split(' ');
         // Static
         if (window.innerWidth >= 1366) {

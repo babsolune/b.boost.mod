@@ -12,26 +12,25 @@ class ScmTeamCalendarController extends DefaultModuleController
     private $event;
     private $team_id;
     private $team_name;
-    private $division;
     private $params;
 
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmTeamCalendarController.tpl');
+		return new FileTemplate('scm/content/ScmTeamCalendarController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
 	{
         $this->init($request);
 		$this->build_view();
-        if ($this->division->get_event_type() == ScmDivision::CHAMPIONSHIP || ($this->division->get_event_type() == ScmDivision::TOURNAMENT && $this->params->get_hat_ranking()))
+        if ($this->event->get_event_type() == ScmEvent::CHAMPIONSHIP || ($this->event->get_event_type() == ScmEvent::TOURNAMENT && $this->params->get_hat_ranking()))
         {
             $this->build_donut();
             $this->build_ranking();
         }
 		$this->check_authorizations();
 
-        $this->view->put('C_ONE_DAY', ScmGameService::one_day_event($this->event_id()));
+        $this->view->put('C_ONE_DAY', $this->get_event()->get_oneday());
 
 		return $this->generate_response();
 	}
@@ -41,7 +40,6 @@ class ScmTeamCalendarController extends DefaultModuleController
         $this->team_id = $request->get_getint('team_id', 0);
         $team_club_id = ScmTeamService::get_team($this->team_id)->get_team_club_id();
         $this->team_name = ScmClubCache::load()->get_club_full_name($team_club_id);
-        $this->division = ScmDivisionService::get_division($this->get_event()->get_division_id());
         $this->params = ScmParamsService::get_params($this->event_id());
     }
 
@@ -82,9 +80,9 @@ class ScmTeamCalendarController extends DefaultModuleController
 
         $this->view->put_all([
             'MENU' => ScmMenuService::build_event_menu($this->event_id()),
-            'C_CHARTS' => $this->division->get_event_type() == ScmDivision::CHAMPIONSHIP || ($this->division->get_event_type() == ScmDivision::TOURNAMENT && $this->params->get_hat_ranking()),
+            'C_CHARTS' => $this->event->get_event_type() == ScmEvent::CHAMPIONSHIP || ($this->event->get_event_type() == ScmEvent::TOURNAMENT && $this->params->get_hat_ranking()),
             'C_HAS_GAMES' => ScmGameService::has_games($this->event_id()),
-            'C_IS_DAY' => ScmDivisionCache::load()->get_division($this->get_event()->get_division_id())['event_type'] == 'championship',
+            'C_IS_DAY' => $this->event->get_event_type() == ScmEvent::CHAMPIONSHIP,
             'C_GENERAL_FORFEIT' => ScmTeamService::get_team($this->team_id)->get_team_status() == ScmParams::FORFEIT,
             'TEAM_NAME' => $this->team_name
         ]);
@@ -125,7 +123,7 @@ class ScmTeamCalendarController extends DefaultModuleController
         // x coord
         $teams_number = ScmTeamService::get_teams_number($this->event_id());
         // y coord
-        $c_return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $c_return_games = $this->get_event()->get_event_game_type() == ScmEvent::RETURN_GAMES;
         $params = ScmParamsService::get_params($this->event_id());
         $c_hat_ranking = $params->get_hat_ranking();
         $days_number = $c_hat_ranking ? $params->get_hat_days() : ($c_return_games ? ($teams_number - 1) * 2 : $teams_number - 1);

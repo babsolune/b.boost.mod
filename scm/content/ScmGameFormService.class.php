@@ -30,7 +30,7 @@ class ScmGameFormService
         ${'modal_fieldset_'.$field}->add_field(new FormFieldSpacer('team_2_' . $field, $item->get_game_away_id() == 0 ? $lang['scm.th.team'] . ' 2' : ScmTeamService::get_team_name($item->get_game_away_id()),
             ['class' => 'portable-half']
         ));
-        if ($type == 'B' && ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES) {
+        if ($type == 'B' && ScmEventService::get_event($event_id)->get_event_game_type() == ScmEvent::RETURN_GAMES) {
             if (($item->get_game_order() > count(ScmGameService::get_games($event_id)) / 2)) {
                 ${'modal_fieldset_'.$field}->add_field(new FormFieldSpacer('penalties_' . $field, $lang['scm.game.event.penalties'],
                     ['class' => 'portable-full']
@@ -167,7 +167,7 @@ class ScmGameFormService
         ${'fieldset_'.$field}->add_field(new FormFieldSimpleSelectChoice('status_' . $field, $lang['scm.game.form.status'], $item->get_game_status(),
             [
                 new FormFieldSelectChoiceOption('', ''),
-                new FormFieldSelectChoiceOption($lang['scm.game.form.status.completed'], ScmGame::COMPLETED),
+                new FormFieldSelectChoiceOption($lang['scm.game.form.status.reserve'], ScmGame::RESERVE),
                 new FormFieldSelectChoiceOption($lang['scm.game.form.status.delayed'], ScmGame::DELAYED),
                 new FormFieldSelectChoiceOption($lang['scm.game.form.status.stopped'], ScmGame::STOPPED)
             ],

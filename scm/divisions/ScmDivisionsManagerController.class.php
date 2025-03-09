@@ -29,8 +29,6 @@ class ScmDivisionsManagerController extends DefaultModuleController
 	{
 		$columns = [
 			new HTMLTableColumn($this->lang['common.name'], 'division_name'),
-			new HTMLTableColumn($this->lang['scm.event.type'], 'event_type'),
-			new HTMLTableColumn($this->lang['scm.game.type'], 'game_type'),
 			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_division()->rel() . '" aria-label="' . $this->lang['scm.add.division'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
         ];
 
@@ -56,40 +54,8 @@ class ScmDivisionsManagerController extends DefaultModuleController
 			$edit_link = new EditLinkHTMLElement(ScmUrlBuilder::edit_division($division->get_id_division()));
 			$delete_link = new DeleteLinkHTMLElement(ScmUrlBuilder::delete_division($division->get_id_division()), '', ['data-confirmation' => $this->lang['scm.warning.delete.division']]);
 
-            switch ($division->get_event_type()) {
-                case ScmDivision::CUP :
-                    $event_type = $this->lang['scm.cup'];
-                    break;
-                case ScmDivision::CHAMPIONSHIP :
-                    $event_type = $this->lang['scm.championship'];
-                    break;
-                case ScmDivision::TOURNAMENT :
-                    $event_type = $this->lang['scm.tournament'];
-                    break;
-                case ScmDivision::PRACTICE :
-                    $event_type = $this->lang['scm.practice'];
-                    break;
-                default :
-                    $event_type = '';
-                    break;
-            }
-
-            switch ($division->get_game_type()) {
-                case ScmDivision::SINGLE_GAMES :
-                    $game_type = $this->lang['scm.single.games'];
-                    break;
-                case ScmDivision::RETURN_GAMES :
-                    $game_type = $this->lang['scm.return.games'];
-                    break;
-                default :
-                    $game_type = '';
-                    break;
-            }
-
 			$row = [
 				new HTMLTableRowCell($division->get_division_name()),
-				new HTMLTableRowCell($event_type),
-				new HTMLTableRowCell($game_type),
 				new HTMLTableRowCell($edit_link->display() . $delete_link->display(), 'controls')
             ];
 

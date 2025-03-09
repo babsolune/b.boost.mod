@@ -15,6 +15,7 @@ class ScmEvent
 	private $season_id;
 	private $division_id;
 	private $pool;
+	private $oneday;
 	private $start_date;
 	private $end_date;
 	private $views_number;
@@ -32,6 +33,17 @@ class ScmEvent
 	private $update_date;
 
 	private $sources;
+
+    private $event_type;
+	private $event_game_type;
+
+	const SINGLE_GAMES = 'single_games';
+	const RETURN_GAMES = 'return_games';
+
+	const CHAMPIONSHIP = 'championship';
+	const CUP          = 'cup';
+	const TOURNAMENT   = 'tournament';
+	const PRACTICE     = 'practice';
 
 	const THUMBNAIL_URL = '/templates/__default__/images/default_item.webp';
 
@@ -107,6 +119,16 @@ class ScmEvent
 	public function set_pool($pool)
 	{
 		$this->pool = $pool;
+	}
+
+	public function get_oneday()
+	{
+		return $this->oneday;
+	}
+
+	public function set_oneday($oneday)
+	{
+		$this->oneday = $oneday;
 	}
 
 	public function get_start_date()
@@ -187,6 +209,26 @@ class ScmEvent
 	public function set_publishing_state($published)
 	{
 		$this->published = $published;
+	}
+
+	public function get_event_type()
+	{
+		return $this->event_type;
+	}
+
+	public function set_event_type($event_type)
+	{
+		$this->event_type = $event_type;
+	}
+
+	public function get_event_game_type()
+	{
+		return $this->event_game_type;
+	}
+
+	public function set_event_game_type($event_game_type)
+	{
+		$this->event_game_type = $event_game_type;
 	}
 
 	public function is_published()
@@ -312,6 +354,7 @@ class ScmEvent
 			'season_id'             => $this->get_season_id(),
 			'division_id'           => $this->get_division_id(),
 			'pool'                  => $this->get_pool(),
+			'oneday'                => $this->get_oneday(),
 			'start_date'            => $this->get_start_date() !== null ? $this->get_start_date()->get_timestamp() : 0,
 			'end_date'              => $this->get_end_date() !== null ? $this->get_end_date()->get_timestamp() : 0,
 			'views_number'          => $this->get_views_number(),
@@ -324,7 +367,9 @@ class ScmEvent
 			'publishing_end_date'   => $this->get_publishing_end_date() !== null ? $this->get_publishing_end_date()->get_timestamp() : 0,
 			'creation_date'         => $this->get_creation_date()->get_timestamp(),
 			'update_date'           => $this->get_update_date() !== null ? $this->get_update_date()->get_timestamp() : $this->get_creation_date()->get_timestamp(),
-			'sources'               => TextHelper::serialize($this->get_sources())
+			'sources'               => TextHelper::serialize($this->get_sources()),
+			'event_type'            => $this->get_event_type(),
+			'event_game_type'       => $this->get_event_game_type()
         ];
 	}
 
@@ -336,6 +381,7 @@ class ScmEvent
 		$this->season_id             = $properties['season_id'];
 		$this->division_id           = $properties['division_id'];
 		$this->pool                  = $properties['pool'];
+		$this->oneday                = $properties['oneday'];
 		$this->start_date            = !empty($properties['start_date']) ? new Date($properties['start_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->end_date              = !empty($properties['end_date']) ? new Date($properties['end_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->views_number          = $properties['views_number'];
@@ -350,6 +396,8 @@ class ScmEvent
 		$this->creation_date         = new Date($properties['creation_date'], Timezone::SERVER_TIMEZONE);
 		$this->update_date           = !empty($properties['update_date']) ? new Date($properties['update_date'], Timezone::SERVER_TIMEZONE) : null;
 		$this->sources               = !empty($properties['sources']) ? TextHelper::unserialize($properties['sources']) : [];
+		$this->event_type            = $properties['event_type'];
+		$this->event_game_type       = $properties['event_game_type'];
     }
 
 	public function init_default_properties($id_category = Category::ROOT_CATEGORY)

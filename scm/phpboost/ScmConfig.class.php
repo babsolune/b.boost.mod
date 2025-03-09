@@ -143,7 +143,7 @@ class ScmConfig extends AbstractConfigData
 	public function get_default_values()
 	{
 		return [
-            self::HOMEPAGE              => self::GAME_LIST,
+            self::HOMEPAGE              => self::EVENT_LIST,
 			self::LEFT_COLUMN_DISABLED  => false,
 			self::RIGHT_COLUMN_DISABLED => false,
 			self::PROMOTION_COLOR       => '#baffb0',

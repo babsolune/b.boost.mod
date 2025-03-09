@@ -13,7 +13,7 @@ class ScmAroundGamesController extends DefaultModuleController
 
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmAroundGamesController.tpl');
+		return new FileTemplate('scm/main/ScmAroundGamesController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)

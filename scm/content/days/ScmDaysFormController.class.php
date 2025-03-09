@@ -11,6 +11,7 @@ class ScmDaysFormController extends DefaultModuleController
 {
     private $event;
     private $day;
+    private $oneday;
     private $days_number;
 
 	public function execute(HTTPRequestCustom $request)
@@ -38,26 +39,34 @@ class ScmDaysFormController extends DefaultModuleController
     private function init()
     {
         $teams_number = ScmTeamService::get_teams_number($this->event_id());
-        $c_return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $c_return_games = $this->get_event()->get_event_game_type() == ScmEvent::RETURN_GAMES;
         $this->days_number = $c_return_games ? ($teams_number - 1) * 2 : $teams_number - 1;
+        $this->oneday = $this->get_event()->get_oneday();
     }
 
 	private function build_form()
 	{
-		$form = new HTMLForm(__CLASS__);
+		$form = new HTMLForm(self::class);
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.days.management'] . '</div>');
 
-        $fieldset = new FormFieldsetHTML('days', $this->lang['scm.days.date']);
+        $fieldset = new FormFieldsetHTML('days', $this->oneday ? $this->lang['scm.day.date'] : $this->lang['scm.days.date']);
         $fieldset->set_css_class('days-form');
         $form->add_fieldset($fieldset);
 
         for ($i = 1; $i <= $this->days_number; $i++)
         {
             $day_date = $this->get_day($i)->get_day_date() ?? ScmEventService::get_event($this->event_id())->get_start_date();
-            $fieldset->add_field(new FormFieldDate('day_date_' . $i, $this->lang['scm.day'] . ' ' . $i, $day_date,
+            $fieldset->add_field(new FormFieldDate('day_date_' . $i, $this->oneday ? '' : $this->lang['scm.day'] . ' ' . $i, $day_date,
                 ['class' => 'groups-select']
             ));
+            if ($this->get_event()->get_oneday() && $i == 1) {
+                break;
+            }
         }
+
+        $fieldset->add_field(new ScmFormFieldClock('general_time', $this->lang['scm.day.general.time'], $this->get_day(1)->get_general_time(),
+            ['class' => 'cell-100']
+        ));
 
         $fieldset->add_field(new FormFieldFree('inset', '', '
             <script>
@@ -90,7 +99,13 @@ class ScmDaysFormController extends DefaultModuleController
             $day = $this->get_day($i);
             $day->set_day_event_id($this->event_id());
             $day->set_day_round($i);
-            $day->set_day_date($this->form->get_value('day_date_' . $i));
+            $day->set_general_time($this->form->get_value('general_time'));
+            if ($this->oneday) {
+                $day->set_day_date($this->form->get_value('day_date_1'));
+            }
+            else {
+                $day->set_day_date($this->form->get_value('day_date_' . $i));
+            }
 
             if ($day->get_id_day() == null)
             {
@@ -100,7 +115,11 @@ class ScmDaysFormController extends DefaultModuleController
             else {
                 ScmDayService::update_day($day, $day->get_id_day());
             }
-            ScmGameService::update_game_date($this->event_id(), $i, $day->get_day_date()->get_timestamp());
+
+            $general_time = explode(':', $this->form->get_value('general_time'));
+            $general_time = ($general_time[0] * 3600) + ($general_time[1] * 60);
+            $real_date = $day->get_day_date()->get_timestamp() + $general_time;
+            ScmGameService::update_game_date($this->event_id(), $i, $real_date);
         }
 
 		ScmEventService::clear_cache();

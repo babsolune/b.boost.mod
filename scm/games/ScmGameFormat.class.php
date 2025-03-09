@@ -66,7 +66,6 @@ class ScmGameFormat
             return strcmp($a['game_date'], $b['game_date']);
         });
 
-        $view->put('C_CLASS', $c_class);
 
         $blocks = $event_id = [];
         foreach($foreach as $game)
@@ -79,6 +78,11 @@ class ScmGameFormat
         }
         $event_id = implode('', array_unique($event_id));
 
+        $view->put_all([
+            'C_CLASS' => $c_class,
+            'C_ONE_DAY' => ScmEventService::get_event($event_id)->get_oneday()
+        ]);
+
         foreach ($blocks as $block => $sub_blocks)
         {
             $view->assign_block_vars('blocks', [
@@ -89,7 +93,7 @@ class ScmGameFormat
             foreach ($sub_blocks as $sub_block => $games)
             {
                 $view->assign_block_vars('blocks.sub_blocks', [
-                    'C_SEVERAL_DATES' => !ScmGameService::one_day_event($event_id),
+                    'C_SEVERAL_DATES' => !ScmEventService::get_event($event_id)->get_oneday(),
                     'C_SUB_ROUND' => $round,
                     'SUB_TITLE' => $sub_block
                 ]);
@@ -118,7 +122,7 @@ class ScmGameFormat
         foreach ($foreach as $block => $games)
         {
             $view->assign_block_vars('blocks', [
-                'C_SEVERAL_DATES' => !ScmGameService::one_day_event($event_id),
+                'C_SEVERAL_DATES' => !ScmEventService::get_event($event_id)->get_oneday(),
                 'C_ROUND' => $round,
                 'TITLE' => $block
             ]);

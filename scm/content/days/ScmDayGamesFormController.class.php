@@ -39,7 +39,7 @@ class ScmDayGamesFormController extends DefaultModuleController
     private function init()
     {
         $this->teams_number = ScmTeamService::get_teams_number($this->event_id());
-        $this->return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $this->return_games = $this->get_event()->get_event_game_type() == ScmEvent::RETURN_GAMES;
     }
 
 	private function build_form()
@@ -51,7 +51,7 @@ class ScmDayGamesFormController extends DefaultModuleController
         $form->set_css_class('modal-container floating-submit form-loader');
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.games.management'] . '</div>');
 
-        $fieldset = new FormFieldsetHTML('days', $this->lang['scm.day'] . ' ' . $cluster);
+        $fieldset = new FormFieldsetHTML('days', ($this->get_event()->get_oneday() ? $this->lang['scm.round'] : $this->lang['scm.day']) . ' ' . $cluster);
 		$form->add_fieldset($fieldset);
 
         $fieldset->add_field(new FormFieldFree( 'waiting_cover', '', $this->lang['scm.waiting.ranking'] . ($until_last_day ? '<br />' . $this->lang['scm.waiting.ranking.next'] : '') . '<br />' . $this->lang['scm.waiting.please'],
@@ -125,8 +125,8 @@ class ScmDayGamesFormController extends DefaultModuleController
             $fieldset->add_field(new FormFieldSimpleSelectChoice('status_' . $field, $this->lang['scm.game.form.status'], $item->get_game_status(),
                 [
                     new FormFieldSelectChoiceOption('', ''),
-                    // new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.completed'], ScmGame::COMPLETED),
                     new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.delayed'], ScmGame::DELAYED),
+                    new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.reserve'], ScmGame::RESERVE),
                     new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.stopped'], ScmGame::STOPPED)
                 ],
                 ['class' => 'game-status portable-full label-top']
@@ -245,7 +245,7 @@ class ScmDayGamesFormController extends DefaultModuleController
             # INCLUDE MESSAGE_HELPER #
             # INCLUDE MENU #
             # INCLUDE CONTENT #
-            <script src="{PATH_TO_ROOT}/scm/templates/js/scm.loader# IF C_CSS_CACHE_ENABLED #.min# ENDIF #.js"></script>
+            <script src="{PATH_TO_ROOT}/scm/templates/js/scm.loader.js"></script>
         ';
 	}
 

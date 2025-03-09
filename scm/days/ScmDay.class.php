@@ -13,6 +13,7 @@ class ScmDay
 	private $day_event_id;
 	private $day_round;
 	private $day_date;
+	private $general_time;
 	private $day_played;
 
 	public function get_id_day()
@@ -55,6 +56,16 @@ class ScmDay
 		$this->day_date = $day_date;
 	}
 
+	public function get_general_time()
+	{
+		return $this->general_time;
+	}
+
+	public function set_general_time($general_time)
+	{
+		$this->general_time = $general_time;
+	}
+
 	public function get_day_played()
 	{
 		return $this->day_played;
@@ -77,6 +88,7 @@ class ScmDay
 			'day_event_id' => $this->get_day_event_id(),
 			'day_round'    => $this->get_day_round(),
 			'day_date'     => $this->get_day_date() !== null ? $this->get_day_date()->get_timestamp() : 0,
+			'general_time' => $this->get_general_time(),
 			'day_played'   => $this->get_day_played(),
         ];
 	}
@@ -87,6 +99,7 @@ class ScmDay
 		$this->day_event_id = $properties['day_event_id'];
 		$this->day_round    = $properties['day_round'];
 		$this->day_date     = !empty($properties['day_date']) ? new Date($properties['day_date'], Timezone::SERVER_TIMEZONE) : null;
+		$this->general_time = $properties['general_time'];
 		$this->day_played   = $properties['day_played'];
 	}
 

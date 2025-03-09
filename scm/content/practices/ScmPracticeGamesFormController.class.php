@@ -38,7 +38,7 @@ class ScmPracticeGamesFormController extends DefaultModuleController
     private function init()
     {
         $this->games = ScmGameService::get_games($this->event_id());
-        $this->return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $this->return_games = $this->get_event()->get_event_game_type() == ScmEvent::RETURN_GAMES;
     }
 
 	private function build_form()
@@ -111,8 +111,8 @@ class ScmPracticeGamesFormController extends DefaultModuleController
             $fieldset->add_field(new FormFieldSimpleSelectChoice('status_' . $field, $this->lang['scm.game.form.status'], $game_status,
                 [
                     new FormFieldSelectChoiceOption('', ''),
-                    // new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.completed'], ScmGame::COMPLETED),
                     new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.delayed'], ScmGame::DELAYED),
+                    new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.reserve'], ScmGame::RESERVE),
                     new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.stopped'], ScmGame::STOPPED)
                 ],
                 ['class' => 'label-top game-status portable-full']

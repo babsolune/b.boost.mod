@@ -10,9 +10,10 @@
 class ScmDaysCalendarController extends DefaultModuleController
 {
     private $event;
-	protected function get_template_to_use()
+
+    protected function get_template_to_use() : FileTemplate
 	{
-		return new FileTemplate('scm/ScmDaysCalendarController.tpl');
+		return new FileTemplate('scm/content/ScmDaysCalendarController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
@@ -25,14 +26,27 @@ class ScmDaysCalendarController extends DefaultModuleController
 
 	private function build_view()
 	{
-        $cluster = AppContext::get_request()->get_getint('cluster', 0);
+        $now = new Date();
+        $games = ScmGameService::get_games($this->event_id());
         $this->view->put_all([
-            'C_ONE_DAY'   => ScmGameService::one_day_event($this->event_id()),
+            'C_ONE_DAY'   => $this->get_event()->get_oneday(),
             'MENU'        => ScmMenuService::build_event_menu($this->event_id()),
             'C_HAS_GAMES' => ScmGameService::has_games($this->event_id()),
-            'DAY'         => $cluster,
-            'DAY_GAMES'   => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $cluster))
         ]);
+
+        $matchdays = [];
+        foreach($games as $game)
+        {
+            $matchdays[$game['game_cluster']][Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][] = $game;
+        }
+
+        foreach ($matchdays as $matchday => $dates)
+        {
+            $this->view->assign_block_vars('days', [
+                'DAY' => $matchday,
+                'DAYS_GAMES' => ScmGameFormat::format_cluster(ScmGameService::get_games_in_cluster($this->event_id(), $matchday)),
+            ]);
+        }
 	}
 
 	private function get_event()
@@ -103,13 +117,12 @@ class ScmDaysCalendarController extends DefaultModuleController
 		$response = new SiteDisplayResponse($this->view);
 
 		$graphical_environment = $response->get_graphical_environment();
-		$graphical_environment->set_page_title($this->lang['scm.calendar'], $event->get_event_name() . ($category->get_id() != Category::ROOT_CATEGORY ? ' - ' . $category->get_name() : '') . ' - ' . $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
-		$graphical_environment->get_seo_meta_data()->set_description(StringVars::replace_vars($this->lang['scm.seo.description.event.calendar'], ['event' => $event->get_event_name()]));
+		$graphical_environment->set_page_title($this->lang['scm.calendar.full'], $event->get_event_name() . ($category->get_id() != Category::ROOT_CATEGORY ? ' - ' . $category->get_name() : '') . ' - ' . $this->lang['scm.module.title'] . ' - ' . GeneralConfig::load()->get_site_name());
+		$graphical_environment->get_seo_meta_data()->set_description(StringVars::replace_vars($this->lang['scm.seo.description.event.calendar.full'], ['event' => $event->get_event_name()]));
 		$graphical_environment->get_seo_meta_data()->set_canonical_url(ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
 
 		$breadcrumb = $graphical_environment->get_breadcrumb();
 		$breadcrumb->add($this->lang['scm.module.title'],ScmUrlBuilder::home());
-
 		$categories = array_reverse(CategoriesService::get_categories_manager()->get_parents($event->get_id_category(), true));
 		foreach ($categories as $id => $category)
 		{
@@ -119,7 +132,7 @@ class ScmDaysCalendarController extends DefaultModuleController
         if ($event->get_is_sub())
             $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
 		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-		$breadcrumb->add($this->lang['scm.calendar'], ScmUrlBuilder::display_groups_rounds($event->get_id(), $event->get_event_slug()));
+		$breadcrumb->add($this->lang['scm.calendar.full'], ScmUrlBuilder::display_groups_rounds($event->get_id(), $event->get_event_slug()));
 
 		return $response;
 	}

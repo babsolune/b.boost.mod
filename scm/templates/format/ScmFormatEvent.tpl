@@ -146,3 +146,4 @@
         # END blocks.items #
     </div>
 # END blocks #
+<script src="{PATH_TO_ROOT}/scm/templates/js/scm.width.js"></script>

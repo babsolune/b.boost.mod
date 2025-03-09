@@ -84,27 +84,5 @@ class ScmDivisionService
 		$division->set_properties($row);
 		return $division;
 	}
-
-    public static function get_event_type_lang($division_id)
-    {
-        $lang = LangLoader::get('common', 'scm');
-        $division = ScmDivisionCache::load()->get_division($division_id);
-
-        $event_type = '';
-        switch($division['event_type'])
-        {
-            case('championship') :
-                $event_type = $lang['scm.championship'];
-                break;
-            case('cup') :
-                $event_type = $lang['scm.cup'];
-                break;
-            case('tournament') :
-                $event_type = $lang['scm.tournament'];
-                break;
-        };
-
-        return $event_type;
-    }
 }
 ?>

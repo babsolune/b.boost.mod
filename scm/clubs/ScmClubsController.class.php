@@ -11,7 +11,7 @@ class ScmClubsController extends DefaultModuleController
 {
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmClubsController.tpl');
+		return new FileTemplate('scm/clubs/ScmClubsController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)

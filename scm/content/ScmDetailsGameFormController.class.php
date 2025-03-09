@@ -40,7 +40,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
     private function init()
     {
         $this->games_number = ScmGameService::get_games($this->event_id());
-        $this->return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $this->return_games = $this->get_event()->get_event_game_type() == ScmEvent::RETURN_GAMES;
         $this->bracket_games = $this->get_game()->get_game_type() === 'B';
         $this->practice_games = $this->get_game()->get_game_type() === 'P';
     }
@@ -255,7 +255,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
             $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
             $real_club = new ScmClub();
             $real_club->set_properties(ScmClubCache::load()->get_club($real_id));
-
+// Debug::stop($real_club);
             $options = [];
             $options[] = new FormFieldSelectChoiceOption('', 0);
             $stadiums = 0;

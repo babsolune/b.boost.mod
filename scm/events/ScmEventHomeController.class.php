@@ -13,7 +13,7 @@ class ScmEventHomeController extends DefaultModuleController
 
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmEventHomeController.tpl');
+		return new FileTemplate('scm/event/ScmEventHomeController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
@@ -30,9 +30,9 @@ class ScmEventHomeController extends DefaultModuleController
 		$event = $this->get_event();
 
         $c_has_games    = ScmGameService::has_games($this->event_id());
-        $c_championship = $c_has_games && ScmEventService::get_event_type($this->event_id()) == ScmDivision::CHAMPIONSHIP;
-        $c_cup          = $c_has_games && ScmEventService::get_event_type($this->event_id()) == ScmDivision::CUP;
-        $c_tournament   = $c_has_games && ScmEventService::get_event_type($this->event_id()) == ScmDivision::TOURNAMENT;
+        $c_championship = $c_has_games && $this->event->get_event_type() == ScmEvent::CHAMPIONSHIP;
+        $c_cup          = $c_has_games && $this->event->get_event_type() == ScmEvent::CUP;
+        $c_tournament   = $c_has_games && $this->event->get_event_type() == ScmEvent::TOURNAMENT;
         $c_is_master    = ScmEventService::is_master($this->event_id());
 
         $this->view->put_all([
@@ -54,10 +54,10 @@ class ScmEventHomeController extends DefaultModuleController
                 $item->set_properties($sub_event);
 
                 $c_has_games    = ScmGameService::has_games($item->get_id());
-                $c_championship = $c_has_games && ScmEventService::get_event_type($item->get_id()) == ScmDivision::CHAMPIONSHIP;
-                $c_cup          = $c_has_games && ScmEventService::get_event_type($item->get_id()) == ScmDivision::CUP;
-                $c_tournament   = $c_has_games && ScmEventService::get_event_type($item->get_id()) == ScmDivision::TOURNAMENT;
-                $c_practice     = $c_has_games && ScmEventService::get_event_type($item->get_id()) == ScmDivision::PRACTICE;
+                $c_championship = $c_has_games && $item->get_event_type() == ScmEvent::CHAMPIONSHIP;
+                $c_cup          = $c_has_games && $item->get_event_type() == ScmEvent::CUP;
+                $c_tournament   = $c_has_games && $item->get_event_type() == ScmEvent::TOURNAMENT;
+                $c_practice     = $c_has_games && $item->get_event_type() == ScmEvent::PRACTICE;
 
                 $this->view->assign_block_vars('sub_events', array_merge($item->get_template_vars(), [
                     'C_CHAMPIONSHIP' => $c_championship,

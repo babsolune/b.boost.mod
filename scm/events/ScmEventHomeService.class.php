@@ -19,7 +19,7 @@ class ScmEventHomeService
 
     public static function build_championship_home(int $event_id)
     {
-        $view = new FileTemplate('scm/ScmEventChampionshipController.tpl');
+        $view = new FileTemplate('scm/event/ScmEventChampionshipController.tpl');
         $lang = LangLoader::get_all_langs('scm');
         $view->add_lang($lang);
 
@@ -30,11 +30,12 @@ class ScmEventHomeService
             $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
             $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
 
-            $view->assign_block_vars('clubs_list', [
-                'CLUB_LOGO' => Url::to_rel(ScmClubCache::load()->get_affiliate_club_shield($team['id_club'])),
-                'CLUB_SHORT_NAME' => $team['club_name'],
-                'U_CLUB' => ScmUrlBuilder::display_club((int)$real_id, (string)$real_slug)->rel()
-            ]);
+            if ($team['team_status'] != ScmParams::EXEMPT)
+                $view->assign_block_vars('clubs_list', [
+                    'CLUB_LOGO' => Url::to_rel(ScmClubCache::load()->get_affiliate_club_shield($team['id_club'])),
+                    'CLUB_SHORT_NAME' => $team['club_name'],
+                    'U_CLUB' => ScmUrlBuilder::display_club((int)$real_id, (string)$real_slug)->rel()
+                ]);
         }
 
         $prev_day = ScmDayService::get_last_day($event_id);
@@ -117,7 +118,7 @@ class ScmEventHomeService
 
     public static function build_tournament_home(int $event_id)
     {
-        $view = new FileTemplate('scm/ScmEventTournamentController.tpl');
+        $view = new FileTemplate('scm/event/ScmEventTournamentController.tpl');
         $view->add_lang(LangLoader::get_all_langs('scm'));
 
         // Display group team list
@@ -165,7 +166,7 @@ class ScmEventHomeService
             'C_ROUND_RANKING'    => $params->get_finals_type() == ScmParams::FINALS_RANKING,
             'C_PLAYGROUNDS'      => $params->get_display_playgrounds(),
             'C_HAS_GAMES'        => ScmGameService::has_games($event_id),
-            'C_ONE_DAY'          => ScmGameService::one_day_event($event_id),
+            'C_ONE_DAY'          => ScmEventService::get_event($event_id)->get_oneday(),
             'ONE_DAY_DATE'       => Date::to_format(ScmEventService::get_event($event_id)->get_start_date()->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT),
             'TEAMS_NUMBER'       => ScmTeamService::get_teams_number($event_id),
             'TEAMS_PER_GROUP'    => $params->get_teams_per_group(),
@@ -229,7 +230,7 @@ class ScmEventHomeService
 
     public static function build_cup_home(int $event_id)
     {
-        $view = new FileTemplate('scm/ScmEventCupController.tpl');
+        $view = new FileTemplate('scm/event/ScmEventCupController.tpl');
         $view->add_lang(LangLoader::get_all_langs('scm'));
 
         // Display group team list
@@ -271,7 +272,7 @@ class ScmEventHomeService
         $view->put_all([
             'C_PLAYGROUNDS'    => ScmParamsService::get_params($event_id)->get_display_playgrounds(),
             'C_HAS_GAMES'      => ScmGameService::has_games($event_id),
-            'C_ONE_DAY'        => ScmGameService::one_day_event($event_id),
+            'C_ONE_DAY'        => ScmEventService::get_event($event_id)->get_oneday(),
             'ONE_DAY_DATE'     => Date::to_format(ScmEventService::get_event($event_id)->get_start_date()->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT),
             'TEAMS_NUMBER'     => ScmTeamService::get_teams_number($event_id),
             'TEAMS_PER_GROUP'  => ScmParamsService::get_params($event_id)->get_teams_per_group(),
@@ -348,7 +349,7 @@ class ScmEventHomeService
 
     public static function build_practice_home(int $event_id)
     {
-        $view = new FileTemplate('scm/ScmEventPracticeController.tpl');
+        $view = new FileTemplate('scm/event/ScmEventPracticeController.tpl');
         $games = ScmGameService::get_games($event_id);
 
         $view->put_all([

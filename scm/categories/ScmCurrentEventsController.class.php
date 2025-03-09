@@ -13,7 +13,7 @@ class ScmCurrentEventsController extends DefaultModuleController
 
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmCurrentEventsController.tpl');
+		return new FileTemplate('scm/main/ScmCurrentEventsController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)

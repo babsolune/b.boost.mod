@@ -20,7 +20,7 @@ class ScmPracticeService
     // Add games
     public static function set_practice_games($event_id, $games_number)
     {
-        $c_return_games = ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES;
+        $c_return_games = ScmEventService::get_event($event_id)->get_event_game_type() == ScmEvent::RETURN_GAMES;
         $games_number = $c_return_games ? $games_number * 2 : $games_number;
 
         for ($i = 1; $i <= $games_number; $i++)

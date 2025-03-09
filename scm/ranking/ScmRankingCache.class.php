@@ -120,15 +120,13 @@ class ScmRankingCache
     public static function is_championship($event_id)
     {
         $event = ScmEventService::get_event($event_id);
-        $division = ScmDivisionService::get_division($event->get_division_id());
-        return $division->get_event_type() == ScmDivision::CHAMPIONSHIP;
+        return $event->get_event_type() == ScmEvent::CHAMPIONSHIP;
     }
 
     public static function is_tournament($event_id)
     {
         $event = ScmEventService::get_event($event_id);
-        $division = ScmDivisionService::get_division($event->get_division_id());
-        return $division->get_event_type() == ScmDivision::TOURNAMENT;
+        return $event->get_event_type() == ScmEvent::TOURNAMENT;
     }
 }
 ?>

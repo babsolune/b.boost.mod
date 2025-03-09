@@ -17,7 +17,7 @@ class ScmBracketController extends DefaultModuleController
     private $looser_bracket;
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmBracketController.tpl');
+		return new FileTemplate('scm/content/ScmBracketController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
@@ -43,7 +43,7 @@ class ScmBracketController extends DefaultModuleController
             'MENU'             => ScmMenuService::build_event_menu($this->event_id()),
             'C_HAT_RANKING'    => ScmParamsService::get_params($this->event_id())->get_hat_ranking(),
             'C_RETURN_GAMES'   => $this->return_games(),
-            'C_ONE_DAY'        => ScmGameService::one_day_event($this->event_id()),
+            'C_ONE_DAY'        => $this->get_event()->get_oneday(),
             'C_LOOSER_BRACKET' => $this->get_params()->get_looser_bracket(),
             'C_HAS_GAMES'      => ScmGameService::has_games($this->event_id()),
             'C_FINALS_RANKING' => $this->get_params($this->event_id())->get_finals_type() == ScmParams::FINALS_RANKING,
@@ -57,8 +57,8 @@ class ScmBracketController extends DefaultModuleController
     {
 		$this->division = ScmDivisionCache::load()->get_division($this->get_event()->get_division_id());
         $this->looser_bracket = $this->get_params()->get_looser_bracket();
-		$this->is_cup = $this->division['event_type'] == ScmDivision::CUP;
-		$this->is_tournament = $this->division['event_type'] == ScmDivision::TOURNAMENT;
+		$this->is_cup = $this->get_event()->get_event_type() == ScmEvent::CUP;
+		$this->is_tournament = $this->get_event()->get_event_type() == ScmEvent::TOURNAMENT;
     }
 
 	/** Bracket with return matches */
@@ -76,8 +76,8 @@ class ScmBracketController extends DefaultModuleController
             $rounds[] = $game['game_cluster'];
         }
 
-        $rounds_count = $c_hat_ranking || $this->is_cup || $this->looser_bracket ? array_unique(array_reverse($rounds)) : array_unique($rounds);
-        $key_rounds_count = $c_hat_ranking || $this->is_cup || $this->looser_bracket ? array_keys(array_reverse($rounds_count)) : array_keys($rounds_count);
+        $rounds_count = $this->is_cup || $this->looser_bracket ? array_unique(array_reverse($rounds)) : array_unique($rounds); // $c_hat_ranking || 
+        $key_rounds_count = $this->is_cup || $this->looser_bracket ? array_keys(array_reverse($rounds_count)) : array_keys($rounds_count); // $c_hat_ranking || 
         $first_key = reset($key_rounds_count);
         $last_key = end($key_rounds_count);
 
@@ -323,7 +323,7 @@ class ScmBracketController extends DefaultModuleController
 
     private function return_games()
     {
-        return ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        return $this->get_event()->get_event_game_type() == ScmEvent::RETURN_GAMES;
     }
 
 	private function get_event()

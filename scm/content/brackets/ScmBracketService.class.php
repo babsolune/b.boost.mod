@@ -26,7 +26,7 @@ class ScmBracketService
     // Add games
     public static function set_bracket_games($event_id, $rounds_number)
     {
-        $c_return_games   = ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES;
+        $c_return_games   = ScmEventService::get_event($event_id)->get_event_game_type() == ScmEvent::RETURN_GAMES;
         $c_looser_bracket = ScmParamsService::get_params($event_id)->get_looser_bracket();
         $c_third_place    = ScmParamsService::get_params($event_id)->get_third_place();
         $c_hat_ranking    = ScmParamsService::get_params($event_id)->get_hat_ranking();

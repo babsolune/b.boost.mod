@@ -52,10 +52,10 @@ class ScmParamsFormController extends DefaultModuleController
 	private function init()
 	{
 		$this->division = ScmDivisionCache::load()->get_division($this->get_event()->get_division_id());
-		$this->is_championship = $this->division['event_type'] == ScmDivision::CHAMPIONSHIP;
-		$this->is_cup = $this->division['event_type'] == ScmDivision::CUP;
-		$this->is_tournament = $this->division['event_type'] == ScmDivision::TOURNAMENT;
-		$this->is_practice = $this->division['event_type'] == ScmDivision::PRACTICE;
+		$this->is_championship = $this->get_event()->get_event_type() == ScmEvent::CHAMPIONSHIP;
+		$this->is_cup = $this->get_event()->get_event_type() == ScmEvent::CUP;
+		$this->is_tournament = $this->get_event()->get_event_type() == ScmEvent::TOURNAMENT;
+		$this->is_practice = $this->get_event()->get_event_type() == ScmEvent::PRACTICE;
 	}
 
 	private function build_form()

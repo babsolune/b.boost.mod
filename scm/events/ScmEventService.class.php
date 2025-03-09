@@ -143,14 +143,25 @@ class ScmEventService
 		return $running_events_id;
 	}
 
-    public static function get_event_type(int $event_id)
+    public static function get_event_type_lang(int $event_id)
     {
-        return ScmDivisionService::get_division(self::get_event($event_id)->get_division_id())->get_event_type();
-    }
+        $lang = LangLoader::get('common', 'scm');
 
-    public static function get_event_game_type(int $event_id)
-    {
-        return ScmDivisionService::get_division(self::get_event($event_id)->get_division_id())->get_game_type();
+        $event_type = '';
+        switch(self::get_event($event_id))
+        {
+            case('championship') :
+                $event_type = $lang['scm.championship'];
+                break;
+            case('cup') :
+                $event_type = $lang['scm.cup'];
+                break;
+            case('tournament') :
+                $event_type = $lang['scm.tournament'];
+                break;
+        };
+
+        return $event_type;
     }
 
     public static function get_event_scoring_type(int $event_id):string

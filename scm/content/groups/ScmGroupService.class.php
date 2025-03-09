@@ -47,7 +47,7 @@ class ScmGroupService
     /** Set all games of all groups */
     public static function set_groups_games(int $event_id) : void
     {
-        $c_return_games = ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES;
+        $c_return_games = ScmEventService::get_event($event_id)->get_event_game_type() == ScmEvent::RETURN_GAMES;
         // build groups from event teams list
         $groups = self::get_group_teams_list($event_id);
         // Build schedule
@@ -104,7 +104,7 @@ class ScmGroupService
 
     public static function set_groups_finals_games(int $event_id) : void
     {
-        $c_return_games = ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES;
+        $c_return_games = ScmEventService::get_event($event_id)->get_event_game_type() == ScmEvent::RETURN_GAMES;
         // build groups from event teams list
         $groups = self::get_group_teams_list($event_id);
 

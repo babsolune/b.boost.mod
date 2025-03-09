@@ -61,7 +61,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
         $this->brackets_number = $this->get_params()->get_looser_bracket() ? $this->get_params()->get_brackets_number() + 1 : 1;
         $this->teams_number = ScmTeamService::get_teams_number($this->event_id());
         $this->teams_per_group = $this->get_params()->get_teams_per_group();
-        $this->return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $this->return_games = $this->get_event()->get_event_game_type() == ScmEvent::RETURN_GAMES;
         $this->finals_ranking = $this->get_params()->get_finals_type() == ScmParams::FINALS_RANKING;
     }
 
@@ -150,8 +150,8 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 ${'bracket_fieldset_'.$field}->add_field(new FormFieldSimpleSelectChoice('status_' . $field, $this->lang['scm.game.form.status'], $game_status,
                     [
                         new FormFieldSelectChoiceOption('', ''),
-                        new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.completed'], ScmGame::COMPLETED),
                         new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.delayed'], ScmGame::DELAYED),
+                        new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.reserve'], ScmGame::RESERVE),
                         new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.stopped'], ScmGame::STOPPED)
                     ],
                     ['class' => 'label-top game-status portable-full']
@@ -265,8 +265,8 @@ class ScmBracketGamesFormController extends DefaultModuleController
             $fieldset->add_field(new FormFieldSimpleSelectChoice('status_' . $field, $this->lang['scm.game.form.status'], $item->get_game_status(),
                 [
                     new FormFieldSelectChoiceOption('', ''),
-                    // new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.completed'], ScmGame::COMPLETED),
                     new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.delayed'], ScmGame::DELAYED),
+                    new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.reserve'], ScmGame::RESERVE),
                     new FormFieldSelectChoiceOption($this->lang['scm.game.form.status.stopped'], ScmGame::STOPPED)
                 ],
                 ['class' => 'label-top game-status portable-full']

@@ -182,21 +182,6 @@ class ScmGameService
             return null;
 	}
 
-    /** Check if all games date are on the same day */
-    public static function one_day_event(int $event_id) : bool
-    {
-        if (self::has_games($event_id))
-        {
-            $dates = [];
-            foreach (self::get_games($event_id) as $game)
-            {
-                $dates[] = Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH);
-            }
-            return count(array_unique($dates)) == 1;
-        }
-        return false;
-    }
-
     // Check if game is live
     public static function is_live(int $event_id, int $game_id) : bool
 	{
@@ -241,10 +226,7 @@ class ScmGameService
         $events_id = $running_events ? implode(', ', $running_events) : 0;
         $now = new Date();
         // week
-        // $serverTimezone = date_default_timezone_get();
-        // $timezone = new DateTimeZone($serverTimezone);
         $today = new DateTime();
-        // $today->setTimezone($timezone);
         $start = clone $today;
         $start->modify('monday this week');
         $start->setTime(00, 00, 00);

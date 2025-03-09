@@ -24,14 +24,8 @@
     white-space: nowrap;
 }
 
-.cell-flex::before,
-.cell-flex::after {
-    content: none;
-}
-
-nav#matchdays {
-    margin: 0;
-    padding: 0.309em;
+article header {
+    margin: 0.618em;
 }
 
 @media (min-width: 769px) {
@@ -127,6 +121,7 @@ th.bgc-sub a {
     width: auto;
     margin: 0;
     padding: 0;
+    z-index: 100;
 }
 
 .waiting-cover {
@@ -225,6 +220,11 @@ th.bgc-sub a {
     visibility: visible;
 }
 
+[class^="columns-"] > *,
+.teams-checkbox .form-field-multiple-checkbox > * {
+    break-inside: avoid;
+}
+
 @media (min-width: 769px) {
     .columns-6,
     .teams-checkbox .form-field-multiple-checkbox {
@@ -266,6 +266,17 @@ th.bgc-sub a {
 .portable .portable-half { width: 50%; text-align: center; }
 .portable .portable-full { width: 100%; }
 .game-details .fieldset-inset .details-full { width: 100%; }
+
+.form-columns-2 .fieldset-inset {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--cell-gap);
+    --items: 2;
+}
+
+.form-columns-2 .fieldset-inset > * {
+    width: calc((100% - ((var(--items) - 1) * var(--cell-gap))) / var(--items));
+}
 
 /* params */
 .params-form p {
@@ -693,6 +704,13 @@ th.bgc-sub a {
     text-align: center;
 }
 
+@media (max-width: 768px) {
+    .scm-cell-highlight {
+        background-color: var(--bgc-alt);
+        color: var(--txt-alt);
+    }
+}
+
 .scm-name {
     flex: 1 1 auto;
 }
@@ -762,4 +780,71 @@ th.bgc-sub a {
 .game-header,
 .game-body {
     margin: 0;
+}
+
+.scm-header {
+    padding: 0.618em;
+    display: flex;
+    flex-direction: column;
+}
+
+.event-title {
+    text-align: center;
+}
+
+.event-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+@media (min-width: 1025px) {
+    .scm-header {
+        padding: 0;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .event-title {
+        text-align: left;
+    }
+    .event-details {
+        flex-direction: column;
+        justify-content: end;
+    }
+}
+
+.flex-group-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.618em;
+}
+
+.flex-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-group-list span {
+    display: inline-flex;
+    gap: 0.228em;
+    align-items: center;
+}
+
+.flex-group-list img {
+    max-height: 19px;
+}
+
+@media (min-width: 769px) {
+    .flex-group-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
+
+.tabs-wrapper {
+    padding: 0.618em;
+}
+
+.tabs-wrapper.no-style {
+    padding: 0;
 }

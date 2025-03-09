@@ -91,7 +91,7 @@ class ScmDayService
     public static function set_days_games(int $event_id):void
     {
         $now = new Date();
-        $c_return_games = ScmEventService::get_event_game_type($event_id) == ScmDivision::RETURN_GAMES;
+        $c_return_games = ScmEventService::get_event($event_id)->get_event_game_type() == ScmEvent::RETURN_GAMES;
         $teams_number = ScmTeamService::get_teams_number($event_id);
 
         $games_number = $c_return_games ? ($teams_number - 1) * 2 : ($teams_number - 1);

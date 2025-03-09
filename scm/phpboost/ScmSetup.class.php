@@ -22,23 +22,23 @@ class ScmSetup extends DefaultModuleSetup
 
 	public static function __static()
 	{
-		self::$scm_cats_table = PREFIX . 'scm_cats';
-		self::$scm_event_table = PREFIX . 'scm';
-		self::$scm_club_table = PREFIX . 'scm_club';
-		self::$scm_day_table = PREFIX . 'scm_day';
+		self::$scm_cats_table     = PREFIX . 'scm_cats';
+		self::$scm_event_table    = PREFIX . 'scm';
+		self::$scm_club_table     = PREFIX . 'scm_club';
+		self::$scm_day_table      = PREFIX . 'scm_day';
 		self::$scm_division_table = PREFIX . 'scm_division';
-		self::$scm_params_table = PREFIX . 'scm_params';
-		self::$scm_game_table = PREFIX . 'scm_game';
-		self::$scm_ranking_table = PREFIX . 'scm_ranking';
-		self::$scm_season_table = PREFIX . 'scm_season';
-		self::$scm_team_table = PREFIX . 'scm_team';
+		self::$scm_params_table   = PREFIX . 'scm_params';
+		self::$scm_game_table     = PREFIX . 'scm_game';
+		self::$scm_ranking_table  = PREFIX . 'scm_ranking';
+		self::$scm_season_table   = PREFIX . 'scm_season';
+		self::$scm_team_table     = PREFIX . 'scm_team';
 	}
 
 	public function install()
 	{
 		$this->drop_tables();
 		$this->create_tables();
-		// $this->insert_data();
+		$this->insert_data();
 	}
 
 	public function uninstall()
@@ -87,14 +87,17 @@ class ScmSetup extends DefaultModuleSetup
 	private function create_scm_event_table()
 	{
 		$fields = [
-			'id'          => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
-			'id_category' => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
-			'event_slug'  => ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
-			'season_id'   => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
-			'division_id' => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
-			'pool'        => ['type' => 'string', 'length' => 255, 'default' => "''"],
-			'start_date'  => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
-			'end_date'    => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
+			'id'              => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
+			'id_category'     => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
+			'event_slug'      => ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
+			'season_id'       => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
+			'division_id'     => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
+			'pool'            => ['type' => 'string', 'length' => 255, 'default' => "''"],
+			'event_type'      => ['type' => 'string', 'length' => 255, 'default' => "''"],
+			'event_game_type' => ['type' => 'string', 'length' => 255, 'default' => "''"],
+			'oneday'          => ['type' => 'boolean', 'default' => 0],
+			'start_date'      => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
+			'end_date'        => ['type' => 'integer', 'length' => 11, 'notnull' => 1, 'default' => 0],
 
 			'views_number'          => ['type' => 'integer', 'length' => 11, 'default' => 0],
 			'scoring_type'          => ['type' => 'string', 'length' => 65, 'default' => '""'],
@@ -115,7 +118,7 @@ class ScmSetup extends DefaultModuleSetup
 				'id_category' => ['type' => 'key', 'fields' => 'id_category'],
 				'event_slug'  => ['type' => 'fulltext', 'fields' => 'event_slug'],
             ]
-            ];
+        ];
 		PersistenceContext::get_dbms_utils()->create_table(self::$scm_event_table, $fields, $options);
 	}
 
@@ -135,7 +138,6 @@ class ScmSetup extends DefaultModuleSetup
 			'club_phone'       => ['type' => 'string', 'length' => 25, 'default' => "''"],
 			'club_colors'      => ['type' => 'text', 'length' => 65000],
 			'club_locations'   => ['type' => 'text', 'length' => 65000],
-			'club_map_display' => ['type' => 'boolean', 'default' => 0],
         ];
 		$options = [
 			'primary' => ['id_club'],
@@ -153,6 +155,7 @@ class ScmSetup extends DefaultModuleSetup
 			'day_event_id' => ['type' => 'integer', 'length' => 11, 'notnull' => 1],
 			'day_round'    => ['type' => 'integer', 'length' => 11, 'notnull' => 1],
 			'day_date'     => ['type' => 'integer', 'length' => 11, 'notnull' => 1],
+			'general_time' => ['type' => 'string', 'length' => 5],
 			'day_played'   => ['type' => 'boolean', 'default' => 0],
         ];
 		$options = [
@@ -169,8 +172,6 @@ class ScmSetup extends DefaultModuleSetup
 		$fields = [
 			'id_division'   => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
 			'division_name' => ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
-			'event_type'    => ['type' => 'string', 'length' => 255, 'default' => "''"],
-			'game_type'     => ['type' => 'string', 'length' => 255, 'default' => "''"],
         ];
 		$options = [
 			'primary' => ['id_division'],
@@ -276,7 +277,7 @@ class ScmSetup extends DefaultModuleSetup
 
 			'game_duration'    => ['type' => 'integer', 'length' => 11, 'default' => 0],
 			'favorite_team_id' => ['type' => 'integer', 'length' => 11, 'default' => 0],
-			'bonus'            => ['type' => 'integer', 'length' => 11, 'default' => 0]
+			'bonus'            => ['type' => 'string', 'length' => 11, 'default' => "''"]
         ];
 		$options = [
 			'primary' => ['id_params'],
@@ -292,7 +293,7 @@ class ScmSetup extends DefaultModuleSetup
 		$fields = [
 			'id_ranking'       => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
 			'ranking_event_id' => ['type' => 'integer', 'length' => 11, 'default' => 0],
-			'content'          => ['type' => 'string', 'length' => 65000000, 'default' => '""'],
+			'content'          => ['type' => 'text', 'length' => 65000000, 'default' => '""'],
 		];
 		$options = [
 			'primary' => ['id_ranking'],
@@ -346,7 +347,7 @@ class ScmSetup extends DefaultModuleSetup
         $row = 1;
         if (($handle = fopen($categories_file, 'r')) !== FALSE)
         {
-            while(($data = fgetcsv($handle, 1000, '|')) !== FALSE)
+            while(($data = fgetcsv($handle, 1000, '|', '"', '\\')) !== FALSE)
             {
                 if ($row == 1) {$row++; continue;}
                 PersistenceContext::get_querier()->insert(self::$scm_cats_table, [
@@ -373,7 +374,7 @@ class ScmSetup extends DefaultModuleSetup
         $row = 1;
         if (($handle = fopen($clubs_file, 'r')) !== FALSE)
         {
-            while(($data = fgetcsv($handle, 1000, '|')) !== FALSE)
+            while(($data = fgetcsv($handle, 1000, '|', '"', '\\')) !== FALSE)
             {
                 if ($row == 1) {$row++; continue;}
                 PersistenceContext::get_querier()->insert(self::$scm_club_table, [
@@ -384,7 +385,6 @@ class ScmSetup extends DefaultModuleSetup
                     'club_logo'        => $data[3],
                     'club_flag'        => $data[4],
                     'club_locations'   => $data[8],
-                    'club_map_display' => $data[9],
                 ]);
                 $row++;
             }

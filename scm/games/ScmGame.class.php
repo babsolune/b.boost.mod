@@ -43,7 +43,7 @@ class ScmGame
     private $game_stadium;
     private $game_stadium_name;
 
-    const COMPLETED = 'completed';
+    const RESERVE = 'reserve';
     const DELAYED = 'delayed';
     const STOPPED = 'stopped';
 
@@ -410,6 +410,29 @@ class ScmGame
         $this->game_stadium_name = $game_stadium_name;
     }
 
+    // Extra functions
+    function is_exempted_game() {
+        if (!$this->game_home_id && !$this->game_away_id)
+        return;
+        return ScmTeamService::get_team($this->game_home_id)->get_team_status() == ScmParams::EXEMPT || ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::EXEMPT;
+    }
+
+    function is_forfeit_game() {
+        if (!$this->game_home_id && !$this->game_away_id)
+        return;
+        return ScmTeamService::get_team($this->game_home_id)->get_team_status() == ScmParams::FORFEIT || ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::FORFEIT;
+    }
+
+    function has_score()
+    {
+        return $this->game_home_score != '' && $this->game_away_score != '';
+    }
+
+    function get_event_type()
+    {
+        return;
+    }
+
     public function get_properties()
 	{
 		return [
@@ -508,8 +531,8 @@ class ScmGame
         $category = $event->get_category();
 
         switch ($this->get_game_status()) {
-            case ScmGame::COMPLETED :
-                $status = $lang['scm.game.form.status.completed'];
+            case ScmGame::RESERVE :
+                $status = $lang['scm.game.form.status.reserve'];
                 break;
             case ScmGame::DELAYED :
                 $status = $lang['scm.game.form.status.delayed'];
@@ -536,8 +559,8 @@ class ScmGame
                 'GAME_CATEGORY'   => $category->get_name(),
 
                 'C_IS_LIVE'       => ScmGameService::is_live($this->game_event_id, $this->id_game),
-                'C_STATUS'        => $this->game_status && $this->game_status != ScmGame::COMPLETED,
-                'C_HAS_SCORE'     => $c_home_score && $c_away_score,
+                'C_STATUS'        => !empty($this->game_status),
+                'C_HAS_SCORE'     => $this->has_score(),
                 'C_HOME_SCORE'    => $c_home_score,
                 'C_AWAY_SCORE'    => $c_away_score,
                 'C_HAS_DETAILS'   => $c_home_score || $c_away_score || $address,
@@ -553,10 +576,10 @@ class ScmGame
                 'C_AWAY_WIN'      => $this->game_home_score < $this->game_away_score || $this->game_home_pen < $this->game_away_pen,
                 'C_AWAY_EMPTY'    => $this->game_away_id == 0,
                 'C_AWAY_EXEMPT'   => $this->game_away_id && ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::EXEMPT,
-                'C_EXEMPT'        => $this->game_home_id && ScmTeamService::get_team($this->game_home_id)->get_team_status() == ScmParams::EXEMPT || $this->game_away_id && ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::EXEMPT,
-                'C_TYPE_GROUP'   => $this->game_type == 'G',
-                'C_TYPE_BRACKET' => $this->game_type == 'B',
-                'C_TYPE_DAY'     => $this->game_type == 'D',
+                'C_EXEMPT'        => $this->is_exempted_game(),
+                'C_TYPE_GROUP'    => $this->game_type == 'G',
+                'C_TYPE_BRACKET'  => $this->game_type == 'B',
+                'C_TYPE_DAY'      => $this->game_type == 'D',
 
                 'GROUP'          => ScmGroupService::ntl($this->game_cluster),
                 'BRACKET'        => ScmBracketService::ntl($this->game_round),
@@ -565,7 +588,7 @@ class ScmGame
                 'U_EDIT_GROUP'   => ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
                 'U_BRACKET'      => ScmUrlBuilder::display_brackets_rounds($event->get_id(), $event->get_event_slug())->rel(),
                 'U_EDIT_BRACKET' => ScmUrlBuilder::edit_brackets_games($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
-                'U_DAY'          => ScmUrlBuilder::display_days_calendar($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
+                'U_DAY'          => ScmUrlBuilder::display_day_calendar($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
                 'U_EDIT_DAY'     => ScmUrlBuilder::edit_days_games($event->get_id(), $event->get_event_slug(), $this->game_cluster)->rel(),
 
                 'EVENT_NAME'      => ScmEventService::get_event($this->game_event_id)->get_event_name(),
@@ -662,7 +685,7 @@ class ScmGame
         $real_stadium = [];
         foreach (TextHelper::deserialize($real_club->get_club_locations()) as $options)
         {
-            if ($options['name'] == $this->get_game_stadium_name() && $this->get_game_stadium_name() && $real_club->get_club_map_display())
+            if ($options['name'] == $this->get_game_stadium_name() && $this->get_game_stadium_name())
                 $real_stadium[] = $options;
         }
 

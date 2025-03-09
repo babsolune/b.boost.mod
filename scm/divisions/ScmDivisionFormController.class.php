@@ -43,45 +43,6 @@ class ScmDivisionFormController extends DefaultModuleController
 			['required' => true]
 		));
 
-        $description = $this->lang['scm.championship.clue'];
-        if ($this->get_division()->get_event_type() == ScmDivision::CHAMPIONSHIP)
-            $description = $this->lang['scm.championship.clue'];
-        elseif ($this->get_division()->get_event_type() == ScmDivision::CUP)
-            $description = $this->lang['scm.cup.clue'];
-        elseif ($this->get_division()->get_event_type() == ScmDivision::TOURNAMENT)
-            $description = $this->lang['scm.tournament.clue'];
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('event_type', $this->lang['scm.event.type'], $this->get_division()->get_event_type(),
-			[
-				new FormFieldSelectChoiceOption('', ''),
-				new FormFieldSelectChoiceOption($this->lang['scm.championship'], ScmDivision::CHAMPIONSHIP),
-				new FormFieldSelectChoiceOption($this->lang['scm.cup'], ScmDivision::CUP),
-				new FormFieldSelectChoiceOption($this->lang['scm.tournament'], ScmDivision::TOURNAMENT),
-				new FormFieldSelectChoiceOption($this->lang['scm.practice'], ScmDivision::PRACTICE)
-            ],
-            [
-                'description' => $description,
-                'events' => ['click' => '
-                    if (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::CHAMPIONSHIP .'") {
-                        jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.championship.clue'] . '");
-                    } else if (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::CUP .'") {
-                        jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.cup.clue'] . '");
-                    } else if  (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::TOURNAMENT .'") {
-                        jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.tournament.clue'] . '");
-                    } else if  (HTMLForms.getField("event_type").getValue() == "'. ScmDivision::PRACTICE .'") {
-                        jQuery(this).closest(".form-element").find(".field-description").html("' . $this->lang['scm.practice.clue'] . '");
-                    }
-                ']
-            ]
-		));
-
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('game_type', $this->lang['scm.game.type'], $this->get_division()->get_game_type(),
-			[
-				new FormFieldSelectChoiceOption('', ''),
-				new FormFieldSelectChoiceOption($this->lang['scm.single.games'], ScmDivision::SINGLE_GAMES),
-				new FormFieldSelectChoiceOption($this->lang['scm.return.games'], ScmDivision::RETURN_GAMES)
-            ]
-		));
-
 		$fieldset->add_field(new FormFieldHidden('referrer', $request->get_url_referrer()));
 
 		$this->submit_button = new FormButtonDefaultSubmit();
@@ -147,8 +108,6 @@ class ScmDivisionFormController extends DefaultModuleController
 		$division = $this->get_division();
 
         $division->set_division_name($this->form->get_value('name'));
-        $division->set_event_type($this->form->get_value('event_type')->get_raw_value());
-        $division->set_game_type($this->form->get_value('game_type')->get_raw_value());
 
 		if ($this->is_new_division)
 		{

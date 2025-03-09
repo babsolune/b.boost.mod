@@ -11,10 +11,9 @@ class ScmCurrentGamesService
 {
     public static function display_current_games()
     {
-        $view = new FileTemplate('scm/ScmCurrentGamesController.tpl');
+        $view = new FileTemplate('scm/main/ScmCurrentGamesController.tpl');
         $lang = LangLoader::get_all_langs('scm');
         $view->add_lang($lang);
-        // Debug::dump(ScmGameService::get_week_games());
 
         $view->put_all([
             'C_CURRENT_GAMES'   => count(ScmGameService::get_current_games()) > 0,

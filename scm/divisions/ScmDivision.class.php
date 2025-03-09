@@ -11,16 +11,6 @@ class ScmDivision
 {
 	private $id_division;
 	private $division_name;
-	private $event_type;
-	private $game_type;
-
-	const SINGLE_GAMES = 'single_games';
-	const RETURN_GAMES = 'return_games';
-
-	const CHAMPIONSHIP = 'championship';
-	const CUP          = 'cup';
-	const TOURNAMENT   = 'tournament';
-	const PRACTICE     = 'practice';
 
 	public function get_id_division()
 	{
@@ -42,26 +32,6 @@ class ScmDivision
 		$this->division_name = $division_name;
 	}
 
-	public function get_event_type()
-	{
-		return $this->event_type;
-	}
-
-	public function set_event_type($event_type)
-	{
-		$this->event_type = $event_type;
-	}
-
-	public function get_game_type()
-	{
-		return $this->game_type;
-	}
-
-	public function set_game_type($game_type)
-	{
-		$this->game_type = $game_type;
-	}
-
 	public function is_authorized_to_manage()
 	{
 		return ScmAuthorizationsService::check_authorizations()->manage_divisions();
@@ -71,9 +41,7 @@ class ScmDivision
 	{
 		return [
 			'id_division'   => $this->get_id_division(),
-			'division_name' => $this->get_division_name(),
-			'event_type'    => $this->get_event_type(),
-			'game_type'     => $this->get_game_type()
+			'division_name' => $this->get_division_name()
         ];
 	}
 
@@ -81,8 +49,6 @@ class ScmDivision
 	{
 		$this->id_division   = $properties['id_division'];
 		$this->division_name = $properties['division_name'];
-		$this->event_type    = $properties['event_type'];
-		$this->game_type     = $properties['game_type'];
 	}
 
     public function init_default_properties() {}

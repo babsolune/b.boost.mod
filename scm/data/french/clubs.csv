@@ -1,18 +1,18 @@
-# name|slug|Nom complet|logo|flag|email|phone|locations|map_display
-Exempt|exempt|Club exempté|||||||0
-Club 01|club-01|FC Club 01|/scm/templates/images/badges/club.webp||||||0
-Club 02|club-02|FC Club 02|/scm/templates/images/badges/club.webp||||||0
-Club 03|club-03|FC Club 03|/scm/templates/images/badges/club.webp||||||0
-Club 04|club-04|FC Club 04|/scm/templates/images/badges/club.webp||||||0
-Club 05|club-05|FC Club 05|/scm/templates/images/badges/club.webp||||||0
-Club 06|club-06|FC Club 06|/scm/templates/images/badges/club.webp||||||0
-Club 07|club-07|FC Club 07|/scm/templates/images/badges/club.webp||||||0
-Club 08|club-08|FC Club 08|/scm/templates/images/badges/club.webp||||||0
-Club 09|club-09|FC Club 09|/scm/templates/images/badges/club.webp||||||0
-Club 10|club-10|FC Club 10|/scm/templates/images/badges/club.webp||||||0
-Club 11|club-11|FC Club 11|/scm/templates/images/badges/club.webp||||||0
-Club 12|club-12|FC Club 12|/scm/templates/images/badges/club.webp||||||0
-Club 13|club-13|FC Club 13|/scm/templates/images/badges/club.webp||||||0
-Club 14|club-14|FC Club 14|/scm/templates/images/badges/club.webp||||||0
-Club 15|club-15|FC Club 15|/scm/templates/images/badges/club.webp||||||0
-Club 16|club-16|FC Club 16|/scm/templates/images/badges/club.webp||||||0
+# name|slug|Nom complet|logo|flag|email|phone|locations
+Exempt|exempt|Club exempté||||||a:0:{}
+Club 01|club-01|FC Club 01|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 02|club-02|FC Club 02|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 03|club-03|FC Club 03|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 04|club-04|FC Club 04|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 05|club-05|FC Club 05|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 06|club-06|FC Club 06|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 07|club-07|FC Club 07|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 08|club-08|FC Club 08|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 09|club-09|FC Club 09|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 10|club-10|FC Club 10|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 11|club-11|FC Club 11|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 12|club-12|FC Club 12|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 13|club-13|FC Club 13|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 14|club-14|FC Club 14|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 15|club-15|FC Club 15|/scm/templates/images/badges/club.webp|||||a:0:{}
+Club 16|club-16|FC Club 16|/scm/templates/images/badges/club.webp|||||a:0:{}

@@ -128,7 +128,7 @@ class ScmUrlBuilder
 ################################ Display
     public static function event_home($event_id, $event_slug)
 	{
-        $event_home = ScmEventService::get_event_type($event_id) == ScmDivision::PRACTICE ? '/practice/' : '/informations/';
+        $event_home = ScmEventService::get_event($event_id)->get_event_type() == ScmEvent::PRACTICE ? '/practice/' : '/informations/';
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . $event_home);
 	}
 
@@ -159,13 +159,13 @@ class ScmUrlBuilder
 	}
 
     // Days calendar
-	public static function display_days_calendar($event_id, $event_slug, $cluster = '')
+	public static function display_day_calendar($event_id, $event_slug, $cluster = '')
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/matchday/' . $cluster);
 	}
 
     // Days calendar full
-	public static function display_days_calendar_full($event_id, $event_slug)
+	public static function display_days_calendar($event_id, $event_slug)
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/full/');
 	}
@@ -207,6 +207,7 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/params/');
 	}
 
+################################ Edit
     // Days
     // Edit days and build days games list
 	public static function edit_days($event_id, $event_slug)

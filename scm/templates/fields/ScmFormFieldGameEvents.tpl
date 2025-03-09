@@ -5,7 +5,8 @@
 		this.id_input  = ${escapejs(ID)};
 		this.max_input = {MAX_INPUT};
 	};
-	ScmFormFieldGameEvents.prototype = {
+
+    ScmFormFieldGameEvents.prototype = {
 		add_field : function (field_id, id_input) {
             if (this.integer <= this.max_input)
             {
@@ -27,7 +28,7 @@
 				jQuery('#add-' + id_input).hide();
 			}
 		},
-		delete_field : function (input,id) {
+		delete_field : function (input, id) {
 			var id = input + '_' + id;
 			jQuery('#' + id).remove();
 			this.integer--;

@@ -16,7 +16,7 @@ class ScmPracticeController extends DefaultModuleController
 
     protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmPracticeController.tpl');
+		return new FileTemplate('scm/content/ScmPracticeController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
@@ -35,7 +35,7 @@ class ScmPracticeController extends DefaultModuleController
         $this->view->put_all([
             'MENU'             => ScmMenuService::build_event_menu($this->event_id()),
             'C_RETURN_GAMES'   => $this->return_games,
-            'C_ONE_DAY'        => ScmGameService::one_day_event($this->event_id()),
+            'C_ONE_DAY'        => $this->get_event()->get_oneday(),
             'C_HAS_GAMES'      => ScmGameService::has_games($this->event_id()),
             'C_DISPLAY_PLAYGROUNDS' => $this->get_params($this->event_id())->get_display_playgrounds()
         ]);
@@ -46,7 +46,7 @@ class ScmPracticeController extends DefaultModuleController
     private function init()
     {
 		$this->division = ScmDivisionCache::load()->get_division($this->get_event()->get_division_id());
-        $this->return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $this->return_games = $this->get_event()->get_event_game_type() == ScmEvent::RETURN_GAMES;
     }
 
 	/** Bracket with return matches */

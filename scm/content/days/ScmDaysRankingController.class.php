@@ -12,7 +12,7 @@ class ScmDaysRankingController extends DefaultModuleController
     private $event;
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmDaysRankingController.tpl');
+		return new FileTemplate('scm/content/ScmDaysRankingController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
@@ -21,7 +21,7 @@ class ScmDaysRankingController extends DefaultModuleController
 		$this->build_days_view($request);
 		$this->check_authorizations();
 
-        $this->view->put('C_ONE_DAY', ScmGameService::one_day_event($this->event_id()));
+        $this->view->put('C_ONE_DAY', $this->get_event()->get_oneday());
 
 		return $this->generate_response();
 	}
@@ -69,7 +69,7 @@ class ScmDaysRankingController extends DefaultModuleController
         // x coord
         $teams_number = ScmTeamService::get_teams_number($this->event_id());
         // y coord
-        $c_return_games = ScmEventService::get_event_game_type($this->event_id()) == ScmDivision::RETURN_GAMES;
+        $c_return_games = $this->get_event()->get_event_game_type() == ScmEvent::RETURN_GAMES;
         $c_hat_ranking  = $params->get_hat_ranking();
         $days_number    = $c_hat_ranking ? $params->get_hat_days() : ($c_return_games ? ($teams_number - 1) * 2 : $teams_number - 1);
 
