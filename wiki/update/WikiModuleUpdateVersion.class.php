@@ -38,7 +38,7 @@ class WikiModuleUpdateVersion extends ModuleUpdateVersion
 			'/templates/post.tpl',
 			'/templates/property.tpl',
 			'/templates/wiki.tpl',
-			'/templates/wiki_js_tool.tpl',
+			'/templates/wiki_js_tools.tpl',
 			'/templates/wiki_search_form.tpl',
 			'/templates/wiki_tools.tpl',
 			'/action.php',

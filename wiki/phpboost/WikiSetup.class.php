@@ -229,7 +229,7 @@ class WikiSetup extends DefaultModuleSetup
 		$file = new File(PATH_TO_ROOT . '/wiki/templates/post.tpl');                            $file->delete();
 		$file = new File(PATH_TO_ROOT . '/wiki/templates/property.tpl');                        $file->delete();
 		$file = new File(PATH_TO_ROOT . '/wiki/templates/wiki.tpl');                            $file->delete();
-		$file = new File(PATH_TO_ROOT . '/wiki/templates/wiki_js_tool.tpl');                    $file->delete();
+		$file = new File(PATH_TO_ROOT . '/wiki/templates/wiki_js_tools.tpl');                   $file->delete();
 		$file = new File(PATH_TO_ROOT . '/wiki/templates/wiki_search_form.tpl');                $file->delete();
 		$file = new File(PATH_TO_ROOT . '/wiki/templates/wiki_tools.tpl');                      $file->delete();
 		$file = new File(PATH_TO_ROOT . '/wiki/action.php');                                    $file->delete();
@@ -238,7 +238,7 @@ class WikiSetup extends DefaultModuleSetup
 		$file = new File(PATH_TO_ROOT . '/wiki/explorer.php');                                  $file->delete();
 		$file = new File(PATH_TO_ROOT . '/wiki/favorites.php');                                 $file->delete();
 		$file = new File(PATH_TO_ROOT . '/wiki/history.php');                                   $file->delete();
-		$file = new File(PATH_TO_ROOT . '/wiki/post_js_tools.php');                              $file->delete();
+		$file = new File(PATH_TO_ROOT . '/wiki/post_js_tools.php');                             $file->delete();
 		$file = new File(PATH_TO_ROOT . '/wiki/post.php');                                      $file->delete();
 		$file = new File(PATH_TO_ROOT . '/wiki/print.php');                                     $file->delete();
 		$file = new File(PATH_TO_ROOT . '/wiki/property.php');                                  $file->delete();
