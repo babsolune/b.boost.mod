@@ -1,8 +1,9 @@
-// @copyright   &copy; 2005-2023 PHPBoost
-// @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
-// @author      Sebastien LARTIGUE <babsolune@phpboost.com>
-// @version     PHPBoost 6.0 - last update: 2022 02 19
-// @since       PHPBoost 5.1 - 2017 09 11
+/** @copyright   &copy; 2005-2025 PHPBoost
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
+ * @version     PHPBoost 6.0 - last update: 2025 04 13
+ * @since       PHPBoost 6.0 - 2022 11 18
+*/
 
 
 (function (jQuery)
@@ -48,12 +49,12 @@
                             // open all parents ul
                             jQuery(this)
                                 .parents('.has-sub > ul')
-                                .slideDown(); 
+                                .slideDown();
                             // open ul siblings of item
                             jQuery(this)
                                 .parents('ul')
-                                .siblings('ul').
-                                slideDown(); 
+                                .siblings('ul')
+                                .slideDown();
                             // Toggle parents and item folder icon
                             jQuery(this)
                                 .parents('.open')
@@ -85,7 +86,7 @@
                     .find(' > .menutree-title .fa-folder')
                     .toggleClass('far fa-folder-open');
                 // oneSub = close siblings when open item
-                if (params.oneSub) 
+                if (params.oneSub)
                 {
                     jQuery(this)
                         .parent()
