@@ -1,8 +1,9 @@
-// @copyright   &copy; 2005-2023 PHPBoost
-// @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
-// @author      Sebastien LARTIGUE <babsolune@phpboost.com>
-// @version     PHPBoost 6.0 - last update: 2023 10 11
-// @since       PHPBoost 6.0 - 2022 11 18
+/** @copyright   &copy; 2005-2025 PHPBoost
+ * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
+ * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
+ * @version     PHPBoost 6.0 - last update: 2023 10 11
+ * @since       PHPBoost 6.0 - 2022 11 18
+*/
 
 // Explorer page
 jQuery('#category-nav').append(WikiExplorerChild(0)).find('ul:first').remove();
@@ -47,8 +48,6 @@ function WikiIndexChild(id) {
     }
 }
 
-// jQuery('#overview-nav .overview-list-0').addClass('cell-flex cell-columns-2');
-
 // Summary menu constructor
 var title = jQuery('.content .formatter-title:not(span)');
 if (title.length == 0)
@@ -61,14 +60,14 @@ title.each(function () {
     var innerhtml = jQuery(this).html();
     var padding = '';
     var hyphen = '<span>&vdash;</span>';
-    if (jQuery(this).is('h2')) {padding = '0.618em'; hyphen = '<i class="fa fa-circle smaller"></i> '}
-    if (jQuery(this).is('h3')) padding = '1.618em';
-    if (jQuery(this).is('h4')) padding = '2.618em';
-    if (jQuery(this).is('h5')) padding = '3.618em';
-    if (jQuery(this).is('h6')) padding = '4.618em';
+    if (jQuery(this).is('h2')) { padding = '0.618em'; hyphen = '<i class="fa fa-circle smaller"></i> '; }
+    if (jQuery(this).is('h3')) { padding = '1.618em'; }
+    if (jQuery(this).is('h4')) { padding = '2.618em'; }
+    if (jQuery(this).is('h5')) { padding = '3.618em'; }
+    if (jQuery(this).is('h6')) { padding = '4.618em'; }
     jQuery('#summary-list').append(jQuery('<li><a class="summary-title" href="#' + rewrited + '" style="padding-left: ' + padding + '">' + hyphen + '<span class="inner-title">' + innerhtml + '</span></a></li>'));
 
-    var anchor = jQuery('<a href="' + window.location.href + '#' + rewrited + '" class="smaller copy-anchor" aria-label="' + ARIA_TO_CLIPBOARD + '"><i class="fa fa-fw fa-hashtag" aria-hidden="true"></i></a>');
+    var anchor = jQuery('<a href="' + window.location.href + '#' + rewrited + '" class="smaller copy-anchor" aria-label="' + L_COPY_TO_CLIPBOARD + '"><i class="fa fa-fw fa-hashtag" aria-hidden="true"></i></a>');
     jQuery(this).prepend(anchor);
 });
 

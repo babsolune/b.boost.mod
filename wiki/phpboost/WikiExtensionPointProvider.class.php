@@ -1,16 +1,19 @@
 <?php
 /**
- * @copyright   &copy; 2005-2023 PHPBoost
+ * @copyright   &copy; 2005-2025 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
- * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 10 11
- * @since       PHPBoost 6.0 - 2022 11 18
+ * @author      Loic ROUCHON <horn@phpboost.com>
+ * @version     PHPBoost 6.0 - last update: 2025 04 13
+ * @since       PHPBoost 2.0 - 2008 02 24
+ * @contributor Kevin MASSY <reidlos@phpboost.com>
+ * @contributor Julien BRISWALTER <j1.seth@phpboost.com>
+ * @contributor Arnaud GENET <elenwii@phpboost.com>
  */
 
 class WikiExtensionPointProvider extends ItemsModuleExtensionPointProvider
 {
-	public function home_page()
-	{
+    public function home_page()
+    {
         $config = WikiConfig::load();
         if ($config->get_homepage() == WikiConfig::EXPLORER)
             return new DefaultHomePageDisplay($this->get_id(), WikiExplorerController::get_view($this->get_id()));
@@ -18,11 +21,11 @@ class WikiExtensionPointProvider extends ItemsModuleExtensionPointProvider
             return new DefaultHomePageDisplay($this->get_id(), WikiIndexController::get_view($this->get_id()));
         else
             return new DefaultHomePageDisplay($this->get_id(), WikiCategoryController::get_view($this->get_id()));
-	}
+    }
 
-	public function user()
-	{
-		return new WikiUserExtensionPoint();
-	}
+    public function user()
+    {
+        return new WikiUserExtensionPoint();
+    }
 }
 ?>

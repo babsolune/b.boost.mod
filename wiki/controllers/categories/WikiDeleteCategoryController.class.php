@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2023 PHPBoost
+ * @copyright   &copy; 2005-2025 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2023 04 05
+ * @version     PHPBoost 6.0 - last update: 2025 04 13
  * @since       PHPBoost 6.0 - 2023 04 05
  */
 
@@ -24,6 +24,9 @@ class WikiDeleteCategoryController extends AbstractDeleteCategoryController
 		return CategoriesUrlBuilder::manage(Environment::get_running_module_name());
 	}
 
+	/**
+	 * @param Category $category
+	 */
 	protected function get_delete_category_url(Category $category)
 	{
 		return CategoriesUrlBuilder::delete($category->get_id(), Environment::get_running_module_name());
