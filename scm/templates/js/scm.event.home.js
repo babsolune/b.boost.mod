@@ -1,5 +1,6 @@
 
 /**
+ * Scroll to the first not played game
  * @copyright   &copy; 2005-2024 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
@@ -8,12 +9,11 @@
 */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Scroll to the first not played game
-    let elements = Array.from(document.querySelectorAll('.game-container')); // define all games
-    const now = Date.now(); // define now
+    let games = Array.from(document.querySelectorAll('.cell-game')); // define all games
+    const now = Date.now(); // define actual timestamp
     let not_played = []; // init games list
-    elements.forEach((game) => {
-        const gamedate = game.dataset.scroll * 1000; // get timestamp of the game
+    games.forEach((game) => {
+        const gamedate = game.dataset.date * 1000; // get timestamp of the game
         if (gamedate && gamedate > now) // compare game timestamp to now
             not_played.push(game); // add game into games list
     });

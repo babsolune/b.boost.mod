@@ -24,8 +24,8 @@
     white-space: nowrap;
 }
 
-article header {
-    margin: 0.618em;
+article > header {
+    margin: 0.618em 0;
 }
 
 @media (min-width: 769px) {
@@ -830,10 +830,6 @@ th.bgc-sub a {
     align-items: center;
 }
 
-.flex-group-list img {
-    max-height: 19px;
-}
-
 @media (min-width: 769px) {
     .flex-group-container {
         flex-direction: row;
@@ -847,4 +843,16 @@ th.bgc-sub a {
 
 .tabs-wrapper.no-style {
     padding: 0;
+}
+
+summary {
+    padding: 0.309em;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--bdr-sub);
+}
+
+.cell-icon {
+    max-height: 19px;
 }

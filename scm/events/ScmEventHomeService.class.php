@@ -43,6 +43,7 @@ class ScmEventHomeService
 
         $view->put_all([
             'EVENT_ID' => $event_id,
+            'C_ONE_DAY' => ScmEventService::get_event($event_id)->get_oneday(),
             'C_EVENT_STARTING' => $next_day == 1,
             'L_STARTING_DATE' => StringVars::replace_vars($lang['scm.event.not.started'], ['date' => Date::to_format(ScmEventService::get_event($event_id)->get_start_date()->get_timestamp(), Date::FORMAT_DAY_MONTH_YEAR_TEXT)]),
             'C_EVENT_ENDING' => $prev_day == count(ScmDayService::get_days($event_id)),
@@ -188,8 +189,8 @@ class ScmEventHomeService
             $view->assign_block_vars('matchdays', [
                 'MATCHDAY' => $matchday,
                 'U_MATCHDAY' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $matchday)->rel(),
-                'MATCHDAYS_LIST'     => ScmGameFormat::format_event($event_id, $dates),
-                'ROUNDS_LIST'        => ScmGameFormat::format_event($event_id, $dates, false, true),
+                'MATCHDAYS_LIST' => ScmGameFormat::format_event($event_id, $dates),
+                'ROUNDS_LIST'    => ScmGameFormat::format_event($event_id, $dates, false, true),
             ]);
         }
 

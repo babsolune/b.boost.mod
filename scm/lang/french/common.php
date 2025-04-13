@@ -137,6 +137,7 @@ $lang['scm.group']               = 'Groupe';
 $lang['scm.group.short']         = 'G';
 $lang['scm.groups']              = 'Groupes';
 $lang['scm.round']               = 'Tour';
+$lang['scm.next.round']          = 'Tour suivant';
 $lang['scm.playoff.games']       = 'Matchs de barrage';
 $lang['scm.place']               = 'Place';
 $lang['scm.round.1']             = 'Finale';

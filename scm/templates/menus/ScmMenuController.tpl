@@ -44,7 +44,7 @@
                     <li><a href="{U_ROUND_GROUPS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-list" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.rounds.groups}</span></a></li>
                     <li>
                         <a href="{U_ROUND_BRACKETS}" class="offload cssmenu-title align-center">
-                            # IF C_FINALS_RANKING #
+                            # IF C_FINALS_RANKING_TYPE #
                                 <span class="stacked">
                                     <i class="fa fa-fw fa-list" aria-hidden="true"></i>
                                     <i class="fa fa-trophy notice stack-event stack-top-right" aria-hidden="true"></i>
@@ -100,7 +100,7 @@
                                 <li# IF C_EDIT_GROUPS_GAMES # class="current"# ENDIF #><a href="{U_EDIT_GROUPS_GAMES}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-list" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.games.groups}</span></a></li>
                                 <li# IF C_EDIT_BRACKETS_GAMES # class="current"# ENDIF #>
                                     <a href="{U_EDIT_BRACKET_GAMES}" class="offload cssmenu-title align-center">
-                                        # IF C_FINALS_RANKING #
+                                        # IF C_FINALS_RANKING_TYPE #
                                             <span class="stacked">
                                                 <i class="fa fa-fw fa-list" aria-hidden="true"></i>
                                                 <i class="fa fa-trophy notice stack-event stack-top-right" aria-hidden="true"></i>
@@ -118,8 +118,8 @@
         # ENDIF #
     # ENDIF #
 </div>
-# IF C_CONTROLS #
-    <div class="event-menu flex-between controls">
+<div class="event-menu flex-between controls">
+    # IF C_CONTROLS #
         <div></div>
         # IF C_EDIT_DAYS_GAMES #
             <nav class="roundmenu roundmenu-horizontal">
@@ -128,16 +128,6 @@
                         <li><a href="{days.U_DAY}" aria-label="{days.L_TYPE} {days.NUMBER}" class="roundmenu-title"><span>{days.NUMBER}</span></a></li>
                     # END days #
                     <li><a href="{U_CHECK_DAYS}" aria-label="{@scm.check.days}" class="roundmenu-title"><span><i class="fa fa-calendar-check warning"></i></span></a></li>
-                </ul>
-            </nav>
-        # ENDIF #
-        # IF C_DAYS_GAMES #
-            <nav class="roundmenu roundmenu-horizontal">
-                <ul>
-                    # START days #
-                        <li><a href="{days.U_DAY}" aria-label="{days.L_TYPE} {days.NUMBER}" class="roundmenu-title"><span>{days.NUMBER}</span></a></li>
-                    # END days #
-                    <li><a href="{U_DAYS_CALENDAR}" aria-label="{@scm.calendar.full}" class="roundmenu-title"><span><i class="fa fa-calendar"></i></span></a></li>
                 </ul>
             </nav>
         # ENDIF #
@@ -168,6 +158,18 @@
                 </ul>
             </nav>
         # ENDIF #
-    </div>
-# ENDIF #
+    # ELSE #
+        <div></div>
+    # ENDIF #
+    # IF C_DAYS_GAMES #
+        <nav class="roundmenu roundmenu-horizontal">
+            <ul>
+                # START days #
+                    <li><a href="{days.U_DAY}" aria-label="{days.L_TYPE} {days.NUMBER}" class="roundmenu-title"><span>{days.NUMBER}</span></a></li>
+                # END days #
+                <li><a href="{U_DAYS_CALENDAR}" aria-label="{@scm.calendar.full}" class="roundmenu-title"><span><i class="fa fa-calendar"></i></span></a></li>
+            </ul>
+        </nav>
+    # ENDIF #
+</div>
 <script src="{PATH_TO_ROOT}/scm/templates/js/scm.highlight.js"></script>

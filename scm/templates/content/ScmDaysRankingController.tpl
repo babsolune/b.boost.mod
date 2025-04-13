@@ -103,12 +103,13 @@
                                     </div>
                                     # IF C_CHARTS #
                                         <div class="scm-cell md-width-px-30">
-                                            <a data-modal="" data-target="target-panel-chart-{ranks.RANK}" aria-label="{@scm.rank.chart}">
+                                            <a class="modal-button --target-panel-chart-{ranks.RANK}" aria-label="{@scm.rank.chart}">
                                                 <i class="fa fa-chart-line" aria-hidden="true"></i>
                                             </a>
-                                            <div id="target-panel-chart-{ranks.RANK}" class="modal modal-animation">
-                                                <div class="close-modal" aria-label="{@common.close}"></div>
-                                                <div class="content-panel cell-chart">
+                                            <div id="target-panel-chart-{ranks.RANK}" class="modal">
+                                                <div class="modal-overlay close-modal" aria-label="{@common.close}"></div>
+                                                <div class="modal-content cell-chart">
+                                                    <span class="error big hide-modal close-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></span>
                                                     <h3>{ranks.TEAM_NAME}</h3>
                                                     <canvas id="ranks-chart-{ranks.RANK}"></canvas>
                                                     <script>

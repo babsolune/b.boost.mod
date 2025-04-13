@@ -6,14 +6,14 @@
                     # IF C_EVENT_STARTING #
                         <li class="tab-item --prev-panel-{EVENT_ID} bgc notice">{@scm.event.pending}</li>
                     # ELSE #
-                        <li class="tab-item --prev-panel-{EVENT_ID}"> {@scm.day} {PREV_DAY}</li>
+                        <li class="tab-item --prev-panel-{EVENT_ID}"> # IF C_ONE_DAY #{@scm.round}# ELSE #{@scm.day}# ENDIF # {PREV_DAY}</li>
                     # ENDIF #
                     # IF NOT C_EVENT_STARTING #
                         <li>
                             # IF C_EVENT_ENDING #
                                 <li class="tab-item --next-panel-{EVENT_ID} bgc notice">{@scm.event.ended.event}</li>
                             # ELSE #
-                                <li class="tab-item --next-panel-{EVENT_ID}">{@scm.next.day}<!--{@scm.day} {NEXT_DAY}--></li>
+                                <li class="tab-item --next-panel-{EVENT_ID}"># IF C_ONE_DAY #{@scm.next.round}# ELSE #{@scm.next.day}# ENDIF #</li>
                             # ENDIF #
                         </li>
                     # ENDIF #

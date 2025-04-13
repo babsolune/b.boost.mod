@@ -115,10 +115,11 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 $c_has_details = ScmGameService::has_details($this->event_id(), 'B', $cluster, $round, $order);
                 $details_class = $c_has_details ? ' success' : '';
 
-                if ($this->return_games && $order == 1 && $round != 1)
+                if ($this->return_games && $order == 1 && $cluster != 1) {
                     ${'bracket_fieldset_'.$field}->add_field(new FormFieldSpacer('first_leg_' . $field, $this->lang['scm.first.leg'],
                         ['class' => 'bgc notice align-center']
                     ));
+                }
                 ${'bracket_fieldset_'.$field}->add_field(new FormFieldFree('game_number_' . $field, '', $game_number . $bonus,
                     ['class' => 'label-top game-name small text-italic form-B-' . $field]
                 ));
@@ -163,10 +164,11 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 ${'bracket_fieldset_'.$field}->add_field(new FormFieldSpacer('separator_' . $field, '<hr />',
                     ['class' => 'label-top game-hr']
                 ));
-                if ($this->return_games && $order == $games_number / 2 && $round != 1)
+                if ($this->return_games && $order == $games_number / 2 && $cluster != 1) {
                     ${'bracket_fieldset_'.$field}->add_field(new FormFieldSpacer('winner_second_leg_' . $field, $this->lang['scm.second.leg'],
                         ['class' => 'bgc notice align-center']
                     ));
+                }
             }
         }
 
@@ -231,8 +233,9 @@ class ScmBracketGamesFormController extends DefaultModuleController
             $c_has_details = ScmGameService::has_details($this->event_id(), 'G', $cluster, $round, $order);
             $details_class = $c_has_details ? ' success' : '';
 
-            if ($this->return_games && $order == 1)
+            if ($this->return_games && $order == 1) {
                 $fieldset->add_field(new FormFieldSpacer('first_leg_' . $field, $this->lang['scm.first.leg']));
+            }
             $fieldset->add_field(new FormFieldSpacer('separator_' . $field, '<hr />', ['class' => 'game-hr']));
             $fieldset->add_field(new FormFieldFree('game_number', '', '<strong>B' . $field . '</strong>'. ' - ' . $this->lang['scm.round'] . ' ' . $round,
                 ['class' => 'game-name small text-italic form-G' . $field]
@@ -275,8 +278,9 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 $fieldset->add_field(new FormFieldTextEditor('game_playground_' . $field, '', $item->get_game_playground(),
                     ['class' => 'game-playground', 'placeholder' => $this->lang['scm.field']]
                 ));
-            if ($this->return_games && $order == $games_number / 2)
+            if ($this->return_games && $order == $games_number / 2) {
                 $fieldset->add_field(new FormFieldSpacer('second_leg_' . $field, '<hr />' . $this->lang['scm.second.leg']));
+            }
         }
 
         $this->finals_submit_button = new FormButtonDefaultSubmit();

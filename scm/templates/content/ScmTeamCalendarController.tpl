@@ -156,7 +156,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span data-modal="" data-target="target-panel-{games.GAME_ID}">
+                                        <span class="modal-button --target-panel-{games.GAME_ID}">
                                             # IF games.C_HAS_DETAILS #
                                                 # IF games.C_VIDEO #
                                                     <i class="far fa-circle-play"></i>
@@ -165,10 +165,10 @@
                                                 # ENDIF #
                                             # ENDIF #
                                         </span>
-                                        <div id="target-panel-{games.GAME_ID}" class="modal modal-animation">
-                                            <div class="close-modal" aria-label="{@common.close}"></div>
-                                            <div class="content-panel">
-                                                <div class="align-right"><a href="#" class="error big hide-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></a></div>
+                                        <div id="target-panel-{games.GAME_ID}" class="modal">
+                                            <div class="modal-overlay close-modal" aria-label="{@common.close}"></div>
+                                            <div class="modal-content">
+                                                <span class="error big hide-modal close-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></span>
                                                 <div class="cell-flex cell-columns-2 cell-tile">
                                                     <div class="home-team cell">
                                                         <div class="cell-header">
@@ -182,23 +182,23 @@
                                                         </div>
                                                         <div class="cell-details">{@scm.game.event.goals}</div>
                                                         # START games.home_goals #
-                                                            <div class="cell-infos">
-                                                                <span>{games.home_goals.PLAYER}</span>
+                                                            <div>
                                                                 <span>{games.home_goals.TIME}'</span>
+                                                                <span>- {games.home_goals.PLAYER}</span>
                                                             </div>
                                                         # END games.home_goals #
                                                         <div class="cell-details">{@scm.game.event.cards.yellow}</div>
                                                         # START games.home_yellow #
-                                                            <div class="cell-infos">
-                                                                <span>{games.home_yellow.PLAYER}</span>
+                                                            <div>
                                                                 <span>{games.home_yellow.TIME}'</span>
+                                                                <span>- {games.home_yellow.PLAYER}</span>
                                                             </div>
                                                         # END games.home_yellow #
                                                         <div class="cell-details">{@scm.game.event.cards.red}</div>
                                                         # START games.home_red #
-                                                            <div class="cell-infos">
-                                                                <span>{games.home_red.PLAYER}</span>
+                                                            <div>
                                                                 <span>{games.home_red.TIME}'</span>
+                                                                <span>- {games.home_red.PLAYER}</span>
                                                             </div>
                                                         # END games.home_red #
                                                     </div>
@@ -214,23 +214,23 @@
                                                         </div>
                                                         <div class="cell-details">{@scm.game.event.goals}</div>
                                                         # START games.away_goals #
-                                                            <div class="cell-infos">
-                                                                <span>{games.away_goals.PLAYER}</span>
+                                                            <div>
                                                                 <span>{games.away_goals.TIME}'</span>
+                                                                <span>- {games.away_goals.PLAYER}</span>
                                                             </div>
                                                         # END games.away_goals #
                                                         <div class="cell-details">{@scm.game.event.cards.yellow}</div>
                                                         # START games.away_yellow #
-                                                            <div class="cell-infos">
-                                                                <span>{games.away_yellow.PLAYER}</span>
+                                                            <div>
                                                                 <span>{games.away_yellow.TIME}'</span>
+                                                                <span>- {games.away_yellow.PLAYER}</span>
                                                             </div>
                                                         # END games.away_yellow #
                                                         <div class="cell-details">{@scm.game.event.cards.red}</div>
                                                         # START games.away_red #
-                                                            <div class="cell-infos">
-                                                                <span>{games.away_red.PLAYER}</span>
+                                                            <div>
                                                                 <span>{games.away_red.TIME}'</span>
+                                                                <span>- {games.away_red.PLAYER}</span>
                                                             </div>
                                                         # END games.away_red #
                                                     </div>

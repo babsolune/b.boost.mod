@@ -51,6 +51,7 @@ class ScmGameFormat
                         'C_LATE'         => $item->get_game_cluster() < ScmDayService::get_last_day($item->get_game_event_id()),
                         'C_HAT_RANKING' => ScmParamsService::get_params($item->get_game_event_id())->get_hat_ranking()
                     ]));
+                    $item->get_details_template($view, 'categories.events.items');
                 }
             }
         }
@@ -101,10 +102,12 @@ class ScmGameFormat
                 {
                     $item = new ScmGame();
                     $item->set_properties($game);
-                    if (!$round && $block == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT))
+                    // if (!$round && $block == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)) {
+                    //     $view->assign_block_vars('blocks.sub_blocks.items', $item->get_template_vars());
+                    // } else {
                         $view->assign_block_vars('blocks.sub_blocks.items', $item->get_template_vars());
-                    else
-                        $view->assign_block_vars('blocks.sub_blocks.items', $item->get_template_vars());
+                    // }
+                    $item->get_details_template($view, 'blocks.sub_blocks.items');
                 }
             }
         }
@@ -149,6 +152,7 @@ class ScmGameFormat
                     'CLUSTER_NAME' => $link_name,
                     'U_GROUP' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $item->get_game_cluster())->rel()
                 ]);
+                $item->get_details_template($view, 'blocks.items');
             }
         }
         return $view;

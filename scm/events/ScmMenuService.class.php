@@ -66,7 +66,7 @@ class ScmMenuService
             'C_HAS_P_GAMES'  => $c_has_p_games,
             'C_ONE_DAY'      => $event->get_oneday(),
             'C_SOURCES'      => $event->get_sources(),
-            'C_FINALS_RANKING' => $c_finals_ranking,
+            'C_FINALS_RANKING_TYPE' => $c_finals_ranking,
             'C_HAS_POOL'     => !empty($event->get_pool()),
 
             'HEADER_CATEGORY'          => $category->get_name(),

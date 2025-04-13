@@ -16,7 +16,7 @@
                             <div class="sm-width-pc-40 smaller text-italic align-center bgc notice">{blocks.sub_blocks.items.STATUS}</div>
                         # ENDIF #
                         <div class="sm-width-pc-30 cell-gap modal-container align-right" aria-label="{@scm.game.event.details}">
-                            <a data-modal="" data-target="target-panel-{blocks.sub_blocks.items.GAME_ID}">
+                            <span class="modal-button --target-panel-{blocks.sub_blocks.items.GAME_ID}">
                                 # IF blocks.sub_blocks.items.C_HAS_DETAILS #
                                     # IF blocks.sub_blocks.items.C_VIDEO #
                                         <i class="far fa-circle-play"></i>
@@ -24,11 +24,11 @@
                                         <i class="far fa-file-lines"></i>
                                     # ENDIF #
                                 # ENDIF #
-                            </a>
-                            <div id="target-panel-{blocks.sub_blocks.items.GAME_ID}" class="modal modal-animation">
-                                <div class="close-modal" aria-label="{@common.close}"></div>
-                                <div class="content-panel">
-                                    <div class="align-right"><a href="#" class="error big hide-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></a></div>
+                            </span>
+                            <div id="target-panel-{blocks.sub_blocks.items.GAME_ID}" class="modal">
+                                <div class="modal-overlay close-modal" aria-label="{@common.close}"></div>
+                                <div class="modal-content">
+                                    <span class="error big hide-modal close-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></span>
                                     <div class="cell-flex cell-columns-2 cell-tile">
                                         <div class="home-team">
                                             <div class="cell-header flex-team">
@@ -42,23 +42,23 @@
                                             </div>
                                             <div class="cell-details">{@scm.game.event.goals}</div>
                                             # START blocks.sub_blocks.items.home_goals #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.sub_blocks.items.home_goals.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.sub_blocks.items.home_goals.TIME}'</span>
+                                                    <span>- {blocks.sub_blocks.items.home_goals.PLAYER}</span>
                                                 </div>
                                             # END blocks.sub_blocks.items.home_goals #
                                             <div class="cell-details">{@scm.game.event.cards.yellow}</div>
                                             # START blocks.sub_blocks.items.home_yellow #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.sub_blocks.items.home_yellow.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.sub_blocks.items.home_yellow.TIME}'</span>
+                                                    <span>- {blocks.sub_blocks.items.home_yellow.PLAYER}</span>
                                                 </div>
                                             # END blocks.sub_blocks.items.home_yellow #
                                             <div class="cell-details">{@scm.game.event.cards.red}</div>
                                             # START blocks.sub_blocks.items.home_red #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.sub_blocks.items.home_red.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.sub_blocks.items.home_red.TIME}'</span>
+                                                    <span>- {blocks.sub_blocks.items.home_red.PLAYER}</span>
                                                 </div>
                                             # END blocks.sub_blocks.items.home_red #
                                         </div>
@@ -74,23 +74,23 @@
                                             </div>
                                             <div class="cell-details">{@scm.game.event.goals}</div>
                                             # START blocks.sub_blocks.items.away_goals #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.sub_blocks.items.away_goals.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.sub_blocks.items.away_goals.TIME}'</span>
+                                                    <span>- {blocks.sub_blocks.items.away_goals.PLAYER}</span>
                                                 </div>
                                             # END blocks.sub_blocks.items.away_goals #
                                             <div class="cell-details">{@scm.game.event.cards.yellow}</div>
                                             # START blocks.sub_blocks.items.away_yellow #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.sub_blocks.items.away_yellow.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.sub_blocks.items.away_yellow.TIME}'</span>
+                                                    <span>- {blocks.sub_blocks.items.away_yellow.PLAYER}</span>
                                                 </div>
                                             # END blocks.sub_blocks.items.away_yellow #
                                             <div class="cell-details">{@scm.game.event.cards.red}</div>
                                             # START blocks.sub_blocks.items.away_red #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.sub_blocks.items.away_red.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.sub_blocks.items.away_red.TIME}'</span>
+                                                    <span>- {blocks.sub_blocks.items.away_red.PLAYER}</span>
                                                 </div>
                                             # END blocks.sub_blocks.items.away_red #
                                         </div>

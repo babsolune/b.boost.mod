@@ -46,7 +46,7 @@ class ScmBracketController extends DefaultModuleController
             'C_ONE_DAY'        => $this->get_event()->get_oneday(),
             'C_LOOSER_BRACKET' => $this->get_params()->get_looser_bracket(),
             'C_HAS_GAMES'      => ScmGameService::has_games($this->event_id()),
-            'C_FINALS_RANKING' => $this->get_params($this->event_id())->get_finals_type() == ScmParams::FINALS_RANKING,
+            'C_FINALS_RANKING_TYPE' => $this->get_params($this->event_id())->get_finals_type() == ScmParams::FINALS_RANKING,
             'C_DISPLAY_PLAYGROUNDS' => $this->get_params($this->event_id())->get_display_playgrounds()
         ]);
 
@@ -76,8 +76,8 @@ class ScmBracketController extends DefaultModuleController
             $rounds[] = $game['game_cluster'];
         }
 
-        $rounds_count = $this->is_cup || $this->looser_bracket ? array_unique(array_reverse($rounds)) : array_unique($rounds); // $c_hat_ranking || 
-        $key_rounds_count = $this->is_cup || $this->looser_bracket ? array_keys(array_reverse($rounds_count)) : array_keys($rounds_count); // $c_hat_ranking || 
+        $rounds_count = $this->is_cup || $this->looser_bracket || $c_hat_ranking ? array_unique(array_reverse($rounds)) : array_unique($rounds); // $c_hat_ranking || 
+        $key_rounds_count = $this->is_cup || $this->looser_bracket || $c_hat_ranking ? array_keys(array_reverse($rounds_count)) : array_keys($rounds_count); // $c_hat_ranking || 
         $first_key = reset($key_rounds_count);
         $last_key = end($key_rounds_count);
 
@@ -138,6 +138,7 @@ class ScmBracketController extends DefaultModuleController
                                         'AWAY_PEN' => $game_b['game_home_pen'],
                                     ]
                                 ));
+                                $game->get_details_template($this->view, 'rounds.games');
                             }
                         }
                     }
@@ -176,6 +177,7 @@ class ScmBracketController extends DefaultModuleController
                                         'AWAY_PEN' => $game_b['game_home_pen'],
                                     ]
                                 ));
+                                $game->get_details_template($this->view, 'rounds.games');
                             }
                         }
                     }
@@ -185,6 +187,7 @@ class ScmBracketController extends DefaultModuleController
 
                         if ($game->get_game_cluster() == $round)
                         $this->view->assign_block_vars('rounds.games', $game->get_template_vars());
+                        $game->get_details_template($this->view, 'rounds.games');
                     }
                 }
             }
@@ -197,6 +200,7 @@ class ScmBracketController extends DefaultModuleController
 
                     if ($game->get_game_cluster() == $round)
                     $this->view->assign_block_vars('rounds.games', $game->get_template_vars());
+                    $game->get_details_template($this->view, 'rounds.games');
                 }
             }
         }
@@ -255,6 +259,7 @@ class ScmBracketController extends DefaultModuleController
                     $item->set_properties($game);
 
                     $this->view->assign_block_vars('brackets.rounds.games', $item->get_template_vars());
+                    $item->get_details_template($this->view, 'brackets.rounds.games');
                 }
             }
         }

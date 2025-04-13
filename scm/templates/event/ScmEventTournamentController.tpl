@@ -1,63 +1,59 @@
 # IF C_HAS_GAMES #
-    <article class="groups">
-        <header class="article-header"><h3>{@scm.groups}</h3></header>
-        <div class="content">
-            <div class="flex-group-container">
-                # START team_groups #
-                        <div class="flex-group">
-                            <span class="flex-group-name"><a href="{team_groups.U_GROUP}" class="offload text-strong">{@scm.group} {team_groups.GROUP}</a></span>
-                            <div class="flex-group-list">
-                                # START team_groups.teams #
-                                    <span class="pinned link-color">
-                                        <img src="{team_groups.teams.TEAM_LOGO}" alt="{team_groups.teams.TEAM_NAME}">
-                                        <span><a href="{team_groups.teams.U_CLUB}" class="offload" aria-label="{@scm.club.see.infos}">{team_groups.teams.TEAM_NAME}</a></span>
-                                    </span>
-                                # END team_groups.teams #
-                            </div>
-                        </div>
-                # END team_groups #
-            </div>
-        </div>
-    </article>
+    <nav id="team-list" class="cssmenu cssmenu-horizontal">
+        <ul class="level-0">
+            # START team_groups #
+                <li class="has-sub">
+                    <a href="{team_groups.U_GROUP}" class="offload cssmenu-title"><span>{@scm.group} {team_groups.GROUP}</span></a>
+                    <ul class="level-1">
+                        # START team_groups.teams #
+                            <li>
+                                <a href="{team_groups.teams.U_CLUB}" class="offload cssmenu-title" aria-label="{@scm.club.see.infos}">
+                                    <img class="cell-icon" src="{team_groups.teams.TEAM_LOGO}" alt="{team_groups.teams.TEAM_NAME}">
+                                    <span>{team_groups.teams.TEAM_NAME}</span>
+                                </a>
+                            </li>
+                        # END team_groups.teams #
+                    </ul>
+                </li>
+            # END team_groups #
+        </ul>
+    </nav>
+    <script>jQuery('#team-list').menumaker({title: ${escapejs(@scm.clubs.list)}, format: 'multitoggle', breakpoint: 768});</script>
     <article class="games">
-        <header class="article-header flex-between">
+        <header class="article-header flex-between flex-between-large">
             <h3>{@scm.calendar}</h3>
-            <button id="next-game" class="button default"><i class="fa fa-circle-arrow-down"></i> {@scm.next.games}</button>
             # IF C_ONE_DAY #<p>{ONE_DAY_DATE}</p># ENDIF #
+            <button id="next-game" class="button default"><i class="fa fa-circle-arrow-down"></i> {@scm.next.games}</button>
         </header>
-        <div class="">
-            <p><h3>{@scm.games.groups.stage}</h3></p>
-            <div class="">
-                # START matchdays #
-                    # IF C_HAT_RANKING #
-                        <h4><a href="{matchdays.U_MATCHDAY}">{@scm.day} {matchdays.MATCHDAY}</a></h4>
-                        <div class="">
-                            # INCLUDE matchdays.MATCHDAYS_LIST #
-                        </div>
+        <p><h3>{@scm.games.groups.stage}</h3></p>
+        # START matchdays #
+            <details open>
+                # IF C_HAT_RANKING #
+                    <summary class="bgc-sub"><a href="{matchdays.U_MATCHDAY}">{@scm.day} {matchdays.MATCHDAY}</a></summary>
+                    <div class="">
+                        <div class="content"># INCLUDE matchdays.MATCHDAYS_LIST #</div>
+                    </div>
+                # ELSE #
+                    <summary class="bgc-sub">{@scm.round} {matchdays.MATCHDAY}</summary>
+                    # IF C_ROUND_RANKINGS #
+                        <div class="content"># INCLUDE matchdays.ROUND_RANKINGS_LIST #</div>
                     # ELSE #
-                        <h4>{@scm.round} {matchdays.MATCHDAY}</h4>
-                        # IF C_ROUND_RANKINGS #
-                            # INCLUDE matchdays.ROUND_RANKINGS_LIST #
-                        # ELSE #
-                            # INCLUDE matchdays.ROUNDS_LIST #
-                        # ENDIF #
+                        <div class="content"># INCLUDE matchdays.ROUNDS_LIST #</div>
                     # ENDIF #
-                # END matchdays #
-            </div>
-            <div class="">
-                <p><h3>{@scm.games.brackets.stage}</h3></p>
-                <div class="">
-                    # START matchrounds #
-                        <h4>{matchrounds.L_MATCHROUND}</h4>
-                        # IF C_ROUND_RANKINGS #
-                            # INCLUDE matchrounds.ROUND_RANKINGS_LIST #
-                        # ELSE #
-                            # INCLUDE matchrounds.ROUNDS_LIST #
-                        # ENDIF #
-                    # END matchrounds #
-                </div>
-            </div>
-        </div>
+                # ENDIF #
+            </details>
+        # END matchdays #
+        <p><h3>{@scm.games.brackets.stage}</h3></p>
+        # START matchrounds #
+            <details open>
+                <summary class="bgc-sub">{matchrounds.L_MATCHROUND}</summary>
+                # IF C_ROUND_RANKINGS #
+                    <div class="content"># INCLUDE matchrounds.ROUND_RANKINGS_LIST #</div>
+                # ELSE #
+                    <div class="content"># INCLUDE matchrounds.ROUNDS_LIST #</div>
+                # ENDIF #
+            </details>
+        # END matchrounds #
     </article>
 # ELSE #
     <div class="message-helper bgc notice">{@scm.message.no.games}</div>

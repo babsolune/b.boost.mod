@@ -2,7 +2,7 @@
     # IF blocks.C_SEVERAL_DATES #<h5 class="cell-content">{blocks.TITLE}</h5># ENDIF #
     <div class="cell-flex cell-columns-2">
         # START blocks.items #
-            <div id="game-{blocks.items.GAME_ID}" class="cell cell-game">
+            <div id="game-{blocks.items.GAME_ID}" class="cell cell-game" data-date="{blocks.items.GAME_DATE_TIMESTAMP}">
                 <div class="flex-between flex-between-large">
                     <div class="flex-between sm-width-pc-100 md-width-pc-33 small">
                         <time class="sm-width-pc-# IF blocks.items.C_STATUS #50# ELSE #70# ENDIF # small cell-gap align-center">{blocks.items.GAME_DATE_HOUR_MINUTE}</time>
@@ -10,7 +10,7 @@
                             <div class="sm-width-pc-20 smaller text-italic align-center bgc notice">{blocks.items.STATUS}</div>
                         # ENDIF #
                         <div class="sm-width-pc-30 cell-gap align-center game-details modal-container" aria-label="{@scm.game.event.details}">
-                            <a data-modal="" data-target="target-panel-{blocks.items.GAME_ID}">
+                            <span class="modal-button --target-panel-{blocks.items.GAME_ID}">
                                 # IF blocks.items.C_HAS_DETAILS #
                                     # IF blocks.items.C_VIDEO #
                                         <i class="far fa-circle-play"></i>
@@ -18,11 +18,11 @@
                                         <i class="far fa-file-lines"></i>
                                     # ENDIF #
                                 # ENDIF #
-                            </a>
-                            <div id="target-panel-{blocks.items.GAME_ID}" class="modal modal-animation">
-                                <div class="close-modal" aria-label="{@common.close}"></div>
-                                <div class="content-panel">
-                                    <div class="align-right"><a href="#" class="error big hide-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></a></div>
+                            </span>
+                            <div id="target-panel-{blocks.items.GAME_ID}" class="modal">
+                                <div class="modal-overlay close-modal" aria-label="{@common.close}"></div>
+                                <div class="modal-content">
+                                    <span class="error big hide-modal close-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></span>
                                     <div class="cell-flex cell-columns-2 cell-tile">
                                         <div class="home-team">
                                             <div class="cell-header flex-team">
@@ -36,27 +36,27 @@
                                             </div>
                                             <div class="cell-details">{@scm.game.event.goals}</div>
                                             # START blocks.items.home_goals #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.items.home_goals.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.items.home_goals.TIME}'</span>
+                                                    <span>- {blocks.items.home_goals.PLAYER}</span>
                                                 </div>
                                             # END blocks.items.home_goals #
                                             <div class="cell-details">{@scm.game.event.cards.yellow}</div>
                                             # START blocks.items.home_yellow #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.items.home_yellow.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.items.home_yellow.TIME}'</span>
+                                                    <span>- {blocks.items.home_yellow.PLAYER}</span>
                                                 </div>
                                             # END blocks.items.home_yellow #
                                             <div class="cell-details">{@scm.game.event.cards.red}</div>
                                             # START blocks.items.home_red #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.items.home_red.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.items.home_red.TIME}'</span>
+                                                    <span>- {blocks.items.home_red.PLAYER}</span>
                                                 </div>
                                             # END blocks.items.home_red #
                                         </div>
-                                        <div class="away-team cell">
+                                        <div class="away-team">
                                             <div class="cell-header flex-team">
                                                 <h4 class="cell-name">
                                                     <a href="{blocks.items.U_AWAY_CLUB}" class="offload">{blocks.items.AWAY_TEAM}</a>
@@ -68,23 +68,23 @@
                                             </div>
                                             <div class="cell-details">{@scm.game.event.goals}</div>
                                             # START blocks.items.away_goals #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.items.away_goals.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.items.away_goals.TIME}'</span>
+                                                    <span>- {blocks.items.away_goals.PLAYER}</span>
                                                 </div>
                                             # END blocks.items.away_goals #
                                             <div class="cell-details">{@scm.game.event.cards.yellow}</div>
                                             # START blocks.items.away_yellow #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.items.away_yellow.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.items.away_yellow.TIME}'</span>
+                                                    <span>- {blocks.items.away_yellow.PLAYER}</span>
                                                 </div>
                                             # END blocks.items.away_yellow #
                                             <div class="cell-details">{@scm.game.event.cards.red}</div>
                                             # START blocks.items.away_red #
-                                                <div class="cell-infos">
-                                                    <span>{blocks.items.away_red.PLAYER}</span>
+                                                <div>
                                                     <span>{blocks.items.away_red.TIME}'</span>
+                                                    <span>- {blocks.items.away_red.PLAYER}</span>
                                                 </div>
                                             # END blocks.items.away_red #
                                         </div>
