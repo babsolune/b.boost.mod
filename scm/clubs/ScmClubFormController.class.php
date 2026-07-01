@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -45,7 +45,7 @@ class ScmClubFormController extends DefaultModuleController
 			[$this->is_new_club ? new ScmConstraintClubNameExists() : '']
         ));
 
-        $fieldset->add_field(new FormFieldCheckbox('affiliate', $this->lang['scm.club.affiliate'], $this->get_club()->get_club_affiliate(),
+        $fieldset->add_field(new FormFieldCheckbox('affiliate', $this->lang['scm.club.affiliate'], $this->get_club()->get_club_sub(),
             [
                 'events' => ['click' => '
                     if (HTMLForms.getField("affiliate").getValue()) {
@@ -71,52 +71,52 @@ class ScmClubFormController extends DefaultModuleController
             ]
         ));
 
-		$fieldset->add_field(new FormFieldSimpleSelectChoice('affiliation', $this->lang['scm.club.affiliation'], $this->get_club()->get_club_affiliation(),
+		$fieldset->add_field(new FormFieldSimpleSelectChoice('affiliation', $this->lang['scm.club.affiliation'], $this->get_club()->get_club_master(),
             $this->get_clubs_list(),
-            ['hidden' => !$this->get_club()->get_club_affiliate()]
+            ['hidden' => !$this->get_club()->get_club_sub()]
         ));
 
         $fieldset->add_field(new FormFieldTextEditor('full_name', $this->lang['scm.club.full.name'], $this->get_club()->get_club_full_name(),
             [
                 'required' => true,
-                'hidden' => $this->get_club()->get_club_affiliate()
+                'hidden' => $this->get_club()->get_club_sub()
             ]
         ));
 
 		$fieldset->add_field(new FormFieldUrlEditor('website', $this->lang['scm.club.website'], $this->get_club()->get_club_website()->absolute(),
-            ['hidden' => $this->get_club()->get_club_affiliate()]
+            ['hidden' => $this->get_club()->get_club_sub()]
         ));
 
         $fieldset->add_field(new FormFieldMailEditor('email', $this->lang['scm.club.email'], $this->get_club()->get_club_email(),
-            ['hidden' => $this->get_club()->get_club_affiliate()]
+            ['hidden' => $this->get_club()->get_club_sub()]
         ));
 
         $fieldset->add_field(new FormFieldTelEditor('phone', $this->lang['scm.club.phone'], $this->get_club()->get_club_phone(),
             [
                 'description' => $this->lang['scm.club.phone.clue'],
-                'hidden' => $this->get_club()->get_club_affiliate()
+                'hidden' => $this->get_club()->get_club_sub()
             ]
         ));
 
         $fieldset->add_field(new ScmFormFieldColors('colors', $this->lang['scm.club.colors'], $this->get_club()->get_club_colors(),
 			[
                 'description' => $this->lang['scm.club.colors.clue'],
-                'hidden' => $this->get_club()->get_club_affiliate()
+                'hidden' => $this->get_club()->get_club_sub()
             ]
 		));
 
 		if ($this->config->is_googlemaps_available()) {
 			$fieldset->add_field(new GoogleMapsFormFieldMultipleMarkers('locations', $this->lang['scm.club.locations'], $this->get_club()->get_club_locations(),
-				['hidden' => $this->get_club()->get_club_affiliate()]
+				['hidden' => $this->get_club()->get_club_sub()]
 			));
 		} else {
             $fieldset->add_field(new FormFieldShortMultiLineTextEditor('locations', $this->lang['scm.club.locations'], $this->get_club()->get_club_locations(),
-                ['hidden' => $this->get_club()->get_club_affiliate()]
+                ['hidden' => $this->get_club()->get_club_sub()]
             ));
         }
 
         $fieldset->add_field(new FormFieldSimpleSelectChoice('flag', $this->lang['scm.club.flag'], $this->get_club()->get_club_flag(), $this->flag_list(),
-            ['hidden' => $this->get_club()->get_club_affiliate()]
+            ['hidden' => $this->get_club()->get_club_sub()]
         ));
 
         $fieldset->add_field(new FormFieldUploadFile('logo', $this->lang['scm.club.logo'], $this->is_new_club ? ScmClub::CLUB_LOGO : $this->get_club()->get_club_logo()));
@@ -135,11 +135,11 @@ class ScmClubFormController extends DefaultModuleController
 		$club = $this->get_club();
 
         $club->set_club_name($this->form->get_value('name'));
-        $club->set_club_affiliate($this->form->get_value('affiliate'));
+        $club->set_club_sub($this->form->get_value('affiliate'));
 
-        if ($club->get_club_affiliate())
+        if ($club->get_club_sub())
         {
-            $club->set_club_affiliation($this->form->get_value('affiliation')->get_raw_value());
+            $club->set_club_master($this->form->get_value('affiliation')->get_raw_value());
             $club->set_club_full_name('');
             $club->set_club_slug(Url::encode_rewrite(ScmClubService::get_club($this->form->get_value('affiliation')->get_raw_value())->get_club_full_name()));
             $club->set_club_logo(ScmClubCache::load()->get_affiliate_club_shield($this->form->get_value('affiliation')->get_raw_value()));
@@ -195,7 +195,7 @@ class ScmClubFormController extends DefaultModuleController
 		$i = 1;
 		foreach($clubs_list as $club)
 		{
-            if(!$club['club_affiliate'])
+            if(!$club['club_sub'])
                 $options[] = new FormFieldSelectChoiceOption($club['club_full_name'], $club['id_club']);
 			$i++;
 		}

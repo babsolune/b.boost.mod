@@ -140,15 +140,6 @@
                 </ul>
             </nav>
         # ENDIF #
-        # IF C_GROUPS_GAMES #
-            <nav class="roundmenu roundmenu-horizontal">
-                <ul>
-                    # START groups #
-                        <li><a href="{groups.U_GROUP}" aria-label="{groups.L_TYPE} {groups.NUMBER}" class="roundmenu-title"><span>{groups.NUMBER}</span></a></li>
-                    # END groups #
-                </ul>
-            </nav>
-        # ENDIF #
         # IF C_EDIT_BRACKETS_GAMES #
             <nav class="roundmenu roundmenu-horizontal">
                 <ul>
@@ -161,6 +152,15 @@
     # ELSE #
         <div></div>
     # ENDIF #
+    # IF C_GROUPS_GAMES #
+        <nav class="roundmenu roundmenu-horizontal">
+            <ul>
+                # START groups #
+                    <li><a href="{groups.U_GROUP}" aria-label="{groups.L_TYPE} {groups.NUMBER}" class="roundmenu-title"><span>{groups.NUMBER}</span></a></li>
+                # END groups #
+            </ul>
+        </nav>
+    # ENDIF #
     # IF C_DAYS_GAMES #
         <nav class="roundmenu roundmenu-horizontal">
             <ul>
@@ -172,4 +172,3 @@
         </nav>
     # ENDIF #
 </div>
-<script src="{PATH_TO_ROOT}/scm/templates/js/scm.highlight.js"></script>

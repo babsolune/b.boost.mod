@@ -24,4 +24,3 @@
 		<div class="message-helper bgc notice">{@scm.message.no.games}</div>
 	</div>
 # ENDIF #
-<script src="{PATH_TO_ROOT}/scm/templates/js/scm.width.js"></script>

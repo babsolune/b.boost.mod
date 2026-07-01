@@ -94,4 +94,3 @@
 	# ENDIF #
 	<footer></footer>
 </section>
-<script src="{PATH_TO_ROOT}/scm/templates/js/scm.events.current.js" defer></script>

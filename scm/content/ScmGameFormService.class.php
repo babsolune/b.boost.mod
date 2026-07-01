@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 07 23
+ * @version     PHPBoost 6.1 - last update: 2024 07 23
  * @since       PHPBoost 6.0 - 2024 07 23
 */
 
@@ -185,7 +185,7 @@ class ScmGameFormService
         {
             $team = ScmTeamService::get_team($club_id);
             $club = ScmClubCache::load()->get_club($team->get_team_club_id());
-            $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+            $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];
             $real_club = new ScmClub();
             $real_club->set_properties(ScmClubCache::load()->get_club($real_id));
 

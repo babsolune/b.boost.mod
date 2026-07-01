@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -27,8 +27,8 @@ class ScmEventHomeService
         foreach (ScmTeamService::get_teams($event_id) as $team)
         {
             $club = ScmClubCache::load()->get_club($team['id_club']);
-            $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
-            $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
+            $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];
+            $real_slug = $club['club_sub'] ? ScmClubService::get_club($club['club_master'])->get_club_slug() : $club['club_slug'];
 
             if ($team['team_status'] != ScmParams::EXEMPT)
                 $view->assign_block_vars('clubs_list', [
@@ -139,12 +139,13 @@ class ScmEventHomeService
             {
                 $club_cache = ScmClubCache::load();
                 $club = $club_cache->get_club($team['id_club']);
-                $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
-                $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
+                $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];
+                $real_slug = $club['club_sub'] ? ScmClubService::get_club($club['club_master'])->get_club_slug() : $club['club_slug'];
 
                 $view->assign_block_vars('team_groups.teams', [
                     'TEAM_NAME' => $team['club_name'],
                     'TEAM_LOGO' => $club_cache->get_club_shield($real_id),
+                    'U_TEAM_CALENDAR' => ScmUrlBuilder::display_team_calendar($event_id, ScmEventService::get_event_slug($event_id), $team['id_team'])->rel(),
                     'U_CLUB' => ScmUrlBuilder::display_club($real_id, $real_slug)->rel()
                 ]);
             }
@@ -190,7 +191,7 @@ class ScmEventHomeService
                 'MATCHDAY' => $matchday,
                 'U_MATCHDAY' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $matchday)->rel(),
                 'MATCHDAYS_LIST' => ScmGameFormat::format_event($event_id, $dates),
-                'ROUNDS_LIST'    => ScmGameFormat::format_event($event_id, $dates, false, true),
+                'ROUNDS_LIST'    => ScmGameFormat::format_event($event_id, $dates, false, true, false),
             ]);
         }
 
@@ -248,8 +249,8 @@ class ScmEventHomeService
             {
                 $club_cache = ScmClubCache::load();
                 $club = $club_cache->get_club($team['id_club']);
-                $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
-                $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
+                $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];
+                $real_slug = $club['club_sub'] ? ScmClubService::get_club($club['club_master'])->get_club_slug() : $club['club_slug'];
 
                 $view->assign_block_vars('team_groups.teams', [
                     'TEAM_NAME' => $team['club_name'],

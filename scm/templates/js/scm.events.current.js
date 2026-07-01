@@ -1,25 +1,41 @@
 
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 jQuery(document).ready(function(){
 	jQuery('#category-nav').append(CreateChild(0)).find('ul:first').remove();
 
 	function CreateChild(id){
-		var $li = jQuery('li[data-p-id="' + id + '"]').sort(function(a, b){
-			return jQuery(a).attr('data-order-id') - jQuery(b).attr('data-order-id');
-		});
-		if($li.length > 0){
-			for(var i = 0; i < $li.length; i++){
-				var $this = $li.eq(i);
-				$this.append(CreateChild($this.attr('data-id')));
-			}
-			return jQuery('<ul class="items-list-'+id+'">').append($li);
-		}
+		// Select and qort elements
+        var items = jQuery('li[data-p-id="' + id + '"]').get().sort(function(a, b) {
+            var orderA = parseInt(jQuery(a).attr('data-order-id')) || 0;
+            var orderB = parseInt(jQuery(b).attr('data-order-id')) || 0;
+            return orderA - orderB;
+        });
+
+        // If elements exist
+        if (items.length > 0) {
+            var $items = jQuery(items);
+
+            // Traiter chaque élément récursivement
+            $items.each(function() {
+                var childId = jQuery(this).attr('data-id');
+                var children = CreateChild(childId);
+                if (children) {
+                    jQuery(this).append(children);
+                }
+            });
+
+            // Return the UL list
+            return jQuery('<ul class="items-list-' + id + '">').append($items);
+        }
+
+        // Return null if no element is found
+        return null;
 	}
 
 	jQuery('#category-nav li').has('ul').addClass('has-children');

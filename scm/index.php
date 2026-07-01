@@ -1,13 +1,13 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
-define('PATH_TO_ROOT', '..');
+define('PATH_TO_ROOT', '../..');
 
 require_once PATH_TO_ROOT . '/kernel/init.php';
 $config = ScmConfig::load();
@@ -20,6 +20,8 @@ if ($config->is_right_column_disabled())
     $columns_disabled->set_disable_right_columns(true);
 
 $url_controller_mappers = [
+    // Ajax
+	new UrlControllerMapper('ScmAjaxGameFormat', '`^/ajax_scores/?$`'),
 	// Administration
 	new UrlControllerMapper('AdminScmConfigController', '`^/admin(?:/config)?/?$`'),
 	new UrlControllerMapper('ScmDelayedGamesController', '`^/delayed/?$`'),

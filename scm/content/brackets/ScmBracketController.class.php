@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -257,8 +257,12 @@ class ScmBracketController extends DefaultModuleController
                 {
                     $item = new ScmGame();
                     $item->set_properties($game);
-
-                    $this->view->assign_block_vars('brackets.rounds.games', $item->get_template_vars());
+                    $this->view->assign_block_vars('brackets.rounds.games', array_merge(
+                        [
+                            'C_THIRD_PLACE' => ScmParamsService::get_params($this->event_id())->get_third_place() && $item->get_game_cluster() == 1 && $item->get_game_order() == 2
+                        ],
+                        $item->get_template_vars()
+                    ));
                     $item->get_details_template($this->view, 'brackets.rounds.games');
                 }
             }

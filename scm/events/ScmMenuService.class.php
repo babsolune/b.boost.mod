@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -17,8 +17,9 @@ class ScmMenuService
 		self::$db_querier = PersistenceContext::get_querier();
 	}
 
-	public static function build_event_menu($event_id, $round = 1)
+	public static function build_event_menu(int $event_id, $round = 1)
 	{
+        $round    = AppContext::get_request()->get_getint('cluster', 0);
         $lang     = LangLoader::get_all_langs('scm');
         $event    = ScmEventService::get_event($event_id);
         $category = CategoriesService::get_categories_manager()->get_categories_cache()->get_category($event->get_id_category());
@@ -48,7 +49,7 @@ class ScmMenuService
         elseif ($event->get_event_type() == ScmEvent::CHAMPIONSHIP && $active_round == 0)
             $active_round = ScmDayService::get_last_day($event_id);
         elseif ($active_round == 0)
-            $active_round = $round;
+            $active_round = 1;
 
         $view->put_all([
             'C_CONTROLS'     => ScmAuthorizationsService::check_authorizations($category->get_id())->manage_events(),
@@ -227,7 +228,7 @@ class ScmMenuService
 		return $view;
     }
 
-    private static function compare_url($url)
+    private static function compare_url(string $url)
     {
         $parsed_url = parse_url($url);
         $path_parts = explode('/', $parsed_url['path']);

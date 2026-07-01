@@ -1,3 +1,36 @@
+# IF C_REFRESH_TIME #
+    <script>
+        setInterval(refresh_scores, 60000);
+        function refresh_scores()
+        {
+            jQuery.ajax({
+                url: '${relative_url(ScmUrlBuilder::ajax_scores())}',
+                type: "post",
+                dataType: "json",
+                data: {
+                    'token' : '{TOKEN}',
+                    'event_id' : '{EVENT_ID}'
+                },
+                beforeSend: function(returnData){
+                    jQuery.each(returnData, function(index, game) {
+                        jQuery('#vs-' + returnData.game_id).html('<i class="fa fa-spin fa-spinner"></i>');
+                    });
+                },
+                success: function(returnData){
+                    jQuery.each(returnData, function(index, game) {
+                        jQuery('#vs-' + returnData.game_id).html('-');
+                        jQuery('#home-' + game.game_id).html(game.home_score);
+                        jQuery('#away-' + game.game_id).html(game.away_score);
+                    });
+                },
+                error: function(e){
+                    jQuery('#shoutbox-refresh').html('<i class="fa fa-sync"></i>');
+                }
+            });
+        }
+    </script>
+# ENDIF #
+
 # START blocks #
     <div class="cell-vertical">
         # IF NOT C_ONE_DAY #
@@ -117,6 +150,11 @@
                                 </div>
                             </div>
                         </div>
+                        # IF C_DISPLAY_PLAYGROUNDS #
+                            <div class="sm-width-pc-100 md-width-pc-33">{@scm.field}: {blocks.sub_blocks.items.PLAYGROUND}</div>
+                        # ELSE #
+                            <div></div>
+                        # ENDIF #
                     </div>
                     <div class="flex-between flex-between-large# IF blocks.sub_blocks.items.C_EXEMPT # bgc notice# ENDIF #">
                         <div class="team-{blocks.sub_blocks.items.HOME_ID} flex-between sm-width-pc-100 md-width-pc-50">
@@ -131,11 +169,11 @@
                                 </span>
                                 # IF blocks.sub_blocks.items.C_HAS_HOME_LOGO #<img src="{blocks.sub_blocks.items.HOME_LOGO}" alt="{blocks.sub_blocks.items.HOME_TEAM}"># ENDIF #
                             </div>
-                            <div class="game-score home-score cell-pad sm-width-pc-20">{blocks.sub_blocks.items.HOME_SCORE}# IF blocks.sub_blocks.items.C_HAS_PEN # <span class="small">({blocks.sub_blocks.items.HOME_PEN})</span># ENDIF #</div>
+                            <div id="home-{blocks.sub_blocks.items.GAME_ID}" class="game-score home-score cell-pad sm-width-pc-20">{blocks.sub_blocks.items.HOME_SCORE}# IF blocks.sub_blocks.items.C_HAS_PEN # <span class="small">({blocks.sub_blocks.items.HOME_PEN})</span># ENDIF #</div>
                         </div>
-                        <div class="hidden-small-screens">-</div>
+                        <div id="vs-{blocks.sub_blocks.items.GAME_ID}" class="hidden-small-screens">-</div>
                         <div class="team-{blocks.sub_blocks.items.AWAY_ID} flex-between sm-width-pc-100 md-width-pc-50 invert-team">
-                            <div class="game-score away-score cell-pad sm-width-pc-20">{blocks.sub_blocks.items.AWAY_SCORE}# IF blocks.sub_blocks.items.C_HAS_PEN # <span class="small">({blocks.sub_blocks.items.AWAY_PEN})</span># ENDIF #</div>
+                            <div id="away-{blocks.sub_blocks.items.GAME_ID}" class="game-score away-score cell-pad sm-width-pc-20">{blocks.sub_blocks.items.AWAY_SCORE}# IF blocks.sub_blocks.items.C_HAS_PEN # <span class="small">({blocks.sub_blocks.items.AWAY_PEN})</span># ENDIF #</div>
                             <div class="game-team away-team cell-pad flex-team flex-left sm-width-pc-80# IF blocks.sub_blocks.items.C_AWAY_FAV # text-strong# ENDIF #">
                                 # IF blocks.sub_blocks.items.C_HAS_AWAY_LOGO #<img src="{blocks.sub_blocks.items.AWAY_LOGO}" alt="{blocks.sub_blocks.items.AWAY_TEAM}"># ENDIF #
                                 <span>
@@ -154,4 +192,3 @@
         # END blocks.sub_blocks #
     </div>
 # END blocks #
-<script src="{PATH_TO_ROOT}/scm/templates/js/scm.width.js"></script>

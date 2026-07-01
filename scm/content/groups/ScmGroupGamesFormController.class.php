@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -131,7 +131,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
         else
         {
             // Empty list of teams if odd number
-            $odd_filled = $this->teams_number % 2 != 0 && $this->get_params()->get_fill_games();
+            $odd_filled = $this->teams_number % 2 !== 0 && $this->get_params()->get_fill_games();
 
             $c_one_day = $this->get_event()->get_oneday();
             $total_games = [];
@@ -307,7 +307,6 @@ class ScmGroupGamesFormController extends DefaultModuleController
         foreach (ScmTeamService::get_teams($this->event_id()) as $team)
         {
             $team_group = $team['team_group'];
-            $team_group = $team_group ? TextHelper::substr($team_group, 0, 1) : '';
             if ($team_group == $group)
                 $teams_list[] = $team;
         }
@@ -358,7 +357,6 @@ class ScmGroupGamesFormController extends DefaultModuleController
             # INCLUDE MESSAGE_HELPER #
             # INCLUDE MENU #
             # INCLUDE CONTENT #
-            <script src="{PATH_TO_ROOT}/scm/templates/js/scm.loader.js"></script>
         ';
 	}
 

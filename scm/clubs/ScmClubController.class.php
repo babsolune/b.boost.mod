@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -64,7 +64,7 @@ class ScmClubController extends DefaultModuleController
         $clubs_family = [];
         foreach ($clubs as $club_event)
         {
-            if($club_event['id_club'] == $club->get_id_club() || ($club_event['club_affiliate'] && $club_event['club_affiliation'] == $club->get_id_club()))
+            if($club_event['id_club'] == $club->get_id_club() || ($club_event['club_sub'] && $club_event['club_master'] == $club->get_id_club()))
             {
                 $clubs_family[] = $club_event['id_club'];
             }

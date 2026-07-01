@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -38,7 +38,7 @@ class ScmSetup extends DefaultModuleSetup
 	{
 		$this->drop_tables();
 		$this->create_tables();
-		$this->insert_data();
+		// $this->insert_data();
 	}
 
 	public function uninstall()
@@ -125,19 +125,20 @@ class ScmSetup extends DefaultModuleSetup
 	private function create_scm_club_table()
 	{
 		$fields = [
-			'id_club'          => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
-			'club_name'        => ['type' => 'string', 'length' => 255, 'notnull' => 0, 'default' => "''"],
-			'club_slug'        => ['type' => 'string', 'length' => 255, 'default' => "''"],
-			'club_affiliate'   => ['type' => 'boolean', 'default' => 0],
-			'club_affiliation' => ['type' => 'integer', 'length' => 11],
-			'club_full_name'   => ['type' => 'string', 'length' => 255, 'notnull' => 0, 'default' => "''"],
-			'club_logo'        => ['type' => 'string', 'length' => 255, 'default' => "''"],
-			'club_flag'        => ['type' => 'string', 'length' => 2, 'default' => "''"],
-			'club_website'     => ['type' => 'string', 'length' => 255, 'default' => "''"],
-			'club_email'       => ['type' => 'string', 'length' => 255, 'default' => "''"],
-			'club_phone'       => ['type' => 'string', 'length' => 25, 'default' => "''"],
-			'club_colors'      => ['type' => 'text', 'length' => 65000],
-			'club_locations'   => ['type' => 'text', 'length' => 65000],
+			'id_club'        => ['type' => 'integer', 'length' => 11, 'autoincrement' => true, 'notnull' => 1],
+			'club_name'      => ['type' => 'string', 'length' => 255, 'notnull' => 1, 'default' => "''"],
+			'club_slug'      => ['type' => 'string', 'length' => 255, 'default' => "''"],
+			'club_sub'       => ['type' => 'boolean', 'default' => 0],
+			'club_master'    => ['type' => 'integer', 'length' => 11, 'default' => 0],
+			'club_number'    => ['type' => 'string', 'length' => 11, 'default' => "''"],
+			'club_full_name' => ['type' => 'string', 'length' => 255, 'default' => "''"],
+			'club_logo'      => ['type' => 'string', 'length' => 255, 'default' => "''"],
+			'club_flag'      => ['type' => 'string', 'length' => 2, 'default' => "''"],
+			'club_website'   => ['type' => 'string', 'length' => 255, 'default' => "''"],
+			'club_email'     => ['type' => 'string', 'length' => 255, 'default' => "''"],
+			'club_phone'     => ['type' => 'string', 'length' => 25, 'default' => "''"],
+			'club_colors'    => ['type' => 'text', 'length' => 65000],
+			'club_locations' => ['type' => 'text', 'length' => 65000],
         ];
 		$options = [
 			'primary' => ['id_club'],
@@ -343,7 +344,8 @@ class ScmSetup extends DefaultModuleSetup
 
 	private function insert_data()
 	{
-		$categories_file = PATH_TO_ROOT . '/scm/data/' . AppContext::get_current_user()->get_locale() . '/categories.csv';
+        // $file = new Folder(LangLoader::get_module_lang_path($this->module_id, LangLoader::get_locale()) . '/install.php');    
+        $categories_file = ModulesManager::get_module_path('scm') . '/data/' . LangLoader::get_locale() . '/categories.csv';
         $row = 1;
         if (($handle = fopen($categories_file, 'r')) !== FALSE)
         {
@@ -352,14 +354,14 @@ class ScmSetup extends DefaultModuleSetup
                 if ($row == 1) {$row++; continue;}
                 PersistenceContext::get_querier()->insert(self::$scm_cats_table, [
                     'id'     				 => null,
-                    'name'        			 => $data[0],
-                    'rewrited_name'     	 => $data[1],
-                    'c_order'  				 => $data[2],
-                    'special_authorizations' => $data[3],
-                    'auth'  				 => $data[4],
-                    'id_parent'  			 => $data[5],
-                    'description'  			 => $data[6],
-                    'thumbnail'  			 => $data[7],
+                    'name'        			 => $data[0] ?? null,
+                    'rewrited_name'     	 => $data[1] ?? null,
+                    'c_order'  				 => $data[2] ?? null,
+                    'special_authorizations' => $data[3] ?? null,
+                    'auth'  				 => $data[4] ?? null,
+                    'id_parent'  			 => $data[5] ?? null,
+                    'description'  			 => $data[6] ?? null,
+                    'thumbnail'  			 => $data[7] ?? null,
                 ]);
                 $row++;
             }
@@ -370,7 +372,7 @@ class ScmSetup extends DefaultModuleSetup
             echo '<div class="message-helper bgc-full error">Error opening the CSV file..</div>';
         }
 
-		$clubs_file = PATH_TO_ROOT . '/scm/data/' . AppContext::get_current_user()->get_locale() . '/clubs.csv';
+		$clubs_file = ModulesManager::get_module_path('scm') . '/data/' . LangLoader::get_locale() . '/pmg.csv';
         $row = 1;
         if (($handle = fopen($clubs_file, 'r')) !== FALSE)
         {
@@ -378,13 +380,16 @@ class ScmSetup extends DefaultModuleSetup
             {
                 if ($row == 1) {$row++; continue;}
                 PersistenceContext::get_querier()->insert(self::$scm_club_table, [
-                    'id_club'          => null,
-                    'club_name'        => $data[0],
-                    'club_slug'        => $data[1],
-                    'club_full_name'   => $data[2],
-                    'club_logo'        => $data[3],
-                    'club_flag'        => $data[4],
-                    'club_locations'   => $data[8],
+                    'id_club'        => null,
+                    'club_name'      => $data[0] ?? null,
+                    'club_slug'      => $data[0] ? Url::encode_rewrite($data[0]) : null,
+                    'club_number'    => $data[2] ?? null,
+                    'club_full_name' => $data[1] ?? null,
+                    'club_logo'      => $data[3] ?? 'modules/scm/templates/images/badges/club.webp',
+                    'club_flag'      => $data[4] ?? null,
+                    'club_website'   => $data[5] ?? null,
+                    'club_email'     => $data[6] ?? null,
+                    'club_phone'     => $data[7] ?? null,
                 ]);
                 $row++;
             }

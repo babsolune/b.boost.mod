@@ -33,29 +33,27 @@
                         </div>
                     </div>
                 # END sub_events #
+            # ELSEIF C_HAS_GAMES #
+                <article itemscope="itemscope" itemtype="https://schema.org/CreativeWork" id="scm-item-{ID}" class="scm-item# IF C_NEW_CONTENT # new-content# ENDIF #">
+                    <div class="content" itemprop="text">
+                        # IF C_CHAMPIONSHIP ## INCLUDE CHAMPIONSHIP_HOME ## ENDIF #
+                        # IF C_CUP ## INCLUDE CUP_HOME ## ENDIF #
+                        # IF C_TOURNAMENT ## INCLUDE TOURNAMENT_HOME ## ENDIF #
+                    </div>
+
+                    <aside>${ContentSharingActionsMenuService::display()}</aside>
+
+                    # IF C_SOURCES #
+                        <aside class="sources-container">
+                            <span class="text-strong"><i class="fa fa-map-signs" aria-hidden="true"></i> {@common.sources}</span> :
+                            # START sources #
+                                <a itemprop="isBasedOnUrl" href="{sources.URL}" class="pinned link-color offload" rel="nofollow">{sources.NAME}</a># IF sources.C_SEPARATOR ## ENDIF #
+                            # END sources #
+                        </aside>
+                    # ENDIF #
+                </article>
             # ELSE #
-                # IF C_HAS_GAMES #
-                    <article itemscope="itemscope" itemtype="https://schema.org/CreativeWork" id="scm-item-{ID}" class="scm-item# IF C_NEW_CONTENT # new-content# ENDIF #">
-                        <div class="content" itemprop="text">
-                            # IF C_CHAMPIONSHIP ## INCLUDE CHAMPIONSHIP_HOME ## ENDIF #
-                            # IF C_CUP ## INCLUDE CUP_HOME ## ENDIF #
-                            # IF C_TOURNAMENT ## INCLUDE TOURNAMENT_HOME ## ENDIF #
-                        </div>
-
-                        <aside>${ContentSharingActionsMenuService::display()}</aside>
-
-                        # IF C_SOURCES #
-                            <aside class="sources-container">
-                                <span class="text-strong"><i class="fa fa-map-signs" aria-hidden="true"></i> {@common.sources}</span> :
-                                # START sources #
-                                    <a itemprop="isBasedOnUrl" href="{sources.URL}" class="pinned link-color offload" rel="nofollow">{sources.NAME}</a># IF sources.C_SEPARATOR ## ENDIF #
-                                # END sources #
-                            </aside>
-                        # ENDIF #
-                    </article>
-                # ELSE #
-                    <div class="message-helper bgc notice">{@scm.message.no.games}</div>
-                # ENDIF #
+                <div class="message-helper bgc notice">{@scm.message.no.games}</div>
             # ENDIF #
 		</div>
 	</div>

@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -15,17 +15,18 @@ $lang['scm.module.title'] = 'Compétitions';
 $lang['scm.mini.prev']    = 'Matchs précédents';
 $lang['scm.mini.next']    = 'Prochains matchs';
 
-$lang['scm.pool']              = 'Sous-groupe';
-$lang['scm.event.pool']        = 'Sous-groupe de la division';
-$lang['scm.group.results']     = 'Résultats du groupe';
-$lang['scm.event.oneday']      = 'Compétition sur une seule journée';
-$lang['scm.event.start.date']  = 'Début de la compétition';
-$lang['scm.event.end.date']    = 'Fin de la compétition';
-$lang['scm.event.pending']     = 'En attente';
-$lang['scm.event.not.started'] = 'La compétition débute le :date';
-$lang['scm.event.ended.event'] = 'Compétition terminée';
-$lang['scm.source.clue']       = 'Liens vers les sites officiels de la compétition';
-$lang['scm.not.specified']     = 'Non renseigné';
+$lang['scm.pool']               = 'Sous-groupe';
+$lang['scm.event.pool']         = 'Sous-groupe de la division';
+$lang['scm.group.results']      = 'Résultats du groupe';
+$lang['scm.groups.composition'] = 'Compositions des groupes';
+$lang['scm.event.oneday']       = 'Compétition sur une seule journée';
+$lang['scm.event.start.date']   = 'Début de la compétition';
+$lang['scm.event.end.date']     = 'Fin de la compétition';
+$lang['scm.event.pending']      = 'En attente';
+$lang['scm.event.not.started']  = 'La compétition débute le :date';
+$lang['scm.event.ended.event']  = 'Compétition terminée';
+$lang['scm.source.clue']        = 'Liens vers les sites officiels de la compétition';
+$lang['scm.not.specified']      = 'Non renseigné';
 
 $lang['scm.event.views.number']   = 'Cette page a été vue :number fois.';
 $lang['scm.event.scoring.type']   = 'Type de score';
@@ -148,6 +149,7 @@ $lang['scm.round.5']             = '1/16 finale';
 $lang['scm.round.6']             = '1/32 finale';
 $lang['scm.round.7']             = '1/64 finale';
 $lang['scm.round.playoff']       = 'Barrages';
+$lang['scm.round.looser.final']  = 'Petite finale';
 $lang['scm.round.of.1']          = 'Finale';
 $lang['scm.round.of.2']          = '1/2 finale';
 $lang['scm.round.of.4']          = '1/4 finale';
@@ -220,6 +222,8 @@ $lang['scm.week.games']           = 'Matchs de la semaine';
 $lang['scm.current.events']       = 'Compétitions en cours';
 $lang['scm.around.games']         = 'Prochains/précédents matchs';
 $lang['scm.no.current.games']     = 'Aucun match en cours';
+$lang['scm.no.games']             = 'Aucun match programmé';
+$lang['scm.prev.games']           = 'Précédents matchs';
 $lang['scm.next.games']           = 'Prochains matchs';
 $lang['scm.game.late']            = 'Match en retard';
 
@@ -319,7 +323,7 @@ $lang['scm.seo.description.clubs'] = 'Tous les clubs du site :site.';
 $lang['scm.seo.description.club'] = 'Toutes les informations du club :club.';
 $lang['scm.seo.description.event.home'] = 'Toutes les informations de la compétition :event.';
 $lang['scm.seo.description.event.bracket'] = 'Phases finales de la compétition :event.';
-$lang['scm.seo.description.event.group'] = 'Phases de group de la compétition :event.';
+$lang['scm.seo.description.event.group'] = 'Phases de groupe de la compétition :event.';
 $lang['scm.seo.description.event.calendar'] = 'Calendrier jour par jour de la compétition :event.';
 $lang['scm.seo.description.event.calendar.full'] = 'Calendrier complet de la compétition :event.';
 $lang['scm.seo.description.event.ranking'] = 'Classement de la compétition :event.';

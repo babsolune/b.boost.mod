@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -412,14 +412,14 @@ class ScmGame
 
     // Extra functions
     function is_exempted_game() {
-        if (!$this->game_home_id && !$this->game_away_id)
-        return;
+        if (!$this->game_home_id || !$this->game_away_id)
+            return;
         return ScmTeamService::get_team($this->game_home_id)->get_team_status() == ScmParams::EXEMPT || ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::EXEMPT;
     }
 
     function is_forfeit_game() {
-        if (!$this->game_home_id && !$this->game_away_id)
-        return;
+        if (!$this->game_home_id || !$this->game_away_id)
+            return;
         return ScmTeamService::get_team($this->game_home_id)->get_team_status() == ScmParams::FORFEIT || ScmTeamService::get_team($this->game_away_id)->get_team_status() == ScmParams::FORFEIT;
     }
 
@@ -502,7 +502,7 @@ class ScmGame
 		$this->game_away_empty     = $properties['game_away_empty'];
 		$this->game_away_forfeit   = $properties['game_away_forfeit'];
 		$this->game_date           = !empty($properties['game_date']) ? new Date($properties['game_date'], Timezone::SERVER_TIMEZONE) : null;
-		$this->game_video          = new Url($properties['game_video']);
+		$this->game_video          = !empty($properties['game_video']) ? new Url($properties['game_video']) : new Url('');
 		$this->game_summary        = $properties['game_summary'];
 		$this->game_status         = $properties['game_status'];
 		$this->game_stadium        = $properties['game_stadium'];
@@ -594,8 +594,6 @@ class ScmGame
                 'EVENT_NAME'      => ScmEventService::get_event($this->game_event_id)->get_event_name(),
                 'U_EVENT'         => ScmUrlBuilder::event_home($this->game_event_id, ScmEventService::get_event_slug($this->game_event_id))->rel(),
                 'GAME_ID'         => $this->game_type.$this->game_cluster.$this->game_round.$this->game_order,
-                'HOME_ID'         => $this->game_home_id,
-                'AWAY_ID'         => $this->game_away_id,
                 'CLUSTER'         => $this->game_cluster,
                 'MATCHDAY'        => $this->game_round,
                 'PLAYGROUND'      => $this->game_playground,
@@ -678,7 +676,7 @@ class ScmGame
     {
         $team = ScmTeamService::get_team($this->game_home_id);
         $club = ScmClubCache::load()->get_club($team->get_team_club_id());
-        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+        $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];
         $real_club = new ScmClub();
         $real_club->set_properties((array)ScmClubCache::load()->get_club($real_id));
 

@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -191,7 +191,7 @@ class ScmTeamService
 		$club_cache = ScmClubCache::load();
         $team = self::get_team($team_id);
         $club = $club_cache->get_club($team->get_team_club_id());
-        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
+        $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];
 
         return $club_cache->get_club_shield($real_id);
 	}
@@ -201,8 +201,8 @@ class ScmTeamService
 		$club_cache = ScmClubCache::load();
         $team = self::get_team($team_id);
         $club = $club_cache->get_club($team->get_team_club_id());
-        $real_id = $club['club_affiliate'] ? $club['club_affiliation'] : $club['id_club'];
-        $real_slug = $club['club_affiliate'] ? ScmClubService::get_club($club['club_affiliation'])->get_club_slug() : $club['club_slug'];
+        $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];
+        $real_slug = $club['club_sub'] ? ScmClubService::get_club($club['club_master'])->get_club_slug() : $club['club_slug'];
 
         return ScmUrlBuilder::display_club((int)$real_id, (string)$real_slug)->rel();
 	}

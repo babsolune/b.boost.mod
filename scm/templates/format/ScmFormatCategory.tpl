@@ -64,4 +64,3 @@
         # END categories.events #
     </div>
 # END categories #
-<script src="{PATH_TO_ROOT}/scm/templates/js/scm.width.js"></script>

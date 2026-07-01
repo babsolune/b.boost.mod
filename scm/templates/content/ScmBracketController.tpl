@@ -294,6 +294,7 @@
                                                 # START brackets.rounds.games #
                                                     <div id="{brackets.rounds.games.GAME_ID}" class="game-container">
                                                         <div class="game-details small text-italic">
+                                                            # IF brackets.rounds.games.C_THIRD_PLACE #<span>{@scm.round.looser.final}</span># ENDIF #
                                                             <span>{brackets.rounds.games.PLAYGROUND}</span>
                                                             <span># IF C_ONE_DAY #{brackets.rounds.games.GAME_DATE_HOUR_MINUTE}# ELSE #{brackets.rounds.games.GAME_DATE_FULL}# ENDIF #</span>
                                                             <div>
@@ -457,8 +458,6 @@
     <footer></footer>
 </section>
 
-<script src="{PATH_TO_ROOT}/scm/templates/js/scm.width.js"></script>
-<script src="{PATH_TO_ROOT}/scm/templates/js/scm.highlight.js"></script>
 # IF C_LOOSER_BRACKET #
     <script>
         function move_games(target) {

@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -60,13 +60,13 @@ class ScmGameFormat
 
     public static function format_cluster($foreach, $c_class = false, $round = false)
     {
+        $now = new Date();
         $view = new FileTemplate('scm/format/ScmFormatCluster.tpl');
         $lang = LangLoader::get_all_langs('scm');
         $view->add_lang($lang);
         usort($foreach, function($a, $b) {
             return strcmp($a['game_date'], $b['game_date']);
         });
-
 
         $blocks = $event_id = [];
         foreach($foreach as $game)
@@ -80,7 +80,10 @@ class ScmGameFormat
         $event_id = implode('', array_unique($event_id));
 
         $view->put_all([
+            'C_REFRESH_TIME' => $now->get_timestamp() > ScmEventService::get_event($event_id)->get_start_date()->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($event_id)->get_end_date()->get_timestamp(),
             'C_CLASS' => $c_class,
+            'C_DISPLAY_PLAYGROUNDS' => ScmParamsService::get_params($event_id)->get_display_playgrounds(),
+            'EVENT_ID' => $event_id,
             'C_ONE_DAY' => ScmEventService::get_event($event_id)->get_oneday()
         ]);
 
@@ -119,8 +122,14 @@ class ScmGameFormat
         $view = new FileTemplate('scm/format/ScmFormatEvent.tpl');
         $lang = LangLoader::get_all_langs('scm');
         $view->add_lang($lang);
+        $now = new Date();
 
-        $view->put('C_CLASS', $c_class);
+        $view->put_all([
+            'C_REFRESH_TIME' => $now->get_timestamp() > ScmEventService::get_event($event_id)->get_start_date()->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($event_id)->get_end_date()->get_timestamp(),
+            'C_CLASS' => $c_class,
+            'C_DISPLAY_PLAYGROUNDS' => ScmParamsService::get_params($event_id)->get_display_playgrounds(),
+            'EVENT_ID' => $event_id,
+        ]);
 
         foreach ($foreach as $block => $games)
         {
@@ -147,6 +156,7 @@ class ScmGameFormat
                     $c_link = false;
                     $link_name = '';
                 }
+
                 $view->assign_block_vars('blocks.items', $item->get_template_vars(), [
                     'C_LINK' => $c_link,
                     'CLUSTER_NAME' => $link_name,

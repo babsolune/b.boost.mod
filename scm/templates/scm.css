@@ -48,7 +48,7 @@ th.bgc-sub a {
 }
 
 .is-live > * {
-    background-color: rgba(var(--success-rgb-t), 0.2);
+    background-color: rgba(var(--success-tone-rgb), 0.2);
 }
 
 #main-content th.sortable-thead {
@@ -380,7 +380,7 @@ th.bgc-sub a {
 
 @media (min-width: 769px) {
     .grouped-fields .game-name               { width: 50%; }
-    .grouped-fields .game-date               { width: 270px; }
+    .grouped-fields .game-date               { width: 300px; }
     .grouped-fields .form-element.game-team  { width: auto; }
     .grouped-fields .form-element.game-score { width: 70px; }
     .grouped-fields .game-playground         { width: 80px; }
@@ -504,7 +504,7 @@ th.bgc-sub a {
 #category-nav ul ul,
 #module-scm .root-ul { padding-left: 1.618em; }
 
-#category-nav .categories-item:hover { background-color: rgba(var(--main-rgb-d), 0.2); }
+#category-nav .categories-item:hover { background-color: rgba(var(--main-dark-rgb), 0.2); }
 
 .categories-item {
 	position: relative;
@@ -522,7 +522,7 @@ th.bgc-sub a {
 	transform: translateY(-50%);
 	left: 0.456em;
 	content: '\f0fe';
-	font-family: 'Font Awesome 6 free';
+	font: var(--fa-font-solid);
 	font-weight: 400;
 }
 
@@ -696,7 +696,7 @@ th.bgc-sub a {
 
 /* .scm-body { */
     /* border-radius: 0.809em; */
-    /* box-shadow: 0 0 8px rgba(var(--bgc-rgb-a), 0.5); */
+    /* box-shadow: 0 0 8px rgba(var(--bgc-alt-rgb), 0.5); */
 /* } */
 
 .scm-cell {

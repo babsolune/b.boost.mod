@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -12,8 +12,9 @@ class ScmClub
 	private $id_club;
 	private $club_name;
 	private $club_slug;
-    private $club_affiliate;
-    private $club_affiliation;
+    private $club_sub;
+    private $club_master;
+    private $club_number;
 	private $club_full_name;
 	private $club_flag;
 	private $club_logo;
@@ -55,24 +56,34 @@ class ScmClub
 		$this->club_slug = $club_slug;
 	}
 
-	public function get_club_affiliate()
+	public function get_club_sub()
 	{
-		return $this->club_affiliate;
+		return $this->club_sub;
 	}
 
-	public function set_club_affiliate($club_affiliate)
+	public function set_club_sub($club_sub)
 	{
-		$this->club_affiliate = $club_affiliate;
+		$this->club_sub = $club_sub;
 	}
 
-	public function get_club_affiliation()
+	public function get_club_master()
 	{
-		return $this->club_affiliation;
+		return $this->club_master;
 	}
 
-	public function set_club_affiliation($club_affiliation)
+	public function set_club_master($club_master)
 	{
-		$this->club_affiliation = $club_affiliation;
+		$this->club_master = $club_master;
+	}
+
+	public function get_club_number()
+	{
+		return $this->club_number;
+	}
+
+	public function set_club_number($club_number)
+	{
+		$this->club_number = $club_number;
 	}
 
 	public function get_club_full_name()
@@ -170,46 +181,49 @@ class ScmClub
 
 	public function get_properties()
 	{
-        $real_club = ScmClubCache::load()->get_club($this->club_affiliation);
+        $real_club = ScmClubCache::load()->get_club($this->club_master);
 		return [
-			'id_club'          => $this->id_club,
-			'club_name'        => $this->club_name,
-			'club_slug'        => $real_club ? $real_club['club_slug'] : $this->club_slug,
-			'club_affiliate'   => $this->club_affiliate,
-			'club_affiliation' => $this->club_affiliation,
-			'club_full_name'   => $real_club ? $real_club['club_full_name'] : $this->club_full_name,
-			'club_flag'        => $this->club_flag,
-			'club_logo'        => $this->club_logo,
-			'club_website'     => $this->club_website->absolute(),
-			'club_email'       => $this->club_email,
-			'club_phone'       => $this->club_phone,
-			'club_locations'   => $this->club_locations,
-			'club_colors'      => TextHelper::serialize($this->club_colors)
+			'id_club'        => $this->id_club,
+			'club_name'      => $this->club_name,
+			'club_slug'      => $real_club ? $real_club['club_slug'] : $this->club_slug,
+			'club_sub'       => $this->club_sub,
+			'club_master'    => $this->club_master,
+			'club_number'    => $this->club_number,
+			'club_full_name' => $real_club ? $real_club['club_full_name'] : $this->club_full_name,
+			'club_flag'      => $this->club_flag,
+			'club_logo'      => $this->club_logo,
+			'club_website'   => $this->club_website->absolute(),
+			'club_email'     => $this->club_email,
+			'club_phone'     => $this->club_phone,
+			'club_locations' => $this->club_locations,
+			'club_colors'    => TextHelper::serialize($this->club_colors)
         ];
 	}
 
 	public function set_properties(array $properties)
 	{
-        $real_club = ScmClubCache::load()->get_club($properties['club_affiliation']);
-		$this->id_club          = $properties['id_club'];
-		$this->club_name        = $properties['club_name'];
-		$this->club_slug        = $this->club_affiliate ? $real_club['club_slug'] : $properties['club_slug'];
-		$this->club_affiliate   = $properties['club_affiliate'];
-		$this->club_affiliation = $properties['club_affiliation'];
-		$this->club_full_name   = $this->club_affiliate ? $real_club['club_full_name'] : $properties['club_full_name'];
-		$this->club_flag        = $properties['club_flag'];
-		$this->club_logo        = $properties['club_logo'];
-		$this->club_website     = new Url($properties['club_website']);
-		$this->club_email       = $properties['club_email'];
-		$this->club_phone       = $properties['club_phone'];
-		$this->club_locations   = $properties['club_locations'];
-        $this->club_colors      = !empty($properties['club_colors']) ? TextHelper::unserialize($properties['club_colors']) : [];
+        $real_club = ScmClubCache::load()->get_club($properties['club_master']);
+		$this->id_club        = $properties['id_club'];
+		$this->club_name      = $properties['club_name'];
+		$this->club_slug      = $this->club_sub ? $real_club['club_slug'] : $properties['club_slug'];
+		$this->club_sub       = $properties['club_sub'];
+		$this->club_master    = $properties['club_master'];
+		$this->club_number    = $properties['club_number'];
+		$this->club_full_name = $this->club_sub ? $real_club['club_full_name'] : $properties['club_full_name'];
+		$this->club_flag      = $properties['club_flag'];
+		$this->club_logo      = $properties['club_logo'];
+		$this->club_website   = $this->club_website ? new Url($properties['club_website']) : new Url();
+		$this->club_email     = $properties['club_email'];
+		$this->club_phone     = $properties['club_phone'];
+		$this->club_locations = $properties['club_locations'];
+        $this->club_colors    = !empty($properties['club_colors']) ? TextHelper::unserialize($properties['club_colors']) : [];
     }
 
 	public function init_default_properties()
 	{
-		$this->club_colors      = [];
-		$this->club_website     = new Url('');
+		$this->club_locations = [];
+		$this->club_colors    = [];
+		$this->club_website   = new Url('');
 	}
 
 	public function get_club_url() : string
@@ -244,11 +258,13 @@ class ScmClub
             'C_HAS_EMAIL'     => !empty($this->club_email),
             'C_HAS_PHONE'     => !empty($this->club_phone),
             'C_HAS_NAME'      => !empty($this->club_name),
+            'C_HAS_NUMBER'    => !empty($this->club_number),
             'C_HAS_FULL_NAME' => !empty($this->club_full_name),
 			// Item
 			'ID'           => $this->id_club,
 			'NAME'         => $this->club_name,
 			'FULL_NAME'    => $this->club_full_name,
+			'NUMBER'       => $this->club_number,
 			'EMAIL'        => $this->club_email,
 			'PHONE'        => $this->club_phone,
 			'LOCATION'     => $club_locations,
@@ -260,6 +276,7 @@ class ScmClub
 			'U_CLUB'         => $this->get_club_url(),
 			'U_EDIT'         => ScmUrlBuilder::edit_club($this->id_club, $this->club_slug)->rel(),
 			'U_DELETE'       => ScmUrlBuilder::delete_club($this->id_club)->rel(),
+            'U_FFF'          => 'https://epreuves.fff.fr/competition/club/' . $this->club_number . '-' . Url::encode_rewrite($this->club_full_name) . '/equipes',
         ];
 	}
 
@@ -267,10 +284,13 @@ class ScmClub
     {
         $club_locations_value = TextHelper::deserialize($this->get_club_locations());
         $locations = [];
-        foreach ($club_locations_value as $options)
+        if (!empty($club_locations_value))
         {
-            if ($options['name'])
-                $locations[] = $options;
+            foreach ($club_locations_value as $options)
+            {
+                if ($options['name'])
+                    $locations[] = $options;
+            }
         }
         return count($locations) > 0;
     }

@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -94,7 +94,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 ${'bracket_fieldset_'.$field} = new FormFieldsetHTML('bracket_' . $field, '');
                 ${'bracket_fieldset_'.$field}->set_css_class('grouped-fields cluster-fields');
                 $form->add_fieldset(${'bracket_fieldset_'.$field});
-                $third_place = $cluster == 1 && $order == 2 ? ' ' . 'petite finale' : '';
+                $third_place = $cluster == 1 && $order == 2 ? ' ' . $this->lang['scm.round.looser.final'] : '';
                 $empty_teams = '';
                 if ($this->get_game('B', $cluster, $round, $order)->get_game_home_empty())
                     $empty_teams = ' - ' . $this->get_game('B', $cluster, $round, $order)->get_game_home_empty() . '|' . $this->get_game('B', $cluster, $round, $order)->get_game_away_empty();

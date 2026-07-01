@@ -1,9 +1,9 @@
 <?php
 /**
- * @copyright   &copy; 2005-2024 PHPBoost
+ * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.0 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2024 06 12
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -59,7 +59,7 @@ class ScmClubsManagerController extends DefaultModuleController
 			$edit_link = new EditLinkHTMLElement(ScmUrlBuilder::edit_club($club->get_id_club(), $club->get_club_slug()));
 			$delete_link = new DeleteLinkHTMLElement(ScmUrlBuilder::delete_club($club->get_id_club()), '', ['data-confirmation' => $this->lang['scm.warning.delete.club']]);
 
-            $real_id = $club->get_club_affiliate() ? $club->get_club_affiliation() : $club->get_id_club();
+            $real_id = $club->get_club_sub() ? $club->get_club_master() : $club->get_id_club();
 
 			$row = [
 				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_club($real_id, $club->get_club_slug()), $club->get_club_full_name())),
