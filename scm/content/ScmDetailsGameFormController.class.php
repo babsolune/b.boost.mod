@@ -47,6 +47,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
 
 	private function build_form()
 	{
+        $url = '';
         if($this->get_game()->get_game_type() == 'D')
             $url = ScmUrlBuilder::edit_days_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_cluster())->rel();
         if($this->get_game()->get_game_type() == 'G')
@@ -54,7 +55,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
         if($this->get_game()->get_game_type() == 'B')
             $url = ScmUrlBuilder::edit_brackets_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_cluster())->rel();
         if($this->get_game()->get_game_type() == 'P')
-            $url = ScmUrlBuilder::edit_practice_games($this->event_id(), $this->get_event()->get_event_slug(), $this->get_game()->get_game_cluster())->rel();
+            $url = ScmUrlBuilder::edit_practice_games($this->event_id(), $this->get_event()->get_event_slug())->rel();
 
         $form = new HTMLForm(__CLASS__);
         $form->set_css_class('floating-submit');
@@ -255,18 +256,22 @@ class ScmDetailsGameFormController extends DefaultModuleController
             $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];
             $real_club = new ScmClub();
             $real_club->set_properties(ScmClubCache::load()->get_club($real_id));
-// Debug::stop($real_club);
+
             $options = [];
             $options[] = new FormFieldSelectChoiceOption('', 0);
             $stadiums = 0;
-            $i = 1;
-            foreach(TextHelper::deserialize($real_club->get_club_locations()) as $club)
+            if (!empty($real_club->get_club_locations()))
             {
-                if ($club['name'])
-                    $stadiums++;
-                $options[] = new FormFieldSelectChoiceOption($club['name'], $i);
-                $i++;
+                $i = 1;
+                foreach(TextHelper::deserialize($real_club->get_club_locations()) as $club)
+                {
+                    if ($club['name'])
+                        $stadiums++;
+                    $options[] = new FormFieldSelectChoiceOption($club['name'], $i);
+                    $i++;
+                }
             }
+
             return $stadiums ? $options : [new FormFieldSelectChoiceOption(StringVars::replace_vars($this->lang['scm.club.no.stadium'], ['club' => $real_club->get_club_name()]), 0)];
         }
         return [new FormFieldSelectChoiceOption($this->lang['scm.club.no.home.club'], 0)];
@@ -379,7 +384,8 @@ class ScmDetailsGameFormController extends DefaultModuleController
         if ($event->get_is_sub())
             $breadcrumb->add(ScmEventService::get_master_name($event->get_id()), ScmEventService::get_master_url($event->get_id()));
 		$breadcrumb->add($event->get_is_sub() ? ScmDivisionService::get_division($event->get_division_id())->get_division_name() : $event->get_event_name(), ScmUrlBuilder::event_home($event->get_id(), $event->get_event_slug()));
-		if ($request->get_value('type') == 'G')
+		$link = new Url('');
+        if ($request->get_value('type') == 'G')
             $link = ScmUrlBuilder::edit_groups_games($event->get_id(), $event->get_event_slug(), $request->get_value('cluster'));
         elseif ($request->get_value('type') == 'B')
             $link = ScmUrlBuilder::edit_brackets_games($event->get_id(), $event->get_event_slug(), $request->get_value('cluster'));
