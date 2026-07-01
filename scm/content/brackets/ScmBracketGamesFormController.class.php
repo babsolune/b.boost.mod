@@ -114,13 +114,14 @@ class ScmBracketGamesFormController extends DefaultModuleController
                     : '';
                 $c_has_details = ScmGameService::has_details($this->event_id(), 'B', $cluster, $round, $order);
                 $details_class = $c_has_details ? ' success' : '';
+                $pens = $this->get_game('B', $cluster, $round, $order)->get_game_home_pen() ? ' | ' . $this->lang['scm.game.event.penalties'] . ' : ' . $this->get_game('B', $cluster, $round, $order)->get_game_home_pen() . ' - ' . $this->get_game('B', $cluster, $round, $order)->get_game_away_pen() : '';
 
                 if ($this->return_games && $order == 1 && $cluster != 1) {
                     ${'bracket_fieldset_'.$field}->add_field(new FormFieldSpacer('first_leg_' . $field, $this->lang['scm.first.leg'],
                         ['class' => 'bgc notice align-center']
                     ));
                 }
-                ${'bracket_fieldset_'.$field}->add_field(new FormFieldFree('game_number_' . $field, '', $game_number . $bonus,
+                ${'bracket_fieldset_'.$field}->add_field(new FormFieldFree('game_number_' . $field, '', $game_number . $bonus . $pens,
                     ['class' => 'label-top game-name small text-italic form-B-' . $field]
                 ));
                 ${'bracket_fieldset_'.$field}->add_field(new FormFieldActionLink('details_' . $field, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $cluster, $round, $order), 'd-inline-block game-details align-right' . $details_class));
@@ -187,7 +188,6 @@ class ScmBracketGamesFormController extends DefaultModuleController
             foreach($games as $game)
             {
                 $order = $game['game_order'];
-                $order = $game['game_order'];
                 $field = $cluster . $round . $order;
                 $item = $this->get_game('B', $cluster, $round, $order);
                 $item->set_game_date($this->form->get_value('game_date_' . $field));
@@ -195,8 +195,6 @@ class ScmBracketGamesFormController extends DefaultModuleController
                     $item->set_game_playground($this->form->get_value('game_playground_' . $field));
                 $item->set_game_home_id((int)$this->form->get_value('home_team_' . $field)->get_raw_value());
                 $item->set_game_home_score($this->form->get_value('home_score_' . $field));
-                $item->set_game_home_pen($this->form->get_value('home_pen_' . $field));
-                $item->set_game_away_pen($this->form->get_value('away_pen_' . $field));
                 $item->set_game_away_score($this->form->get_value('away_score_' . $field));
                 $item->set_game_away_id((int)$this->form->get_value('away_team_' . $field)->get_raw_value());
                 $item->set_game_status($this->form->get_value('status_' . $field)->get_raw_value());
