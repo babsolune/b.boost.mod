@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.1 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2026 07 02
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -71,12 +71,86 @@ class ScmBracketGamesFormController extends DefaultModuleController
         $cluster = AppContext::get_request()->get_getint('cluster', 0);
         $round_name = ($this->hat_ranking && $cluster == $rounds_number + 1) ? $this->lang['scm.playoff.games'] : $this->lang['scm.round.' . $cluster . ''];
 
-        $form = new HTMLForm(__CLASS__);
+        $form = new HTMLForm(self::class);
         $form->set_css_class('floating-submit');
         $form->set_layout_title(
             '<div class="align-center small">' . $this->lang['scm.games.management'] . '</div>'
             . '<div class="align-center smaller">' . $this->lang['scm.games.brackets.stage'] . ' - ' . $round_name . '</div>'
         );
+
+        if ($cluster != $rounds_number)
+        {
+            $fieldset = new FormFieldsetHTML('ajax_games', 'matchs du tour précédent');
+            $form->add_fieldset($fieldset);
+
+            $fieldset->add_field(new FormFieldSpacer('ajax', '
+                <script>
+                    jQuery.ajax({
+                        url: "' . ScmUrlBuilder::ajax_cluster()->rel() . '",
+                        type: "get",
+                        dataType: "json",
+                        data: {
+                            "token" : "' . AppContext::get_session()->get_token() . '",
+                            "event_id" : "' . $this->event_id() . '",
+                            "type" : "B",
+                            "cluster" : "' . $cluster + 1 . '",
+                        },
+                        success: function(returnData) {
+                            var target = jQuery("#' . self::class . '_ajax_games .form-spacer");
+                            let groupIndex = 0;
+                            let groupDiv = null;
+                            jQuery.each(returnData, function(index, game) {
+                                if (index % 2 === 0) {
+                                    groupIndex++;
+                                    groupDiv = jQuery("#' . self::class . '_game_number_' . $cluster . '" + game.game_round + groupIndex + "_field .form-field-free-large");
+                                    jQuery(groupDiv).append("<br />");
+                                }
+                                jQuery("<div>", {
+                                    id: game.game_id,
+                                    class: "pinned bgc light",
+                                    style: "margin-left: 0.618em;",
+                                    // text: game.game_id
+                                }).appendTo(groupDiv);
+                                jQuery("#" + game.game_id).append(
+                                    TeamScore(
+                                        game.game_home_team,
+                                        game.game_home_score,
+                                        game.game_home_pen,
+                                        (game.game_home_score + game.game_home_pen) > (game.game_away_score + game.game_away_pen)
+                                    ) +
+                                    " - " +
+                                    TeamScore(
+                                        game.game_away_team,
+                                        game.game_away_score,
+                                        game.game_away_pen,
+                                        (game.game_away_score + game.game_away_pen) > (game.game_home_score + game.game_home_pen),
+                                        "away"
+                                    )
+                                );
+                            });
+                        },
+                        error: function(e) {
+                            jQuery("body").css("background", "red");
+                        }
+                    });
+                    function TeamScore(teamName, score, penalty, isWinner, locale = "home") {
+                        var result = "";
+                        if (isWinner) result += "<strong>";
+                        if (locale == "away") {
+                            result += score;
+                            if (penalty != null) result += "(" + penalty + ")";
+                            result += " " + teamName;
+                        }
+                        else {
+                            result += teamName + " " + score;
+                            if (penalty != null) result += "(" + penalty + ")";
+                        }
+                        if (isWinner) result += "</strong>";
+                        return result;
+                    }
+                </script>
+            '));
+        }
 
         foreach ($this->get_brackets($cluster) as $round => $games)
         {

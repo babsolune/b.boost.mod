@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.1 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2026 07 02
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -282,6 +282,11 @@ class ScmUrlBuilder
 	public static function ajax_scores()
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/ajax_scores/');
+	}
+
+	public static function ajax_cluster()
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/ajax_cluster/');
 	}
 
 	public static function home()

@@ -11,20 +11,20 @@
                     'token' : '{TOKEN}',
                     'event_id' : '{EVENT_ID}'
                 },
-                beforeSend: function(returnData){
+                beforeSend: function(returnData) {
                     jQuery.each(returnData, function(index, game) {
                         jQuery('#vs-' + returnData.game_id).html('<i class="fa fa-spin fa-spinner"></i>');
                     });
                 },
-                success: function(returnData){
+                success: function(returnData) {
                     jQuery.each(returnData, function(index, game) {
                         jQuery('#vs-' + returnData.game_id).html('-');
                         jQuery('#home-' + game.game_id).html(game.home_score);
                         jQuery('#away-' + game.game_id).html(game.away_score);
                     });
                 },
-                error: function(e){
-                    jQuery('#shoutbox-refresh').html('<i class="fa fa-sync"></i>');
+                error: function(e) {
+                    // jQuery('#shoutbox-refresh').html('<i class="fa fa-sync"></i>');
                 }
             });
         }

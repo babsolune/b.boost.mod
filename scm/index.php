@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.1 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2026 07 02
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -22,6 +22,7 @@ if ($config->is_right_column_disabled())
 $url_controller_mappers = [
     // Ajax
 	new UrlControllerMapper('ScmAjaxGameFormat', '`^/ajax_scores/?$`'),
+	new UrlControllerMapper('ScmAjaxGamesCluster', '`^/ajax_cluster/?$`'),
 	// Administration
 	new UrlControllerMapper('AdminScmConfigController', '`^/admin(?:/config)?/?$`'),
 	new UrlControllerMapper('ScmDelayedGamesController', '`^/delayed/?$`'),

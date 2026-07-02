@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.1 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2026 07 02
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -436,7 +436,7 @@ class ScmGame
     public function get_properties()
 	{
 		return [
-			'id_game'             => $this->get_id_game(),
+            'id_game'             => $this->get_id_game(),
 			'game_event_id'       => $this->get_game_event_id(),
 			'game_type'           => $this->get_game_type(),
 			'game_cluster'        => $this->get_game_cluster(),
@@ -674,6 +674,8 @@ class ScmGame
 
     private function stadium_map()
     {
+        if (empty($this->game_home_id))
+            return;
         $team = ScmTeamService::get_team($this->game_home_id);
         $club = ScmClubCache::load()->get_club($team->get_team_club_id());
         $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];
