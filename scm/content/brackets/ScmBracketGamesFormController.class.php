@@ -78,9 +78,10 @@ class ScmBracketGamesFormController extends DefaultModuleController
             . '<div class="align-center smaller">' . $this->lang['scm.games.brackets.stage'] . ' - ' . $round_name . '</div>'
         );
 
+        // Load matches and scores from previous round for each raw
         if ($cluster != $rounds_number)
         {
-            $fieldset = new FormFieldsetHTML('ajax_games', 'matchs du tour précédent');
+            $fieldset = new FormFieldsetHTML('ajax_games', '');
             $form->add_fieldset($fieldset);
 
             $fieldset->add_field(new FormFieldSpacer('ajax', '
@@ -103,14 +104,12 @@ class ScmBracketGamesFormController extends DefaultModuleController
                                 if (index % 2 === 0) {
                                     groupIndex++;
                                     groupDiv = jQuery("#' . self::class . '_game_number_' . $cluster . '" + game.game_round + groupIndex + "_field .form-field-free-large");
-                                    jQuery(groupDiv).append("<br />");
+                                    jQuery("<div>", {class : "bracket-previous-games"}).appendTo(groupDiv);
                                 }
                                 jQuery("<div>", {
                                     id: game.game_id,
-                                    class: "pinned bgc light",
-                                    style: "margin-left: 0.618em;",
-                                    // text: game.game_id
-                                }).appendTo(groupDiv);
+                                    class: "pinned bgc-main",
+                                }).appendTo(groupDiv.find(".bracket-previous-games"));
                                 jQuery("#" + game.game_id).append(
                                     TeamScore(
                                         game.game_home_team,
@@ -135,19 +134,126 @@ class ScmBracketGamesFormController extends DefaultModuleController
                     });
                     function TeamScore(teamName, score, penalty, isWinner, locale = "home") {
                         var result = "";
-                        if (isWinner) result += "<strong>";
+                        if (isWinner) result += "<strong class=\"success\">";
                         if (locale == "away") {
                             result += score;
-                            if (penalty != null) result += "(" + penalty + ")";
+                            if (penalty !== null && penalty !== "") result += "(" + penalty + ")";
                             result += " " + teamName;
                         }
                         else {
                             result += teamName + " " + score;
-                            if (penalty != null) result += "(" + penalty + ")";
+                            if (penalty !== null && penalty !== "") result += "(" + penalty + ")";
                         }
                         if (isWinner) result += "</strong>";
                         return result;
                     }
+                </script>
+            '));
+        }
+        elseif ($cluster == $rounds_number)
+        {
+            $fieldset = new FormFieldsetHTML('ajax_games', '');
+            $form->add_fieldset($fieldset);
+
+            $fieldset->add_field(new FormFieldSpacer('ajax_ranking', '
+                <span id="rankings" class="modal-button --final-rankings left-middle-fixed" aria-label="' . $this->lang['scm.group.results'] . '">
+                    <i class="fa fa-list-ol" aria-hidden="true"></i>
+                </span>
+                <div id="final-rankings" class="modal">
+                    <div class="modal-overlay close-modal" role="button" aria-label="' . $this->lang['common.close'] . '"></div>
+                    <div class="modal-content">
+                        <span class="error hide-modal close-modal close-bbcode-sub" aria-label="' . $this->lang['common.close'] . '"><i class="far fa-circle-xmark" aria-hidden="true"></i></span>
+                        <div id="final-rankings-content" class="cell-flex cell-columns-4"></div>
+                    </div>
+                </div>
+                <script>
+                    function groupName(number)
+                    {
+                        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                        return alphabet[number - 1];
+                    }
+                    $("#rankings").on("click", function(e) {
+                        e.preventDefault();
+                        jQuery.ajax({
+                            url: "' . ScmUrlBuilder::ajax_round_rankings()->rel() . '",
+                            type: "post",
+                            dataType: "json",
+                            data: {
+                                "token" : "' . AppContext::get_session()->get_token() . '",
+                                "event_id" : "' . $this->event_id() . '",
+                                "type" : "B",
+                            },
+                            beforeSend: function(returnData) {
+                                // Do something waiting for data
+                            },
+                            success: function(returnData) {
+                                var html = "";
+                                jQuery.each(returnData, function(index, game) {
+                                    var rankingsData = typeof game.row === "string" ? JSON.parse(game.row) : game.row;
+
+                                    // Parcourir chaque cluster (ex: "1", "2", etc.)
+                                    jQuery.each(rankingsData, function(clusterKey, clusterRankings) {
+                                        // clusterRankings est un tableau de classements
+                                        if (Array.isArray(clusterRankings) && clusterRankings.length > 0) {
+                                            // Ajouter un titre pour le cluster/groupe
+                                            html += "<div class=\"cluster-group\">";
+                                            html += "<h3 class=\"cluster-title\">Groupe " + groupName(clusterKey) + "</h3>";
+                                            html += "<table class=\"rankings-table\">";
+                                            html += "<thead>";
+                                            html += "<tr>";
+                                            html += "<th>Rang</th>";
+                                            html += "<th>Équipe</th>";
+                                            html += "<th>Pts</th>";
+                                            // html += "<th>J</th>";
+                                            // html += "<th>G</th>";
+                                            // html += "<th>N</th>";
+                                            // html += "<th>P</th>";
+                                            // html += "<th>BP</th>";
+                                            // html += "<th>BC</th>";
+                                            html += "<th>Diff</th>";
+                                            html += "</tr>";
+                                            html += "</thead>";
+                                            html += "<tbody>";
+
+                                            // Trier par rang
+                                            clusterRankings.sort(function(a, b) {
+                                                return a.rank - b.rank;
+                                            });
+
+                                            jQuery.each(clusterRankings, function(i, team) {
+                                                html += "<tr class=\"rank-" + team.rank + "\">";
+                                                html += "<td>" + team.rank + "</td>";
+                                                html += "<td>" + team.team_name + "</td>";
+                                                html += "<td><strong>" + team.points + "</strong></td>";
+                                                // html += "<td>" + team.played + "</td>";
+                                                // html += "<td>" + team.win + "</td>";
+                                                // html += "<td>" + team.draw + "</td>";
+                                                // html += "<td>" + team.loss + "</td>";
+                                                // html += "<td>" + team.goals_for + "</td>";
+                                                // html += "<td>" + team.goals_against + "</td>";
+                                                html += "<td aria-label=\"" + team.goals_for + "|" + team.goals_against + "\">" + team.goal_average + "</td>";
+                                                html += "</tr>";
+                                            });
+
+                                            html += "</tbody>";
+                                            html += "</table>";
+                                            html += "</div>";
+                                        }
+                                    });
+                                });
+                                jQuery("#final-rankings-content").append(html)
+                            },
+                            error: function(e) {
+                                // jQuery("body").css("background", "error");
+                            }
+                        });
+                    });
+
+                    // Delete data to prevent from load several times on each call
+                    $(document).on("click", ".close-modal", function(e) {
+                        e.preventDefault();
+                        jQuery("#final-rankings-content").empty();
+                    });
                 </script>
             '));
         }
@@ -189,13 +295,15 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 $c_has_details = ScmGameService::has_details($this->event_id(), 'B', $cluster, $round, $order);
                 $details_class = $c_has_details ? ' success' : '';
                 $pens = $this->get_game('B', $cluster, $round, $order)->get_game_home_pen() ? ' | ' . $this->lang['scm.game.event.penalties'] . ' : ' . $this->get_game('B', $cluster, $round, $order)->get_game_home_pen() . ' - ' . $this->get_game('B', $cluster, $round, $order)->get_game_away_pen() : '';
+                $video = !empty($this->get_game('B', $cluster, $round, $order)->get_game_video()->absolute())
+                    ? '<a href="' . $this->get_game('B', $cluster, $round, $order)->get_game_video()->absolute() . '" target="_blank" rel="noopener" aria-label="video"><i class="far fa-circle-play" aria-hidden="true"></i></a> | ' : '';
 
                 if ($this->return_games && $order == 1 && $cluster != 1) {
                     ${'bracket_fieldset_'.$field}->add_field(new FormFieldSpacer('first_leg_' . $field, $this->lang['scm.first.leg'],
                         ['class' => 'bgc notice align-center']
                     ));
                 }
-                ${'bracket_fieldset_'.$field}->add_field(new FormFieldFree('game_number_' . $field, '', $game_number . $bonus . $pens,
+                ${'bracket_fieldset_'.$field}->add_field(new FormFieldFree('game_number_' . $field, '', $video . $game_number . $bonus . $pens,
                     ['class' => 'label-top game-name small text-italic form-B-' . $field]
                 ));
                 ${'bracket_fieldset_'.$field}->add_field(new FormFieldActionLink('details_' . $field, '<span aria-label="' . $this->lang['scm.game.event.details'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></span>' , ScmUrlBuilder::edit_details_game($this->event_id(), $this->get_event()->get_event_slug(), 'B', $cluster, $round, $order), 'd-inline-block game-details align-right' . $details_class));

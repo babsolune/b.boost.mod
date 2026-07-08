@@ -137,6 +137,7 @@ $lang['scm.practice.management'] = 'Créer la liste des matchs';
 $lang['scm.group']               = 'Groupe';
 $lang['scm.group.short']         = 'G';
 $lang['scm.groups']              = 'Groupes';
+$lang['scm.group.results']       = 'Résultats des groupes';
 $lang['scm.round']               = 'Tour';
 $lang['scm.next.round']          = 'Tour suivant';
 $lang['scm.playoff.games']       = 'Matchs de barrage';

@@ -11,13 +11,13 @@ class ScmUrlBuilder
 {
 	private static $dispatcher = '/scm';
 
-	public static function configuration()
+	public static function configuration(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/admin/config');
 	}
 
 ################################ Categories
-	public static function display_category($id, $rewrited_name, $page = 1, $subcategories_page = 1)
+	public static function display_category($id, $rewrited_name, $page = 1, $subcategories_page = 1): Url
 	{
         $category = $id . '-' . $rewrited_name . '/';
 		$page = $page !== 1 || $subcategories_page !== 1 ? $page . '/' : '';
@@ -26,132 +26,132 @@ class ScmUrlBuilder
 	}
 
 ################################ Events
-	public static function manage()
+	public static function manage(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/manage/');
 	}
 
-	public static function add($id_category = null)
+	public static function add($id_category = null): Url
 	{
 		$id_category = !empty($id_category) ? $id_category . '/' : '';
 		return DispatchManager::get_url(self::$dispatcher, '/add/' . $id_category);
 	}
 
-	public static function edit($event_id, $event_slug)
+	public static function edit($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/');
 	}
 
-	public static function delete($event_id)
+	public static function delete($event_id): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '/delete/?' . 'token=' . AppContext::get_session()->get_token());
 	}
 
 ################################ Clubs
-	public static function manage_clubs()
+	public static function manage_clubs(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/clubs/manage/');
 	}
 
-	public static function add_club()
+	public static function add_club(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/club/add/');
 	}
 
-	public static function edit_club(int $club_id, string $club_slug)
+	public static function edit_club(int $club_id, string $club_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/club/' . $club_id . '-' . $club_slug . '/edit/');
 	}
 
-    public static function delete_club(int $club_id)
+    public static function delete_club(int $club_id): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/club/' . $club_id . '/delete/?' . 'token=' . AppContext::get_session()->get_token());
 	}
 
-    public static function display_clubs()
+    public static function display_clubs(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/clubs/list/');
 	}
 
-    public static function display_club(int $club_id, string $club_slug)
+    public static function display_club(int $club_id, string $club_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/club/' . $club_id . '-' . $club_slug);
 	}
 
-	public static function visit_club($club_id)
+	public static function visit_club($club_id): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/club/visit/' . $club_id);
 	}
 
 ################################ Seasons
-	public static function manage_seasons()
+	public static function manage_seasons(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/season/manage/');
 	}
 
-	public static function add_season()
+	public static function add_season(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/season/add/');
 	}
 
-	public static function edit_season($id)
+	public static function edit_season($id): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/season/' . $id . '/edit/');
 	}
 
-	public static function delete_season($id)
+	public static function delete_season($id): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/season/' . $id . '/delete/?' . 'token=' . AppContext::get_session()->get_token());
 	}
 
 ################################ Divisions
-	public static function manage_divisions()
+	public static function manage_divisions(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/division/manage/');
 	}
 
-	public static function add_division()
+	public static function add_division(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/division/add/');
 	}
 
-	public static function edit_division($id)
+	public static function edit_division($id): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/division/' . $id . '/edit/');
 	}
 
-	public static function delete_division($id)
+	public static function delete_division($id): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/division/' . $id . '/delete/?' . 'token=' . AppContext::get_session()->get_token());
 	}
 
 ################################ Display
-    public static function event_home($event_id, $event_slug)
+    public static function event_home($event_id, $event_slug): Url
 	{
         $event_home = ScmEventService::get_event($event_id)->get_event_type() == ScmEvent::PRACTICE ? '/practice/' : '/informations/';
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . $event_home);
 	}
 
     // Groups
-	public static function display_groups_rounds($event_id, $event_slug, $group = 1)
+	public static function display_groups_rounds($event_id, $event_slug, $group = 1): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/group/' . $group . '/');
 	}
 
     // Brackets
-	public static function display_brackets_rounds($event_id, $event_slug)
+	public static function display_brackets_rounds($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/bracket/');
 	}
 
     // Practice
-	public static function display_practice($event_id, $event_slug)
+	public static function display_practice($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/practice/');
 	}
 
     // Days ranking
-	public static function display_days_ranking($event_id, $event_slug, $section = '', $cluster = '')
+	public static function display_days_ranking($event_id, $event_slug, $section = '', $cluster = ''): Url
 	{
         $section = !empty($section) ? '/' . $section . '/' : '';
         $cluster = !empty($cluster) ? '/' . $cluster : '';
@@ -159,50 +159,50 @@ class ScmUrlBuilder
 	}
 
     // Days calendar
-	public static function display_day_calendar($event_id, $event_slug, $cluster = '')
+	public static function display_day_calendar($event_id, $event_slug, $cluster = ''): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/matchday/' . $cluster . '/');
 	}
 
     // Days calendar full
-	public static function display_days_calendar($event_id, $event_slug)
+	public static function display_days_calendar($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/full/');
 	}
 
     // Days checker
-	public static function days_checker($event_id, $event_slug)
+	public static function days_checker($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/checker/');
 	}
 
     // Delayed games in an event
-	public static function days_delayed($event_id, $event_slug)
+	public static function days_delayed($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/delayed/');
 	}
 
     // All delayed games
-	public static function late_games()
+	public static function late_games(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/delayed/');
 	}
 
     // Team calendar
-	public static function display_team_calendar($event_id, $event_slug, $team_id)
+	public static function display_team_calendar($event_id, $event_slug, $team_id): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/calendar/team/' . $team_id);
 	}
 
 ################################ Setup
     // Teams
-	public static function edit_teams($event_id, $event_slug)
+	public static function edit_teams($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/teams/');
 	}
 
     // Params
-	public static function edit_params($event_id, $event_slug)
+	public static function edit_params($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/params/');
 	}
@@ -210,86 +210,91 @@ class ScmUrlBuilder
 ################################ Edit
     // Days
     // Edit days and build days games list
-	public static function edit_days($event_id, $event_slug)
+	public static function edit_days($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/builder/matchdays/');
 	}
     // Edit days games
-	public static function edit_days_games($event_id, $event_slug, $cluster = 1)
+	public static function edit_days_games($event_id, $event_slug, $cluster = 1): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/matchdays/' . $cluster . '/');
 	}
 
     // Groups
     // Edit groups and build group games list
-	public static function edit_groups($event_id, $event_slug)
+	public static function edit_groups($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/builder/groups/');
 	}
 
     // Edit groups games
-	public static function edit_groups_games($event_id, $event_slug, $cluster = 1)
+	public static function edit_groups_games($event_id, $event_slug, $cluster = 1): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/groups/' . $cluster . '/');
 	}
 
     // Bracket
     // Edit bracket and build bracket games list
-	public static function edit_brackets($event_id, $event_slug)
+	public static function edit_brackets($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/builder/brackets/');
 	}
     // Edit bracket games
-	public static function edit_brackets_games($event_id, $event_slug, $cluster = 1)
+	public static function edit_brackets_games($event_id, $event_slug, $cluster = 1): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/brackets/' . $cluster . '/');
 	}
 
     // Bracket
     // Edit bracket and build bracket games list
-	public static function edit_practice($event_id, $event_slug)
+	public static function edit_practice($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/builder/practice/');
 	}
     // Edit bracket games
-	public static function edit_practice_games($event_id, $event_slug)
+	public static function edit_practice_games($event_id, $event_slug): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/edit/practice/');
 	}
 
     // Edit details games
-	public static function edit_details_game($event_id, $event_slug, $type, $cluster, $round, $order)
+	public static function edit_details_game($event_id, $event_slug, $type, $cluster, $round, $order): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/' . $event_id . '-' . $event_slug . '/details/' . $type . '/' . $cluster . '/' . $round . '/' . $order);
 	}
 
 ################################ Main Controllers
-	public static function dead_link($id)
+	public static function dead_link($id): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/dead_link/' . $id);
 	}
 
-	public static function display_event_list()
+	public static function display_event_list(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/event_list/');
 	}
 
-	public static function display_game_list()
+	public static function display_game_list(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/game_list/');
 	}
 
-	public static function ajax_scores()
+	public static function ajax_game_format(): Url
 	{
-		return DispatchManager::get_url(self::$dispatcher, '/ajax_scores/');
+		return DispatchManager::get_url(self::$dispatcher, '/ajax_game_format/');
 	}
 
-	public static function ajax_cluster()
+	public static function ajax_cluster(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/ajax_cluster/');
 	}
 
-	public static function home()
+	public static function ajax_round_rankings(): Url
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/ajax_round_rankings/');
+	}
+
+	public static function home(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/');
 	}

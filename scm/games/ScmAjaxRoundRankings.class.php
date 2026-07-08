@@ -7,7 +7,7 @@
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
-class ScmAjaxGameFormat extends AbstractController
+class ScmAjaxRoundRankings extends AbstractController
 {
 	public function execute(HTTPRequestCustom $request)
 	{
@@ -15,18 +15,19 @@ class ScmAjaxGameFormat extends AbstractController
         $event_id = $request->get_postint('event_id', 0);
         $result = PersistenceContext::get_querier()->select('
             SELECT *
-            FROM  ' . ScmSetup::$scm_game_table . '
-            WHERE game_event_id = ' . $event_id
+            FROM  ' . ScmSetup::$scm_ranking_table . '
+            WHERE ranking_event_id = ' . $event_id
         );
         $response = [];
 
         while ($row = $result->fetch()) {
-            $response[] = [
-                'game_id' => $row['game_type'] . $row['game_cluster'] . $row['game_round'] . $row['game_order'],
-                'game_cluster' => $row['game_cluster'],
-                'home_score' => $row['game_home_score'],
-                'away_score' => $row['game_away_score'],
-                'date' => $row['game_date'],
+            $response[] = [ 
+                'row' => $row['content']
+                // 'game_id' => $row['game_type'] . $row['game_cluster'] . $row['game_round'] . $row['game_order'],
+                // 'game_cluster' => $row['game_cluster'],
+                // 'home_score' => $row['game_home_score'],
+                // 'away_score' => $row['game_away_score'],
+                // 'date' => $row['game_date'],
             ];
         }
 

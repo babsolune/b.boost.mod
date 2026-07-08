@@ -21,8 +21,9 @@ if ($config->is_right_column_disabled())
 
 $url_controller_mappers = [
     // Ajax
-	new UrlControllerMapper('ScmAjaxGameFormat', '`^/ajax_scores/?$`'),
+	new UrlControllerMapper('ScmAjaxGameFormat', '`^/ajax_game_format/?$`'),
 	new UrlControllerMapper('ScmAjaxGamesCluster', '`^/ajax_cluster/?$`'),
+	new UrlControllerMapper('ScmAjaxRoundRankings', '`^/ajax_round_rankings/?$`'),
 	// Administration
 	new UrlControllerMapper('AdminScmConfigController', '`^/admin(?:/config)?/?$`'),
 	new UrlControllerMapper('ScmDelayedGamesController', '`^/delayed/?$`'),

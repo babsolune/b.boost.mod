@@ -674,8 +674,6 @@ class ScmGame
 
     private function stadium_map()
     {
-        if (empty($this->game_home_id))
-            return;
         $team = ScmTeamService::get_team($this->game_home_id);
         $club = ScmClubCache::load()->get_club($team->get_team_club_id());
         $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];

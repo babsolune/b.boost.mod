@@ -226,12 +226,10 @@
                                                         <span>
                                                             # IF C_ONE_DAY #
                                                                 {rounds.games.GAME_DATE_A_HOUR_MINUTE} - {rounds.games.GAME_DATE_B_HOUR_MINUTE}
+                                                            # ELSEIF rounds.C_FINAL #
+                                                                {rounds.games.GAME_DATE_SHORT}
                                                             # ELSE #
-                                                                # IF rounds.C_FINAL #
-                                                                    {rounds.games.GAME_DATE_SHORT}
-                                                                # ELSE #
-                                                                    {rounds.games.GAME_DATE_A_DAY_MONTH} - {rounds.games.GAME_DATE_B_DAY_MONTH}
-                                                                # ENDIF #
+                                                                {rounds.games.GAME_DATE_A_DAY_MONTH} - {rounds.games.GAME_DATE_B_DAY_MONTH}
                                                             # ENDIF #
                                                         </span>
                                                     </div>

@@ -4,7 +4,7 @@
         function refresh_scores()
         {
             jQuery.ajax({
-                url: '${relative_url(ScmUrlBuilder::ajax_scores())}',
+                url: '${relative_url(ScmUrlBuilder::ajax_game_format())}',
                 type: "post",
                 dataType: "json",
                 data: {

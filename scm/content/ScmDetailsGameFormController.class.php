@@ -82,10 +82,10 @@ class ScmDetailsGameFormController extends DefaultModuleController
                     ['class' => 'portable-full']
                 ));
                 $fieldset->add_field(new FormFieldNumberEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
-                    ['class' => 'home-details portable-half', 'pattern' => '[0-9]*']
+                    ['class' => 'home-details portable-half', 'pattern' => '[0-9]*', 'min' => 0]
                 ));
                 $fieldset->add_field(new FormFieldNumberEditor('away_pen', '', $this->get_game()->get_game_away_pen(),
-                    ['class' => 'away-details portable-half', 'pattern' => '[0-9]*']
+                    ['class' => 'away-details portable-half', 'pattern' => '[0-9]*', 'min' => 0]
                 ));
             }
         }
@@ -94,10 +94,10 @@ class ScmDetailsGameFormController extends DefaultModuleController
                 ['class' => 'portable-full']
             ));
             $fieldset->add_field(new FormFieldNumberEditor('home_pen', '', $this->get_game()->get_game_home_pen(),
-                ['class' => 'home-details portable-half', 'pattern' => '[0-9]*']
+                ['class' => 'home-details portable-half', 'pattern' => '[0-9]*', 'min' => 0]
             ));
             $fieldset->add_field(new FormFieldNumberEditor('away_pen', '', $this->get_game()->get_game_away_pen(),
-                ['class' => 'away-details portable-half', 'pattern' => '[0-9]*']
+                ['class' => 'away-details portable-half', 'pattern' => '[0-9]*', 'min' => 0]
             ));
         }
 

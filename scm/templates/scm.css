@@ -856,3 +856,14 @@ summary {
 .cell-icon {
     max-height: 19px;
 }
+
+.bracket-previous-games > * {
+    margin: 0 0.618em;
+}
+
+.left-middle-fixed {
+    position: fixed;
+    top: 50%;
+    left: 0.618em;
+    transform: translate(50%, 50%);
+}
