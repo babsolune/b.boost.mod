@@ -30,13 +30,13 @@ class ScmEventsManagerController extends DefaultModuleController
 		$columns = [
 			new HTMLTableColumn($this->lang['category.category'], 'id_category'),
 			new HTMLTableColumn($this->lang['scm.season'], 'season_name'),
-			new HTMLTableColumn($this->lang['item'], 'division_name'),
+			new HTMLTableColumn(TextHelper::ucfirst($this->lang['item']), 'division_name'),
 			new HTMLTableColumn($this->lang['scm.event.master'], 'master_id'),
 			new HTMLTableColumn($this->lang['scm.pool'], 'pool'),
 			new HTMLTableColumn($this->lang['scm.event.type'], 'event_type'),
 			new HTMLTableColumn($this->lang['scm.game.type'], 'game_type'),
 			new HTMLTableColumn($this->lang['common.status'], 'published'),
-			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add()->rel() . '" aria-label="' . $this->lang['scm.add.event'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
+			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add()->rel() . '" aria-label="' . $this->lang['scm.add.event'] . '"><i class="far fa-2x fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
         ];
 
 		if (!$display_categories)

@@ -27,7 +27,7 @@ class ScmDivisionsManagerController extends DefaultModuleController
 	{
 		$columns = [
 			new HTMLTableColumn($this->lang['common.name'], 'division_name'),
-			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_division()->rel() . '" aria-label="' . $this->lang['scm.add.division'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
+			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_division()->rel() . '" aria-label="' . $this->lang['scm.add.division'] . '"><i class="far fa-2x fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
         ];
 
 		$table_model = new SQLHTMLTableModel(ScmSetup::$scm_division_table, 'divisions-manager', $columns, new HTMLTableSortingRule('division_name', HTMLTableSortingRule::ASC));
