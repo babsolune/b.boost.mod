@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "España",
+        "code": "es",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

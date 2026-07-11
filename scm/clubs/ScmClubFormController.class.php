@@ -3,7 +3,7 @@
  * @copyright   &copy; 2005-2026 PHPBoost
  * @license     https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL-3.0
  * @author      Sebastien LARTIGUE <babsolune@phpboost.com>
- * @version     PHPBoost 6.1 - last update: 2024 06 12
+ * @version     PHPBoost 6.1 - last update: 2026 07 11
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
@@ -39,6 +39,8 @@ class ScmClubFormController extends DefaultModuleController
 
 		$fieldset = new FormFieldsetHTML('scm', $this->lang['form.parameters']);
 		$form->add_fieldset($fieldset);
+
+        $fieldset->add_field(new ScmFormFieldDistrictSelect('club_district', 'District', $this->get_club()->get_club_district(), $this->get_countries_list()));
 
         $fieldset->add_field(new FormFieldTextEditor('name', $this->lang['scm.club.name'], $this->get_club()->get_club_name(),
             ['required' => true],
@@ -130,10 +132,47 @@ class ScmClubFormController extends DefaultModuleController
 		$this->form = $form;
 	}
 
+    private function get_countries_list()
+    {
+        $options = [new FormFieldSelectChoiceOption('Sélectionnez un pays', 'none')];
+
+        $leagues_dir = ModulesManager::get_module_path('scm/data/leagues/');
+        $json_files = glob($leagues_dir . '*.json');
+
+        usort($json_files, function($fileA, $fileB) {
+            $dataA = json_decode(file_get_contents($fileA), true);
+            $dataB = json_decode(file_get_contents($fileB), true);
+            $codeA = LangLoader::get_message($dataA['country']['code'], 'countries');
+            $codeB = LangLoader::get_message($dataB['country']['code'], 'countries');
+            return strcmp($codeA, $codeB);
+        });
+
+        foreach ($json_files as $file) {
+            if ($this->is_new_club)
+                $data_file = '../' . $file;
+            else
+                $data_file = '../../' . $file;
+            $json = file_get_contents($file);
+            $data = json_decode($json, true);
+            if (isset($data['country']['code'])) {
+                $options[] = new ScmFormFieldDistrictOption(LangLoader::get_message($data['country']['code'], 'countries'), $data['country']['code'],
+                    [
+                        'data_attribute_name' => 'file',
+                        'data_attribute_value' => $data_file
+                    ]
+                );
+            }
+        }
+
+        return $options;
+    }
+
 	private function save()
 	{
 		$club = $this->get_club();
 
+        // Debug::stop(AppContext::get_request());
+        $club->set_club_district($this->form->get_value('club_district'));
         $club->set_club_name($this->form->get_value('name'));
         $club->set_club_sub($this->form->get_value('affiliate'));
 

@@ -139,6 +139,7 @@ class ScmSetup extends DefaultModuleSetup
 			'club_phone'     => ['type' => 'string', 'length' => 25, 'default' => "''"],
 			'club_colors'    => ['type' => 'text', 'length' => 65000],
 			'club_locations' => ['type' => 'text', 'length' => 65000],
+			'club_district'  => ['type' => 'text', 'length' => 65000],
         ];
 		$options = [
 			'primary' => ['id_club'],

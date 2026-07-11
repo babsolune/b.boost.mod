@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Nederland",
+        "code": "nl",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

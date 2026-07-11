@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Italia",
+        "code": "it",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Türkiye",
+        "code": "tr",
+        "href": "thefa.com"
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

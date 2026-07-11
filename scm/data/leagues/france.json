@@ -1,0 +1,445 @@
+{
+    "country": {
+        "name": "France",
+        "code": "fr",
+        "href": "fff.fr"
+    },
+    "leagues": [
+        {
+            "league": "Auvergne-Rhône-Alpes",
+            "lref": "laurafoot",
+            "districts": [
+                {
+                    "dref": "ain",
+                    "district": "District de l'Ain"
+                },
+                {
+                    "dref": "allier",
+                    "district": "District de l'Allier"
+                },
+                {
+                    "dref": "footcantal",
+                    "district": "District du Cantal"
+                },
+                {
+                    "dref": "isere",
+                    "district": "District de l'Isère"
+                },
+                {
+                    "dref": "drome-ardeche",
+                    "district": "District Drôme-Ardèche"
+                },
+                {
+                    "dref": "loire",
+                    "district": "District de la Loire"
+                },
+                {
+                    "dref": "haute-loire",
+                    "district": "District de Haute-Loire"
+                },
+                {
+                    "dref": "lyon-rhone",
+                    "district": "District de Lyon et du Rhône"
+                },
+                {
+                    "dref": "foot63",
+                    "district": "District du Puy-de-Dôme"
+                },
+                {
+                    "dref": "savoie",
+                    "district": "District de Savoie"
+                },
+                {
+                    "dref": "hautesavoie-paysdegex",
+                    "district": "District de Haute-Savoie-Pays de Gex"
+                }
+            ]
+        },
+        {
+            "league": "Bourgogne-Franche-Comté",
+            "lref": "lbfc",
+            "districts": [
+                {
+                    "dref": "cote-dor",
+                    "district": "District de la Côte-d'Or"
+                },
+                {
+                    "dref": "doubs-territoire-de-belfort",
+                    "district": "District Doubs-Territoire de Belfort"
+                },
+                {
+                    "dref": "jura",
+                    "district": "District du Jura"
+                },
+                {
+                    "dref": "nievre",
+                    "district": "District de la Nièvre"
+                },
+                {
+                    "dref": "district71",
+                    "district": "District de Saône-et-Loire"
+                },
+                {
+                    "dref": "haute-saone",
+                    "district": "District de la Haute-Saône"
+                },
+                {
+                    "dref": "yonne",
+                    "district": "District de l'Yonne"
+                }
+            ]
+        },
+        {
+            "league": "Bretagne",
+            "lref": "footbretagne",
+            "districts": [
+                {
+                    "dref": "foot22",
+                    "district": "District des Côtes-d'Armor"
+                },
+                {
+                    "dref": "foot29",
+                    "district": "District du Finistère"
+                },
+                {
+                    "dref": "foot35",
+                    "district": "District de l'Ille-et-Vilaine"
+                },
+                {
+                    "dref": "foot56",
+                    "district": "District du Morbihan"
+                }
+            ]
+        },
+        {
+            "league": "Centre-Val de Loire",
+            "lref": "foot-centre",
+            "districts": [
+                {
+                    "dref": "cher",
+                    "district": "District du Cher"
+                },
+                {
+                    "dref": "eure-et-loir",
+                    "district": "District d'Eure-et-Loir"
+                },
+                {
+                    "dref": "indre",
+                    "district": "District de l'Indre"
+                },
+                {
+                    "dref": "indre-et-loire",
+                    "district": "District d'Indre-et-Loire"
+                },
+                {
+                    "dref": "loir-et-cher",
+                    "district": "District du Loir-et-Cher"
+                },
+                {
+                    "dref": "foot-loiret",
+                    "district": "District du Loiret"
+                }
+            ]
+        },
+        {
+            "league": "Grand-Est",
+            "lref": "lgef",
+            "districts": [
+                {
+                    "dref": "districtfoot08",
+                    "district": "District des Ardennes"
+                },
+                {
+                    "dref": "alsace",
+                    "district": "District d'Alsace"
+                },
+                {
+                    "dref": "district-aube",
+                    "district": "District de l'Aube"
+                },
+                {
+                    "dref": "marne",
+                    "district": "District de la Marne"
+                },
+                {
+                    "dref": "hautemarne",
+                    "district": "District de la Haute-Marne"
+                },
+                {
+                    "dref": "meurtheetmoselle",
+                    "district": "District de Meurthe-et-Moselle"
+                },
+                {
+                    "dref": "meuse",
+                    "district": "District de la Meuse"
+                },
+                {
+                    "dref": "moselle",
+                    "district": "District Mosellan"
+                },
+                {
+                    "dref": "vosges",
+                    "district": "District des Vosges"
+                }
+            ]
+        },
+        {
+            "league": "Hauts-de-France",
+            "lref": "lfhf",
+            "districts": [
+                {
+                    "dref": "aisne",
+                    "district": "District de l'Aisne"
+                },
+                {
+                    "dref": "artois",
+                    "district": "District de l'Artois"
+                },
+                {
+                    "dref": "cote-dopale",
+                    "district": "District de la Côte d'Opale"
+                },
+                {
+                    "dref": "escaut",
+                    "district": "District de l'Escaut"
+                },
+                {
+                    "dref": "flandre",
+                    "district": "District des Flandres"
+                },
+                {
+                    "dref": "oise",
+                    "district": "District de l'Oise"
+                },
+                {
+                    "dref": "distrctsommefootball",
+                    "district": "District de la Somme"
+                }
+            ]
+        },
+        {
+            "league": "Méditerranée",
+            "lref": "mediterranee",
+            "districts": [
+                {
+                    "dref": "alpes",
+                    "district": "District des Alpes"
+                },
+                {
+                    "dref": "cotedazur",
+                    "district": "District de Côte d'Azur"
+                },
+                {
+                    "dref": "provence",
+                    "district": "District de Provence"
+                },
+                {
+                    "dref": "grandvaucluse",
+                    "district": "District de Grand-Vaucluse"
+                },
+                {
+                    "dref": "var",
+                    "district": "District du Var"
+                }
+            ]
+        },
+        {
+            "league": "Normandie",
+            "lref": "normandie",
+            "districts": [
+                {
+                    "dref": "foot14",
+                    "district": "District du Calvados"
+                },
+                {
+                    "dref": "eure",
+                    "district": "District de l'Eure"
+                },
+                {
+                    "dref": "manche",
+                    "district": "District de la Manche"
+                },
+                {
+                    "dref": "footorne",
+                    "district": "District de l'Orne"
+                },
+                {
+                    "dref": "dfsm",
+                    "district": "District de la Seine-Maritime"
+                }
+            ]
+        },
+        {
+            "league": "Nouvelle Aquitaine",
+            "lref": "lfna",
+            "districts": [
+                {
+                    "dref": "foot16",
+                    "district": "District de Charente"
+                },
+                {
+                    "dref": "foot17",
+                    "district": "District de Charente-Maritime"
+                },
+                {
+                    "dref": "foot19",
+                    "district": "District de Corrèze"
+                },
+                {
+                    "dref": "foot23",
+                    "district": "District de la Creuse"
+                },
+                {
+                    "dref": "foot79",
+                    "district": "District des Deux-Sèvres"
+                },
+                {
+                    "dref": "dordogne-perigord",
+                    "district": "District de Dordogne-Périgord"
+                },
+                {
+                    "dref": "gironde",
+                    "district": "District de Gironde"
+                },
+                {
+                    "dref": "landes",
+                    "district": "District des Landes"
+                },
+                {
+                    "dref": "lot-et-garonne",
+                    "district": "District du Lot-et-Garonne"
+                },
+                {
+                    "dref": "footpyr64",
+                    "district": "District des Pyrénées-Atlantiques"
+                },
+                {
+                    "dref": "foot86",
+                    "district": "District de la Vienne"
+                },
+                {
+                    "dref": "foot87",
+                    "district": "District de la Haute-Vienne"
+                }
+            ]
+        },
+        {
+            "league": "Occitanie",
+            "lref": "occitanie",
+            "districts": [
+                {
+                    "dref": "ariegefoot",
+                    "district": "District de l'Ariège"
+                },
+                {
+                    "dref": "aude",
+                    "district": "District de l'Aude"
+                },
+                {
+                    "dref": "aveyron",
+                    "district": "District de l'Aveyron"
+                },
+                {
+                    "dref": "gard-lozere",
+                    "district": "District Gard-Lozère"
+                },
+                {
+                    "dref": "haute-garonne",
+                    "district": "District de Haute-Garonne"
+                },
+                {
+                    "dref": "districtfootgers",
+                    "district": "District du Gers"
+                },
+                {
+                    "dref": "herault",
+                    "district": "District de l'Hérault"
+                },
+                {
+                    "dref": "district-foot-lot",
+                    "district": "District du Lot"
+                },
+                {
+                    "dref": "pyrenees-orientales",
+                    "district": "District des Pyrénées-Orientales"
+                },
+                {
+                    "dref": "district-foot-65",
+                    "district": "District des Hautes-Pyrénées"
+                },
+                {
+                    "dref": "foottarn",
+                    "district": "District du Tarn"
+                },
+                {
+                    "dref": "foot82",
+                    "district": "District du Tarn-et-Garonne"
+                }
+            ]
+        },
+        {
+            "league": "Paris Île-de-France",
+            "lref": "paris-idf",
+            "districts": [
+                {
+                    "dref": "essonne",
+                    "district": "District de l'Essonne"
+                },
+                {
+                    "dref": "",
+                    "district": "District des Hauts-de-Seine"
+                },
+                {
+                    "dref": "district75foot",
+                    "district": "District de Paris"
+                },
+                {
+                    "dref": "seineetmarne",
+                    "district": "District de Seine-et-Marne"
+                },
+                {
+                    "dref": "district93foot",
+                    "district": "District de Seine-Saint-Denis"
+                },
+                {
+                    "dref": "districtvaldemarne",
+                    "district": "District du Val-de-Marne"
+                },
+                {
+                    "dref": "district-foot95",
+                    "district": "District du Val-d'Oise"
+                },
+                {
+                    "dref": "dyf78",
+                    "district": "District des Yvelines"
+                }
+            ]
+        },
+        {
+            "league": "Pays de la Loire",
+            "lref": "lfpl",
+            "districts": [
+                {
+                    "dref": "foot44",
+                    "district": "District de Loire-Atlantique"
+                },
+                {
+                    "dref": "foot49",
+                    "district": "District de Maine-et-Loire"
+                },
+                {
+                    "dref": "mayenne",
+                    "district": "District de Mayenne"
+                },
+                {
+                    "dref": "sarthe",
+                    "district": "District de la Sarthe"
+                },
+                {
+                    "dref": "districtfoot85",
+                    "district": "District de Vendée"
+                }
+            ]
+        }
+    ]
+}

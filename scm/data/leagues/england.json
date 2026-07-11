@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "England",
+        "code": "fe",
+        "href": "thefa.com"
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

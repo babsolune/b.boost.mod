@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Portugal",
+        "code": "pt",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

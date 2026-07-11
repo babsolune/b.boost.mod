@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Belgique",
+        "code": "be",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

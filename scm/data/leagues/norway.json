@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Norge",
+        "code": "no",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

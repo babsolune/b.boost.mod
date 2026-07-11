@@ -23,8 +23,9 @@ class ScmClub
 	private $club_phone;
 	private $club_colors;
 	private $club_locations;
+	private $club_district;
 
-	const CLUB_LOGO = '/scm/templates/images/badges/club.webp';
+	const CLUB_LOGO = '/modules/scm/templates/images/badges/club.webp';
 
 	public function get_id_club()
 	{
@@ -149,11 +150,6 @@ class ScmClub
 		$this->club_phone = $club_phone;
 	}
 
-	public function add_club_color($club_color)
-	{
-		$this->club_colors[] = $club_color;
-	}
-
 	public function set_club_colors($club_colors)
 	{
 		$this->club_colors = $club_colors;
@@ -172,6 +168,16 @@ class ScmClub
 	public function set_club_locations($club_locations)
 	{
 		$this->club_locations = $club_locations;
+	}
+
+	public function get_club_district()
+	{
+		return $this->club_district;
+	}
+
+	public function set_club_district($club_district)
+	{
+		$this->club_district = $club_district;
 	}
 
 	public function is_authorized_to_manage()
@@ -196,6 +202,7 @@ class ScmClub
 			'club_email'     => $this->club_email,
 			'club_phone'     => $this->club_phone,
 			'club_locations' => $this->club_locations,
+			'club_district'  => TextHelper::serialize($this->club_district),
 			'club_colors'    => TextHelper::serialize($this->club_colors)
         ];
 	}
@@ -212,16 +219,18 @@ class ScmClub
 		$this->club_full_name = $this->club_sub ? $real_club['club_full_name'] : $properties['club_full_name'];
 		$this->club_flag      = $properties['club_flag'];
 		$this->club_logo      = $properties['club_logo'];
-		$this->club_website   = $this->club_website ? new Url($properties['club_website']) : new Url();
+		$this->club_website   = new Url($properties['club_website']);
 		$this->club_email     = $properties['club_email'];
 		$this->club_phone     = $properties['club_phone'];
 		$this->club_locations = $properties['club_locations'];
+		$this->club_district  = !empty($properties['club_district']) ? TextHelper::unserialize($properties['club_district']) : [];
         $this->club_colors    = !empty($properties['club_colors']) ? TextHelper::unserialize($properties['club_colors']) : [];
     }
 
 	public function init_default_properties()
 	{
 		$this->club_locations = [];
+		$this->club_district  = [];
 		$this->club_colors    = [];
 		$this->club_website   = new Url('');
 	}
@@ -231,7 +240,7 @@ class ScmClub
 		return ScmUrlBuilder::display_club($this->id_club, $this->club_slug)->rel();
 	}
 
-	public function get_template_vars() : array
+	public function get_template_vars(): array
 	{
         $club_locations_value = TextHelper::deserialize($this->get_club_locations());
         $club_locations = '';
@@ -246,6 +255,8 @@ class ScmClub
 			$map = new GoogleMapsDisplayMap($this->get_club_locations(), 'club_locations', $this->get_club_name());
 			$club_locations_map = $map->display();
 		}
+
+        $club_district = [];
 
 		return [
             // Conditions

@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Österreich",
+        "code": "at",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

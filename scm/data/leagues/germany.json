@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Deutschland",
+        "code": "de",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}
