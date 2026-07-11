@@ -1,12 +1,11 @@
 # name|slug|c_order|special_auth|auth|id_parent|description|thumbnail
 Test|test|1|0||0||default
 Séniors|seniors|2|0||0||default
-U21|u21|3|0||0||default
-U19|u19|4|0||0||default
-U17|u17|5|0||0||default
-U15|u15|6|0||0||default
-U13|u13|7|0||0||default
-U11|u11|8|0||0||default
-U09|u09|9|0||0||default
-International|international|10|0||0||default
-National|national|11|0||0||default
+U17|u17|3|0||0||default
+U15|u15|4|0||0||default
+U13|u13|5|0||0||default
+U11|u11|6|0||0||default
+U09|u09|7|0||0||default
+U07|u07|8|0||0||default
+International|international|9|0||0||default
+National|national|10|0||0||default
