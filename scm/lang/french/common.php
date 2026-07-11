@@ -166,6 +166,7 @@ $lang['scm.bracket.from.groups'] = 'des groupes';
 $lang['scm.bracket.hour.tag']    = 'H';
 
 // Tables
+$lang['scm.caption.group.full.ranking'] = 'Classement général inter-groupes';
 $lang['scm.th.playground'] = 'Terrain';
 $lang['scm.th.date']       = 'Date';
 $lang['scm.th.hourly']     = 'Horaire';
