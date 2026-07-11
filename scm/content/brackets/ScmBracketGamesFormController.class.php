@@ -78,7 +78,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
             . '<div class="align-center smaller">' . $this->lang['scm.games.brackets.stage'] . ' - ' . $round_name . '</div>'
         );
 
-        // Load matches and scores from previous round for each raw
+        // Load matches and scores from previous round for each round exept first round
         if ($cluster != $rounds_number)
         {
             $fieldset = new FormFieldsetHTML('ajax_games', '');
@@ -98,10 +98,18 @@ class ScmBracketGamesFormController extends DefaultModuleController
                         },
                         success: function(returnData) {
                             var target = jQuery("#' . self::class . '_ajax_games .form-spacer");
+                            var c_looser_bracket = ' . $this->get_params()->get_looser_bracket() . ';
                             let groupIndex = 0;
                             let groupDiv = null;
                             jQuery.each(returnData, function(index, game) {
-                                if (index % 2 === 0) {
+                                if (c_looser_bracket)
+                                {
+                                    groupIndex++;
+                                    groupDiv = jQuery("#' . self::class . '_game_number_' . $cluster . '" + game.game_round + "' . $cluster . '" + "_field .form-field-free-large");
+                                    
+                                    jQuery("<div>", {class : "bracket-previous-games"}).appendTo(groupDiv);
+                                }
+                                else if (index % 2 === 0) {
                                     groupIndex++;
                                     groupDiv = jQuery("#' . self::class . '_game_number_' . $cluster . '" + game.game_round + groupIndex + "_field .form-field-free-large");
                                     jQuery("<div>", {class : "bracket-previous-games"}).appendTo(groupDiv);
@@ -127,6 +135,18 @@ class ScmBracketGamesFormController extends DefaultModuleController
                                     )
                                 );
                             });
+                            jQuery(".bracket-previous-games > *").each(function() {
+                            console.log("child");
+                                if (jQuery(this).html().trim() === "") {
+                                    jQuery(this).remove();
+                                }
+                            });
+                            jQuery(".bracket-previous-games").each(function(div) {
+                            console.log("parent");
+                                if (jQuery(this).html().trim() === "") {
+                                    jQuery(this).remove();
+                                }
+                            });
                         },
                         error: function(e) {
                             jQuery("body").css("background", "red");
@@ -150,6 +170,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 </script>
             '));
         }
+        // Load rankings of all groups if it's the first round
         elseif ($cluster == $rounds_number)
         {
             $fieldset = new FormFieldsetHTML('ajax_games', '');
@@ -159,11 +180,12 @@ class ScmBracketGamesFormController extends DefaultModuleController
                 <span id="rankings" class="modal-button --final-rankings left-middle-fixed" aria-label="' . $this->lang['scm.group.results'] . '">
                     <i class="fa fa-list-ol" aria-hidden="true"></i>
                 </span>
-                <div id="final-rankings" class="modal">
+                <div id="final-rankings" class="modal small">
                     <div class="modal-overlay close-modal" role="button" aria-label="' . $this->lang['common.close'] . '"></div>
                     <div class="modal-content">
                         <span class="error hide-modal close-modal close-bbcode-sub" aria-label="' . $this->lang['common.close'] . '"><i class="far fa-circle-xmark" aria-hidden="true"></i></span>
                         <div id="final-rankings-content" class="cell-flex cell-columns-4"></div>
+                        <div id="rest-best"></div>
                     </div>
                 </div>
                 <script>
@@ -172,7 +194,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
                         const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                         return alphabet[number - 1];
                     }
-                    $("#rankings").on("click", function(e) {
+                    jQuery("#rankings").on("click", function(e) {
                         e.preventDefault();
                         jQuery.ajax({
                             url: "' . ScmUrlBuilder::ajax_round_rankings()->rel() . '",
@@ -188,34 +210,27 @@ class ScmBracketGamesFormController extends DefaultModuleController
                             },
                             success: function(returnData) {
                                 var html = "";
+                                var allTeams = [];
                                 jQuery.each(returnData, function(index, game) {
                                     var rankingsData = typeof game.row === "string" ? JSON.parse(game.row) : game.row;
 
-                                    // Parcourir chaque cluster (ex: "1", "2", etc.)
+                                    // Browse each cluster
                                     jQuery.each(rankingsData, function(clusterKey, clusterRankings) {
-                                        // clusterRankings est un tableau de classements
                                         if (Array.isArray(clusterRankings) && clusterRankings.length > 0) {
-                                            // Ajouter un titre pour le cluster/groupe
                                             html += "<div class=\"cluster-group\">";
                                             html += "<h3 class=\"cluster-title\">Groupe " + groupName(clusterKey) + "</h3>";
                                             html += "<table class=\"rankings-table\">";
                                             html += "<thead>";
                                             html += "<tr>";
-                                            html += "<th>Rang</th>";
-                                            html += "<th>Équipe</th>";
-                                            html += "<th>Pts</th>";
-                                            // html += "<th>J</th>";
-                                            // html += "<th>G</th>";
-                                            // html += "<th>N</th>";
-                                            // html += "<th>P</th>";
-                                            // html += "<th>BP</th>";
-                                            // html += "<th>BC</th>";
-                                            html += "<th>Diff</th>";
+                                            html += "<th>' . $this->lang['scm.th.rank'] . '</th>";
+                                            html += "<th>' . $this->lang['scm.th.team'] . '</th>";
+                                            html += "<th>' . $this->lang['scm.th.points.short'] . '</th>";
+                                            html += "<th>' . $this->lang['scm.th.goal.average.short'] . '</th>";
                                             html += "</tr>";
                                             html += "</thead>";
                                             html += "<tbody>";
 
-                                            // Trier par rang
+                                            // sort by rank
                                             clusterRankings.sort(function(a, b) {
                                                 return a.rank - b.rank;
                                             });
@@ -223,16 +238,14 @@ class ScmBracketGamesFormController extends DefaultModuleController
                                             jQuery.each(clusterRankings, function(i, team) {
                                                 html += "<tr class=\"rank-" + team.rank + "\">";
                                                 html += "<td>" + team.rank + "</td>";
-                                                html += "<td>" + team.team_name + "</td>";
+                                                html += "<td class=\"align-left\">" + team.team_name + "</td>";
                                                 html += "<td><strong>" + team.points + "</strong></td>";
-                                                // html += "<td>" + team.played + "</td>";
-                                                // html += "<td>" + team.win + "</td>";
-                                                // html += "<td>" + team.draw + "</td>";
-                                                // html += "<td>" + team.loss + "</td>";
-                                                // html += "<td>" + team.goals_for + "</td>";
-                                                // html += "<td>" + team.goals_against + "</td>";
                                                 html += "<td aria-label=\"" + team.goals_for + "|" + team.goals_against + "\">" + team.goal_average + "</td>";
                                                 html += "</tr>";
+
+                                                var teamCopy = jQuery.extend({}, team);
+                                                teamCopy.group_name = groupName(clusterKey);
+                                                allTeams.push(teamCopy);
                                             });
 
                                             html += "</tbody>";
@@ -242,6 +255,53 @@ class ScmBracketGamesFormController extends DefaultModuleController
                                     });
                                 });
                                 jQuery("#final-rankings-content").append(html)
+
+                                if (allTeams.length > 0) {
+                                    allTeams.sort(function(a, b) {
+                                        if (a.rank !== b.rank) {
+                                            return a.rank - b.rank;
+                                        }
+                                        if (b.points !== a.points) {
+                                            return b.points - a.points;
+                                        }
+                                        if (b.goal_average !== a.goal_average) {
+                                            return b.goal_average - a.goal_average;
+                                        }
+                                        return b.goals_for - a.goals_for;
+                                    });
+
+                                    var globalHtml = "<div class=\"global-rankings\">";
+                                    globalHtml += "<h3 class=\"global-title\">' . $this->lang['scm.caption.group.full.ranking'] . '</h3>";
+                                    globalHtml += "<table class=\"rankings-table table-auto\">";
+                                    globalHtml += "<thead>";
+                                    globalHtml += "<tr>";
+                                    globalHtml += "<th>' . $this->lang['scm.th.rank'] . '</th>";
+                                    globalHtml += "<th>' . $this->lang['scm.th.rank'] . '<br />' . $this->lang['scm.th.group'] . '</th>";
+                                    globalHtml += "<th>' . $this->lang['scm.th.team'] . '</th>";
+                                    globalHtml += "<th>' . $this->lang['scm.th.points.short'] . '</th>";
+                                    globalHtml += "<th>' . $this->lang['scm.th.goal.average.short'] . ' (' . $this->lang['scm.th.goals.for.short'] . ')</th>";
+                                    globalHtml += "</tr>";
+                                    globalHtml += "</thead>";
+                                    globalHtml += "<tbody>";
+
+                                    jQuery.each(allTeams, function(index, team) {
+                                        var generalRank = index + 1; // Position globale
+                                        globalHtml += "<tr>";
+                                        globalHtml += "<td><strong>" + generalRank + "</strong></td>";
+                                        globalHtml += "<td>" + team.rank + team.group_name + "</td>";
+                                        globalHtml += "<td class=\"align-left\">" + team.team_name + "</td>";
+                                        globalHtml += "<td><strong>" + team.points + "</strong></td>";
+                                        globalHtml += "<td>" + team.goal_average + " (" + team.goals_for + ")</td>";
+                                        globalHtml += "</tr>";
+                                    });
+
+                                    globalHtml += "</tbody>";
+                                    globalHtml += "</table>";
+                                    globalHtml += "</div>";
+
+                                    // Insertion dans la div demandée
+                                    jQuery("#rest-best").html(globalHtml);
+                                }
                             },
                             error: function(e) {
                                 // jQuery("body").css("background", "error");
@@ -249,8 +309,8 @@ class ScmBracketGamesFormController extends DefaultModuleController
                         });
                     });
 
-                    // Delete data to prevent from load several times on each call
-                    $(document).on("click", ".close-modal", function(e) {
+                    // Delete the data when closing the window to avoid loading them several times with each call
+                    jQuery(document).on("click", ".close-modal", function(e) {
                         e.preventDefault();
                         jQuery("#final-rankings-content").empty();
                     });
