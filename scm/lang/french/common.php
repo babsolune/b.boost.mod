@@ -275,13 +275,14 @@ Toute suppression d\'une saison entraine la suppression des compétitions qui la
 ';
 
 // Teams
-$lang['scm.teams.management']  = 'Équipes de la compétition';
-$lang['scm.associate.clubs']   = 'Associer les clubs à cette compétition';
-$lang['scm.selected.teams']    = 'clubs sélectionnés';
-$lang['scm.teams']             = 'Équipes de la compétition';
-$lang['scm.team.results']      = 'Calendrier de l\'équipe';
-$lang['scm.clubs.list']        = 'Liste des clubs';
-$lang['scm.field']             = 'Terrain';
+$lang['scm.teams.management'] = 'Équipes de la compétition';
+$lang['scm.associate.clubs']  = 'Associer les clubs à cette compétition';
+$lang['scm.selected.team']    = 'club sélectionné';
+$lang['scm.selected.teams']   = 'clubs sélectionnés';
+$lang['scm.teams']            = 'Équipes de la compétition';
+$lang['scm.team.results']     = 'Calendrier de l\'équipe';
+$lang['scm.clubs.list']       = 'Liste des clubs';
+$lang['scm.field']            = 'Terrain';
 
 $lang['scm.warning.add.teams'] = ':teams_number équipes ont été ajoutées à la compétition <strong>:event_name</strong>.';
 $lang['scm.warning.add.teams.odd'] = '

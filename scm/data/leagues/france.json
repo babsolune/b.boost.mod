@@ -11,19 +11,19 @@
             "districts": [
                 {
                     "dref": "ain",
-                    "district": "District de l'Ain"
+                    "district": "l'Ain"
                 },
                 {
                     "dref": "allier",
-                    "district": "District de l'Allier"
+                    "district": "l'Allier"
                 },
                 {
                     "dref": "footcantal",
-                    "district": "District du Cantal"
+                    "district": "Cantal"
                 },
                 {
                     "dref": "isere",
-                    "district": "District de l'Isère"
+                    "district": "l'Isère"
                 },
                 {
                     "dref": "drome-ardeche",
@@ -31,27 +31,27 @@
                 },
                 {
                     "dref": "loire",
-                    "district": "District de la Loire"
+                    "district": "la Loire"
                 },
                 {
                     "dref": "haute-loire",
-                    "district": "District de Haute-Loire"
+                    "district": "Haute-Loire"
                 },
                 {
                     "dref": "lyon-rhone",
-                    "district": "District de Lyon et du Rhône"
+                    "district": "Lyon et du Rhône"
                 },
                 {
                     "dref": "foot63",
-                    "district": "District du Puy-de-Dôme"
+                    "district": "Puy-de-Dôme"
                 },
                 {
                     "dref": "savoie",
-                    "district": "District de Savoie"
+                    "district": "Savoie"
                 },
                 {
                     "dref": "hautesavoie-paysdegex",
-                    "district": "District de Haute-Savoie-Pays de Gex"
+                    "district": "Haute-Savoie-Pays de Gex"
                 }
             ]
         },
@@ -61,7 +61,7 @@
             "districts": [
                 {
                     "dref": "cote-dor",
-                    "district": "District de la Côte-d'Or"
+                    "district": "la Côte-d'Or"
                 },
                 {
                     "dref": "doubs-territoire-de-belfort",
@@ -69,23 +69,23 @@
                 },
                 {
                     "dref": "jura",
-                    "district": "District du Jura"
+                    "district": "Jura"
                 },
                 {
                     "dref": "nievre",
-                    "district": "District de la Nièvre"
+                    "district": "la Nièvre"
                 },
                 {
                     "dref": "district71",
-                    "district": "District de Saône-et-Loire"
+                    "district": "Saône-et-Loire"
                 },
                 {
                     "dref": "haute-saone",
-                    "district": "District de la Haute-Saône"
+                    "district": "la Haute-Saône"
                 },
                 {
                     "dref": "yonne",
-                    "district": "District de l'Yonne"
+                    "district": "l'Yonne"
                 }
             ]
         },
@@ -95,19 +95,19 @@
             "districts": [
                 {
                     "dref": "foot22",
-                    "district": "District des Côtes-d'Armor"
+                    "district": "Côtes-d'Armor"
                 },
                 {
                     "dref": "foot29",
-                    "district": "District du Finistère"
+                    "district": "Finistère"
                 },
                 {
                     "dref": "foot35",
-                    "district": "District de l'Ille-et-Vilaine"
+                    "district": "l'Ille-et-Vilaine"
                 },
                 {
                     "dref": "foot56",
-                    "district": "District du Morbihan"
+                    "district": "Morbihan"
                 }
             ]
         },
@@ -117,7 +117,7 @@
             "districts": [
                 {
                     "dref": "cher",
-                    "district": "District du Cher"
+                    "district": "Cher"
                 },
                 {
                     "dref": "eure-et-loir",
@@ -125,7 +125,7 @@
                 },
                 {
                     "dref": "indre",
-                    "district": "District de l'Indre"
+                    "district": "l'Indre"
                 },
                 {
                     "dref": "indre-et-loire",
@@ -133,11 +133,11 @@
                 },
                 {
                     "dref": "loir-et-cher",
-                    "district": "District du Loir-et-Cher"
+                    "district": "Loir-et-Cher"
                 },
                 {
                     "dref": "foot-loiret",
-                    "district": "District du Loiret"
+                    "district": "Loiret"
                 }
             ]
         },
@@ -147,7 +147,7 @@
             "districts": [
                 {
                     "dref": "districtfoot08",
-                    "district": "District des Ardennes"
+                    "district": "Ardennes"
                 },
                 {
                     "dref": "alsace",
@@ -155,23 +155,23 @@
                 },
                 {
                     "dref": "district-aube",
-                    "district": "District de l'Aube"
+                    "district": "l'Aube"
                 },
                 {
                     "dref": "marne",
-                    "district": "District de la Marne"
+                    "district": "la Marne"
                 },
                 {
                     "dref": "hautemarne",
-                    "district": "District de la Haute-Marne"
+                    "district": "la Haute-Marne"
                 },
                 {
                     "dref": "meurtheetmoselle",
-                    "district": "District de Meurthe-et-Moselle"
+                    "district": "Meurthe-et-Moselle"
                 },
                 {
                     "dref": "meuse",
-                    "district": "District de la Meuse"
+                    "district": "la Meuse"
                 },
                 {
                     "dref": "moselle",
@@ -179,7 +179,7 @@
                 },
                 {
                     "dref": "vosges",
-                    "district": "District des Vosges"
+                    "district": "Vosges"
                 }
             ]
         },
@@ -189,31 +189,31 @@
             "districts": [
                 {
                     "dref": "aisne",
-                    "district": "District de l'Aisne"
+                    "district": "l'Aisne"
                 },
                 {
                     "dref": "artois",
-                    "district": "District de l'Artois"
+                    "district": "l'Artois"
                 },
                 {
                     "dref": "cote-dopale",
-                    "district": "District de la Côte d'Opale"
+                    "district": "la Côte d'Opale"
                 },
                 {
                     "dref": "escaut",
-                    "district": "District de l'Escaut"
+                    "district": "l'Escaut"
                 },
                 {
                     "dref": "flandre",
-                    "district": "District des Flandres"
+                    "district": "Flandres"
                 },
                 {
                     "dref": "oise",
-                    "district": "District de l'Oise"
+                    "district": "l'Oise"
                 },
                 {
                     "dref": "distrctsommefootball",
-                    "district": "District de la Somme"
+                    "district": "la Somme"
                 }
             ]
         },
@@ -223,23 +223,23 @@
             "districts": [
                 {
                     "dref": "alpes",
-                    "district": "District des Alpes"
+                    "district": "Alpes"
                 },
                 {
                     "dref": "cotedazur",
-                    "district": "District de Côte d'Azur"
+                    "district": "Côte d'Azur"
                 },
                 {
                     "dref": "provence",
-                    "district": "District de Provence"
+                    "district": "Provence"
                 },
                 {
                     "dref": "grandvaucluse",
-                    "district": "District de Grand-Vaucluse"
+                    "district": "Grand-Vaucluse"
                 },
                 {
                     "dref": "var",
-                    "district": "District du Var"
+                    "district": "Var"
                 }
             ]
         },
@@ -249,23 +249,23 @@
             "districts": [
                 {
                     "dref": "foot14",
-                    "district": "District du Calvados"
+                    "district": "Calvados"
                 },
                 {
                     "dref": "eure",
-                    "district": "District de l'Eure"
+                    "district": "l'Eure"
                 },
                 {
                     "dref": "manche",
-                    "district": "District de la Manche"
+                    "district": "la Manche"
                 },
                 {
                     "dref": "footorne",
-                    "district": "District de l'Orne"
+                    "district": "l'Orne"
                 },
                 {
                     "dref": "dfsm",
-                    "district": "District de la Seine-Maritime"
+                    "district": "la Seine-Maritime"
                 }
             ]
         },
@@ -275,51 +275,51 @@
             "districts": [
                 {
                     "dref": "foot16",
-                    "district": "District de Charente"
+                    "district": "Charente"
                 },
                 {
                     "dref": "foot17",
-                    "district": "District de Charente-Maritime"
+                    "district": "Charente-Maritime"
                 },
                 {
                     "dref": "foot19",
-                    "district": "District de Corrèze"
+                    "district": "Corrèze"
                 },
                 {
                     "dref": "foot23",
-                    "district": "District de la Creuse"
+                    "district": "la Creuse"
                 },
                 {
                     "dref": "foot79",
-                    "district": "District des Deux-Sèvres"
+                    "district": "Deux-Sèvres"
                 },
                 {
                     "dref": "dordogne-perigord",
-                    "district": "District de Dordogne-Périgord"
+                    "district": "Dordogne-Périgord"
                 },
                 {
                     "dref": "gironde",
-                    "district": "District de Gironde"
+                    "district": "Gironde"
                 },
                 {
                     "dref": "landes",
-                    "district": "District des Landes"
+                    "district": "Landes"
                 },
                 {
                     "dref": "lot-et-garonne",
-                    "district": "District du Lot-et-Garonne"
+                    "district": "Lot-et-Garonne"
                 },
                 {
                     "dref": "footpyr64",
-                    "district": "District des Pyrénées-Atlantiques"
+                    "district": "Pyrénées-Atlantiques"
                 },
                 {
                     "dref": "foot86",
-                    "district": "District de la Vienne"
+                    "district": "la Vienne"
                 },
                 {
                     "dref": "foot87",
-                    "district": "District de la Haute-Vienne"
+                    "district": "la Haute-Vienne"
                 }
             ]
         },
@@ -329,15 +329,15 @@
             "districts": [
                 {
                     "dref": "ariegefoot",
-                    "district": "District de l'Ariège"
+                    "district": "l'Ariège"
                 },
                 {
                     "dref": "aude",
-                    "district": "District de l'Aude"
+                    "district": "l'Aude"
                 },
                 {
                     "dref": "aveyron",
-                    "district": "District de l'Aveyron"
+                    "district": "l'Aveyron"
                 },
                 {
                     "dref": "gard-lozere",
@@ -345,35 +345,35 @@
                 },
                 {
                     "dref": "haute-garonne",
-                    "district": "District de Haute-Garonne"
+                    "district": "Haute-Garonne"
                 },
                 {
                     "dref": "districtfootgers",
-                    "district": "District du Gers"
+                    "district": "Gers"
                 },
                 {
                     "dref": "herault",
-                    "district": "District de l'Hérault"
+                    "district": "l'Hérault"
                 },
                 {
                     "dref": "district-foot-lot",
-                    "district": "District du Lot"
+                    "district": "Lot"
                 },
                 {
                     "dref": "pyrenees-orientales",
-                    "district": "District des Pyrénées-Orientales"
+                    "district": "Pyrénées-Orientales"
                 },
                 {
                     "dref": "district-foot-65",
-                    "district": "District des Hautes-Pyrénées"
+                    "district": "Hautes-Pyrénées"
                 },
                 {
                     "dref": "foottarn",
-                    "district": "District du Tarn"
+                    "district": "Tarn"
                 },
                 {
                     "dref": "foot82",
-                    "district": "District du Tarn-et-Garonne"
+                    "district": "Tarn-et-Garonne"
                 }
             ]
         },
@@ -383,35 +383,35 @@
             "districts": [
                 {
                     "dref": "essonne",
-                    "district": "District de l'Essonne"
+                    "district": "l'Essonne"
                 },
                 {
                     "dref": "",
-                    "district": "District des Hauts-de-Seine"
+                    "district": "Hauts-de-Seine"
                 },
                 {
                     "dref": "district75foot",
-                    "district": "District de Paris"
+                    "district": "Paris"
                 },
                 {
                     "dref": "seineetmarne",
-                    "district": "District de Seine-et-Marne"
+                    "district": "Seine-et-Marne"
                 },
                 {
                     "dref": "district93foot",
-                    "district": "District de Seine-Saint-Denis"
+                    "district": "Seine-Saint-Denis"
                 },
                 {
                     "dref": "districtvaldemarne",
-                    "district": "District du Val-de-Marne"
+                    "district": "Val-de-Marne"
                 },
                 {
                     "dref": "district-foot95",
-                    "district": "District du Val-d'Oise"
+                    "district": "Val-d'Oise"
                 },
                 {
                     "dref": "dyf78",
-                    "district": "District des Yvelines"
+                    "district": "Yvelines"
                 }
             ]
         },
@@ -421,23 +421,23 @@
             "districts": [
                 {
                     "dref": "foot44",
-                    "district": "District de Loire-Atlantique"
+                    "district": "Loire-Atlantique"
                 },
                 {
                     "dref": "foot49",
-                    "district": "District de Maine-et-Loire"
+                    "district": "Maine-et-Loire"
                 },
                 {
                     "dref": "mayenne",
-                    "district": "District de Mayenne"
+                    "district": "Mayenne"
                 },
                 {
                     "dref": "sarthe",
-                    "district": "District de la Sarthe"
+                    "district": "la Sarthe"
                 },
                 {
                     "dref": "districtfoot85",
-                    "district": "District de Vendée"
+                    "district": "Vendée"
                 }
             ]
         }

@@ -6,8 +6,17 @@
             <div class="flex-between">
                 <div>
                     # IF C_HAS_FLAG #<img class="club-logo" src="{U_FLAG}" alt="{NAME}"># ENDIF #
-                    <span class="big"># IF C_HAS_NAME #{NAME}# ENDIF #</span>
+                    <span class="big">
+                        # IF C_HAS_NAME #{NAME}# ENDIF #
+                    </span>
                 </div>
+                # IF C_HAS_COUNTRY #
+                <div>
+                    # IF C_HAS_COUNTRY #<a href="{U_COUNTRY}" target="_blank" rel="noopener">{COUNTRY}</a># ENDIF #
+                    # IF C_HAS_LEAGUE # | <a href="{U_LEAGUE}" target="_blank" rel="noopener">{LEAGUE}</a> # ENDIF #
+                    # IF C_HAS_DISTRICT # | <a href="{U_DISTRICT}" target="_blank" rel="noopener">{DISTRICT}</a> # ENDIF #
+                </div>
+                # ENDIF #
                 # IF C_CONTROLS #
                     <div class="controls align-right">
                         <a class="offload" href="{U_EDIT}" aria-label="{@common.edit}"><i class="far fa-fw fa-edit" aria-hidden="true"></i></a>

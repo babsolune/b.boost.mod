@@ -219,7 +219,7 @@ class ScmClub
 		$this->club_full_name = $this->club_sub ? $real_club['club_full_name'] : $properties['club_full_name'];
 		$this->club_flag      = $properties['club_flag'];
 		$this->club_logo      = $properties['club_logo'];
-		$this->club_website   = new Url($properties['club_website']);
+		$this->club_website   = !empty($properties['club_website']) ? new Url($properties['club_website']) : new Url('');
 		$this->club_email     = $properties['club_email'];
 		$this->club_phone     = $properties['club_phone'];
 		$this->club_locations = $properties['club_locations'];
@@ -256,7 +256,16 @@ class ScmClub
 			$club_locations_map = $map->display();
 		}
 
-        $club_district = [];
+        $club_country = $club_league = $club_district = $district_file = '';
+        $district_data = [];
+
+        foreach ($this->club_district as $district)
+        {
+            $club_country = $district['code'];
+            $club_league = $district['lref'];
+            $club_district = $district['dref'];
+            $district_data = ScmClubService::get_district_data($district['file']);
+        }
 
 		return [
             // Conditions
@@ -271,6 +280,9 @@ class ScmClub
             'C_HAS_NAME'      => !empty($this->club_name),
             'C_HAS_NUMBER'    => !empty($this->club_number),
             'C_HAS_FULL_NAME' => !empty($this->club_full_name),
+            'C_HAS_COUNTRY'   => !empty($club_country),
+            'C_HAS_LEAGUE'    => !empty($club_league),
+            'C_HAS_DISTRICT'  => !empty($club_district),
 			// Item
 			'ID'           => $this->id_club,
 			'NAME'         => $this->club_name,
@@ -280,6 +292,9 @@ class ScmClub
 			'PHONE'        => $this->club_phone,
 			'LOCATION'     => $club_locations,
 			'LOCATION_MAP' => $club_locations_map,
+            'COUNTRY'      => !empty($club_country) ? LangLoader::get_message($club_country, 'countries') : '',
+            'LEAGUE'       => !empty($club_league) ? ScmClubService::get_league($district_data, $club_league) : '',
+            'DISTRICT'     => !empty($club_district) ? ScmClubService::get_district($district_data, $club_district) : '',
 			// Links
 			'U_LOGO'         => Url::to_rel(ScmClubCache::load()->get_affiliate_club_shield($this->id_club)),
 			'U_FLAG'         => TPL_PATH_TO_ROOT . '/images/stats/countries/' . $this->club_flag . '.png',
@@ -288,6 +303,9 @@ class ScmClub
 			'U_EDIT'         => ScmUrlBuilder::edit_club($this->id_club, $this->club_slug)->rel(),
 			'U_DELETE'       => ScmUrlBuilder::delete_club($this->id_club)->rel(),
             'U_FFF'          => 'https://epreuves.fff.fr/competition/club/' . $this->club_number . '-' . Url::encode_rewrite($this->club_full_name) . '/equipes',
+            'U_COUNTRY'      => !empty($club_country) ? 'https://' . ScmClubService::get_country_url($district_data) : '#',
+            'U_LEAGUE'       => !empty($club_country) ? 'https://' . ScmClubService::get_league_url($district_data, $club_league) . '.' . ScmClubService::get_country_url($district_data) : '#',
+            'U_DISTRICT'     => !empty($club_country) ? 'https://' . ScmClubService::get_district_url($district_data, $club_district) . '.' . ScmClubService::get_country_url($district_data) : '#',
         ];
 	}
 

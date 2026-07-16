@@ -48,7 +48,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
         $cluster = AppContext::get_request()->get_getint('cluster', 0);
         $until_last_day = $this->hat_ranking ? ScmGroupService::get_last_matchday_hat($this->event_id()) > $cluster : 0;
 
-        $form = new HTMLForm(__CLASS__);
+        $form = new HTMLForm(self::class);
         $form->set_css_class('floating-submit modal-container form-loader');
 		$form->set_layout_title(
             '<div class="align-center small">' . $this->lang['scm.games.management'] . '</div>'

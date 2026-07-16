@@ -867,3 +867,19 @@ summary {
     left: 0.618em;
     transform: translate(50%, 50%);
 }
+
+.clubs-details {
+    padding: 0.618em;
+    & > details {
+        padding-left: 1.809em;
+    }
+}
+
+.summary-title {
+    border: none;
+    margin-bottom: 0.618em;
+    & > * {
+        display: inline-block;
+    }
+}
+

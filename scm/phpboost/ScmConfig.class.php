@@ -162,7 +162,7 @@ class ScmConfig extends AbstractConfigData
 	 */
 	public static function load()
 	{
-		return ConfigManager::load(__CLASS__, 'scm', 'config');
+		return ConfigManager::load(self::class, 'scm', 'config');
 	}
 
 	/**

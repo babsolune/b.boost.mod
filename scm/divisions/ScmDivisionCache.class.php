@@ -60,7 +60,7 @@ class ScmDivisionCache implements CacheData
 	 */
 	public static function load()
 	{
-		return CacheManager::load(__CLASS__, 'scm', 'divisions');
+		return CacheManager::load(self::class, 'scm', 'divisions');
 	}
 
 	/**

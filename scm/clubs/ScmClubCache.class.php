@@ -93,7 +93,7 @@ class ScmClubCache implements CacheData
 	 */
 	public static function load()
 	{
-		return CacheManager::load(__CLASS__, 'scm', 'clubs');
+		return CacheManager::load(self::class, 'scm', 'clubs');
 	}
 
 	/**

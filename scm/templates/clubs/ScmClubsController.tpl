@@ -16,22 +16,71 @@
 	# ELSE #
 		<div class="sub-section">
 			<div class="content-container">
-                <div class="columns-6">
-                    # START clubs #
-                        <article class="flex-team flex-left mb">
-                            # IF clubs.C_HAS_SHIELD #
-                                # IF clubs.C_HAS_LOGO #
-                                    <img src="{clubs.U_LOGO}" alt="{clubs.FULL_NAME}">
-                                # ELSE #
-                                    # IF clubs.C_HAS_FLAG #
-                                        <img src="{clubs.U_FLAG}" alt="{clubs.FULL_NAME}">
+                # START countries #
+                    <details class="clubs-details" open>
+                        <summary class="summary-title"><h3>{countries.COUNTRY_NAME}</h3></summary>
+                        <div class="columns-6">
+                            # START countries.items #
+                                <article class="flex-team flex-left mb">
+                                    # IF countries.items.C_HAS_SHIELD #
+                                        # IF countries.items.C_HAS_LOGO #
+                                            <img src="{countries.items.U_LOGO}" alt="{countries.items.FULL_NAME}">
+                                        # ELSE #
+                                            # IF countries.items.C_HAS_FLAG #
+                                                <img src="{countries.items.U_FLAG}" alt="{countries.items.FULL_NAME}">
+                                            # ENDIF #
+                                        # ENDIF #
                                     # ENDIF #
-                                # ENDIF #
+                                    <span><a href="{countries.items.U_CLUB}" aria-label="{countries.items.FULL_NAME}" class="offload">{countries.items.NAME}</a></span>
+                                </article>
+                            # END countries.items #
+                        </div>
+                        # START countries.leagues #
+                            # IF countries.leagues.C_LEAGUE #
+                                <details class="clubs-details" open>
+                                    <summary class="summary-title"><h4>{countries.leagues.LEAGUE_NAME}</h4></summary>
+                                    <div class="columns-6">
+                                        # START countries.leagues.items #
+                                            <article class="flex-team flex-left mb">
+                                                # IF countries.leagues.items.C_HAS_SHIELD #
+                                                    # IF countries.leagues.items.C_HAS_LOGO #
+                                                        <img src="{countries.leagues.items.U_LOGO}" alt="{countries.leagues.items.FULL_NAME}">
+                                                    # ELSE #
+                                                        # IF countries.leagues.items.C_HAS_FLAG #
+                                                            <img src="{countries.leagues.items.U_FLAG}" alt="{countries.leagues.items.FULL_NAME}">
+                                                        # ENDIF #
+                                                    # ENDIF #
+                                                # ENDIF #
+                                                <span><a href="{countries.leagues.items.U_CLUB}" aria-label="{countries.leagues.items.FULL_NAME}" class="offload">{countries.leagues.items.NAME}</a></span>
+                                            </article>
+                                        # END countries.leagues.items #
+                                    </div>
+                                    # START countries.leagues.districts #
+                                        <details class="clubs-details" open>
+                                            # IF countries.leagues.districts.C_DISTRICT_NAME #<summary class="summary-title"><h5>{countries.leagues.districts.DISTRICT_NAME}</h5></summary># ENDIF #
+                                            <div class="columns-6">
+                                                # START countries.leagues.districts.items #
+                                                    <article class="flex-team flex-left mb">
+                                                        # IF countries.leagues.districts.items.C_HAS_SHIELD #
+                                                            # IF countries.leagues.districts.items.C_HAS_LOGO #
+                                                                <img src="{countries.leagues.districts.items.U_LOGO}" alt="{countries.leagues.districts.items.FULL_NAME}">
+                                                            # ELSE #
+                                                                # IF countries.leagues.districts.items.C_HAS_FLAG #
+                                                                    <img src="{countries.leagues.districts.items.U_FLAG}" alt="{countries.leagues.districts.items.FULL_NAME}">
+                                                                # ENDIF #
+                                                            # ENDIF #
+                                                        # ENDIF #
+                                                        <span><a href="{countries.leagues.districts.items.U_CLUB}" aria-label="{countries.leagues.districts.items.FULL_NAME}" class="offload">{countries.leagues.districts.items.NAME}</a></span>
+                                                    </article>
+                                                # END countries.leagues.districts.items #
+                                            </div>
+                                        </details>
+                                    # END countries.leagues.districts #
+                                </details>
                             # ENDIF #
-                            <span><a href="{clubs.U_CLUB}" aria-label="{clubs.FULL_NAME}" class="offload">{clubs.NAME}</a></span>
-                        </article>
-                    # END clubs #
-                </div>
+                        # END countries.leagues #
+                    </details>
+                # END countries #
 			</div>
 		</div>
 	# ENDIF #

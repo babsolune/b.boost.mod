@@ -64,7 +64,7 @@ class ScmTeamCache implements CacheData
 	 */
 	public static function load()
 	{
-		return CacheManager::load(__CLASS__, 'scm', 'teams');
+		return CacheManager::load(self::class, 'scm', 'teams');
 	}
 
 	/**

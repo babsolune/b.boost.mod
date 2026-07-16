@@ -54,36 +54,108 @@ class ScmTeamsFormController extends DefaultModuleController
 		$fieldset = new FormFieldsetHTML('event', '');
 		$form->add_fieldset($fieldset);
 
-		$fieldset->add_field(new FormFieldMultipleCheckbox('teams', '', $this->get_teams_list(), $this->get_clubs_list()));
+		$fieldset->add_field(new ScmFormFieldMultipleCheckbox('teams', '', $this->get_teams_list(), $this->get_clubs_list()));
 
         $fieldset->add_field(new FormFieldFree('teams_counter', '', '
 			<script>
-					// Select all checkboxes
-                    let checkboxes = document.querySelectorAll("input[type=checkbox]");
-                    // Add span to display the counter
-                    let target = document.getElementById("'. self::class.'_event");
-                    let span = document.createElement("span");
-                    span.classList.add("checkbox-counter");
-                    target.prepend(span);
+                // Select all checkboxes
+                let checkboxes = document.querySelectorAll("input[type=checkbox]");
+                // Add span to display the counter
+                let target = document.getElementById("'. self::class.'_event");
+                let span = document.createElement("span");
+                span.classList.add("checkbox-counter");
+                target.prepend(span);
 
-                    // Initialize checked count
-                    let checked_count = 0;
+                // Initialize checked count
+                let checked_count = 0;
 
-                    // Function to count checked checkboxes
-                    function count_checked_checkboxes() {
-                        checked_count = document.querySelectorAll("input[type=checkbox]:checked").length;
-                        const counter = checked_count + " ' . $this->lang['scm.selected.teams'] . '";
-                        const span_target = document.querySelector(".checkbox-counter");
-                        span_target.innerHTML = counter;
+                // Function to count checked checkboxes
+                function count_checked_checkboxes() {
+                    checked_count = document.querySelectorAll("input[type=checkbox]:checked").length;
+                    const counter = checked_count > 1 ? checked_count + " ' . $this->lang['scm.selected.teams'] . '" : checked_count + " ' . $this->lang['scm.selected.team'] . '";
+                    const span_target = document.querySelector(".checkbox-counter");
+                    span_target.innerHTML = counter;
+                }
+                // Add event listener to each checkbox
+                checkboxes.forEach((checkbox) => {
+                    checkbox.addEventListener("change", count_checked_checkboxes);
+                });
+
+                // Call the function initially to get the current count
+                count_checked_checkboxes();
+
+                // Reorder checkboxes with district categories
+                const container = document.getElementById("onblurContainerResponse'. self::class.'_teams");
+                container.style.columns = "unset";
+
+                // 1. Récupérer tous les éléments enfants (directs) du conteneur
+                const children = Array.from(container.children);
+
+                // 2. Trouver les indices des éléments avec la classe "checkbox-title"
+                const initIndices = [];
+                children.forEach((child, index) => {
+                    if (child.classList.contains("checkbox-title")) {
+                        initIndices.push(index);
                     }
-                    // Add event listener to each checkbox
-                    checkboxes.forEach((checkbox) => {
-                        checkbox.addEventListener("change", count_checked_checkboxes);
+                });
+
+                // 4. Construire les groupes
+                const groups = [];
+                let start = 0;
+                for (let i = 0; i < initIndices.length; i++) {
+                    const end = initIndices[i];
+                    // Groupe précédent (entre deux "checkbox-title") → on le prend si non vide
+                    if (start < end) {
+                        groups.push({
+                            init: null, // pas de titre pour ce groupe (normalement ne devrait pas arriver)
+                            items: children.slice(start, end)
+                        });
+                    }
+                    // Groupe commençant par cet "init"
+                    const nextStart = (i + 1 < initIndices.length) ? initIndices[i + 1] : children.length;
+                    groups.push({
+                        init: children[end],
+                        items: children.slice(end + 1, nextStart)
+                    });
+                    start = nextStart;
+                }
+
+                // 5. Vider le conteneur
+                container.innerHTML = "";
+
+                // 6. Pour chaque groupe, créer un <details> et l"ajouter au conteneur
+                groups.forEach(group => {
+                    // Créer le <details>
+                    const details = document.createElement("details");
+                    details.open = true; // ouvert par défaut
+
+                    // Créer le <summary>
+                    const summary = document.createElement("summary");
+                    summary.classList.add("summary-title");
+                    if (group.init) {
+                        // On déplace l"élément "init" à l"intérieur du summary
+                        summary.appendChild(group.init);
+                    } else {
+                        // Cas particulier (normalement pas de groupe sans init)
+                        summary.textContent = "Groupe";
+                    }
+                    details.appendChild(summary);
+
+                    // Créer une div interne pour le contenu avec columns:4
+                    const innerDiv = document.createElement("div");
+                    innerDiv.style.columns = "4";
+
+                    // Ajouter les éléments du groupe dans innerDiv
+                    group.items.forEach(item => {
+                        innerDiv.appendChild(item);
                     });
 
-                    // Call the function initially to get the current count
-                    count_checked_checkboxes();
-			</script>
+                    details.appendChild(innerDiv);
+
+                    // Ajouter le details au conteneur
+                    container.appendChild(details);
+                });
+            </script>
         '));
 
 		$this->form = $form;
@@ -120,14 +192,62 @@ class ScmTeamsFormController extends DefaultModuleController
     {
         $options = [];
 		$cache = ScmClubCache::load();
-		$clubs_list = $cache->get_clubs();
 
-		$i = 1;
-		foreach($clubs_list as $club)
-		{
-			$options[] = new FormFieldMultipleCheckboxOption($club['id_club'], ($club['club_name']));
-			$i++;
-		}
+        $clubs = ScmClubService::sort_club_list($cache->get_clubs());
+
+        foreach ($clubs as $country => $countries)
+        {
+            if($country == 'all')
+            {
+                $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', '<h2>' . $this->lang['scm.clubs.countries.team'] . '</h2>');
+                foreach ($countries as $country_club)
+                {
+                    $options[] = new FormFieldMultipleCheckboxOption($country_club['id_club'], ($country_club['club_name']));
+                }
+            }
+            else
+            {
+                $data = ScmClubService::get_district_data($countries['file']);
+                $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', '<h2>' . LangLoader::get_message($country, 'countries') . '</h2>');
+                foreach ($countries as $league => $leagues)
+                {
+                    if ($league !== 'file') {
+                        $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', empty($league) ? $this->lang['scm.clubs.leagues.none'] : '<h3>' . ScmClubService::get_league($data, $league) . '</h3>');
+                    }
+                    if (empty($league))
+                    {
+                        foreach ($leagues as $root_league_clubs)
+                        {
+                            foreach ($root_league_clubs as $root_league_club)
+                            {
+                                $options[] = new FormFieldMultipleCheckboxOption($root_league_club['id_club'], ($root_league_club['club_name']));
+                            }
+                        }
+                    }
+                    elseif ($league !== 'file')
+                    {
+                        foreach ($leagues as $district => $districts)
+                        {
+                            $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', empty($district) ? $this->lang['scm.clubs.districts.none'] : '<h4>' . ScmClubService::get_district($data, $district) . '</h4>');
+                            if (empty($district))
+                            {
+                                foreach ($districts as $root_district_club)
+                                {
+                                    $options[] = new FormFieldMultipleCheckboxOption($root_district_club['id_club'], ($root_district_club['club_name']));
+                                }
+                            }
+                            else
+                            {
+                                foreach ($districts as $district_club)
+                                {
+                                    $options[] = new FormFieldMultipleCheckboxOption($district_club['id_club'], ($district_club['club_name']));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 		return $options;
     }

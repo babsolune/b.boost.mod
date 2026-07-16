@@ -60,7 +60,7 @@ class ScmSeasonCache implements CacheData
 	 */
 	public static function load()
 	{
-		return CacheManager::load(__CLASS__, 'scm', 'seasons');
+		return CacheManager::load(self::class, 'scm', 'seasons');
 	}
 
 	/**

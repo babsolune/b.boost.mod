@@ -60,7 +60,7 @@ class ScmParamsFormController extends DefaultModuleController
 
 	private function build_form()
 	{
-		$form = new HTMLForm(__CLASS__);
+		$form = new HTMLForm(self::class);
         $form->set_css_class('params-form cell-flex cell-columns-2 floating-submit');
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.params.management'] . '</div>');
 

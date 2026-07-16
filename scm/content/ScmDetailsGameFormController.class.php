@@ -57,7 +57,7 @@ class ScmDetailsGameFormController extends DefaultModuleController
         if($this->get_game()->get_game_type() == 'P')
             $url = ScmUrlBuilder::edit_practice_games($this->event_id(), $this->get_event()->get_event_slug())->rel();
 
-        $form = new HTMLForm(__CLASS__);
+        $form = new HTMLForm(self::class);
         $form->set_css_class('floating-submit');
 		$form->set_layout_title(
             '<div class="align-center small">' . $this->lang['scm.game.event.details'] . '</div>'

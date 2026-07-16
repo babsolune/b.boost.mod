@@ -35,7 +35,7 @@ class ScmPracticeFormController extends DefaultModuleController
 
 	private function build_form()
 	{
-		$form = new HTMLForm(__CLASS__);
+		$form = new HTMLForm(self::class);
 		$form->set_layout_title('<div class="align-center small">' . $this->lang['scm.practice.management'] . '</div>');
 
 		$this->submit_button = new FormButtonDefaultSubmit();

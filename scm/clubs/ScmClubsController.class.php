@@ -27,14 +27,80 @@ class ScmClubsController extends DefaultModuleController
 	{
 		$cache = ScmClubCache::load();
 
-		foreach ($cache->get_clubs() as $club)
-		{
-            $item = new ScmClub();
-            $item->set_properties($club);
+        $clubs = ScmClubService::sort_club_list($cache->get_clubs());
 
-            if (!$item->get_club_sub())
-                $this->view->assign_block_vars('clubs', $item->get_template_vars());
-		}
+        foreach ($clubs as $country => $countries)
+        {
+            if($country == 'all')
+            {
+                $this->view->assign_block_vars('countries', [
+                    'COUNTRY_NAME' => $this->lang['scm.clubs.countries.team']
+                ]);
+
+                foreach ($countries as $country_club)
+                {
+                    $item = new ScmClub();
+                    $item->set_properties($country_club);
+                    $this->view->assign_block_vars('countries.items', $item->get_template_vars());
+                }
+            }
+            else
+            {
+                $data = ScmClubService::get_district_data($countries['file']);
+                $this->view->assign_block_vars('countries', [
+                    'COUNTRY_NAME' => LangLoader::get_message($country, 'countries')
+                ]);
+
+                foreach ($countries as $league => $leagues)
+                {
+                    $this->view->assign_block_vars('countries.leagues', [
+                        'C_LEAGUE' => !empty($league) && $league !== 'file',
+                        'LEAGUE_NAME' => ScmClubService::get_league($data, $league),
+                    ]);
+
+                    if (empty($league))
+                    {
+                        foreach ($leagues as $root_league_clubs)
+                        {
+                            foreach ($root_league_clubs as $root_league_club)
+                            {
+                                $item = new ScmClub();
+                                $item->set_properties($root_league_club);
+                                $this->view->assign_block_vars('countries.items', $item->get_template_vars());
+                            }
+                        }
+                    }
+                    elseif ($league !== 'file')
+                    {
+                        foreach ($leagues as $district => $districts)
+                        {
+                            if (empty($district))
+                            {
+                                foreach ($districts as $root_district_club)
+                                {
+                                    $item = new ScmClub();
+                                    $item->set_properties($root_district_club);
+                                    $this->view->assign_block_vars('countries.leagues.items', $item->get_template_vars());
+                                }
+                            }
+                            else
+                            {
+                                $this->view->assign_block_vars('countries.leagues.districts', [
+                                    'C_DISTRICT_NAME' => $district,
+                                    'DISTRICT_NAME' => ScmClubService::get_district($data, $district)
+                                ]);
+                                foreach ($districts as $district_club)
+                                {
+                                    $item = new ScmClub();
+                                    $item->set_properties($district_club);
+                                    $this->view->assign_block_vars('countries.leagues.districts.items', $item->get_template_vars());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 	}
 
 	private function check_authorizations()

@@ -94,5 +94,117 @@ class ScmClubService
         }
 		return $clubs;
 	}
+
+    /** District management */
+
+    public static function get_district_data($file)
+    {
+        $json_file = str_replace('../', '', $file);
+        $json_content = file_get_contents(PATH_TO_ROOT . '/' . $json_file);
+        return json_decode($json_content, true);
+    }
+
+    public static function get_country_url($data) {
+        foreach ($data as $href) {
+            if (!empty($href['href'])) {
+                return $href['href'];
+            }
+        }
+        return null;
+    }
+
+    public static function get_league($data, $lref) {
+        foreach ($data['leagues'] as $league) {
+            if ($league['lref'] === $lref) {
+                return $league['league'];
+            }
+        }
+        return null;
+    }
+
+    public static function get_league_url($data, $lref) {
+        foreach ($data['leagues'] as $league) {
+            if ($league['lref'] === $lref) {
+                return $league['lref'];
+            }
+        }
+        return null;
+    }
+
+    public static function get_district($data, $dref) {
+        foreach ($data['leagues'] as $league) {
+            foreach ($league['districts'] as $district) {
+                if ($district['dref'] === $dref) {
+                    return $district['district'];
+                }
+            }
+        }
+        return null;
+    }
+
+    public static function get_district_url($data, $dref) {
+        foreach ($data['leagues'] as $league) {
+            foreach ($league['districts'] as $district) {
+                if ($district['dref'] === $dref) {
+                    return $district['dref'];
+                }
+            }
+        }
+        return null;
+    }
+
+    public static function sort_club_list(array $clubs): array
+    {
+        $classified_clubs = [
+            'all' => [],
+        ];
+        foreach ($clubs as $club)
+        {
+            $district = isset($club['club_district']) ? TextHelper::deserialize($club['club_district']) : [];
+
+            // Si club_district est vide ou non défini, ajouter à "all"
+            if (empty($district)) {
+                $classified_clubs['all'][] = $club;
+                continue;
+            }
+
+            // Extraire les valeurs de code, lref, dref
+            $code = $district[0]['code'] ?? null;
+            $lref = $district[0]['lref'] ?? null;
+            $dref = $district[0]['dref'] ?? null;
+            $file = $district[0]['file'] ?? null;
+
+            // Si code existe, classer par code
+            if ($code !== null) {
+                if (!isset($classified_clubs[$code])) {
+                    $classified_clubs[$code] = [];
+                }
+                $classified_clubs[$code]['file'] = $file;
+
+                // Si lref existe, classer par lref sous code
+                if ($lref !== null) {
+                    if (!isset($classified_clubs[$code][$lref])) {
+                        $classified_clubs[$code][$lref] = [];
+                    }
+
+                    // Si dref existe, classer par dref sous lref
+                    if ($dref !== null) {
+                        if (!isset($classified_clubs[$code][$lref][$dref])) {
+                            $classified_clubs[$code][$lref][$dref] = [];
+                        }
+                        $classified_clubs[$code][$lref][$dref][] = $club;
+                    } else {
+                        // Sinon, ajouter directement sous lref
+                        $classified_clubs[$code][$lref][] = $club;
+                    }
+                } else {
+                    // Sinon, ajouter directement sous code
+                    $classified_clubs[$code][] = $club;
+                    $classified_clubs[$code]['file'][] = $file;
+                }
+            }
+        }
+        return $classified_clubs;
+    }
 }
 ?>

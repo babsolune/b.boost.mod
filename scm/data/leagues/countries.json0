@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "National teams",
+        "code": "all",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

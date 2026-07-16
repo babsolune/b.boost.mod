@@ -31,7 +31,7 @@ class ScmSeasonFormController extends DefaultModuleController
 
 	private function build_form(HTTPRequestCustom $request)
 	{
-		$form = new HTMLForm(__CLASS__);
+		$form = new HTMLForm(self::class);
 		$form->set_layout_title($this->get_season()->get_id_season() === null ? $this->lang['scm.add.season'] : ($this->lang['scm.edit.season']));
 
 		$fieldset = new FormFieldsetHTML('scm', $this->lang['form.parameters']);

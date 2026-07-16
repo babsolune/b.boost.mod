@@ -31,7 +31,7 @@ class ScmDivisionFormController extends DefaultModuleController
 
 	private function build_form(HTTPRequestCustom $request)
 	{
-		$form = new HTMLForm(__CLASS__);
+		$form = new HTMLForm(self::class);
 		$form->set_layout_title($this->get_division()->get_id_division() === null ? $this->lang['scm.add.division'] : ($this->lang['scm.edit.division']));
 
 		$fieldset = new FormFieldsetHTML('scm', $this->lang['form.parameters']);

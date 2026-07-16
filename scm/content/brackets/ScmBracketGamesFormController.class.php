@@ -453,7 +453,7 @@ class ScmBracketGamesFormController extends DefaultModuleController
         $cluster = AppContext::get_request()->get_getint('cluster', 0);
         $games_number = count(ScmGroupService::games_list_from_group($this->event_id(), 'B', $cluster));
 
-        $finals_form = new HTMLForm(__CLASS__);
+        $finals_form = new HTMLForm(self::class);
         $finals_form->set_css_class('class');
         $finals_form->set_layout_title(
             '<div class="align-center small">' . $this->lang['scm.games.management'] . '</div>'

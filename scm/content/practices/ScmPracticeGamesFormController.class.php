@@ -43,7 +43,7 @@ class ScmPracticeGamesFormController extends DefaultModuleController
 
 	private function build_form()
 	{
-        $form = new HTMLForm(__CLASS__);
+        $form = new HTMLForm(self::class);
         $form->set_css_class('floating-submit');
         $form->set_layout_title(
             '<div class="align-center small">' . $this->lang['scm.games.management'] . '</div>'

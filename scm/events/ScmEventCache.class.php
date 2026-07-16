@@ -66,7 +66,7 @@ class ScmEventCache implements CacheData
 	 */
 	public static function load()
 	{
-		return CacheManager::load(__CLASS__, 'scm', 'event');
+		return CacheManager::load(self::class, 'scm', 'event');
 	}
 
 	/**

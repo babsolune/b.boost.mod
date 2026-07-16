@@ -16,6 +16,10 @@ $lang['scm.clubs.manager'] = 'Gestion des clubs';
 $lang['scm.clubs.filter']  = 'Rechercher un club';
 $lang['scm.clubs.list']    = 'Liste des clubs';
 
+$lang['scm.clubs.countries.team'] = 'Équipes nationales';
+$lang['scm.clubs.leagues.none']   = 'Pas de ligue déclarée';
+$lang['scm.clubs.districts.none'] = 'Pas de district déclaré';
+
 $lang['scm.club']               = 'Club';
 $lang['scm.club.see.infos']     = 'Voir les informations du club';
 $lang['scm.club.see.calendar']  = 'Voir le calendrier du club';
