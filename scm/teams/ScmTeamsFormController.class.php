@@ -212,7 +212,7 @@ class ScmTeamsFormController extends DefaultModuleController
                 foreach ($countries as $league => $leagues)
                 {
                     if ($league !== 'file') {
-                        $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', empty($league) ? $this->lang['scm.clubs.leagues.none'] : '<h3>' . ScmClubService::get_league($data, $league) . '</h3>');
+                        $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', empty($league) ? '<h3>' . $this->lang['scm.clubs.leagues.none'] . '</h3>' : '<h3>' . ScmClubService::get_league($data, $league) . '</h3>');
                     }
                     if (empty($league))
                     {
@@ -228,7 +228,7 @@ class ScmTeamsFormController extends DefaultModuleController
                     {
                         foreach ($leagues as $district => $districts)
                         {
-                            $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', empty($district) ? $this->lang['scm.clubs.districts.none'] : '<h4>' . ScmClubService::get_district($data, $district) . '</h4>');
+                            $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', empty($district) ? '<h4>' . $this->lang['scm.clubs.districts.none'] . '</h4>' : '<h4>' . ScmClubService::get_district($data, $district) . '</h4>');
                             if (empty($district))
                             {
                                 foreach ($districts as $root_district_club)

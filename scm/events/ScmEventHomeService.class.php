@@ -190,8 +190,9 @@ class ScmEventHomeService
             $view->assign_block_vars('matchdays', [
                 'MATCHDAY' => $matchday,
                 'U_MATCHDAY' => ScmUrlBuilder::display_groups_rounds($event_id, ScmEventService::get_event_slug($event_id), $matchday)->rel(),
-                'MATCHDAYS_LIST' => ScmGameFormat::format_event($event_id, $dates),
+                'MATCHDAYS_LIST' => ScmGameFormat::format_event($event_id, $dates, false, false, false),
                 'ROUNDS_LIST'    => ScmGameFormat::format_event($event_id, $dates, false, true, false),
+                'ROUND_RANKING_LIST' => ScmGameFormat::format_event($event_id, $dates, false, true, false),
             ]);
         }
 
@@ -219,7 +220,7 @@ class ScmEventHomeService
             $view->assign_block_vars('matchrounds', [
                 'MATCHDAYS_LIST'     => ScmGameFormat::format_event($event_id, $dates, false, false, true),
                 'ROUNDS_LIST'        => ScmGameFormat::format_event($event_id, $dates, false, false, true),
-                'ROUND_RANKING_LIST' => ScmGameFormat::format_event($event_id, $dates),
+                'ROUND_RANKING_LIST' => ScmGameFormat::format_event($event_id, $dates, false, true, false),
                 'L_MATCHROUND' => ($matchround == $c_first_round && $c_hat_ranking)
                                     ? LangLoader::get_message('scm.playoff.games', 'common', 'scm')
                                     : (ScmParamsService::get_params($event_id)->get_finals_type() == ScmParams::FINALS_RANKING

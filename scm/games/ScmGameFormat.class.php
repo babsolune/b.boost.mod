@@ -80,26 +80,27 @@ class ScmGameFormat
         $event_id = implode('', array_unique($event_id));
 
         $view->put_all([
-            'C_REFRESH_TIME' => $now->get_timestamp() > ScmEventService::get_event($event_id)->get_start_date()->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($event_id)->get_end_date()->get_timestamp(),
-            'C_CLASS' => $c_class,
+            'C_CONTROLS'            => ScmEventService::get_event($event_id)->is_authorized_to_manage_events(),
+            'C_REFRESH_TIME'        => $now->get_timestamp() > ScmEventService::get_event($event_id)->get_start_date()->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($event_id)->get_end_date()->get_timestamp(),
+            'C_CLASS'               => $c_class,
             'C_DISPLAY_PLAYGROUNDS' => ScmParamsService::get_params($event_id)->get_display_playgrounds(),
-            'EVENT_ID' => $event_id,
-            'C_ONE_DAY' => ScmEventService::get_event($event_id)->get_oneday()
+            'EVENT_ID'              => $event_id,
+            'C_ONE_DAY'             => ScmEventService::get_event($event_id)->get_oneday()
         ]);
 
         foreach ($blocks as $block => $sub_blocks)
         {
             $view->assign_block_vars('blocks', [
                 'C_ROUND' => $round,
-                'TITLE' => $block
+                'TITLE'   => $block
             ]);
 
             foreach ($sub_blocks as $sub_block => $games)
             {
                 $view->assign_block_vars('blocks.sub_blocks', [
                     'C_SEVERAL_DATES' => !ScmEventService::get_event($event_id)->get_oneday(),
-                    'C_SUB_ROUND' => $round,
-                    'SUB_TITLE' => $sub_block
+                    'C_SUB_ROUND'     => $round,
+                    'SUB_TITLE'       => $sub_block
                 ]);
                 foreach($games as $game)
                 {
@@ -125,12 +126,12 @@ class ScmGameFormat
         $now = new Date();
 
         $view->put_all([
-            'C_REFRESH_TIME' => $now->get_timestamp() > ScmEventService::get_event($event_id)->get_start_date()->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($event_id)->get_end_date()->get_timestamp(),
-            'C_CLASS' => $c_class,
+            'C_CONTROLS'            => ScmEventService::get_event($event_id)->is_authorized_to_manage_events(),
+            'C_REFRESH_TIME'        => $now->get_timestamp() > ScmEventService::get_event($event_id)->get_start_date()->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($event_id)->get_end_date()->get_timestamp(),
+            'C_CLASS'               => $c_class,
             'C_DISPLAY_PLAYGROUNDS' => ScmParamsService::get_params($event_id)->get_display_playgrounds(),
-            'EVENT_ID' => $event_id,
+            'EVENT_ID'              => $event_id,
         ]);
-
         foreach ($foreach as $block => $games)
         {
             $view->assign_block_vars('blocks', [
@@ -138,6 +139,7 @@ class ScmGameFormat
                 'C_ROUND' => $round,
                 'TITLE' => $block
             ]);
+
             foreach($games as $game)
             {
                 $item = new ScmGame();

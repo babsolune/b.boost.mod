@@ -865,7 +865,7 @@ summary {
     position: fixed;
     top: 50%;
     left: 0.618em;
-    transform: translate(50%, 50%);
+    width: auto !important;
 }
 
 .clubs-details {

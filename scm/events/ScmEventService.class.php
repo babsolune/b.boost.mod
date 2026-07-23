@@ -185,7 +185,9 @@ class ScmEventService
     {
         $event = self::get_event($event_id);
         $master_event_id = $event->get_master_id();
-        if($master_event_id)
+        $division = $season = '';
+
+        if ($master_event_id)
         {
             $master_event = self::get_event($master_event_id);
             $division = ScmDivisionService::get_division($master_event->get_division_id());
@@ -199,7 +201,9 @@ class ScmEventService
     {
         $event = self::get_event($event_id);
         $master_event_id = $event->get_master_id();
-        if($master_event_id)
+        $division = '';
+
+        if ($master_event_id)
         {
             $master_event = self::get_event($master_event_id);
             $division = ScmDivisionService::get_division($master_event->get_division_id());
@@ -212,7 +216,9 @@ class ScmEventService
     {
         $event = self::get_event($event_id);
         $master_event_id = $event->get_master_id();
-        if($master_event_id)
+        $season = '';
+
+        if ($master_event_id)
         {
             $master_event = self::get_event($master_event_id);
             $season = ScmSeasonService::get_season($master_event->get_season_id());
@@ -225,6 +231,8 @@ class ScmEventService
     {
         $event = self::get_event($event_id);
         $master_event_id = $event->get_master_id();
+        $master_event = '';
+
         if ($master_event_id)
         {
             $master_event = self::get_event($master_event_id);
