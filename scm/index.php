@@ -21,6 +21,7 @@ if ($config->is_right_column_disabled())
 
 $url_controller_mappers = [
     // Ajax
+	new UrlControllerMapper('ScmAjaxGameForm', '`^/ajax_game_form/?$`'),
 	new UrlControllerMapper('ScmAjaxGameFormat', '`^/ajax_game_format/?$`'),
 	new UrlControllerMapper('ScmAjaxGamesCluster', '`^/ajax_cluster/?$`'),
 	new UrlControllerMapper('ScmAjaxRoundRankings', '`^/ajax_round_rankings/?$`'),

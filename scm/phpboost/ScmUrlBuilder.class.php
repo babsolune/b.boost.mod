@@ -279,6 +279,11 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/game_list/');
 	}
 
+	public static function ajax_game_form(): Url
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/ajax_game_form/');
+	}
+
 	public static function ajax_game_format(): Url
 	{
 		return DispatchManager::get_url(self::$dispatcher, '/ajax_game_format/');

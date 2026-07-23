@@ -41,13 +41,16 @@ class ScmBracketController extends DefaultModuleController
 
         $this->view->put_all([
             'MENU'             => ScmMenuService::build_event_menu($this->event_id()),
+            'C_CONTROLS'       => ScmEventService::get_event($this->event_id())->is_authorized_to_manage_events(),
             'C_HAT_RANKING'    => ScmParamsService::get_params($this->event_id())->get_hat_ranking(),
             'C_RETURN_GAMES'   => $this->return_games(),
             'C_ONE_DAY'        => $this->get_event()->get_oneday(),
             'C_LOOSER_BRACKET' => $this->get_params()->get_looser_bracket(),
             'C_HAS_GAMES'      => ScmGameService::has_games($this->event_id()),
             'C_FINALS_RANKING_TYPE' => $this->get_params($this->event_id())->get_finals_type() == ScmParams::FINALS_RANKING,
-            'C_DISPLAY_PLAYGROUNDS' => $this->get_params($this->event_id())->get_display_playgrounds()
+            'C_DISPLAY_PLAYGROUNDS' => $this->get_params($this->event_id())->get_display_playgrounds(),
+
+            'EVENT_ID' => $this->event_id()
         ]);
 
 		return $this->generate_response();
@@ -237,8 +240,8 @@ class ScmBracketController extends DefaultModuleController
             ]);
 
             // Reverse brackets to be looser.n, looser.n-1, looser.1, winner
-            $keys = $this->is_cup || $this->looser_bracket ? array_reverse(array_keys($rounds)) : array_keys($rounds);
-            $values = $this->is_cup || $this->looser_bracket ? array_reverse(array_values($rounds)) : array_values($rounds);
+            $keys = $this->is_cup && $this->looser_bracket ? array_reverse(array_keys($rounds)) : array_keys($rounds);
+            $values = $this->is_cup && $this->looser_bracket ? array_reverse(array_values($rounds)) : array_values($rounds);
             $r_rounds = array_combine($keys, $values);
 
             // Isolate first round
