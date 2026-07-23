@@ -1,5 +1,5 @@
-# IF C_REFRESH_TIME #
-    <script>
+<script>
+    # IF C_REFRESH_TIME #
         setInterval(refresh_scores, 60000);
         function refresh_scores()
         {
@@ -27,19 +27,132 @@
                 }
             });
         }
-    </script>
-# ENDIF #
+    # ENDIF #
+
+    function call_score(game_type, game_cluster, game_round, game_order)
+    {
+        jQuery.ajax({
+            url: '${relative_url(ScmUrlBuilder::ajax_game_form())}',
+            type: "post",
+            dataType: "json",
+            data: {
+                'action': 'call',
+                'token' : '{TOKEN}',
+                'event_id' : '{EVENT_ID}',
+                'game_type' : game_type,
+                'game_cluster' : game_cluster,
+                'game_round' : game_round,
+                'game_order' : game_order,
+            },
+            success: function(returnData) {
+                jQuery.each(returnData, function(index, game) {
+                    const penaltyFields = game_type === 'B'
+                        ? (
+                            '<label class="label-sup grouped-element" for="home_pen_' + game.game_id + '">' +
+                                '<span>Penalties locaux</span>' +
+                                '<input class="align-center" type="number" min="0" id="home_pen_' + game.game_id + '" name="home_pen" value="' + game.home_pen + '" placeholder="{@scm.game.event.penalties}">' +
+                            '</label>' +
+                            '<label class="label-sup grouped-element" for="away_pen_' + game.game_id + '">' +
+                                '<span>Penalties visiteurs</span>' +
+                                '<input class="align-center" type="number" min="0" id="away_pen_' + game.game_id + '" name="away_pen" value="' + game.away_pen + '" placeholder="{@scm.game.event.penalties}">' +
+                            '</label>'
+                        )
+                        : ''
+                    ;
+                    const score_form = jQuery('#score-panel-' + game.game_id + ' .modal-form');
+                    score_form.append(
+                        '<form class="grouped-inputs inputs-with-sup" method="post" action="{REWRITED_SCRIPT}">' +
+                            '<label style="min-width: 220px !important;" class="label-sup grouped-element" for="date_' + game.game_id + '">' +
+                                '<span>Date/heure</span>' +
+                                '<input type="datetime-local" id="date_' + game.game_id + '" name="date" value="' + game.date + '">' +
+                            '</label>' +
+                            '<label class="label-sup grouped-element" for="playground_' + game.game_id + '">' +
+                                '<span>Terrain</span>' +
+                                '<input class="align-center" type="text" id="playground_' + game.game_id + '" name="playground" value="' + game.playground + '" placeholder="terrain">' +
+                            '</label>' +
+                            '<label class="label-sup grouped-element" for="home_name_' + game.game_id + '">' +
+                                '<span>Locaux</span>' +
+                                '<select id="home_name_' + game.game_id + '" name="home_id"></select>' +
+                            '</label>' +
+                            '<label class="label-sup grouped-element" for="home_score_' + game.game_id + '">' +
+                                '<span>Score locaux</span>' +
+                                '<input class="align-center" type="number" min="0" id="home_score_' + game.game_id + '" name="home_score" value="' + game.home_score + '" placeholder="score">' +
+                            '</label>' +
+                            penaltyFields +
+                            '<label class="label-sup grouped-element" for="away_score_' + game.game_id + '">' +
+                                '<span>Score visiteurs</span>' +
+                                '<input class="align-center" type="number" min="0" id="away_score_' + game.game_id + '" name="away_score" value="' + game.away_score + '" placeholder="score">' +
+                            '</label>' +
+                            '<label class="label-sup grouped-element" for="away_name_' + game.game_id + '">' +
+                                '<span>Visiteurs</span>' +
+                                '<select id="away_name_' + game.game_id + '" name="away_id"></select>' +
+                            '</label>' +
+                            '<input type="hidden" name="token" value="{TOKEN}" />' +
+                            '<input type="hidden" name="event_id" value="{EVENT_ID}" />' +
+                            '<button type="button" class="button submit" onclick="validate_score(\'' + game_type + '\', \'' + game_cluster + '\', \'' + game_round + '\', \'' + game_order + '\')">Valider</button>' +
+                        '</form>'
+                    );
+                    const home_select = jQuery("#home_name_" + game.game_id);
+                    const away_select = jQuery("#away_name_" + game.game_id);
+                    game.team_list.forEach((team) => {
+                        const home_option = jQuery("<option></option>").attr("value", team.id).text(team.name);
+                        if (team.name === game.home_name) {
+                            home_option.attr("selected", "selected");
+                        }
+                        home_select.append(home_option);
+
+                        const away_option = jQuery("<option></option>").attr("value", team.id).text(team.name);
+                        if (team.name === game.away_name) {
+                            away_option.attr("selected", "selected");
+                        }
+                        away_select.append(away_option);
+                    });
+                    jQuery(".close-modal").on('click', function() {
+                        score_form.empty();
+                    });
+                });
+            },
+            error: function(e) {
+                jQuery('body').addClass('bgc-full error');
+            }
+        });
+    }
+
+    function validate_score(game_type, game_cluster, game_round, game_order)
+    {
+        const form = jQuery('#score-panel-' + game_type + game_cluster + game_round + game_order).find('form');
+        jQuery.ajax({
+            url: '${relative_url(ScmUrlBuilder::ajax_game_form())}',
+            type: "post",
+            dataType: "json",
+            data: 
+                form.serialize() +
+                '&action=validate' +
+                '&game_type=' + encodeURIComponent(game_type) +
+                '&game_cluster=' + encodeURIComponent(game_cluster) +
+                '&game_round=' + encodeURIComponent(game_round) +
+                '&game_order=' + encodeURIComponent(game_order)
+            ,
+            success: function(returnData) {
+                window.location.reload();
+            },
+            error: function(returnData) {
+                jQuery('body').addClass('bgc-full warning');
+            }
+        });
+    }
+</script>
 
 # START blocks #
     # IF blocks.C_SEVERAL_DATES #<h5 class="cell-content">{blocks.TITLE}</h5># ENDIF #
     <div class="cell-flex cell-columns-2">
         # START blocks.items #
             <div id="game-{blocks.items.GAME_ID}" class="cell cell-game" data-date="{blocks.items.GAME_DATE_TIMESTAMP}">
-                <div class="flex-between flex-between-large">
-                    <div class="flex-between sm-width-pc-100 md-width-pc-33 small">
-                        <time class="sm-width-pc-# IF blocks.items.C_STATUS #50# ELSE #70# ENDIF # small cell-gap align-center">{blocks.items.GAME_DATE_HOUR_MINUTE}</time>
+                <div class="flex-between flex-between-large small">
+                    <div class="flex-between sm-width-pc-100 md-width-pc-33">
+                        <time class="sm-width-pc-# IF blocks.items.C_STATUS #50# ELSE #70# ENDIF # cell-gap align-center">{blocks.items.GAME_DATE_HOUR_MINUTE}</time>
                         # IF blocks.items.C_STATUS #
-                            <div class="sm-width-pc-20 smaller text-italic align-center bgc notice">{blocks.items.STATUS}</div>
+                            <div class="sm-width-pc-20 text-italic align-center bgc notice">{blocks.items.STATUS}</div>
                         # ENDIF #
                         <div class="sm-width-pc-30 cell-gap align-center game-details modal-container" aria-label="{@scm.game.event.details}">
                             <span class="modal-button --target-panel-{blocks.items.GAME_ID}">
@@ -150,10 +263,25 @@
                         <div></div>
                     # ENDIF #
                     # IF blocks.items.C_LINK #
-                        <div class="sm-width-pc-100 md-width-pc-33 small text-italic align-center">
+                        <div class="sm-width-pc-100 md-width-pc-33 text-italic align-center">
                             <a href="{blocks.items.U_GROUP}" aria-label="{@scm.group.results}" class="offload cell-gap">
                                 {blocks.items.CLUSTER_NAME}
                             </a>
+                        </div>
+                    # ENDIF #
+                    # IF C_CONTROLS #
+                        <div class="sm-width-pc-30 cell-gap modal-container align-right" aria-label="{@scm.game.event.details}">
+                            <span class="modal-button --score-panel-{blocks.items.GAME_ID}"
+                                onclick="call_score('{blocks.items.GAME_TYPE}', '{blocks.items.GAME_CLUSTER}', '{blocks.items.GAME_ROUND}', '{blocks.items.GAME_ORDER}')">
+                                <i class="fa fa-gear"></i>
+                            </span>
+                            <div id="score-panel-{blocks.items.GAME_ID}" class="modal">
+                                <div class="modal-overlay close-modal" aria-label="{@common.close}"></div>
+                                <div class="modal-content">
+                                    <span class="error big hide-modal close-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></span>
+                                    <div class="modal-form"></div>
+                                </div>
+                            </div>
                         </div>
                     # ENDIF #
                 </div>

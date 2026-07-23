@@ -7,7 +7,7 @@
                     # IF items.C_IS_SUB #<a class="offload d-block smaller" href="{items.U_MASTER_EVENT}">{items.MASTER_EVENT}</a># ENDIF #
                 </div>
                 <div class="smaller md-width-pc-50 align-center">
-                    <span>{@scm.day.short}{items.CLUSTER} : {items.GAME_DATE_DAY}/{items.GAME_DATE_MONTH}/{items.YEAR} {items.GAME_DATE_HOUR}:{items.GAME_DATE_MINUTE}</span>
+                    <span>{@scm.day.short}{items.GAME_CLUSTER} : {items.GAME_DATE_DAY}/{items.GAME_DATE_MONTH}/{items.YEAR} {items.GAME_DATE_HOUR}:{items.GAME_DATE_MINUTE}</span>
                     <a class="offload d-block" href="{items.U_EVENT}">{items.GAME_DIVISION}</a>
                 </div>
             </div>

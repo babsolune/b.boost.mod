@@ -20,7 +20,7 @@
                                         <span>{dates.items.HOME_TEAM} <strong>vs</strong> {dates.items.AWAY_TEAM}</span>
                                     </div>
                                     <div class="md-width-pc-20 align-right">
-                                        <a href="{dates.items.U_EDIT}" target="_blank" rel="noopener noreferrer" class="offload">{@scm.day} {dates.items.CLUSTER}</a>
+                                        <a href="{dates.items.U_EDIT}" target="_blank" rel="noopener noreferrer" class="offload">{@scm.day} {dates.items.GAME_CLUSTER}</a>
                                     </div>
                                 </li>
                             # END dates.items #
