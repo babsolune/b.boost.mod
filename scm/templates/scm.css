@@ -339,6 +339,11 @@ th.bgc-sub a {
     pointer-events: none;
 }
 
+.games-list,
+.ranking-list {
+    align-content: center;
+}
+
 @media (min-width: 769px) {
     .game-details .fieldset-inset {
         display: flex;
@@ -607,6 +612,80 @@ th.bgc-sub a {
         width: 320px;
         margin: 0 var(--cell-gap) var(--cell-gap) 0;
         flex-shrink: 0;
+    }
+}
+
+@media (min-width: 769px) {
+    .bracket-round {
+        .bracket-round-games {
+            .game-container {
+                position: relative;
+                &::before, &::after {
+                    position: absolute;
+                    content: '';
+                }
+                &::before {
+                    top: 50%;
+                    right: 100%;
+                    transform: translateY(-50%);
+                    width:11px;
+                    height: 2px;
+                    background-color: var(--bdr-main);
+                }
+                &::after {
+                    border-right: 1px solid var(--bdr-main);
+                    height: 60%;
+                    right: -12px;
+                    width: 10px;
+                }
+                &:nth-child(odd)::after {
+                    border-top: 2px solid var(--bdr-main);
+                    border-top-right-radius: 0.3em;
+                    top: 50%;
+                }
+                &:nth-child(even)::after {
+                    border-bottom: 1px solid var(--bdr-main);
+                    border-bottom-right-radius: 0.3em;
+                    bottom: 50%;
+                }
+            }
+        }
+        &:nth-child(2) {
+            .game-container {
+                &::after {
+                    height: 125%;
+                }
+            }
+        }
+        &:nth-child(3) {
+            .game-container {
+                &::after {
+                    height: 250%;
+                }
+            }
+        }
+        &:nth-child(4) {
+            .game-container {
+                &::after {
+                    height: 500%;
+                }
+            }
+        }
+        &:nth-child(5) {
+            .game-container {
+                &::after {
+                    height: 1000%;
+                }
+            }
+        }
+        &:last-child {
+            .game-container {
+                &::after {
+                    height: 0;
+                    border: none !important;
+                }
+            }
+        }
     }
 }
 

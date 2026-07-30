@@ -47,6 +47,8 @@ class ScmAjaxGameForm extends AbstractController
                     'playground' => $row['game_playground'],
                     'home_name' => ScmTeamService::get_team_name($row['game_home_id']),
                     'home_score' => $row['game_home_score'],
+                    'home_pen' => $row['game_home_pen'],
+                    'away_pen' => $row['game_away_pen'],
                     'away_score' => $row['game_away_score'],
                     'away_name' => ScmTeamService::get_team_name($row['game_away_id']),
                     'date' => $date->format('Y-m-d\TH:i'),

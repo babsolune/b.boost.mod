@@ -16,14 +16,19 @@
             },
             success: function(returnData) {
                 jQuery.each(returnData, function(index, game) {
-                    const penaltyFields = game_type === 'B'
+                    const homePenaltyFields = game_type === 'B'
                         ? (
                             '<label class="label-sup grouped-element" for="home_pen_' + game.game_id + '">' +
-                                '<span>Penalties locaux</span>' +
+                                '<span>Penalties</span>' +
                                 '<input class="align-center" type="number" min="0" id="home_pen_' + game.game_id + '" name="home_pen" value="' + game.home_pen + '" placeholder="{@scm.game.event.penalties}">' +
-                            '</label>' +
+                            '</label>'
+                        )
+                        : ''
+                    ;
+                    const awayPenaltyFields = game_type === 'B'
+                        ? (
                             '<label class="label-sup grouped-element" for="away_pen_' + game.game_id + '">' +
-                                '<span>Penalties visiteurs</span>' +
+                                '<span>Penalties</span>' +
                                 '<input class="align-center" type="number" min="0" id="away_pen_' + game.game_id + '" name="away_pen" value="' + game.away_pen + '" placeholder="{@scm.game.event.penalties}">' +
                             '</label>'
                         )
@@ -31,35 +36,46 @@
                     ;
                     const score_form = jQuery('#score-panel-' + game.game_id + ' .modal-form');
                     score_form.append(
-                        '<form class="grouped-inputs inputs-with-sup" method="post" action="{REWRITED_SCRIPT}">' +
-                            '<label style="min-width: 220px !important;" class="label-sup grouped-element" for="date_' + game.game_id + '">' +
-                                '<span>Date/heure</span>' +
-                                '<input type="datetime-local" id="date_' + game.game_id + '" name="date" value="' + game.date + '">' +
-                            '</label>' +
-                            '<label class="label-sup grouped-element" for="playground_' + game.game_id + '">' +
-                                '<span>Terrain</span>' +
-                                '<input class="align-center" type="text" id="playground_' + game.game_id + '" name="playground" value="' + game.playground + '" placeholder="terrain">' +
-                            '</label>' +
-                            '<label class="label-sup grouped-element" for="home_name_' + game.game_id + '">' +
-                                '<span>Locaux</span>' +
-                                '<select id="home_name_' + game.game_id + '" name="home_id"></select>' +
-                            '</label>' +
-                            '<label class="label-sup grouped-element" for="home_score_' + game.game_id + '">' +
-                                '<span>Score locaux</span>' +
-                                '<input class="align-center" type="number" min="0" id="home_score_' + game.game_id + '" name="home_score" value="' + game.home_score + '" placeholder="score">' +
-                            '</label>' +
-                            penaltyFields +
-                            '<label class="label-sup grouped-element" for="away_score_' + game.game_id + '">' +
-                                '<span>Score visiteurs</span>' +
-                                '<input class="align-center" type="number" min="0" id="away_score_' + game.game_id + '" name="away_score" value="' + game.away_score + '" placeholder="score">' +
-                            '</label>' +
-                            '<label class="label-sup grouped-element" for="away_name_' + game.game_id + '">' +
-                                '<span>Visiteurs</span>' +
-                                '<select id="away_name_' + game.game_id + '" name="away_id"></select>' +
-                            '</label>' +
+                        '<form method="post" action="{REWRITED_SCRIPT}">' +
+                            '<div class="grouped-inputs stretch-inputs inputs-with-sup">' +
+                                '<label style="min-width: 220px !important;" class="label-sup grouped-element" for="date_' + game.game_id + '">' +
+                                    '<span>Date/heure</span>' +
+                                    '<input type="datetime-local" id="date_' + game.game_id + '" name="date" value="' + game.date + '">' +
+                                '</label>' +
+                                # IF C_DISPLAY_PLAYGROUNDS #
+                                    '<label class="label-sup grouped-element" for="playground_' + game.game_id + '">' +
+                                        '<span>Terrain</span>' +
+                                        '<input class="align-center" type="text" id="playground_' + game.game_id + '" name="playground" value="' + game.playground + '" placeholder="terrain">' +
+                                    '</label>' +
+                                # ENDIF #
+                            '</div>' +
+                            '<div class="grouped-inputs stretch-inputs inputs-with-sup">' +
+                                '<label class="label-sup grouped-element" for="home_name_' + game.game_id + '">' +
+                                    '<span>Locaux</span>' +
+                                    '<select id="home_name_' + game.game_id + '" name="home_id"></select>' +
+                                '</label>' +
+                                '<label class="label-sup grouped-element" for="home_score_' + game.game_id + '">' +
+                                    '<span>Score</span>' +
+                                    '<input class="align-center" type="number" min="0" id="home_score_' + game.game_id + '" name="home_score" value="' + game.home_score + '" placeholder="score">' +
+                                '</label>' +
+                                homePenaltyFields +
+                            '</div>' +
+                            '<div class="grouped-inputs stretch-inputs inputs-with-sup">' +
+                                '<label class="label-sup grouped-element" for="away_name_' + game.game_id + '">' +
+                                    '<span>Visiteurs</span>' +
+                                    '<select id="away_name_' + game.game_id + '" name="away_id"></select>' +
+                                '</label>' +
+                                '<label class="label-sup grouped-element" for="away_score_' + game.game_id + '">' +
+                                    '<span>Score</span>' +
+                                    '<input class="align-center" type="number" min="0" id="away_score_' + game.game_id + '" name="away_score" value="' + game.away_score + '" placeholder="score">' +
+                                '</label>' +
+                                awayPenaltyFields +
+                            '</div>' +
                             '<input type="hidden" name="token" value="{TOKEN}" />' +
                             '<input type="hidden" name="event_id" value="{EVENT_ID}" />' +
-                            '<button type="button" class="button submit" onclick="validate_score(\'' + game_type + '\', \'' + game_cluster + '\', \'' + game_round + '\', \'' + game_order + '\')">Valider</button>' +
+                            '<div class="align-center">' +
+                                '<button type="button" class="button submit" onclick="validate_score(\'' + game_type + '\', \'' + game_cluster + '\', \'' + game_round + '\', \'' + game_order + '\')">Valider</button>' +
+                            '</div>' +
                         '</form>'
                     );
                     const home_select = jQuery("#home_name_" + game.game_id);
@@ -406,11 +422,15 @@
                                                 # IF brackets.C_DRAW_GAMES #<div># ENDIF #
                                                 # START brackets.rounds.games #
                                                     <div id="{brackets.rounds.games.GAME_ID}" class="game-container">
-                                                        <div class="game-details small text-italic">
-                                                            # IF brackets.rounds.games.C_THIRD_PLACE #<span>{@scm.round.looser.final}</span># ENDIF #
-                                                            <span>{brackets.rounds.games.PLAYGROUND}</span>
-                                                            <span># IF C_ONE_DAY #{brackets.rounds.games.GAME_DATE_HOUR_MINUTE}# ELSE #{brackets.rounds.games.GAME_DATE_FULL}# ENDIF #</span>
+                                                        <div class="game-details small" aria-label="{brackets.rounds.games.GAME_ID}">
+                                                            # IF brackets.rounds.games.C_THIRD_PLACE #<div>{@scm.round.looser.final}</div># ENDIF #
                                                             <div>
+                                                                # IF C_ONE_DAY #{brackets.rounds.games.GAME_DATE_HOUR_MINUTE}
+                                                                # ELSE #{brackets.rounds.games.GAME_DATE_FULL}
+                                                                # ENDIF #
+                                                            </div>
+                                                            <div class="cell-gap align-right">
+                                                                # IF C_DISPLAY_PLAYGROUNDS #<span aria-label="{@scm.field}">{brackets.rounds.games.PLAYGROUND}</span># ENDIF #
                                                                 # IF brackets.rounds.games.C_HAS_DETAILS #
                                                                     <a class="modal-button --target-panel-{brackets.rounds.games.GAME_ID}" aria-label="{@scm.game.event.details} {brackets.rounds.games.GAME_ID}">
                                                                         <i class="far fa-file-lines"></i>
@@ -510,25 +530,22 @@
                                                                             # ENDIF #
                                                                         </div>
                                                                     </div>
-                                                                # ELSE #
-                                                                    {brackets.rounds.games.GAME_ID}
                                                                 # ENDIF #
-                                                            </div>
-                                                            # IF C_CONTROLS #
-                                                                <div class="sm-width-pc-30 cell-gap modal-container align-right" aria-label="{@scm.game.event.details}">
-                                                                    <span class="modal-button --score-panel-{brackets.rounds.games.GAME_ID}"
+                                                                # IF C_CONTROLS #
+                                                                    <a class="modal-button --score-panel-{brackets.rounds.games.GAME_ID}"
+                                                                        aria-label="{@scm.game.event.details}"
                                                                         onclick="call_score('{brackets.rounds.games.GAME_TYPE}', '{brackets.rounds.games.GAME_CLUSTER}', '{brackets.rounds.games.GAME_ROUND}', '{brackets.rounds.games.GAME_ORDER}')">
                                                                         <i class="fa fa-gear"></i>
-                                                                    </span>
-                                                                    <div id="score-panel-{brackets.rounds.games.GAME_ID}" class="modal">
+                                                                    </a>
+                                                                    <div id="score-panel-{brackets.rounds.games.GAME_ID}" class="modal modal-half">
                                                                         <div class="modal-overlay close-modal" aria-label="{@common.close}"></div>
                                                                         <div class="modal-content">
                                                                             <span class="error big hide-modal close-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></span>
                                                                             <div class="modal-form"></div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            # ENDIF #
+                                                                # ENDIF #
+                                                            </div>
                                                         </div>
                                                         <div class="id-{brackets.rounds.games.HOME_ID} game-team game-home# IF brackets.rounds.games.C_HOME_FAV # text-strong# ENDIF #"
                                                                 # IF brackets.rounds.games.C_HOME_WIN # style="background-color: {brackets.rounds.games.WIN_COLOR}"# ENDIF #>

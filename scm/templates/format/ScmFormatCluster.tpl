@@ -48,14 +48,19 @@
             },
             success: function(returnData) {
                 jQuery.each(returnData, function(index, game) {
-                    const penaltyFields = game_type === 'B'
+                    const homePenaltyFields = game_type === 'B'
                         ? (
                             '<label class="label-sup grouped-element" for="home_pen_' + game.game_id + '">' +
-                                '<span>Penalties locaux</span>' +
+                                '<span>Penalties</span>' +
                                 '<input class="align-center" type="number" min="0" id="home_pen_' + game.game_id + '" name="home_pen" value="' + game.home_pen + '" placeholder="{@scm.game.event.penalties}">' +
-                            '</label>' +
+                            '</label>'
+                        )
+                        : ''
+                    ;
+                    const awayPenaltyFields = game_type === 'B'
+                        ? (
                             '<label class="label-sup grouped-element" for="away_pen_' + game.game_id + '">' +
-                                '<span>Penalties visiteurs</span>' +
+                                '<span>Penalties</span>' +
                                 '<input class="align-center" type="number" min="0" id="away_pen_' + game.game_id + '" name="away_pen" value="' + game.away_pen + '" placeholder="{@scm.game.event.penalties}">' +
                             '</label>'
                         )
@@ -63,35 +68,46 @@
                     ;
                     const score_form = jQuery('#score-panel-' + game.game_id + ' .modal-form');
                     score_form.append(
-                        '<form class="grouped-inputs inputs-with-sup" method="post" action="{REWRITED_SCRIPT}">' +
-                            '<label style="min-width: 220px !important;" class="label-sup grouped-element" for="date_' + game.game_id + '">' +
-                                '<span>Date/heure</span>' +
-                                '<input type="datetime-local" id="date_' + game.game_id + '" name="date" value="' + game.date + '">' +
-                            '</label>' +
-                            '<label class="label-sup grouped-element" for="playground_' + game.game_id + '">' +
-                                '<span>Terrain</span>' +
-                                '<input class="align-center" type="text" id="playground_' + game.game_id + '" name="playground" value="' + game.playground + '" placeholder="terrain">' +
-                            '</label>' +
-                            '<label class="label-sup grouped-element" for="home_name_' + game.game_id + '">' +
-                                '<span>Locaux</span>' +
-                                '<select id="home_name_' + game.game_id + '" name="home_id"></select>' +
-                            '</label>' +
-                            '<label class="label-sup grouped-element" for="home_score_' + game.game_id + '">' +
-                                '<span>Score locaux</span>' +
-                                '<input class="align-center" type="number" min="0" id="home_score_' + game.game_id + '" name="home_score" value="' + game.home_score + '" placeholder="score">' +
-                            '</label>' +
-                            penaltyFields +
-                            '<label class="label-sup grouped-element" for="away_score_' + game.game_id + '">' +
-                                '<span>Score visiteurs</span>' +
-                                '<input class="align-center" type="number" min="0" id="away_score_' + game.game_id + '" name="away_score" value="' + game.away_score + '" placeholder="score">' +
-                            '</label>' +
-                            '<label class="label-sup grouped-element" for="away_name_' + game.game_id + '">' +
-                                '<span>Visiteurs</span>' +
-                                '<select id="away_name_' + game.game_id + '" name="away_id"></select>' +
-                            '</label>' +
+                        '<form method="post" action="{REWRITED_SCRIPT}">' +
+                            '<div class="grouped-inputs stretch-inputs inputs-with-sup">' +
+                                '<label style="min-width: 220px !important;" class="label-sup grouped-element" for="date_' + game.game_id + '">' +
+                                    '<span>Date/heure</span>' +
+                                    '<input type="datetime-local" id="date_' + game.game_id + '" name="date" value="' + game.date + '">' +
+                                '</label>' +
+                                # IF C_DISPLAY_PLAYGROUNDS #
+                                    '<label class="label-sup grouped-element" for="playground_' + game.game_id + '">' +
+                                        '<span>Terrain</span>' +
+                                        '<input class="align-center" type="text" id="playground_' + game.game_id + '" name="playground" value="' + game.playground + '" placeholder="terrain">' +
+                                    '</label>' +
+                                # ENDIF #
+                            '</div>' +
+                            '<div class="grouped-inputs stretch-inputs inputs-with-sup">' +
+                                '<label class="label-sup grouped-element" for="home_name_' + game.game_id + '">' +
+                                    '<span>Locaux</span>' +
+                                    '<select id="home_name_' + game.game_id + '" name="home_id"></select>' +
+                                '</label>' +
+                                '<label class="label-sup grouped-element" for="home_score_' + game.game_id + '">' +
+                                    '<span>Score</span>' +
+                                    '<input class="align-center" type="number" min="0" id="home_score_' + game.game_id + '" name="home_score" value="' + game.home_score + '" placeholder="score">' +
+                                '</label>' +
+                                homePenaltyFields +
+                            '</div>' +
+                            '<div class="grouped-inputs stretch-inputs inputs-with-sup">' +
+                                '<label class="label-sup grouped-element" for="away_name_' + game.game_id + '">' +
+                                    '<span>Visiteurs</span>' +
+                                    '<select id="away_name_' + game.game_id + '" name="away_id"></select>' +
+                                '</label>' +
+                                '<label class="label-sup grouped-element" for="away_score_' + game.game_id + '">' +
+                                    '<span>Score</span>' +
+                                    '<input class="align-center" type="number" min="0" id="away_score_' + game.game_id + '" name="away_score" value="' + game.away_score + '" placeholder="score">' +
+                                '</label>' +
+                                awayPenaltyFields +
+                            '</div>' +
                             '<input type="hidden" name="token" value="{TOKEN}" />' +
                             '<input type="hidden" name="event_id" value="{EVENT_ID}" />' +
-                            '<button type="button" class="button submit" onclick="validate_score(\'' + game_type + '\', \'' + game_cluster + '\', \'' + game_round + '\', \'' + game_order + '\')">Valider</button>' +
+                            '<div class="align-center">' +
+                                '<button type="button" class="button submit" onclick="validate_score(\'' + game_type + '\', \'' + game_cluster + '\', \'' + game_round + '\', \'' + game_order + '\')">Valider</button>' +
+                            '</div>' +
                         '</form>'
                     );
                     const home_select = jQuery("#home_name_" + game.game_id);
@@ -157,133 +173,131 @@
             # IF blocks.sub_blocks.C_SUB_ROUND ## IF blocks.sub_blocks.C_SEVERAL_DATES #<h6>{blocks.sub_blocks.SUB_TITLE}</h6># ENDIF ## ENDIF #
             # START blocks.sub_blocks.items #
                 <div id="game-{blocks.sub_blocks.items.GAME_ID}" class="cell cell-game">
-                    <div class="flex-between small">
-                        <time class="sm-width-pc-30 cell-gap">{blocks.sub_blocks.items.GAME_DATE_HOUR_MINUTE}</time>
-                        # IF blocks.sub_blocks.items.C_STATUS #
-                            <div class="sm-width-pc-40 smaller text-italic align-center bgc notice">{blocks.sub_blocks.items.STATUS}</div>
-                        # ENDIF #
-                        <div class="sm-width-pc-30 cell-gap modal-container align-right" aria-label="{@scm.game.event.details}">
-                            <span class="modal-button --target-panel-{blocks.sub_blocks.items.GAME_ID}">
-                                # IF blocks.sub_blocks.items.C_HAS_DETAILS #
+                    <div class="flex-between small" aria-label="{blocks.sub_blocks.items.GAME_ID}">
+                        <div class="sm-width-pc-100 md-width-pc-50 cell-gap">
+                            <time class="sm-width-pc-30 cell-gap">{blocks.sub_blocks.items.GAME_DATE_HOUR_MINUTE}</time>
+                            # IF blocks.sub_blocks.items.C_STATUS #
+                                <div class="sm-width-pc-40 smaller text-italic align-center bgc notice">{blocks.sub_blocks.items.STATUS}</div>
+                            # ENDIF #
+                        </div>
+                        <div class="sm-width-pc-100 md-width-pc-50 cell-gap align-right">
+                            # IF C_DISPLAY_PLAYGROUNDS #
+                                <span class="sm-width-pc-100 md-width-pc-33">{@scm.field}: {blocks.sub_blocks.items.PLAYGROUND}</span>
+                            # ENDIF #
+                            # IF blocks.sub_blocks.items.C_HAS_DETAILS #
+                                <a class="modal-button --target-panel-{blocks.sub_blocks.items.GAME_ID}">
                                     # IF blocks.sub_blocks.items.C_VIDEO #
                                         <i class="far fa-circle-play"></i>
                                     # ELSE #
                                         <i class="far fa-file-lines"></i>
                                     # ENDIF #
-                                # ENDIF #
-                            </span>
-                            <div id="target-panel-{blocks.sub_blocks.items.GAME_ID}" class="modal">
-                                <div class="modal-overlay close-modal" aria-label="{@common.close}"></div>
-                                <div class="modal-content">
-                                    <span class="error big hide-modal close-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></span>
-                                    <div class="cell-flex cell-columns-2 cell-tile">
-                                        <div class="home-team">
-                                            <div class="cell-header flex-team">
-                                                <h4 class="cell-name">
-                                                    <a href="{blocks.sub_blocks.items.U_HOME_CLUB}" class="offload">{blocks.sub_blocks.items.HOME_TEAM}</a>
-                                                </h4>
-                                                # IF blocks.sub_blocks.items.C_HAS_HOME_LOGO #<img src="{blocks.sub_blocks.items.HOME_LOGO}" alt="{blocks.sub_blocks.items.HOME_TEAM}"># ENDIF #
+                                </a>
+                                <div id="target-panel-{blocks.sub_blocks.items.GAME_ID}" class="modal">
+                                    <div class="modal-overlay close-modal" aria-label="{@common.close}"></div>
+                                    <div class="modal-content">
+                                        <span class="error big hide-modal close-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></span>
+                                        <div class="cell-flex cell-columns-2 cell-tile">
+                                            <div class="home-team">
+                                                <div class="cell-header flex-team">
+                                                    <h4 class="cell-name">
+                                                        <a href="{blocks.sub_blocks.items.U_HOME_CLUB}" class="offload">{blocks.sub_blocks.items.HOME_TEAM}</a>
+                                                    </h4>
+                                                    # IF blocks.sub_blocks.items.C_HAS_HOME_LOGO #<img src="{blocks.sub_blocks.items.HOME_LOGO}" alt="{blocks.sub_blocks.items.HOME_TEAM}"># ENDIF #
+                                                </div>
+                                                <div class="cell-score bigger align-center">
+                                                    {blocks.sub_blocks.items.HOME_SCORE}
+                                                </div>
+                                                <div class="cell-details">{@scm.game.event.goals}</div>
+                                                # START blocks.sub_blocks.items.home_goals #
+                                                    <div>
+                                                        <span>{blocks.sub_blocks.items.home_goals.TIME}'</span>
+                                                        <span>- {blocks.sub_blocks.items.home_goals.PLAYER}</span>
+                                                    </div>
+                                                # END blocks.sub_blocks.items.home_goals #
+                                                <div class="cell-details">{@scm.game.event.cards.yellow}</div>
+                                                # START blocks.sub_blocks.items.home_yellow #
+                                                    <div>
+                                                        <span>{blocks.sub_blocks.items.home_yellow.TIME}'</span>
+                                                        <span>- {blocks.sub_blocks.items.home_yellow.PLAYER}</span>
+                                                    </div>
+                                                # END blocks.sub_blocks.items.home_yellow #
+                                                <div class="cell-details">{@scm.game.event.cards.red}</div>
+                                                # START blocks.sub_blocks.items.home_red #
+                                                    <div>
+                                                        <span>{blocks.sub_blocks.items.home_red.TIME}'</span>
+                                                        <span>- {blocks.sub_blocks.items.home_red.PLAYER}</span>
+                                                    </div>
+                                                # END blocks.sub_blocks.items.home_red #
                                             </div>
-                                            <div class="cell-score bigger align-center">
-                                                {blocks.sub_blocks.items.HOME_SCORE}
+                                            <div class="away-team">
+                                                <div class="cell-header flex-team">
+                                                    <h4 class="cell-name">
+                                                        <a href="{blocks.sub_blocks.items.U_AWAY_CLUB}" class="offload">{blocks.sub_blocks.items.AWAY_TEAM}</a>
+                                                    </h4>
+                                                    # IF blocks.sub_blocks.items.C_HAS_AWAY_LOGO #<img src="{blocks.sub_blocks.items.AWAY_LOGO}" alt="{blocks.sub_blocks.items.AWAY_TEAM}"># ENDIF #
+                                                </div>
+                                                <div class="cell-score bigger align-center">
+                                                    {blocks.sub_blocks.items.AWAY_SCORE}
+                                                </div>
+                                                <div class="cell-details">{@scm.game.event.goals}</div>
+                                                # START blocks.sub_blocks.items.away_goals #
+                                                    <div>
+                                                        <span>{blocks.sub_blocks.items.away_goals.TIME}'</span>
+                                                        <span>- {blocks.sub_blocks.items.away_goals.PLAYER}</span>
+                                                    </div>
+                                                # END blocks.sub_blocks.items.away_goals #
+                                                <div class="cell-details">{@scm.game.event.cards.yellow}</div>
+                                                # START blocks.sub_blocks.items.away_yellow #
+                                                    <div>
+                                                        <span>{blocks.sub_blocks.items.away_yellow.TIME}'</span>
+                                                        <span>- {blocks.sub_blocks.items.away_yellow.PLAYER}</span>
+                                                    </div>
+                                                # END blocks.sub_blocks.items.away_yellow #
+                                                <div class="cell-details">{@scm.game.event.cards.red}</div>
+                                                # START blocks.sub_blocks.items.away_red #
+                                                    <div>
+                                                        <span>{blocks.sub_blocks.items.away_red.TIME}'</span>
+                                                        <span>- {blocks.sub_blocks.items.away_red.PLAYER}</span>
+                                                    </div>
+                                                # END blocks.sub_blocks.items.away_red #
                                             </div>
-                                            <div class="cell-details">{@scm.game.event.goals}</div>
-                                            # START blocks.sub_blocks.items.home_goals #
-                                                <div>
-                                                    <span>{blocks.sub_blocks.items.home_goals.TIME}'</span>
-                                                    <span>- {blocks.sub_blocks.items.home_goals.PLAYER}</span>
-                                                </div>
-                                            # END blocks.sub_blocks.items.home_goals #
-                                            <div class="cell-details">{@scm.game.event.cards.yellow}</div>
-                                            # START blocks.sub_blocks.items.home_yellow #
-                                                <div>
-                                                    <span>{blocks.sub_blocks.items.home_yellow.TIME}'</span>
-                                                    <span>- {blocks.sub_blocks.items.home_yellow.PLAYER}</span>
-                                                </div>
-                                            # END blocks.sub_blocks.items.home_yellow #
-                                            <div class="cell-details">{@scm.game.event.cards.red}</div>
-                                            # START blocks.sub_blocks.items.home_red #
-                                                <div>
-                                                    <span>{blocks.sub_blocks.items.home_red.TIME}'</span>
-                                                    <span>- {blocks.sub_blocks.items.home_red.PLAYER}</span>
-                                                </div>
-                                            # END blocks.sub_blocks.items.home_red #
                                         </div>
-                                        <div class="away-team">
-                                            <div class="cell-header flex-team">
-                                                <h4 class="cell-name">
-                                                    <a href="{blocks.sub_blocks.items.U_AWAY_CLUB}" class="offload">{blocks.sub_blocks.items.AWAY_TEAM}</a>
-                                                </h4>
-                                                # IF blocks.sub_blocks.items.C_HAS_AWAY_LOGO #<img src="{blocks.sub_blocks.items.AWAY_LOGO}" alt="{blocks.sub_blocks.items.AWAY_TEAM}"># ENDIF #
-                                            </div>
-                                            <div class="cell-score bigger align-center">
-                                                {blocks.sub_blocks.items.AWAY_SCORE}
-                                            </div>
-                                            <div class="cell-details">{@scm.game.event.goals}</div>
-                                            # START blocks.sub_blocks.items.away_goals #
-                                                <div>
-                                                    <span>{blocks.sub_blocks.items.away_goals.TIME}'</span>
-                                                    <span>- {blocks.sub_blocks.items.away_goals.PLAYER}</span>
+                                        # IF blocks.sub_blocks.items.C_VIDEO #
+                                            <a href="{blocks.sub_blocks.items.U_VIDEO}" class="button submit" target="blank" rel="noopener noreferer">
+                                                <i class="far fa-circle-play"></i> {@scm.watch.video}
+                                            </a>
+                                        # ENDIF #
+                                        <div class="flex-between flex-between-large">
+                                            # IF blocks.sub_blocks.items.STADIUM #
+                                                <div class="md-width-pc-50">
+                                                    <h5>{@scm.game.event.stadium}</h5>
+                                                    {blocks.sub_blocks.items.STADIUM}
                                                 </div>
-                                            # END blocks.sub_blocks.items.away_goals #
-                                            <div class="cell-details">{@scm.game.event.cards.yellow}</div>
-                                            # START blocks.sub_blocks.items.away_yellow #
-                                                <div>
-                                                    <span>{blocks.sub_blocks.items.away_yellow.TIME}'</span>
-                                                    <span>- {blocks.sub_blocks.items.away_yellow.PLAYER}</span>
+                                            # ENDIF #
+                                            # IF blocks.sub_blocks.items.SUMMARY #
+                                                <div class="md-width-pc-50">
+                                                    <h5>{@scm.game.event.summary}</h5>
+                                                    {blocks.sub_blocks.items.SUMMARY}
                                                 </div>
-                                            # END blocks.sub_blocks.items.away_yellow #
-                                            <div class="cell-details">{@scm.game.event.cards.red}</div>
-                                            # START blocks.sub_blocks.items.away_red #
-                                                <div>
-                                                    <span>{blocks.sub_blocks.items.away_red.TIME}'</span>
-                                                    <span>- {blocks.sub_blocks.items.away_red.PLAYER}</span>
-                                                </div>
-                                            # END blocks.sub_blocks.items.away_red #
+                                            # ENDIF #
                                         </div>
-                                    </div>
-                                    # IF blocks.sub_blocks.items.C_VIDEO #
-                                        <a href="{blocks.sub_blocks.items.U_VIDEO}" class="button submit" target="blank" rel="noopener noreferer">
-                                            <i class="far fa-circle-play"></i> {@scm.watch.video}
-                                        </a>
-                                    # ENDIF #
-                                    <div class="flex-between flex-between-large">
-                                        # IF blocks.sub_blocks.items.STADIUM #
-                                            <div class="md-width-pc-50">
-                                                <h5>{@scm.game.event.stadium}</h5>
-                                                {blocks.sub_blocks.items.STADIUM}
-                                            </div>
-                                        # ENDIF #
-                                        # IF blocks.sub_blocks.items.SUMMARY #
-                                            <div class="md-width-pc-50">
-                                                <h5>{@scm.game.event.summary}</h5>
-                                                {blocks.sub_blocks.items.SUMMARY}
-                                            </div>
-                                        # ENDIF #
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        # IF C_DISPLAY_PLAYGROUNDS #
-                            <div class="sm-width-pc-100 md-width-pc-33">{@scm.field}: {blocks.sub_blocks.items.PLAYGROUND}</div>
-                        # ELSE #
-                            <div></div>
-                        # ENDIF #
-                        # IF C_CONTROLS #
-                            <div class="sm-width-pc-30 cell-gap modal-container align-right" aria-label="{@scm.game.event.details}">
-                                <span class="modal-button --score-panel-{blocks.sub_blocks.items.GAME_ID}"
+                            # ENDIF #
+                            # IF C_CONTROLS #
+                                <a class="modal-button --score-panel-{blocks.sub_blocks.items.GAME_ID}"
                                     onclick="call_score('{blocks.sub_blocks.items.GAME_TYPE}', '{blocks.sub_blocks.items.GAME_CLUSTER}', '{blocks.sub_blocks.items.GAME_ROUND}', '{blocks.sub_blocks.items.GAME_ORDER}')">
                                     <i class="fa fa-gear"></i>
-                                </span>
-                                <div id="score-panel-{blocks.sub_blocks.items.GAME_ID}" class="modal">
+                                </a>
+                                <div id="score-panel-{blocks.sub_blocks.items.GAME_ID}" class="modal modal-half">
                                     <div class="modal-overlay close-modal" aria-label="{@common.close}"></div>
                                     <div class="modal-content">
                                         <span class="error big hide-modal close-modal" aria-label="{@common.close}"><i class="far fa-circle-xmark" aria-hidden="true"></i></span>
                                         <div class="modal-form"></div>
                                     </div>
                                 </div>
-                            </div>
-                        # ENDIF #
+                            # ENDIF #
+                        </div>
                     </div>
                     <div class="flex-between flex-between-large# IF blocks.sub_blocks.items.C_EXEMPT # bgc notice# ENDIF #">
                         <div class="team-{blocks.sub_blocks.items.HOME_ID} flex-between sm-width-pc-100 md-width-pc-50">
