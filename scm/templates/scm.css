@@ -962,3 +962,53 @@ summary {
     }
 }
 
+/* Styles de base pour le bouton hamburger (caché sur desktop) */
+.mobile-menu-toggle {
+    display: none;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    &::after {
+        font: var(--fa-font-solid);
+        content: "\f4fe" ;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+    &[aria-expanded="true"]::after {
+        content: '\f00d';
+    }
+}
+
+/* Styles responsive */
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    #moderator-menu.cssmenu.cssmenu-horizontal {
+        position: relative;
+        z-index: 1000;
+        & > ul {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            display: none;
+            flex-direction: column;
+            width: auto;
+            & > li {
+                width: 100%;
+                text-align: center;
+                & > a {
+                    display: block;
+                    padding: 0.618rem;
+                }
+            }
+        }
+        &.menu-open > ul {
+            display: flex;
+        }
+    }
+}
+

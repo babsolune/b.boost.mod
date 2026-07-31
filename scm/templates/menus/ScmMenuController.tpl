@@ -64,8 +64,10 @@
     </nav>
     # IF NOT C_IS_MASTER #
         # IF C_CONTROLS #
-            <nav class="bgc moderator cssmenu cssmenu-horizontal align-center">
-                <ul>
+            <nav id="moderator-menu" class="cssmenu cssmenu-horizontal align-center">
+                <button type="button" class="cssmenu-title mobile-menu-toggle button button-mini bgc-full moderator" aria-label="Menu Modérateur" aria-expanded="false" aria-controls="moderator-menu">
+                </button>
+                <ul class="bgc-full moderator">
                     <li><a href="{U_EDIT_TEAMS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-people-group" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.teams}</span></a></li>
                     # IF C_HAS_TEAMS #<li><a href="{U_EDIT_PARAMS}" class="offload cssmenu-title align-center"><i class="fa fa-fw fa-cogs" aria-hidden="true"></i><span class="small d-block# IF IS_MOBILE_DEVICE # sr-only# ENDIF #">{@scm.menu.config.params}</span></a></li># ENDIF #
 
@@ -172,3 +174,17 @@
         </nav>
     # ENDIF #
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        const nav    = document.getElementById('moderator-menu');
+
+        if (!toggle || !nav) return;
+
+        toggle.addEventListener('click', function () {
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', String(!isExpanded));
+            nav.classList.toggle('menu-open');
+        });
+    });
+</script>
