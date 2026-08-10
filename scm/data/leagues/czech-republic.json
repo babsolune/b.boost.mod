@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Česká",
+        "code": "cz",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

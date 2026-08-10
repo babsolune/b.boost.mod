@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Sverige",
+        "code": "se",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Bosna i Hercegovina",
+        "code": "ba",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

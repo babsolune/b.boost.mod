@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Suisse",
+        "code": "ch",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Cymru",
+        "code": "fw",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

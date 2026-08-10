@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Hrvatska",
+        "code": "hr",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

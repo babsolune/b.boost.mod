@@ -301,7 +301,7 @@
                             <span><a href="{blocks.items.U_HOME_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{blocks.items.HOME_TEAM}</a></span>
                             # IF blocks.items.C_HAS_HOME_LOGO #<img src="{blocks.items.HOME_LOGO}" alt="{blocks.items.HOME_TEAM}"># ENDIF #
                         </div>
-                        <div id="home-{blocks.items.GAME_ID}" class="game-score home-score cell-pad sm-width-pc-20">{blocks.items.HOME_SCORE}# IF blocks.items.C_HAS_PEN # <span class="small">({blocks.items.HOME_PEN})</span># ENDIF #</div>
+                        <div id="home-{blocks.items.GAME_ID}" class="game-score home-score cell-pad sm-width-pc-20"># IF blocks.items.C_HAS_PEN #<span class="small">({blocks.items.HOME_PEN}) </span># ENDIF #{blocks.items.HOME_SCORE}</div>
                     </div>
                     <div id="vs-{blocks.items.GAME_ID}" class="hidden-small-screens">-</div>
                     <div class="team-{blocks.items.AWAY_ID} flex-between sm-width-pc-100 md-width-pc-50 invert-team">

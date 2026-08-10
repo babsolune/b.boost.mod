@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "ٱلْمَغْرِب",
+        "code": "ma",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

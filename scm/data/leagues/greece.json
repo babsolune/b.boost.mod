@@ -1,0 +1,19 @@
+{
+    "country": {
+        "name": "Ελλάδα",
+        "code": "gr",
+        "href": ""
+    },
+    "leagues": [
+        {
+            "league": "",
+            "lref": "",
+            "districts": [
+                {
+                    "dref": "",
+                    "district": ""
+                }
+            ]
+        }
+    ]
+}

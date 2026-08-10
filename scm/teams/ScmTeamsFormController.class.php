@@ -84,77 +84,80 @@ class ScmTeamsFormController extends DefaultModuleController
                 // Call the function initially to get the current count
                 count_checked_checkboxes();
 
-                // Reorder checkboxes with district categories
-                const container = document.getElementById("onblurContainerResponse'. self::class.'_teams");
-                container.style.columns = "unset";
+                // // Reorder checkboxes with district categories
+                //     // const parts = districtRaw ? districtRaw.split("_") : [];
+                //     const container = document.getElementById("onblurContainerResponse'. self::class.'_teams");
+                //     container.style.columns = "unset";
 
-                // 1. Récupérer tous les éléments enfants (directs) du conteneur
-                const children = Array.from(container.children);
+                //     // 1. Récupérer tous les éléments enfants (directs) du conteneur
+                //     const children = Array.from(container.children);
 
-                // 2. Trouver les indices des éléments avec la classe "checkbox-title"
-                const initIndices = [];
-                children.forEach((child, index) => {
-                    if (child.classList.contains("checkbox-title")) {
-                        initIndices.push(index);
-                    }
-                });
+                //     // 2. Trouver les indices des éléments avec un identifiant contenant "checkbox-title"
+                //     const init_indice = [];
+                //     children.forEach((child, index) => {
+                //         if (child.id.includes("checkbox-title")) {
+                //             init_indice.push(index);
+                //         }
+                //     });
+                //     console.log(init_indice);
 
-                // 4. Construire les groupes
-                const groups = [];
-                let start = 0;
-                for (let i = 0; i < initIndices.length; i++) {
-                    const end = initIndices[i];
-                    // Groupe précédent (entre deux "checkbox-title") → on le prend si non vide
-                    if (start < end) {
-                        groups.push({
-                            init: null, // pas de titre pour ce groupe (normalement ne devrait pas arriver)
-                            items: children.slice(start, end)
-                        });
-                    }
-                    // Groupe commençant par cet "init"
-                    const nextStart = (i + 1 < initIndices.length) ? initIndices[i + 1] : children.length;
-                    groups.push({
-                        init: children[end],
-                        items: children.slice(end + 1, nextStart)
-                    });
-                    start = nextStart;
-                }
+                //     // 4. Construire les groupes
+                //     const groups = [];
+                //     let start = 0;
+                //     for (let i = 0; i < init_indice.length; i++) {
+                //         const end = init_indice[i];
+                //         // Groupe précédent (entre deux "checkbox-title") → on le prend si non vide
+                //         if (start < end) {
+                //             groups.push({
+                //                 init: null, // pas de titre pour ce groupe (normalement ne devrait pas arriver)
+                //                 items: children.slice(start, end)
+                //             });
+                //         }
+                //         // Groupe commençant par cet "init"
+                //         const nextStart = (i + 1 < init_indice.length) ? init_indice[i + 1] : children.length;
+                //         groups.push({
+                //             init: children[end],
+                //             items: children.slice(end + 1, nextStart)
+                //         });
+                //         start = nextStart;
+                //     }
 
-                // 5. Vider le conteneur
-                container.innerHTML = "";
+                //     // 5. Vider le conteneur
+                //     container.innerHTML = "";
 
-                // 6. Pour chaque groupe, créer un <details> et l"ajouter au conteneur
-                groups.forEach(group => {
-                    // Créer le <details>
-                    const details = document.createElement("details");
-                    details.open = true; // ouvert par défaut
+                //     // 6. Pour chaque groupe, créer un <details> et l"ajouter au conteneur
+                //     groups.forEach(group => {
+                //         // Créer le <details>
+                //         const details = document.createElement("details");
+                //         details.open = true; // ouvert par défaut
 
-                    // Créer le <summary>
-                    const summary = document.createElement("summary");
-                    summary.classList.add("summary-title");
-                    if (group.init) {
-                        // On déplace l"élément "init" à l"intérieur du summary
-                        summary.appendChild(group.init);
-                    } else {
-                        // Cas particulier (normalement pas de groupe sans init)
-                        summary.textContent = "Groupe";
-                    }
-                    details.appendChild(summary);
+                //         // Créer le <summary>
+                //         const summary = document.createElement("summary");
+                //         summary.classList.add("summary-title");
+                //         if (group.init) {
+                //             // On déplace l"élément "init" à l"intérieur du summary
+                //             summary.appendChild(group.init);
+                //         } else {
+                //             // Cas particulier (normalement pas de groupe sans init)
+                //             summary.textContent = "Groupe";
+                //         }
+                //         details.appendChild(summary);
 
-                    // Créer une div interne pour le contenu avec columns:4
-                    const innerDiv = document.createElement("div");
-                    innerDiv.style.columns = "4";
+                //         // Créer une div interne pour le contenu avec columns:4
+                //         const innerDiv = document.createElement("div");
+                //         innerDiv.style.columns = "4";
 
-                    // Ajouter les éléments du groupe dans innerDiv
-                    group.items.forEach(item => {
-                        innerDiv.appendChild(item);
-                    });
+                //         // Ajouter les éléments du groupe dans innerDiv
+                //         group.items.forEach(item => {
+                //             innerDiv.appendChild(item);
+                //         });
 
-                    details.appendChild(innerDiv);
+                //         details.appendChild(innerDiv);
 
-                    // Ajouter le details au conteneur
-                    container.appendChild(details);
-                });
+                //         // Ajouter le details au conteneur
+                //         container.appendChild(details);
+                //     });
+                // // Reorder checkboxes with district categories
             </script>
         '));
 
@@ -194,59 +197,187 @@ class ScmTeamsFormController extends DefaultModuleController
 		$cache = ScmClubCache::load();
 
         $clubs = ScmClubService::sort_club_list($cache->get_clubs());
+        // $reordered_clubs = ScmClubService::sort_club_list($cache->get_clubs());
 
-        foreach ($clubs as $country => $countries)
+        $allKey = [];
+        $otherKey = [];
+        $otherKeysWithNames = [];
+
+        // 2. Séparer les clés
+        foreach (array_keys($clubs) as $key) {
+            if ($key === 'all') {
+                $allKey = [$key => $clubs[$key]];
+            } elseif ($key === 'other') {
+                $otherKey = [$key => $clubs[$key]];
+            } else {
+                $interpretedName = LangLoader::get_message($key, 'countries');
+                $otherKeysWithNames[$key] = $interpretedName;
+            }
+        }
+
+        // 3. Trier les autres clés par leur nom interprété
+        asort($otherKeysWithNames);
+
+        // 4. Reconstruire le tableau dans l'ordre souhaité
+        $reordered_clubs = [];
+
+        // Ajouter 'all' en premier si elle existe
+        if (!empty($allKey)) {
+            $reordered_clubs = $allKey;
+        }
+
+        // Ajouter les autres clés triées
+        foreach (array_keys($otherKeysWithNames) as $key) {
+            $reordered_clubs[$key] = $clubs[$key];
+        }
+
+        // Ajouter 'other' en dernier si elle existe
+        if (!empty($otherKey)) {
+            $reordered_clubs = array_merge($reordered_clubs, $otherKey);
+        }
+
+        foreach ($reordered_clubs as $country => $countries)
         {
             if($country == 'all')
             {
-                $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', '<h2>' . $this->lang['scm.clubs.countries.team'] . '</h2>');
+                $options[] = new FormFieldMultipleCheckboxOption(
+                    'checkbox-title_root',
+                    '<h2>' . $this->lang['scm.clubs.countries.team'] . '</h2>'
+                );
                 foreach ($countries as $country_club)
                 {
-                    $options[] = new FormFieldMultipleCheckboxOption($country_club['id_club'], ($country_club['club_name']));
+                    $options[] = new FormFieldMultipleCheckboxOption($country_club['id_club'] . '_root', ($country_club['club_name']));
                 }
             }
             else
             {
                 $data = ScmClubService::get_district_data($countries['file']);
-                $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', '<h2>' . LangLoader::get_message($country, 'countries') . '</h2>');
+
+                $options[] = new FormFieldMultipleCheckboxOption(
+                    'checkbox-title_' . $country,
+                    '<h2>' . LangLoader::get_message($country, 'countries') . '</h2>'
+                );
                 foreach ($countries as $league => $leagues)
                 {
-                    if ($league !== 'file') {
-                        $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', empty($league) ? '<h3>' . $this->lang['scm.clubs.leagues.none'] . '</h3>' : '<h3>' . ScmClubService::get_league($data, $league) . '</h3>');
-                    }
-                    if (empty($league))
+                    if ($league !== 'file')
                     {
-                        foreach ($leagues as $root_league_clubs)
+                        if (empty($league))
                         {
-                            foreach ($root_league_clubs as $root_league_club)
-                            {
-                                $options[] = new FormFieldMultipleCheckboxOption($root_league_club['id_club'], ($root_league_club['club_name']));
-                            }
-                        }
-                    }
-                    elseif ($league !== 'file')
-                    {
-                        foreach ($leagues as $district => $districts)
-                        {
-                            $options[] = new FormFieldMultipleCheckboxOption('checkbox_title', empty($district) ? '<h4>' . $this->lang['scm.clubs.districts.none'] . '</h4>' : '<h4>' . ScmClubService::get_district($data, $district) . '</h4>');
-                            if (empty($district))
-                            {
-                                foreach ($districts as $root_district_club)
-                                {
-                                    $options[] = new FormFieldMultipleCheckboxOption($root_district_club['id_club'], ($root_district_club['club_name']));
-                                }
-                            }
-                            else
+                            $options[] = new FormFieldMultipleCheckboxOption(
+                                'checkbox-title_' . $country . '_' . $league,
+                                '<h3>' . ScmClubService::get_league($data, $league) . '</h3>'
+                            );
+                            foreach ($leagues as $district => $districts)
                             {
                                 foreach ($districts as $district_club)
                                 {
-                                    $options[] = new FormFieldMultipleCheckboxOption($district_club['id_club'], ($district_club['club_name']));
+                                    $options[] = new FormFieldMultipleCheckboxOption($district_club['id_club'] . '_' . $country, $district_club['club_name']);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            $options[] = new FormFieldMultipleCheckboxOption(
+                                'checkbox-title_' . $country . '_' . $league,
+                                '<h3>' . ScmClubService::get_league($data, $league) . '</h3>'
+                            );
+                            foreach ($leagues as $district => $districts)
+                            {
+                                if (empty($district))
+                                {
+                                    foreach ($districts as $district_club)
+                                    {
+                                        $options[] = new FormFieldMultipleCheckboxOption($district_club['id_club'] . '_' . $country . '_' . $league, $district_club['club_name']);
+                                    }
+                                }
+                                else
+                                {
+                                    $options[] = new FormFieldMultipleCheckboxOption(
+                                        'checkbox-title_' . $country . '_' . $league . '_' . $district,
+                                        '<h4>' . ScmClubService::get_district($data, $district) . '</h4>'
+                                    );
+                                    foreach ($districts as $district_club)
+                                    {
+                                        $options[] = new FormFieldMultipleCheckboxOption($district_club['id_club'] . '_' . $country . '_' . $league . '_' . $district, $district_club['club_name']);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            // else
+            // {
+            //     $data = ScmClubService::get_district_data($countries['file']);
+            //     $options[] = new FormFieldMultipleCheckboxOption(
+            //         'checkbox-title_' . $country,
+            //         '<h2>' . LangLoader::get_message($country, 'countries') . '</h2>'
+            //     );
+            //     foreach ($countries as $league => $leagues)
+            //     {
+            //         if ($league !== 'file') {
+            //             if (!empty($league))
+            //             {
+            //                 $options[] = new FormFieldMultipleCheckboxOption(
+            //                     'checkbox-title_' . $country . '_' . $league,
+            //                     '<h3>' . ScmClubService::get_league($data, $league) . '</h3>'
+            //                 );
+            //                 foreach ($leagues as $root_league_clubs)
+            //                 {
+            //                     // $options[] = new FormFieldMultipleCheckboxOption(
+            //                     //     'checkbox-title_' . $country,
+            //                     //     '<h3>' . $this->lang['scm.clubs.leagues.none'] . '</h3>');
+            //                     foreach ($root_league_clubs as $root_league_club)
+            //                     {
+            //                         $options[] = new FormFieldMultipleCheckboxOption($root_league_club['id_club'] . '_' . $country, $root_league_club['club_name']);
+            //                     }
+            //                 }
+            //             }
+            //             else
+            //             {
+            //                 if (empty($league))
+            //                 {
+            //                     foreach ($leagues as $root_league_clubs)
+            //                     {
+            //                         // $options[] = new FormFieldMultipleCheckboxOption(
+            //                         //     'checkbox-title_' . $country,
+            //                         //     '<h3>' . $this->lang['scm.clubs.leagues.none'] . '</h3>');
+            //                         foreach ($root_league_clubs as $root_league_club)
+            //                         {
+            //                             $options[] = new FormFieldMultipleCheckboxOption($root_league_club['id_club'] . '_' . $country, $root_league_club['club_name']);
+            //                         }
+            //                     }
+            //                 }
+            //                 else
+            //                 {
+            //                     foreach ($leagues as $district => $districts)
+            //                     {
+            //                         if (empty($district))
+            //                         {
+            //                             // $options[] = new FormFieldMultipleCheckboxOption(
+            //                             //     'checkbox-title_' . $country . '_' . $league,
+            //                             //     '<h4>' . $this->lang['scm.clubs.districts.none'] . '</h4>');
+            //                             foreach ($districts as $root_district_club)
+            //                             {
+            //                                 $options[] = new FormFieldMultipleCheckboxOption($root_district_club['id_club'] . '_' . $country . '_' . $league, ($root_district_club['club_name']));
+            //                             }
+            //                         }
+            //                         else
+            //                         {
+            //                             $options[] = new FormFieldMultipleCheckboxOption(
+            //                                 'checkbox-title_' . $country . '_' . $league . '_' . $district,
+            //                                 '<h4>' . ScmClubService::get_district($data, $district) . '</h4>');
+            //                             foreach ($districts as $district_club)
+            //                             {
+            //                                 $options[] = new FormFieldMultipleCheckboxOption($district_club['id_club'] . '_' . $country . '_' . $league . '_' . $district, ($district_club['club_name']));
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         }
 
 		return $options;

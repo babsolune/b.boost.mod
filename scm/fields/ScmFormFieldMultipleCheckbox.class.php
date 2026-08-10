@@ -114,8 +114,16 @@ class ScmFormFieldMultipleCheckbox extends AbstractFormField
 		$rows = [];
 		foreach ($this->available_options as $option)
 		{
-			$rows[] = [
-                'C_GROUP_OPTION' => $option->get_id() == 'checkbox_title',
+            $parts_id = $option->get_id();
+            $parts = explode('_', trim($parts_id));
+            $id   = $parts[0] ?? '';
+            $code = $parts[1] ?? '';
+            $lref = $parts[2] ?? '';
+            $dref = $parts[3] ?? '';
+            $checkbox_id = ($code ? $code . '_' : '') . ($lref ? $lref . '_': '') . ($dref ? $dref . '_' : '') . $id;
+            $rows[] = [
+                'C_GROUP_OPTION' => $id == 'checkbox-title',
+                'CHECKBOX_ID' => $checkbox_id,
 				'NAME' => $option->get_label(),
 				'HTML_ID' => $this->get_option_id($option),
 				'C_CHECKED' => $this->is_selected($option)

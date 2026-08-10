@@ -1,5 +1,5 @@
 # START choice #
-	<div class="# IF choice.C_GROUP_OPTION #checkbox-title# ELSE #form-field-checkbox# ENDIF #">
+	<div id="{choice.CHECKBOX_ID}" class="# IF choice.C_GROUP_OPTION #checkbox-title# ELSE #form-field-checkbox# ENDIF #">
         # IF choice.C_GROUP_OPTION #
             <div>{choice.NAME}</div>
         # ELSE #
