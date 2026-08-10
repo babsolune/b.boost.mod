@@ -20,7 +20,7 @@ $process = 'error';
 $conflict_rows = [];
 $countries_file = PATH_TO_ROOT . '/lang/english/countries.php';
 
-function build_serialized_district(?string $csv_value): string 
+function build_serialized_district(?string $csv_value): string
 {
     if (empty($csv_value)) {
         return '';
@@ -38,26 +38,27 @@ function build_serialized_district(?string $csv_value): string
     $lref = $parts[1] ?? '';
     $dref = $parts[2] ?? '';
 
-    if (isset($lang[$code])) {
+    if (isset($lang[$code]) && $lang[$code] != 0)
+    {
         $country_file_name = Url::encode_rewrite($lang[$code]);
-    } else {
-        $country_file_name = $code;
-    }
-    $filePath = '../../../../modules/scm/data/leagues/' . $country_file_name . '.json';
+        $filePath = '../../../../modules/scm/data/leagues/' . $country_file_name . '.json';
 
-    $structure = [
-        [
-            'code' => $code,
-            'lref' => $lref,
-            'dref' => $dref,
-            'file' => $filePath
-        ]
-    ];
+        $structure = [
+            [
+                'code' => $code,
+                'lref' => $lref,
+                'dref' => $dref,
+                'file' => $filePath
+            ]
+        ];
+    } else {
+        $structure = [];
+    }
 
     return serialize($structure);
 }
 
-function build_logo(?string $name, ?string $csv_value): string 
+function build_logo(?string $name, ?string $csv_value): string
 {
     if (empty($name) || empty($csv_value)) {
         return '';
@@ -76,10 +77,11 @@ function build_logo(?string $name, ?string $csv_value): string
     $dref = $parts[2] ?? '';
 
     $country = isset($lang[$code]) ? '/' . Url::encode_rewrite($lang[$code]) : '';
-    $league = isset($lref) ? '/' . $lref : '';
-    $district = isset($dref) ? '/' . $dref : '';
+    $league = isset($lref) && $lref != '' ? '/' . $lref : '';
+    $district = isset($dref) && $dref != '' ? '/' . $dref : '';
+    $club = '/' . $name . '.webp';
 
-    return '/modules/scm/data/logos' . $country . $league . $district . '/' . $name . '.webp';
+    return '/modules/scm/data/logos' . $country . $league . $district . $club;
 }
 
 function build_flag(?string $csv_value): string 
@@ -89,16 +91,20 @@ function build_flag(?string $csv_value): string
     }
 
     $parts = explode('_', trim($csv_value));
-    $code = $parts[0] ?? '';
+    if ($parts[0] === '0')
+        $code = $parts[1] ?? '';
+    else
+        $code = $parts[0] ?? '';
 
     return $code;
 }
 
-$countries_file = PATH_TO_ROOT . '/lang/english/countries.php';
+/** @var array $lang */
+$countries_file = new File(PATH_TO_ROOT . '/lang/english/countries.php');
 $lang_countries = [];
 
-if (file_exists($countries_file)) {
-    require $countries_file;
+if ($countries_file->exists()) {
+    require $countries_file->get_path();
     $lang_countries = $lang;
 }
 
@@ -112,19 +118,23 @@ if (isset($_POST['import_selected'])) {
     $overwrite_actions = $_POST['overwrite_actions'] ?? [];
 
     // CASE 1: First submit with file upload
-    if (!empty($_FILES['clubs_file']['tmp_name'])) {
+    if (!empty($_FILES['clubs_file']['tmp_name']))
+    {
         $csvFile = $_FILES['clubs_file']['tmp_name'];
 
-        if (($handle = fopen($csvFile, 'r')) !== false) {
+        if (($handle = fopen($csvFile, 'r')) !== false)
+        {
             $row = 0;
             $cached_rows = [];
 
             while (($data = fgetcsv($handle, 1000, '|', '"', '\\')) !== false) {
+                // Ignorer l'en-tête ou ligne vide
                 if ($row === 0 || empty($data[0]) || trim($data[0]) === '') {
                     $row++;
                     continue;
                 }
 
+                // On vérifie si l'index courant de la ligne est sélectionné
                 if (isset($selected_rows_set[$row])) {
                     $cached_rows[$row] = $data;
                 }
@@ -132,10 +142,9 @@ if (isset($_POST['import_selected'])) {
             }
             fclose($handle);
 
-            // Store parsed rows in superglobal session
             $_SESSION['scm_import_rows'] = $cached_rows;
         }
-    } 
+    }
 
     // Retrieve cached rows
     $cached_rows = $_SESSION['scm_import_rows'] ?? [];
@@ -177,7 +186,7 @@ if (isset($_POST['import_selected'])) {
                 $data = $item['data'];
                 $exists = $item['exists'];
                 $action = $overwrite_actions[$row_idx] ?? 'update';
-                $logoFile = build_logo(Url::encode_rewrite($data[0] ?? ''), $data[2] ?? null);
+                $logo_file = build_logo(Url::encode_rewrite($data[0] ?? ''), $data[2] ?? null);
 
                 $payload = [
                     'club_name'      => $data[0] ?? null,
@@ -186,7 +195,7 @@ if (isset($_POST['import_selected'])) {
                     'club_district'  => isset($data[2]) ? build_serialized_district($data[2]) : null,
                     'club_flag'      => isset($data[2]) ? build_flag($data[2]) : null,
                     'club_number'    => $data[3] ?? null,
-                    'club_logo'      => isset($data[2]) ? $logoFile : '/modules/scm/templates/images/badges/club.webp',
+                    'club_logo'      => isset($data[2]) ? $logo_file : '/modules/scm/templates/images/badges/club.webp',
                     'club_website'   => $data[4] ?? null,
                     'club_email'     => $data[5] ?? null,
                     'club_phone'     => $data[6] ?? null,
@@ -199,9 +208,9 @@ if (isset($_POST['import_selected'])) {
                 } else {
                     if ($action === 'update') {
                         PersistenceContext::get_querier()->update(
-                            ScmSetup::$scm_club_table, 
-                            $payload, 
-                            'WHERE club_name = :name', 
+                            ScmSetup::$scm_club_table,
+                            $payload,
+                            'WHERE club_name = :name',
                             ['name' => $data[0]]
                         );
                         $updated++;
@@ -223,7 +232,7 @@ if (isset($_POST['import_selected'])) {
     }
 }
 
-if (AppContext::get_current_user()->check_level(User::MEMBER_LEVEL)) {
+if (AppContext::get_current_user()->check_level(User::ADMINISTRATOR_LEVEL)) {
 ?>
 
     <?php if ($message): ?>
@@ -334,15 +343,14 @@ if (AppContext::get_current_user()->check_level(User::MEMBER_LEVEL)) {
             const lines = text.split(/\r\n|\n/);
             tbody.innerHTML = '';
 
-            let rowIdx = 0;
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (!line) continue;
 
                 const rowData = parseCSVLine(line, '|', '"');
 
-                if (rowIdx === 0 || rowData[0] === '') {
-                    rowIdx++;
+                // On ignore l'en-tête (première ligne non vide ou i === 0)
+                if (i === 0 || rowData[0] === '') {
                     continue;
                 }
 
@@ -355,23 +363,52 @@ if (AppContext::get_current_user()->check_level(User::MEMBER_LEVEL)) {
                 const site = escapeHtml(rowData[4] || '-');
                 const email = escapeHtml(rowData[5] || '-');
                 const tel = escapeHtml(rowData[6] || '-');
+                let code = '';
+                let lref = '';
+                let dref = '';
+                let logoHtml = '';
+                let flagHtml = '';
+                let u_code = '';
+                let u_lref = '';
+                let u_dref = '';
+                let u_logo = '';
 
                 const parts = districtRaw ? districtRaw.split('_') : [];
-                const u_code = parts[0] ? '/' + countriesMap[parts[0]] : '';
-                const u_lref = parts[1] ? '/' + parts[1] : '';
-                const u_dref = parts[2] ? '/' + parts[2] : '';
-                const u_logo = '/' + encode_rewrite(displayName) + '.webp';
-
-                const code = parts[0] || '';
-                const lref = parts[1] || '';
-                const dref = parts[2] || '';
-
-                const logoHtml = districtRaw ? `<img src="${pathToRoot}/modules/scm/data/logos/${encode_rewrite(u_code)}${u_lref}${u_dref}${u_logo}" width="32" height="32" alt="logo du club ${displayName}">` : '-';
-                const flagHtml = districtRaw ? `<img src="${pathToRoot}/images/stats/countries/${code}.png" alt="drapeau">` : '-';
+                if (districtRaw)
+                {
+                    if (parts[0] == 0)
+                    {
+                        code = parts[1];
+                        lref = '-';
+                        dref = '-';
+                        logoHtml = '-';
+                        flagHtml = `<img src="${pathToRoot}/images/stats/countries/${code}.png" alt="drapeau">`;
+                    }
+                    else
+                    {
+                        u_code = parts[0] ? '/' + countriesMap[parts[0]] : '';
+                        u_lref = parts[1] ? '/' + parts[1] : '';
+                        u_dref = parts[2] ? '/' + parts[2] : '';
+                        u_logo = '/' + encode_rewrite(displayName) + '.webp';
+                        code = parts[0] || '';
+                        lref = parts[1] || '';
+                        dref = parts[2] || '';
+                        logoHtml = code != '-' ? `<img src="${pathToRoot}/modules/scm/data/logos/${encode_rewrite(u_code)}${u_lref}${u_dref}${u_logo}" width="32" height="32" alt="logo du club ${displayName}">` : '-';
+                        flagHtml = code != '-' ? `<img src="${pathToRoot}/images/stats/countries/${code}.png" alt="drapeau">` : '-';
+                    }
+                }
+                else
+                {
+                    code = '-';
+                    lref = '-';
+                    dref = '-';
+                    logoHtml = '-';
+                    flagHtml = '-';
+                }
 
                 tr.innerHTML = `
                     <td>
-                        <input type="checkbox" name="selected_rows[]" value="${rowIdx}" class="row-checkbox" checked>
+                        <input type="checkbox" name="selected_rows[]" value="${i}" class="row-checkbox" checked>
                     </td>
                     <td>${displayName}</td>
                     <td>${fullName}</td>
@@ -385,7 +422,6 @@ if (AppContext::get_current_user()->check_level(User::MEMBER_LEVEL)) {
                 `;
 
                 tbody.appendChild(tr);
-                rowIdx++;
             }
 
             container.style.display = 'block';
