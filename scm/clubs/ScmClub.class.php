@@ -201,7 +201,7 @@ class ScmClub
 			'club_website'   => $this->club_website->absolute(),
 			'club_email'     => $this->club_email,
 			'club_phone'     => $this->club_phone,
-			'club_locations' => $this->club_locations,
+			'club_locations' => TextHelper::serialize($this->club_locations),
 			'club_district'  => TextHelper::serialize($this->club_district),
 			'club_colors'    => TextHelper::serialize($this->club_colors)
         ];
@@ -222,7 +222,7 @@ class ScmClub
 		$this->club_website   = !empty($properties['club_website']) ? new Url($properties['club_website']) : new Url('');
 		$this->club_email     = $properties['club_email'];
 		$this->club_phone     = $properties['club_phone'];
-		$this->club_locations = $properties['club_locations'];
+		$this->club_locations = !empty($properties['club_locations']) ? TextHelper::unserialize($properties['club_locations']) : [];;
 		$this->club_district  = !empty($properties['club_district']) ? TextHelper::unserialize($properties['club_district']) : [];
         $this->club_colors    = !empty($properties['club_colors']) ? TextHelper::unserialize($properties['club_colors']) : [];
     }
