@@ -1,3 +1,4 @@
+<!-- === ScmClubsController === -->
 <section id="module-scm" class="several-items">
 	<header class="section-header">
 		<h1 class="flex-between">
@@ -19,7 +20,7 @@
                 # START countries #
                     <details class="clubs-details" open>
                         <summary class="summary-title"><h3>{countries.COUNTRY_NAME}</h3></summary>
-                        <div class="columns-6">
+                        <div class="col-v-4">
                             # START countries.items #
                                 <article class="flex-team flex-left mb">
                                     # IF countries.items.C_HAS_SHIELD #
@@ -31,7 +32,7 @@
                                             # ENDIF #
                                         # ENDIF #
                                     # ENDIF #
-                                    <span><a href="{countries.items.U_CLUB}" aria-label="{countries.items.FULL_NAME}" class="offload">{countries.items.NAME}</a></span>
+                                    <span><a href="{countries.items.U_CLUB}" aria-label="{countries.items.NAME}" class="offload">{countries.items.FULL_NAME}</a></span>
                                 </article>
                             # END countries.items #
                         </div>
@@ -39,7 +40,7 @@
                             # IF countries.leagues.C_LEAGUE #
                                 <details class="clubs-details" open>
                                     <summary class="summary-title"><h4>{countries.leagues.LEAGUE_NAME}</h4></summary>
-                                    <div class="columns-6">
+                                    <div class="col-v-4">
                                         # START countries.leagues.items #
                                             <article class="flex-team flex-left mb">
                                                 # IF countries.leagues.items.C_HAS_SHIELD #
@@ -51,14 +52,14 @@
                                                         # ENDIF #
                                                     # ENDIF #
                                                 # ENDIF #
-                                                <span><a href="{countries.leagues.items.U_CLUB}" aria-label="{countries.leagues.items.FULL_NAME}" class="offload">{countries.leagues.items.NAME}</a></span>
+                                                <span><a href="{countries.leagues.items.U_CLUB}" aria-label="{countries.leagues.items.NAME}" class="offload">{countries.leagues.items.FULL_NAME}</a></span>
                                             </article>
                                         # END countries.leagues.items #
                                     </div>
                                     # START countries.leagues.districts #
                                         <details class="clubs-details" open>
                                             # IF countries.leagues.districts.C_DISTRICT_NAME #<summary class="summary-title"><h5>{countries.leagues.districts.DISTRICT_NAME}</h5></summary># ENDIF #
-                                            <div class="columns-6">
+                                            <div class="col-v-4">
                                                 # START countries.leagues.districts.items #
                                                     <article class="flex-team flex-left mb">
                                                         # IF countries.leagues.districts.items.C_HAS_SHIELD #
@@ -70,7 +71,7 @@
                                                                 # ENDIF #
                                                             # ENDIF #
                                                         # ENDIF #
-                                                        <span><a href="{countries.leagues.districts.items.U_CLUB}" aria-label="{countries.leagues.districts.items.FULL_NAME}" class="offload">{countries.leagues.districts.items.NAME}</a></span>
+                                                        <span><a href="{countries.leagues.districts.items.U_CLUB}" aria-label="{countries.leagues.districts.items.NAME}" class="offload">{countries.leagues.districts.items.FULL_NAME}</a></span>
                                                     </article>
                                                 # END countries.leagues.districts.items #
                                             </div>

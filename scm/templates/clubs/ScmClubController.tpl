@@ -1,21 +1,24 @@
+<!-- === ScmClubController === -->
 <section id="module-scm" class="single-item">
-    <header class="section-header row-header">
-        # IF C_HAS_LOGO #<img class="club-logo" src="{U_LOGO}" alt="{FULL_NAME}"># ENDIF #
+    <header class="section-header">
         <div class="club-name">
-            <h1># IF C_HAS_FULL_NAME #{FULL_NAME}# ELSE #{NAME}# ENDIF #</h1>
-            <div class="flex-between">
-                <div>
+            <div class="flex-team-container">
+                # IF C_HAS_LOGO #<img class="club-logo" src="{U_LOGO}" alt="{FULL_NAME}"># ENDIF #
+                <h1># IF C_HAS_FULL_NAME #{FULL_NAME}# ELSE #{NAME}# ENDIF #</h1>
+            </div>
+            <div class="flex-between flex-between-large">
+                <div class="flex-between">
                     # IF C_HAS_FLAG #<img class="club-logo" src="{U_FLAG}" alt="{NAME}"># ENDIF #
                     <span class="big">
                         # IF C_HAS_NAME #{NAME}# ENDIF #
                     </span>
                 </div>
                 # IF C_HAS_COUNTRY #
-                <div>
-                    # IF C_HAS_COUNTRY #<a href="{U_COUNTRY}" target="_blank" rel="noopener">{COUNTRY}</a># ENDIF #
-                    # IF C_HAS_LEAGUE # | <a href="{U_LEAGUE}" target="_blank" rel="noopener">{LEAGUE}</a> # ENDIF #
-                    # IF C_HAS_DISTRICT # | <a href="{U_DISTRICT}" target="_blank" rel="noopener">{DISTRICT}</a> # ENDIF #
-                </div>
+                    <div>
+                        # IF C_HAS_COUNTRY #<a href="{U_COUNTRY}" target="_blank" rel="noopener">{COUNTRY}</a># ENDIF #
+                        # IF C_HAS_LEAGUE # | <a href="{U_LEAGUE}" target="_blank" rel="noopener">{LEAGUE}</a> # ENDIF #
+                        # IF C_HAS_DISTRICT # | <a href="{U_DISTRICT}" target="_blank" rel="noopener">{DISTRICT}</a> # ENDIF #
+                    </div>
                 # ENDIF #
                 # IF C_CONTROLS #
                     <div class="controls align-right">
