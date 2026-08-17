@@ -136,7 +136,6 @@ class ScmClubFormController extends DefaultModuleController
 	{
 		$club = $this->get_club();
 
-        $club->set_club_district($this->form->get_value('club_district'));
         $club->set_club_name($this->form->get_value('name'));
         $club->set_club_sub($this->form->get_value('affiliate'));
 
@@ -145,10 +144,20 @@ class ScmClubFormController extends DefaultModuleController
             $club->set_club_master($this->form->get_value('affiliation')->get_raw_value());
             $club->set_club_full_name('');
             $club->set_club_slug(Url::encode_rewrite(ScmClubService::get_club($this->form->get_value('affiliation')->get_raw_value())->get_club_full_name()));
-            $club->set_club_logo(ScmClubCache::load()->get_affiliate_club_shield($this->form->get_value('affiliation')->get_raw_value()));
+            if ($this->form->get_value('logo')) {
+                $club->set_club_logo($this->form->get_value('logo'));
+            } else {
+                $club->set_club_logo(ScmClubCache::load()->get_affiliate_club_shield($this->form->get_value('affiliation')->get_raw_value()));
+            }
+            if ($this->form->get_value('club_district')) {
+                $club->set_club_district($this->form->get_value('club_district'));
+            } else {
+                $club->set_club_district(ScmClubService::get_club($this->form->get_value('affiliation')->get_raw_value())->get_club_district());
+            }
         }
         else
         {
+            $club->set_club_district($this->form->get_value('club_district'));
             $club->set_club_full_name($this->form->get_value('full_name'));
             $club->set_club_slug(Url::encode_rewrite($club->get_club_full_name()));
             $club->set_club_website(new Url($this->form->get_value('website')));
