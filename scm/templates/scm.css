@@ -220,29 +220,6 @@ th.bgc-sub a {
     visibility: visible;
 }
 
-[class^="columns-"] > *,
-.teams-checkbox .form-field-multiple-checkbox > * {
-    break-inside: avoid;
-}
-
-@media (min-width: 769px) {
-    .columns-6,
-    .teams-checkbox .form-field-multiple-checkbox {
-        columns: 2;
-    }
-}
-@media (min-width: 1025px) {
-    .columns-6,
-    .teams-checkbox .form-field-multiple-checkbox {
-        columns: 4;
-    }
-}
-@media (min-width: 1366px) {
-    .columns-6 {
-        columns: 6;
-    }
-}
-
 .teams-checkbox .form-field-checkbox {
     padding: 0.309em;
     margin: 0 0 0.309em;
@@ -573,12 +550,6 @@ th.bgc-sub a {
 
 .bracket-round:last-child .bracket-round-games { justify-content: center; }
 
-.row-header{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
 .bracket-highlight {
     background-color: var(--bgc-sub) !important;
     color: var(--txt-sub) !important;
@@ -606,12 +577,11 @@ th.bgc-sub a {
     .cell-bracket {
         flex-direction: row;
 		margin: 0 var(--cell-container-gap) 0 0;
-    }
-
-    .cell-bracket > * {
-        width: 320px;
-        margin: 0 var(--cell-gap) var(--cell-gap) 0;
-        flex-shrink: 0;
+        & > * {
+            width: 320px;
+            margin: 0 var(--cell-gap) var(--cell-gap) 0;
+            flex-shrink: 0;
+        }
     }
 }
 
@@ -687,6 +657,21 @@ th.bgc-sub a {
             }
         }
     }
+
+    .first-round.bracket-round {
+        .bracket-round-games {
+            .game-container {
+                &::after {
+                    top: 50%;
+                    left: 100%;
+                    transform: translateY(-50%);
+                    width:11px;
+                    height: 2px;
+                    background-color: var(--bdr-main);
+                }
+            }
+        }
+    }
 }
 
 /* Team layout */
@@ -726,23 +711,12 @@ th.bgc-sub a {
     justify-content: flex-start;
 }
 
-@media (max-width: 768px) {
-    .flex-team span { order: 2; }
-    .flex-team img  { order: 1; }
-    .flex-right {
-        justify-content: flex-start;
-        text-align: left;
-    }
-    .invert-team .game-team  { order: 1; }
-    .invert-team .game-score { order: 2; }
-}
-
-
 /* details */
 .cell-details {
     padding: 0.309em;
     font-weight: bold;
 }
+
 .cell-details.cell-modal .cell {
     max-width: 100%;
 }
@@ -947,18 +921,26 @@ summary {
     width: auto !important;
 }
 
-.clubs-details {
-    padding: 0.618em;
-    & > details {
-        padding-left: 1.809em;
-    }
+.games details {
+    margin-top: 0.618em;
 }
 
+.fieldset-inset .summary-title,
 .summary-title {
     border: none;
     margin-bottom: 0.618em;
     & > * {
         display: inline-block;
+        width: auto;
+    }
+    &::marker {
+        vertical-align: middle; 
+    }
+}
+
+details > details {
+    @media(min-width: 769px) {
+        padding-left: 1.618em;
     }
 }
 
