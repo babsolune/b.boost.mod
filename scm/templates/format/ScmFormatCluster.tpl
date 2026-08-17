@@ -1,4 +1,4 @@
-
+<!-- === ScmFormatCluster === -->
 <script>
     # IF C_REFRESH_TIME #
         setInterval(refresh_scores, 60000);
@@ -315,7 +315,7 @@
                             <div id="home-{blocks.sub_blocks.items.GAME_ID}" class="game-score home-score cell-pad sm-width-pc-20">{blocks.sub_blocks.items.HOME_SCORE}# IF blocks.sub_blocks.items.C_HAS_PEN # <span class="small">({blocks.sub_blocks.items.HOME_PEN})</span># ENDIF #</div>
                         </div>
                         <div id="vs-{blocks.sub_blocks.items.GAME_ID}" class="hidden-small-screens">-</div>
-                        <div class="team-{blocks.sub_blocks.items.AWAY_ID} flex-between sm-width-pc-100 md-width-pc-50 invert-team">
+                        <div class="team-{blocks.sub_blocks.items.AWAY_ID} flex-between sm-width-pc-100 md-width-pc-50">
                             <div id="away-{blocks.sub_blocks.items.GAME_ID}" class="game-score away-score cell-pad sm-width-pc-20">{blocks.sub_blocks.items.AWAY_SCORE}# IF blocks.sub_blocks.items.C_HAS_PEN # <span class="small">({blocks.sub_blocks.items.AWAY_PEN})</span># ENDIF #</div>
                             <div class="game-team away-team cell-pad flex-team flex-left sm-width-pc-80# IF blocks.sub_blocks.items.C_AWAY_FAV # text-strong# ENDIF #">
                                 # IF blocks.sub_blocks.items.C_HAS_AWAY_LOGO #<img src="{blocks.sub_blocks.items.AWAY_LOGO}" alt="{blocks.sub_blocks.items.AWAY_TEAM}"># ENDIF #

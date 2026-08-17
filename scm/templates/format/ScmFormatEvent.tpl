@@ -164,7 +164,7 @@
     <div class="cell-flex cell-columns-2">
         # START blocks.items #
             <div id="game-{blocks.items.GAME_ID}" class="cell cell-game" data-date="{blocks.items.GAME_DATE_TIMESTAMP}" aria-label="{blocks.items.GAME_ID}">
-                <div class="flex-between flex-between-large small">
+                <div class="flex-between small">
                     <div class="sm-width-pc-100 md-width-pc-50 cell-gap">
                         <time class="sm-width-pc-# IF blocks.items.C_STATUS #50# ELSE #70# ENDIF # cell-gap align-left">{blocks.items.GAME_DATE_HOUR_MINUTE}</time>
                         # IF blocks.items.C_LINK #
@@ -176,7 +176,7 @@
                             <span class="bgc notice">{blocks.items.STATUS}</span>
                         # ENDIF #
                     </div>
-                    <div class="sm-width-pc-30 cell-gap align-right">
+                    <div class="sm-width-pc-100 md-width-pc-50 cell-gap align-right">
                         # IF C_DISPLAY_PLAYGROUNDS #
                             <span class="sm-width-pc-100 md-width-pc-33">{@scm.field}: {blocks.items.PLAYGROUND}</span>
                         # ENDIF #
@@ -295,7 +295,7 @@
                         # ENDIF #
                     </div>
                 </div>
-                <div class="flex-between flex-between-large# IF blocks.items.C_EXEMPT # bgc notice# ENDIF #">
+                <div class="flex-between# IF blocks.items.C_EXEMPT # bgc notice# ENDIF #">
                     <div class="team-{blocks.items.HOME_ID} flex-between sm-width-pc-100 md-width-pc-50">
                         <div class="game-team home-team cell-pad flex-team flex-right sm-width-pc-80# IF blocks.items.C_HOME_FAV # text-strong# ENDIF #">
                             <span><a href="{blocks.items.U_HOME_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{blocks.items.HOME_TEAM}</a></span>
@@ -304,7 +304,7 @@
                         <div id="home-{blocks.items.GAME_ID}" class="game-score home-score cell-pad sm-width-pc-20"># IF blocks.items.C_HAS_PEN #<span class="small">({blocks.items.HOME_PEN}) </span># ENDIF #{blocks.items.HOME_SCORE}</div>
                     </div>
                     <div id="vs-{blocks.items.GAME_ID}" class="hidden-small-screens">-</div>
-                    <div class="team-{blocks.items.AWAY_ID} flex-between sm-width-pc-100 md-width-pc-50 invert-team">
+                    <div class="team-{blocks.items.AWAY_ID} flex-between sm-width-pc-100 md-width-pc-50">
                         <div id="away-{blocks.items.GAME_ID}" class="game-score away-score cell-pad sm-width-pc-20">{blocks.items.AWAY_SCORE}# IF blocks.items.C_HAS_PEN # <span class="small">({blocks.items.AWAY_PEN})</span># ENDIF #</div>
                         <div class="game-team away-team cell-pad flex-team flex-left sm-width-pc-80# IF blocks.items.C_AWAY_FAV # text-strong# ENDIF #">
                             # IF blocks.items.C_HAS_AWAY_LOGO #<img src="{blocks.items.AWAY_LOGO}" alt="{blocks.items.AWAY_TEAM}"># ENDIF #

@@ -1,3 +1,4 @@
+<!-- === ScmTeamCalendarController === -->
 <section id="module-scm" class="single-item modal-container">
     # INCLUDE MENU #
     # IF C_CHARTS #
@@ -98,6 +99,7 @@
                             <col class="md-width-pc-5" />
                             # IF NOT C_ONE_DAY #<col class="md-width-pc-10" /># ENDIF #
                             <col class="md-width-pc-5" />
+                            <col class="md-width-pc-5" />
                             <col class="md-width-pc-# IF C_ONE_DAY #37# ELSE #32# ENDIF #" />
                             <col class="md-width-pc-8" />
                             <col class="md-width-pc-8" />
@@ -113,6 +115,7 @@
                                 # ENDIF #
                                 # IF NOT C_ONE_DAY #<th>{@scm.th.date}</th># ENDIF #
                                 <th aria-label="{@scm.th.hourly}"><i class="far fa-clock"></i></th>
+                                <th aria-label="{@scm.th.status}"></th>
                                 <th>{@scm.th.home.team}</th>
                                 <th colspan="2">{@scm.th.score}</th>
                                 <th>{@scm.th.away.team}</th>
@@ -121,10 +124,11 @@
                         </thead>
                         <tbody>
                             # START games #
-                                <tr class="# IF games.C_IS_AWAY_TEAM #bgc {games.TEAM_STATUS}# ENDIF ## IF games.C_IS_HOME_TEAM #bgc {games.TEAM_STATUS}# ENDIF ## IF games.C_EXEMPT #bgc notice# ENDIF #">
+                                <tr class="# IF games.C_EXEMPT #bgc notice# ENDIF #">
                                     <td># IF C_IS_DAY #{games.DAY}# ELSE #{games.ROUND}# ENDIF #</td>
                                     # IF NOT C_ONE_DAY #<td>{games.GAME_DATE_SHORT}</td># ENDIF #
                                     <td>{games.GAME_DATE_HOUR_MINUTE}</td>
+                                    <td><i class="fa fa-{games.TEAM_STATUS}" aria-hidden="true"></i></td>
                                     <td class="">
                                         <div class="flex-team flex-right">
                                             <span class="# IF games.HOME_FORFEIT # warning# ENDIF ## IF games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">

@@ -340,7 +340,7 @@
                         <div class="round-trip-bracket">
                             <div class="cell-bracket">
                                 # START rounds #
-                                    <div# IF rounds.C_ALL_PLACES # id="round-trip-main-round-{rounds.ROUND_ID}"# ENDIF # class="bracket-round# IF rounds.C_ALL_PLACES # all-places# ENDIF #">
+                                    <div# IF rounds.C_ALL_PLACES # id="round-trip-main-round-{rounds.ROUND_ID}"# ENDIF # class="bracket-round# IF rounds.C_ALL_PLACES # all-places# ENDIF ## IF rounds.C_HAT_PLAYOFF # first-round# ENDIF #">
                                         <h5 class="bracket-round-title">{rounds.L_TITLE}</h5>
                                         <div class="bracket-round-games">
                                             # IF rounds.C_DRAW_GAMES #<div># ENDIF #

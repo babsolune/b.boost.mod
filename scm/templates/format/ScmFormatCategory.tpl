@@ -1,3 +1,4 @@
+<!-- === ScmFormatCategory === -->
 # START categories #
     <div class="cell-format format-category">
         <h6 class="text-strong cell-content cell-100" style="margin: 0 var(--cell-gap) 0 0;">
@@ -43,7 +44,7 @@
                                 <div class="game-score home-score cell-pad sm-width-pc-20">{categories.events.items.HOME_SCORE}# IF categories.events.items.C_HAS_PEN # <span class="small">({categories.events.items.HOME_PEN})</span># ENDIF #</div>
                             </div>
                             <div class="hidden-small-screens">-</div>
-                            <div class="team-{categories.events.items.AWAY_ID} flex-between sm-width-pc-100 md-width-pc-50 invert-team">
+                            <div class="team-{categories.events.items.AWAY_ID} flex-between sm-width-pc-100 md-width-pc-50">
                                 <div class="game-score away-score cell-pad sm-width-pc-20">{categories.events.items.AWAY_SCORE}# IF categories.events.items.C_HAS_PEN # <span class="small">({categories.events.items.AWAY_PEN})</span># ENDIF #</div>
                                 <div class="game-team away-team cell-pad flex-team flex-left sm-width-pc-80# IF categories.events.items.C_AWAY_FAV # text-strong# ENDIF #">
                                     # IF categories.events.items.C_HAS_AWAY_LOGO #<img src="{categories.events.items.AWAY_LOGO}" alt="{categories.events.items.AWAY_TEAM}"># ENDIF #

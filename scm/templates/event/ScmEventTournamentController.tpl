@@ -1,3 +1,4 @@
+<!-- === ScmEventTournamentController === -->
 # IF C_HAS_GAMES #
     <button class="button modal-button --infos-groups">{@scm.groups.composition}</button>
     <div class="modal" id="infos-groups">
@@ -48,14 +49,14 @@
                 # IF C_HAT_RANKING #
                     <summary class="bgc-sub"><a href="{matchdays.U_MATCHDAY}">{@scm.day} {matchdays.MATCHDAY}</a></summary>
                     <div class="">
-                        <div class="content"># INCLUDE matchdays.MATCHDAYS_LIST #</div>
+                        # INCLUDE matchdays.MATCHDAYS_LIST #
                     </div>
                 # ELSE #
                     <summary class="bgc-sub">{@scm.round} {matchdays.MATCHDAY}</summary>
                     # IF C_ROUND_RANKING #
-                        <div class="content"># INCLUDE matchdays.ROUND_RANKING_LIST #</div>
+                        <div class=""># INCLUDE matchdays.ROUND_RANKING_LIST #</div>
                     # ELSE #
-                        <div class="content"># INCLUDE matchdays.ROUNDS_LIST #</div>
+                        <div class=""># INCLUDE matchdays.ROUNDS_LIST #</div>
                     # ENDIF #
                 # ENDIF #
             </details>
@@ -65,9 +66,9 @@
             <details open>
                 <summary class="bgc-sub">{matchrounds.L_MATCHROUND}</summary>
                 # IF C_ROUND_RANKING #
-                    <div class="content"># INCLUDE matchrounds.ROUND_RANKING_LIST #</div>
+                    <div class=""># INCLUDE matchrounds.ROUND_RANKING_LIST #</div>
                 # ELSE #
-                    <div class="content"># INCLUDE matchrounds.ROUNDS_LIST #</div>
+                    <div class=""># INCLUDE matchrounds.ROUNDS_LIST #</div>
                 # ENDIF #
             </details>
         # END matchrounds #
