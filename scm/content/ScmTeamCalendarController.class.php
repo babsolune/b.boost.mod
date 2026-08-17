@@ -22,7 +22,9 @@ class ScmTeamCalendarController extends DefaultModuleController
 	public function execute(HTTPRequestCustom $request)
 	{
         $this->init($request);
-		$this->build_view();
+
+        $this->build_view();
+
         if ($this->event->get_event_type() == ScmEvent::CHAMPIONSHIP || ($this->event->get_event_type() == ScmEvent::TOURNAMENT && $this->params->get_hat_ranking()))
         {
             $this->build_donut();
@@ -58,22 +60,22 @@ class ScmTeamCalendarController extends DefaultModuleController
             $score_status = $item->get_game_home_pen() ? (int)$item->get_game_home_pen() - (int)$item->get_game_away_pen() : (int)$item->get_game_home_score() - (int)$item->get_game_away_score();
             $team_status = '';
             if ($score_status > 0 && $this->team_id == $item->get_game_home_id())
-                $team_status = "success";
+                $team_status = "check success";
             elseif ($score_status < 0 && $this->team_id == $item->get_game_home_id())
-                $team_status = "error";
+                $team_status = "xmark error";
             elseif ($score_status > 0 && $this->team_id == $item->get_game_away_id())
-                $team_status = "error";
+                $team_status = "xmark error";
             elseif ($score_status < 0 && $this->team_id == $item->get_game_away_id())
-                $team_status = "success";
+                $team_status = "check success";
             elseif ($item->get_game_home_score() != '' && (int)$item->get_game_away_score() != '' && $score_status === 0)
-                $team_status = "moderator";
+                $team_status = "minus moderator";
 
             $this->view->assign_block_vars('games', array_merge($item->get_template_vars(),[
                 'C_IS_HOME_TEAM' => $this->team_id == $item->get_game_home_id(),
                 'C_IS_AWAY_TEAM' => $this->team_id == $item->get_game_away_id(),
                 'TEAM_STATUS' => $team_status,
                 'DAY' => $item->get_game_cluster(),
-                'ROUND' => $item->get_game_type() == 'G' ? (ScmParamsService::get_params($item->get_game_event_id())->get_hat_ranking() ? $item->get_game_cluster() : $item->get_game_round()) : 'B' . $item->get_game_cluster(),
+                'ROUND' => $item->get_game_type() == 'G' ? (ScmParamsService::get_params($item->get_game_event_id())->get_hat_ranking() ? $item->get_game_cluster() : $item->get_game_round()) : $this->lang['scm.short.round.' . $item->get_game_cluster() . ''],
             ]));
             $item->get_details_template($this->view, 'games');
         }
@@ -92,9 +94,9 @@ class ScmTeamCalendarController extends DefaultModuleController
     {
         $games = ScmGameService::get_team_games($this->event_id(), $this->team_id);
         $win = $draw = $loss = 0;
+        $item = new ScmGame();
         foreach ($games as $game)
         {
-            $item = new ScmGame();
             $item->set_properties($game);
 
             $score_status = (int)$item->get_game_home_score() - (int)$item->get_game_away_score();
