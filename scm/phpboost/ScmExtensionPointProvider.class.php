@@ -13,11 +13,11 @@ class ScmExtensionPointProvider extends ItemsModuleExtensionPointProvider
 	{
         $config = ScmConfig::load();
         if ($config->get_homepage() == ScmConfig::EVENT_LIST)
-            return new DefaultHomePageDisplay($this->get_id(), ScmCurrentEventsController::get_view($this->get_id()));
+            return new DefaultHomePageDisplay($this->get_id(), ScmCurrentEventsController::get_view());
         elseif ($config->get_homepage() == ScmConfig::GAME_LIST)
-            return new DefaultHomePageDisplay($this->get_id(), ScmAroundGamesController::get_view($this->get_id()));
+            return new DefaultHomePageDisplay($this->get_id(), ScmAroundGamesController::get_view());
         elseif ($config->get_homepage() == ScmConfig::CATEGORIES)
-            return new DefaultHomePageDisplay($this->get_id(), ScmCategoryController::get_view($this->get_id()));
+            return new DefaultHomePageDisplay($this->get_id(), ScmCategoryController::get_view());
 	}
 
     public function menus()
