@@ -12,7 +12,7 @@
 ####################################################
 
 $lang['scm.module.title'] = 'Compétitions';
-$lang['scm.mini.prev']    = 'Matchs précédents';
+$lang['scm.mini.prev']    = 'Précédents matchs';
 $lang['scm.mini.next']    = 'Prochains matchs';
 
 $lang['scm.pool']               = 'Sous-groupe';
@@ -94,41 +94,41 @@ $lang['scm.calendar.rounds']    = 'Calendrier des phases de groupes';
 $lang['scm.calendar.brackets']  = 'Calendrier des phases finales';
 
 // Days
-$lang['scm.days.management'] = 'Créer la liste les matchs par journée';
-$lang['scm.days.games.creation'] = 'Créer les matchs';
-$lang['scm.days.results'] = 'Résultats';
-$lang['scm.days.ranking'] = 'Classement';
+$lang['scm.days.management']      = 'Créer la liste les matchs par journée';
+$lang['scm.days.games.creation']  = 'Créer les matchs';
+$lang['scm.days.results']         = 'Résultats';
+$lang['scm.days.ranking']         = 'Classement';
 $lang['scm.days.ranking.general'] = 'Général';
-$lang['scm.days.ranking.days'] = 'Par journée';
-$lang['scm.days.ranking.home'] = 'À domicile';
-$lang['scm.days.ranking.away'] = 'À l\'extérieur';
-$lang['scm.days.ranking.attack'] = 'Attaque';
+$lang['scm.days.ranking.days']    = 'Par journée';
+$lang['scm.days.ranking.home']    = 'À domicile';
+$lang['scm.days.ranking.away']    = 'À l\'extérieur';
+$lang['scm.days.ranking.attack']  = 'Attaque';
 $lang['scm.days.ranking.defense'] = 'Défense';
-$lang['scm.rank.form'] = 'Forme';
+$lang['scm.rank.form']            = 'Forme';
     // scm.rank.health + $result
-$lang['scm.rank.health.win'] = 'V';
-$lang['scm.rank.health.draw'] = 'N';
-$lang['scm.rank.health.lost'] = 'D';
-$lang['scm.rank.health.exempt'] = '#';
-$lang['scm.label.health.exempt'] = 'Exempté';
-$lang['scm.rank.health.delayed'] = 'Match reporté';
+$lang['scm.rank.health.win']      = 'V';
+$lang['scm.rank.health.draw']     = 'N';
+$lang['scm.rank.health.lost']     = 'D';
+$lang['scm.rank.health.exempt']   = '#';
+$lang['scm.label.health.exempt']  = 'Exempté';
+$lang['scm.rank.health.delayed']  = 'Match reporté';
 $lang['scm.rank.health.unplayed'] = 'À jouer';
-$lang['scm.rank.chart'] = 'Progression de l\'équipe';
+$lang['scm.rank.chart']           = 'Progression de l\'équipe';
 
-$lang['scm.day']  = 'Journée';
-$lang['scm.day.short']  = 'J';
-$lang['scm.days.date']  = 'Date des journées';
-$lang['scm.day.date']  = 'Date de la journée';
-$lang['scm.day.general.time']  = 'Prédéfinir un horaire de match';
-$lang['scm.prev.day']  = 'Journée précédente';
-$lang['scm.next.day']  = 'Journée suivante';
-$lang['scm.check.days']  = 'Vérifier la cohérence du calendrier';
-$lang['scm.delayed.days']  = 'Matchs reportés';
+$lang['scm.day']                = 'Journée';
+$lang['scm.day.short']          = 'J';
+$lang['scm.days.date']          = 'Date des journées';
+$lang['scm.day.date']           = 'Date de la journée';
+$lang['scm.day.general.time']   = 'Prédéfinir un horaire de match';
+$lang['scm.prev.day']           = 'Journée précédente';
+$lang['scm.next.day']           = 'Journée suivante';
+$lang['scm.check.days']         = 'Vérifier la cohérence du calendrier';
+$lang['scm.delayed.days']       = 'Matchs reportés';
 $lang['scm.duplicate.matches']  = 'Doublons';
-$lang['scm.matches'] = 'Matchs';
+$lang['scm.matches']            = 'Matchs';
 $lang['scm.matchdays.missing']  = 'Journées manquantes';
-$lang['scm.matchdays.number']  = 'Nombre de matchs';
-$lang['scm.total']  = 'Total';
+$lang['scm.matchdays.number']   = 'Nombre de matchs';
+$lang['scm.total']              = 'Total';
 
 // Rounds
 $lang['scm.groups.management']   = 'Créer la liste des matchs par groupe';
@@ -149,6 +149,13 @@ $lang['scm.round.4']             = '1/8 finale';
 $lang['scm.round.5']             = '1/16 finale';
 $lang['scm.round.6']             = '1/32 finale';
 $lang['scm.round.7']             = '1/64 finale';
+$lang['scm.short.round.1']       = 'Fin.';
+$lang['scm.short.round.2']       = '1/2';
+$lang['scm.short.round.3']       = '1/4';
+$lang['scm.short.round.4']       = '1/8';
+$lang['scm.short.round.5']       = '1/16';
+$lang['scm.short.round.6']       = '1/32';
+$lang['scm.short.round.7']       = '1/64';
 $lang['scm.round.playoff']       = 'Barrages';
 $lang['scm.round.looser.final']  = 'Petite finale';
 $lang['scm.round.of.1']          = 'Finale';
@@ -170,6 +177,7 @@ $lang['scm.caption.group.full.ranking'] = 'Classement général inter-groupes';
 $lang['scm.th.playground'] = 'Terrain';
 $lang['scm.th.date']       = 'Date';
 $lang['scm.th.hourly']     = 'Horaire';
+$lang['scm.th.status']     = 'Statut';
 $lang['scm.th.team']       = 'Équipe';
 $lang['scm.th.home.team']  = 'Locaux';
 $lang['scm.th.away.team']  = 'Visiteurs';
@@ -318,19 +326,19 @@ $lang['scm.manage.seasons.auth']   = 'Autorisation de gérer les saisons';
 $lang['scm.manage.events.auth']    = 'Autorisation de gérer les compétitions';
 
 // SEO
-$lang['scm.seo.description.root']   = 'Toutes les compétitions de la saison en cours du site :site.';
-$lang['scm.seo.description.categories'] = 'Toutes les catégories des compétitions du site :site.';
-$lang['scm.seo.description.game.list'] = 'Tous les récents matchs du site :site.';
-$lang['scm.seo.description.running.events'] = 'Toutes les récentes compétitions du site :site.';
-$lang['scm.seo.description.clubs'] = 'Tous les clubs du site :site.';
-$lang['scm.seo.description.club'] = 'Toutes les informations du club :club.';
-$lang['scm.seo.description.event.home'] = 'Toutes les informations de la compétition :event.';
-$lang['scm.seo.description.event.bracket'] = 'Phases finales de la compétition :event.';
-$lang['scm.seo.description.event.group'] = 'Phases de groupe de la compétition :event.';
-$lang['scm.seo.description.event.calendar'] = 'Calendrier jour par jour de la compétition :event.';
+$lang['scm.seo.description.root']                = 'Toutes les compétitions de la saison en cours du site :site.';
+$lang['scm.seo.description.categories']          = 'Toutes les catégories des compétitions du site :site.';
+$lang['scm.seo.description.game.list']           = 'Tous les récents matchs du site :site.';
+$lang['scm.seo.description.running.events']      = 'Toutes les récentes compétitions du site :site.';
+$lang['scm.seo.description.clubs']               = 'Tous les clubs du site :site.';
+$lang['scm.seo.description.club']                = 'Toutes les informations du club :club.';
+$lang['scm.seo.description.event.home']          = 'Toutes les informations de la compétition :event.';
+$lang['scm.seo.description.event.bracket']       = 'Phases finales de la compétition :event.';
+$lang['scm.seo.description.event.group']         = 'Phases de groupe de la compétition :event.';
+$lang['scm.seo.description.event.calendar']      = 'Calendrier jour par jour de la compétition :event.';
 $lang['scm.seo.description.event.calendar.full'] = 'Calendrier complet de la compétition :event.';
-$lang['scm.seo.description.event.ranking'] = 'Classement de la compétition :event.';
-$lang['scm.seo.description.event.team'] = 'Résultat de l\'équipe :team dans la compétition :event.';
+$lang['scm.seo.description.event.ranking']       = 'Classement de la compétition :event.';
+$lang['scm.seo.description.event.team']          = 'Résultat de l\'équipe :team dans la compétition :event.';
 
 // Hooks
 $lang['scm.specific_hook.event_add']    = 'Ajout d\'une compétition';
