@@ -1,4 +1,4 @@
-Nom d'affichage|Nom complet|n° affilliation|logo|flag|website|Nom d'affichage|Nom complet|n° affilliation|logo|flag|website|email|phone|
+Nom d'affichage|Nom complet|district|n° affilliation|website|email|phone|
 France|France|0_fr
 Allemagne|Allemagne|0_de
 Angleterre|Angleterre|0_fe
@@ -18,9 +18,9 @@ Tchéquie|Tchéquie|0_cz
 
 Corée du Sud|Corée du Sud|0_kr
 Japon|Japon|0_jp
-A Saoudite|Arabie Saoudite|0_sa
+Arabie Saoudite|Arabie Saoudite|0_sa
 Australie|Australie|0_au
-N Zélande|N Zélande|0_nz
+N Zélande|Nouvelle Zélande|0_nz
 Iran|Iran|0_ir
 Irak|Irak|0_iq
 Qatar|Qatar|0_qa
@@ -31,7 +31,7 @@ Maroc|Maroc|0_ma
 Tunisie|Tunisie|0_tn
 Algérie|Algérie|0_dz
 Ghana|Ghana|0_gh
-Af du Sud|Afrique du Sud|0_za
+Afrique du Sud|Afrique du Sud|0_za
 Côte d'Ivoire|Côte d'Ivoire|0_ci
 Égypte|Égypte|0_eg
 Sénégal|Sénégal|0_sn
