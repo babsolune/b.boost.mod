@@ -20,8 +20,8 @@ class ScmFormFieldMultipleCheckbox extends AbstractFormField
 	 * Constructs a FormFieldCheckbox.
 	 * @param string $id Field identifier
 	 * @param string $label Field label
-	 * @param FormFieldMultipleCheckboxOption[] $selected_options The selected options (can also be an array of string where strings are identifiers of selected options)
-	 * @param FormFieldMultipleCheckboxOption[] $available_options All the options managed by the field
+	 * @param ScmFormFieldMultipleCheckboxOption[] $selected_options The selected options (can also be an array of string where strings are identifiers of selected options)
+	 * @param ScmFormFieldMultipleCheckboxOption[] $available_options All the options managed by the field
 	 * @param array $field_options Map containing the options
 	 * @param FormFieldConstraint[] $constraints The constraints checked during the validation
 	 */
@@ -42,7 +42,7 @@ class ScmFormFieldMultipleCheckbox extends AbstractFormField
 			{
 				$value[] = $this->get_option($option);
 			}
-			else if ($option instanceof FormFieldMultipleCheckboxOption)
+			else if ($option instanceof ScmFormFieldMultipleCheckboxOption)
 			{
 				$value[] = $option;
 			}
@@ -125,6 +125,7 @@ class ScmFormFieldMultipleCheckbox extends AbstractFormField
                 'C_GROUP_OPTION' => $id == 'checkbox-title',
                 'CHECKBOX_ID' => $checkbox_id,
 				'NAME' => $option->get_label(),
+				'SORT_ID' => $option->get_sort_id(),
 				'HTML_ID' => $this->get_option_id($option),
 				'C_CHECKED' => $this->is_selected($option)
 			];
@@ -136,12 +137,12 @@ class ScmFormFieldMultipleCheckbox extends AbstractFormField
 		return $tpl;
 	}
 
-	private function get_option_id(FormFieldMultipleCheckboxOption $option)
+	private function get_option_id(ScmFormFieldMultipleCheckboxOption $option)
 	{
 		return $this->get_html_id() . '_' . $option->get_id();
 	}
 
-	private function is_selected(FormFieldMultipleCheckboxOption $option)
+	private function is_selected(ScmFormFieldMultipleCheckboxOption $option)
 	{
 		return in_array($option, $this->get_value());
 	}

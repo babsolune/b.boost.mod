@@ -27,74 +27,154 @@ class ScmClubsController extends DefaultModuleController
 	{
 		$cache = ScmClubCache::load();
 
-        $clubs = ScmClubService::sort_club_list($cache->get_clubs());
-
-        foreach ($clubs as $country => $countries)
+        // Remove sub-club from the list
+        $clubs_list = [];
+        foreach($cache->get_clubs() as $club_id => $club)
         {
-            if($country == 'all')
-            {
+            if (!$club['club_sub']) {
+                $clubs_list[] = $club;
+            }
+        }
+
+        $clubs = ScmClubService::sort_club_list($clubs_list);
+
+        // Separate keys into 'all', 'other', and the rest
+        $allKey = [];
+        $otherKey = [];
+        $otherKeysWithNames = [];
+
+        foreach (array_keys($clubs) as $key)
+        {
+            if ($key === 'all') {
+                $allKey = [$key => $clubs[$key]];
+            } elseif ($key === 'other') {
+                $otherKey = [$key => $clubs[$key]];
+            } else {
+                $interpretedName = LangLoader::get_message($key, 'countries');
+                $otherKeysWithNames[$key] = $interpretedName;
+            }
+        }
+
+        // Sort countries by their interpreted names
+        asort($otherKeysWithNames);
+
+        // Rebuild the clubs array in the desired order
+        $reordered_clubs = [];
+
+        // Add 'all' first if it exists
+        if (!empty($allKey)) {
+            $reordered_clubs = $allKey;
+        }
+
+        // Add sorted countries
+        foreach (array_keys($otherKeysWithNames) as $key)
+        {
+            $reordered_clubs[$key] = $clubs[$key];
+        }
+
+        // Add 'other' last if it exists
+        if (!empty($otherKey)) {
+            $reordered_clubs = array_merge($reordered_clubs, $otherKey);
+        }
+
+        // Iterate through reordered clubs and sort leagues and districts recursively
+        foreach ($reordered_clubs as $country => $countries)
+        {
+            if ($country == 'all') {
+                // Handle 'all' case
                 $this->view->assign_block_vars('countries', [
                     'COUNTRY_NAME' => $this->lang['scm.clubs.countries.team']
                 ]);
 
-                foreach ($countries as $country_club)
-                {
+                foreach ($countries as $country_club) {
                     $item = new ScmClub();
                     $item->set_properties($country_club);
                     $this->view->assign_block_vars('countries.items', $item->get_template_vars());
                 }
-            }
-            else
-            {
+            } else {
+                // Get district data for the country
                 $data = ScmClubService::get_district_data($countries['file']);
+
+                // Assign country name
                 $this->view->assign_block_vars('countries', [
                     'COUNTRY_NAME' => LangLoader::get_message($country, 'countries')
                 ]);
 
-                foreach ($countries as $league => $leagues)
-                {
+                // Sort leagues by their interpreted names
+                $leaguesWithNames = [];
+                foreach ($countries as $leagueKey => $leagues) {
+                    if ($leagueKey === 'file') {
+                        continue;
+                    }
+                    $leagueName = ScmClubService::get_league($data, $leagueKey);
+                    $leaguesWithNames[$leagueKey] = $leagueName;
+                }
+                asort($leaguesWithNames);
+
+                // Iterate through sorted leagues
+                foreach (array_keys($leaguesWithNames) as $leagueKey) {
+                    $leagues = $countries[$leagueKey];
+
+                    // Assign league data
                     $this->view->assign_block_vars('countries.leagues', [
-                        'C_LEAGUE' => !empty($league) && $league !== 'file',
-                        'LEAGUE_NAME' => ScmClubService::get_league($data, $league),
+                        'C_LEAGUE' => !empty($leagueKey) && $leagueKey !== 'file',
+                        'LEAGUE_NAME' => ScmClubService::get_league($data, $leagueKey),
                     ]);
 
-                    if (empty($league))
-                    {
-                        foreach ($leagues as $root_league_clubs)
-                        {
-                            foreach ($root_league_clubs as $root_league_club)
-                            {
+                    if (empty($leagueKey)) {
+                        // Handle leagues without a key (e.g., root-level clubs)
+                        foreach ($leagues as $root_league_clubs) {
+                            usort($root_league_clubs, function($a, $b) {
+                                return strcmp($a['club_full_name'], $b['club_full_name']);
+                            });
+                            foreach ($root_league_clubs as $root_league_club) {
                                 $item = new ScmClub();
                                 $item->set_properties($root_league_club);
                                 $this->view->assign_block_vars('countries.items', $item->get_template_vars());
                             }
                         }
-                    }
-                    elseif ($league !== 'file')
-                    {
-                        foreach ($leagues as $district => $districts)
-                        {
-                            if (empty($district))
-                            {
-                                foreach ($districts as $root_district_club)
-                                {
+                    } else {
+                        // Sort districts by their interpreted names
+                        $districtsWithNames = [];
+                        foreach ($leagues as $districtKey => $districts) {
+                            if (empty($districtKey)) {
+                                // Handle districts without a key (e.g., root-level clubs in a league)
+                                usort($districts, function($a, $b) {
+                                    return strcmp($a['club_full_name'], $b['club_full_name']);
+                                });
+                                foreach ($districts as $root_district_club) {
                                     $item = new ScmClub();
                                     $item->set_properties($root_district_club);
                                     $this->view->assign_block_vars('countries.leagues.items', $item->get_template_vars());
                                 }
+                                continue;
                             }
-                            else
-                            {
-                                $this->view->assign_block_vars('countries.leagues.districts', [
-                                    'C_DISTRICT_NAME' => $district,
-                                    'DISTRICT_NAME' => ScmClubService::get_district($data, $district)
-                                ]);
-                                foreach ($districts as $district_club)
-                                {
-                                    $item = new ScmClub();
-                                    $item->set_properties($district_club);
-                                    $this->view->assign_block_vars('countries.leagues.districts.items', $item->get_template_vars());
-                                }
+                            $districtName = ScmClubService::get_district($data, $districtKey);
+                            $districtsWithNames[$districtKey] = $districtName;
+                        }
+
+                        // Sort districts by their interpreted names
+                        asort($districtsWithNames);
+
+                        // Iterate through sorted districts
+                        foreach (array_keys($districtsWithNames) as $districtKey) {
+                            $districts = $leagues[$districtKey];
+
+                            // Assign district data
+                            $this->view->assign_block_vars('countries.leagues.districts', [
+                                'C_DISTRICT_NAME' => $districtKey,
+                                'DISTRICT_NAME' => ScmClubService::get_district($data, $districtKey)
+                            ]);
+
+                            usort($districts, function($a, $b) {
+                                return strcmp($a['club_full_name'], $b['club_full_name']);
+                            });
+
+                            // Add clubs in the district
+                            foreach ($districts as $district_club) {
+                                $item = new ScmClub();
+                                $item->set_properties($district_club);
+                                $this->view->assign_block_vars('countries.leagues.districts.items', $item->get_template_vars());
                             }
                         }
                     }
@@ -132,7 +212,7 @@ class ScmClubsController extends DefaultModuleController
 	{
 		$object = new self('scm');
 		$object->check_authorizations();
-		$object->build_view(AppContext::get_request());
+		$object->build_view();
 		return $object->view;
 	}
 }
