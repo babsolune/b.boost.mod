@@ -12,7 +12,7 @@ class ScmDaysCheckerController extends DefaultModuleController
     private $event;
 	protected function get_template_to_use()
 	{
-		return new FileTemplate('scm/ScmDaysCheckerController.tpl');
+		return new FileTemplate('scm/content/ScmDaysCheckerController.tpl');
 	}
 
 	public function execute(HTTPRequestCustom $request)
