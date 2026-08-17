@@ -81,6 +81,8 @@ function build_logo(?string $name, ?string $csv_value): string
     $district = isset($dref) && $dref != '' ? '/' . $dref : '';
     $club = '/' . $name . '.webp';
 
+    if ($code === '0')
+        return '';
     return '/modules/scm/data/logos' . $country . $league . $district . $club;
 }
 
