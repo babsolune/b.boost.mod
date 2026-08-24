@@ -48,7 +48,8 @@ class ScmLobbyProvider extends DefaultModuleLobbyProvider
         $running_events = ScmEventService::get_running_events_id();
         $events_id = $running_events ? implode(', ', $running_events) : 0;
 
-        $results = PersistenceContext::get_querier()->select('SELECT games.*, params.*
+        $results = PersistenceContext::get_querier()->select('
+            SELECT games.*, params.*
             FROM ' . ScmSetup::$scm_game_table . ' games
             LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = games.game_event_id
             WHERE games.game_date > :now
@@ -88,14 +89,17 @@ class ScmLobbyProvider extends DefaultModuleLobbyProvider
 			$item = new ScmGame();
 			$item->set_properties($game);
 
-			$view->assign_block_vars('next_items', array_merge($item->get_template_vars(), [
-                'C_DELAYED'      => $item->get_game_cluster() < ScmDayService::get_last_day($item->get_game_event_id()),
-                'YEAR'           => date('y', $item->get_game_date()->get_timestamp()),
-                'C_IS_SUB'       => ScmEventService::is_sub_event($item->get_game_event_id()),
-                'MASTER_EVENT'   => ScmEventService::get_master_division($item->get_game_event_id()),
-                'U_MASTER_EVENT' => ScmEventService::get_master_url($item->get_game_event_id()),
-                'U_EVENT'        => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
-			]));
+			$view->assign_block_vars('next_items', array_merge(
+                $item->get_template_vars(),
+                [
+                    'C_DELAYED'      => $item->get_game_cluster() < ScmDayService::get_last_day($item->get_game_event_id()),
+                    'YEAR'           => date('y', $item->get_game_date()->get_timestamp()),
+                    'C_IS_SUB'       => ScmEventService::is_sub_event($item->get_game_event_id()),
+                    'MASTER_EVENT'   => ScmEventService::get_master_division($item->get_game_event_id()),
+                    'U_MASTER_EVENT' => ScmEventService::get_master_url($item->get_game_event_id()),
+                    'U_EVENT'        => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
+                ]
+            ));
 		}
 
         // prev games
@@ -104,7 +108,8 @@ class ScmLobbyProvider extends DefaultModuleLobbyProvider
         $running_events = ScmEventService::get_running_events_id();
         $events_id = $running_events ? implode(', ', $running_events) : 0;
 
-        $results = PersistenceContext::get_querier()->select('SELECT games.*, params.*
+        $results = PersistenceContext::get_querier()->select('
+            SELECT games.*, params.*
             FROM ' . ScmSetup::$scm_game_table . ' games
             LEFT JOIN ' . ScmSetup::$scm_params_table . ' params ON params.params_event_id = games.game_event_id
             WHERE games.game_date < :now
@@ -145,14 +150,17 @@ class ScmLobbyProvider extends DefaultModuleLobbyProvider
 			$item = new ScmGame();
 			$item->set_properties($game);
 
-			$view->assign_block_vars('prev_items', array_merge($item->get_template_vars(), [
-                'C_LATE'         => $item->get_game_cluster() < ScmDayService::get_last_day($item->get_game_event_id()),
-                'YEAR'           => date('y', $item->get_game_date()->get_timestamp()),
-                'C_IS_SUB'       => ScmEventService::is_sub_event($item->get_game_event_id()),
-                'MASTER_EVENT'   => ScmEventService::get_master_division($item->get_game_event_id()),
-                'U_MASTER_EVENT' => ScmEventService::get_master_url($item->get_game_event_id()),
-                'U_EVENT'        => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
-			]));
+			$view->assign_block_vars('prev_items', array_merge(
+                $item->get_template_vars(),
+                [
+                    'C_LATE'         => $item->get_game_cluster() < ScmDayService::get_last_day($item->get_game_event_id()),
+                    'YEAR'           => date('y', $item->get_game_date()->get_timestamp()),
+                    'C_IS_SUB'       => ScmEventService::is_sub_event($item->get_game_event_id()),
+                    'MASTER_EVENT'   => ScmEventService::get_master_division($item->get_game_event_id()),
+                    'U_MASTER_EVENT' => ScmEventService::get_master_url($item->get_game_event_id()),
+                    'U_EVENT'        => ScmUrlBuilder::event_home($item->get_game_event_id(), ScmEventService::get_event_slug($item->get_game_event_id()))->rel()
+                ]
+            ));
 		}
 
 		return $view;

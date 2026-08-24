@@ -88,7 +88,7 @@ class ScmEvent
 
 	public function get_category()
 	{
-		return CategoriesService::get_categories_manager()->get_categories_cache()->get_category($this->id_category);
+		return CategoriesService::get_categories_manager('scm')->get_categories_cache()->get_category($this->id_category);
 	}
 
 	public function get_season_id()
