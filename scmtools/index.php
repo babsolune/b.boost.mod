@@ -192,7 +192,7 @@ if (isset($_POST['import_selected'])) {
 
                 $payload = [
                     'club_name'      => $data[0] ?? null,
-                    'club_slug'      => !empty($data[0]) ? Url::encode_rewrite($data[0]) : null,
+                    'club_slug'      => !empty($data[1]) ? Url::encode_rewrite($data[1]) : null,
                     'club_full_name' => $data[1] ?? null,
                     'club_district'  => isset($data[2]) ? build_serialized_district($data[2]) : null,
                     'club_flag'      => isset($data[2]) ? build_flag($data[2]) : null,
