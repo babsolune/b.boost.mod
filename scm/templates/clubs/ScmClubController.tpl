@@ -35,6 +35,17 @@
                 <div class="content">
                     <div class="cell-flex cell-columns-2 cell-tile">
                         <div class="cell cell-1-3">
+                            # IF C_HAS_NUMBER #
+                                <div class="cell-content cell-infos">
+                                    # IF C_FFF #
+                                        <span>F.F.F.</span>
+                                        <a href="{U_FFF}" target="_blank" rel="noopener noreferer">{@scm.club.see.website}</a>
+                                    # ELSEIF C_FFR #
+                                        <span>F.F.R.</span>
+                                        <a href="{U_FFR}" target="_blank" rel="noopener noreferer">{@scm.club.see.website}</a>
+                                    # ENDIF #
+                                </div>
+                            # ENDIF #
                             <div class="cell-content cell-infos">
                                 <span>{@scm.club.website} : </span>
                                 <span>
@@ -103,6 +114,12 @@
                             </div>
                         # END seasons #
                     </div>
+                    # IF C_HAS_OVERVIEW #
+                        <div class="content">
+                            <h2>{@scm.club.overview}</h2>
+                            {OVERVIEW}
+                        </div>
+                    # ENDIF #
                 </div>
             </article>
         </div>

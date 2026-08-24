@@ -24,6 +24,7 @@ class ScmClub
 	private $club_colors;
 	private $club_locations;
 	private $club_district;
+	private $club_overview;
 
 	const CLUB_LOGO = '/modules/scm/templates/images/badges/club.webp';
 
@@ -180,6 +181,16 @@ class ScmClub
 		$this->club_district = $club_district;
 	}
 
+	public function get_club_overview()
+	{
+		return $this->club_overview;
+	}
+
+	public function set_club_overview($club_overview)
+	{
+		$this->club_overview = $club_overview;
+	}
+
 	public function is_authorized_to_manage()
 	{
 		return ScmAuthorizationsService::check_authorizations()->manage_clubs();
@@ -203,7 +214,8 @@ class ScmClub
 			'club_phone'     => $this->club_phone,
 			'club_locations' => TextHelper::serialize($this->club_locations),
 			'club_district'  => TextHelper::serialize($this->club_district),
-			'club_colors'    => TextHelper::serialize($this->club_colors)
+			'club_colors'    => TextHelper::serialize($this->club_colors),
+			'club_overview'  => $this->club_overview,
         ];
 	}
 
@@ -225,6 +237,7 @@ class ScmClub
 		$this->club_locations = !empty($properties['club_locations']) ? TextHelper::unserialize($properties['club_locations']) : [];;
 		$this->club_district  = !empty($properties['club_district']) ? TextHelper::unserialize($properties['club_district']) : [];
         $this->club_colors    = !empty($properties['club_colors']) ? TextHelper::unserialize($properties['club_colors']) : [];
+		$this->club_overview     = $properties['club_overview'];
     }
 
 	public function init_default_properties()
@@ -278,11 +291,13 @@ class ScmClub
             'C_HAS_EMAIL'     => !empty($this->club_email),
             'C_HAS_PHONE'     => !empty($this->club_phone),
             'C_HAS_NAME'      => !empty($this->club_name),
+            'C_FFF'           => true,
             'C_HAS_NUMBER'    => !empty($this->club_number),
             'C_HAS_FULL_NAME' => !empty($this->club_full_name),
             'C_HAS_COUNTRY'   => !empty($club_country),
             'C_HAS_LEAGUE'    => !empty($club_league),
             'C_HAS_DISTRICT'  => !empty($club_district),
+            'C_HAS_OVERVIEW'  => !empty($this->club_overview),
 			// Item
 			'ID'           => $this->id_club,
 			'NAME'         => $this->club_name,
@@ -290,6 +305,7 @@ class ScmClub
 			'NUMBER'       => $this->club_number,
 			'EMAIL'        => $this->club_email,
 			'PHONE'        => $this->club_phone,
+			'OVERVIEW'     => $this->club_overview,
 			'LOCATION'     => $club_locations,
 			'LOCATION_MAP' => $club_locations_map,
             'COUNTRY'      => !empty($club_country) ? LangLoader::get_message($club_country, 'countries') : '',
@@ -313,7 +329,7 @@ class ScmClub
     {
         $club_locations_value = TextHelper::deserialize($this->get_club_locations());
         $locations = [];
-        if (!empty($club_locations_value))
+        if (!empty($club_locations_value) && is_array($club_locations_value))
         {
             foreach ($club_locations_value as $options)
             {
