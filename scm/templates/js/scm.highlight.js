@@ -41,14 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
     rankingColorElements.forEach(function(element) {
         let color = window.getComputedStyle(element, null).getPropertyValue('background-color');
     });
-});
 
-// Add current class in event menu
-var	current_url = window.location.href;
-check_url = current_url.replace(window.location.origin, '');
-jQuery('.roundmenu-title').each(function() {
-    var link_href = jQuery(this).attr('href');
-    if(link_href === check_url) {
-        jQuery(this).addClass('current');
-    }
+    // Add current class in event menu
+    var	current_url = window.location.href;
+    check_url = current_url.replace(window.location.origin, '');
+
+    jQuery('.roundmenu-title').each(function() {
+        var link_href = jQuery(this).attr('href');
+        if(link_href === check_url) {
+            jQuery(this).addClass('current');
+        }
+    });
 });

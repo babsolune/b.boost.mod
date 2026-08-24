@@ -10,7 +10,7 @@ jQuery(document).ready(function(){
 	jQuery('#category-nav').append(CreateChild(0)).find('ul:first').remove();
 
 	function CreateChild(id){
-		// Select and qort elements
+		// Select and sort elements
         var items = jQuery('li[data-p-id="' + id + '"]').get().sort(function(a, b) {
             var orderA = parseInt(jQuery(a).attr('data-order-id')) || 0;
             var orderB = parseInt(jQuery(b).attr('data-order-id')) || 0;
@@ -21,7 +21,7 @@ jQuery(document).ready(function(){
         if (items.length > 0) {
             var $items = jQuery(items);
 
-            // Traiter chaque élément récursivement
+            // Process each element recursively
             $items.each(function() {
                 var childId = jQuery(this).attr('data-id');
                 var children = CreateChild(childId);
@@ -38,7 +38,9 @@ jQuery(document).ready(function(){
         return null;
 	}
 
-	jQuery('#category-nav li').has('ul').addClass('has-children');
+	jQuery('#category-nav li').filter(function () {
+        return jQuery(this).children('ul').children().length > 0;
+    }).addClass('has-children');
 
     jQuery('[class*="toggle-menu-button"] .categories-item').each(function(){
         jQuery(this).on('click', function(){
