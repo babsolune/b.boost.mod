@@ -16,8 +16,6 @@ class ScmClubFormController extends DefaultModuleController
 	{
 		$this->check_authorizations();
 
-        $token = $request->get_string('token', '');
-
 		$this->build_form($request);
 
 		if ($this->submit_button->has_been_submited() && $this->form->validate())
@@ -40,7 +38,66 @@ class ScmClubFormController extends DefaultModuleController
 		$fieldset = new FormFieldsetHTML('scm', $this->lang['form.parameters']);
 		$form->add_fieldset($fieldset);
 
-        $fieldset->add_field(new ScmFormFieldDistrictSelect('club_district', 'District', $this->get_club()->get_club_district()));//, $this->get_countries_list()
+        $fieldset->add_field(new FormFieldFree('choose_master', '', '
+			<script>
+                const checkbox = document.getElementById("' . self::class . '_affiliate");
+
+                if (checkbox !== null) {
+                    let searchBuffer = "";
+                    let timeoutId = null;
+
+                    // Function that attaches keydown behavior to the select element
+                    const initSelectSearch = () => {
+                        const select = document.getElementById("' . self::class . '_affiliation");
+
+                        // Attach listener only if select exists and is visible/active
+                        if (select !== null && !select.dataset.searchInitialized)
+                        {
+                            // Flag to prevent duplicate listeners
+                            select.dataset.searchInitialized = "true";
+
+                            select.addEventListener("keydown", (e) => {
+                                if (e.key.length !== 1) return;
+
+                                e.preventDefault();
+
+                                searchBuffer += e.key.toLowerCase();
+
+                                clearTimeout(timeoutId);
+                                timeoutId = setTimeout(() => {
+                                    searchBuffer = "";
+                                }, 1000);
+
+                                const options = Array.from(select.options);
+                                const matchingOption = options.find(opt => {
+                                    const labelText = (opt.textContent || opt.innerText || opt.label || "").toLowerCase();
+                                    return labelText.indexOf(searchBuffer) !== -1;
+                                });
+
+                                if (matchingOption) {
+                                    select.value = matchingOption.value;
+                                }
+                            });
+                        }
+                    };
+
+                    // Check on page load if checkbox is already checked
+                    if (checkbox.checked) {
+                        initSelectSearch();
+                    }
+
+                    // Listen for checkbox toggle
+                    checkbox.addEventListener("change", () => {
+                        if (checkbox.checked) {
+                            // Small delay in case the element is rendered dynamically via AJAX/DOM
+                            setTimeout(initSelectSearch, 50);
+                        }
+                    });
+                }
+			</script>
+        '));
+
+        $fieldset->add_field(new ScmFormFieldDistrictSelect('club_district', 'District', $this->get_club()->get_club_district()));
 
         $fieldset->add_field(new FormFieldTextEditor('name', $this->lang['scm.club.name'], $this->get_club()->get_club_name(),
             ['required' => true],
@@ -53,6 +110,7 @@ class ScmClubFormController extends DefaultModuleController
                     if (HTMLForms.getField("affiliate").getValue()) {
                         HTMLForms.getField("affiliation").enable();
                         HTMLForms.getField("full_name").disable();
+                        HTMLForms.getField("number").disable();
                         HTMLForms.getField("website").disable();
                         HTMLForms.getField("email").disable();
                         HTMLForms.getField("phone").disable();
@@ -62,6 +120,7 @@ class ScmClubFormController extends DefaultModuleController
                     } else {
                         HTMLForms.getField("affiliation").disable();
                         HTMLForms.getField("full_name").enable();
+                        HTMLForms.getField("number").enable();
                         HTMLForms.getField("website").enable();
                         HTMLForms.getField("email").enable();
                         HTMLForms.getField("phone").enable();
@@ -83,6 +142,10 @@ class ScmClubFormController extends DefaultModuleController
                 'required' => true,
                 'hidden' => $this->get_club()->get_club_sub()
             ]
+        ));
+
+        $fieldset->add_field(new FormFieldTextEditor('number', $this->lang['scm.club.number'], $this->get_club()->get_club_number(),
+            ['hidden' => $this->get_club()->get_club_sub()]
         ));
 
 		$fieldset->add_field(new FormFieldUrlEditor('website', $this->lang['scm.club.website'], $this->get_club()->get_club_website()->absolute(),
@@ -123,6 +186,8 @@ class ScmClubFormController extends DefaultModuleController
 
         $fieldset->add_field(new FormFieldUploadFile('logo', $this->lang['scm.club.logo'], $this->is_new_club ? ScmClub::CLUB_LOGO : $this->get_club()->get_club_logo()));
 
+        $fieldset->add_field(new FormFieldRichTextEditor('overview', $this->lang['scm.club.overview'], $this->get_club()->get_club_overview()));
+
 		$fieldset->add_field(new FormFieldHidden('referrer', $request->get_url_referrer()));
 
 		$this->submit_button = new FormButtonDefaultSubmit();
@@ -138,6 +203,7 @@ class ScmClubFormController extends DefaultModuleController
 
         $club->set_club_name($this->form->get_value('name'));
         $club->set_club_sub($this->form->get_value('affiliate'));
+        $club->set_club_sub($this->form->get_value('club_sub'));
 
         if ($club->get_club_sub())
         {
@@ -157,8 +223,10 @@ class ScmClubFormController extends DefaultModuleController
         }
         else
         {
+            $club->set_club_master('');
             $club->set_club_district($this->form->get_value('club_district'));
             $club->set_club_full_name($this->form->get_value('full_name'));
+            $club->set_club_number($this->form->get_value('number'));
             $club->set_club_slug(Url::encode_rewrite($club->get_club_full_name()));
             $club->set_club_website(new Url($this->form->get_value('website')));
             $club->set_club_email($this->form->get_value('email'));
@@ -167,6 +235,7 @@ class ScmClubFormController extends DefaultModuleController
             $club->set_club_flag($this->form->get_value('flag')->get_raw_value());
             $club->set_club_logo($this->form->get_value('logo'));
             $club->set_club_locations($this->form->get_value('locations'));
+            $club->set_club_overview($this->form->get_value('overview'));
         }
 
 		if ($this->is_new_club)
