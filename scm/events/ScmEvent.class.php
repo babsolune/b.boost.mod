@@ -342,7 +342,7 @@ class ScmEvent
 	{
         $division_name = ScmDivisionService::get_division($this->division_id)->get_division_name();
         $season_name = ScmSeasonService::get_season($this->season_id)->get_season_name();
-		return $division_name . ' ' . $season_name . ' ' . $this->pool;
+		return $season_name . ' ' . $division_name . ' ' . $this->pool;
 	}
 
 	public function get_properties()

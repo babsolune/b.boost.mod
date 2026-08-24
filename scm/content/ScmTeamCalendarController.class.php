@@ -59,23 +59,43 @@ class ScmTeamCalendarController extends DefaultModuleController
 
             $score_status = $item->get_game_home_pen() ? (int)$item->get_game_home_pen() - (int)$item->get_game_away_pen() : (int)$item->get_game_home_score() - (int)$item->get_game_away_score();
             $team_status = '';
-            if ($score_status > 0 && $this->team_id == $item->get_game_home_id())
+            if ($score_status > 0 && $this->team_id == $item->get_game_home_id()) {
                 $team_status = "check success";
-            elseif ($score_status < 0 && $this->team_id == $item->get_game_home_id())
+            }
+            elseif ($score_status < 0 && $this->team_id == $item->get_game_home_id()) {
                 $team_status = "xmark error";
-            elseif ($score_status > 0 && $this->team_id == $item->get_game_away_id())
+            }
+            elseif ($score_status > 0 && $this->team_id == $item->get_game_away_id()) {
                 $team_status = "xmark error";
-            elseif ($score_status < 0 && $this->team_id == $item->get_game_away_id())
+            }
+            elseif ($score_status < 0 && $this->team_id == $item->get_game_away_id()) {
                 $team_status = "check success";
-            elseif ($item->get_game_home_score() != '' && (int)$item->get_game_away_score() != '' && $score_status === 0)
+            }
+            elseif ($item->get_game_home_score() != '' && (int)$item->get_game_away_score() != '' && $score_status === 0) {
                 $team_status = "minus moderator";
+            }
 
+            $round_name = '';
+            if ($item->get_game_type() == 'G') {
+                if (ScmParamsService::get_params($item->get_game_event_id())->get_hat_ranking()) {
+                    $round_name = $item->get_game_cluster();
+                }
+                else {
+                    $round_name = $item->get_game_round();
+                }
+            }
+            elseif ($item->get_game_type() == 'B') {
+                $this->lang['scm.short.round.' . $item->get_game_cluster() . ''];
+            }
+            else {
+                $item->get_game_cluster();
+            }
             $this->view->assign_block_vars('games', array_merge($item->get_template_vars(),[
                 'C_IS_HOME_TEAM' => $this->team_id == $item->get_game_home_id(),
                 'C_IS_AWAY_TEAM' => $this->team_id == $item->get_game_away_id(),
                 'TEAM_STATUS' => $team_status,
                 'DAY' => $item->get_game_cluster(),
-                'ROUND' => $item->get_game_type() == 'G' ? (ScmParamsService::get_params($item->get_game_event_id())->get_hat_ranking() ? $item->get_game_cluster() : $item->get_game_round()) : $this->lang['scm.short.round.' . $item->get_game_cluster() . ''],
+                'ROUND' => $round_name,
             ]));
             $item->get_details_template($this->view, 'games');
         }
