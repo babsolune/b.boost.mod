@@ -77,41 +77,44 @@ class ScmGameFormat
             else
                 $blocks[Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)][$game['game_round']][] = $game;
         }
-        $event_id = implode('', array_unique($event_id));
+        $event_id = (int)implode('', array_unique($event_id));
 
-        $view->put_all([
-            'C_CONTROLS'            => ScmEventService::get_event($event_id)->is_authorized_to_manage_events(),
-            'C_REFRESH_TIME'        => $now->get_timestamp() > ScmEventService::get_event($event_id)->get_start_date()->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($event_id)->get_end_date()->get_timestamp(),
-            'C_CLASS'               => $c_class,
-            'C_DISPLAY_PLAYGROUNDS' => ScmParamsService::get_params($event_id)->get_display_playgrounds(),
-            'EVENT_ID'              => $event_id,
-            'C_ONE_DAY'             => ScmEventService::get_event($event_id)->get_oneday()
-        ]);
-
-        foreach ($blocks as $block => $sub_blocks)
+        if (!empty($event_id))
         {
-            $view->assign_block_vars('blocks', [
-                'C_ROUND' => $round,
-                'TITLE'   => $block
+            $view->put_all([
+                'C_CONTROLS'            => ScmEventService::get_event($event_id)->is_authorized_to_manage_events(),
+                'C_REFRESH_TIME'        => $now->get_timestamp() > ScmEventService::get_event($event_id)->get_start_date()->get_timestamp() && $now->get_timestamp() < ScmEventService::get_event($event_id)->get_end_date()->get_timestamp(),
+                'C_CLASS'               => $c_class,
+                'C_DISPLAY_PLAYGROUNDS' => ScmParamsService::get_params($event_id)->get_display_playgrounds(),
+                'EVENT_ID'              => $event_id,
+                'C_ONE_DAY'             => ScmEventService::get_event($event_id)->get_oneday()
             ]);
 
-            foreach ($sub_blocks as $sub_block => $games)
+            foreach ($blocks as $block => $sub_blocks)
             {
-                $view->assign_block_vars('blocks.sub_blocks', [
-                    'C_SEVERAL_DATES' => !ScmEventService::get_event($event_id)->get_oneday(),
-                    'C_SUB_ROUND'     => $round,
-                    'SUB_TITLE'       => $sub_block
+                $view->assign_block_vars('blocks', [
+                    'C_ROUND' => $round,
+                    'TITLE'   => $block
                 ]);
-                foreach($games as $game)
+
+                foreach ($sub_blocks as $sub_block => $games)
                 {
-                    $item = new ScmGame();
-                    $item->set_properties($game);
-                    // if (!$round && $block == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)) {
-                    //     $view->assign_block_vars('blocks.sub_blocks.items', $item->get_template_vars());
-                    // } else {
-                        $view->assign_block_vars('blocks.sub_blocks.items', $item->get_template_vars());
-                    // }
-                    $item->get_details_template($view, 'blocks.sub_blocks.items');
+                    $view->assign_block_vars('blocks.sub_blocks', [
+                        'C_SEVERAL_DATES' => !ScmEventService::get_event($event_id)->get_oneday(),
+                        'C_SUB_ROUND'     => $round,
+                        'SUB_TITLE'       => $sub_block
+                    ]);
+                    foreach($games as $game)
+                    {
+                        $item = new ScmGame();
+                        $item->set_properties($game);
+                        // if (!$round && $block == Date::to_format($game['game_date'], Date::FORMAT_DAY_MONTH_YEAR_TEXT)) {
+                        //     $view->assign_block_vars('blocks.sub_blocks.items', $item->get_template_vars());
+                        // } else {
+                            $view->assign_block_vars('blocks.sub_blocks.items', $item->get_template_vars());
+                        // }
+                        $item->get_details_template($view, 'blocks.sub_blocks.items');
+                    }
                 }
             }
         }

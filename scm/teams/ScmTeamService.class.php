@@ -191,8 +191,10 @@ class ScmTeamService
 		$club_cache = ScmClubCache::load();
         $team = self::get_team($team_id);
         $club = $club_cache->get_club($team->get_team_club_id());
+        if (!isset($club)) {
+            return null;
+        }
         $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];
-
         return $club_cache->get_club_shield($real_id);
 	}
 
@@ -201,6 +203,9 @@ class ScmTeamService
 		$club_cache = ScmClubCache::load();
         $team = self::get_team($team_id);
         $club = $club_cache->get_club($team->get_team_club_id());
+        if (!isset($club)) {
+            return null;
+        }
         $real_id = $club['club_sub'] ? $club['club_master'] : $club['id_club'];
         $real_slug = $club['club_sub'] ? ScmClubService::get_club($club['club_master'])->get_club_slug() : $club['club_slug'];
 

@@ -90,6 +90,13 @@ class ScmFormFieldDistrictSelect extends AbstractFormField
         usort($json_files, function($fileA, $fileB) {
             $dataA = json_decode(file_get_contents($fileA), true);
             $dataB = json_decode(file_get_contents($fileB), true);
+
+            if (basename($fileA) === 'other.json') {
+                return -1;
+            }
+            if (basename($fileB) === 'other.json') {
+                return 1;
+            }
             $codeA = LangLoader::get_message($dataA['country']['code'], 'countries');
             $codeB = LangLoader::get_message($dataB['country']['code'], 'countries');
             return strcmp($codeA, $codeB);
