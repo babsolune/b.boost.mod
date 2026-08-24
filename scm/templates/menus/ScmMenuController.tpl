@@ -1,11 +1,11 @@
 <header class="section-header scm-header">
     <div class="event-title">
         # IF C_IS_SUB #
-            <h1>{HEADER_MASTER_DIVISION} {HEADER_MASTER_SEASON}</h1>
-            <h2>{HEADER_DIVISION}# IF C_HAS_POOL # - {POOL}# ENDIF #</h2>
+            <h1>{HEADER_MASTER_DIVISION}</h1>
+            <h2 class="small">{HEADER_MASTER_SEASON}# IF C_HAS_POOL # - {POOL}# ENDIF #</h2>
         # ELSE #
-            <h1>{HEADER_DIVISION} {HEADER_SEASON}</h1>
-            # IF C_HAS_POOL #<h2>{POOL}</h2># ENDIF #
+            <h1>{HEADER_DIVISION}</h1>
+            <h2 class="small">{HEADER_SEASON}# IF C_HAS_POOL # - {POOL}# ENDIF #</h2>
         # ENDIF #
     </div>
     <div class="event-details">
