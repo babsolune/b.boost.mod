@@ -49,15 +49,25 @@ class ScmTreeLinks implements ModuleTreeLinksExtensionPoint
             $event->add_sub_link(new ModuleLink($lang['scm.events.management'], ScmUrlBuilder::manage(), ScmAuthorizationsService::check_authorizations()->manage_events()));
         $tree->add_link($event);
 
-        $division = new ModuleLink($lang['scm.divisions'], ScmUrlBuilder::manage_divisions(), ScmAuthorizationsService::check_authorizations()->manage_divisions());
-            $division->add_sub_link(new ModuleLink($lang['scm.add.division'], ScmUrlBuilder::add_division(), ScmAuthorizationsService::check_authorizations()->manage_divisions()));
-            $division->add_sub_link(new ModuleLink($lang['scm.divisions.manager'], ScmUrlBuilder::manage_divisions(), ScmAuthorizationsService::check_authorizations()->manage_divisions()));
-        $tree->add_link($division);
+        if (ScmAuthorizationsService::check_authorizations()->manage_events())
+        {
+            $division = new ModuleLink($lang['scm.divisions'], ScmUrlBuilder::manage_divisions(), ScmAuthorizationsService::check_authorizations()->manage_divisions());
+                $division->add_sub_link(new ModuleLink($lang['scm.add.division'], ScmUrlBuilder::add_division(), ScmAuthorizationsService::check_authorizations()->manage_divisions()));
+                $division->add_sub_link(new ModuleLink($lang['scm.divisions.manager'], ScmUrlBuilder::manage_divisions(), ScmAuthorizationsService::check_authorizations()->manage_divisions()));
+            $tree->add_link($division);
+        }
 
-        $season = new ModuleLink($lang['scm.seasons'], ScmUrlBuilder::manage_seasons(), ScmAuthorizationsService::check_authorizations()->manage_seasons());
-            $season->add_sub_link(new ModuleLink($lang['scm.add.season'], ScmUrlBuilder::add_season(), ScmAuthorizationsService::check_authorizations()->manage_seasons()));
-            $season->add_sub_link(new ModuleLink($lang['scm.seasons.manager'], ScmUrlBuilder::manage_seasons(), ScmAuthorizationsService::check_authorizations()->manage_seasons()));
-        $tree->add_link($season);
+        if (ScmAuthorizationsService::check_authorizations()->manage_events())
+        {
+            $season = new ModuleLink($lang['scm.seasons'], ScmUrlBuilder::manage_seasons(), ScmAuthorizationsService::check_authorizations()->manage_seasons());
+                $season->add_sub_link(new ModuleLink($lang['scm.add.season'], ScmUrlBuilder::add_season(), ScmAuthorizationsService::check_authorizations()->manage_seasons()));
+                $season->add_sub_link(new ModuleLink($lang['scm.seasons.manager'], ScmUrlBuilder::manage_seasons(), ScmAuthorizationsService::check_authorizations()->manage_seasons()));
+                $season->add_sub_link(new ModuleLink($lang['scm.season.list'], ScmUrlBuilder::season_list()));
+            $tree->add_link($season);
+        }
+        else {
+            $tree->add_link(new ModuleLink($lang['scm.season.list'], ScmUrlBuilder::season_list()));
+        }
 
         $tree->add_link(new AdminModuleLink($lang['form.configuration'], ScmUrlBuilder::configuration()));
 

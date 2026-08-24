@@ -83,6 +83,7 @@ $url_controller_mappers = [
 
 	// Seasons
 	new UrlControllerMapper('ScmSeasonsManagerController', '`^/season/manage/?$`'),
+	new UrlControllerMapper('ScmSeasonsController', '`^/season/list/?$`'),
 	new UrlControllerMapper('ScmSeasonFormController', '`^/season/add/?$`'),
 	new UrlControllerMapper('ScmSeasonFormController', '`^/season/([0-9]+)/edit/?$`', ['id']),
 	new UrlControllerMapper('ScmSeasonDeleteController', '`^/season/([0-9]+)/delete/?$`', ['id']),

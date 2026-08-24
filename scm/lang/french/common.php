@@ -275,6 +275,7 @@ $lang['scm.calendar.year.clue'] = 'Coché = Année<br />Non coché = Année - An
 $lang['scm.add.season']         = 'Ajouter une saison';
 $lang['scm.edit.season']        = 'Modifier une saison';
 $lang['scm.seasons.manager']    = 'Gestion des saisons';
+$lang['scm.season.list']       = 'Liste des saisons';
 $lang['scm.warning.delete.season']   = '
 Attention !!!
 
@@ -329,6 +330,7 @@ $lang['scm.manage.events.auth']    = 'Autorisation de gérer les compétitions';
 // SEO
 $lang['scm.seo.description.root']                = 'Toutes les compétitions de la saison en cours du site :site.';
 $lang['scm.seo.description.categories']          = 'Toutes les catégories des compétitions du site :site.';
+$lang['scm.seo.description.season.list']         = 'Toutes les saisons du site :site.';
 $lang['scm.seo.description.game.list']           = 'Tous les récents matchs du site :site.';
 $lang['scm.seo.description.running.events']      = 'Toutes les récentes compétitions du site :site.';
 $lang['scm.seo.description.clubs']               = 'Tous les clubs du site :site.';

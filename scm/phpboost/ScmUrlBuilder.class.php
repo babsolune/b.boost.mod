@@ -104,6 +104,11 @@ class ScmUrlBuilder
 		return DispatchManager::get_url(self::$dispatcher, '/season/' . $id . '/delete/?' . 'token=' . AppContext::get_session()->get_token());
 	}
 
+	public static function season_list(): Url
+	{
+		return DispatchManager::get_url(self::$dispatcher, '/season/list/');
+	}
+
 ################################ Divisions
 	public static function manage_divisions(): Url
 	{
