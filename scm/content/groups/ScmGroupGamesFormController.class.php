@@ -248,7 +248,7 @@ class ScmGroupGamesFormController extends DefaultModuleController
         }
 
 		ScmEventService::clear_cache();
-        ScmRankingCache::set_cache_file_ranking($this->event_id(), $cluster);
+        // ScmRankingCache::set_cache_file_ranking($this->event_id(), $cluster);
         ScmRankingContentService::set_ranking_content($this->event_id(), $cluster);
 	}
 
