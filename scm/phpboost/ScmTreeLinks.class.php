@@ -25,7 +25,7 @@ class ScmTreeLinks implements ModuleTreeLinksExtensionPoint
             $categories = new ModuleLink($lang['category.categories'], CategoriesUrlBuilder::manage($module_id), ScmAuthorizationsService::check_authorizations()->manage_events());
                 $categories->add_sub_link(new ModuleLink($lang['category.add'], CategoriesUrlBuilder::add(AppContext::get_request()->get_getint('id_category', Category::ROOT_CATEGORY), $module_id), ScmAuthorizationsService::check_authorizations()->manage_events()));
                 $categories->add_sub_link(new ModuleLink($lang['category.categories.management'], CategoriesUrlBuilder::manage($module_id), ScmAuthorizationsService::check_authorizations()->manage_events()));
-                $categories->add_sub_link(new ModuleLink($lang['category.categories.list'], ScmUrlBuilder::display_category(0, 'root'), $config->get_homepage() !== ScmConfig::CATEGORIES && ScmAuthorizationsService::check_authorizations()->read()));
+                $categories->add_sub_link(new ModuleLink($lang['scm.categories.list'], ScmUrlBuilder::display_category(0, 'root'), $config->get_homepage() !== ScmConfig::CATEGORIES && ScmAuthorizationsService::check_authorizations()->read()));
             $tree->add_link($categories);
         }
         else {
