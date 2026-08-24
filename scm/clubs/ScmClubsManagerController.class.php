@@ -26,14 +26,14 @@ class ScmClubsManagerController extends DefaultModuleController
 	private function build_table()
 	{
 		$columns = [
-			new HTMLTableColumn($this->lang['scm.club.full.name'], 'club_full_name'),
 			new HTMLTableColumn($this->lang['scm.club.name'], 'club_name'),
+			new HTMLTableColumn($this->lang['scm.club.full.name'], 'club_full_name'),
 			new HTMLTableColumn($this->lang['scm.club.flag'], ''),
 			new HTMLTableColumn($this->lang['scm.club.logo'], ''),
-			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_club()->rel() . '" aria-label="' . $this->lang['scm.club.add'] . '"><i class="far fa-square-plus" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
+			new HTMLTableColumn('<a class="offload" href="' . ScmUrlBuilder::add_club()->rel() . '" aria-label="' . $this->lang['scm.club.add'] . '"><i class="far fa-square-plus fa-2x" aria-hidden="true"></i></a>', '', ['css_class' => 'bgc-full success'])
         ];
 
-		$table_model = new SQLHTMLTableModel(ScmSetup::$scm_club_table, 'clubs-manager', $columns, new HTMLTableSortingRule('club_name', HTMLTableSortingRule::ASC));
+		$table_model = new SQLHTMLTableModel(ScmSetup::$scm_club_table, 'clubs-manager', $columns, new HTMLTableSortingRule('club_name', HTMLTableSortingRule::ASC), '50');
 
 		$table_model->set_layout_title($this->lang['scm.clubs.manager']);
 
@@ -62,8 +62,8 @@ class ScmClubsManagerController extends DefaultModuleController
             $real_id = $club->get_club_sub() ? $club->get_club_master() : $club->get_id_club();
 
 			$row = [
-				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_club($real_id, $club->get_club_slug()), $club->get_club_full_name())),
-				new HTMLTableRowCell(new SpanHTMLElement($club->get_club_name())),
+				new HTMLTableRowCell(new SpanHTMLElement($club->get_club_name()), 'align-left'),
+				new HTMLTableRowCell(new LinkHTMLElement(ScmUrlBuilder::display_club($real_id, $club->get_club_slug()), $club->get_club_full_name()), 'align-left'),
 				new HTMLTableRowCell(
                     $club->get_club_flag() ?
                     new ImgHTMLElement(

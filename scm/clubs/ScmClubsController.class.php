@@ -102,7 +102,8 @@ class ScmClubsController extends DefaultModuleController
 
                 // Sort leagues by their interpreted names
                 $leaguesWithNames = [];
-                foreach ($countries as $leagueKey => $leagues) {
+                foreach ($countries as $leagueKey => $leagues)
+                {
                     if ($leagueKey === 'file') {
                         continue;
                     }
@@ -125,7 +126,7 @@ class ScmClubsController extends DefaultModuleController
                         // Handle leagues without a key (e.g., root-level clubs)
                         foreach ($leagues as $root_league_clubs) {
                             usort($root_league_clubs, function($a, $b) {
-                                return strcmp($a['club_full_name'], $b['club_full_name']);
+                                return strcmp($a['club_name'], $b['club_name']);
                             });
                             foreach ($root_league_clubs as $root_league_club) {
                                 $item = new ScmClub();
@@ -140,7 +141,7 @@ class ScmClubsController extends DefaultModuleController
                             if (empty($districtKey)) {
                                 // Handle districts without a key (e.g., root-level clubs in a league)
                                 usort($districts, function($a, $b) {
-                                    return strcmp($a['club_full_name'], $b['club_full_name']);
+                                    return strcmp($a['club_name'], $b['club_name']);
                                 });
                                 foreach ($districts as $root_district_club) {
                                     $item = new ScmClub();
@@ -167,7 +168,7 @@ class ScmClubsController extends DefaultModuleController
                             ]);
 
                             usort($districts, function($a, $b) {
-                                return strcmp($a['club_full_name'], $b['club_full_name']);
+                                return strcmp($a['club_name'], $b['club_name']);
                             });
 
                             // Add clubs in the district
