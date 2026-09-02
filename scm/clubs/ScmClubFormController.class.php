@@ -203,7 +203,6 @@ class ScmClubFormController extends DefaultModuleController
 
         $club->set_club_name($this->form->get_value('name'));
         $club->set_club_sub($this->form->get_value('affiliate'));
-        $club->set_club_sub($this->form->get_value('club_sub'));
 
         if ($club->get_club_sub())
         {
@@ -223,7 +222,7 @@ class ScmClubFormController extends DefaultModuleController
         }
         else
         {
-            $club->set_club_master('');
+            $club->set_club_master(null);
             $club->set_club_district($this->form->get_value('club_district'));
             $club->set_club_full_name($this->form->get_value('full_name'));
             $club->set_club_number($this->form->get_value('number'));
@@ -243,7 +242,6 @@ class ScmClubFormController extends DefaultModuleController
 			$id = ScmClubService::add_club($club);
 			$club->set_id_club($id);
             HooksService::execute_hook_action('club_add', 'scm', array_merge($club->get_properties(), [
-                'action' => $this->lang['scm.hook.add.club'],
                 'id' => $club->get_id_club(),
                 'title' => $club->get_club_name(),
                 'url' => $club->get_club_url()
@@ -253,7 +251,6 @@ class ScmClubFormController extends DefaultModuleController
 		{
 			ScmClubService::update_club($club);
             HooksService::execute_hook_action('club_edit', 'scm', array_merge($club->get_properties(), [
-                'action' => $this->lang['scm.hook.edit.club'],
                 'id' => $club->get_id_club(),
                 'title' => $club->get_club_name(),
                 'url' => $club->get_club_url()
