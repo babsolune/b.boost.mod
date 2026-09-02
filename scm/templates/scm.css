@@ -471,7 +471,6 @@ th.bgc-sub a {
     margin-right: 0.618em;
     max-height: 70px;
 }
-
 .club-name {
     padding-left: 0.618em;
     flex: 1 1 auto;
@@ -747,6 +746,7 @@ th.bgc-sub a {
 .scm-body .scm-line {
     border-bottom: 1px solid var(--bdr-main);
 }
+
 .scm-body .scm-line:last-child {
     border: none;
 }
