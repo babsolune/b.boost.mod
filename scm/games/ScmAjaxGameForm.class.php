@@ -145,7 +145,7 @@ class ScmAjaxGameForm extends AbstractController
 
             return $options;
         }
-        if ($type == 'B')
+        else
         {
             $options = [];
             $clubs = ScmClubCache::load();
