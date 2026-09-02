@@ -27,7 +27,9 @@ class ScmClubDeleteController extends DefaultModuleController
 			ContributionService::generate_cache();
 
 		ScmEventService::clear_cache();
-		HooksService::execute_hook_action('club_delete', 'scm', array_merge($club->get_properties(), ['title' => $club->get_club_name()]));
+		HooksService::execute_hook_action('club_delete', 'scm', array_merge($club->get_properties(),
+            ['title' => $club->get_club_name()]
+        ));
 
 		AppContext::get_response()->redirect(
             ($request->get_url_referrer() && !TextHelper::strstr($request->get_url_referrer(), ScmUrlBuilder::manage_clubs()->rel()) ? $request->get_url_referrer() : ScmUrlBuilder::manage_clubs()),

@@ -344,7 +344,6 @@ $lang['scm.seo.description.event.ranking']       = 'Classement de la compétitio
 $lang['scm.seo.description.event.team']          = 'Résultat de l\'équipe :team dans la compétition :event.';
 
 // Hooks
-$lang['scm.hook.edit.club']    = 'Édition d\'un club';
 $lang['scm.specific_hook.event_add']    = 'Ajout d\'une compétition';
 $lang['scm.specific_hook.event_edit']   = 'Édition d\'une compétition';
 $lang['scm.specific_hook.params_edit']  = 'Modification des paramètres';

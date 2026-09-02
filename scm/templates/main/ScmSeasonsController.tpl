@@ -6,7 +6,7 @@
 			# IF C_CATEGORY ## IF IS_ADMIN #<a class="offload" href="{U_EDIT_CATEGORY}" aria-label="{@common.edit}"><i class="far fa-edit" aria-hidden="true"></i></a># ENDIF ## ENDIF #
 		</div>
 		<h1>
-			{@scm.division.list}
+			{@scm.season.list}
 		</h1>
 	</header>
 
