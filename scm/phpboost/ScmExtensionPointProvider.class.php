@@ -7,7 +7,7 @@
  * @since       PHPBoost 6.0 - 2024 06 12
 */
 
-class ScmExtensionPointProvider extends ItemsModuleExtensionPointProvider
+class ScmExtensionPointProvider extends ModuleExtensionPointProvider
 {
 	public function home_page()
 	{
