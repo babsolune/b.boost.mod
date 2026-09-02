@@ -557,6 +557,7 @@ class ScmGame
                 'GAME_DIVISION'   => $division->get_division_name(),
                 'GAME_SEASON'     => $season->get_season_name(),
                 'GAME_CATEGORY'   => $category->get_name(),
+                'U_GAME_CATEGORY' => ScmUrlBuilder::display_category($category->get_id(), $category->get_rewrited_name())->rel(),
 
                 'C_IS_LIVE'       => ScmGameService::is_live($this->game_event_id, $this->id_game),
                 'C_STATUS'        => !empty($this->game_status),
