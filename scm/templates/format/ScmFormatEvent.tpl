@@ -1,3 +1,4 @@
+<!-- === ScmFormatEvent === -->
 <script>
     # IF C_REFRESH_TIME #
         setInterval(refresh_scores, 60000);
@@ -298,7 +299,18 @@
                 <div class="flex-between# IF blocks.items.C_EXEMPT # bgc notice# ENDIF #">
                     <div class="team-{blocks.items.HOME_ID} flex-between sm-width-pc-100 md-width-pc-50">
                         <div class="game-team home-team cell-pad flex-team flex-right sm-width-pc-80# IF blocks.items.C_HOME_FAV # text-strong# ENDIF #">
-                            <span><a href="{blocks.items.U_HOME_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{blocks.items.HOME_TEAM}</a></span>
+                            <span>
+                                # IF blocks.items.C_HOME_EXEMPT #
+                                    {blocks.items.HOME_TEAM}
+                                # ELSE #
+                                    <a
+                                        href="{blocks.items.U_HOME_CALENDAR}"
+                                        aria-label="{@scm.club.see.calendar}"
+                                        class="offload">
+                                        {blocks.items.HOME_TEAM}
+                                    </a>
+                                # ENDIF #
+                            </span>
                             # IF blocks.items.C_HAS_HOME_LOGO #<img src="{blocks.items.HOME_LOGO}" alt="{blocks.items.HOME_TEAM}"># ENDIF #
                         </div>
                         <div id="home-{blocks.items.GAME_ID}" class="game-score home-score cell-pad sm-width-pc-20"># IF blocks.items.C_HAS_PEN #<span class="small">({blocks.items.HOME_PEN}) </span># ENDIF #{blocks.items.HOME_SCORE}</div>
@@ -308,7 +320,18 @@
                         <div id="away-{blocks.items.GAME_ID}" class="game-score away-score cell-pad sm-width-pc-20">{blocks.items.AWAY_SCORE}# IF blocks.items.C_HAS_PEN # <span class="small">({blocks.items.AWAY_PEN})</span># ENDIF #</div>
                         <div class="game-team away-team cell-pad flex-team flex-left sm-width-pc-80# IF blocks.items.C_AWAY_FAV # text-strong# ENDIF #">
                             # IF blocks.items.C_HAS_AWAY_LOGO #<img src="{blocks.items.AWAY_LOGO}" alt="{blocks.items.AWAY_TEAM}"># ENDIF #
-                            <span><a href="{blocks.items.U_AWAY_CALENDAR}" aria-label="{@scm.club.see.calendar}" class="offload">{blocks.items.AWAY_TEAM}</a></span>
+                            <span>
+                                # IF blocks.items.C_AWAY_EXEMPT #
+                                    {blocks.items.AWAY_TEAM}
+                                # ELSE #
+                                    <a
+                                        href="{blocks.items.U_AWAY_CALENDAR}"
+                                        aria-label="{@scm.club.see.calendar}"
+                                        class="offload">
+                                        {blocks.items.AWAY_TEAM}
+                                    </a>
+                                # ENDIF #
+                            </span>
                         </div>
                     </div>
                 </div>

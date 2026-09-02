@@ -299,34 +299,42 @@
                             # ENDIF #
                         </div>
                     </div>
-                    <div class="flex-between flex-between-large# IF blocks.sub_blocks.items.C_EXEMPT # bgc notice# ENDIF #">
-                        <div class="team-{blocks.sub_blocks.items.HOME_ID} flex-between sm-width-pc-100 md-width-pc-50">
-                            <div class="game-team home-team cell-pad flex-team flex-right sm-width-pc-80# IF blocks.sub_blocks.items.C_HOME_FAV # text-strong# ENDIF #">
+                    <div class="flex-between# IF blocks.sub_blocks.items.C_EXEMPT # bgc notice# ENDIF #">
+                        <div class="flex-between sm-width-pc-50">
+                            <div class="game-team home-team cell-pad flex-team flex-right sm-width-pc-90 md-width-pc-80# IF blocks.sub_blocks.items.C_HOME_FAV # text-strong# ENDIF #">
                                 <span>
-                                    <a
-                                        href="{blocks.sub_blocks.items.U_HOME_CALENDAR}"
-                                        aria-label="{@scm.club.see.calendar}# IF blocks.sub_blocks.items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF blocks.sub_blocks.items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
-                                        class="offload# IF blocks.sub_blocks.items.C_HOME_FAV # text-strong# ENDIF ## IF blocks.sub_blocks.items.HOME_FORFEIT # warning# ENDIF ## IF blocks.sub_blocks.items.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                    # IF blocks.sub_blocks.items.C_HOME_EXEMPT #
                                         {blocks.sub_blocks.items.HOME_TEAM}
-                                    </a>
+                                    # ELSE #
+                                        <a
+                                            href="{blocks.sub_blocks.items.U_HOME_CALENDAR}"
+                                            aria-label="{@scm.club.see.calendar}# IF blocks.sub_blocks.items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF blocks.sub_blocks.items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                            class="offload# IF blocks.sub_blocks.items.C_HOME_FAV # text-strong# ENDIF ## IF blocks.sub_blocks.items.HOME_FORFEIT # warning# ENDIF ## IF blocks.sub_blocks.items.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                            {blocks.sub_blocks.items.HOME_TEAM}
+                                        </a>
+                                    # ENDIF #
                                 </span>
                                 # IF blocks.sub_blocks.items.C_HAS_HOME_LOGO #<img src="{blocks.sub_blocks.items.HOME_LOGO}" alt="{blocks.sub_blocks.items.HOME_TEAM}"># ENDIF #
                             </div>
-                            <div id="home-{blocks.sub_blocks.items.GAME_ID}" class="game-score home-score cell-pad sm-width-pc-20">{blocks.sub_blocks.items.HOME_SCORE}# IF blocks.sub_blocks.items.C_HAS_PEN # <span class="small">({blocks.sub_blocks.items.HOME_PEN})</span># ENDIF #</div>
+                            <div id="home-{blocks.sub_blocks.items.GAME_ID}" class="game-score home-score cell-pad sm-width-pc-10 md-width-pc-20">{blocks.sub_blocks.items.HOME_SCORE}# IF blocks.sub_blocks.items.C_HAS_PEN # <span class="small">({blocks.sub_blocks.items.HOME_PEN})</span># ENDIF #</div>
                         </div>
                         <div id="vs-{blocks.sub_blocks.items.GAME_ID}" class="hidden-small-screens">-</div>
-                        <div class="team-{blocks.sub_blocks.items.AWAY_ID} flex-between sm-width-pc-100 md-width-pc-50">
-                            <div id="away-{blocks.sub_blocks.items.GAME_ID}" class="game-score away-score cell-pad sm-width-pc-20">{blocks.sub_blocks.items.AWAY_SCORE}# IF blocks.sub_blocks.items.C_HAS_PEN # <span class="small">({blocks.sub_blocks.items.AWAY_PEN})</span># ENDIF #</div>
-                            <div class="game-team away-team cell-pad flex-team flex-left sm-width-pc-80# IF blocks.sub_blocks.items.C_AWAY_FAV # text-strong# ENDIF #">
+                        <div class="flex-between sm-width-pc-50">
+                            <div id="away-{blocks.sub_blocks.items.GAME_ID}" class="game-score away-score cell-pad sm-width-pc-10 md-width-pc-20">{blocks.sub_blocks.items.AWAY_SCORE}# IF blocks.sub_blocks.items.C_HAS_PEN # <span class="small">({blocks.sub_blocks.items.AWAY_PEN})</span># ENDIF #</div>
+                            <div class="game-team away-team cell-pad flex-team flex-left sm-width-pc-90 md-width-pc-80# IF blocks.sub_blocks.items.C_AWAY_FAV # text-strong# ENDIF #">
                                 # IF blocks.sub_blocks.items.C_HAS_AWAY_LOGO #<img src="{blocks.sub_blocks.items.AWAY_LOGO}" alt="{blocks.sub_blocks.items.AWAY_TEAM}"># ENDIF #
                                 <span>
-                                    <a
-                                        href="{blocks.sub_blocks.items.U_AWAY_CALENDAR}"
-                                        aria-label="{@scm.club.see.calendar}# IF blocks.sub_blocks.items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF blocks.sub_blocks.items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
-                                        class="offload# IF blocks.sub_blocks.items.C_AWAY_FAV # text-strong# ENDIF ## IF blocks.sub_blocks.items.AWAY_FORFEIT # warning# ENDIF ## IF blocks.sub_blocks.items.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                    # IF blocks.sub_blocks.items.C_AWAY_EXEMPT #
                                         {blocks.sub_blocks.items.AWAY_TEAM}
-                                    </a>
-                            </span>
+                                    # ELSE #
+                                        <a
+                                            href="{blocks.sub_blocks.items.U_AWAY_CALENDAR}"
+                                            aria-label="{@scm.club.see.calendar}# IF blocks.sub_blocks.items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF blocks.sub_blocks.items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                            class="offload# IF blocks.sub_blocks.items.C_AWAY_FAV # text-strong# ENDIF ## IF blocks.sub_blocks.items.AWAY_FORFEIT # warning# ENDIF ## IF blocks.sub_blocks.items.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                            {blocks.sub_blocks.items.AWAY_TEAM}
+                                        </a>
+                                    # ENDIF #
+                                </span>
                             </div>
                         </div>
                     </div>

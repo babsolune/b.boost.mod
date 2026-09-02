@@ -32,12 +32,16 @@
                             <div class="team-{categories.events.items.HOME_ID} flex-between sm-width-pc-100 md-width-pc-50">
                                 <div class="game-team home-team cell-pad flex-team flex-right sm-width-pc-80# IF categories.events.items.C_HOME_FAV # text-strong# ENDIF #">
                                     <span>
-                                        <a
-                                            href="{categories.events.items.U_HOME_CALENDAR}"
-                                            aria-label="{@scm.club.see.calendar}# IF categories.events.items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF categories.events.items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
-                                            class="offload# IF categories.events.items.C_HOME_FAV # text-strong# ENDIF ## IF categories.events.items.HOME_FORFEIT # warning# ENDIF ## IF categories.events.items.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                        # IF categories.events.items.C_HOME_EXEMPT #
                                             {categories.events.items.HOME_TEAM}
-                                        </a>
+                                        # ELSE #
+                                            <a
+                                                href="{categories.events.items.U_HOME_CALENDAR}"
+                                                aria-label="{@scm.club.see.calendar}# IF categories.events.items.HOME_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF categories.events.items.HOME_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                class="offload# IF categories.events.items.C_HOME_FAV # text-strong# ENDIF ## IF categories.events.items.HOME_FORFEIT # warning# ENDIF ## IF categories.events.items.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                                {categories.events.items.HOME_TEAM}
+                                            </a>
+                                        # ENDIF #
                                     </span>
                                     # IF categories.events.items.C_HAS_HOME_LOGO #<img src="{categories.events.items.HOME_LOGO}" alt="{categories.events.items.HOME_TEAM}"># ENDIF #
                                 </div>
@@ -49,12 +53,16 @@
                                 <div class="game-team away-team cell-pad flex-team flex-left sm-width-pc-80# IF categories.events.items.C_AWAY_FAV # text-strong# ENDIF #">
                                     # IF categories.events.items.C_HAS_AWAY_LOGO #<img src="{categories.events.items.AWAY_LOGO}" alt="{categories.events.items.AWAY_TEAM}"># ENDIF #
                                     <span>
-                                        <a
-                                            href="{categories.events.items.U_AWAY_CALENDAR}"
-                                            aria-label="{@scm.club.see.calendar}# IF categories.events.items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF categories.events.items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
-                                            class="offload# IF categories.events.items.C_AWAY_FAV # text-strong# ENDIF ## IF categories.events.items.AWAY_FORFEIT # warning# ENDIF ## IF categories.events.items.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                        # IF categories.events.items.C_AWAY_EXEMPT #
                                             {categories.events.items.AWAY_TEAM}
-                                        </a>
+                                        # ELSE #
+                                            <a
+                                                href="{categories.events.items.U_AWAY_CALENDAR}"
+                                                aria-label="{@scm.club.see.calendar}# IF categories.events.items.AWAY_FORFEIT # - {@scm.game.event.forfeit}# ENDIF ## IF categories.events.items.AWAY_GENERAL_FORFEIT # - {@scm.game.event.general.forfeit}# ENDIF #"
+                                                class="offload# IF categories.events.items.C_AWAY_FAV # text-strong# ENDIF ## IF categories.events.items.AWAY_FORFEIT # warning# ENDIF ## IF categories.events.items.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
+                                                {categories.events.items.AWAY_TEAM}
+                                            </a>
+                                        # ENDIF #
                                     </span>
                                 </div>
                             </div>

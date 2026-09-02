@@ -134,6 +134,8 @@
                                             <span class="# IF games.HOME_FORFEIT # warning# ENDIF ## IF games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">
                                                 # IF games.C_IS_HOME_TEAM #
                                                     {games.HOME_TEAM}
+                                                # ELSEIF games.C_HOME_EXEMPT #
+                                                    {games.HOME_TEAM}
                                                 # ELSE #
                                                     <a aria-label="{@scm.club.see.calendar}" href="{games.U_HOME_CALENDAR}" class="offload# IF games.HOME_FORFEIT # warning# ENDIF ## IF games.HOME_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.HOME_TEAM}</a>
                                                 # ENDIF #
@@ -152,6 +154,8 @@
                                             # IF games.C_HAS_AWAY_LOGO #<img src="{games.AWAY_LOGO}" alt="{games.AWAY_TEAM}"># ENDIF #
                                             <span class="# IF games.AWAY_FORFEIT # warning# ENDIF ## IF games.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">
                                                 # IF games.C_IS_AWAY_TEAM #
+                                                    {games.AWAY_TEAM}
+                                                # ELSEIF games.C_AWAY_EXEMPT #
                                                     {games.AWAY_TEAM}
                                                 # ELSE #
                                                     <a aria-label="{@scm.club.see.calendar}" href="{games.U_AWAY_CALENDAR}" class="offload# IF games.AWAY_FORFEIT # warning# ENDIF ## IF games.AWAY_GENERAL_FORFEIT # text-strike warning# ENDIF #">{games.AWAY_TEAM}</a>
