@@ -242,57 +242,53 @@ class ScmTeamsFormController extends DefaultModuleController
     private function get_clubs_list()
     {
         $options = [];
-		$cache = ScmClubCache::load();
-
+        $cache = ScmClubCache::load();
         $clubs = ScmClubService::sort_club_list($cache->get_clubs());
 
-        // 1. Sort countries by their interpreted names
-        $otherKeysWithNames = [];
-        foreach (array_keys($clubs) as $key) {
-            if ($key === 'all' || $key === 'other') {
-                continue; // Handle 'all' and 'other' separately
-            }
-            $interpretedName = LangLoader::get_message($key, 'countries');
-            $otherKeysWithNames[$key] = $interpretedName;
-        }
-        asort($otherKeysWithNames);
+        // 1. Extract 'all' and 'other' from clubs
+        $allClubs = isset($clubs['all']) ? $clubs['all'] : [];
+        $otherClubs = isset($clubs['other']) ? $clubs['other'] : [];
+        unset($clubs['all'], $clubs['other']); // Remove to sort remaining countries
 
-        // 2. Rebuild $reordered_clubs with sorted countries
+        // 2. Sort remaining countries by their interpreted names
+        $countriesWithNames = [];
+        foreach (array_keys($clubs) as $countryKey) {
+            $interpretedName = LangLoader::get_message($countryKey, 'countries');
+            $countriesWithNames[$countryKey] = $interpretedName;
+        }
+        asort($countriesWithNames);
+
+        // 3. Rebuild $reordered_clubs in order: all → sorted countries → other
         $reordered_clubs = [];
-        if (!empty($allKey)) {
-            $reordered_clubs = $allKey;
+        if (!empty($allClubs)) {
+            $reordered_clubs['all'] = $allClubs;
         }
 
-        foreach (array_keys($otherKeysWithNames) as $countryKey) {
+        foreach (array_keys($countriesWithNames) as $countryKey) {
             $reordered_clubs[$countryKey] = $clubs[$countryKey];
         }
 
-        if (!empty($otherKey)) {
-            $reordered_clubs = array_merge($reordered_clubs, $otherKey);
+        if (!empty($otherClubs)) {
+            $reordered_clubs['other'] = $otherClubs;
         }
 
-        // 3. Iterate through $reordered_clubs and recursively sort leagues and districts
-        foreach ($reordered_clubs as $country => $countries)
-        {
-            if ($country === 'all')
-            {
-                // Special case for 'all' (unchanged)
+        // 4. Iterate through $reordered_clubs to generate options
+        foreach ($reordered_clubs as $country => $countries) {
+            if ($country === 'all') {
+                // Special case for 'all'
                 $options[] = new ScmFormFieldMultipleCheckboxOption(
                     'checkbox-title_root',
                     '<h2>' . $this->lang['scm.clubs.countries.team'] . '</h2>',
                     'checkbox-title_root',
                 );
-                foreach ($countries as $country_club)
-                {
+                foreach ($countries as $country_club) {
                     $options[] = new ScmFormFieldMultipleCheckboxOption(
                         $country_club['id_club'],
                         $country_club['club_name'],
                         $country_club['id_club'] . '_root',
                     );
                 }
-            }
-            else
-            {
+            } else {
                 $data = ScmClubService::get_district_data($countries['file']);
 
                 // Add country title
@@ -302,10 +298,9 @@ class ScmTeamsFormController extends DefaultModuleController
                     'checkbox-title_' . $country,
                 );
 
-                // 4. Sort leagues by their interpreted names
+                // 5. Sort leagues by their interpreted names
                 $leaguesWithNames = [];
-                foreach ($countries as $leagueKey => $leagues)
-                {
+                foreach ($countries as $leagueKey => $leagues) {
                     if ($leagueKey === 'file') {
                         continue;
                     }
@@ -314,9 +309,8 @@ class ScmTeamsFormController extends DefaultModuleController
                 }
                 asort($leaguesWithNames);
 
-                // 5. Iterate through sorted leagues
-                foreach (array_keys($leaguesWithNames) as $leagueKey)
-                {
+                // 6. Iterate through sorted leagues
+                foreach (array_keys($leaguesWithNames) as $leagueKey) {
                     $leagues = $countries[$leagueKey];
 
                     // Add league title
@@ -326,12 +320,11 @@ class ScmTeamsFormController extends DefaultModuleController
                         'checkbox-title_' . $country . '_' . $leagueKey,
                     );
 
-                    // 6. Sort districts by their interpreted names
+                    // 7. Sort districts by their interpreted names
                     $districtsWithNames = [];
-                    foreach ($leagues as $districtKey => $districts)
-                    {
+                    foreach ($leagues as $districtKey => $districts) {
                         if (empty($districtKey)) {
-                            // Case where there are no districts (e.g., leagues without subcategories)
+                            // Case where there are no districts
                             foreach ($districts as $district_club) {
                                 $options[] = new ScmFormFieldMultipleCheckboxOption(
                                     $district_club['id_club'],
@@ -341,7 +334,6 @@ class ScmTeamsFormController extends DefaultModuleController
                             }
                             continue;
                         }
-
                         $districtName = ScmClubService::get_district($data, $districtKey);
                         $districtsWithNames[$districtKey] = $districtName;
                     }
@@ -349,9 +341,8 @@ class ScmTeamsFormController extends DefaultModuleController
                     if (!empty($districtsWithNames)) {
                         asort($districtsWithNames);
 
-                        // 7. Iterate through sorted districts
-                        foreach (array_keys($districtsWithNames) as $districtKey)
-                        {
+                        // 8. Iterate through sorted districts
+                        foreach (array_keys($districtsWithNames) as $districtKey) {
                             $districts = $leagues[$districtKey];
 
                             // Add district title
